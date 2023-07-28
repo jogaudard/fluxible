@@ -6,6 +6,7 @@ library(tidyverse)
 library(dataDownloader)
 library(fs)
 library(lubridate)
+library(broom)
 
 source("code/match.R")
 source("code/fitting.R")
@@ -78,10 +79,33 @@ CO2_INCLINE_2022 <- match.flux(raw_CO2_INCLINE_2022,
                                 date_format = "ymd"
 )
 
+# we just need to look at the comments to clean the soil temperature
+CO2_INCLINE_2022 %>%
+  select(comments) %>% 
+  distinct()
+
+CO2_INCLINE_2022 <- CO2_INCLINE_2022 %>% 
+  mutate(
+    temp_soil = case_when(
+      comments %in% c("soilT logger not plugged in", "no soil T") ~ NA_real_,
+      TRUE ~ temp_soil
+    )
+  )
+
+
 # fitting the fluxes ------------------------------------------------------
+
+fitting_INCLINE_2022 <- CO2_INCLINE_2022 %>% 
+  filter(
+    datetime > start_window &
+      datetime < end_window
+  ) %>% 
+  fitting.flux()
 
 
 # graphs and visual assessment --------------------------------------------
+
+
 
 
 # quality assessment ------------------------------------------------------

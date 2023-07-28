@@ -15,10 +15,7 @@ fitting.flux <- function(data,
                          # error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
 ){ 
   
-  # data <- co2_fluxes_liahovden# %>% # this sis just to test the function with data sample
-  # filter(
-  #   fluxID %in% c(160: 169)
-  # )
+ # data <- CO2_INCLINE_2022
   
   CO2_df <- data %>% 
     group_by(fluxID) %>% 
@@ -182,12 +179,18 @@ fitting.flux <- function(data,
     )
   
   # function not transformed to prevent tz from being negative
+  # myfn <- function(time, CO2, par, Cz) {
+  #   with(data, sqrt((1/length(time)) * sum((par[1]+par[2]*(time-par[4])+(Cz-par[1])*exp(-par[3]*(time-par[4]))-CO2)^2)))
+  # }
+  
+  # function not transformed to prevent tz from being negative
   myfn <- function(time, CO2, par, Cz) {
-    with(data, sqrt((1/length(time)) * sum((par[1]+par[2]*(time-par[4])+(Cz-par[1])*exp(-par[3]*(time-par[4]))-CO2)^2)))
+    sqrt((1/length(time)) * sum((par[1]+par[2]*(time-par[4])+(Cz-par[1])*exp(-par[3]*(time-par[4]))-CO2)^2))
   }
   
+  
   # myfn <- function(time, CO2, par, Cz) {
-  #   sqrt((1/length(time)) * sum((par[1]+par[2]*(time-exp(par[4]))+(Cz-par[1])*exp(-(par[3]/(abs(par[3])+1))*(time-exp(par[4])))-CO2)^2))
+    # sqrt((1/length(time)) * sum((par[1]+par[2]*(time-par[4])+(Cz-par[1])*exp(-(par[3]/(abs(par[3])+1))*(time-exp(par[4])))-CO2)^2))
   # }
   
   # myfn <- function(time, CO2, par, Cz) {
@@ -217,12 +220,12 @@ fitting.flux <- function(data,
     
     
     # I would like to do something more resilient to avoid stopping everything if there is a problem with optim. Maybe tryCatch can be an idea
-    results = list(optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
+    results = list(optim(par = c(Cm_est, a_est, b_est, tz_est), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
     Cm = results$par[1],
     a = results$par[2],
     b = results$par[3],#/(abs(results$par[3])+1), 
     #need to find the fit with the b closest to 0 (negative or positive)
-    t_z = results$par[],
+    tz = results$par[4],
     # tz = exp(results$par[4]), #we force tz to be positive
     # b = bmin$minimum
     # Cm = Cm_est,
@@ -248,8 +251,8 @@ fitting.flux <- function(data,
     mutate(
       # time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
       # time_corr = as.double(time_corr),
-      fit = Cm + a * (time - tz - time_corr) + (Cz - Cm) * exp(- b * (time - tz - time_corr)),
-      fit_slope = slope_tz * (time - time_corr) + Cz - slope_tz * tz,
+      fit = Cm + a * (time - tz) + (Cz - Cm) * exp(- b * (time - tz)),
+      fit_slope = slope_tz * time + Cz - slope_tz * tz,
       # fit = Cm_est + a_est * (time - tz_est - time_corr) + (Cz - Cm_est) * exp(- b_est * (time - tz_est - time_corr)),
       # fit_slope = (a_est + b_est * (Cm_est - Cz) ) * (time - time_corr) + Cz - slope_tz * tz_est,
       start_z = start_window + tz # this is for graph purpose, to have a vertical line showing where tz is for each flux
