@@ -5,6 +5,7 @@
 library(tidyverse)
 library(dataDownloader)
 library(fs)
+library(lubridate)
 
 source("code/match.R")
 source("code/fitting.R")
@@ -68,7 +69,14 @@ record <- read_csv("raw_data/INCLINE_field-record_2022.csv", na = c(""), col_typ
   )
 
 # match data --------------------------------------------------------------
-
+CO2_INCLINE_2022 <- match.flux(raw_CO2_INCLINE_2022,
+                                record,
+                                window_length = 180,
+                                startcrop = 0,
+                                measurement_length = 180,
+                                time_format = "time",
+                                date_format = "ymd"
+)
 
 # fitting the fluxes ------------------------------------------------------
 
