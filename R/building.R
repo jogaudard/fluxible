@@ -71,10 +71,28 @@ co2_df_short <- co2_df %>%
          )
 
 
+# same with the record file
+record_short <- record %>%
+   select(turfID, type, starting_time, date) %>%
+      mutate(
+         starting_time = gsub("(\\d{2})(?=\\d{2})", "\\1:", starting_time, perl = TRUE), # to add the : in the time
+         date = ymd(date),
+         start = ymd_hms(paste(date, starting_time)), #pasting date and time together to make datetime
+      ) %>%
+         select(!c(starting_time, date)) %>%
+            filter( # we will just make it shorter and keep a couple of fluxes around midnight
+         between_time(start, "2022-07-28 23:40:00", "2022-07-29 00:10:00")
+         )
+
+# let's store them as csv for the tests
+write_csv(record_short, "data/record_short.csv")
+write_csv(co2_df_short, "data/co2_df_short.csv")
+write_csv(co2_df_missing, "data/co2_df_missing.csv")
 
 # a dataset with too many missing data
-co2_df_missing <- co2_df_short %>%
-   
+co2_df_missing <- co2_df_short
+co2_df_missing$CO2[c(FALSE, TRUE)] <- NA_real_ # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
+
 
 
 
