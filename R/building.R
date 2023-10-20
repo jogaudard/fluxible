@@ -35,6 +35,8 @@ usethis::use_testthat()
 
 library(dataDownloader)
 library(tidyverse)
+library(lubridate)
+library(timetk)
 
 get_file(node = "fcbw4",
          file = "PFTC6_CO2_joasete_2022.csv",
@@ -58,9 +60,14 @@ co2_df_short <- co2_df %>%
     CO2 = "CO2 (ppm)",
     PAR = "PAR (umolsm2)"
    ) %>%
-      select(datetime, temp_air, temp_soil, CO2, PAR) %>% # we keep just the variables we need
+   mutate(
+      datetime = dmy_hms(datetime)
+   ) %>%
+         select(datetime, temp_air, temp_soil, CO2, PAR) %>% # we keep just the variables we need
          filter( # we will just make it shorter and keep a couple of fluxes around midnight
-                datetime >= 
+         between_time(datetime, "2022-07-28 23:00:00", "2022-07-29 01:00:00")
+               #  datetime >= "2022-07-28T23:00:00" &
+               # #  datetime <= "2022-07-29T01:00:00"
          )
 
 
