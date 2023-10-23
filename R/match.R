@@ -29,19 +29,19 @@ match.flux <- function(raw_flux,
   
   field_record <- field_record %>%
     mutate(
-      starting_time = case_when(
-        time_format == "whole" ~ hms(gsub("(\\d{2})(?=\\d{2})", "\\1:", starting_time, perl = TRUE)), # to add the : in the time
-        time_format == "time" ~ hms(starting_time)
-      ),
-      date = case_when(
-        # !is.na(ymd(date)) ~ ymd(date),
-        # !is.na(dmy(date)) ~ dmy(date)
-        date_format == "ymd" ~ ymd(date),
-        date_format == "dmy" ~ dmy(date),
-        date_format == "mdy" ~ mdy(date)
-      ),
+    #   starting_time = case_when(
+    #     time_format == "whole" ~ hms(gsub("(\\d{2})(?=\\d{2})", "\\1:", starting_time, perl = TRUE)), # to add the : in the time
+    #     time_format == "time" ~ hms(starting_time)
+    #   ),
+    #   date = case_when(
+    #     # !is.na(ymd(date)) ~ ymd(date),
+    #     # !is.na(dmy(date)) ~ dmy(date)
+    #     date_format == "ymd" ~ ymd(date),
+    #     date_format == "dmy" ~ dmy(date),
+    #     date_format == "mdy" ~ mdy(date)
+    #   ),
       # date = dmy(date), #date in R format
-      start = ymd_hms(paste(date, starting_time)), #pasting date and time together to make datetime
+      # start = ymd_hms(paste(date, starting_time)), #pasting date and time together to make datetime
       end = start + measurement_length, #creating column End
       start_window = start + startcrop, #cropping the start
       end_window = start_window + window_length, #cropping the end of the measurement
@@ -49,24 +49,28 @@ match.flux <- function(raw_flux,
       # arrange(start) %>%
       # mutate(
       fluxID = row_number() #adding an individual ID to each flux, useful to join data or graph the fluxes
-    ) %>% 
-    select(!starting_time)
+    )
+    # select(!starting_time)
   # select(start, end, start_window, end_window, fluxID, turfID, type, date)
   
   
   co2conc <- full_join(raw_flux, field_record, by = c("datetime" = "start"), keep = TRUE) %>% #joining both dataset in one
-    fill(fluxID) %>% # filling fluxID in the raw_flux data set as well
+    fill(fluxID) # filling fluxID in the raw_flux data set as well
     # fill(PAR,temp_air, temp_soil, turfID,type,start,end,start_window, end_window, fluxID, date, campaign, treatment) %>% #filling all rows with data from above
-    group_by(fluxID) %>% # filling the rest, except if there are NA for some fluxes
-    fill(PAR,temp_air, temp_soil, turfID,type,start,end,start_window, end_window, date, campaign, treatment, comments) %>% 
-    ungroup() %>%
+  co2conc <- co2conc %>%
+      group_by(fluxID) %>% # filling the rest, except if there are NA for some fluxes
+    # fill(PAR,temp_air, temp_soil, turfID,type,start,end,start_window, end_window, date, campaign, treatment, comments) %>% 
+    fill(names(co2conc)) %>%
+       ungroup() %>%
     filter(
       datetime <= end
-      & datetime >= start) %>% #cropping the part of the flux that is after the End and before the Start
-    mutate(
-      type = as_factor(type),
-      fluxID = as.numeric(fluxID)
+      & datetime >= start) #cropping the part of the flux that is after the End and before the Start
+    # mutate(
+    #   type = as_factor(type),
+    #   fluxID = as.numeric(fluxID)
     )
   
   return(co2conc)
 }
+
+# need to simplify: just a start crop and length of measurement, no more window stuff

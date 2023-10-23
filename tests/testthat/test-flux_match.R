@@ -2,7 +2,8 @@
 # standard sample of data
 test_that("matching works", {
   ### setup
-  co2_df <- 
+  co2_df_short <- read_csv("data/co2_df_short.csv")
+  record_short <- read_csv("data/co2_df_short.csv")
   )
   expect_equal(2 * 2, 4)
 })
