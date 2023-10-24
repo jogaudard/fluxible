@@ -100,6 +100,7 @@ co2_conc <- match.flux(raw_flux = co2_df_short, field_record = record_short)
 write_csv(record_short, "data/record_short.csv")
 write_csv(co2_df_short, "data/co2_df_short.csv")
 write_csv(co2_df_missing, "data/co2_df_missing.csv")
+write_csv(co2_conc, "data/co2_conc.csv")
 
 
 # package workflow --------------------------------------------------------
@@ -126,6 +127,7 @@ write_csv(co2_df_missing, "data/co2_df_missing.csv")
 # what.GPP: to calculate GPP as the difference between NEE and ER
 
 # what.GPP_corr: to correct GPP for nighttime measurement (stable layer issue, specific to PFTC6 measurements)
+
 
 
 

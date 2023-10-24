@@ -4,8 +4,11 @@ test_that("matching works", {
   ### setup
   co2_df_short <- read_csv("data/co2_df_short.csv")
   record_short <- read_csv("data/co2_df_short.csv")
-  )
-  expect_equal(2 * 2, 4)
+  co2_conc <- read_csv("data/co2_conc.csv")
+
+
+  
+  expect_equal(match.flux(co2_df_short, record_short), co2_conc)
 })
 
 # special case when flux is over midnight (change in date): this can be included in the standard match
