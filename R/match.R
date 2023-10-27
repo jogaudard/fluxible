@@ -1,6 +1,8 @@
+#' Matching continously measured fluxes with measurement IDs
+
 # to slice and match the CO2 concentration data with the correct flux ID from schedule report on the field.
 
-match.flux <- function(raw_flux,
+match_flux <- function(raw_flux,
                         field_record,
                         startcrop = 10,
                         measurement_length = 210

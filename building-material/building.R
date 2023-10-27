@@ -3,6 +3,7 @@
 
 library(usethis)
 library(available)
+library(roxygen2)
 
 
 # finding out if the package name is available ----------------------------
@@ -94,7 +95,7 @@ co2_df_missing$CO2[c(FALSE, TRUE)] <- NA_real_ # we replace every second row wit
 # we can use the matching function to build it and then manually carefully check it
 
 # this part still needs some work: rerun match with the correct length of measurement and check the df
-co2_conc <- match.flux(raw_flux = co2_df_short, field_record = record_short)
+co2_conc <- match_flux(raw_flux = co2_df_short, field_record = record_short)
 
 # let's store them as csv for the tests
 write_csv(record_short, "data/record_short.csv")

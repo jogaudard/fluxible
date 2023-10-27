@@ -8,11 +8,14 @@ test_that("matching works", {
 
 
   
-  expect_equal(match.flux(co2_df_short, record_short), co2_conc)
+  expect_equal(match_flux(co2_df_short, record_short), co2_conc)
 })
 
 # special case when flux is over midnight (change in date): this can be included in the standard match
 # not enough data within the window provided returns a flag
 # 
 
+# test_that("warning when not enough data", {
+
+# })
 
