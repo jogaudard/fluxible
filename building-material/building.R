@@ -49,8 +49,8 @@ get_file(node = "fcbw4",
          path = "data",
          remote_path = "raw_data/c_flux_raw_data")
 
-co2_df <- read_csv("data/PFTC6_CO2_joasete_2022.csv")
-record <- read_csv("data/PFTC6_cflux_field-record_joasete.csv")
+co2_df <- read_csv("tests/testthat/data/PFTC6_CO2_joasete_2022.csv")
+record <- read_csv("tests/testthat/data/PFTC6_cflux_field-record_joasete.csv")
 
 # we want a shorter standard dataset covering midnight
 co2_df <- co2_df %>%

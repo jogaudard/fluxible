@@ -3,7 +3,7 @@
 test_that("matching works", {
   ### setup
   co2_df_short <- readr::read_csv("data/co2_df_short.csv")
-  record_short <- readr::read_csv("data/co2_df_short.csv")
+  record_short <- readr::read_csv("data/record_short.csv")
   co2_conc <- readr::read_csv("data/co2_conc.csv")
 
 
@@ -15,7 +15,14 @@ test_that("matching works", {
 # not enough data within the window provided returns a flag
 # 
 
-# test_that("warning when not enough data", {
+test_that("warning when not enough data", {
+### setup
+co2_df_missing <- readr::read_csv("data/co2_df_missing.csv")
+record_short <- readr::read_csv("data/record_short.csv")
 
-# })
+expect_error(match_flux(co2_df_missing, record_short), "less than ")
 
+})
+
+
+# test that the data type checking works (all the error messages)
