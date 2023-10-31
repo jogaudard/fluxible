@@ -49,7 +49,7 @@ get_file(node = "fcbw4",
          path = "data",
          remote_path = "raw_data/c_flux_raw_data")
 
-co2_df <- read_csv("tests/testthat/data/PFTC6_CO2_joasete_2022.csv")
+co2_df <- read_csv("tests/testthat/data/PFTC6_CO2_joasete_2022.csv", col_types = "ccdddddd")
 record <- read_csv("tests/testthat/data/PFTC6_cflux_field-record_joasete.csv")
 
 # we want a shorter standard dataset covering midnight
@@ -88,7 +88,7 @@ record_short <- record %>%
 
 
 # a dataset with too many missing data
-co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv")
+co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv", col_types = "Tdddd")
 # co2_df_missing <- co2_df_short
 # co2_df_missing$CO2[c(FALSE, TRUE)] <- NA_real_ # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
 
@@ -107,6 +107,9 @@ write_csv(co2_df_short, "tests/testthat/data/co2_df_short.csv")
 write_csv(co2_conc, "tests/testthat/data/co2_conc.csv")
 write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 
+
+# to test the package
+devtools::test()
 
 # package workflow --------------------------------------------------------
 # it seems that to make testing easier I need to split my functions in smaller bits (I can add some wrap-up functions later)

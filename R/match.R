@@ -4,7 +4,7 @@
 # to slice and match the CO2 concentration data with the correct flux ID from schedule report on the field.
 
 match_flux <- function(raw_flux,
-                        safield_record,
+                        field_record,
                         startcrop = 10,
                         measurement_length = 210,
                         ratio_threshold = 0.5
@@ -15,6 +15,7 @@ match_flux <- function(raw_flux,
  # need to include a test for the format of the column, especially the date
   
   field_record <- field_record %>%
+    dplyr::arrange(start) %>%
     dplyr::mutate(
       start = start + startcrop, #cropping the start
       end = start + measurement_length, #creating column End
@@ -31,13 +32,13 @@ match_flux <- function(raw_flux,
         is.na(datetime) ~ start
       )
       ) %>%
-      arrange(datetime) %>%
+      dplyr::arrange(datetime) %>%
          tidyr::fill(fluxID)  %>% # filling fluxID to group afterwards
-       drop_na(fluxID) # dropping everything that happens before the first flux
+       tidyr::drop_na(fluxID) # dropping everything that happens before the first flux
 
   co2conc <- co2conc %>%
       dplyr::group_by(fluxID) %>% # filling the rest, except if there are NA for some fluxes
-    tidyr::fill(names(co2conc)) %>%
+    tidyr::fill(names(field_record)) %>%
     dplyr::filter(
       (datetime <= end
       & datetime >= start) #cropping the part of the flux that is after the End and before the start
@@ -55,7 +56,43 @@ match_flux <- function(raw_flux,
       ) # also need to print a warning in the console with fluxID
     ) %>%
        dplyr::ungroup()
+
+       # making sure all columns are in the right format
+       co2conc <- co2conc %>%
+          dplyr::mutate(
+            temp_air = as.double(temp_air),
+            temp_soil = as.double(temp_soil),
+            PAR = as.double(PAR),
+            turfID = as.factor(turfID),
+            type = as.factor(type),
+            fluxID = as.factor(fluxID),
+            flag = as.character(flag)
+          ) %>%
+             dplyr::arrange(fluxID)
   
+  # print warnings when there are flags
+  # if(any(!is.na(co2conc$flag))) warning("there is a flag somewhere")
+
+  flags <- co2conc %>%
+     select(fluxID, flag) %>%
+     tidyr::drop_na(flag) %>%
+        dplyr::distinct() %>%
+           dplyr::mutate(
+            warnings = paste("\n","fluxID", fluxID, ":", flag),
+            warnings = as.character(warnings)
+           ) %>%
+              pull(warnings)
+    
+    # warnings <- pull(flags, warnings)
+    # warnings <- paste(warnings, sep = ";")
+    warnings <- str_c(flags)
+
+  # warnings <- 
+
+  # test <- paste("blop","blip", sep = "\n")
+        if(any(!is.na(co2conc$flag))) warning(warnings)
+        # if(any(!is.na(co2conc$flag))) warning(test)
+
   
   return(co2conc)
 }
