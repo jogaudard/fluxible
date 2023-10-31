@@ -88,20 +88,24 @@ record_short <- record %>%
 
 
 # a dataset with too many missing data
-co2_df_missing <- co2_df_short
-co2_df_missing$CO2[c(FALSE, TRUE)] <- NA_real_ # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
+co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv")
+# co2_df_missing <- co2_df_short
+# co2_df_missing$CO2[c(FALSE, TRUE)] <- NA_real_ # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
 
 # the matching dataset that we want to have after the matching function
 # we can use the matching function to build it and then manually carefully check it
 
-# this part still needs some work: rerun match with the correct length of measurement and check the df
+
 co2_conc <- match_flux(raw_flux = co2_df_short, field_record = record_short)
+co2_conc_missing <- match_flux(co2_df_missing, record_short)
+
 
 # let's store them as csv for the tests
-write_csv(record_short, "data/record_short.csv")
-write_csv(co2_df_short, "data/co2_df_short.csv")
-write_csv(co2_df_missing, "data/co2_df_missing.csv")
-write_csv(co2_conc, "data/co2_conc.csv")
+write_csv(record_short, "tests/testthat/data/record_short.csv")
+write_csv(co2_df_short, "tests/testthat/data/co2_df_short.csv")
+# write_csv(co2_df_missing, "data/co2_df_missing.csv") # will do the missing df manually to remove some data
+write_csv(co2_conc, "tests/testthat/data/co2_conc.csv")
+write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 
 
 # package workflow --------------------------------------------------------
