@@ -9,7 +9,7 @@ match_flux <- function(raw_flux,
                         measurement_length = 210,
                         ratio_threshold = 0.5
 ){
-# raw_flux <- co2_df_missing
+# raw_flux <- co2_df_short
 # field_record <- record_short
   
  # need to include a test for the format of the column, especially the date
@@ -27,7 +27,7 @@ match_flux <- function(raw_flux,
     dplyr::mutate(
       # datetime = tidyr::replace_na(datetime, start)
       # datetime_wna = datetime, # keep a datetime column with NA to know where data are missing
-      datetime = case_when( # to add the fluxID in case the row with matching datetime and start is missing
+      datetime = dplyr::case_when( # to add the fluxID in case the row with matching datetime and start is missing
         !is.na(datetime) ~ datetime,
         is.na(datetime) ~ start
       )
@@ -74,18 +74,18 @@ match_flux <- function(raw_flux,
   # if(any(!is.na(co2conc$flag))) warning("there is a flag somewhere")
 
   flags <- co2conc %>%
-     select(fluxID, flag) %>%
+     dplyr::select(fluxID, flag) %>%
      tidyr::drop_na(flag) %>%
         dplyr::distinct() %>%
            dplyr::mutate(
             warnings = paste("\n","fluxID", fluxID, ":", flag),
             warnings = as.character(warnings)
            ) %>%
-              pull(warnings)
+              dplyr::pull(warnings)
     
     # warnings <- pull(flags, warnings)
     # warnings <- paste(warnings, sep = ";")
-    warnings <- str_c(flags)
+    warnings <- stringr::str_c(flags)
 
   # warnings <- 
 
