@@ -1,16 +1,25 @@
 #' Matching continously measured fluxes with measurement IDs
-#' Matching continously measured fluxes with measurement IDs
+#' @description Function to match a dataframe of continuously measured CO2 concentration with measurement IDs from another dataframe. Uses datetime to tell which measurements happened when. Extra variables in both dataframes will appear in the output. 
+#' @param raw_conc dataframe of CO2 concentration measured continuously. Has to contain at least a datetime column in ymd_hms format and a CO2 concentration column as double.
+#' @param field_record dataframe recording which measurement happened when. Has to contain at least a column telling at what time (in ymd_hms) the measurement started, and any other column allowing for identification of measurements.
+#' @param startcrop how many seconds should be discarded at the beginning of the measurement
+#' @param measurement_length length of the measurement (in seconds) from the start specified in the field_record
+#' @param ratio_threshold ratio (number of concentration measurement compared to length of measurement in seconds) below which the data should be flagged as too little
+#' @param time_diff time difference (in seconds) between the two datasets. Will be added to the datetime column of the raw_conc dataset
+#' @param datetime_col to specify the name of the datetime column in raw_conc
+#' @param conc_col to specify the name of the concentration column in raw_conc
+#' @param start_col to specify the name of the start column in field_record
+#' @return a dataframe with concentration measurements and corresponding datetime, fluxID, start and end of measurement, flags in case of no data or low number of data, and any variables present in both inputs
+# should I describe all the variables in the output?
 
-# to slice and match the CO2 concentration data with the correct flux ID from schedule report on the field.
-
-match_flux <- function(raw_flux,
+match_flux <- function(raw_conc,
                         field_record,
                         startcrop = 10,
-                        measurement_length = 210,
+                        measurement_length = 220,
                         ratio_threshold = 0.5,
                         time_diff = 0,
                         datetime_col = "datetime",
-                        CO2_col = "CO2",
+                        conc_col = "conc",
                         start_col = "start"
 ){
 
@@ -25,10 +34,10 @@ match_flux <- function(raw_flux,
 
 # need to make it that one can have different column names
   
-raw_flux <- raw_flux %>%
+raw_conc <- raw_conc %>%
    dplyr::rename(
     datetime = all_of(datetime_col),
-    CO2 = all_of(CO2_col)
+    conc = all_of(conc_col)
    )
 
 field_record <- field_record %>%
@@ -41,7 +50,7 @@ field_record <- field_record %>%
 #  if(!is.double(raw_flux$temp_air)) stop("temp_air is not a double")
 #  if(!is.double(raw_flux$temp_soil)) stop("temp_soil is not a double")
 #  if(!is.double(raw_flux$PAR)) stop("PAR is not a double")
- if(!is.double(raw_flux$CO2)) stop("CO2 is not a double")
+ if(!is.double(raw_flux$conc)) stop("CO2 is not a double")
 
  if(!lubridate::is.POSIXct(field_record$start)) stop("start in field_record dataframe is not ymd_hms!")
  
@@ -58,18 +67,18 @@ field_record <- field_record %>%
   field_record <- field_record %>%
     dplyr::arrange(start) %>%
     dplyr::mutate(
-      start = start + startcrop, #cropping the start
       end = start + measurement_length, #creating column End
+      start = start + startcrop, #cropping the start
       fluxID = dplyr::row_number() #adding an individual ID to each flux, useful to join data or graph the fluxes
     )
-  raw_flux <- raw_flux %>%
+  raw_conc <- raw_conc %>%
      dplyr::mutate(
       datetime = datetime + time_diff
      )
   
-  co2conc <- dplyr::full_join(raw_flux, field_record, by = c("datetime" = "start"), keep = TRUE) %>% #joining both dataset in one
+  conc_df <- dplyr::full_join(raw_conc, field_record, by = c("datetime" = "start"), keep = TRUE) %>% #joining both dataset in one
     dplyr::mutate(
-      datetime = datetime,
+      # datetime = datetime,
       # datetime = tidyr::replace_na(datetime, start)
       # datetime_wna = datetime, # keep a datetime column with NA to know where data are missing
       datetime = dplyr::case_when( # to add the fluxID in case the row with matching datetime and start is missing
@@ -81,7 +90,7 @@ field_record <- field_record %>%
          tidyr::fill(fluxID)  %>% # filling fluxID to group afterwards
        tidyr::drop_na(fluxID) # dropping everything that happens before the first flux
 
-  co2conc <- co2conc %>%
+  conc_df <- conc_df %>%
       dplyr::group_by(fluxID) %>% # filling the rest, except if there are NA for some fluxes
     tidyr::fill(names(field_record)) %>%
     dplyr::filter(
@@ -91,8 +100,8 @@ field_record <- field_record %>%
       )  %>%
     dplyr::mutate(
       # nrow = n(),
-      n_co2 = sum(!is.na(CO2)), #not sure why I cannot do that with count
-      ratio = n_co2/(measurement_length + 1), # add 1 sec because filter is inclusing both limits
+      n_conc = sum(!is.na(conc)), #not sure why I cannot do that with count
+      ratio = n_conc/(measurement_length + 1), # add 1 sec because filter is inclusing both limits
       flag = dplyr::case_when(
         ratio == 0 ~ "no data",
         ratio <= ratio_threshold ~ "nb of data too low"
@@ -103,7 +112,7 @@ field_record <- field_record %>%
        dplyr::ungroup()
 
        # making sure all columns are in the right format
-       co2conc <- co2conc %>%
+       conc_df <- conc_df %>%
           dplyr::mutate(
             # temp_air = as.double(temp_air), # we should not work on those columns, because there might not always be there
             # temp_soil = as.double(temp_soil),
@@ -118,7 +127,7 @@ field_record <- field_record %>%
   # print warnings when there are flags
   # if(any(!is.na(co2conc$flag))) warning("there is a flag somewhere")
 
-  flags <- co2conc %>%
+  flags <- conc_df %>%
      dplyr::select(fluxID, flag) %>%
      tidyr::drop_na(flag) %>%
         dplyr::distinct() %>%
@@ -135,9 +144,9 @@ field_record <- field_record %>%
   # warnings <- 
 
   # test <- paste("blop","blip", sep = "\n")
-        if(any(!is.na(co2conc$flag))) warning(warnings)
+        if(any(!is.na(conc_df$flag))) warning(warnings)
         # if(any(!is.na(co2conc$flag))) warning(test)
 
   
-  return(co2conc)
+  return(conc_df)
 }

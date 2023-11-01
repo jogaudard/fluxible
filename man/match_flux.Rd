@@ -4,8 +4,40 @@
 \alias{match_flux}
 \title{Matching continously measured fluxes with measurement IDs}
 \usage{
-match_flux(raw_flux, field_record, startcrop = 10, measurement_length = 210)
+match_flux(
+  raw_conc,
+  field_record,
+  startcrop = 10,
+  measurement_length = 220,
+  ratio_threshold = 0.5,
+  time_diff = 0,
+  datetime_col = "datetime",
+  conc_col = "conc",
+  start_col = "start"
+)
+}
+\arguments{
+\item{raw_conc}{dataframe of CO2 concentration measured continuously. Has to contain at least a datetime column in ymd_hms format and a CO2 concentration column as double.}
+
+\item{field_record}{dataframe recording which measurement happened when. Has to contain at least a column telling at what time (in ymd_hms) the measurement started, and any other column allowing for identification of measurements.}
+
+\item{startcrop}{how many seconds should be discarded at the beginning of the measurement}
+
+\item{measurement_length}{length of the measurement (in seconds) from the start specified in the field_record}
+
+\item{ratio_threshold}{ratio (number of concentration measurement compared to length of measurement in seconds) below which the data should be flagged as too little}
+
+\item{time_diff}{time difference (in seconds) between the two datasets. Will be added to the datetime column of the raw_conc dataset}
+
+\item{datetime_col}{to specify the name of the datetime column in raw_conc}
+
+\item{conc_col}{to specify the name of the concentration column in raw_conc}
+
+\item{start_col}{to specify the name of the start column in field_record}
+}
+\value{
+a dataframe with concentration measurements and corresponding datetime, fluxID, start and end of measurement, flags in case of no data or low number of data, and any variables present in both inputs
 }
 \description{
-Matching continously measured fluxes with measurement IDs
+Function to match a dataframe of continuously measured CO2 concentration with measurement IDs from another dataframe. Uses datetime to tell which measurements happened when. Extra variables in both dataframes will appear in the output.
 }
