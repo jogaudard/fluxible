@@ -13,6 +13,61 @@ test_that("matching works", {
   expect_equal(match_flux(co2_df_short, record_short), co2_conc)
 })
 
+test_that("time_diff works", {
+  ### setup
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc", na = c("#N/A", "NA")) %>%
+     dplyr::arrange(datetime)
+
+co2_df_short <- co2_df_short %>%
+   dplyr::mutate(
+    datetime = datetime - 180 # logger is lagging 3 minutes behind
+   )
+
+# test
+  
+  expect_equal(match_flux(co2_df_short, record_short, time_diff = 180), co2_conc)
+})
+
+test_that("renaming variables works", {
+  ### setup
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc", na = c("#N/A", "NA")) %>%
+     dplyr::arrange(datetime)
+
+  co2_df_short <- co2_df_short %>%
+     dplyr::rename(
+      CO2_conc = CO2,
+      date_time = datetime
+     )
+
+  record_short <- record_short %>%
+     dplyr::rename(
+      starting = start
+     )
+
+# we do not need to adapt to the names of the user?
+  # co2_conc <- co2_conc %>%
+  #    dplyr::rename(
+  #     CO2_conc = CO2,
+  #     date_time = datetime,
+  #     starting = start
+  #    )
+
+# test
+  
+  expect_equal(
+    match_flux(
+      co2_df_short,
+      record_short,
+      datetime_col = "date_time",
+      CO2_col = "CO2_conc",
+      start_col = "starting"
+      ), co2_conc)
+})
+
 # special case when flux is over midnight (change in date): this can be included in the standard match
 # not enough data within the window provided returns a flag
 # 
@@ -64,3 +119,99 @@ test_that("no warnings when no flags", {
 })
 
 # test that the data type checking works (all the error messages)
+
+test_that("error on datetime", {
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  
+
+  co2_df_short <- co2_df_short %>%
+     dplyr::mutate(
+      datetime = lubridate::date(datetime)
+     )
+
+  expect_error(
+    match_flux(co2_df_short, record_short),
+    "datetime in raw_flux dataframe is not ymd_hms!"
+  )
+})
+
+test_that("error on CO2", {
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  
+
+  co2_df_short <- co2_df_short %>%
+     dplyr::mutate(
+      CO2 = as.character(CO2)
+     )
+
+  expect_error(
+    match_flux(co2_df_short, record_short),
+    "CO2 is not a double"
+  )
+})
+
+test_that("error on start", {
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  
+
+  record_short <- record_short %>%
+     dplyr::mutate(
+      start = lubridate::hour(start)
+     )
+
+  expect_error(
+    match_flux(co2_df_short, record_short),
+    "start in field_record dataframe is not ymd_hms!"
+  )
+})
+
+test_that("error on startcrop", {
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  
+
+
+  expect_error(
+    match_flux(co2_df_short, record_short, startcrop = "blip"),
+    "startcrop has to be a double"
+  )
+})
+
+test_that("error on measurement_length", {
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  
+
+
+  expect_error(
+    match_flux(co2_df_short, record_short, measurement_length = "blip"),
+    "measurement_length has to be a double"
+  )
+})
+
+test_that("error on ratio_threshold", {
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  
+
+
+  expect_error(
+    match_flux(co2_df_short, record_short, ratio_threshold = 2),
+    "ratio_threshold has to be a number between 0 and 1"
+  )
+})
+
+test_that("error on time_diff", {
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
+  
+
+
+  expect_error(
+    match_flux(co2_df_short, record_short, time_diff = "comment est votre blanquette?"),
+    "time_diff has to be a double"
+  )
+})

@@ -7,13 +7,54 @@ match_flux <- function(raw_flux,
                         field_record,
                         startcrop = 10,
                         measurement_length = 210,
-                        ratio_threshold = 0.5
+                        ratio_threshold = 0.5,
+                        time_diff = 0,
+                        datetime_col = "datetime",
+                        CO2_col = "CO2",
+                        start_col = "start"
 ){
+
 # raw_flux <- co2_df_short
+
+# raw_flux <- co2_df_short %>%
+#      dplyr::rename(
+#       # CO2_conc = CO2,
+#       date_time = datetime
+#      )
 # field_record <- record_short
+
+# need to make it that one can have different column names
   
+raw_flux <- raw_flux %>%
+   dplyr::rename(
+    datetime = all_of(datetime_col),
+    CO2 = all_of(CO2_col)
+   )
+
+field_record <- field_record %>%
+   dplyr::rename(
+    start = all_of(start_col)
+   )
+
  # need to include a test for the format of the column, especially the date
-  
+ if(!lubridate::is.POSIXct(raw_flux$datetime)) stop("datetime in raw_flux dataframe is not ymd_hms!")
+#  if(!is.double(raw_flux$temp_air)) stop("temp_air is not a double")
+#  if(!is.double(raw_flux$temp_soil)) stop("temp_soil is not a double")
+#  if(!is.double(raw_flux$PAR)) stop("PAR is not a double")
+ if(!is.double(raw_flux$CO2)) stop("CO2 is not a double")
+
+ if(!lubridate::is.POSIXct(field_record$start)) stop("start in field_record dataframe is not ymd_hms!")
+ 
+ if(!is.double(startcrop)) stop("startcrop has to be a double")
+ if(!is.double(time_diff)) stop("time_diff has to be a double")
+ if(!is.double(measurement_length)) stop("measurement_length has to be a double")
+ if(!is.double(ratio_threshold)) stop("ratio_threshold has to be a number between 0 and 1")
+ if(
+  ratio_threshold < 0 
+  | ratio_threshold > 1)
+  stop("ratio_threshold has to be a number between 0 and 1")
+
+
   field_record <- field_record %>%
     dplyr::arrange(start) %>%
     dplyr::mutate(
@@ -21,10 +62,14 @@ match_flux <- function(raw_flux,
       end = start + measurement_length, #creating column End
       fluxID = dplyr::row_number() #adding an individual ID to each flux, useful to join data or graph the fluxes
     )
-  
+  raw_flux <- raw_flux %>%
+     dplyr::mutate(
+      datetime = datetime + time_diff
+     )
   
   co2conc <- dplyr::full_join(raw_flux, field_record, by = c("datetime" = "start"), keep = TRUE) %>% #joining both dataset in one
     dplyr::mutate(
+      datetime = datetime,
       # datetime = tidyr::replace_na(datetime, start)
       # datetime_wna = datetime, # keep a datetime column with NA to know where data are missing
       datetime = dplyr::case_when( # to add the fluxID in case the row with matching datetime and start is missing
@@ -60,11 +105,11 @@ match_flux <- function(raw_flux,
        # making sure all columns are in the right format
        co2conc <- co2conc %>%
           dplyr::mutate(
-            temp_air = as.double(temp_air),
-            temp_soil = as.double(temp_soil),
-            PAR = as.double(PAR),
-            turfID = as.factor(turfID),
-            type = as.factor(type),
+            # temp_air = as.double(temp_air), # we should not work on those columns, because there might not always be there
+            # temp_soil = as.double(temp_soil),
+            # PAR = as.double(PAR),
+            # turfID = as.factor(turfID),
+            # type = as.factor(type),
             fluxID = as.factor(fluxID),
             flag = as.character(flag)
           ) %>%
