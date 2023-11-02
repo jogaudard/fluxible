@@ -1,6 +1,6 @@
 # function to fit the CO2 concentration to a function of time, as described in Zhao 2018
 
-fitting.flux <- function(data,
+flux_fitting_log <- function(data,
                          weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong
                          t_window = 20, # enlarge focus window before and after tmin and tmax
                          Cz_window = 15, # window used to calculate Cz, at the beginning of cut window
