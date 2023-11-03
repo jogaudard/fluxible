@@ -15,9 +15,9 @@ flux_fitting_log <- function(data,
                          # error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
 ){ 
   
- # data <- CO2_INCLINE_2022
+#  data <- co2_conc
   
-  CO2_df <- data %>% 
+  conc_df <- data %>% 
     group_by(fluxID) %>% 
     mutate(
       time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
@@ -32,27 +32,27 @@ flux_fitting_log <- function(data,
         tmax < tmin ~ tmin + t_window,
         tmin < tmax ~ tmax + t_window
       ),
-      start_window = case_when(
-        start_cut > start_window ~ start_cut,
-        TRUE ~ start_window
+      start = case_when(
+        start_cut > start ~ start_cut,
+        TRUE ~ start
       ),
-      end_window = case_when(
-        end_cut < end_window ~ end_cut,
-        TRUE ~ end_window
+      end = case_when(
+        end_cut < end ~ end_cut,
+        TRUE ~ end
       ),
       cut = case_when(
-        datetime < start_window | datetime > end_window ~ "cut",
+        datetime < start | datetime > end ~ "cut",
         # fluxID ==  & datetime %in%  ~ "cut",
         # fluxID %in% weird_fluxesID ~ "cut",
         TRUE ~ "keep"
       ),
       cut = as_factor(cut),
-      time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
+      time_corr = difftime(start, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
       time_corr = as.double(time_corr)
     ) %>% 
     ungroup()
   
-  cut_CO2_df <- CO2_df %>% 
+  cut_conc_df <- conc_df %>% 
     group_by(fluxID) %>% 
     filter(cut == "keep") %>% 
     mutate(
@@ -61,7 +61,7 @@ flux_fitting_log <- function(data,
     ) %>% 
     ungroup()
   
-  Cm_df <- cut_CO2_df %>% 
+  Cm_df <- cut_conc_df %>% 
     group_by(fluxID) %>% 
     distinct(CO2, .keep_all = TRUE) %>% 
     # mutate(
@@ -78,15 +78,15 @@ flux_fitting_log <- function(data,
     ungroup() %>% 
     distinct(Cmax, Cmin, .keep_all = TRUE)
   
-  Cm_slope <- cut_CO2_df %>% 
+  Cm_slope <- cut_conc_df %>% 
     group_by(fluxID) %>% 
     # mutate(
     #   time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
     #   time = as.double(time)
     # ) %>% 
     do({model = lm(CO2 ~ time_cut, data=.)    # create your model
-    data.frame(tidy(model),              # get coefficient info
-               glance(model))}) %>%          # get model info
+    data.frame(broom::tidy(model),              # get coefficient info
+               broom::glance(model))}) %>%          # get model info
     filter(term == "time_cut") %>% 
     rename(slope_Cm = estimate) %>% 
     select(fluxID, slope_Cm) %>% 
@@ -106,7 +106,7 @@ flux_fitting_log <- function(data,
     select(fluxID, Cm_est, tm, slope_Cm) %>% 
     ungroup()
   
-  Cz_df <- cut_CO2_df %>%
+  Cz_df <- cut_conc_df %>%
     group_by(fluxID) %>%
     # mutate(
     #   time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
@@ -117,8 +117,8 @@ flux_fitting_log <- function(data,
       time_cut <= Cz_window
     ) %>%
     do({model = lm(CO2 ~ time_cut, data=.)    # create your model
-    data.frame(tidy(model),              # get coefficient info
-               glance(model))}) %>%          # get model info
+    data.frame(broom::tidy(model),              # get coefficient info
+               broom::glance(model))}) %>%          # get model info
     pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
     rename(
       Cz = "(Intercept)",
@@ -126,7 +126,7 @@ flux_fitting_log <- function(data,
     select(fluxID, Cz, slope_Cz) %>%
     ungroup()
   
-  tz_df <- cut_CO2_df %>% 
+  tz_df <- cut_conc_df %>% 
     # left_join(Cm_df) %>% 
     left_join(Cz_df) %>% 
     group_by(fluxID) %>% 
@@ -145,14 +145,14 @@ flux_fitting_log <- function(data,
     select(fluxID, tz_est) %>% 
     distinct()
   
-  a_df <- cut_CO2_df %>% 
+  a_df <- cut_conc_df %>% 
     group_by(fluxID) %>% 
     filter(
-      datetime >= end_window - t_window
+      datetime >= end - t_window
     ) %>% 
     do({model = lm(CO2 ~ time_cut, data=.)    # create your model
-    data.frame(tidy(model),              # get coefficient info
-               glance(model))}) %>%          # get model info
+    data.frame(broom::tidy(model),              # get coefficient info
+               broom::glance(model))}) %>%          # get model info
     pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
     rename(
       a_est = time_cut
@@ -160,7 +160,7 @@ flux_fitting_log <- function(data,
     select(fluxID, a_est) %>% 
     ungroup()
   
-  Ct_df <- CO2_df %>% 
+  Ct_df <- conc_df %>% 
     left_join(tz_df) %>% 
     group_by(fluxID) %>% 
     mutate(
@@ -210,7 +210,7 @@ flux_fitting_log <- function(data,
   
   
   
-  fitting_par <- cut_CO2_df %>% 
+  fitting_par <- cut_conc_df %>% 
     left_join(estimates_df) %>% 
     select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_cut, CO2) %>%
     group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
@@ -246,7 +246,7 @@ flux_fitting_log <- function(data,
   ) %>% 
     ungroup()
   
-  CO2_fitting <- CO2_df %>% 
+  conc_fitting <- conc_df %>% 
     left_join(fitting_par) %>% 
     mutate(
       # time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
@@ -328,5 +328,5 @@ flux_fitting_log <- function(data,
   #     )
   #   )
   
-  return(CO2_fitting)
+  return(conc_fitting)
 }

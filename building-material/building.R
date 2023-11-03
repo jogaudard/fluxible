@@ -108,7 +108,10 @@ write_csv(co2_conc, "tests/testthat/data/co2_conc.csv")
 write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 
 # to test the fitting, we will use the function, graph the fluxes, check them carefully and then assume the output is the expected one
-
+co2_conc <- read_csv("tests/testthat/data/co2_conc.csv") # just to save time
+slopes <- co2_conc %>%
+   flux_fitting_log()
+   
 
 # to test the package
 devtools::test()
