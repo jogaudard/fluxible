@@ -11,7 +11,7 @@ library(roxygen2)
 # wtflux sounds too offensive to native English speakers
 # other ideas: fluxury, fluxhurry, fluxable, fluxible
 
-available("fluxhurry")
+available("fluxed")
 
 
 # creating the structure --------------------------------------------------
