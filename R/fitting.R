@@ -1,93 +1,68 @@
 # function to fit the CO2 concentration to a function of time, as described in Zhao 2018
 
-flux_fitting_log <- function(data,
-                         weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong
-                         t_window = 20, # enlarge focus window before and after tmin and tmax
-                         Cz_window = 15, # window used to calculate Cz, at the beginning of cut window
-                         b_window = 10 # window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly
-                         # c = 3 # coefficient to define the interval around estimates to optimize function
-                         # noise = 10, # noise of the setup in ppm
-                         # r.squared_threshold = -100, #threshold to discard data based on r.squared of the linear fit at tz over the kept part
-                         # RMSE_threshold = 25, # threshold above which data are discarded
-                         # cor_threshold = 0.5, # delimits the window in which CO2 is considered not correlated with time
-                         # b_threshold = 1, # this value and its opposite define a window out of which data are being discarded
-                         # ambient_CO2 = 421,
-                         # error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
+flux_fitting_log <- function(conc_df,
+                               weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong
+                               t_window = 20, # enlarge focus window before and after tmin and tmax
+                               Cz_window = 15, # window used to calculate Cz, at the beginning of cut window
+                               b_window = 10, # window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly
+                               a_window = 10, # window at the end of the flux to estimate a
+                               length_flux = 160, # length of the total flux
+                               roll_width = 15, # width of the rolling mean for CO2 when looking for tz, idaelly same as Cz_window
+                               # c = 3 # coefficient to define the interval around estimates to optimize function
+                               # noise = 10, # noise of the setup in ppm
+                               # r.squared_threshold = -100, #threshold to discard data based on r.squared of the linear fit at tz over the kept part
+                              #  RMSE_threshold = 25, # threshold above which data are discarded
+                              #  cor_threshold = 0.5, # delimits the window in which CO2 is considered not correlated with time
+                              #  b_threshold = 1, # this value and its opposite define a window out of which data are being discarded
+                              #  ambient_CO2 = 421,
+                              #  error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
+                              start_cut = 0, # to cut at the start
+                              end_cut = 0 # to cut at the end, if you notice on the graphs that the match was not precise enough
 ){ 
   
-#  data <- co2_conc
+  # we will try to calculate all the parameters without a, and then insert a in the end
   
-  conc_df <- data %>% 
+
+  
+  conc_df <- conc_df %>% 
     group_by(fluxID) %>% 
     mutate(
       time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
       time = as.double(time),
-      tmax = max(datetime[CO2 == max(CO2)]),
-      tmin = min(datetime[CO2 == min(CO2)]),
-      start_cut = case_when(
-        tmax > tmin ~ tmin - t_window,
-        tmin > tmax ~ tmax - t_window
-      ),
-      end_cut = case_when(
-        tmax < tmin ~ tmin + t_window,
-        tmin < tmax ~ tmax + t_window
-      ),
-      start = case_when(
-        start_cut > start ~ start_cut,
-        TRUE ~ start
-      ),
-      end = case_when(
-        end_cut < end ~ end_cut,
-        TRUE ~ end
-      ),
+      start = start + start_cut,
+      end = end - end_cut,
       cut = case_when(
         datetime < start | datetime > end ~ "cut",
-        # fluxID ==  & datetime %in%  ~ "cut",
-        # fluxID %in% weird_fluxesID ~ "cut",
         TRUE ~ "keep"
       ),
-      cut = as_factor(cut),
-      time_corr = difftime(start, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
-      time_corr = as.double(time_corr)
+      cut = as_factor(cut)
     ) %>% 
     ungroup()
   
-  cut_conc_df <- conc_df %>% 
-    group_by(fluxID) %>% 
-    filter(cut == "keep") %>% 
+conc_df_cut <- conc_df %>%
+   filter(
+      cut == "keep"
+    )
+
+  Cm_df <- conc_df_cut %>% 
+       group_by(fluxID) %>% 
+    distinct(conc, .keep_all = TRUE) %>% 
     mutate(
-      time_cut = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
-      time_cut = as.double(time_cut)
-    ) %>% 
-    ungroup()
-  
-  Cm_df <- cut_conc_df %>% 
-    group_by(fluxID) %>% 
-    distinct(CO2, .keep_all = TRUE) %>% 
-    # mutate(
-    #   time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
-    #   time = as.double(time)
-    # ) %>% 
-    mutate(
-      Cmax = max(CO2),
-      Cmin = min(CO2),
-      tmax = time_cut[CO2 == Cmax],
-      tmin = time_cut[CO2 == Cmin]
+      Cmax = max(conc),
+      Cmin = min(conc),
+      tmax = time[conc == Cmax],
+      tmin = time[conc == Cmin]
     ) %>% 
     select(fluxID, Cmax, Cmin, tmax, tmin) %>% 
     ungroup() %>% 
     distinct(Cmax, Cmin, .keep_all = TRUE)
   
-  Cm_slope <- cut_conc_df %>% 
+  Cm_slope <- conc_df_cut %>% 
     group_by(fluxID) %>% 
-    # mutate(
-    #   time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
-    #   time = as.double(time)
-    # ) %>% 
-    do({model = lm(CO2 ~ time_cut, data=.)    # create your model
+    do({model = lm(conc ~ time, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
-    filter(term == "time_cut") %>% 
+    filter(term == "time") %>% 
     rename(slope_Cm = estimate) %>% 
     select(fluxID, slope_Cm) %>% 
     ungroup()
@@ -106,195 +81,189 @@ flux_fitting_log <- function(data,
     select(fluxID, Cm_est, tm, slope_Cm) %>% 
     ungroup()
   
-  Cz_df <- cut_conc_df %>%
+  Cz_df <- conc_df_cut %>%
     group_by(fluxID) %>%
-    # mutate(
-    #   time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
-    #   time = as.double(time)
-    # ) %>%
-    # select(fluxID, time, CO2) %>%
     filter(
-      time_cut <= Cz_window
+      time <= Cz_window
     ) %>%
-    do({model = lm(CO2 ~ time_cut, data=.)    # create your model
+    do({model = lm(conc ~ time, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
     pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
     rename(
       Cz = "(Intercept)",
-      slope_Cz = time_cut) %>%
+      slope_Cz = time) %>%
     select(fluxID, Cz, slope_Cz) %>%
     ungroup()
   
-  tz_df <- cut_conc_df %>% 
-    # left_join(Cm_df) %>% 
+  tz_df <- conc_df_cut %>% 
     left_join(Cz_df) %>% 
     group_by(fluxID) %>% 
-    # mutate(
-    #   time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
-    #   time = as.numeric(time)
-    # ) %>% 
     filter(
-      time_cut > Cz_window
-    ) %>% 
+      # time > Cz_window
+      time < length_flux / 2 # tz should be in the first half of the flux
+    ) %>%
     mutate(
-      Cd = abs(CO2-Cz),
-      tz_est = min(time_cut[Cd == min(Cd)])
+      conc_roll = zoo::rollmean(conc, k = roll_width, fill = NA, align = "right"),
+      Cd = abs(conc_roll - Cz),
+      minCd = min(Cd, na.rm = TRUE),
+      tz_est = min(time[Cd == minCd], na.rm = TRUE)
     ) %>% 
     ungroup() %>% 
     select(fluxID, tz_est) %>% 
     distinct()
   
-  a_df <- cut_conc_df %>% 
-    group_by(fluxID) %>% 
-    filter(
-      datetime >= end - t_window
-    ) %>% 
-    do({model = lm(CO2 ~ time_cut, data=.)    # create your model
-    data.frame(broom::tidy(model),              # get coefficient info
-               broom::glance(model))}) %>%          # get model info
-    pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
-    rename(
-      a_est = time_cut
-    ) %>% 
-    select(fluxID, a_est) %>% 
-    ungroup()
+  # a_df <- CO2_df %>% # a is the slope at the end of the flux
+  #   group_by(fluxID) %>% 
+  #   filter(
+  #     datetime >= end - t_window
+  #   ) %>% 
+  #   do({model = lm(CO2 ~ time, data=.)    # create your model
+  #   data.frame(tidy(model),              # get coefficient info
+  #              glance(model))}) %>%          # get model info
+  #   pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
+  #   rename(
+  #     a_est = time
+  #   ) %>% 
+  #   select(fluxID, a_est) %>% 
+  #   ungroup()
   
-  Ct_df <- conc_df %>% 
+  Cb_df <- conc_df_cut %>% 
     left_join(tz_df) %>% 
     group_by(fluxID) %>% 
     mutate(
-      Ct = CO2[time == tz_est + time_corr - Cz_window]
+      Cb = conc[time == tz_est - b_window]
     ) %>% 
     ungroup() %>% 
-    select(fluxID, Ct) %>% 
+    select(fluxID, Cb) %>% 
+    distinct()
+  
+  a_df <- conc_df_cut %>% 
+    group_by(fluxID) %>% 
+    mutate(
+      ta = length_flux - a_window,
+      Ca = conc[time == ta]
+    ) %>% 
+    ungroup() %>% 
+    select(fluxID, ta, Ca) %>% 
     distinct()
   
   estimates_df <- left_join(Cm_df, Cz_df) %>% 
     left_join(tz_df) %>% 
-    left_join(a_df) %>% 
-    left_join(Ct_df) %>% 
+    left_join(a_df) %>%
+    left_join(Cb_df) %>% 
     mutate(
-      b_est = log(abs((Ct - Cm_est + a_est * b_window)/(Cz - Cm_est))) * (1/b_window) # problem with the log? negative value? let's try with absolute value
-    )
+      b_est = case_when(
+        Cb == Cm_est ~ 0, # special case or flat flux
+        Cz == Cm_est ~ 0, # special case or flat flux
+        TRUE ~         log(abs((Cb - Cm_est)/(Cz - Cm_est))) * (1/b_window), # problem with the log? negative value? let's try with absolute value
+      ),
+      a_est = case_when(
+        ta == tz_est ~ 0, # tz_est = ta is a special case that is undefined
+        TRUE ~ (Ca - Cm_est - (Cz - Cm_est) * exp(-b_est * (ta - tz_est))) / (ta - tz_est)
+      )
+      )
+
   
-  # function not transformed to prevent tz from being negative
-  # myfn <- function(time, CO2, par, Cz) {
-  #   with(data, sqrt((1/length(time)) * sum((par[1]+par[2]*(time-par[4])+(Cz-par[1])*exp(-par[3]*(time-par[4]))-CO2)^2)))
-  # }
   
-  # function not transformed to prevent tz from being negative
-  myfn <- function(time, CO2, par, Cz) {
-    sqrt((1/length(time)) * sum((par[1]+par[2]*(time-par[4])+(Cz-par[1])*exp(-par[3]*(time-par[4]))-CO2)^2))
+  
+  myfn <- function(time, conc, par, Cz) {
+    # sqrt((1/length(time)) * sum((par[1]+par[2]*(time-exp(par[4]))+(Cz-par[1])*exp(-(1/(1+exp(-par[3])))*(time-exp(par[4])))-CO2)^2))
+    sqrt((1/length(time)) * sum((par[1]+par[2]*(time-exp(par[4]))+(Cz-par[1])*exp(-par[3]*(time-exp(par[4])))-conc)^2))
+    # sqrt((1/length(time)) * sum((par[1]+par[2]*(time-exp(par[4]))+(Cz-par[1])*exp(-exp(par[3])*(time-exp(par[4])))-CO2)^2))
+    
+  }
+  
+  myfn1 <- function(time, conc, Cz, Cm, b, tz) {
+    sqrt((1/length(time)) * sum((Cm+(Cz-Cm)*exp(-b*(time-tz))-conc)^2))
+  }
+  
+  myfn2 <- function(time, conc, a, Cz, Cm, b, tz) {
+    sqrt((1/length(time)) * sum((Cm+a*(time-tz)+(Cz-Cm)*exp(-b*(time-tz))-conc)^2))
   }
   
   
-  # myfn <- function(time, CO2, par, Cz) {
-    # sqrt((1/length(time)) * sum((par[1]+par[2]*(time-par[4])+(Cz-par[1])*exp(-(par[3]/(abs(par[3])+1))*(time-exp(par[4])))-CO2)^2))
-  # }
-  
-  # myfn <- function(time, CO2, par, Cz) {
-  #   sqrt((1/length(time)) * sum((par[1]+par[2]*(time-exp(par[4]))+(Cz-par[1])*exp(-par[3]*(time-exp(par[4])))-CO2)^2))
-  # }
-  
-  myfn1 <- function(time, CO2, Cz, Cm, b, tz) {
-    sqrt((1/length(time)) * sum((Cm+(Cz-Cm)*exp(-b*(time-tz))-CO2)^2))
-  }
-  
-  myfn2 <- function(time, CO2, a, Cz, Cm, b, tz) {
-    sqrt((1/length(time)) * sum((Cm+a*(time-tz)+(Cz-Cm)*exp(-b*(time-tz))-CO2)^2))
-  }
   
   
-  
-  
-  
-  
-  fitting_par <- cut_conc_df %>% 
+  fitting_par <- conc_df_cut %>% 
     left_join(estimates_df) %>% 
-    select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_cut, CO2) %>%
+    select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
     group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
     nest() %>% 
     rowwise() %>%
     summarize(
-    
-    
-    # I would like to do something more resilient to avoid stopping everything if there is a problem with optim. Maybe tryCatch can be an idea
-    results = list(optim(par = c(Cm_est, a_est, b_est, tz_est), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
-    Cm = results$par[1],
-    a = results$par[2],
-    b = results$par[3],#/(abs(results$par[3])+1), 
-    #need to find the fit with the b closest to 0 (negative or positive)
-    tz = results$par[4],
-    # tz = exp(results$par[4]), #we force tz to be positive
-    # b = bmin$minimum
-    # Cm = Cm_est,
-    # b = results1$minimum[1],
-    # tz = tz_est,
-    # Cm = optimize(myfn1, c(0, (c+1) * Cm_est), CO2 = data$CO2, time = data$time_cut, Cz = Cz, tz = tz_est, b = b_est)$minimum,
-    # tz = optimize(myfn1, c(tz_est, (c+1) * tz_est), CO2 = data$CO2, time = data$time_cut, Cz = Cz, Cm = Cm, b = b_est)$minimum,
-    # b = optimize(myfn1, c(-10, 10), CO2 = data$CO2, time = data$time_cut, Cz = Cz, Cm = Cm, tz = tz)$minimum, #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
-    # a = optimize(myfn2, c(-c * a_est, (c+1) * a_est), CO2 = data$CO2, time = data$time_cut, Cz = Cz, Cm = Cm, b = b, tz = tz)$minimum,
-    # a = results2$minimum[1],
-    
-    # a = optim(par = c(Cm_est = 526.39, a_est = -0.263391, b_est = -0.000181677, tz_est = 29), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = 557)$par[2]
-    # Cm = optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = Cz)$par[1],
-    # a = optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = Cz)$par[2],
-    # b = optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = Cz)$par[3],
-    # tz = optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, CO2 = data$CO2, time = data$time_cut, Cz = Cz)$par[4],
-    slope_tz = a + b * (Cm - Cz)
-  ) %>% 
+      # I would like to do something more resilient to avoid stopping everything if there is a problem with optim. Maybe tryCatch can be an idea
+      results = list(optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, conc = data$conc, time = data$time, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
+      Cm = results$par[1],
+      a = results$par[2],
+      # b = exp(results$par[3]),#/(abs(results$par[3])+1),
+      b = results$par[3],
+      # b = 1/(1+exp(-results$par[3])),
+      #need to find the fit with the b closest to 0 (negative or positive)
+      tz = exp(results$par[4]), #we force tz to be positive
+      slope_tz = a + b * (Cm - Cz),
+    ) %>% 
     ungroup()
-  
   conc_fitting <- conc_df %>% 
     left_join(fitting_par) %>% 
     mutate(
       # time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
       # time_corr = as.double(time_corr),
       fit = Cm + a * (time - tz) + (Cz - Cm) * exp(- b * (time - tz)),
-      fit_slope = slope_tz * time + Cz - slope_tz * tz,
+      fit_slope = slope_tz * (time) + Cz - slope_tz * tz,
       # fit = Cm_est + a_est * (time - tz_est - time_corr) + (Cz - Cm_est) * exp(- b_est * (time - tz_est - time_corr)),
       # fit_slope = (a_est + b_est * (Cm_est - Cz) ) * (time - time_corr) + Cz - slope_tz * tz_est,
-      start_z = start_window + tz # this is for graph purpose, to have a vertical line showing where tz is for each flux
+      start_z = start + tz # this is for graph purpose, to have a vertical line showing where tz is for each flux
       
-    )
+    )# %>% 
+  # group_by(fluxID, Cm, a, b, tz, Cz) %>% 
+  #   # nest() %>% 
+  #   mutate(
+  #     RMSE = myfn2(time = time, CO2 = CO2, a = a, b = b, Cm = Cm, Cz = Cz, tz = tz - time_corr)
+  #   ) %>% 
+  #   ungroup
   
+  # r2_general <-function(preds,actual){ 
+  #   return(1 - (sum((actual - preds)^2)/sum((actual - mean(actual))^2)))
+  # }
   
   # model_fit <- CO2_fitting %>%
   #   group_by(fluxID) %>% 
   #   nest() %>% 
   #   rowwise() %>% 
   #   summarize(
-  #     cor_coef = cor(data$CO2, data$time)
+  #     cor_coef = cor(data$CO2, data$time),
+  #     r.squared_full = r2_general(data$fit, data$CO2),
+  #     RMSE_full = sqrt((1/length(data$time)) * sum((data$fit - data$CO2)^2))
   #   )
-  # 
-  # model_fit_cut <- CO2_fitting %>%
-  #   filter(
-  #     cut == "keep"
-  #   ) %>%
-  #   group_by(fluxID) %>% 
-  #   nest() %>% 
+  
+  # model_fit <- CO2_fitting %>%
+  #   # filter(
+  #   #   cut == "keep"
+  #   # ) %>%
+  #   group_by(fluxID) %>%
+  #   nest() %>%
   #   rowwise() %>%
-  #   # select(fluxID, time, CO2, fit, fit_slope, Cm, a, b, Cz, tz, time_corr) %>% 
+  #   # select(fluxID, time, CO2, fit, fit_slope, Cm, a, b, Cz, tz, time_corr) %>%
   #   summarize(
-  #     cor_coef_keep = cor(data$CO2, data$time),
-  #     r.squared = r2_general(data$fit, data$CO2),
+  #     cor_coef = cor(data$CO2, data$time),
+  #     # r.squared = r2_general(data$fit, data$CO2),
   #     RMSE = sqrt((1/length(data$time)) * sum((data$fit - data$CO2)^2)),
   #     # RMSE = myfn2(time = data$time, CO2 = data$CO2, a = data$a, b = data$b, Cm = data$Cm, Cz = data$Cz, tz = data$tz - data$time_corr),
-  #     norm_RMSE = RMSE / (max(data$CO2) - min(data$CO2)),
-  #     r.squared_slope = r2_general(data$fit_slope, data$CO2),
+  #     # norm_RMSE = RMSE / (max(data$CO2) - min(data$CO2)),
+  #     # r.squared_slope = r2_general(data$fit_slope, data$CO2),
   #     start_error = case_when(
   #       data$CO2[1] < (ambient_CO2 - error) ~ "error",
   #       data$CO2[1] > (ambient_CO2 + error) ~ "error",
   #       TRUE ~ "ok"
   #     )
-  #   ) %>% 
+  #   ) %>%
   #   ungroup()
   
-  # CO2_fitting <- CO2_fitting %>% 
-  #   left_join(model_fit) %>% 
+  # CO2_fitting <- CO2_fitting %>%
+  #   left_join(model_fit)
   #   left_join(model_fit_cut)
-  
+  # 
   # now we need a set of rules to assess if the data should be kept, discarded, or replaced by 0
   # kept: good fit
   # discarded: bad fit, but with changes in CO2 concentration over time
@@ -304,17 +273,20 @@ flux_fitting_log <- function(data,
   
   # CO2_fitting <- CO2_fitting %>% 
   #   mutate(
-  #     threshold_slope = noise / as.double(difftime(end_window, start_window, units = "secs")),
+  #     # threshold_slope = noise / as.double(difftime(end_window, start_window, units = "secs")),
   #     fit_quality = case_when(
-  #       b <= -b_threshold & b >= b_threshold ~ "bad",
-  #       RMSE > RMSE_threshold ~ "bad",
-  #       r.squared_slope < r.squared_threshold ~ "bad",
+  #       # b <= -b_threshold | 
+  #         b >= b_threshold ~ "bad",
+  #         type == "ER" & slope_tz < 0 ~ "bad",
+  #       # RMSE > RMSE_threshold ~ "bad",
+  #       # r.squared_slope < r.squared_threshold ~ "bad",
   #       # fluxID %in% weird_fluxesID ~ "bad",
   #       # start_error == "error" ~ "bad",
   #       TRUE ~ "ok"
   #     ),
   #     correlation = case_when(
-  #       cor_coef < cor_threshold & cor_coef > -cor_threshold ~ "no",
+  #       # cor_coef < cor_threshold & cor_coef > -cor_threshold ~ "no",
+  #       abs(cor_coef) < cor_threshold ~ "no",
   #       TRUE ~ "yes"
   #     ),
   #     flag = case_when(
@@ -326,7 +298,7 @@ flux_fitting_log <- function(data,
   #       # fit_quality == "bad" & correlation == "no" & type == "ER" ~ "discard", # the idea being that we cannot have a respiration of 0, but I am not sure I agree with that. Soil could be super dry, frozen, containing very little organic matter...
   #       fit_quality == "ok" ~ "ok"
   #     )
-  #   )
+    # )
   
   return(conc_fitting)
 }

@@ -46,11 +46,11 @@ field_record <- field_record %>%
    )
 
  # need to include a test for the format of the column, especially the date
- if(!lubridate::is.POSIXct(raw_flux$datetime)) stop("datetime in raw_flux dataframe is not ymd_hms!")
+ if(!lubridate::is.POSIXct(raw_conc$datetime)) stop("datetime in raw_conc dataframe is not ymd_hms!")
 #  if(!is.double(raw_flux$temp_air)) stop("temp_air is not a double")
 #  if(!is.double(raw_flux$temp_soil)) stop("temp_soil is not a double")
 #  if(!is.double(raw_flux$PAR)) stop("PAR is not a double")
- if(!is.double(raw_flux$conc)) stop("CO2 is not a double")
+ if(!is.double(raw_conc$conc)) stop("CO2 is not a double")
 
  if(!lubridate::is.POSIXct(field_record$start)) stop("start in field_record dataframe is not ymd_hms!")
  

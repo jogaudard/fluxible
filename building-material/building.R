@@ -11,7 +11,7 @@ library(roxygen2)
 # wtflux sounds too offensive to native English speakers
 # other ideas: fluxury, fluxhurry, fluxable, fluxible
 
-available("fluxed")
+available("fluxible")
 
 
 # creating the structure --------------------------------------------------
@@ -38,6 +38,7 @@ library(dataDownloader)
 library(tidyverse)
 library(lubridate)
 library(timetk)
+library(broom)
 
 get_file(node = "fcbw4",
          file = "PFTC6_CO2_joasete_2022.csv",
@@ -96,8 +97,16 @@ co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv", col_types =
 # we can use the matching function to build it and then manually carefully check it
 
 
-co2_conc <- match_flux(raw_flux = co2_df_short, field_record = record_short)
-co2_conc_missing <- match_flux(co2_df_missing, record_short)
+co2_conc <- match_flux(
+   raw_conc = co2_df_short,
+   field_record = record_short,
+   conc_col = "CO2"
+   )
+co2_conc_missing <- match_flux(
+   co2_df_missing,
+   record_short,
+   conc_col = "CO2"
+   )
 
 
 # let's store them as csv for the tests
@@ -110,8 +119,28 @@ write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 # to test the fitting, we will use the function, graph the fluxes, check them carefully and then assume the output is the expected one
 co2_conc <- read_csv("tests/testthat/data/co2_conc.csv") # just to save time
 slopes <- co2_conc %>%
-   flux_fitting_log()
+   flux_fitting_log(
+      end_cut = 60
+   )
    
+# then we graph and check that it is all good
+
+slopes  %>%
+  ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  geom_line(aes(y = fit_slope), linetype = "dashed") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+  ylim(400,800) +
+  facet_wrap(~fluxID, scales = "free")
 
 # to test the package
 devtools::test()
