@@ -34,11 +34,15 @@ usethis::use_testthat()
 # creating a sample dataset to use in the test
 # we can use PFTC6 data because that way we have data over midnight (special case)
 
-library(dataDownloader)
-library(tidyverse)
-library(lubridate)
-library(timetk)
-library(broom)
+# commented the package loader because I want to test if packages are specified inside the functions
+# library(dataDownloader)
+# library(tidyverse)
+# library(lubridate)
+# library(timetk)
+# library(broom)
+
+# to have pipes in the functions
+usethis::use_pipe()
 
 get_file(node = "fcbw4",
          file = "PFTC6_CO2_joasete_2022.csv",
@@ -117,7 +121,7 @@ write_csv(co2_conc, "tests/testthat/data/co2_conc.csv")
 write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 
 # to test the fitting, we will use the function, graph the fluxes, check them carefully and then assume the output is the expected one
-co2_conc <- read_csv("tests/testthat/data/co2_conc.csv") # just to save time
+co2_conc <- readr::read_csv("tests/testthat/data/co2_conc.csv") # just to save time
 slopes <- co2_conc %>%
    flux_fitting_log(
       end_cut = 60
