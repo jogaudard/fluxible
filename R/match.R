@@ -50,7 +50,7 @@ field_record <- field_record %>%
 #  if(!is.double(raw_flux$temp_air)) stop("temp_air is not a double")
 #  if(!is.double(raw_flux$temp_soil)) stop("temp_soil is not a double")
 #  if(!is.double(raw_flux$PAR)) stop("PAR is not a double")
- if(!is.double(raw_conc$conc)) stop("CO2 is not a double")
+ if(!is.double(raw_conc$conc)) stop("conc is not a double")
 
  if(!lubridate::is.POSIXct(field_record$start)) stop("start in field_record dataframe is not ymd_hms!")
  
