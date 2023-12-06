@@ -122,14 +122,23 @@ write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 
 # to test the fitting, we will use the function, graph the fluxes, check them carefully and then assume the output is the expected one
 co2_conc <- readr::read_csv("tests/testthat/data/co2_conc.csv") # just to save time
-slopes <- co2_conc %>%
+
+slopes0 <- co2_conc %>%
+   flux_fitting_log()
+
+slopes60 <- co2_conc %>%
    flux_fitting_log(
       end_cut = 60
+   )
+
+slopes30 <- co2_conc %>%
+   flux_fitting_log(
+      end_cut = 30
    )
    
 # then we graph and check that it is all good
 
-slopes  %>%
+slopes0  %>% # this one looks bad, because there is some stuff left at the end of the fluxes
   ggplot(aes(datetime)) +
   geom_point(aes(y = conc, color = cut), size = 0.2) +
   geom_line(aes(y = fit), linetype = "longdash") +
@@ -145,6 +154,49 @@ slopes  %>%
   scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
   ylim(400,800) +
   facet_wrap(~fluxID, scales = "free")
+
+slopes30  %>%
+  ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  geom_line(aes(y = fit_slope), linetype = "dashed") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+  ylim(400,800) +
+  facet_wrap(~fluxID, scales = "free")
+
+  slopes60  %>%
+  ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  geom_line(aes(y = fit_slope), linetype = "dashed") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+  ylim(400,800) +
+  facet_wrap(~fluxID, scales = "free")
+
+write_csv(slopes0, "tests/testthat/data/slopes0.csv")
+write_csv(slopes30, "tests/testthat/data/slopes30.csv")
+write_csv(slopes60, "tests/testthat/data/slopes60.csv")
+
+
+# with missing data
+
+co2_conc_missing <- readr::read_csv("tests/testthat/data/co2_conc_missing.csv")
 
 # to test the package
 devtools::test()
