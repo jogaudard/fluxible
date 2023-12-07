@@ -1,5 +1,14 @@
 # function to fit the CO2 concentration to a function of time, as described in Zhao 2018
 
+# to do list
+# clean unused parts and stuff in comments
+# add error messages for wrong arguments
+# add warnings?
+# add documentation
+# make test on longer datasets
+# make test with negative fluxes (the dataset used so far has only positive fluxes)
+
+
 flux_fitting_log <- function(conc_df,
                                weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong
                                t_window = 20, # enlarge focus window before and after tmin and tmax
@@ -25,93 +34,93 @@ flux_fitting_log <- function(conc_df,
 
   
   conc_df <- conc_df %>% 
-    group_by(fluxID) %>% 
-    mutate(
+    dplyr::group_by(fluxID) %>% 
+    dplyr::mutate(
       time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
       time = as.double(time),
       start = start + start_cut,
       end = end - end_cut,
-      cut = case_when(
+      cut = dplyr::case_when(
         datetime < start | datetime > end ~ "cut",
         TRUE ~ "keep"
       ),
-      cut = as_factor(cut)
+      cut = haven::as_factor(cut)
     ) %>% 
-    ungroup()
+    dplyr::ungroup()
   
 conc_df_cut <- conc_df %>%
-   filter(
+   dplyr::filter(
       cut == "keep"
     )
 
   Cm_df <- conc_df_cut %>% 
-       group_by(fluxID) %>% 
-    distinct(conc, .keep_all = TRUE) %>% 
-    mutate(
+       dplyr::group_by(fluxID) %>% 
+    dplyr::distinct(conc, .keep_all = TRUE) %>% 
+    dplyr::mutate(
       Cmax = max(conc),
       Cmin = min(conc),
       tmax = time[conc == Cmax],
       tmin = time[conc == Cmin]
     ) %>% 
-    select(fluxID, Cmax, Cmin, tmax, tmin) %>% 
-    ungroup() %>% 
-    distinct(Cmax, Cmin, .keep_all = TRUE)
+    dplyr::select(fluxID, Cmax, Cmin, tmax, tmin) %>% 
+    dplyr::ungroup() %>% 
+    dplyr::distinct(Cmax, Cmin, .keep_all = TRUE)
   
   Cm_slope <- conc_df_cut %>% 
-    group_by(fluxID) %>% 
-    do({model = lm(conc ~ time, data=.)    # create your model
+    dplyr::group_by(fluxID) %>% 
+    dplyr::do({model = lm(conc ~ time, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
-    filter(term == "time") %>% 
-    rename(slope_Cm = estimate) %>% 
-    select(fluxID, slope_Cm) %>% 
-    ungroup()
+    dplyr::filter(term == "time") %>% 
+    dplyr::rename(slope_Cm = estimate) %>% 
+    dplyr::select(fluxID, slope_Cm) %>% 
+    dplyr::ungroup()
   
   Cm_df <- left_join(Cm_df, Cm_slope) %>% 
-    mutate(
-      Cm_est = case_when(
+    dplyr::mutate(
+      Cm_est = dplyr::case_when(
         slope_Cm < 0 ~ Cmin, #Cm is the maximum mixing point, which is when the limit of C(t) when t tends to infinite.
         slope_Cm > 0 ~ Cmax 
       ),
-      tm = case_when(
+      tm = dplyr::case_when(
         slope_Cm < 0 ~ tmin,
         slope_Cm > 0 ~ tmax
       )
     ) %>% 
-    select(fluxID, Cm_est, tm, slope_Cm) %>% 
-    ungroup()
+    dplyr::select(fluxID, Cm_est, tm, slope_Cm) %>% 
+    dplyr::ungroup()
   
   Cz_df <- conc_df_cut %>%
-    group_by(fluxID) %>%
-    filter(
+    dplyr::group_by(fluxID) %>%
+    dplyr::filter(
       time <= Cz_window
     ) %>%
-    do({model = lm(conc ~ time, data=.)    # create your model
+    dplyr::do({model = lm(conc ~ time, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
     pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
-    rename(
+    dplyr::rename(
       Cz = "(Intercept)",
       slope_Cz = time) %>%
-    select(fluxID, Cz, slope_Cz) %>%
-    ungroup()
+    dplyr::select(fluxID, Cz, slope_Cz) %>%
+    dplyr::ungroup()
   
   tz_df <- conc_df_cut %>% 
     left_join(Cz_df) %>% 
-    group_by(fluxID) %>% 
-    filter(
+    dplyr::group_by(fluxID) %>% 
+    dplyr::filter(
       # time > Cz_window
       time < length_flux / 2 # tz should be in the first half of the flux
     ) %>%
-    mutate(
+    dplyr::mutate(
       conc_roll = zoo::rollmean(conc, k = roll_width, fill = NA, align = "right"),
       Cd = abs(conc_roll - Cz),
       minCd = min(Cd, na.rm = TRUE),
       tz_est = min(time[Cd == minCd], na.rm = TRUE)
     ) %>% 
-    ungroup() %>% 
-    select(fluxID, tz_est) %>% 
-    distinct()
+    dplyr::ungroup() %>% 
+    dplyr::select(fluxID, tz_est) %>% 
+    dplyr::distinct()
   
   # a_df <- CO2_df %>% # a is the slope at the end of the flux
   #   group_by(fluxID) %>% 
@@ -130,35 +139,35 @@ conc_df_cut <- conc_df %>%
   
   Cb_df <- conc_df_cut %>% 
     left_join(tz_df) %>% 
-    group_by(fluxID) %>% 
-    mutate(
+    dplyr::group_by(fluxID) %>% 
+    dplyr::mutate(
       Cb = conc[time == tz_est - b_window]
     ) %>% 
-    ungroup() %>% 
-    select(fluxID, Cb) %>% 
-    distinct()
+    dplyr::ungroup() %>% 
+    dplyr::select(fluxID, Cb) %>% 
+    dplyr::distinct()
   
   a_df <- conc_df_cut %>% 
-    group_by(fluxID) %>% 
-    mutate(
+    dplyr::group_by(fluxID) %>% 
+    dplyr::mutate(
       ta = length_flux - a_window,
       Ca = conc[time == ta]
     ) %>% 
-    ungroup() %>% 
-    select(fluxID, ta, Ca) %>% 
-    distinct()
+    dplyr::ungroup() %>% 
+    dplyr::select(fluxID, ta, Ca) %>% 
+    dplyr::distinct()
   
   estimates_df <- left_join(Cm_df, Cz_df) %>% 
     left_join(tz_df) %>% 
     left_join(a_df) %>%
     left_join(Cb_df) %>% 
-    mutate(
-      b_est = case_when(
+    dplyr::mutate(
+      b_est = dplyr::case_when(
         Cb == Cm_est ~ 0, # special case or flat flux
         Cz == Cm_est ~ 0, # special case or flat flux
         TRUE ~         log(abs((Cb - Cm_est)/(Cz - Cm_est))) * (1/b_window), # problem with the log? negative value? let's try with absolute value
       ),
-      a_est = case_when(
+      a_est = dplyr::case_when(
         ta == tz_est ~ 0, # tz_est = ta is a special case that is undefined
         TRUE ~ (Ca - Cm_est - (Cz - Cm_est) * exp(-b_est * (ta - tz_est))) / (ta - tz_est)
       )
@@ -187,8 +196,8 @@ conc_df_cut <- conc_df %>%
   
   fitting_par <- conc_df_cut %>% 
     left_join(estimates_df) %>% 
-    select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
-    group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
+    dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
+    dplyr::group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
     nest() %>% 
     rowwise() %>%
     summarize(
@@ -203,10 +212,13 @@ conc_df_cut <- conc_df %>%
       tz = exp(results$par[4]), #we force tz to be positive
       slope_tz = a + b * (Cm - Cz),
     ) %>% 
-    ungroup()
+    dplyr::ungroup() %>%
+       dplyr::select(!results) # we do not need it anymore and it is confusing to have them as tibble
+
+
   conc_fitting <- conc_df %>% 
     left_join(fitting_par) %>% 
-    mutate(
+    dplyr::mutate(
       # time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
       # time_corr = as.double(time_corr),
       fit = Cm + a * (time - tz) + (Cz - Cm) * exp(- b * (time - tz)),

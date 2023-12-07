@@ -6,8 +6,8 @@ test_that("multiplication works", {
 
 test_that("fitting works with 0 second end cut",{
   ### setup
-  co2_conc <- readr::read_csv("data/co2_conc.csv")
-  slopes0 <- readr::read_csv("data/slopes0.csv")
+  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+  slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
   expect_equal(
