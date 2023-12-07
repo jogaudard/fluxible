@@ -63,7 +63,7 @@ co2_df <- co2_df %>%
     datetime = "Date/Time",
     temp_air = "Temp_air ('C)",
     temp_soil = "Temp_soil ('C)",
-    CO2 = "CO2 (ppm)",
+    conc = "CO2 (ppm)",
     PAR = "PAR (umolsm2)"
    ) %>%
    mutate(
