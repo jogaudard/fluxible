@@ -69,7 +69,7 @@ co2_df <- co2_df %>%
    mutate(
       datetime = dmy_hms(datetime)
    ) %>%
-         select(datetime, temp_air, temp_soil, CO2, PAR) # we keep just the variables we need
+         select(datetime, temp_air, temp_soil, conc, PAR) # we keep just the variables we need
 
 co2_df_short <- co2_df %>%
    filter( # we will just make it shorter and keep a couple of fluxes around midnight
@@ -103,13 +103,11 @@ co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv", col_types =
 
 co2_conc <- match_flux(
    raw_conc = co2_df_short,
-   field_record = record_short,
-   conc_col = "CO2"
+   field_record = record_short
    )
 co2_conc_missing <- match_flux(
    co2_df_missing,
-   record_short,
-   conc_col = "CO2"
+   record_short
    )
 
 

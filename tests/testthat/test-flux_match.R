@@ -46,7 +46,7 @@ test_that("renaming variables works", {
 
   co2_df_short <- co2_df_short %>%
      dplyr::rename(
-      CO2_conc = CO2,
+      CO2_conc = conc,
       date_time = datetime
      )
 
@@ -151,18 +151,18 @@ test_that("error on datetime", {
       co2_df_short,
       record_short
       ),
-    "datetime in raw_flux dataframe is not ymd_hms!"
+    "datetime in raw_conc dataframe is not ymd_hms!"
   )
 })
 
-test_that("error on CO2", {
+test_that("error on conc variable", {
   co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 
   co2_df_short <- co2_df_short %>%
      dplyr::mutate(
-      CO2 = as.character(CO2)
+      conc = as.character(conc)
      )
 
   expect_error(
