@@ -1,6 +1,7 @@
 # function to fit the CO2 concentration to a function of time, as described in Zhao 2018
 
 # to do list
+# check time thing in the beginning
 # clean unused parts and stuff in comments
 # add error messages for wrong arguments
 # add warnings?
@@ -10,12 +11,12 @@
 
 
 flux_fitting_log <- function(conc_df,
-                               weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong
+                              #  weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong, this shoudl be moved to the quality check function
                                t_window = 20, # enlarge focus window before and after tmin and tmax
                                Cz_window = 15, # window used to calculate Cz, at the beginning of cut window
                                b_window = 10, # window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly
                                a_window = 10, # window at the end of the flux to estimate a
-                               length_flux = 160, # length of the total flux
+                              #  length_flux = 160, # length of the total flux
                                roll_width = 15, # width of the rolling mean for CO2 when looking for tz, idaelly same as Cz_window
                                # c = 3 # coefficient to define the interval around estimates to optimize function
                                # noise = 10, # noise of the setup in ppm
@@ -29,7 +30,16 @@ flux_fitting_log <- function(conc_df,
                               end_cut = 0 # to cut at the end, if you notice on the graphs that the match was not precise enough
 ){ 
   
-   
+   # we need to check that values provided to the function are what we expect and will not crash the function
+
+  #  if(!is.double(t_window)) stop("t_window has to be a double")
+  #  if(!is.double(Cz_window)) stop("Cz_window has to be a double")
+  #  if(!is.double(b_window)) stop("b_window has to be a double")
+  #  if(!is.double(a_window)) stop("a_window has to be a double")
+  #  if(!is.double(length_flux)) stop("length_flux has to be a double")
+  #  if(!is.double(roll_width)) stop("roll_width has to be a double")
+  #  if(!is.double(start_cut)) stop("start_cut has to be a double")
+  #  if(!is.double(end_cut)) stop("end_cut has to be a double")
 
 
 
@@ -41,8 +51,9 @@ flux_fitting_log <- function(conc_df,
   conc_df <- conc_df %>% 
     dplyr::group_by(fluxID) %>% 
     dplyr::mutate(
-      time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"),
+      time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
       time = as.double(time),
+      length_flux = max(time) - start_cut - end_cut, #to have length_flux for each flux, better than setting it up as a function argument
       start = start + start_cut,
       end = end - end_cut,
       cut = dplyr::case_when(

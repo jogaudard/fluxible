@@ -36,7 +36,7 @@ usethis::use_testthat()
 
 # commented the package loader because I want to test if packages are specified inside the functions
 # library(dataDownloader)
-# library(tidyverse)
+library(tidyverse)
 # library(lubridate)
 # library(timetk)
 # library(broom)
@@ -124,6 +124,7 @@ co2_conc <- readr::read_csv("tests/testthat/data/co2_conc.csv") # just to save t
 slopes0 <- co2_conc %>%
    flux_fitting_log()
 
+   
 slopes60 <- co2_conc %>%
    flux_fitting_log(
       end_cut = 60
@@ -135,8 +136,8 @@ slopes30 <- co2_conc %>%
    )
    
 # then we graph and check that it is all good
-
-slopes0  %>% # this one looks bad, because there is some stuff left at the end of the fluxes
+slopes0v1 <- read_csv("tests/testthat/data/slopes0v1.csv")
+slopes0 %>% # this one looks bad, because there is some stuff left at the end of the fluxes
   ggplot(aes(datetime)) +
   geom_point(aes(y = conc, color = cut), size = 0.2) +
   geom_line(aes(y = fit), linetype = "longdash") +
