@@ -20,8 +20,8 @@ test_that("fitting works with 0 second end cut",{
 
 test_that("fitting works with 30 second end cut",{
   ### setup
-  co2_conc <- readr::read_csv("data/co2_conc.csv")
-  slopes30 <- readr::read_csv("data/slopes30.csv")
+  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+  slopes30 <- readr::read_csv("data/slopes30.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
   expect_equal(
@@ -35,8 +35,8 @@ test_that("fitting works with 30 second end cut",{
 
 test_that("fitting works with 60 second end cut",{
   ### setup
-  co2_conc <- readr::read_csv("data/co2_conc.csv")
-  slopes30 <- readr::read_csv("data/slopes60.csv")
+  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+  slopes60 <- readr::read_csv("data/slopes60.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
   expect_equal(

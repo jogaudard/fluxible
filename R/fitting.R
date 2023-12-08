@@ -29,8 +29,13 @@ flux_fitting_log <- function(conc_df,
                               end_cut = 0 # to cut at the end, if you notice on the graphs that the match was not precise enough
 ){ 
   
+   
+
+
+
   # we will try to calculate all the parameters without a, and then insert a in the end
   
+
 
   
   conc_df <- conc_df %>% 
@@ -76,7 +81,7 @@ conc_df_cut <- conc_df %>%
     dplyr::select(fluxID, slope_Cm) %>% 
     dplyr::ungroup()
   
-  Cm_df <- left_join(Cm_df, Cm_slope) %>% 
+  Cm_df <- dplyr::left_join(Cm_df, Cm_slope) %>% 
     dplyr::mutate(
       Cm_est = dplyr::case_when(
         slope_Cm < 0 ~ Cmin, #Cm is the maximum mixing point, which is when the limit of C(t) when t tends to infinite.
@@ -106,7 +111,7 @@ conc_df_cut <- conc_df %>%
     dplyr::ungroup()
   
   tz_df <- conc_df_cut %>% 
-    left_join(Cz_df) %>% 
+    dplyr::left_join(Cz_df) %>% 
     dplyr::group_by(fluxID) %>% 
     dplyr::filter(
       # time > Cz_window
@@ -138,7 +143,7 @@ conc_df_cut <- conc_df %>%
   #   ungroup()
   
   Cb_df <- conc_df_cut %>% 
-    left_join(tz_df) %>% 
+    dplyr::left_join(tz_df) %>% 
     dplyr::group_by(fluxID) %>% 
     dplyr::mutate(
       Cb = conc[time == tz_est - b_window]
@@ -157,10 +162,10 @@ conc_df_cut <- conc_df %>%
     dplyr::select(fluxID, ta, Ca) %>% 
     dplyr::distinct()
   
-  estimates_df <- left_join(Cm_df, Cz_df) %>% 
-    left_join(tz_df) %>% 
-    left_join(a_df) %>%
-    left_join(Cb_df) %>% 
+  estimates_df <- dplyr::left_join(Cm_df, Cz_df) %>% 
+    dplyr::left_join(tz_df) %>% 
+    dplyr::left_join(a_df) %>%
+    dplyr::left_join(Cb_df) %>% 
     dplyr::mutate(
       b_est = dplyr::case_when(
         Cb == Cm_est ~ 0, # special case or flat flux
@@ -195,7 +200,7 @@ conc_df_cut <- conc_df %>%
   
   
   fitting_par <- conc_df_cut %>% 
-    left_join(estimates_df) %>% 
+    dplyr::left_join(estimates_df) %>% 
     dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
     dplyr::group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
     nest() %>% 
@@ -217,7 +222,7 @@ conc_df_cut <- conc_df %>%
 
 
   conc_fitting <- conc_df %>% 
-    left_join(fitting_par) %>% 
+    dplyr::left_join(fitting_par) %>% 
     dplyr::mutate(
       # time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
       # time_corr = as.double(time_corr),
