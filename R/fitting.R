@@ -41,12 +41,12 @@ flux_fitting_log <- function(conc_df,
   #  if(!is.double(start_cut)) stop("start_cut has to be a double")
   #  if(!is.double(end_cut)) stop("end_cut has to be a double")
 
-
+# handling missing data
+# should print a warning that there is not enough data
+# take them out of the df and re add them in the end with NA for all new columns
+# what is "not enough data for the function to work?"
 
   # we will try to calculate all the parameters without a, and then insert a in the end
-  
-
-
   
   conc_df <- conc_df %>% 
     dplyr::group_by(fluxID) %>% 
@@ -114,7 +114,7 @@ conc_df_cut <- conc_df %>%
     dplyr::do({model = lm(conc ~ time, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
-    pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
+    tidyr::pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
     dplyr::rename(
       Cz = "(Intercept)",
       slope_Cz = time) %>%
@@ -214,9 +214,9 @@ conc_df_cut <- conc_df %>%
     dplyr::left_join(estimates_df) %>% 
     dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
     dplyr::group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
-    nest() %>% 
-    rowwise() %>%
-    summarize(
+    tidyr::nest() %>% 
+    dplyr::rowwise() %>%
+    dplyr::summarize(
       # I would like to do something more resilient to avoid stopping everything if there is a problem with optim. Maybe tryCatch can be an idea
       results = list(optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, conc = data$conc, time = data$time, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
       Cm = results$par[1],

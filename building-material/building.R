@@ -188,14 +188,43 @@ slopes30  %>%
   ylim(400,800) +
   facet_wrap(~fluxID, scales = "free")
 
-write_csv(slopes0, "tests/testthat/data/slopes0.csv")
-write_csv(slopes30, "tests/testthat/data/slopes30.csv")
-write_csv(slopes60, "tests/testthat/data/slopes60.csv")
+# we pass those as comments to avoid overwriting the files used in the tests
+# write_csv(slopes0, "tests/testthat/data/slopes0.csv")
+# write_csv(slopes30, "tests/testthat/data/slopes30.csv")
+# write_csv(slopes60, "tests/testthat/data/slopes60.csv")
 
 
 # with missing data
 
 co2_conc_missing <- readr::read_csv("tests/testthat/data/co2_conc_missing.csv")
+
+co2_conc_missing %>%
+   ggplot(aes(datetime, conc)) +
+   geom_point() +
+   facet_wrap(~fluxID, scales = "free")
+
+slopes_missing <- co2_conc_missing %>%
+filter(fluxID == 5) %>%
+   flux_fitting_log()
+
+
+
+  slopes_missing  %>%
+  ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  geom_line(aes(y = fit_slope), linetype = "dashed") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+  ylim(400,800) +
+  facet_wrap(~fluxID, scales = "free")
 
 # to test the package
 devtools::test()
