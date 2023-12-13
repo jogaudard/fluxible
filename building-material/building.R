@@ -204,7 +204,7 @@ co2_conc_missing %>%
    facet_wrap(~fluxID, scales = "free")
 
 slopes_missing <- co2_conc_missing %>%
-filter(fluxID == 5) %>%
+# filter(fluxID == 5) %>%
    flux_fitting_log()
 
 

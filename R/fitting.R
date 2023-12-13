@@ -50,7 +50,7 @@ flux_fitting_log <- function(conc_df,
   
   conc_df <- conc_df %>% 
     dplyr::group_by(fluxID) %>% 
-    dplyr::mutate(
+       dplyr::mutate(
       time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
       time = as.double(time),
       length_flux = max(time) - start_cut - end_cut, #to have length_flux for each flux, better than setting it up as a function argument
@@ -84,7 +84,7 @@ conc_df_cut <- conc_df %>%
   
   Cm_slope <- conc_df_cut %>% 
     dplyr::group_by(fluxID) %>% 
-    dplyr::do({model = lm(conc ~ time, data=.)    # create your model
+    dplyr::do({model = lm(conc ~ time, data=., na.action = "na.exclude")    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
     dplyr::filter(term == "time") %>% 
