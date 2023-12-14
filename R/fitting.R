@@ -49,11 +49,10 @@ flux_fitting_log <- function(conc_df,
   # we will try to calculate all the parameters without a, and then insert a in the end
   
   conc_df <- conc_df %>% 
-    dplyr::group_by(fluxID) %>% 
+       dplyr::group_by(fluxID) %>% 
        dplyr::mutate(
       time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
       time = as.double(time),
-      length_flux = max(time) - start_cut - end_cut, #to have length_flux for each flux, better than setting it up as a function argument
       start = start + start_cut,
       end = end - end_cut,
       cut = dplyr::case_when(
@@ -67,7 +66,16 @@ flux_fitting_log <- function(conc_df,
 conc_df_cut <- conc_df %>%
    dplyr::filter(
       cut == "keep"
-    )
+    )  %>%
+       tidyr::drop_na(conc) %>% # drop NA in conc to avoid messing up the models used later, will have to print a warning for that
+           dplyr::group_by(fluxID) %>%
+           dplyr::mutate(
+            time_cut = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
+            time_cut = as.double(time_cut),
+            length_window = max(time_cut) - start_cut - end_cut, #to have length_flux for each flux, better than setting it up as a function argument
+                 ) %>%
+                    dplyr::ungroup()
+
 
   Cm_df <- conc_df_cut %>% 
        dplyr::group_by(fluxID) %>% 
@@ -75,8 +83,8 @@ conc_df_cut <- conc_df %>%
     dplyr::mutate(
       Cmax = max(conc),
       Cmin = min(conc),
-      tmax = time[conc == Cmax],
-      tmin = time[conc == Cmin]
+      tmax = time_cut[conc == Cmax],
+      tmin = time_cut[conc == Cmin]
     ) %>% 
     dplyr::select(fluxID, Cmax, Cmin, tmax, tmin) %>% 
     dplyr::ungroup() %>% 
@@ -84,10 +92,10 @@ conc_df_cut <- conc_df %>%
   
   Cm_slope <- conc_df_cut %>% 
     dplyr::group_by(fluxID) %>% 
-    dplyr::do({model = lm(conc ~ time, data=., na.action = "na.exclude")    # create your model
+    dplyr::do({model = lm(conc ~ time_cut, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
-    dplyr::filter(term == "time") %>% 
+    dplyr::filter(term == "time_cut") %>% 
     dplyr::rename(slope_Cm = estimate) %>% 
     dplyr::select(fluxID, slope_Cm) %>% 
     dplyr::ungroup()
@@ -109,15 +117,15 @@ conc_df_cut <- conc_df %>%
   Cz_df <- conc_df_cut %>%
     dplyr::group_by(fluxID) %>%
     dplyr::filter(
-      time <= Cz_window
+      time_cut <= Cz_window
     ) %>%
-    dplyr::do({model = lm(conc ~ time, data=.)    # create your model
+    dplyr::do({model = lm(conc ~ time_cut, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) %>%          # get model info
     tidyr::pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") %>% 
     dplyr::rename(
       Cz = "(Intercept)",
-      slope_Cz = time) %>%
+      slope_Cz = time_cut) %>%
     dplyr::select(fluxID, Cz, slope_Cz) %>%
     dplyr::ungroup()
   
@@ -126,13 +134,13 @@ conc_df_cut <- conc_df %>%
     dplyr::group_by(fluxID) %>% 
     dplyr::filter(
       # time > Cz_window
-      time < length_flux / 2 # tz should be in the first half of the flux
+      time_cut < length_window / 2 # tz should be in the first half of the flux
     ) %>%
     dplyr::mutate(
       conc_roll = zoo::rollmean(conc, k = roll_width, fill = NA, align = "right"),
       Cd = abs(conc_roll - Cz),
       minCd = min(Cd, na.rm = TRUE),
-      tz_est = min(time[Cd == minCd], na.rm = TRUE)
+      tz_est = min(time_cut[Cd == minCd], na.rm = TRUE)
     ) %>% 
     dplyr::ungroup() %>% 
     dplyr::select(fluxID, tz_est) %>% 
@@ -157,7 +165,7 @@ conc_df_cut <- conc_df %>%
     dplyr::left_join(tz_df) %>% 
     dplyr::group_by(fluxID) %>% 
     dplyr::mutate(
-      Cb = conc[time == tz_est - b_window]
+      Cb = conc[time_cut == tz_est - b_window]
     ) %>% 
     dplyr::ungroup() %>% 
     dplyr::select(fluxID, Cb) %>% 
@@ -166,8 +174,8 @@ conc_df_cut <- conc_df %>%
   a_df <- conc_df_cut %>% 
     dplyr::group_by(fluxID) %>% 
     dplyr::mutate(
-      ta = length_flux - a_window,
-      Ca = conc[time == ta]
+      ta = length_window - a_window,
+      Ca = conc[time_cut == ta]
     ) %>% 
     dplyr::ungroup() %>% 
     dplyr::select(fluxID, ta, Ca) %>% 
@@ -212,13 +220,13 @@ conc_df_cut <- conc_df %>%
   
   fitting_par <- conc_df_cut %>% 
     dplyr::left_join(estimates_df) %>% 
-    dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
+    dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_cut, conc) %>%
     dplyr::group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
     tidyr::nest() %>% 
     dplyr::rowwise() %>%
     dplyr::summarize(
       # I would like to do something more resilient to avoid stopping everything if there is a problem with optim. Maybe tryCatch can be an idea
-      results = list(optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, conc = data$conc, time = data$time, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
+      results = list(optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, conc = data$conc, time = data$time_cut, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
       Cm = results$par[1],
       a = results$par[2],
       # b = exp(results$par[3]),#/(abs(results$par[3])+1),
@@ -234,11 +242,22 @@ conc_df_cut <- conc_df %>%
 
   conc_fitting <- conc_df %>% 
     dplyr::left_join(fitting_par) %>% 
+    dplyr::group_by(fluxID) %>%
     dplyr::mutate(
       # time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
       # time_corr = as.double(time_corr),
-      fit = Cm + a * (time - tz) + (Cz - Cm) * exp(- b * (time - tz)),
-      fit_slope = slope_tz * (time) + Cz - slope_tz * tz,
+      # fit = dplyr::case_when(
+      #   is.na(time) ~ NA_real_,
+      #   !is.na(time) ~ Cm + a * (time - tz) + (Cz - Cm) * exp(- b * (time - tz))
+      # ), # problem here because tz is calculated compared to time_cut
+      # fit_slope = dplyr::case_when(
+      #   is.na(time) ~ NA_real_,
+      #   !is.na(time) ~ slope_tz * (time) + Cz - slope_tz * tz
+      # ),
+      # need to correct tz for the time diff between time and time_cut
+      time_diff = time[2] - time[1],
+      fit = Cm + a * (time - tz - time_diff) + (Cz - Cm) * exp(- b * (time - tz - time_diff)),
+      fit_slope = slope_tz * (time) + Cz - slope_tz * (tz + time_diff),
       # fit = Cm_est + a_est * (time - tz_est - time_corr) + (Cz - Cm_est) * exp(- b_est * (time - tz_est - time_corr)),
       # fit_slope = (a_est + b_est * (Cm_est - Cz) ) * (time - time_corr) + Cz - slope_tz * tz_est,
       start_z = start + tz # this is for graph purpose, to have a vertical line showing where tz is for each flux

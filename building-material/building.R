@@ -197,6 +197,7 @@ slopes30  %>%
 # with missing data
 
 co2_conc_missing <- readr::read_csv("tests/testthat/data/co2_conc_missing.csv")
+view(co2_conc_missing)
 
 co2_conc_missing %>%
    ggplot(aes(datetime, conc)) +
@@ -204,8 +205,11 @@ co2_conc_missing %>%
    facet_wrap(~fluxID, scales = "free")
 
 slopes_missing <- co2_conc_missing %>%
-# filter(fluxID == 5) %>%
-   flux_fitting_log()
+# drop_na(conc) %>%
+   # filter(fluxID == 4) %>%
+   flux_fitting_log(
+      # end_cut = 29
+      )
 
 
 
@@ -223,7 +227,7 @@ slopes_missing <- co2_conc_missing %>%
    #  "start_error" = "red"
   )) +
   scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
-  ylim(400,800) +
+#   ylim(-60000,600) +
   facet_wrap(~fluxID, scales = "free")
 
 # to test the package
