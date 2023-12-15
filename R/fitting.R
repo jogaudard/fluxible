@@ -349,11 +349,24 @@ conc_df_cut <- conc_df %>%
     # )
   
   warning_df <- conc_df_cut %>%
-     select(fluxID, length_window, conc) %>%
-        group_by(fluxID) %>%
-           reframe(
-            count = sum(!is.na(conc))
-           )
+     dplyr::select(fluxID, n_conc, time) %>%
+        dplyr::group_by(fluxID, n_conc) %>%
+           dplyr::reframe(
+            length_flux = max(time)
+           ) %>%
+              dplyr::ungroup() %>%
+                 dplyr::mutate(
+                  # count = as.numeric(count),
+                  warnings = paste("\n","fluxID", fluxID, ": slope was estimated on", n_conc, "points out of", length_flux, "seconds because data are missing"),
+                  warnings = dplyr::case_when(
+                    length_flux != n_conc - 1 ~ warnings
+                  ),
+                  warnings = as.character(warnings)
+                 )
+                #  view(warning_df)
+
+  if(any(!is.na(warning_df$warnings))) warning(warnings)
+  # print(warning_df)
 
   return(conc_fitting)
 }
