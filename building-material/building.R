@@ -200,6 +200,15 @@ co2_conc_missing <- readr::read_csv("tests/testthat/data/co2_conc_missing.csv")
 view(co2_conc_missing)
 
 co2_conc_missing %>%
+select(fluxID, conc, start, end) %>%
+   group_by(fluxID) %>%
+      reframe(
+         count = sum(!is.na(conc)),
+         length = difftime(end, start, unit = "secs")
+      ) %>%
+         distinct()
+
+co2_conc_missing %>%
    ggplot(aes(datetime, conc)) +
    geom_point() +
    facet_wrap(~fluxID, scales = "free")
@@ -211,6 +220,7 @@ slopes_missing <- co2_conc_missing %>%
       # end_cut = 29
       )
 
+view(slopes_missing)
 
 
   slopes_missing  %>%

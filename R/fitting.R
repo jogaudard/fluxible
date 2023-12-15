@@ -72,7 +72,7 @@ conc_df_cut <- conc_df %>%
            dplyr::mutate(
             time_cut = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
             time_cut = as.double(time_cut),
-            length_window = max(time_cut) - start_cut - end_cut, #to have length_flux for each flux, better than setting it up as a function argument
+            length_window = max(time_cut), #to have length_flux for each flux, better than setting it up as a function argument
                  ) %>%
                     dplyr::ungroup()
 
@@ -262,7 +262,8 @@ conc_df_cut <- conc_df %>%
       # fit_slope = (a_est + b_est * (Cm_est - Cz) ) * (time - time_corr) + Cz - slope_tz * tz_est,
       start_z = start + tz # this is for graph purpose, to have a vertical line showing where tz is for each flux
       
-    )# %>% 
+    ) %>% 
+    dplyr::select(!time_diff)
   # group_by(fluxID, Cm, a, b, tz, Cz) %>% 
   #   # nest() %>% 
   #   mutate(
@@ -347,5 +348,12 @@ conc_df_cut <- conc_df %>%
   #     )
     # )
   
+  warning_df <- conc_df_cut %>%
+     select(fluxID, length_window, conc) %>%
+        group_by(fluxID) %>%
+           reframe(
+            count = sum(!is.na(conc))
+           )
+
   return(conc_fitting)
 }
