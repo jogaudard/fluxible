@@ -348,7 +348,7 @@ conc_df_cut <- conc_df %>%
   #     )
     # )
   
-  warning_df <- conc_df_cut %>%
+  warning_msg <- conc_df_cut %>%
      dplyr::select(fluxID, n_conc, time) %>%
         dplyr::group_by(fluxID, n_conc) %>%
            dplyr::reframe(
@@ -362,10 +362,13 @@ conc_df_cut <- conc_df %>%
                     length_flux != n_conc - 1 ~ warnings
                   ),
                   warnings = as.character(warnings)
-                 )
+                 ) %>%
+              dplyr::pull(warnings)
                 #  view(warning_df)
 
-  if(any(!is.na(warning_df$warnings))) warning(warnings)
+  warnings <- stringr::str_c(warning_msg)
+
+  if(any(!is.na(warnings)))  warning(warnings)
   # print(warning_df)
 
   return(conc_fitting)

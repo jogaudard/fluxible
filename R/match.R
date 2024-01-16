@@ -94,14 +94,14 @@ field_record <- field_record %>%
       dplyr::group_by(fluxID) %>% # filling the rest, except if there are NA for some fluxes
     tidyr::fill(names(field_record)) %>%
     dplyr::filter(
-      (datetime <= end
+      (datetime < end
       & datetime >= start) #cropping the part of the flux that is after the End and before the start
       # | is.na(datetime_wna) # we keep datetime = na because we want to see where there is no data
       )  %>%
     dplyr::mutate(
       # nrow = n(),
       n_conc = sum(!is.na(conc)), #not sure why I cannot do that with count
-      ratio = n_conc/(measurement_length + 1), # add 1 sec because filter is including both limits
+      ratio = n_conc/(measurement_length - startcrop), # add 1 sec because filter is including both limits
       flag = dplyr::case_when(
         ratio == 0 ~ "no data",
         ratio <= ratio_threshold ~ "nb of data too low"
