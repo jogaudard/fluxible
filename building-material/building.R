@@ -73,7 +73,7 @@ co2_df <- co2_df %>%
 
 co2_df_short <- co2_df %>%
    filter( # we will just make it shorter and keep a couple of fluxes around midnight
-         between_time(datetime, "2022-07-28 23:40:00", "2022-07-29 00:10:00")
+         timetk::between_time(datetime, "2022-07-28 23:40:00", "2022-07-29 00:10:00")
          )
 
 
@@ -87,7 +87,7 @@ record_short <- record %>%
       ) %>%
          select(!c(starting_time, date)) %>%
             filter( # we will just make it shorter and keep a couple of fluxes around midnight
-         between_time(start, "2022-07-28 23:40:00", "2022-07-29 00:10:00")
+         timetk::between_time(start, "2022-07-28 23:40:00", "2022-07-29 00:10:00")
          )
 
 
@@ -105,10 +105,15 @@ co2_conc <- match_flux(
    raw_conc = co2_df_short,
    field_record = record_short
    )
+
+   view(co2_conc)
+
 co2_conc_missing <- match_flux(
    co2_df_missing,
    record_short
    )
+
+   view(co2_conc_missing)
 
 
 # let's store them as csv for the tests
@@ -121,8 +126,8 @@ write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 # to test the fitting, we will use the function, graph the fluxes, check them carefully and then assume the output is the expected one
 co2_conc <- readr::read_csv("tests/testthat/data/co2_conc.csv") # just to save time
 
-slopes0 <- co2_conc %>%
-   flux_fitting_log()
+slopes0 <- flux_fitting_log(co2_conc)
+
 
    
 slopes60 <- co2_conc %>%
@@ -189,9 +194,9 @@ slopes30  %>%
   facet_wrap(~fluxID, scales = "free")
 
 # we pass those as comments to avoid overwriting the files used in the tests
-# write_csv(slopes0, "tests/testthat/data/slopes0.csv")
-# write_csv(slopes30, "tests/testthat/data/slopes30.csv")
-# write_csv(slopes60, "tests/testthat/data/slopes60.csv")
+write_csv(slopes0, "tests/testthat/data/slopes0.csv")
+write_csv(slopes30, "tests/testthat/data/slopes30.csv")
+write_csv(slopes60, "tests/testthat/data/slopes60.csv")
 
 
 # with missing data
@@ -225,6 +230,50 @@ view(slopes_missing)
 
   slopes_missing  %>%
   ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  geom_line(aes(y = fit_slope), linetype = "dashed") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+#   ylim(-60000,600) +
+  facet_wrap(~fluxID, scales = "free")
+
+# need to test some stuff arounf time_diff because I don't think it works the way it should
+
+slopes10s <- flux_fitting_log(
+   co2_conc,
+   start_cut = 10)
+
+slopes10s %>%
+   ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  geom_line(aes(y = fit_slope), linetype = "dashed") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+#   ylim(-60000,600) +
+  facet_wrap(~fluxID, scales = "free")
+
+  slopes60s <- flux_fitting_log(
+   co2_conc,
+   start_cut = 60)
+
+slopes60s %>%
+   ggplot(aes(datetime)) +
   geom_point(aes(y = conc, color = cut), size = 0.2) +
   geom_line(aes(y = fit), linetype = "longdash") +
   geom_line(aes(y = fit_slope), linetype = "dashed") +
