@@ -64,10 +64,10 @@ test_that("warnings when NAs are dropped in conc", {
 
 expect_warning(
   flux_fitting_log(co2_conc_missing),
-"fluxID 1: slope was estimated on 70 measurements out of 210 seconds because data are missing
-fluxID 2: slope was estimated on 122 measurements out of 210 seconds because data are missing
-fluxID 3: slope was estimated on 103 measurements out of 210 seconds because data are missing
-fluxID 5: slope was estimated on 161 measurements out of 210 seconds because data are missing
+"fluxID 1 : slope was estimated on 70 points out of 210 seconds because data are missing
+fluxID 2 : slope was estimated on 121 points out of 210 seconds because data are missing
+fluxID 3 : slope was estimated on 102 points out of 210 seconds because data are missing
+fluxID 5 : slope was estimated on 161 points out of 210 seconds because data are missing
 "
 )
 
