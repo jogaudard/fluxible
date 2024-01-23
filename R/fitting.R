@@ -251,9 +251,9 @@ conc_df_cut <- conc_df %>%
   
   fitting_par <- conc_df_cut %>% 
     dplyr::left_join(estimates_df) %>% 
-    dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
-    # dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_cut, conc) %>%
-    dplyr::group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz) %>%
+    # dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) %>%
+    dplyr::select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_cut, conc, time_diff) %>%
+    dplyr::group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_diff) %>%
     tidyr::nest() %>% 
     dplyr::rowwise() %>%
     dplyr::summarize(
