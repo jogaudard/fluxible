@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(wtflux)
+library(fluxible)
 
-test_check("wtflux")
+test_check("fluxible")

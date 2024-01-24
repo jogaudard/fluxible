@@ -1,6 +1,10 @@
 #' to calculate a flux based on the rate of change of gas concentration over time
 #' 
-#
+
+# to do list
+# documentation
+# column renaming
+# dummy check, arguments in right format
 
 
 flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions)
@@ -8,7 +12,7 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
                        tube_volume = 0.075, # volume of the tubing in L, default for summer 2020 setup
                        atm_pressure = 1, # atmoshperic pressure, assumed 1 atm
                        plot_area = 0.0625, # area of the plot in m^2, default for Three-D
-                       R = 0.082057 #gas constant, in L*atm*K^(-1)*mol^(-1)
+                       R = 0.082057, #gas constant, in L*atm*K^(-1)*mol^(-1)
                        cols_keep = c("turfID", "type", "start"), # columns to keep in the output (must be constant values for each fluxID, will go through distinct)
                        cols_ave = c("PAR") # columns that should be average in the output
 )

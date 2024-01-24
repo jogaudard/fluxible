@@ -307,6 +307,9 @@ flux_fitting_log(
 # to test the package
 devtools::test()
 
+# to create a new test file
+usethis::use_test(name = "flux_calc")
+
 # package workflow --------------------------------------------------------
 # it seems that to make testing easier I need to split my functions in smaller bits (I can add some wrap-up functions later)
 #
