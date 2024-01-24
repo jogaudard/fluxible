@@ -102,6 +102,61 @@ expect_warning(
 
 })
 
+test_that("error on arguments", {
+ co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
+
+expect_error(
+  flux_fitting_log(
+    co2_conc_missing,
+    start_cut = "Voldemort"
+    ),
+"start_cut has to be a double"
+)
+
+
+})
+
+
+
+test_that("cutting too much", {
+ co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+
+expect_error(
+  flux_fitting_log(
+    co2_conc,
+    start_cut = 120,
+    end_cut = 100
+    ),
+"You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)",
+fixed = TRUE # need that because there parenthesis in the error message
+)
+
+
+})
+
+test_that("renaming works", {
+ co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+
+
+  co2_conc_names <- co2_conc %>%
+     dplyr::rename(
+      date_time = datetime,
+      finish = end,
+      co2 = conc
+     )
+
+expect_no_error(
+  flux_fitting_log(
+    co2_conc_names,
+    datetime_col = "date_time",
+    end_col = "finish",
+    conc_col = "co2"
+  )
+)
+
+
+})
+
 ### tests on warnings
 
 # test_that("warning that fluxIDs provided are not found in the dataset",{

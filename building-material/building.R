@@ -294,6 +294,13 @@ slopes60s %>%
 #   ylim(-60000,600) +
   facet_wrap(~fluxID, scales = "free")
 
+flux_fitting_log(
+    co2_conc,
+    start_cut = 120,
+    end_cut = 100
+    )
+
+
 # to test the package
 devtools::test()
 

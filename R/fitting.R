@@ -1,13 +1,11 @@
 # function to fit the CO2 concentration to a function of time, as described in Zhao 2018
 
 # to do list
-# check time thing in the beginning
 # clean unused parts and stuff in comments
-# add error messages for wrong arguments
-# add warnings?
 # add documentation
 # make test on longer datasets
 # make test with negative fluxes (the dataset used so far has only positive fluxes)
+
 
 
 flux_fitting_log <- function(conc_df,
@@ -27,9 +25,25 @@ flux_fitting_log <- function(conc_df,
                               #  ambient_CO2 = 421,
                               #  error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
                               start_cut = 0, # to cut at the start
-                              end_cut = 0 # to cut at the end, if you notice on the graphs that the match was not precise enough
+                              end_cut = 0, # to cut at the end, if you notice on the graphs that the match was not precise enough
+                              start_col = "start",
+                              end_col = "end",
+                              datetime_col = "datetime",
+                              conc_col = "conc",
+                              fluxID_col = "fluxID"
 ){ 
   
+  #renaming columns
+  conc_df <- conc_df %>%
+     dplyr::rename(
+      start = all_of(start_col),
+      end = all_of(end_col),
+      datetime = all_of(datetime_col),
+      conc = all_of(conc_col),
+      fluxID = all_of(fluxID_col)
+     )
+
+
    # we need to check that values provided to the function are what we expect and will not crash the function
 
    if(!is.double(t_window)) stop("t_window has to be a double")
@@ -41,10 +55,20 @@ flux_fitting_log <- function(conc_df,
    if(!is.double(start_cut)) stop("start_cut has to be a double")
    if(!is.double(end_cut)) stop("end_cut has to be a double")
 
+
 # need also to check that all the parameters are making sense (cutting has to be shorter than the window for ex)
 
 # start_cut + end_cut has to be shorter than the flux length
-# 
+
+length_flux_max <- conc_df %>%
+   dplyr::mutate(
+    length_flux = difftime(end, start, units = "sec"),
+    length_flux = as.double(length_flux)
+   ) %>%
+      dplyr::select(length_flux) %>%
+         max()
+
+if((start_cut + end_cut) >= length_flux_max) {stop("You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)")}
 
   
   # we will try to calculate all the parameters without a, and then insert a in the end
@@ -75,7 +99,9 @@ conc_df_cut <- conc_df %>%
             time_cut = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
             time_cut = as.double(time_cut), # we need time_cut because we dropped the NA in conc
             # time_cut = time, # maybe it can just be the same, it doesn't have to start at 0
-            length_window = max(time_cut), #to have length_flux for each flux, better than setting it up as a function argument
+            length_window = max(time_cut), #to have length_flux for each flux, better than setting it up as a function argument, we use time_cut because we want the time where there are conc data
+            length_flux = difftime(end, start, units = "sec"), # the length of the flux after cutting, does not mean there is data for all the seconds
+            # length_flux = as.double(length_window),
             # length_window = max(time_cut) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
             # length_window = max(time) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
             time_diff = time - time_cut,
@@ -383,7 +409,7 @@ conc_df_cut <- conc_df %>%
   
   warning_msg <- conc_df %>%
     dplyr::left_join(conc_df_cut) %>% # we want n_conc after cutting
-     dplyr::select(fluxID, n_conc, n_conc_cut, start, end) %>%
+     dplyr::select(fluxID, n_conc, n_conc_cut, length_flux) %>%
      dplyr::distinct() %>%
         # dplyr::group_by(fluxID, n_conc, start, end) %>%
           #  dplyr::reframe(
@@ -392,7 +418,7 @@ conc_df_cut <- conc_df %>%
           #  ) %>%
               # dplyr::ungroup() %>%
                  dplyr::mutate(
-                  length_flux = difftime(end, start, units = "sec"),
+                  # length_flux = difftime(end, start, units = "sec"),
                   # count = as.numeric(count),
                   low_data = paste("\n","fluxID", fluxID, ": slope was estimated on", n_conc_cut, "points out of", length_flux, "seconds because data are missing"),
                   no_data = paste("\n","fluxID", fluxID, ": slope could not be estimated because there are no data in the conc column"),
