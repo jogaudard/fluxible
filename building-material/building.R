@@ -31,6 +31,9 @@ available("fluxible")
 
 usethis::use_testthat()
 
+# to create the documentation
+devtools::document()
+
 # creating a sample dataset to use in the test
 # we can use PFTC6 data because that way we have data over midnight (special case)
 

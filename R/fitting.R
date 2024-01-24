@@ -6,6 +6,21 @@
 # make test on longer datasets
 # make test with negative fluxes (the dataset used so far has only positive fluxes)
 
+#' Fitting a model to the gas concentration curve and estimating the slope
+#' @description Fits a logarithmic expression to the concentration evolution over time
+#' @param t_window enlarge focus window before and after tmin and tmax
+#' @param Cz_window window used to calculate Cz, at the beginning of cut window
+#' @param b_window window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly
+#' @param a_window window at the end of the flux to estimate a
+#' @param roll_width width of the rolling mean for CO2 when looking for tz, idaelly same as Cz_window
+#' @param start_cut to cut at the start
+#' @param end_cut to cut at the end, if you notice on the graphs that the match was not precise enough
+#' @param start_col column with datetime when the measurement started
+#' @param end_col column with datetime when the measurement ended
+#' @param datetime_col column with datetime of each concentration measurement
+#' @param conc_col column with gas concentration data
+#' @param fluxID_col column with ID of each flux
+#' @return a dataframe with the slope at t zero (should be used for flux calculation), modelled concentration over time and logarithmic function parameters
 
 
 flux_fitting_log <- function(conc_df,

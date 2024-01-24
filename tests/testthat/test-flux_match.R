@@ -10,7 +10,7 @@ test_that("matching works", {
 
 # test
   
-  expect_equal(match_flux(
+  expect_equal(flux_match(
     co2_df_short,
     record_short
     ), co2_conc)
@@ -30,7 +30,7 @@ co2_df_short <- co2_df_short %>%
 
 # test
   
-  expect_equal(match_flux(
+  expect_equal(flux_match(
     co2_df_short,
     record_short,
     time_diff = 180
@@ -66,7 +66,7 @@ test_that("renaming variables works", {
 # test
   
   expect_equal(
-    match_flux(
+    flux_match(
       co2_df_short,
       record_short,
       datetime_col = "date_time",
@@ -91,7 +91,7 @@ co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "Td
 
 expect_equal(
   suppressWarnings( # warnings are expected, they are tested in another test
-  match_flux(
+  flux_match(
     co2_df_missing,
   record_short
   )),
@@ -107,7 +107,7 @@ test_that("warnings", {
   co2_df_missing <- readr::read_csv("data/co2_df_missing.csv", col_types = "Tdddd", na = "#N/A")
 record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
 
-expect_warning(match_flux(
+expect_warning(flux_match(
   co2_df_missing,
   record_short
   ),
@@ -128,7 +128,7 @@ test_that("no warnings when no flags", {
 
 # test
   
-  expect_no_warning(match_flux(
+  expect_no_warning(flux_match(
     co2_df_short,
     record_short
     ))
@@ -147,7 +147,7 @@ test_that("error on datetime", {
      )
 
   expect_error(
-    match_flux(
+    flux_match(
       co2_df_short,
       record_short
       ),
@@ -166,7 +166,7 @@ test_that("error on conc variable", {
      )
 
   expect_error(
-    match_flux(
+    flux_match(
       co2_df_short,
       record_short),
     "conc is not a double"
@@ -184,7 +184,7 @@ test_that("error on start", {
      )
 
   expect_error(
-    match_flux(
+    flux_match(
       co2_df_short,
       record_short
       ),
@@ -199,7 +199,7 @@ test_that("error on startcrop", {
 
 
   expect_error(
-    match_flux(co2_df_short,
+    flux_match(co2_df_short,
     record_short,
     startcrop = "blip"),
     "startcrop has to be a double"
@@ -213,7 +213,7 @@ test_that("error on measurement_length", {
 
 
   expect_error(
-    match_flux(
+    flux_match(
       co2_df_short,
       record_short,
       measurement_length = "blip"
@@ -229,7 +229,7 @@ test_that("error on ratio_threshold", {
 
 
   expect_error(
-    match_flux(
+    flux_match(
       co2_df_short,
       record_short,
       ratio_threshold = 2
@@ -245,7 +245,7 @@ test_that("error on time_diff", {
 
 
   expect_error(
-    match_flux(
+    flux_match(
       co2_df_short,
       record_short,
       time_diff = "comment est votre blanquette?"

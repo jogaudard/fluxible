@@ -12,7 +12,7 @@
 #' @return a dataframe with concentration measurements and corresponding datetime, fluxID, start and end of measurement, flags in case of no data or low number of data, and any variables present in both inputs
 # should I describe all the variables in the output?
 
-match_flux <- function(raw_conc,
+flux_match <- function(raw_conc,
                         field_record,
                         startcrop = 10,
                         measurement_length = 220,
