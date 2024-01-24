@@ -227,6 +227,11 @@ slopes_missing <- co2_conc_missing %>%
 
 view(slopes_missing)
 
+slopes_missing_10 <- flux_fitting_log(
+    co2_conc_missing,
+    start_cut = 10
+    )
+
 
   slopes_missing  %>%
   ggplot(aes(datetime)) +

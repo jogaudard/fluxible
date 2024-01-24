@@ -32,24 +32,20 @@ flux_fitting_log <- function(conc_df,
   
    # we need to check that values provided to the function are what we expect and will not crash the function
 
-  #  if(!is.double(t_window)) stop("t_window has to be a double")
-  #  if(!is.double(Cz_window)) stop("Cz_window has to be a double")
-  #  if(!is.double(b_window)) stop("b_window has to be a double")
-  #  if(!is.double(a_window)) stop("a_window has to be a double")
+   if(!is.double(t_window)) stop("t_window has to be a double")
+   if(!is.double(Cz_window)) stop("Cz_window has to be a double")
+   if(!is.double(b_window)) stop("b_window has to be a double")
+   if(!is.double(a_window)) stop("a_window has to be a double")
   #  if(!is.double(length_flux)) stop("length_flux has to be a double")
-  #  if(!is.double(roll_width)) stop("roll_width has to be a double")
-  #  if(!is.double(start_cut)) stop("start_cut has to be a double")
-  #  if(!is.double(end_cut)) stop("end_cut has to be a double")
-
-# handling missing data
-# should print a warning that there is not enough data
-# take them out of the df and re add them in the end with NA for all new columns
-# what is "not enough data for the function to work?"
-# need to detect fluxes without enough data and take them out before to avoid crashing the function
-
-
+   if(!is.double(roll_width)) stop("roll_width has to be a double")
+   if(!is.double(start_cut)) stop("start_cut has to be a double")
+   if(!is.double(end_cut)) stop("end_cut has to be a double")
 
 # need also to check that all the parameters are making sense (cutting has to be shorter than the window for ex)
+
+# start_cut + end_cut has to be shorter than the flux length
+# 
+
   
   # we will try to calculate all the parameters without a, and then insert a in the end
   
@@ -64,7 +60,8 @@ flux_fitting_log <- function(conc_df,
         datetime < start | datetime > end ~ "cut",
         TRUE ~ "keep"
       ),
-      cut = haven::as_factor(cut)
+      cut = haven::as_factor(cut),
+      n_conc = sum(!is.na(conc)) # already done in match function but I want the functions to be independant
     ) %>% 
     dplyr::ungroup()
   
@@ -81,7 +78,9 @@ conc_df_cut <- conc_df %>%
             length_window = max(time_cut), #to have length_flux for each flux, better than setting it up as a function argument
             # length_window = max(time_cut) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
             # length_window = max(time) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
-            time_diff = time - time_cut
+            time_diff = time - time_cut,
+            n_conc_cut = sum(!is.na(conc)) # nb of conc data after cutting, for warnings
+
                  ) %>%
                     dplyr::ungroup()
 
@@ -382,8 +381,9 @@ conc_df_cut <- conc_df %>%
   #     )
     # )
   
-  warning_msg <- conc_df_cut %>%
-     dplyr::select(fluxID, n_conc, start, end) %>%
+  warning_msg <- conc_df %>%
+    dplyr::left_join(conc_df_cut) %>% # we want n_conc after cutting
+     dplyr::select(fluxID, n_conc, n_conc_cut, start, end) %>%
      dplyr::distinct() %>%
         # dplyr::group_by(fluxID, n_conc, start, end) %>%
           #  dplyr::reframe(
@@ -394,13 +394,15 @@ conc_df_cut <- conc_df %>%
                  dplyr::mutate(
                   length_flux = difftime(end, start, units = "sec"),
                   # count = as.numeric(count),
-                  warnings = paste("\n","fluxID", fluxID, ": slope was estimated on", n_conc, "points out of", length_flux, "seconds because data are missing"),
+                  low_data = paste("\n","fluxID", fluxID, ": slope was estimated on", n_conc_cut, "points out of", length_flux, "seconds because data are missing"),
+                  no_data = paste("\n","fluxID", fluxID, ": slope could not be estimated because there are no data in the conc column"),
                   warnings = dplyr::case_when(
-                    length_flux != n_conc ~ warnings
+                    n_conc == 0 ~ no_data,
+                    n_conc_cut != length_flux ~ low_data
                   ),
                   warnings = as.character(warnings)
                  ) %>%
-                 drop_na(warnings) %>%
+                 tidyr::drop_na(warnings) %>%
               dplyr::pull(warnings)
                 #  view(warning_df)
 

@@ -64,11 +64,10 @@ test_that("warnings when NAs are dropped in conc", {
 
 expect_warning(
   flux_fitting_log(co2_conc_missing),
-"fluxID 1 : slope was estimated on 70 points out of 210 seconds because data are missing
-fluxID 2 : slope was estimated on 121 points out of 210 seconds because data are missing
-fluxID 3 : slope was estimated on 102 points out of 210 seconds because data are missing
-fluxID 5 : slope was estimated on 161 points out of 210 seconds because data are missing
-"
+" fluxID 1 : slope was estimated on 70 points out of 210 seconds because data are missing
+ fluxID 2 : slope was estimated on 121 points out of 210 seconds because data are missing
+ fluxID 3 : slope was estimated on 102 points out of 210 seconds because data are missing
+ fluxID 5 : slope was estimated on 161 points out of 210 seconds because data are missing"
 )
 
 
@@ -81,9 +80,25 @@ test_that("warnings when thre is no data in conc", {
 
 expect_warning(
   flux_fitting_log(co2_conc_missing),
-"fluxID 6: no conc data, slope could not be estimated
-"
+" fluxID 6 : slope could not be estimated because there are no data in the conc column"
 )
+
+})
+
+test_that("warnings with cutting", {
+ co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
+
+expect_warning(
+  flux_fitting_log(
+    co2_conc_missing,
+    start_cut = 10
+    ),
+" fluxID 1 : slope was estimated on 70 points out of 200 seconds because data are missing
+ fluxID 2 : slope was estimated on 121 points out of 200 seconds because data are missing
+ fluxID 3 : slope was estimated on 102 points out of 200 seconds because data are missing
+ fluxID 5 : slope was estimated on 151 points out of 200 seconds because data are missing"
+)
+
 
 })
 
