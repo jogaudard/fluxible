@@ -144,7 +144,7 @@ slopes30 <- co2_conc %>%
    )
    
 # then we graph and check that it is all good
-slopes0v1 <- read_csv("tests/testthat/data/slopes0v1.csv")
+slopes0v1 <- readr::read_csv("tests/testthat/data/slopes0v1.csv")
 slopes0 %>% # this one looks bad, because there is some stuff left at the end of the fluxes
   ggplot(aes(datetime)) +
   geom_point(aes(y = conc, color = cut), size = 0.2) +

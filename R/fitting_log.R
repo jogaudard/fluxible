@@ -51,11 +51,11 @@ flux_fitting_log <- function(conc_df,
   #renaming columns
   conc_df <- conc_df %>%
      dplyr::rename(
-      start = all_of(start_col),
-      end = all_of(end_col),
-      datetime = all_of(datetime_col),
-      conc = all_of(conc_col),
-      fluxID = all_of(fluxID_col)
+      start = dplyr::all_of(start_col),
+      end = dplyr::all_of(end_col),
+      datetime = dplyr::all_of(datetime_col),
+      conc = dplyr::all_of(conc_col),
+      fluxID = dplyr::all_of(fluxID_col)
      )
 
 

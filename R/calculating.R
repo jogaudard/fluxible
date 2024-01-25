@@ -13,25 +13,66 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
                        atm_pressure = 1, # atmoshperic pressure, assumed 1 atm
                        plot_area = 0.0625, # area of the plot in m^2, default for Three-D
                        R = 0.082057, #gas constant, in L*atm*K^(-1)*mol^(-1)
-                       cols_keep = c("turfID", "type", "start"), # columns to keep in the output (must be constant values for each fluxID, will go through distinct)
-                       cols_ave = c("PAR") # columns that should be average in the output
+                       #  cols_keep = c("turfID", "type", "start"), # columns to keep in the output (must be constant values for each fluxID, will go through distinct)
+                       cols_keep = c(),
+                       #  cols_ave = c("PAR"), # columns that should be average in the output
+                       cols_ave = c(),
+                       slope_col, # column containing the slope to calculate the flux
+                       fluxID_col = "fluxID",
+                       temp_air_col = "temp_air"
+
 )
 {
+
+  slope_df <- slope_df %>%
+     dplyr::rename(
+      fluxID = dplyr::all_of(fluxID_col),
+      temp_air = dplyr::all_of(temp_air_col),
+      slope = dplyr::all_of(slope_col)
+     )
+
   vol = chamber_volume + tube_volume
+
+slope_temp <- slope_df %>%
+   dplyr::select(slope, fluxID, temp_air) %>%
+      dplyr::group_by(fluxID, slope) %>%
+         dplyr::summarise(
+          temp_air_ave = mean(temp_air, na.rm = TRUE)
+         ) %>%
+            dplyr::ungroup()
   
 # a df with all the columns we just want to keep and join back in the end
-keeping_cols <- slope_df  %>%
-   dplyr::select(all_of(cols_keep), fluxID) %>%
-                dplyr::distinct()
+if(length(cols_keep) > 0) {
+slope_keep <- slope_df  %>%
+   dplyr::select(dplyr::all_of(cols_keep), fluxID) %>%
+                dplyr::distinct() %>%
+                   dplyr::left_join(slope_temp, by = "fluxID")
+} else {
+   slope_keep <- slope_temp
+}
 
 # a df with the columns that have to be averaged
-ave_cols <- slope_df %>%
-   dplyr::select(all_of(cols_ave), fluxID, temp_air) %>%
+if(length(cols_ave) > 0) {
+slope_ave <- slope_df %>%
+   dplyr::select(dplyr::all_of(cols_ave), fluxID) %>%
       dplyr::group_by(fluxID) %>%
-         dplyr::summarize_all(mean, na.rm = TRUE)
+         dplyr::summarize_all(mean, na.rm = TRUE) %>%
+            dplyr::ungroup() %>%
+               dplyr::left_join(slope_keep, by = "fluxID")
+} else {
+   slope_ave <- slope_keep
+}
 
-slopes <- slope_df %>%
-   dplyr::select(slope, fluxID)
+# # a df with average of air temperature
+# ait_temp_df <- slope_df %>%
+#    dplyr::select(fluxID, temp_air) %>%
+#       dplyr::group_by(fluxID) %>%
+#          dplyr::summarize_all(mean, na.rm = TRUE) %>%
+#             dplyr::ungroup()
+
+
+
+
 
   # creates means of all columns specified to be averaged
 #   means <- co2conc %>% 
@@ -44,14 +85,16 @@ slopes <- slope_df %>%
 #     ) %>% 
 #     ungroup()
   
-  fluxes_final <- dplyr::left_join(slope_df, ave_df, by = "fluxID") %>% 
-                    dplyr::left_join(keeping_cols, by = "fluxID") %>%
+  # fluxes_final <- dplyr::left_join(slope_df, ave_cols, by = "fluxID") %>% 
+  #                   dplyr::left_join(keeping_cols, by = "fluxID") %>%
+  #                   dplyr::left_join(air_temp_df, by = "fluxID") %>%
+  fluxes <- slope_ave %>%
                     dplyr::mutate(
-                        flux = (slope * atm_pressure * vol)/(R * temp_air * plot_area) #gives flux in micromol/s/m^2
+                        flux = (slope * atm_pressure * vol)/(R * (temp_air_ave + 273.15) * plot_area) #gives flux in micromol/s/m^2
                         *3600 #secs to hours
                         /1000 #micromol to mmol
-                    ) %>% #flux is now in mmol/m^2/h, which is more common
+                    ) #flux is now in mmol/m^2/h, which is more common
   
-  return(fluxes_final)
+  return(fluxes)
   
 }
