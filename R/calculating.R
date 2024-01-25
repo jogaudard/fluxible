@@ -3,7 +3,6 @@
 
 # to do list
 # documentation
-# column renaming
 # dummy check, arguments in right format
 
 
@@ -12,17 +11,28 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
                        tube_volume = 0.075, # volume of the tubing in L, default for summer 2020 setup
                        atm_pressure = 1, # atmoshperic pressure, assumed 1 atm
                        plot_area = 0.0625, # area of the plot in m^2, default for Three-D
-                       R = 0.082057, #gas constant, in L*atm*K^(-1)*mol^(-1)
+                       R_const = 0.082057, #gas constant, in L*atm*K^(-1)*mol^(-1)
                        #  cols_keep = c("turfID", "type", "start"), # columns to keep in the output (must be constant values for each fluxID, will go through distinct)
                        cols_keep = c(),
                        #  cols_ave = c("PAR"), # columns that should be average in the output
                        cols_ave = c(),
                        slope_col, # column containing the slope to calculate the flux
                        fluxID_col = "fluxID",
-                       temp_air_col = "temp_air"
+                       temp_air_col = "temp_air",
+                       temp_air_unit = "celsius"
 
 )
 {
+
+  if(!is.double(chamber_volume)) stop("chamber_volume has to be a double")
+  if(!is.double(tube_volume)) stop("tube_volume has to be a double")
+  if(!is.double(atm_pressure)) stop("atm_pressure has to be a double")
+  if(!is.double(plot_area)) stop("plot_area has to be a double")
+  if(!is.double(R_const)) stop("R_const has to be a double")
+  if(is.na(slope_col)) stop("slope_col argument is missing")
+  if(!(temp_air_unit %in% list("celsius", "fahrenheit", "kelvin"))) stop("temp_air_unit has to be either celsius, fahrenheit or kelvin")
+
+  
 
   slope_df <- slope_df %>%
      dplyr::rename(
@@ -30,6 +40,7 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
       temp_air = dplyr::all_of(temp_air_col),
       slope = dplyr::all_of(slope_col)
      )
+
 
   vol = chamber_volume + tube_volume
 
@@ -39,7 +50,14 @@ slope_temp <- slope_df %>%
          dplyr::summarise(
           temp_air_ave = mean(temp_air, na.rm = TRUE)
          ) %>%
-            dplyr::ungroup()
+            dplyr::ungroup() %>%
+               dplyr::mutate(
+                temp_air_ave = dplyr::case_when(
+                  temp_air_unit == "celsius" ~ temp_air_ave + 273.15,
+                  temp_air_unit == "fahrenheit" ~ (temp_air_ave + 459.67) * (5/9),
+                  temp_air_unit == "kelvin" ~ temp_air_ave
+                )
+               )
   
 # a df with all the columns we just want to keep and join back in the end
 if(length(cols_keep) > 0) {
@@ -90,7 +108,7 @@ slope_ave <- slope_df %>%
   #                   dplyr::left_join(air_temp_df, by = "fluxID") %>%
   fluxes <- slope_ave %>%
                     dplyr::mutate(
-                        flux = (slope * atm_pressure * vol)/(R * (temp_air_ave + 273.15) * plot_area) #gives flux in micromol/s/m^2
+                        flux = (slope * atm_pressure * vol)/(R_const * temp_air_ave * plot_area) #gives flux in micromol/s/m^2
                         *3600 #secs to hours
                         /1000 #micromol to mmol
                     ) #flux is now in mmol/m^2/h, which is more common
