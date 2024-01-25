@@ -77,10 +77,24 @@ test_that("keeping and averaging work together", {
 
 })
 
+# test_that("fahrenheit conversion works", {
+# co2_fluxes <- readr::read_csv("data/fluxes.csv")
+#     slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+
+    
+  
+# })
+
+# test_that("kelvin conversion works", {
+# })
+
+# test_that("celsius conversion works", {
+# })
+
 # test_that("errors on arguments types", {
 #   expect_equal()
 # })
 
-# test_that("error when no air temperature data", {
+# test_that("error on air temp units", {
 #   expect_equal()
 # })

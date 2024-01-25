@@ -4,6 +4,7 @@
 # to do list
 # documentation
 # dummy check, arguments in right format
+# test temperature conversions
 
 
 flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions)
@@ -110,9 +111,13 @@ slope_ave <- slope_df %>%
                     dplyr::mutate(
                         flux = (slope * atm_pressure * vol)/(R_const * temp_air_ave * plot_area) #gives flux in micromol/s/m^2
                         *3600 #secs to hours
-                        /1000 #micromol to mmol
-                    ) #flux is now in mmol/m^2/h, which is more common
-  
+                        /1000, #micromol to mmol #flux is now in mmol/m^2/h, which is more common
+                        temp_air_ave = dplyr::case_when(
+                          temp_air_unit == "celsius" ~ temp_air_ave - 273.15,
+                          temp_air_unit == "fahrenheit" ~ ((temp_air_ave - 273.15) * (9/5)) + 32,
+                          temp_air_unit == "kelvin" ~ temp_air_ave
+                        )
+                    ) 
   return(fluxes)
   
 }
