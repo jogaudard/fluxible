@@ -1,13 +1,24 @@
 #' to calculate a flux based on the rate of change of gas concentration over time
-#' 
+#' @description to calculate a flux based on the rate of change of gas concentration over time
+#' @param slope_col column containing the slope to calculate the flux
+#' @param chamber_volume volume of the flux chamber in L, default for Three-D chamber (25x24.5x40cm)
+#' @param tube_volume volume of the tubing in L, default for summer 2020 setup
+#' @param atm_pressure atmoshperic pressure, assumed 1 atm
+#' @param plot_area area of the plot in m^2, default for Three-D
+#' @param R_const gas constant, in L*atm*K^(-1)*mol^(-1)
+#' @param cols_keep columns to keep from the input to the input. Those columns need to have unique values for each flux
+#' @param cols_ave columns with values that should be averaged for each flux in the ouput. Not that NA are removed in mean calculation
+#' @param fluxID_col column containing the fluxID
+#' @param temp_air_col column containing the air temperature used to caculate fluxes. Will be averaged with NA removed.
+#' @param temp_air_unit units for air temperature. Has to be either celsius, fahrenheit or kelvin
+#' @return a df containing fluxID, fluxes, temperature average for each flux, slope used for each flux calculation, and any columns specified in cols_keep and cols_ave
 
 # to do list
 # documentation
-# dummy check, arguments in right format
-# test temperature conversions
 
 
 flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions)
+                       slope_col, # column containing the slope to calculate the flux
                        chamber_volume = 24.5, # volume of the flux chamber in L, default for Three-D chamber (25x24.5x40cm)
                        tube_volume = 0.075, # volume of the tubing in L, default for summer 2020 setup
                        atm_pressure = 1, # atmoshperic pressure, assumed 1 atm
@@ -17,7 +28,6 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
                        cols_keep = c(),
                        #  cols_ave = c("PAR"), # columns that should be average in the output
                        cols_ave = c(),
-                       slope_col, # column containing the slope to calculate the flux
                        fluxID_col = "fluxID",
                        temp_air_col = "temp_air",
                        temp_air_unit = "celsius"
@@ -30,7 +40,7 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
   if(!is.double(atm_pressure)) stop("atm_pressure has to be a double")
   if(!is.double(plot_area)) stop("plot_area has to be a double")
   if(!is.double(R_const)) stop("R_const has to be a double")
-  if(is.na(slope_col)) stop("slope_col argument is missing")
+#   if(is.na(slope_col)) stop("slope_col argument is missing") # apparently not necessary, R is checking this by itself
   if(!(temp_air_unit %in% list("celsius", "fahrenheit", "kelvin"))) stop("temp_air_unit has to be either celsius, fahrenheit or kelvin")
 
   

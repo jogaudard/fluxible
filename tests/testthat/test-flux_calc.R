@@ -132,10 +132,41 @@ expect_equal(
 
 
 
-# test_that("errors on arguments types", {
-#   expect_equal()
-# })
+test_that("errors on arguments types", {
+      slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
 
-# test_that("error on air temp units", {
-#   expect_equal()
-# })
+  expect_error(
+    flux_calc(
+      slopes0,
+      slope_col = "slope_tz",
+      chamber_volume = "sort of big"
+    ),
+    "chamber_volume has to be a double"
+  )
+  
+})
+
+test_that("error on air temp units", {
+  slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
+
+  expect_error(
+    flux_calc(
+      slopes0,
+      slope_col = "slope_tz",
+      temp_air_unit = "melvin"
+    ),
+    "temp_air_unit has to be either celsius, fahrenheit or kelvin"
+  )
+  # Played for Laughs in the 1985 humor book "Science Made Stupid" by Tom Weller, in which a table in its appendix lists such units as the "arg" (the unit of work done incorrectly), the "galumph" (unit of waste motion), the "lumpen" (unit of resistance to getting out of bed in the morning), and the "melvin" (unit of temperature, "as measured from absolutely perfect to absolutely awful"). A separate table of conversions for weights and measures on the same page listed equivalencies such as "325 cubebs = 1 furbish; 6 furbishes = 1 nautical smile; 20 nautical smiles = 1 minor league; 3 minor leagues = 1 major league" and "24 carrots = 1 pickelweight; 30 pickelweights = 1 tuna; 1000 tuna = 1 short ton; 1.37 short tons = 1 tall ton". (https://allthetropes.org/wiki/Fantastic_Measurement_System)
+})
+
+test_that("error that slope column is missing", {
+  slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
+
+  expect_error(
+    flux_calc(
+      slopes0
+    ),
+    "argument \"slope_col\" is missing, with no default"
+  )
+})
