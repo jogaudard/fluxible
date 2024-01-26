@@ -2,7 +2,7 @@
 # standard sample of data
 test_that("matching works", {
   ### setup
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc", na = c("#N/A", "NA")) %>%
      dplyr::arrange(datetime)
@@ -18,7 +18,7 @@ test_that("matching works", {
 
 test_that("time_diff works", {
   ### setup
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc", na = c("#N/A", "NA")) %>%
      dplyr::arrange(datetime)
@@ -39,7 +39,7 @@ co2_df_short <- co2_df_short %>%
 
 test_that("renaming variables works", {
   ### setup
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc", na = c("#N/A", "NA")) %>%
      dplyr::arrange(datetime)
@@ -81,7 +81,7 @@ test_that("renaming variables works", {
 
 test_that("flags on nb of data", {
 ### setup
-co2_df_missing <- readr::read_csv("data/co2_df_missing.csv", col_types = "Tdddd", na = "#N/A")
+co2_df_missing <- readr::read_csv("data/co2_df_missing.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
 record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
 co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc", na = c("#N/A", "NA")) %>%
      dplyr::arrange(datetime)
@@ -104,7 +104,7 @@ expect_equal(
 
 # test that flags also get printed as warnings
 test_that("warnings", {
-  co2_df_missing <- readr::read_csv("data/co2_df_missing.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_missing <- readr::read_csv("data/co2_df_missing.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
 record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
 
 expect_warning(flux_match(
@@ -120,7 +120,7 @@ expect_warning(flux_match(
 
 test_that("no warnings when no flags", {
   ### setup
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc", na = "#N/A") %>%
      dplyr::arrange(datetime)
@@ -137,7 +137,7 @@ test_that("no warnings when no flags", {
 # test that the data type checking works (all the error messages)
 
 test_that("error on datetime", {
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 
@@ -156,7 +156,7 @@ test_that("error on datetime", {
 })
 
 test_that("error on conc variable", {
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 
@@ -174,7 +174,7 @@ test_that("error on conc variable", {
 })
 
 test_that("error on start", {
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 
@@ -193,7 +193,7 @@ test_that("error on start", {
 })
 
 test_that("error on startcrop", {
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 
@@ -207,7 +207,7 @@ test_that("error on startcrop", {
 })
 
 test_that("error on measurement_length", {
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 
@@ -223,7 +223,7 @@ test_that("error on measurement_length", {
 })
 
 test_that("error on ratio_threshold", {
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 
@@ -239,7 +239,7 @@ test_that("error on ratio_threshold", {
 })
 
 test_that("error on time_diff", {
-  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = "#N/A")
+  co2_df_short <- readr::read_csv("data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
   record_short <- readr::read_csv("data/record_short.csv", col_types = "ffT", na = "#N/A")
   
 

@@ -57,8 +57,8 @@ get_file(node = "fcbw4",
          path = "data",
          remote_path = "raw_data/c_flux_raw_data")
 
-co2_df <- read_csv("tests/testthat/data/PFTC6_CO2_joasete_2022.csv", col_types = "ccdddddd")
-record <- read_csv("tests/testthat/data/PFTC6_cflux_field-record_joasete.csv")
+co2_df <- read_csv("tests/testthat/data/PFTC6_CO2_joasete_2022.csv", col_types = "ccdddddd", na = c("#N/A", "Over", "Invalid"))
+record <- read_csv("tests/testthat/data/PFTC6_cflux_field-record_joasete.csv", col_types = "ffdDccc")
 
 # we want a shorter standard dataset covering midnight
 co2_df <- co2_df %>%
@@ -102,6 +102,9 @@ co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv", col_types =
 
 # the matching dataset that we want to have after the matching function
 # we can use the matching function to build it and then manually carefully check it
+
+co2_df_short <- readr::read_csv("tests/testthat/data/co2_df_short.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
+  record_short <- readr::read_csv("tests/testthat/data/record_short.csv", col_types = "ffT", na = "#N/A")
 
 
 co2_conc <- match_flux(

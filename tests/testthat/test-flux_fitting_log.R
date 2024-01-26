@@ -15,9 +15,14 @@ test_that("fitting works with 0 second end cut",{
   slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
-  output <- flux_fitting_log(
+  qflux_fitting_log <- purrr::quietly(flux_fitting_log) # to make the warnings quiet
+
+  fitting_log_call <- qflux_fitting_log(
       co2_conc
     )
+
+  output <- fitting_log_call$result
+
   expect_equal(
     output$slope_tz,
     slopes0$slope_tz
@@ -145,8 +150,11 @@ test_that("renaming works", {
       co2 = conc
      )
 
+  qflux_fitting_log <- purrr::quietly(flux_fitting_log) # to make the warnings quiet
+
+
 expect_no_error(
-  flux_fitting_log(
+  qflux_fitting_log(
     co2_conc_names,
     datetime_col = "date_time",
     end_col = "finish",
