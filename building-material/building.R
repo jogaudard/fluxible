@@ -197,9 +197,9 @@ slopes30  %>%
   facet_wrap(~fluxID, scales = "free")
 
 # we pass those as comments to avoid overwriting the files used in the tests
-write_csv(slopes0, "tests/testthat/data/slopes0.csv")
-write_csv(slopes30, "tests/testthat/data/slopes30.csv")
-write_csv(slopes60, "tests/testthat/data/slopes60.csv")
+# write_csv(slopes0, "tests/testthat/data/slopes0.csv")
+# write_csv(slopes30, "tests/testthat/data/slopes30.csv")
+# write_csv(slopes60, "tests/testthat/data/slopes60.csv")
 
 
 # with missing data
@@ -306,12 +306,90 @@ flux_fitting_log(
 
 fluxes <- readr::read_csv("tests/testthat/data/fluxes.csv")
 
+co2_conc <- readr::read_csv("tests/testthat/data/co2_conc.csv") # just to save time
+
+slopes0lin <- flux_fitting_lin(co2_conc)
+
+slopes0lin %>%
+   ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+#   ylim(-60000,600) +
+  facet_wrap(~fluxID, scales = "free")
+
+  slopes10lin <- flux_fitting_lin(co2_conc, end_cut = 10)
+
+slopes10lin %>%
+   ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+#   ylim(-60000,600) +
+  facet_wrap(~fluxID, scales = "free")
+
+  slopes30lin <- flux_fitting_lin(co2_conc, end_cut = 30)
+
+slopes30lin %>%
+   ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+#   ylim(-60000,600) +
+  facet_wrap(~fluxID, scales = "free")
+
+slopes60lin <- flux_fitting_lin(co2_conc, end_cut = 60)
+
+slopes60lin %>%
+   ggplot(aes(datetime)) +
+  geom_point(aes(y = conc, color = cut), size = 0.2) +
+  geom_line(aes(y = fit), linetype = "longdash") +
+  scale_color_manual(values = c(
+    "keep" = "green",
+    "cut" = "red"
+   #  "ok" = "black",
+   #  "discard" = "red",
+   #  "zero" = "grey",
+   #  "start_error" = "red"
+  )) +
+  scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
+#   ylim(-60000,600) +
+  facet_wrap(~fluxID, scales = "free")
+
+#   write_csv(slopes0lin, "tests/testthat/data/slopes0lin.csv")
+#    write_csv(slopes10lin, "tests/testthat/data/slopes10lin.csv")
+#     write_csv(slopes30lin, "tests/testthat/data/slopes30lin.csv")
+#      write_csv(slopes60lin, "tests/testthat/data/slopes60lin.csv")
 
 # to test the package
 devtools::test()
 
 # to create a new test file
-usethis::use_test(name = "flux_calc")
+usethis::use_test(name = "flux_fitting_lin")
 
 # package workflow --------------------------------------------------------
 # it seems that to make testing easier I need to split my functions in smaller bits (I can add some wrap-up functions later)

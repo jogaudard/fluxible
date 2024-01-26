@@ -96,7 +96,7 @@ if((start_cut + end_cut) >= length_flux_max) {stop("You cannot cut more than the
       start = start + start_cut,
       end = end - end_cut,
       cut = dplyr::case_when(
-        datetime < start | datetime > end ~ "cut",
+        datetime < start | datetime >= end ~ "cut",
         TRUE ~ "keep"
       ),
       cut = haven::as_factor(cut),
