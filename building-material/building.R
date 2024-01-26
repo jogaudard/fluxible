@@ -304,6 +304,9 @@ flux_fitting_log(
     )
 
 
+fluxes <- readr::read_csv("tests/testthat/data/fluxes.csv")
+
+
 # to test the package
 devtools::test()
 

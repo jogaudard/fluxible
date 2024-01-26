@@ -38,7 +38,7 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
   slope_df <- slope_df %>%
      dplyr::rename(
       fluxID = dplyr::all_of(fluxID_col),
-      temp_air = dplyr::all_of(temp_air_col),
+      air_temp = dplyr::all_of(temp_air_col),
       slope = dplyr::all_of(slope_col)
      )
 
@@ -46,10 +46,10 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
   vol = chamber_volume + tube_volume
 
 slope_temp <- slope_df %>%
-   dplyr::select(slope, fluxID, temp_air) %>%
+   dplyr::select(slope, fluxID, air_temp) %>%
       dplyr::group_by(fluxID, slope) %>%
          dplyr::summarise(
-          temp_air_ave = mean(temp_air, na.rm = TRUE)
+          temp_air_ave = mean(air_temp, na.rm = TRUE)
          ) %>%
             dplyr::ungroup() %>%
                dplyr::mutate(
