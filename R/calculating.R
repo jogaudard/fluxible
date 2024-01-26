@@ -14,7 +14,7 @@
 #' @return a df containing fluxID, fluxes, temperature average for each flux, slope used for each flux calculation, and any columns specified in cols_keep and cols_ave
 
 # to do list
-# documentation
+# test that columns in arguments exist
 
 
 flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions)
@@ -43,7 +43,16 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
 #   if(is.na(slope_col)) stop("slope_col argument is missing") # apparently not necessary, R is checking this by itself
   if(!(temp_air_unit %in% list("celsius", "fahrenheit", "kelvin"))) stop("temp_air_unit has to be either celsius, fahrenheit or kelvin")
 
+  colnames <- colnames(slope_df)
+  if(!(slope_col %in% colnames)) stop("could not find slope_col in slope_df")
+  if(!(fluxID_col %in% colnames)) stop("could not find fluxID_col in slope_df")
+  if(!(temp_air_col %in% colnames)) stop("could not find temp_air_col in slope_df")
+
+
+  if(length(setdiff(cols_keep, colnames)) > 0) stop("some names in cols_keep cannot be found in slope_df")
+  if(length(setdiff(cols_ave, colnames)) > 0) stop("some names in cols_ave cannot be found in slope_df")
   
+ 
 
   slope_df <- slope_df %>%
      dplyr::rename(

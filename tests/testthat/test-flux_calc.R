@@ -170,3 +170,28 @@ test_that("error that slope column is missing", {
     "argument \"slope_col\" is missing, with no default"
   )
 })
+
+test_that("error slope_col cannot be found in slope_df", {
+  slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
+
+  expect_error(
+    flux_calc(
+      slopes0,
+      slope_col = "column_with_slope"
+    ),
+    "could not find slope_col in slope_df"
+  )
+})
+
+test_that("error some cols_keep do not exist", {
+  slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
+
+  expect_error(
+    flux_calc(
+      slopes0,
+      slope_col = "slope_tz",
+      cols_keep = c("PAR", "site")
+    ),
+    "some names in cols_keep cannot be found in slope_df"
+  )
+})
