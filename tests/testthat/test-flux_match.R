@@ -31,7 +31,7 @@ test_that("time_diff works", {
   # co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc", na = c("#N/A", "NA")) %>%
   #    dplyr::arrange(datetime)
 
-co2_df_short <- co2_df_short %>%
+co2_df_short_180 <- co2_df_short %>%
    dplyr::mutate(
     datetime = datetime - 180 # logger is lagging 3 minutes behind
    )
@@ -39,7 +39,7 @@ co2_df_short <- co2_df_short %>%
 # test
   
   expect_snapshot(flux_match(
-    co2_df_short,
+    co2_df_short_180,
     record_short,
     time_diff = 180
     ))
