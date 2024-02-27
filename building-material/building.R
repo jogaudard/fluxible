@@ -107,12 +107,15 @@ co2_df_short <- readr::read_csv("tests/testthat/data/co2_df_short.csv", col_type
   record_short <- readr::read_csv("tests/testthat/data/record_short.csv", col_types = "ffT", na = "#N/A")
 
 
-co2_conc <- match_flux(
+co2_conc2 <- flux_match(
    raw_conc = co2_df_short,
    field_record = record_short
    )
 
-   view(co2_conc)
+co2_conc2$turfID %>%
+   unique()
+
+   view(co2_conc2)
 
 co2_conc_missing <- match_flux(
    co2_df_missing,

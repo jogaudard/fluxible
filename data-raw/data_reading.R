@@ -1,5 +1,8 @@
 # for matching
-co2_conc <- readr::read_csv("data-raw/co2_conc.csv", col_types = "TddddffTTfddc")
+co2_conc <- readr::read_csv("data-raw/co2_conc.csv", col_types = "TddddffTTfddc") %>%
+# co2_conc <- readr::read_csv("data-raw/co2_conc.csv") %>%
+
+   dplyr::arrange(datetime)
 usethis::use_data(co2_conc, overwrite = TRUE)
 
 co2_df_missing <- readr::read_csv("data-raw/co2_df_missing.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
@@ -29,5 +32,13 @@ slopes60lin <- readr::read_csv("data-raw/slopes60lin.csv", col_types = "TddddffT
 usethis::use_data(slopes60lin, overwrite = TRUE)
 
 # for fluc calc
-co2_fluxes <- readr::read_csv("data-raw/fluxes.csv")
+co2_fluxes <- readr::read_csv("data-raw/fluxes.csv", col_types = "fdddddffTdd")
 usethis::use_data(co2_fluxes, overwrite = TRUE)
+
+# other temperature units
+slopes0_temp <- slopes0 %>%
+   mutate(
+      temp_fahr = (temp_air * 1.8) + 32,
+      temp_kelvin = temp_air + 273.15
+   )
+usethis::use_data(slopes0_temp, overwrite = TRUE)

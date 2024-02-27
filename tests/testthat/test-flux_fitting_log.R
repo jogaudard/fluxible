@@ -11,8 +11,8 @@
 
 test_that("fitting works with 0 second end cut",{
   ### setup
-  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-  slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+  # co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+  # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
   qflux_fitting_log <- purrr::quietly(flux_fitting_log) # to make the warnings quiet
@@ -31,8 +31,8 @@ test_that("fitting works with 0 second end cut",{
 
 test_that("fitting works with 30 second end cut",{
   ### setup
-  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-  slopes30 <- readr::read_csv("data/slopes30.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+  # co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+  # slopes30 <- readr::read_csv("data/slopes30.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
   output <- flux_fitting_log(
@@ -47,8 +47,8 @@ test_that("fitting works with 30 second end cut",{
 
 test_that("fitting works with 60 second end cut",{
   ### setup
-  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-  slopes60 <- readr::read_csv("data/slopes60.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+  # co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+  # slopes60 <- readr::read_csv("data/slopes60.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
   output <- flux_fitting_log(
@@ -65,7 +65,7 @@ test_that("fitting works with 60 second end cut",{
 # warning that NAs were dropped in some fluxID
 
 test_that("warnings when NAs are dropped in conc", {
- co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
+#  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
 
 expect_warning(
   flux_fitting_log(co2_conc_missing),
@@ -81,7 +81,7 @@ expect_warning(
 # warning when there is no data in some fluxID
 
 test_that("warnings when there is no data in conc", {
- co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
+#  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
 
 expect_warning(
   flux_fitting_log(co2_conc_missing),
@@ -91,7 +91,7 @@ expect_warning(
 })
 
 test_that("warnings with cutting", {
- co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
+#  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
 
 expect_warning(
   flux_fitting_log(
@@ -108,7 +108,7 @@ expect_warning(
 })
 
 test_that("error on arguments", {
- co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
+#  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
 
 expect_error(
   flux_fitting_log(
@@ -124,7 +124,7 @@ expect_error(
 
 
 test_that("cutting too much", {
- co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+#  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
 
 expect_error(
   flux_fitting_log(
@@ -140,7 +140,7 @@ fixed = TRUE # need that because there parenthesis in the error message
 })
 
 test_that("renaming works", {
- co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
+#  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
 
 
   co2_conc_names <- co2_conc %>%

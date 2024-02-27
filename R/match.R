@@ -120,7 +120,8 @@ field_record <- field_record %>%
             # turfID = as.factor(turfID),
             # type = as.factor(type),
             fluxID = as.factor(fluxID),
-            flag = as.character(flag)
+            flag = as.character(flag),
+            turfID = as.factor(turfID)
           ) %>%
              dplyr::arrange(fluxID)
   

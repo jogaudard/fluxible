@@ -9,7 +9,7 @@ get_file(node = "fcbw4",
          remote_path = "raw_data/v. c_flux_raw_data")
 
 # making the dataset we want
-record <- read_csv("data-raw/PFTC6_cflux_field-record_joasete.csv", col_types = "ffdDccc")
+record <- read_csv("data-raw/PFTC6_cflux_field-record_joasete.csv")
 
 record_short <- record %>%
    select(turfID, type, starting_time, date) %>%
