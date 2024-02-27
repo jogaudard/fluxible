@@ -1,0 +1,33 @@
+# for matching
+co2_conc <- readr::read_csv("data-raw/co2_conc.csv", col_types = "TddddffTTfddc")
+usethis::use_data(co2_conc, overwrite = TRUE)
+
+co2_df_missing <- readr::read_csv("data-raw/co2_df_missing.csv", col_types = "Tdddd", na = c("#N/A", "Over", "Invalid"))
+usethis::use_data(co2_df_missing, overwrite = TRUE)
+
+co2_conc_missing <- readr::read_csv("data-raw/co2_conc_missing.csv", col_types = "TddddffTTfddc")
+usethis::use_data(co2_conc_missing, overwrite = TRUE)
+
+# for fitting log
+slopes0 <- readr::read_csv("data-raw/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+usethis::use_data(slopes0, overwrite = TRUE)
+
+slopes30 <- readr::read_csv("data-raw/slopes30.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+usethis::use_data(slopes30, overwrite = TRUE)
+
+slopes60 <- readr::read_csv("data-raw/slopes60.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+usethis::use_data(slopes60, overwrite = TRUE)
+
+# for fitting lin
+slopes0lin <- readr::read_csv("data-raw/slopes0lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+usethis::use_data(slopes0lin, overwrite = TRUE)
+
+slopes30lin <- readr::read_csv("data-raw/slopes30lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+usethis::use_data(slopes30lin, overwrite = TRUE)
+
+slopes60lin <- readr::read_csv("data-raw/slopes60lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+usethis::use_data(slopes60lin, overwrite = TRUE)
+
+# for fluc calc
+co2_fluxes <- readr::read_csv("data-raw/fluxes.csv")
+usethis::use_data(co2_fluxes, overwrite = TRUE)

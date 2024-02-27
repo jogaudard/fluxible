@@ -80,7 +80,7 @@ expect_warning(
 
 # warning when there is no data in some fluxID
 
-test_that("warnings when thre is no data in conc", {
+test_that("warnings when there is no data in conc", {
  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
 
 expect_warning(
