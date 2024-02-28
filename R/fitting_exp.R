@@ -83,10 +83,10 @@ flux_fitting_exp <- function(conc_df,
 
 length_flux_max <- conc_df |>
    mutate(
-    length_flux = difftime(end, start, units = "sec"),
-    length_flux = as.double(length_flux)
+    length_flux = difftime(.data$end, .data$start, units = "sec"),
+    length_flux = as.double(.data$length_flux)
    ) |>
-      select(length_flux) |>
+      select("length_flux") |>
          max()
 
 if((start_cut + end_cut) >= length_flux_max) {stop("You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)")}
@@ -95,18 +95,18 @@ if((start_cut + end_cut) >= length_flux_max) {stop("You cannot cut more than the
   # we will try to calculate all the parameters without a, and then insert a in the end
   
   conc_df <- conc_df |> 
-       group_by(fluxID) |> 
+       group_by(.data$fluxID) |> 
        mutate(
-      time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
-      time = as.double(time),
-      start = start + start_cut,
-      end = end - end_cut,
+      time = difftime(.data$datetime[1:length(.data$datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
+      time = as.double(.data$time),
+      start = .data$start + ((start_cut)),
+      end = .data$end - ((end_cut)),
       cut = case_when(
-        datetime < start | datetime >= end ~ "cut",
+        .data$datetime < .data$start | .data$datetime >= .data$end ~ "cut",
         TRUE ~ "keep"
       ),
-      cut = as_factor(cut),
-      n_conc = sum(!is.na(conc)) # already done in match function but I want the functions to be independant
+      cut = as_factor(.data$cut),
+      n_conc = sum(!is.na(.data$conc)) # already done in match function but I want the functions to be independant
     ) |> 
     ungroup()
   
@@ -115,79 +115,79 @@ conc_df_cut <- conc_df |>
       cut == "keep"
     )  |>
        drop_na(conc) |> # drop NA in conc to avoid messing up the models used later, will have to print a warning for that
-           group_by(fluxID) |>
+           group_by(.data$fluxID) |>
            mutate(
             time_cut = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
-            time_cut = as.double(time_cut), # we need time_cut because we dropped the NA in conc
+            time_cut = as.double(.data$time_cut), # we need time_cut because we dropped the NA in conc
             # time_cut = time, # maybe it can just be the same, it doesn't have to start at 0
-            length_window = max(time_cut), #to have length_flux for each flux, better than setting it up as a function argument, we use time_cut because we want the time where there are conc data
-            length_flux = difftime(end, start, units = "sec"), # the length of the flux after cutting, does not mean there is data for all the seconds
+            length_window = max(.data$time_cut), #to have length_flux for each flux, better than setting it up as a function argument, we use time_cut because we want the time where there are conc data
+            length_flux = difftime(.data$end, .data$start, units = "sec"), # the length of the flux after cutting, does not mean there is data for all the seconds
             # length_flux = as.double(length_window),
             # length_window = max(time_cut) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
             # length_window = max(time) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
-            time_diff = time - time_cut,
-            n_conc_cut = sum(!is.na(conc)) # nb of conc data after cutting, for warnings
+            time_diff = .data$time - .data$time_cut,
+            n_conc_cut = sum(!is.na(.data$conc)) # nb of conc data after cutting, for warnings
 
                  ) |>
                     ungroup()
 
 
   Cm_df <- conc_df_cut |> 
-       group_by(fluxID) |> 
-    distinct(conc, .keep_all = TRUE) |> 
+       group_by(.data$fluxID) |> 
+    distinct(.data$conc, .keep_all = TRUE) |> 
     mutate(
-      Cmax = max(conc),
-      Cmin = min(conc),
+      Cmax = max(.data$conc),
+      Cmin = min(.data$conc),
       # tmax = time[conc == Cmax],
       # tmin = time[conc == Cmin]
-      tmax = time_cut[conc == Cmax],
-      tmin = time_cut[conc == Cmin]
+      tmax = time_cut[.data$conc == .data$Cmax],
+      tmin = time_cut[.data$conc == .data$Cmin]
     ) |> 
-    select(fluxID, Cmax, Cmin, tmax, tmin) |> 
+    select("fluxID", "Cmax", "Cmin", "tmax", "tmin") |> 
     ungroup() |> 
-    distinct(Cmax, Cmin, .keep_all = TRUE)
+    distinct(.data$Cmax, .data$Cmin, .keep_all = TRUE)
   
   Cm_slope <- conc_df_cut |> 
-    group_by(fluxID) |> 
+    group_by(.data$fluxID) |> 
     do({model = lm(conc ~ time_cut, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) |>          # get model info
-    filter(term == "time_cut") |> 
+    filter(.data$term == "time_cut") |> 
     # do({model = lm(conc ~ time, data=.)    # create your model
     # data.frame(tidy(model),              # get coefficient info
     #            glance(model))}) |>          # get model info
     # filter(term == "time") |> 
-    rename(slope_Cm = estimate) |> 
-    select(fluxID, slope_Cm) |> 
+    rename(slope_Cm = "estimate") |> 
+    select("fluxID", "slope_Cm") |> 
     ungroup()
   
   Cm_df <- left_join(Cm_df, Cm_slope) |> 
     mutate(
       Cm_est = case_when(
-        slope_Cm < 0 ~ Cmin, #Cm is the maximum mixing point, which is when the limit of C(t) when t tends to infinite.
-        slope_Cm > 0 ~ Cmax 
+        .data$slope_Cm < 0 ~ .data$Cmin, #Cm is the maximum mixing point, which is when the limit of C(t) when t tends to infinite.
+        .data$slope_Cm > 0 ~ .data$Cmax 
       ),
       tm = case_when(
-        slope_Cm < 0 ~ tmin,
-        slope_Cm > 0 ~ tmax
+        .data$slope_Cm < 0 ~ .data$tmin,
+        .data$slope_Cm > 0 ~ .data$tmax
       )
     ) |> 
-    select(fluxID, Cm_est, tm, slope_Cm) |> 
+    select("fluxID", "Cm_est", "tm", "slope_Cm") |> 
     ungroup()
   
   Cz_df <- conc_df_cut |>
-    group_by(fluxID) |>
+    group_by(.data$fluxID) |>
     filter(
-      time_cut <= Cz_window
+      .data$time_cut <= ((Cz_window))
       # time <= Cz_window + start_cut
     ) |>
-    do({model = lm(conc ~ time_cut, data=.)    # create your model
+    do({model = lm(.data$conc ~ .data$time_cut, data=.)    # create your model
     data.frame(broom::tidy(model),              # get coefficient info
                broom::glance(model))}) |>          # get model info
     pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") |> 
     rename(
       Cz = "(Intercept)",
-      slope_Cz = time_cut) |>
+      slope_Cz = ".data$time_cut") |>
     # do({model = lm(conc ~ time, data=.)    # create your model
     # data.frame(tidy(model),              # get coefficient info
     #            glance(model))}) |>          # get model info
@@ -195,27 +195,27 @@ conc_df_cut <- conc_df |>
     # rename(
     #   Cz = "(Intercept)",
     #   slope_Cz = time) |>
-    select(fluxID, Cz, slope_Cz) |>
+    select("fluxID", "Cz", "slope_Cz") |>
     ungroup()
   
   tz_df <- conc_df_cut |> 
     left_join(Cz_df) |> 
-    group_by(fluxID) |> 
+    group_by(.data$fluxID) |> 
     filter(
       # time > Cz_window
-      time_cut < length_window / 2 # tz should be in the first half of the flux
+      .data$time_cut < .data$length_window / 2 # tz should be in the first half of the flux
       # time_cut < (length_window / 2) + start_cut # tz should be in the first half of the flux
             # time < (length_window / 2) + start_cut # tz should be in the first half of the flux
     ) |>
     mutate(
-      conc_roll = zoo::rollmean(conc, k = roll_width, fill = NA, align = "right"),
-      Cd = abs(conc_roll - Cz),
-      minCd = min(Cd, na.rm = TRUE),
+      conc_roll = zoo::rollmean(.data$conc, k = ((roll_width)), fill = NA, align = "right"),
+      Cd = abs(.data$conc_roll - .data$Cz),
+      minCd = min(.data$Cd, na.rm = TRUE),
       # tz_est = min(time[Cd == minCd], na.rm = TRUE)
-      tz_est = min(time_cut[Cd == minCd], na.rm = TRUE)
+      tz_est = min(.data$time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
     ) |> 
     ungroup() |> 
-    select(fluxID, tz_est) |> 
+    select("fluxID", "tz_est") |> 
     distinct()
   
   # a_df <- CO2_df |> # a is the slope at the end of the flux
@@ -235,27 +235,27 @@ conc_df_cut <- conc_df |>
   
   Cb_df <- conc_df_cut |> 
     left_join(tz_df) |> 
-    group_by(fluxID) |> 
+    group_by(.data$fluxID) |> 
     mutate(
-      Cb = conc[time_cut == tz_est - b_window]
+      Cb = .data$conc[.data$time_cut == .data$tz_est - ((b_window))]
       # Cb = case_when(tz_est - b_window < 0 ~ conc[time == start_cut],
       #                       tz_est - b_window >= 0 ~ conc[time == tz_est - b_window]
       # )
     ) |> 
     ungroup() |> 
-    select(fluxID, Cb) |> 
+    select("fluxID", "Cb") |> 
     distinct()
   
   a_df <- conc_df_cut |> 
-    group_by(fluxID) |> 
+    group_by(.data$fluxID) |> 
     mutate(
-      ta = length_window - a_window,
+      ta = .data$length_window - ((a_window)),
       # ta = length_window - a_window + start_cut,
-      Ca = conc[time_cut == ta]
+      Ca = .data$conc[.data$time_cut == .data$ta]
       # Ca = conc[time == ta]
     ) |> 
     ungroup() |> 
-    select(fluxID, ta, Ca) |> 
+    select("fluxID", "ta", "Ca") |> 
     distinct()
   
   estimates_df <- left_join(Cm_df, Cz_df) |> 
@@ -264,13 +264,13 @@ conc_df_cut <- conc_df |>
     left_join(Cb_df) |> 
     mutate(
       b_est = case_when(
-        Cb == Cm_est ~ 0, # special case or flat flux
-        Cz == Cm_est ~ 0, # special case or flat flux
-        TRUE ~         log(abs((Cb - Cm_est)/(Cz - Cm_est))) * (1/b_window), # problem with the log? negative value? let's try with absolute value
+        .data$Cb == .data$Cm_est ~ 0, # special case or flat flux
+        .data$Cz == .data$Cm_est ~ 0, # special case or flat flux
+        TRUE ~ log(abs((.data$Cb - .data$Cm_est)/(.data$Cz - .data$Cm_est))) * (1/((b_window))), # problem with the log? negative value? let's try with absolute value
       ),
       a_est = case_when(
-        ta == tz_est ~ 0, # tz_est = ta is a special case that is undefined
-        TRUE ~ (Ca - Cm_est - (Cz - Cm_est) * exp(-b_est * (ta - tz_est))) / (ta - tz_est)
+        .data$ta == .data$tz_est ~ 0, # tz_est = ta is a special case that is undefined
+        TRUE ~ (.data$Ca - .data$Cm_est - (.data$Cz - .data$Cm_est) * exp(-.data$b_est * (.data$ta - .data$tz_est))) / (.data$ta - .data$tz_est)
       )
       )
 
@@ -298,29 +298,29 @@ conc_df_cut <- conc_df |>
   fitting_par <- conc_df_cut |> 
     left_join(estimates_df) |> 
     # select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time, conc) |>
-    select(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_cut, conc, time_diff) |>
-    group_by(fluxID, Cm_est, a_est, b_est, tz_est, Cz, time_diff) |>
+    select("fluxID", "Cm_est", "a_est", "b_est", "tz_est", "Cz", "time_cut", "conc", "time_diff") |>
+    group_by(.data$fluxID, .data$Cm_est, .data$a_est, .data$b_est, .data$tz_est, .data$Cz, .data$time_diff) |>
     nest() |> 
     rowwise() |>
     summarize(
       # I would like to do something more resilient to avoid stopping everything if there is a problem with optim. Maybe tryCatch can be an idea
-      results = list(optim(par = c(Cm_est, a_est, b_est, log(tz_est)), fn = myfn, conc = data$conc, time = data$time_cut, Cz = Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
-      Cm = results$par[1],
-      a = results$par[2],
+      results = list(optim(par = c(.data$Cm_est, .data$a_est, .data$b_est, log(.data$tz_est)), fn = myfn, conc = data$conc, time = data$time_cut, Cz = .data$Cz)), #, lower=c(0, -Inf, -Inf, 0),  method="L-BFGS-B"
+      Cm = .data$results$par[1],
+      a = .data$results$par[2],
       # b = exp(results$par[3]),#/(abs(results$par[3])+1),
-      b = results$par[3],
+      b = .data$results$par[3],
       # b = 1/(1+exp(-results$par[3])),
       #need to find the fit with the b closest to 0 (negative or positive)
-      tz = exp(results$par[4]), #we force tz to be positive
-      slope_tz = a + b * (Cm - Cz),
+      tz = exp(.data$results$par[4]), #we force tz to be positive
+      slope_tz = .data$a + .data$b * (.data$Cm - .data$Cz),
     ) |> 
     ungroup() |>
-       select(!results) # we do not need it anymore and it is confusing to have them as tibble
+       select(!"results") # we do not need it anymore and it is confusing to have them as tibble
 
 
   conc_fitting <- conc_df |> 
     left_join(fitting_par) |> 
-    group_by(fluxID) |>
+    group_by(.data$fluxID) |>
     mutate(
       # time_corr = difftime(start_window, start, units = "secs"), # need a correction because in this df time is starting at beginning, not at cut
       # time_corr = as.double(time_corr),
@@ -334,13 +334,13 @@ conc_df_cut <- conc_df |>
       # ),
       # need to correct tz for the time diff between time and time_cut
       # time_diff = time[1] - time_cut[1],
-      fit = Cm + a * (time - tz - time_diff) + (Cz - Cm) * exp(- b * (time - tz - time_diff)),
-      fit_slope = slope_tz * (time) + Cz - slope_tz * (tz + time_diff),
+      fit = .data$Cm + .data$a * (.data$time - .data$tz - .data$time_diff) + (.data$Cz - .data$Cm) * exp(- .data$b * (.data$time - .data$tz - .data$time_diff)),
+      fit_slope = .data$slope_tz * (.data$time) + .data$Cz - .data$slope_tz * (.data$tz + .data$time_diff),
       # fit = Cm + a * (time - tz) + (Cz - Cm) * exp(- b * (time - tz)),
       # fit_slope = slope_tz * (time) + Cz - slope_tz * tz,
       # fit = Cm_est + a_est * (time - tz_est - time_corr) + (Cz - Cm_est) * exp(- b_est * (time - tz_est - time_corr)),
       # fit_slope = (a_est + b_est * (Cm_est - Cz) ) * (time - time_corr) + Cz - slope_tz * tz_est,
-      start_z = start + tz # this is for graph purpose, to have a vertical line showing where tz is for each flux
+      start_z = .data$start + .data$tz # this is for graph purpose, to have a vertical line showing where tz is for each flux
       
     ) #|> 
     #select(!time_diff)
@@ -430,7 +430,7 @@ conc_df_cut <- conc_df |>
   
   warning_msg <- conc_df |>
     left_join(conc_df_cut) |> # we want n_conc after cutting
-     select(fluxID, n_conc, n_conc_cut, length_flux) |>
+     select("fluxID", "n_conc", "n_conc_cut", "length_flux") |>
      distinct() |>
         # group_by(fluxID, n_conc, start, end) |>
           #  reframe(
@@ -441,16 +441,16 @@ conc_df_cut <- conc_df |>
                  mutate(
                   # length_flux = difftime(end, start, units = "sec"),
                   # count = as.numeric(count),
-                  low_data = paste("\n","fluxID", fluxID, ": slope was estimated on", n_conc_cut, "points out of", length_flux, "seconds because data are missing"),
-                  no_data = paste("\n","fluxID", fluxID, ": slope could not be estimated because there are no data in the conc column"),
+                  low_data = paste("\n","fluxID", .data$fluxID, ": slope was estimated on", .data$n_conc_cut, "points out of", .data$length_flux, "seconds because data are missing"),
+                  no_data = paste("\n","fluxID", .data$fluxID, ": slope could not be estimated because there are no data in the conc column"),
                   warnings = case_when(
-                    n_conc == 0 ~ no_data,
-                    n_conc_cut != length_flux ~ low_data
+                    .data$n_conc == 0 ~ .data$no_data,
+                    .data$n_conc_cut != .data$length_flux ~ .data$low_data
                   ),
-                  warnings = as.character(warnings)
+                  warnings = as.character(.data$warnings)
                  ) |>
                  drop_na(warnings) |>
-              pull(warnings)
+              pull(.data$warnings)
                 #  view(warning_df)
 
   warnings <- str_c(warning_msg)

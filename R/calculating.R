@@ -15,7 +15,6 @@
 #' @return a df containing fluxID, fluxes, temperature average for each flux, slope used for each flux calculation, and any columns specified in cols_keep and cols_ave
 #' @importFrom rlang .data
 #' @importFrom dplyr .data rename all_of select group_by summarise ungroup mutate case_when distinct left_join summarize_all
-# #' @importFrom purrr ::
 
 # to do list
 # test that columns in arguments exist
@@ -70,7 +69,7 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
 
 slope_temp <- slope_df |>
    select("slope", "fluxID", "air_temp") |>
-      group_by(fluxID, slope) |>
+      group_by(.data$fluxID, .data$slope) |>
          summarise(
           temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
          ) |>

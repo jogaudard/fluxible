@@ -41,3 +41,7 @@ a dataframe with concentration measurements and corresponding datetime, fluxID, 
 \description{
 Function to match a dataframe of continuously measured CO2 concentration with measurement IDs from another dataframe. Uses datetime to tell which measurements happened when. Extra variables in both dataframes will appear in the output.
 }
+\examples{
+data(co2_df_short, record_short)
+flux_match(co2_df_short, record_short)
+}

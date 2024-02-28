@@ -14,6 +14,10 @@
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct 
 # #' @importFrom purrr ::
+#' @examples 
+#' data(co2_df_short, record_short)
+#' flux_match(co2_df_short, record_short)
+#' @export
 
 
 # should I describe all the variables in the output?
