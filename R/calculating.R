@@ -1,5 +1,6 @@
 #' to calculate a flux based on the rate of change of gas concentration over time
 #' @description to calculate a flux based on the rate of change of gas concentration over time
+#' @param slope_df dataframe of flux slopes
 #' @param slope_col column containing the slope to calculate the flux
 #' @param chamber_volume volume of the flux chamber in L, default for Three-D chamber (25x24.5x40cm)
 #' @param tube_volume volume of the tubing in L, default for summer 2020 setup
@@ -12,6 +13,9 @@
 #' @param temp_air_col column containing the air temperature used to caculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units for air temperature. Has to be either celsius, fahrenheit or kelvin
 #' @return a df containing fluxID, fluxes, temperature average for each flux, slope used for each flux calculation, and any columns specified in cols_keep and cols_ave
+#' @importFrom rlang .data
+#' @importFrom dplyr .data rename all_of select group_by summarise ungroup mutate case_when distinct left_join summarize_all
+# #' @importFrom purrr ::
 
 # to do list
 # test that columns in arguments exist
@@ -54,87 +58,87 @@ flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions
   
  
 
-  slope_df <- slope_df %>%
-     dplyr::rename(
-      fluxID = dplyr::all_of(fluxID_col),
-      air_temp = dplyr::all_of(temp_air_col),
-      slope = dplyr::all_of(slope_col)
+  slope_df <- slope_df |>
+     rename(
+      fluxID = all_of(fluxID_col),
+      air_temp = all_of(temp_air_col),
+      slope = all_of(slope_col)
      )
 
 
   vol = chamber_volume + tube_volume
 
-slope_temp <- slope_df %>%
-   dplyr::select(slope, fluxID, air_temp) %>%
-      dplyr::group_by(fluxID, slope) %>%
-         dplyr::summarise(
-          temp_air_ave = mean(air_temp, na.rm = TRUE)
-         ) %>%
-            dplyr::ungroup() %>%
-               dplyr::mutate(
-                temp_air_ave = dplyr::case_when(
-                  temp_air_unit == "celsius" ~ temp_air_ave + 273.15,
-                  temp_air_unit == "fahrenheit" ~ (temp_air_ave + 459.67) * (5/9),
-                  temp_air_unit == "kelvin" ~ temp_air_ave
+slope_temp <- slope_df |>
+   select("slope", "fluxID", "air_temp") |>
+      group_by(fluxID, slope) |>
+         summarise(
+          temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
+         ) |>
+            ungroup() |>
+               mutate(
+                temp_air_ave = case_when(
+                  temp_air_unit == "celsius" ~ .data$temp_air_ave + 273.15,
+                  temp_air_unit == "fahrenheit" ~ (.data$temp_air_ave + 459.67) * (5/9),
+                  temp_air_unit == "kelvin" ~ .data$temp_air_ave
                 )
                )
   
 # a df with all the columns we just want to keep and join back in the end
-if(length(cols_keep) > 0) {
-slope_keep <- slope_df  %>%
-   dplyr::select(dplyr::all_of(cols_keep), fluxID) %>%
-                dplyr::distinct() %>%
-                   dplyr::left_join(slope_temp, by = "fluxID")
+if(length((cols_keep)) > 0) {
+slope_keep <- slope_df  |>
+   select(all_of(cols_keep), "fluxID") |>
+                distinct() |>
+                   left_join(slope_temp, by = "fluxID")
 } else {
    slope_keep <- slope_temp
 }
 
 # a df with the columns that have to be averaged
-if(length(cols_ave) > 0) {
-slope_ave <- slope_df %>%
-   dplyr::select(dplyr::all_of(cols_ave), fluxID) %>%
-      dplyr::group_by(fluxID) %>%
-         dplyr::summarize_all(mean, na.rm = TRUE) %>%
-            dplyr::ungroup() %>%
-               dplyr::left_join(slope_keep, by = "fluxID")
+if(length((cols_ave)) > 0) {
+slope_ave <- slope_df |>
+   select(all_of(cols_ave), "fluxID") |>
+      group_by(.data$fluxID) |>
+         summarize_all(mean, na.rm = TRUE) |>
+            ungroup() |>
+               left_join(slope_keep, by = "fluxID")
 } else {
    slope_ave <- slope_keep
 }
 
 # # a df with average of air temperature
-# ait_temp_df <- slope_df %>%
-#    dplyr::select(fluxID, temp_air) %>%
-#       dplyr::group_by(fluxID) %>%
-#          dplyr::summarize_all(mean, na.rm = TRUE) %>%
-#             dplyr::ungroup()
+# ait_temp_df <- slope_df |>
+#    select(fluxID, temp_air) |>
+#       group_by(fluxID) |>
+#          summarize_all(mean, na.rm = TRUE) |>
+#             ungroup()
 
 
 
 
 
   # creates means of all columns specified to be averaged
-#   means <- co2conc %>% 
-#     group_by(fluxID) %>% 
+#   means <- co2conc |> 
+#     group_by(fluxID) |> 
 #     summarise(
 #       PARavg = mean(PAR, na.rm = TRUE), #mean value of PAR for each flux
 #       temp_airavg = mean(temp_air, na.rm = TRUE)  #mean value of temp_air for each flux
 #       + 273.15, #transforming in kelvin for calculation
 #       temp_soilavg = mean(temp_soil, na.rm = TRUE) #mean value of temp_soil for each flux
-#     ) %>% 
+#     ) |> 
 #     ungroup()
   
-  # fluxes_final <- dplyr::left_join(slope_df, ave_cols, by = "fluxID") %>% 
-  #                   dplyr::left_join(keeping_cols, by = "fluxID") %>%
-  #                   dplyr::left_join(air_temp_df, by = "fluxID") %>%
-  fluxes <- slope_ave %>%
-                    dplyr::mutate(
-                        flux = (slope * atm_pressure * vol)/(R_const * temp_air_ave * plot_area) #gives flux in micromol/s/m^2
+  # fluxes_final <- left_join(slope_df, ave_cols, by = "fluxID") |> 
+  #                   left_join(keeping_cols, by = "fluxID") |>
+  #                   left_join(air_temp_df, by = "fluxID") |>
+  fluxes <- slope_ave |>
+                    mutate(
+                        flux = (.data$slope * ((atm_pressure)) * ((vol)))/(((R_const)) * .data$temp_air_ave * ((plot_area))) #gives flux in micromol/s/m^2
                         *3600 #secs to hours
                         /1000, #micromol to mmol #flux is now in mmol/m^2/h, which is more common
-                        temp_air_ave = dplyr::case_when(
-                          temp_air_unit == "celsius" ~ temp_air_ave - 273.15,
-                          temp_air_unit == "fahrenheit" ~ ((temp_air_ave - 273.15) * (9/5)) + 32,
-                          temp_air_unit == "kelvin" ~ temp_air_ave
+                        temp_air_ave = case_when(
+                          ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,
+                          ((temp_air_unit)) == "fahrenheit" ~ ((.data$temp_air_ave - 273.15) * (9/5)) + 32,
+                          ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
                         )
                     ) 
   return(fluxes)

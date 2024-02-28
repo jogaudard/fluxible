@@ -16,6 +16,8 @@ flux_fitting_lin(
 )
 }
 \arguments{
+\item{conc_df}{dataframe of gas concentration over time}
+
 \item{start_cut}{to cut at the start}
 
 \item{end_cut}{to cut at the end, if you notice on the graphs that the match was not precise enough}

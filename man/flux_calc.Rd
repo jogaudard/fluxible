@@ -20,6 +20,8 @@ flux_calc(
 )
 }
 \arguments{
+\item{slope_df}{dataframe of flux slopes}
+
 \item{slope_col}{column containing the slope to calculate the flux}
 
 \item{chamber_volume}{volume of the flux chamber in L, default for Three-D chamber (25x24.5x40cm)}
