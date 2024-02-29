@@ -33,11 +33,11 @@ flux_fitting_lin <- function(conc_df,
     #renaming columns
   conc_df <- conc_df |>
      rename(
-      start = all_of(start_col),
-      end = all_of(end_col),
-      datetime = all_of(datetime_col),
-      conc = all_of(conc_col),
-      fluxID = all_of(fluxID_col)
+      start = all_of((start_col)),
+      end = all_of((end_col)),
+      datetime = all_of((datetime_col)),
+      conc = all_of((conc_col)),
+      fluxID = all_of((fluxID_col))
      )
 
     if(!is.double(start_cut)) stop("start_cut has to be a double")

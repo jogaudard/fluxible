@@ -1,1 +1,1 @@
-# function to check the quality of the data before 
+#' putting together the quality functions depending on the type of calculations
