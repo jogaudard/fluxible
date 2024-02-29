@@ -25,13 +25,16 @@ slopes60 <- readr::read_csv("data-raw/slopes60.csv", col_types = "TddddffTTfddcd
 usethis::use_data(slopes60, overwrite = TRUE)
 
 # for fitting lin
-slopes0lin <- readr::read_csv("data-raw/slopes0lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+slopes0lin <- readr::read_csv("data-raw/slopes0lin.csv", col_types = "TddddffTTfddcdfddddddddddddT") |>
+   dplyr::select(!std.error)
 usethis::use_data(slopes0lin, overwrite = TRUE)
 
-slopes30lin <- readr::read_csv("data-raw/slopes30lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+slopes30lin <- readr::read_csv("data-raw/slopes30lin.csv", col_types = "TddddffTTfddcdfddddddddddddT") |>
+   dplyr::select(!std.error)
 usethis::use_data(slopes30lin, overwrite = TRUE)
 
-slopes60lin <- readr::read_csv("data-raw/slopes60lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+slopes60lin <- readr::read_csv("data-raw/slopes60lin.csv", col_types = "TddddffTTfddcdfddddddddddddT") |>
+   dplyr::select(!std.error)
 usethis::use_data(slopes60lin, overwrite = TRUE)
 
 # for fluc calc

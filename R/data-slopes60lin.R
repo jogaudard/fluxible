@@ -19,7 +19,7 @@
 #' \item{flag}{Data quality flags.}
 #' \item{time}{Time variable of the flux in seconds.}
 #' \item{cut}{Indicating if the measurement should be kept (keep) or discarded (cut).}
-#' \item{std.error}{Standard error of the linear model of CO2 concentration over time.}
+# #' \item{std.error}{Standard error of the linear model of CO2 concentration over time.}
 #' \item{p.value}{P-value of the linear model of CO2 concentration over time.}
 #' \item{r.squared}{R squared of the linear model of CO2 concentration over time.}
 #' \item{adj.r.squared}{Adjusted R squared of the linear model of CO2 concentration over time.}

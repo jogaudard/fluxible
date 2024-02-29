@@ -10,7 +10,7 @@
 #' @param fluxID_col column with ID of each flux
 #' @return a df with the modelled gas concentration, slope, intercept, std error, r square and p value of the linear model
 #' @importFrom rlang .data
-#' @importFrom dplyr rename all_of mutate select group_by case_when ungroup filter do left_join distinct pull
+#' @importFrom dplyr rename all_of mutate select group_by case_when ungroup filter left_join distinct pull bind_cols
 #' @importFrom tidyr drop_na pivot_wider fill 
 #' @importFrom haven as_factor
 # #' @importFrom purrr ::
@@ -89,16 +89,25 @@ conc_df_cut <- conc_df |>
                     ungroup()
 
     fitting_par <- conc_df_cut |> 
-    group_by(fluxID) |> 
-    do({model = lm(conc ~ time_cut, data=.)    # create your model
-    data.frame(broom::tidy(model),              # get coefficient info
-               broom::glance(model))}) |>          # get model info
-               select(fluxID, term, estimate, std.error, p.value, r.squared, adj.r.squared) |>
-    pivot_wider(names_from = term, values_from = estimate) |>
+    group_by(.data$fluxID) |> 
+    nest()  |>
+    mutate(
+      temp = map(.data$data, \(d){
+      model <- lm(conc ~ time_cut, data= d) 
+      glance <- broom::glance(model) |>
+        select("r.squared", "adj.r.squared", "p.value")
+      tidy <- broom::tidy(model) |>
+        select("term", "estimate") |>
+       pivot_wider(names_from = "term", values_from = "estimate")
+       bind_cols(glance, tidy)
+     } )
+    ) |>
+    select(!"data") |>
+    unnest("temp") |>
     rename(
-        intercept = "(Intercept)",
-        slope = time_cut
-        ) |>
+      slope = "time_cut",
+      intercept = "(Intercept)"
+      ) |> 
     fill(intercept, .direction = "down") |>
     drop_na(slope) |> #there must be a less dirty way to do this!
        ungroup()

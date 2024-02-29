@@ -23,11 +23,12 @@
 #' @param fluxID_col column with ID of each flux
 #' @return a dataframe with the slope at t zero (should be used for flux calculation), modelled concentration over time and exponential expression parameters
 #' @importFrom rlang .data
-#' @importFrom dplyr rename all_of mutate select group_by case_when ungroup filter distinct do left_join rowwise summarize pull
-#' @importFrom tidyr pivot_wider drop_na nest
+#' @importFrom dplyr rename all_of mutate select group_by case_when ungroup filter distinct left_join rowwise summarize pull
+#' @importFrom tidyr pivot_wider drop_na nest unnest
 #' @importFrom haven as_factor
 #' @importFrom stringr str_c
-# #' @importFrom purrr ::
+#' @importFrom stats lm optim
+#' @importFrom purrr map
 
 flux_fitting_exp <- function(conc_df,
                               #  weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong, this shoudl be moved to the quality check function
@@ -97,7 +98,7 @@ if((start_cut + end_cut) >= length_flux_max) {stop("You cannot cut more than the
   conc_df <- conc_df |> 
        group_by(.data$fluxID) |> 
        mutate(
-      time = difftime(.data$datetime[1:length(.data$datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
+      time = difftime(.data$datetime[1:length(.data$datetime)],.data$datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
       time = as.double(.data$time),
       start = .data$start + ((start_cut)),
       end = .data$end - ((end_cut)),
@@ -117,7 +118,7 @@ conc_df_cut <- conc_df |>
        drop_na(conc) |> # drop NA in conc to avoid messing up the models used later, will have to print a warning for that
            group_by(.data$fluxID) |>
            mutate(
-            time_cut = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
+            time_cut = difftime(.data$datetime[1:length(.data$datetime)],.data$datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
             time_cut = as.double(.data$time_cut), # we need time_cut because we dropped the NA in conc
             # time_cut = time, # maybe it can just be the same, it doesn't have to start at 0
             length_window = max(.data$time_cut), #to have length_flux for each flux, better than setting it up as a function argument, we use time_cut because we want the time where there are conc data
@@ -132,7 +133,7 @@ conc_df_cut <- conc_df |>
                     ungroup()
 
 
-  Cm_df <- conc_df_cut |> 
+  Cm_temp <- conc_df_cut |> 
        group_by(.data$fluxID) |> 
     distinct(.data$conc, .keep_all = TRUE) |> 
     mutate(
@@ -149,19 +150,21 @@ conc_df_cut <- conc_df |>
   
   Cm_slope <- conc_df_cut |> 
     group_by(.data$fluxID) |> 
-    do({model = lm(conc ~ time_cut, data=.)    # create your model
-    data.frame(broom::tidy(model),              # get coefficient info
-               broom::glance(model))}) |>          # get model info
-    filter(.data$term == "time_cut") |> 
-    # do({model = lm(conc ~ time, data=.)    # create your model
-    # data.frame(tidy(model),              # get coefficient info
-    #            glance(model))}) |>          # get model info
-    # filter(term == "time") |> 
-    rename(slope_Cm = "estimate") |> 
+    nest()  |>
+    mutate(
+      model_Cm = map(.data$data, \(d)
+      lm(conc ~ time_cut, data= d) |>
+      broom::tidy() |>
+      select("term", "estimate") |>
+      pivot_wider(names_from = "term", values_from = "estimate")
+      )
+    ) |>
+    unnest(model_Cm) |>
+    rename(slope_Cm = "time_cut") |> 
     select("fluxID", "slope_Cm") |> 
     ungroup()
   
-  Cm_df <- left_join(Cm_df, Cm_slope) |> 
+  Cm_df <- left_join(Cm_temp, Cm_slope) |> 
     mutate(
       Cm_est = case_when(
         .data$slope_Cm < 0 ~ .data$Cmin, #Cm is the maximum mixing point, which is when the limit of C(t) when t tends to infinite.
@@ -181,22 +184,24 @@ conc_df_cut <- conc_df |>
       .data$time_cut <= ((Cz_window))
       # time <= Cz_window + start_cut
     ) |>
-    do({model = lm(.data$conc ~ .data$time_cut, data=.)    # create your model
-    data.frame(broom::tidy(model),              # get coefficient info
-               broom::glance(model))}) |>          # get model info
-    pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") |> 
+    nest()  |>
+    mutate(
+      model_Cz = map(.data$data, \(d)
+      lm(conc ~ time_cut, data= d) |>
+      broom::tidy() |>
+      select("term", "estimate") |>
+      pivot_wider(names_from = "term", values_from = "estimate")
+      )
+    ) |>
+    unnest(model_Cz) |>
     rename(
-      Cz = "(Intercept)",
-      slope_Cz = ".data$time_cut") |>
-    # do({model = lm(conc ~ time, data=.)    # create your model
-    # data.frame(tidy(model),              # get coefficient info
-    #            glance(model))}) |>          # get model info
-    # pivot_wider(id_cols = fluxID, names_from = "term", values_from = "estimate") |> 
-    # rename(
-    #   Cz = "(Intercept)",
-    #   slope_Cz = time) |>
-    select("fluxID", "Cz", "slope_Cz") |>
+      slope_Cz = "time_cut",
+      Cz = "(Intercept)"
+      ) |> 
+    select("fluxID", "slope_Cz", "Cz") |> 
     ungroup()
+
+    
   
   tz_df <- conc_df_cut |> 
     left_join(Cz_df) |> 
