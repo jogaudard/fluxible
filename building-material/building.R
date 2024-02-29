@@ -140,12 +140,12 @@ slopes0 <- flux_fitting_exp(co2_conc)
 
    
 slopes60 <- co2_conc %>%
-   flux_fitting_log(
+   flux_fitting_exp(
       end_cut = 60
    )
 
-slopes30 <- co2_conc %>%
-   flux_fitting_log(
+slopes30_test <- co2_conc %>%
+   flux_fitting_exp(
       end_cut = 30
    )
    
@@ -167,6 +167,12 @@ slopes0 %>% # this one looks bad, because there is some stuff left at the end of
   scale_x_datetime(date_breaks = "1 min", minor_breaks = "10 sec", date_labels = "%e/%m \n %H:%M") +
   ylim(400,800) +
   facet_wrap(~fluxID, scales = "free")
+
+  slopes30 <- slopes30  |>
+  mutate(
+         fit_slope = .data$slope_tz * (.data$time) + .data$Cz - .data$slope_tz * (.data$tz + .data$time_diff),
+
+  )
 
 slopes30  %>%
   ggplot(aes(datetime)) +

@@ -13,9 +13,11 @@
 #' @importFrom dplyr rename all_of mutate select group_by case_when ungroup filter left_join distinct pull bind_cols
 #' @importFrom tidyr drop_na pivot_wider fill 
 #' @importFrom haven as_factor
-# #' @importFrom purrr ::
 #' @importFrom stringr str_c
-# replace do with a nest mutate with map
+#' @examples 
+#' data(co2_conc)
+#' flux_fitting_lin(co2_conc)
+#' @export
 
 flux_fitting_lin <- function(conc_df,
                             start_cut = 0, # to cut at the start
@@ -43,27 +45,27 @@ flux_fitting_lin <- function(conc_df,
 
    length_flux_max <- conc_df |>
    mutate(
-    length_flux = difftime(end, start, units = "sec"),
-    length_flux = as.double(length_flux)
+    length_flux = difftime(.data$end, .data$start, units = "sec"),
+    length_flux = as.double(.data$length_flux)
    ) |>
-      select(length_flux) |>
+      select("length_flux") |>
          max()
 
 if((start_cut + end_cut) >= length_flux_max) {stop("You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)")}
 
 conc_df <- conc_df |> 
-       group_by(fluxID) |> 
+       group_by(.data$fluxID) |> 
        mutate(
-      time = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
-      time = as.double(time),
-      start = start + start_cut,
-      end = end - end_cut,
+      time = difftime(.data$datetime[1:length(.data$datetime)],.data$datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
+      time = as.double(.data$time),
+      start = .data$start + ((start_cut)),
+      end = .data$end - ((end_cut)),
       cut = case_when(
-        datetime < start | datetime >= end ~ "cut",
+        .data$datetime < .data$start | .data$datetime >= .data$end ~ "cut",
         TRUE ~ "keep"
       ),
-      cut = as_factor(cut),
-      n_conc = sum(!is.na(conc)) # already done in match function but I want the functions to be independant
+      cut = as_factor(.data$cut),
+      n_conc = sum(!is.na(.data$conc)) # already done in match function but I want the functions to be independant
     ) |> 
     ungroup()
   
@@ -71,19 +73,19 @@ conc_df_cut <- conc_df |>
    filter(
       cut == "keep"
     )  |>
-       drop_na(conc) |> # drop NA in conc to avoid messing up the models used later, will have to print a warning for that
-           group_by(fluxID) |>
+       drop_na("conc") |> # drop NA in conc to avoid messing up the models used later, will have to print a warning for that
+           group_by(.data$fluxID) |>
            mutate(
-            time_cut = difftime(datetime[1:length(datetime)],datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
-            time_cut = as.double(time_cut), # we need time_cut because we dropped the NA in conc
+            time_cut = difftime(.data$datetime[1:length(.data$datetime)],.data$datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
+            time_cut = as.double(.data$time_cut), # we need time_cut because we dropped the NA in conc
             # time_cut = time, # maybe it can just be the same, it doesn't have to start at 0
-            length_window = max(time_cut), #to have length_flux for each flux, better than setting it up as a function argument, we use time_cut because we want the time where there are conc data
-            length_flux = difftime(end, start, units = "sec"), # the length of the flux after cutting, does not mean there is data for all the seconds
+            length_window = max(.data$time_cut), #to have length_flux for each flux, better than setting it up as a function argument, we use time_cut because we want the time where there are conc data
+            length_flux = difftime(.data$end, .data$start, units = "sec"), # the length of the flux after cutting, does not mean there is data for all the seconds
             # length_flux = as.double(length_window),
             # length_window = max(time_cut) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
             # length_window = max(time) - start_cut #to have length_flux for each flux, better than setting it up as a function argument
-            time_diff = time - time_cut,
-            n_conc_cut = sum(!is.na(conc)) # nb of conc data after cutting, for warnings
+            time_diff = .data$time - .data$time_cut,
+            n_conc_cut = sum(!is.na(.data$conc)) # nb of conc data after cutting, for warnings
 
                  ) |>
                     ungroup()
@@ -99,7 +101,7 @@ conc_df_cut <- conc_df |>
       tidy <- broom::tidy(model) |>
         select("term", "estimate") |>
        pivot_wider(names_from = "term", values_from = "estimate")
-       bind_cols(glance, tidy)
+       bind_cols(((glance)), ((tidy)))
      } )
     ) |>
     select(!"data") |>
@@ -116,12 +118,12 @@ conc_df_cut <- conc_df |>
     left_join(fitting_par) |> 
     # group_by(fluxID) |>
     mutate(
-            fit = intercept + slope * (time - start_cut)
+            fit = .data$intercept + .data$slope * (.data$time - ((start_cut)))
     )
 
     warning_msg <- conc_df |>
     left_join(conc_df_cut) |> # we want n_conc after cutting
-     select(fluxID, n_conc, n_conc_cut, length_flux) |>
+     select("fluxID", "n_conc", "n_conc_cut", "length_flux") |>
      distinct() |>
         # group_by(fluxID, n_conc, start, end) |>
           #  reframe(
@@ -132,16 +134,16 @@ conc_df_cut <- conc_df |>
                  mutate(
                   # length_flux = difftime(end, start, units = "sec"),
                   # count = as.numeric(count),
-                  low_data = paste("\n","fluxID", fluxID, ": slope was estimated on", n_conc_cut, "points out of", length_flux, "seconds because data are missing"),
-                  no_data = paste("\n","fluxID", fluxID, ": slope could not be estimated because there are no data in the conc column"),
+                  low_data = paste("\n","fluxID", .data$fluxID, ": slope was estimated on", .data$n_conc_cut, "points out of", .data$length_flux, "seconds because data are missing"),
+                  no_data = paste("\n","fluxID", .data$fluxID, ": slope could not be estimated because there are no data in the conc column"),
                   warnings = case_when(
-                    n_conc == 0 ~ no_data,
-                    n_conc_cut != length_flux ~ low_data
+                    .data$n_conc == 0 ~ .data$no_data,
+                    .data$n_conc_cut != .data$length_flux ~ .data$low_data
                   ),
-                  warnings = as.character(warnings)
+                  warnings = as.character(.data$warnings)
                  ) |>
                  drop_na(warnings) |>
-              pull(warnings)
+              pull(.data$warnings)
                 #  view(warning_df)
 
   warnings <- str_c(warning_msg)

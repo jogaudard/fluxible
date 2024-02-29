@@ -15,17 +15,21 @@ test_that("fitting works with 0 second end cut",{
   # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
-  qflux_fitting_exp <- purrr::quietly(flux_fitting_exp) # to make the warnings quiet
+  # qflux_fitting_exp <- purrr::quietly(flux_fitting_exp) # to make the warnings quiet
 
-  fitting_exp_call <- qflux_fitting_exp(
-      co2_conc
-    )
+  # fitting_exp_call <- qflux_fitting_exp(
+  #     co2_conc
+  #   )
 
-  output <- fitting_exp_call$result
+  # output <- fitting_exp_call$result
 
-  expect_equal(
-    output$slope_tz,
-    slopes0$slope_tz
+  # expect_equal(
+  #   output$slope_tz,
+  #   slopes0$slope_tz
+  # )
+
+  expect_snapshot(
+    flux_fitting_exp(co2_conc)
   )
 })
 
@@ -35,13 +39,11 @@ test_that("fitting works with 30 second end cut",{
   # slopes30 <- readr::read_csv("data/slopes30.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
-  output <- flux_fitting_exp(
+    expect_snapshot(
+    flux_fitting_exp(
       co2_conc,
       end_cut = 30
-    )
-  expect_equal(
-    output$slope_tz,
-    slopes30$slope_tz
+      )
   )
 })
 
@@ -51,13 +53,11 @@ test_that("fitting works with 60 second end cut",{
   # slopes60 <- readr::read_csv("data/slopes60.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
   ### test
-  output <- flux_fitting_exp(
+  expect_snapshot(
+    flux_fitting_exp(
       co2_conc,
       end_cut = 60
-    )
-  expect_equal(
-    output$slope_tz,
-    slopes60$slope_tz
+      )
   )
 })
 

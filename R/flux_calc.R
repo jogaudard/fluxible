@@ -15,6 +15,10 @@
 #' @return a df containing fluxID, fluxes, temperature average for each flux, slope used for each flux calculation, and any columns specified in cols_keep and cols_ave
 #' @importFrom rlang .data
 #' @importFrom dplyr .data rename all_of select group_by summarise ungroup mutate case_when distinct left_join summarize_all
+#' @examples 
+#' data(slopes0)
+#' flux_calc(slopes0, slope_col = "slope_tz")
+#' @export
 
 # to do list
 # test that columns in arguments exist

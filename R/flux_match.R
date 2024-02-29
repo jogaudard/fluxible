@@ -13,7 +13,6 @@
 #' @importFrom dplyr rename arrange mutate row_number full_join case_when group_by filter ungroup select distinct pull
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct 
-# #' @importFrom purrr ::
 #' @examples 
 #' data(co2_df_short, record_short)
 #' flux_match(co2_df_short, record_short)
@@ -75,15 +74,15 @@ field_record <- field_record |>
 
 
   field_record <- field_record |>
-    arrange(start) |>
+    arrange(.data$start) |>
     mutate(
-      end = start + measurement_length, #creating column End
-      start = start + startcrop, #cropping the start
+      end = .data$start + ((measurement_length)), #creating column End
+      start = .data$start + ((startcrop)), #cropping the start
       fluxID = row_number() #adding an individual ID to each flux, useful to join data or graph the fluxes
     )
   raw_conc <- raw_conc |>
      mutate(
-      datetime = datetime + time_diff
+      datetime = .data$datetime + ((time_diff))
      )
   
   conc_df <- full_join(raw_conc, field_record, by = c("datetime" = "start"), keep = TRUE) |> #joining both dataset in one
@@ -92,29 +91,29 @@ field_record <- field_record |>
       # datetime = replace_na(datetime, start)
       # datetime_wna = datetime, # keep a datetime column with NA to know where data are missing
       datetime = case_when( # to add the fluxID in case the row with matching datetime and start is missing
-        !is.na(datetime) ~ datetime,
-        is.na(datetime) ~ start
+        !is.na(.data$datetime) ~ .data$datetime,
+        is.na(.data$datetime) ~ .data$start
       )
       ) |>
-      arrange(datetime) |>
+      arrange(.data$datetime) |>
          fill(fluxID)  |> # filling fluxID to group afterwards
        drop_na(fluxID) # dropping everything that happens before the first flux
 
   conc_df <- conc_df |>
-      group_by(fluxID) |> # filling the rest, except if there are NA for some fluxes
+      group_by(.data$fluxID) |> # filling the rest, except if there are NA for some fluxes
     fill(names(field_record)) |>
     filter(
-      (datetime < end
-      & datetime >= start) #cropping the part of the flux that is after the End and before the start
+      (.data$datetime < .data$end
+      & .data$datetime >= .data$start) #cropping the part of the flux that is after the End and before the start
       # | is.na(datetime_wna) # we keep datetime = na because we want to see where there is no data
       )  |>
     mutate(
       # nrow = n(),
-      n_conc = sum(!is.na(conc)), #not sure why I cannot do that with count
-      ratio = n_conc/(measurement_length - startcrop), # add 1 sec because filter is including both limits
+      n_conc = sum(!is.na(.data$conc)), #not sure why I cannot do that with count
+      ratio = .data$n_conc/(((measurement_length)) - ((startcrop))), # add 1 sec because filter is including both limits
       flag = case_when(
-        ratio == 0 ~ "no data",
-        ratio <= ratio_threshold ~ "nb of data too low"
+        .data$ratio == 0 ~ "no data",
+        .data$ratio <= ((ratio_threshold)) ~ "nb of data too low"
         # is.na(datetime_wna) ~ "no data"
         
       ) # also need to print a warning in the console with fluxID
@@ -129,24 +128,24 @@ field_record <- field_record |>
             # PAR = as.double(PAR),
             # turfID = as.factor(turfID),
             # type = as.factor(type),
-            fluxID = as.factor(fluxID),
-            flag = as.character(flag),
-            turfID = as.factor(turfID)
+            fluxID = as.factor(.data$fluxID),
+            flag = as.character(.data$flag),
+            turfID = as.factor(.data$turfID)
           ) |>
-             arrange(fluxID)
+             arrange(.data$fluxID)
   
   # print warnings when there are flags
   # if(any(!is.na(co2conc$flag))) warning("there is a flag somewhere")
 
   flags <- conc_df |>
-     select(fluxID, flag) |>
+     select("fluxID", "flag") |>
      drop_na(flag) |>
         distinct() |>
            mutate(
-            warnings = paste("\n","fluxID", fluxID, ":", flag),
-            warnings = as.character(warnings)
+            warnings = paste("\n","fluxID", .data$fluxID, ":", .data$flag),
+            warnings = as.character(.data$warnings)
            ) |>
-              pull(warnings)
+              pull(.data$warnings)
     
     # warnings <- pull(flags, warnings)
     # warnings <- paste(warnings, sep = ";")

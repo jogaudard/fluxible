@@ -29,6 +29,10 @@
 #' @importFrom stringr str_c
 #' @importFrom stats lm optim
 #' @importFrom purrr map
+#' #' @examples 
+#' data(co2_conc)
+#' flux_fitting_exp(co2_conc)
+#' @export
 
 flux_fitting_exp <- function(conc_df,
                               #  weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong, this shoudl be moved to the quality check function
@@ -115,7 +119,7 @@ conc_df_cut <- conc_df |>
    filter(
       cut == "keep"
     )  |>
-       drop_na(conc) |> # drop NA in conc to avoid messing up the models used later, will have to print a warning for that
+       drop_na("conc") |> # drop NA in conc to avoid messing up the models used later, will have to print a warning for that
            group_by(.data$fluxID) |>
            mutate(
             time_cut = difftime(.data$datetime[1:length(.data$datetime)],.data$datetime[1] , units = "secs"), # I am not sure what happens here if some rows are missing
@@ -141,8 +145,8 @@ conc_df_cut <- conc_df |>
       Cmin = min(.data$conc),
       # tmax = time[conc == Cmax],
       # tmin = time[conc == Cmin]
-      tmax = time_cut[.data$conc == .data$Cmax],
-      tmin = time_cut[.data$conc == .data$Cmin]
+      tmax = .data$time_cut[.data$conc == .data$Cmax],
+      tmin = .data$time_cut[.data$conc == .data$Cmin]
     ) |> 
     select("fluxID", "Cmax", "Cmin", "tmax", "tmin") |> 
     ungroup() |> 
@@ -153,13 +157,13 @@ conc_df_cut <- conc_df |>
     nest()  |>
     mutate(
       model_Cm = map(.data$data, \(d)
-      lm(conc ~ time_cut, data= d) |>
+      lm(conc ~ time_cut, data = d) |>
       broom::tidy() |>
       select("term", "estimate") |>
       pivot_wider(names_from = "term", values_from = "estimate")
       )
     ) |>
-    unnest(model_Cm) |>
+    unnest("model_Cm") |>
     rename(slope_Cm = "time_cut") |> 
     select("fluxID", "slope_Cm") |> 
     ungroup()
@@ -187,13 +191,13 @@ conc_df_cut <- conc_df |>
     nest()  |>
     mutate(
       model_Cz = map(.data$data, \(d)
-      lm(conc ~ time_cut, data= d) |>
+      lm(conc ~ time_cut, data = d) |>
       broom::tidy() |>
       select("term", "estimate") |>
       pivot_wider(names_from = "term", values_from = "estimate")
       )
     ) |>
-    unnest(model_Cz) |>
+    unnest("model_Cz") |>
     rename(
       slope_Cz = "time_cut",
       Cz = "(Intercept)"
