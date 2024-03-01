@@ -31,37 +31,27 @@ flux_match <- function(raw_conc,
                         conc_col = "conc",
                         start_col = "start"
 ){
-
-# raw_flux <- co2_df_short
-
-# raw_flux <- co2_df_short |>
-#      rename(
-#       # CO2_conc = CO2,
-#       date_time = datetime
-#      )
-# field_record <- record_short
-
-# need to make it that one can have different column names
   
 raw_conc <- raw_conc |>
    rename(
-    datetime = all_of(datetime_col),
-    conc = all_of(conc_col)
+    f_datetime = all_of(datetime_col),
+    f_conc = all_of(conc_col)
    )
 
 field_record <- field_record |>
    rename(
-    start = all_of(start_col)
+    f_start = all_of(start_col)
    )
 
+#this should be moved in a check data function
  # need to include a test for the format of the column, especially the date
- if(!is.POSIXct(raw_conc$datetime)) stop("datetime in raw_conc dataframe is not ymd_hms!")
+ if(!is.POSIXct(raw_conc$f_datetime)) stop("datetime in raw_conc dataframe is not ymd_hms!")
 #  if(!is.double(raw_flux$temp_air)) stop("temp_air is not a double")
 #  if(!is.double(raw_flux$temp_soil)) stop("temp_soil is not a double")
 #  if(!is.double(raw_flux$PAR)) stop("PAR is not a double")
- if(!is.double(raw_conc$conc)) stop("conc is not a double")
+ if(!is.double(raw_conc$f_conc)) stop("conc is not a double")
 
- if(!is.POSIXct(field_record$start)) stop("start in field_record dataframe is not ymd_hms!")
+ if(!is.POSIXct(field_record$f_start)) stop("start in field_record dataframe is not ymd_hms!")
  
  if(!is.double(startcrop)) stop("startcrop has to be a double")
  if(!is.double(time_diff)) stop("time_diff has to be a double")
@@ -74,46 +64,46 @@ field_record <- field_record |>
 
 
   field_record <- field_record |>
-    arrange(.data$start) |>
+    arrange(.data$f_start) |>
     mutate(
-      end = .data$start + ((measurement_length)), #creating column End
-      start = .data$start + ((startcrop)), #cropping the start
-      fluxID = row_number() #adding an individual ID to each flux, useful to join data or graph the fluxes
+      f_end = .data$f_start + ((measurement_length)), #creating column End
+      f_start = .data$f_start + ((startcrop)), #cropping the start
+      f_fluxID = row_number() #adding an individual ID to each flux, useful to join data or graph the fluxes
     )
   raw_conc <- raw_conc |>
      mutate(
-      datetime = .data$datetime + ((time_diff))
+      f_datetime = .data$f_datetime + ((time_diff))
      )
   
-  conc_df <- full_join(raw_conc, field_record, by = c("datetime" = "start"), keep = TRUE) |> #joining both dataset in one
+  conc_df <- full_join(raw_conc, field_record, by = c("f_datetime" = "f_start"), keep = TRUE) |> #joining both dataset in one
     mutate(
       # datetime = datetime,
       # datetime = replace_na(datetime, start)
       # datetime_wna = datetime, # keep a datetime column with NA to know where data are missing
       datetime = case_when( # to add the fluxID in case the row with matching datetime and start is missing
-        !is.na(.data$datetime) ~ .data$datetime,
-        is.na(.data$datetime) ~ .data$start
+        !is.na(.data$f_datetime) ~ .data$f_datetime,
+        is.na(.data$f_datetime) ~ .data$f_start
       )
       ) |>
-      arrange(.data$datetime) |>
-         fill(fluxID)  |> # filling fluxID to group afterwards
-       drop_na(fluxID) # dropping everything that happens before the first flux
+      arrange(.data$f_datetime) |>
+         fill(f_fluxID)  |> # filling fluxID to group afterwards
+       drop_na(f_fluxID) # dropping everything that happens before the first flux
 
   conc_df <- conc_df |>
-      group_by(.data$fluxID) |> # filling the rest, except if there are NA for some fluxes
+      group_by(.data$f_fluxID) |> # filling the rest, except if there are NA for some fluxes
     fill(names(field_record)) |>
     filter(
-      (.data$datetime < .data$end
-      & .data$datetime >= .data$start) #cropping the part of the flux that is after the End and before the start
+      (.data$f_datetime < .data$f_end
+      & .data$f_datetime >= .data$f_start) #cropping the part of the flux that is after the End and before the start
       # | is.na(datetime_wna) # we keep datetime = na because we want to see where there is no data
       )  |>
     mutate(
       # nrow = n(),
-      n_conc = sum(!is.na(.data$conc)), #not sure why I cannot do that with count
-      ratio = .data$n_conc/(((measurement_length)) - ((startcrop))), # add 1 sec because filter is including both limits
-      flag = case_when(
-        .data$ratio == 0 ~ "no data",
-        .data$ratio <= ((ratio_threshold)) ~ "nb of data too low"
+      f_n_conc = sum(!is.na(.data$f_conc)), #not sure why I cannot do that with count
+      f_ratio = .data$f_n_conc/(((measurement_length)) - ((startcrop))), # add 1 sec because filter is including both limits
+      f_flag_match = case_when(
+        .data$f_ratio == 0 ~ "no data",
+        .data$f_ratio <= ((ratio_threshold)) ~ "nb of data too low"
         # is.na(datetime_wna) ~ "no data"
         
       ) # also need to print a warning in the console with fluxID
@@ -128,35 +118,35 @@ field_record <- field_record |>
             # PAR = as.double(PAR),
             # turfID = as.factor(turfID),
             # type = as.factor(type),
-            fluxID = as.factor(.data$fluxID),
-            flag = as.character(.data$flag),
-            turfID = as.factor(.data$turfID)
+            f_fluxID = as.factor(.data$f_fluxID),
+            f_flag_match = as.character(.data$f_flag_match)
+            # f_turfID = as.factor(.data$f_turfID)
           ) |>
-             arrange(.data$fluxID)
+             arrange(.data$f_fluxID)
   
   # print warnings when there are flags
   # if(any(!is.na(co2conc$flag))) warning("there is a flag somewhere")
 
   flags <- conc_df |>
-     select("fluxID", "flag") |>
-     drop_na(flag) |>
+     select("f_fluxID", "f_flag_match") |>
+     drop_na(f_flag_match) |>
         distinct() |>
            mutate(
-            warnings = paste("\n","fluxID", .data$fluxID, ":", .data$flag),
-            warnings = as.character(.data$warnings)
+            f_warnings = paste("\n","fluxID", .data$f_fluxID, ":", .data$f_flag_match),
+            f_warnings = as.character(.data$f_warnings)
            ) |>
-              pull(.data$warnings)
+              pull(.data$f_warnings)
     
     # warnings <- pull(flags, warnings)
     # warnings <- paste(warnings, sep = ";")
-    warnings <- stringr::str_c(flags)
+    f_warnings <- stringr::str_c(flags)
 
   # warnings <- 
 
   # test <- paste("blop","blip", sep = "\n")
-        if(any(!is.na(conc_df$flag))) warning(warnings)
+        if(any(!is.na(conc_df$f_flag_match))) warning(f_warnings)
         # if(any(!is.na(co2conc$flag))) warning(test)
 
   
-  return(conc_df)
+  conc_df
 }

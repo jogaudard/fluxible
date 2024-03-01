@@ -21,7 +21,6 @@
 #' @export
 
 # to do list
-# test that columns in arguments exist
 
 
 flux_calc <- function(slope_df, # dataset of slopes (output of fitting functions)
@@ -86,6 +85,8 @@ slope_temp <- slope_df |>
                 )
                )
   
+
+
 # a df with all the columns we just want to keep and join back in the end
 if(length((cols_keep)) > 0) {
 slope_keep <- slope_df  |>
@@ -133,6 +134,9 @@ slope_ave <- slope_df |>
   # fluxes_final <- left_join(slope_df, ave_cols, by = "fluxID") |> 
   #                   left_join(keeping_cols, by = "fluxID") |>
   #                   left_join(air_temp_df, by = "fluxID") |>
+  #need to add match.arg for temp_air_unit
+temp_air_unit <- match.arg(((temp_air_unit)), c("celsius", "fahrenheit", "kelvin"))
+
   fluxes <- slope_ave |>
                     mutate(
                         flux = (.data$slope * ((atm_pressure)) * ((vol)))/(((R_const)) * .data$temp_air_ave * ((plot_area))) #gives flux in micromol/s/m^2

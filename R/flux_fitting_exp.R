@@ -34,6 +34,7 @@
 #' flux_fitting_exp(co2_conc)
 #' @export
 
+
 flux_fitting_exp <- function(conc_df,
                               #  weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong, this shoudl be moved to the quality check function
                                t_window = 20, # enlarge focus window before and after tmin and tmax
@@ -351,7 +352,11 @@ conc_df_cut <- conc_df |>
       # fit_slope = (a_est + b_est * (Cm_est - Cz) ) * (time - time_corr) + Cz - slope_tz * tz_est,
       start_z = .data$start + .data$tz # this is for graph purpose, to have a vertical line showing where tz is for each flux
       
-    ) #|> 
+    ) |> 
+    ungroup()
+
+
+
     #select(!time_diff)
   # group_by(fluxID, Cm, a, b, tz, Cz) |> 
   #   # nest() |> 
@@ -466,6 +471,8 @@ conc_df_cut <- conc_df |>
 
   if(any(!is.na(warnings)))  warning(warnings)
   # print(warning_df)
+
+  attr(conc_fitting, "fit_type") <- "exponential"
 
   return(conc_fitting)
 }

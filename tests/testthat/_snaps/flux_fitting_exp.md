@@ -19,7 +19,6 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds because data are missing
     Output
       # A tibble: 1,251 x 29
-      # Groups:   fluxID [6]
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -56,7 +55,6 @@
       Joining with `by = join_by(datetime, temp_air, temp_soil, conc, PAR, turfID, type, start, end, fluxID, n_conc, ratio, flag, time, cut)`
     Output
       # A tibble: 1,251 x 29
-      # Groups:   fluxID [6]
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -93,7 +91,6 @@
       Joining with `by = join_by(datetime, temp_air, temp_soil, conc, PAR, turfID, type, start, end, fluxID, n_conc, ratio, flag, time, cut)`
     Output
       # A tibble: 1,251 x 29
-      # Groups:   fluxID [6]
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   

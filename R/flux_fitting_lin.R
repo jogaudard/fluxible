@@ -19,6 +19,7 @@
 #' flux_fitting_lin(co2_conc)
 #' @export
 
+
 flux_fitting_lin <- function(conc_df,
                             start_cut = 0, # to cut at the start
                             end_cut = 0, # to cut at the end, if you notice on the graphs that the match was not precise enough
@@ -150,5 +151,8 @@ conc_df_cut <- conc_df |>
 
   if(any(!is.na(warnings)))  warning(warnings)
 
-  return(conc_fitting)
+  attr(conc_fitting, "fit_type") <- "linear"
+
+  conc_fitting
+
 }

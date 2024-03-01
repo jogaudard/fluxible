@@ -8,7 +8,9 @@ flux_quality_lin <- function(fluxes_df,
                             fluxID_col = "fluxID",
                             fluxes_col = "fluxes",
                             pvalue_col = "p.value",
-                            rsquared_col = "r.squared"
+                            rsquared_col = "r.squared",
+                            ambient_CO2 = 421,
+                            error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
 ){
 
     fluxes_df <- fluxes_df |>
@@ -19,7 +21,7 @@ flux_quality_lin <- function(fluxes_df,
             rsquared = all_of((rsquared_col))
         )
 
-    fluxes_df <- fluxes_df |>
+    fluxes_df |>
         mutate(
             quality_flag = case_when(
                 .data$rsquared >= ((rsquared_threshold)) ~ "ok",
