@@ -80,7 +80,7 @@ field_record <- field_record |>
       # datetime = datetime,
       # datetime = replace_na(datetime, start)
       # datetime_wna = datetime, # keep a datetime column with NA to know where data are missing
-      datetime = case_when( # to add the fluxID in case the row with matching datetime and start is missing
+      f_datetime = case_when( # to add the fluxID in case the row with matching datetime and start is missing
         !is.na(.data$f_datetime) ~ .data$f_datetime,
         is.na(.data$f_datetime) ~ .data$f_start
       )
@@ -120,7 +120,7 @@ field_record <- field_record |>
             # type = as.factor(type),
             f_fluxID = as.factor(.data$f_fluxID),
             f_flag_match = as.character(.data$f_flag_match)
-            # f_turfID = as.factor(.data$f_turfID)
+            # turfID = as.factor(.data$fluxID)
           ) |>
              arrange(.data$f_fluxID)
   
