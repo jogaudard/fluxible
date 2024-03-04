@@ -36,7 +36,6 @@
 
 
 flux_fitting_exp <- function(conc_df,
-                              #  weird_fluxesID = NA, # a vector of fluxes to discard because they are obviously wrong, this shoudl be moved to the quality check function
                                t_window = 20, # enlarge focus window before and after tmin and tmax
                                Cz_window = 15, # window used to calculate Cz, at the beginning of cut window
                                b_window = 10, # window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly
@@ -474,5 +473,5 @@ conc_df_cut <- conc_df |>
 
   attr(conc_fitting, "fit_type") <- "exponential"
 
-  return(conc_fitting)
+  conc_fitting
 }

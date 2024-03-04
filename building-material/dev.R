@@ -1,5 +1,6 @@
 #to create the tests
 usethis::use_testthat()
+usethis::use_test("flux_fitting")
 
 #to add used packages in the description
 usethis::use_package("purrr")

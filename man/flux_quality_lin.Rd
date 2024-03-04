@@ -12,7 +12,9 @@ flux_quality_lin(
   fluxID_col = "fluxID",
   fluxes_col = "fluxes",
   pvalue_col = "p.value",
-  rsquared_col = "r.squared"
+  rsquared_col = "r.squared",
+  ambient_CO2 = 421,
+  error = 100
 )
 }
 \description{
