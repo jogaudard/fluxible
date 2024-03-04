@@ -2,21 +2,46 @@
 % Please edit documentation in R/flux_quality_lin.R
 \name{flux_quality_lin}
 \alias{flux_quality_lin}
-\title{to provide quality assessment for the fluxes calculated with the linear model}
+\title{quality assessment for the fluxes calculated with the linear model}
 \usage{
 flux_quality_lin(
-  fluxes_df,
+  slopes_df,
   pvalue_threshold = 0.3,
   rsquared_threshold = 0.7,
-  blind_replace = FALSE,
-  fluxID_col = "fluxID",
-  fluxes_col = "fluxes",
+  fluxID_col = "f_fluxID",
+  slope_col = "f_slope",
   pvalue_col = "p.value",
   rsquared_col = "r.squared",
   ambient_CO2 = 421,
   error = 100
 )
 }
+\arguments{
+\item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
+
+\item{pvalue_threshold}{threshold of p-value below which the change of gas concentration over time is considered not significant (user decided)}
+
+\item{rsquared_threshold}{threshold of r squared value below which the linear model is considered an unsatisfactory fit}
+
+\item{fluxID_col}{column containing unique IDs for each flux}
+
+\item{slope_col}{column containing the slope of each flux (ideally as calculated by the flux_fitting function)}
+
+\item{pvalue_col}{column containing the p-value of each flux}
+
+\item{rsquared_col}{column containing the r squared to be used for the quality assessment}
+
+\item{ambient_CO2}{ambient CO2 concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)}
+
+\item{error}{error of the setup, defines a window in which the starting values are considered acceptable}
+}
+\value{
+same dataframe with added flag and corrected slopes columns
+}
 \description{
-to provide quality assessment for the fluxes calculated with the linear model
+indicates if fluxes should be discarded or replaced by 0 according to parameters set by user
+}
+\examples{
+data(slopes0lin)
+flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope")
 }

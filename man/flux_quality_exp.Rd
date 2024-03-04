@@ -2,7 +2,8 @@
 % Please edit documentation in R/flux_quality_exp.R
 \name{flux_quality_exp}
 \alias{flux_quality_exp}
-\title{assessing fluxes quality calculated with an exponential fit}
+\title{assessing fluxes quality calculated with an exponential fit
+quality assessment for the fluxes calculated with the exponential model}
 \usage{
 flux_quality_exp(
   slopes_df,
@@ -20,6 +21,43 @@ flux_quality_exp(
   error = 100
 )
 }
+\arguments{
+\item{slopes_df}{dataset containing slopes, fluxID, and parameters of the exponential expression}
+
+\item{fluxID_col}{column containing unique IDs for each flux}
+
+\item{conc_col}{column containing the measured gas concentration}
+
+\item{b_col}{column containing the b parameter of the exponential expression}
+
+\item{time_col}{column containing the time of each measurement in seconds}
+
+\item{fit_col}{column containing the modeled data}
+
+\item{slope_col}{column containing the slope of the exponential expression used for the calculation}
+
+\item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
+
+\item{RMSE_threshold}{threshold for the RMSE of each flux above which the fit is considered unsatisfactory}
+
+\item{cor_threshold}{threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant}
+
+\item{b_threshold}{threshold for the b parameter. Defines a window with its opposite inside which the fit is considered good enough.}
+}
+\value{
+same dataframe with added flag and corrected slopes columns
+}
 \description{
-assessing fluxes quality calculated with an exponential fit
+indicates if fluxes should be discarded or replaced by 0 according to parameters set by user
+}
+\examples{
+data(slopes0)
+flux_quality_exp(slopes0,
+fluxID_col = "fluxID",
+conc_col = "conc",
+b_col = "b",
+time_col = "time",
+fit_col = "fit",
+slope_col = "slope_tz"
+)
 }
