@@ -6,34 +6,37 @@
 \usage{
 flux_quality_lin(
   slopes_df,
-  pvalue_threshold = 0.3,
-  rsquared_threshold = 0.7,
+  ambient_conc = 421,
+  error = 100,
   fluxID_col = "f_fluxID",
   slope_col = "f_slope",
+  weird_fluxesID = c(),
   pvalue_col = "p.value",
   rsquared_col = "r.squared",
-  ambient_CO2 = 421,
-  error = 100
+  pvalue_threshold = 0.3,
+  rsquared_threshold = 0.7
 )
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
 
-\item{pvalue_threshold}{threshold of p-value below which the change of gas concentration over time is considered not significant (user decided)}
+\item{ambient_conc}{ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)}
 
-\item{rsquared_threshold}{threshold of r squared value below which the linear model is considered an unsatisfactory fit}
+\item{error}{error of the setup, defines a window in which the starting values are considered acceptable}
 
 \item{fluxID_col}{column containing unique IDs for each flux}
 
 \item{slope_col}{column containing the slope of each flux (ideally as calculated by the flux_fitting function)}
 
+\item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
+
 \item{pvalue_col}{column containing the p-value of each flux}
 
 \item{rsquared_col}{column containing the r squared to be used for the quality assessment}
 
-\item{ambient_CO2}{ambient CO2 concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)}
+\item{pvalue_threshold}{threshold of p-value below which the change of gas concentration over time is considered not significant (user decided)}
 
-\item{error}{error of the setup, defines a window in which the starting values are considered acceptable}
+\item{rsquared_threshold}{threshold of r squared value below which the linear model is considered an unsatisfactory fit}
 }
 \value{
 same dataframe with added flag and corrected slopes columns

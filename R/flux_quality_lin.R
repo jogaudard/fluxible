@@ -5,9 +5,10 @@
 #' @param rsquared_threshold threshold of r squared value below which the linear model is considered an unsatisfactory fit
 #' @param fluxID_col column containing unique IDs for each flux
 #' @param slope_col column containing the slope of each flux (ideally as calculated by the flux_fitting function)
+#' @param weird_fluxesID vector of fluxIDs that should be discarded by the user's decision
 #' @param pvalue_col column containing the p-value of each flux
 #' @param rsquared_col column containing the r squared to be used for the quality assessment
-#' @param ambient_CO2 ambient CO2 concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)
+#' @param ambient_conc ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)
 #' @param error error of the setup, defines a window in which the starting values are considered acceptable
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename
@@ -18,15 +19,16 @@
 
 
 flux_quality_lin <- function(slopes_df,
-                            pvalue_threshold = 0.3,
-                            rsquared_threshold = 0.7,
+                            ambient_conc = 421,
+                            error = 100,
                             fluxID_col = "f_fluxID",
                             slope_col = "f_slope",
+                            weird_fluxesID = c(),
                             pvalue_col = "p.value",
                             rsquared_col = "r.squared",
-                            ambient_CO2 = 421,
-                            error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
-){
+                            pvalue_threshold = 0.3,
+                            rsquared_threshold = 0.7
+                            ){
 
     slopes_df <- slopes_df |>
         rename(
@@ -39,11 +41,13 @@ flux_quality_lin <- function(slopes_df,
     slopes_df |>
         mutate(
             f_quality_flag = case_when(
+                .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
                 .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
                 .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
                 .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
             ),
             f_slope_corr = case_when(
+                    .data$f_quality_flag == "weird_flux" ~ NA_real_,
                     .data$f_quality_flag == "ok" ~ .data$f_slope,
                     .data$f_quality_flag == "discard" ~ NA_real_,
                     .data$f_quality_flag == "zero" ~ 0

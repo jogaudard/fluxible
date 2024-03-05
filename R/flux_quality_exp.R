@@ -12,6 +12,8 @@
 #' @param RMSE_threshold threshold for the RMSE of each flux above which the fit is considered unsatisfactory
 #' @param cor_threshold threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant
 #' @param b_threshold threshold for the b parameter. Defines a window with its opposite inside which the fit is considered good enough.
+#' @param ambient_conc ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)
+#' @param error error of the setup, defines a window in which the starting values are considered acceptable
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
@@ -33,19 +35,19 @@
 # need to check time vs time_cut, we want the quality assessment only on the part that we keep
 
 flux_quality_exp <- function(slopes_df,
+                            ambient_conc = 421,
+                            error = 100,
                             fluxID_col = "f_fluxID",
+                            slope_col = "f_slope",
+                            weird_fluxesID = c(),
                             conc_col = "f_conc",
                             b_col = "f_b",
                             time_col = "f_time",
                             fit_col = "f_fit",
-                            slope_col = "f_slope_tz",
-                            weird_fluxesID = c(), # a vector of fluxes to discard because they are obviously wrong, this shoudl be moved to the quality check function
-                            RMSE_threshold = 25, # threshold above which data are discarded
-                            cor_threshold = 0.5, # delimits the window in which CO2 is considered not correlated with time
-                            b_threshold = 1, # this value and its opposite define a window out of which data are being discarded
-                            ambient_conc = 421, #by default for CO2, does it make sense for other fluxes??
-                            error = 100 # error of the setup in ppm. fluxes starting outside of the window ambient_CO2 +/- error will be discarded
-){
+                            RMSE_threshold = 25,
+                            cor_threshold = 0.5,
+                            b_threshold = 1
+                        ){
 
     slopes_df <- slopes_df |>
         rename(
@@ -71,8 +73,11 @@ flux_quality_exp <- function(slopes_df,
         TRUE ~ "ok"
       )
     ) |>
-    unnest() |>
-    ungroup() |>
+    unnest("f_fluxID") |>
+    ungroup()
+
+    quality_flag <- slopes_df |>
+      left_join(quality_par) |>
     mutate(
         f_fit_quality = case_when(
             .data$f_b >= ((b_threshold)) ~ "bad_b",
@@ -99,7 +104,7 @@ flux_quality_exp <- function(slopes_df,
       )
     )
 
-    quality_par
+    quality_flag
 
 
 }

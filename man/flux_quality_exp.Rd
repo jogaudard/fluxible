@@ -7,24 +7,32 @@ quality assessment for the fluxes calculated with the exponential model}
 \usage{
 flux_quality_exp(
   slopes_df,
+  ambient_conc = 421,
+  error = 100,
   fluxID_col = "f_fluxID",
+  slope_col = "f_slope",
+  weird_fluxesID = c(),
   conc_col = "f_conc",
   b_col = "f_b",
   time_col = "f_time",
   fit_col = "f_fit",
-  slope_col = "f_slope_tz",
-  weird_fluxesID = c(),
   RMSE_threshold = 25,
   cor_threshold = 0.5,
-  b_threshold = 1,
-  ambient_conc = 421,
-  error = 100
+  b_threshold = 1
 )
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, and parameters of the exponential expression}
 
+\item{ambient_conc}{ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)}
+
+\item{error}{error of the setup, defines a window in which the starting values are considered acceptable}
+
 \item{fluxID_col}{column containing unique IDs for each flux}
+
+\item{slope_col}{column containing the slope of the exponential expression used for the calculation}
+
+\item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
 
 \item{conc_col}{column containing the measured gas concentration}
 
@@ -33,10 +41,6 @@ flux_quality_exp(
 \item{time_col}{column containing the time of each measurement in seconds}
 
 \item{fit_col}{column containing the modeled data}
-
-\item{slope_col}{column containing the slope of the exponential expression used for the calculation}
-
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
 
 \item{RMSE_threshold}{threshold for the RMSE of each flux above which the fit is considered unsatisfactory}
 

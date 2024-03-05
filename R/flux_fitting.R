@@ -46,12 +46,35 @@ flux_fitting <- function(conc_df,
     fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
 
     if(((fit_type)) == "exponential") {
-        conc_fitting <- flux_fitting_exp(conc_df)
+        conc_fitting <- flux_fitting_exp(
+            conc_df,
+            start_cut = ((start_cut)),
+            end_cut = ((end_cut)),
+            start_col = ((start_col)),
+            end_col = ((end_col)),
+            datetime_col = ((datetime_col)),
+            conc_col = ((conc_col)),
+            fluxID_col = ((fluxID_col)),
+            t_window = ((t_window)),
+            Cz_window = ((Cz_window)),
+            b_window = ((b_window)),
+            a_window = ((a_window)),
+            roll_width = ((roll_width))
+            )
         }
 
 
     if(((fit_type)) == "linear") {
-        conc_fitting <- flux_fitting_lin(conc_df)
+        conc_fitting <- flux_fitting_lin(
+            conc_df,
+            start_cut = ((start_cut)),
+            end_cut = ((end_cut)),
+            start_col = ((start_col)),
+            end_col = ((end_col)),
+            datetime_col = ((datetime_col)),
+            conc_col = ((conc_col)),
+            fluxID_col = ((fluxID_col))
+            )
         }
 
 
