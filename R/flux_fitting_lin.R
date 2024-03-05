@@ -111,8 +111,8 @@ conc_df_cut <- conc_df |>
       slope = "time_cut",
       intercept = "(Intercept)"
       ) |> 
-    fill(intercept, .direction = "down") |>
-    drop_na(slope) |> #there must be a less dirty way to do this!
+    fill("intercept", .direction = "down") |>
+    drop_na("slope") |> #there must be a less dirty way to do this!
        ungroup()
 
     conc_fitting <- conc_df |> 

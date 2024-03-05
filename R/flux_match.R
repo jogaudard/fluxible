@@ -86,8 +86,8 @@ field_record <- field_record |>
       )
       ) |>
       arrange(.data$f_datetime) |>
-         fill(f_fluxID)  |> # filling fluxID to group afterwards
-       drop_na(f_fluxID) # dropping everything that happens before the first flux
+         fill("f_fluxID")  |> # filling fluxID to group afterwards
+       drop_na("f_fluxID") # dropping everything that happens before the first flux
 
   conc_df <- conc_df |>
       group_by(.data$f_fluxID) |> # filling the rest, except if there are NA for some fluxes
@@ -129,7 +129,7 @@ field_record <- field_record |>
 
   flags <- conc_df |>
      select("f_fluxID", "f_flag_match") |>
-     drop_na(f_flag_match) |>
+     drop_na("f_flag_match") |>
         distinct() |>
            mutate(
             f_warnings = paste("\n","fluxID", .data$f_fluxID, ":", .data$f_flag_match),
