@@ -16,6 +16,7 @@ flux_quality_exp(
   b_col = "f_b",
   time_col = "f_time",
   fit_col = "f_fit",
+  cut_col = "f_cut",
   RMSE_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1
@@ -42,6 +43,8 @@ flux_quality_exp(
 
 \item{fit_col}{column containing the modeled data}
 
+\item{cut_col}{column containing the cutting information}
+
 \item{RMSE_threshold}{threshold for the RMSE of each flux above which the fit is considered unsatisfactory}
 
 \item{cor_threshold}{threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant}
@@ -62,6 +65,7 @@ conc_col = "conc",
 b_col = "b",
 time_col = "time",
 fit_col = "fit",
-slope_col = "slope_tz"
+slope_col = "slope_tz",
+cut_col = "cut"
 )
 }

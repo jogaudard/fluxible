@@ -48,3 +48,8 @@ slopes0_temp <- slopes0 %>%
       temp_kelvin = temp_air + 273.15
    )
 usethis::use_data(slopes0_temp, overwrite = TRUE)
+
+# quality and graphs
+
+slopes0lin_flag <- flux_quality(slopes0lin, fit_type = "lin", fluxID_col = "fluxID", slope_col = "slope")
+usethis::use_data(slopes0lin_flag, overwrite = TRUE)

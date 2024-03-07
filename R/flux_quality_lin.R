@@ -38,7 +38,7 @@ flux_quality_lin <- function(slopes_df,
             f_rsquared = all_of((rsquared_col))
         )
 
-    slopes_df |>
+    slopes_df <- slopes_df |>
         mutate(
             f_quality_flag = case_when(
                 .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",

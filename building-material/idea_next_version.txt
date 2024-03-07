@@ -1,2 +1,3 @@
 pass gas measurement frequency as argument in fitting functions to avoid unnecessary warnings
 use user's columns names instead of renaming
+graphs on american paper format

@@ -20,6 +20,7 @@ flux_quality(
   b_col = "f_b",
   time_col = "f_time",
   fit_col = "f_fit",
+  cut_col = "f_cut",
   RMSE_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1
@@ -55,6 +56,8 @@ flux_quality(
 \item{time_col}{column containing the time of each measurement in seconds (exponential fit)}
 
 \item{fit_col}{column containing the modeled data (exponential fit)}
+
+\item{cut_col}{column containing the cutting information}
 
 \item{RMSE_threshold}{threshold for the RMSE of each flux above which the fit is considered unsatisfactory (exponential fit)}
 
