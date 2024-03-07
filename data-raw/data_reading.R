@@ -12,16 +12,16 @@ co2_conc_missing <- readr::read_csv("data-raw/co2_conc_missing.csv", col_types =
 usethis::use_data(co2_conc_missing, overwrite = TRUE)
 
 # for fitting log
-slopes0 <- readr::read_csv("data-raw/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT") %>%
-   dplyr::select(!c(temp_fahr, temp_kelvin))
+slopes0 <- readr::read_csv("data-raw/slopes0.csv")
+   # dplyr::select(!c(temp_fahr, temp_kelvin))
 usethis::use_data(slopes0, overwrite = TRUE)
 
-slopes30 <- readr::read_csv("data-raw/slopes30.csv", col_types = "TddddffTTfddcdfddddddddddddT") %>%
-   dplyr::select(!time_diff)
+slopes30 <- readr::read_csv("data-raw/slopes30.csv")
+   # dplyr::select(!time_diff)
 usethis::use_data(slopes30, overwrite = TRUE)
 
-slopes60 <- readr::read_csv("data-raw/slopes60.csv", col_types = "TddddffTTfddcdfddddddddddddT") %>%
-   dplyr::select(!time_diff)
+slopes60 <- readr::read_csv("data-raw/slopes60.csv")
+   # dplyr::select(!time_diff)
 usethis::use_data(slopes60, overwrite = TRUE)
 
 # for fitting lin

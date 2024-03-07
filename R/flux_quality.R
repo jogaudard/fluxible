@@ -17,6 +17,7 @@
 #' @param fit_col column containing the modeled data (exponential fit)
 #' @param RMSE_threshold threshold for the RMSE of each flux above which the fit is considered unsatisfactory (exponential fit)
 #' @param cor_threshold threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant (exponential fit)
+#' @param cut_col column containing the cutting information
 #' @param b_threshold threshold for the b parameter. Defines a window with its opposite inside which the fit is considered good enough (exponential fit)
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
@@ -44,6 +45,7 @@ flux_quality <- function(slopes_df,
                         b_col = "f_b",
                         time_col = "f_time",
                         fit_col = "f_fit",
+                        cut_col = "f_cut",
                         RMSE_threshold = 25,
                         cor_threshold = 0.5,
                         b_threshold = 1
@@ -63,6 +65,7 @@ flux_quality <- function(slopes_df,
             b_col = ((b_col)),
             time_col = ((time_col)),
             fit_col = ((fit_col)),
+            cut_col = ((cut_col)),
             RMSE_threshold = ((RMSE_threshold)),
             cor_threshold = ((cor_threshold)),
             b_threshold = ((b_threshold))

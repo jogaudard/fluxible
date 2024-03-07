@@ -8,6 +8,7 @@
 #' @param time_col column containing the time of each measurement in seconds
 #' @param fit_col column containing the modeled data
 #' @param slope_col column containing the slope of the exponential expression used for the calculation
+#' @param cut_col column containing the cutting information
 #' @param weird_fluxesID vector of fluxIDs that should be discarded by the user's decision
 #' @param RMSE_threshold threshold for the RMSE of each flux above which the fit is considered unsatisfactory
 #' @param cor_threshold threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant
@@ -26,7 +27,8 @@
 #' b_col = "b",
 #' time_col = "time",
 #' fit_col = "fit",
-#' slope_col = "slope_tz"
+#' slope_col = "slope_tz",
+#' cut_col = "cut"
 #' )
 #' @export 
 #' 
@@ -44,6 +46,7 @@ flux_quality_exp <- function(slopes_df,
                             b_col = "f_b",
                             time_col = "f_time",
                             fit_col = "f_fit",
+                            cut_col = "f_cut",
                             RMSE_threshold = 25,
                             cor_threshold = 0.5,
                             b_threshold = 1
@@ -56,17 +59,27 @@ flux_quality_exp <- function(slopes_df,
             f_b = all_of((b_col)),
             f_time = all_of((time_col)),
             f_fit = all_of((fit_col)),
-            f_slope_tz = all_of((slope_col))
+            f_slope_tz = all_of((slope_col)),
+            f_cut = all_of((cut_col))
         )
 
     
     quality_par <- slopes_df |>
-        group_by(.data$f_fluxID) |>
+        group_by(.data$f_fluxID, .data$f_cut) |> # we want to evaluate the part of the flux that we are keeping
         nest() |>
         rowwise() |>
         summarise(
             f_cor_coef = cor(data$f_conc, data$f_time),
-            f_RMSE = sqrt((1/length(data$f_time)) * sum((data$f_fit - data$f_conc)^2)),
+            f_RMSE = sqrt((1/length(data$f_time)) * sum((data$f_fit - data$f_conc)^2))
+    ) |>
+    unnest(c("f_fluxID", "f_cut")) |>
+    ungroup()
+
+    quality_par_start <- slopes_df |>
+        group_by(.data$f_fluxID) |> # for the start error we take the entire flux into account
+        nest() |>
+        rowwise() |>
+        summarise(
             f_start_error = case_when(
                 data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
                 data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
@@ -78,6 +91,7 @@ flux_quality_exp <- function(slopes_df,
 
     quality_flag <- slopes_df |>
       left_join(quality_par) |>
+      left_join(quality_par_start) |>
     mutate(
         f_fit_quality = case_when(
             .data$f_b >= ((b_threshold)) ~ "bad_b",

@@ -144,7 +144,7 @@ slopes60 <- co2_conc %>%
       end_cut = 60
    )
 
-slopes30_test <- co2_conc %>%
+slopes30 <- co2_conc %>%
    flux_fitting_exp(
       end_cut = 30
    )
@@ -209,9 +209,9 @@ slopes30  %>%
   facet_wrap(~fluxID, scales = "free")
 
 # we pass those as comments to avoid overwriting the files used in the tests
-# write_csv(slopes0, "tests/testthat/data/slopes0.csv")
-# write_csv(slopes30, "tests/testthat/data/slopes30.csv")
-# write_csv(slopes60, "tests/testthat/data/slopes60.csv")
+# write_csv(slopes0, "data-raw/slopes0.csv")
+# write_csv(slopes30, "data-raw/slopes30.csv")
+# write_csv(slopes60, "data-raw/slopes60.csv")
 
 
 # with missing data
