@@ -12,6 +12,9 @@ flux_graph_lin(
   fit_col = "f_fit",
   quality_flag_col = "f_quality_flag",
   fluxID_col = "f_fluxID",
+  pvalue_col = "f_pvalue",
+  rsquared_col = "f_rsquared",
+  start_col = "f_start",
   f_date_breaks = "1 min",
   f_minor_breaks = "10 sec",
   f_date_labels = "\%e/\%m \\n \%H:\%M",
@@ -32,5 +35,5 @@ graphs the fluxes and indicates what should be discarded or replaced by zero
 }
 \examples{
 data(slopes0lin_flag)
-flux_graph_lin(slopes0lin_flag, datetime_col = "datetime", conc_col = "conc", cut_col = "cut", fit_col = "fit", print_plot = TRUE)
+flux_graph_lin(slopes0lin_flag, datetime_col = "datetime", conc_col = "conc", cut_col = "cut", fit_col = "fit", start_col = "start", print_plot = TRUE)
 }

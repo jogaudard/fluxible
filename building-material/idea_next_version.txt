@@ -1,3 +1,5 @@
 pass gas measurement frequency as argument in fitting functions to avoid unnecessary warnings
 use user's columns names instead of renaming
 graphs on american paper format
+give choice to overwrite plot or not
+giga warp up function doing the fitting, quality, and plot to test different cuts and quality thresholds
