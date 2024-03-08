@@ -25,7 +25,7 @@
 #' @importFrom stats cor
 #' @examples 
 #' data(slopes0lin)
-#' flux_quality(slopes0lin, fit_type = "li", fluxID_col = "fluxID", slope_col = "slope")
+#' flux_quality(slopes0lin, fit_type = "li", fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
 #' @export 
 #' 
 #' 
@@ -55,7 +55,7 @@ flux_quality <- function(slopes_df,
 
     if(((fit_type)) == "exponential") {
         quality_flag <- flux_quality_exp(
-            slopes_df,
+            ((slopes_df)),
             ambient_conc = ((ambient_conc)),
             error = ((error)),
             fluxID_col = ((fluxID_col)),
@@ -75,7 +75,7 @@ flux_quality <- function(slopes_df,
 
     if(((fit_type)) == "linear") {
         quality_flag <- flux_quality_lin(
-            slopes_df,
+            ((slopes_df)),
             ambient_conc = ((ambient_conc)),
             error = ((error)),
             fluxID_col = ((fluxID_col)),
@@ -84,7 +84,8 @@ flux_quality <- function(slopes_df,
             pvalue_col = ((pvalue_col)),
             rsquared_col = ((rsquared_col)),
             pvalue_threshold = ((pvalue_threshold)),
-            rsquared_threshold = ((rsquared_threshold))
+            rsquared_threshold = ((rsquared_threshold)),
+            conc_col = ((conc_col))
             )
         }
 

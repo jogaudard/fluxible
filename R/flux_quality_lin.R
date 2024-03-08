@@ -4,6 +4,7 @@
 #' @param pvalue_threshold threshold of p-value below which the change of gas concentration over time is considered not significant (user decided)
 #' @param rsquared_threshold threshold of r squared value below which the linear model is considered an unsatisfactory fit
 #' @param fluxID_col column containing unique IDs for each flux
+#' @param conc_col column containing the measured gas concentration
 #' @param slope_col column containing the slope of each flux (ideally as calculated by the flux_fitting function)
 #' @param weird_fluxesID vector of fluxIDs that should be discarded by the user's decision
 #' @param pvalue_col column containing the p-value of each flux
@@ -11,10 +12,10 @@
 #' @param ambient_conc ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)
 #' @param error error of the setup, defines a window in which the starting values are considered acceptable
 #' @return same dataframe with added flag and corrected slopes columns
-#' @importFrom dplyr mutate case_when rename
+#' @importFrom dplyr mutate case_when rename left_join
 #' @examples 
 #' data(slopes0lin)
-#' flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope")
+#' flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
 #' @export 
 
 # need to add start error
@@ -24,6 +25,7 @@ flux_quality_lin <- function(slopes_df,
                             error = 100,
                             fluxID_col = "f_fluxID",
                             slope_col = "f_slope",
+                            conc_col = "f_conc",
                             weird_fluxesID = c(),
                             pvalue_col = "p.value",
                             rsquared_col = "r.squared",
@@ -35,11 +37,27 @@ flux_quality_lin <- function(slopes_df,
         rename(
             f_fluxID = all_of((fluxID_col)),
             f_slope = all_of((slope_col)),
+            f_conc = all_of((conc_col)),
             f_pvalue = all_of((pvalue_col)),
             f_rsquared = all_of((rsquared_col))
         )
 
+    quality_par_start <- slopes_df |>
+        group_by(.data$f_fluxID) |> 
+        nest() |>
+        rowwise() |>
+        summarise(
+            f_start_error = case_when(
+                data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
+                data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
+        TRUE ~ "ok"
+      )
+    ) |>
+    unnest("f_fluxID") |>
+    ungroup()
+
     slopes_df <- slopes_df |>
+        left_join(quality_par_start) |>
         mutate(
             f_quality_flag = case_when(
                 .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",

@@ -16,7 +16,7 @@ test_that("works for linear fitting", {
 
 
   expect_equal(
-    flux_quality(slopes0lin, fit_type = "li", fluxID_col = "fluxID", slope_col = "slope"),
-    flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope")
+    flux_quality(slopes0lin, fit_type = "li", fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc"),
+    flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
   )
 })

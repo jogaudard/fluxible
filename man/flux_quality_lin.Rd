@@ -10,6 +10,7 @@ flux_quality_lin(
   error = 100,
   fluxID_col = "f_fluxID",
   slope_col = "f_slope",
+  conc_col = "f_conc",
   weird_fluxesID = c(),
   pvalue_col = "p.value",
   rsquared_col = "r.squared",
@@ -27,6 +28,8 @@ flux_quality_lin(
 \item{fluxID_col}{column containing unique IDs for each flux}
 
 \item{slope_col}{column containing the slope of each flux (ideally as calculated by the flux_fitting function)}
+
+\item{conc_col}{column containing the measured gas concentration}
 
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
 
@@ -46,5 +49,5 @@ indicates if fluxes should be discarded or replaced by 0 according to parameters
 }
 \examples{
 data(slopes0lin)
-flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope")
+flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
 }

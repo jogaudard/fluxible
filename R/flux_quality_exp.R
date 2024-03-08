@@ -101,20 +101,21 @@ flux_quality_exp <- function(slopes_df,
         abs(.data$f_cor_coef) < ((cor_threshold)) ~ "no",
         TRUE ~ "yes"
       ),
-      f_flag_fit = case_when(
+      f_quality_flag = case_when(
         .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
         .data$f_start_error == "error" ~ "start_error",
         .data$f_fit_quality == "bad_b" & .data$f_correlation == "yes" ~ "discard",
         .data$f_fit_quality == "bad_b" & .data$f_correlation == "no" ~ "zero",
         .data$f_fit_quality == "bad_RMSE" & .data$f_correlation == "yes" ~ "discard",
-        .data$f_fit_quality == "bad_RMSE" & .data$f_correlation == "no" ~ "zero"
+        .data$f_fit_quality == "bad_RMSE" & .data$f_correlation == "no" ~ "zero",
+        TRUE ~ "ok"
       ),
       f_slope_corr = case_when(
-        .data$f_flag_fit == "weird_flux" ~ NA_real_,
-        .data$f_flag_fit == "start_error" ~ NA_real_,
-        .data$f_flag_fit == "discard" ~ NA_real_,
-        .data$f_flag_fit == "zero" ~ 0,
-        TRUE ~ .data$f_slope_tz,
+        .data$f_quality_flag == "weird_flux" ~ NA_real_,
+        .data$f_quality_flag == "start_error" ~ NA_real_,
+        .data$f_quality_flag == "discard" ~ NA_real_,
+        .data$f_quality_flag == "zero" ~ 0,
+        .data$f_quality_flag == "ok" ~ .data$f_slope_tz,
       )
     )
 

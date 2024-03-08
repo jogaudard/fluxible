@@ -26,31 +26,33 @@
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @examples
-#' data(slopes0lin_flag)
-#' flux_plot_lin(slopes0lin_flag, datetime_col = "datetime", cut_col = "cut", fit_col = "fit", start_col = "start", print_plot = TRUE)
-#' data(slopes30lin_flag)
-#' flux_plot_lin(slopes30lin_flag, datetime_col = "datetime", cut_col = "cut", fit_col = "fit", start_col = "start", print_plot = TRUE)
+#' data(slopes0_flag)
+#' flux_plot_exp(slopes0_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = FALSE)
+#' data(slopes30_flag)
+#' flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = TRUE)
 #' @export
 #' 
 #' 
 
-flux_plot_lin <- function(slopes_df,
+flux_plot_exp <- function(slopes_df,
                             datetime_col = "f_datetime",
                             conc_col = "f_conc",
                             cut_col = "f_cut",
                             fit_col = "f_fit",
+                            fit_slope_col = "f_fit_slope",
                             quality_flag_col = "f_quality_flag",
                             fluxID_col = "f_fluxID",
-                            pvalue_col = "f_pvalue",
-                            rsquared_col = "f_rsquared",
                             start_col = "f_start",
+                            b_col = "f_b",
+                            cor_coef_col = "f_cor_coef",
+                            RMSE_col = "f_RMSE",
                             f_date_breaks = "1 min",
                             f_minor_breaks = "10 sec",
                             f_date_labels = "%e/%m \n %H:%M",
                             f_ylim_upper = 800,
                             f_ylim_lower = 400,
                             f_scales = "free",
-                            f_plotname = "plot_quality_lin",
+                            f_plotname = "plot_quality_exp",
                             # f_paper = "a4r",
                             f_ncol = 4,
                             f_nrow = 3,
@@ -68,15 +70,18 @@ flux_plot_lin <- function(slopes_df,
             f_conc = all_of((conc_col)),
             f_cut = all_of((cut_col)),
             f_fit = all_of((fit_col)),
+            f_fit_slope = all_of(((fit_slope_col))),
             f_quality_flag = all_of((quality_flag_col)),
             f_fluxID = all_of((fluxID_col)),
-            f_pvalue = all_of((pvalue_col)),
-            f_rsquared = all_of((rsquared_col)),
-            f_start = all_of(((start_col)))
+            f_start = all_of(((start_col))),
+            f_b = all_of((b_col)),
+            f_cor_coef = all_of(((cor_coef_col))),
+            f_RMSE = all_of(((RMSE_col)))
         )
 
     param_df <- slopes_df |>
-      select("f_conc", "f_start", "f_fluxID", "f_rsquared", "f_pvalue") |>
+      select("f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut") |>
+      filter(.data$f_cut == "keep") |>
       group_by(.data$f_fluxID) |>
       mutate(
         conc_start = .data$f_conc[1]
@@ -85,16 +90,19 @@ flux_plot_lin <- function(slopes_df,
       select(!"f_conc") |>
       distinct() |>
       mutate(
-        f_rsquared = round(f_rsquared, digits = 2),
-        f_pvalue = round(f_pvalue, digits = 4),
-        print_col = paste("R", ^, "2 = ", f_rsquared, "\n", "p-value = ", f_pvalue, sep = "")
+        f_RMSE = round(f_RMSE, digits = 1),
+        f_cor_coef = round(f_cor_coef, digits = 2),
+        f_b = round(f_b, digits = 5),
+        # print_col = paste("RMSE =", f_RMSE)
+        print_col = paste("RMSE = ", f_RMSE, "\n", "Corr coef = ", f_cor_coef, "\n", "b = ", f_b, sep = "")
         # print_col = as.character(print_col)
       )
 
-    plot_lin <- slopes_df |>
+    plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     geom_point(aes(y = .data$f_conc, color = .data$f_cut), size = 0.2) +
     geom_line(aes(y = .data$f_fit, color = .data$f_quality_flag), linetype = "longdash") +
+    geom_line(aes(y = .data$f_fit_slope, color = .data$f_quality_flag), linetype = "dashed") +
     scale_color_manual(values = c(
     "keep" = "green",
     "cut" = "red",
@@ -125,12 +133,12 @@ flux_plot_lin <- function(slopes_df,
 
 
 pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
-for(i in 1:n_pages(plot_lin)){
-print(plot_lin +
+for(i in 1:n_pages(plot_exp)){
+print(plot_exp +
 facet_wrap_paginate(~ f_fluxID, ncol = ((f_ncol)), nrow = ((f_nrow)), page = i, scales = ((f_scales))))
 }
 quietly(dev.off())
 
-if(((print_plot)) == TRUE) {return(plot_lin)}
+if(((print_plot)) == TRUE) {return(plot_exp)}
 
 }

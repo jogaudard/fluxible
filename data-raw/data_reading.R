@@ -51,5 +51,14 @@ usethis::use_data(slopes0_temp, overwrite = TRUE)
 
 # quality and graphs
 
-slopes0lin_flag <- flux_quality(slopes0lin, fit_type = "lin", fluxID_col = "fluxID", slope_col = "slope")
+slopes0lin_flag <- flux_quality(slopes0lin, fit_type = "lin", fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
 usethis::use_data(slopes0lin_flag, overwrite = TRUE)
+
+slopes30lin_flag <- flux_quality(slopes30lin, fit_type = "lin", fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
+usethis::use_data(slopes30lin_flag, overwrite = TRUE)
+
+slopes0_flag <- flux_quality(slopes0, fit_type = "exp", fluxID_col = "fluxID", conc_col = "conc", b_col = "b", time_col = "time", fit_col = "fit", slope_col = "slope_tz", cut_col = "cut")
+usethis::use_data(slopes0_flag, overwrite = TRUE)
+
+slopes30_flag <- flux_quality(slopes30, fit_type = "exp", fluxID_col = "fluxID", , conc_col = "conc", b_col = "b", time_col = "time", fit_col = "fit", slope_col = "slope_tz", cut_col = "cut")
+usethis::use_data(slopes30_flag, overwrite = TRUE)
