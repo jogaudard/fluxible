@@ -87,7 +87,7 @@ flux_plot_lin <- function(slopes_df,
       mutate(
         f_rsquared = round(f_rsquared, digits = 2),
         f_pvalue = round(f_pvalue, digits = 4),
-        print_col = paste("R", ^, "2 = ", f_rsquared, "\n", "p-value = ", f_pvalue, sep = "")
+        print_col = paste("R2 = ", f_rsquared, "\n", "p-value = ", f_pvalue, sep = "")
         # print_col = as.character(print_col)
       )
 
