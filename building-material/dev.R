@@ -8,8 +8,9 @@ usethis::use_package("ggplot2")
 # to make the webpage
 usethis::use_pkgdown()
 pkgdown::build_site()
+usethis::use_pkgdown_github_pages()
 
-usethis::use_readme_md()
+usethis::use_readme_rmd()
 
 
 devtools::test()
