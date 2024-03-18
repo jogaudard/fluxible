@@ -22,7 +22,7 @@
 #' @importFrom stringr str_c
 #' @importFrom stats lm optim
 #' @importFrom purrr map
-#' #' @examples 
+#' @examples 
 #' data(co2_conc)
 #' flux_fitting(co2_conc, fit_type = "exp")
 #' @export

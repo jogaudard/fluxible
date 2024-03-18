@@ -56,3 +56,7 @@ a dataframe with the slope at t zero (should be used for flux calculation), mode
 \description{
 fits gas concentration over time with an exponential or linear model
 }
+\examples{
+data(co2_conc)
+flux_fitting(co2_conc, fit_type = "exp")
+}

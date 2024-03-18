@@ -53,3 +53,7 @@ a dataframe with the slope at t zero (should be used for flux calculation), mode
 \description{
 Fits an exponential expression to the concentration evolution over time
 }
+\examples{
+data(co2_conc)
+flux_fitting_exp(co2_conc)
+}

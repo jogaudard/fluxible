@@ -30,7 +30,7 @@
 #' @importFrom stats lm optim
 #' @importFrom purrr map
 #' @importFrom utils data
-#' #' @examples 
+#' @examples 
 #' data(co2_conc)
 #' flux_fitting_exp(co2_conc)
 #' @export
