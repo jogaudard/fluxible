@@ -25,11 +25,14 @@
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
+#' @importFrom grDevices pdf dev.off
 #' @examples
 #' data(slopes0lin_flag)
-#' flux_plot_lin(slopes0lin_flag, datetime_col = "datetime", cut_col = "cut", fit_col = "fit", start_col = "start", print_plot = TRUE)
+#' flux_plot_lin(slopes0lin_flag, datetime_col = "datetime", cut_col = "cut", fit_col = "fit",
+#' start_col = "start", print_plot = TRUE)
 #' data(slopes30lin_flag)
-#' flux_plot_lin(slopes30lin_flag, datetime_col = "datetime", cut_col = "cut", fit_col = "fit", start_col = "start", print_plot = TRUE)
+#' flux_plot_lin(slopes30lin_flag, datetime_col = "datetime", cut_col = "cut", fit_col = "fit",
+#' start_col = "start", print_plot = TRUE)
 #' @export
 #' 
 #' 
@@ -89,9 +92,9 @@ flux_plot_lin <- function(slopes_df,
       select(!"f_conc") |>
       distinct() |>
       mutate(
-        f_rsquared = round(f_rsquared, digits = 2),
-        f_pvalue = round(f_pvalue, digits = 4),
-        print_col = paste("R2 = ", f_rsquared, "\n", "p-value = ", f_pvalue, sep = "")
+        f_rsquared = round(.data$f_rsquared, digits = 2),
+        f_pvalue = round(.data$f_pvalue, digits = 4),
+        print_col = paste("R2 = ", .data$f_rsquared, "\n", "p-value = ", .data$f_pvalue, sep = "")
         # print_col = as.character(print_col)
       )
 
@@ -110,7 +113,7 @@ flux_plot_lin <- function(slopes_df,
   )) +
   scale_x_datetime(date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)), date_labels = ((f_date_labels))) +
   ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-  geom_text(data = param_df, aes(x = f_start, y = conc_start, label = print_col), vjust = 0, hjust = "inward", nudge_y = 100) +
+  geom_text(data = param_df, aes(x = .data$f_start, y = .data$conc_start, label = .data$print_col), vjust = 0, hjust = "inward", nudge_y = 100) +
 #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
   facet_wrap_paginate(~f_fluxID, ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))) +
   labs(

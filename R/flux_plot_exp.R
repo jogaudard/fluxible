@@ -27,11 +27,14 @@
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
+#' @importFrom grDevices pdf dev.off
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot_exp(slopes0_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = FALSE)
+#' flux_plot_exp(slopes0_flag, datetime_col = "datetime", fit_slope_col = "fit_slope",
+#' start_col = "start", print_plot = FALSE)
 #' data(slopes30_flag)
-#' flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = TRUE, f_plotname = "exemple")
+#' flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope",
+#' start_col = "start", print_plot = TRUE, f_plotname = "exemple")
 #' @export
 #' 
 #' 
@@ -98,11 +101,11 @@ flux_plot_exp <- function(slopes_df,
       select(!"f_conc") |>
       distinct() |>
       mutate(
-        f_RMSE = round(f_RMSE, digits = 1),
-        f_cor_coef = round(f_cor_coef, digits = 2),
-        f_b = round(f_b, digits = 5),
+        f_RMSE = round(.data$f_RMSE, digits = 1),
+        f_cor_coef = round(.data$f_cor_coef, digits = 2),
+        f_b = round(.data$f_b, digits = 5),
         # print_col = paste("RMSE =", f_RMSE)
-        print_col = paste("RMSE = ", f_RMSE, "\n", "Corr coef = ", f_cor_coef, "\n", "b = ", f_b, sep = "")
+        print_col = paste("RMSE = ", .data$f_RMSE, "\n", "Corr coef = ", .data$f_cor_coef, "\n", "b = ", .data$f_b, sep = "")
         # print_col = as.character(print_col)
       )
 
@@ -122,7 +125,7 @@ flux_plot_exp <- function(slopes_df,
   )) +
   scale_x_datetime(date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)), date_labels = ((f_date_labels))) +
   ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-  geom_text(data = param_df, aes(x = f_start, y = conc_start, label = print_col), vjust = 0, hjust = "inward", nudge_y = 100) +
+  geom_text(data = param_df, aes(x = .data$f_start, y = .data$conc_start, label = .data$print_col), vjust = 0, hjust = "inward", nudge_y = 100) +
 #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
   facet_wrap_paginate(~f_fluxID, ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))) +
   labs(

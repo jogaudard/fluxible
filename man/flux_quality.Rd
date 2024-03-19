@@ -73,5 +73,6 @@ indicates if fluxes should be discarded or replaced by 0 according to parameters
 }
 \examples{
 data(slopes0lin)
-flux_quality(slopes0lin, fit_type = "li", fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
+flux_quality(slopes0lin, fit_type = "li", fluxID_col = "fluxID",
+slope_col = "slope", conc_col = "conc")
 }
