@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_quality.R
 \name{flux_quality}
 \alias{flux_quality}
-\title{assessing quality of slopes calculated with the exponential or the linear model}
+\title{assessing quality of slopes calculated}
 \usage{
 flux_quality(
   slopes_df,
@@ -31,45 +31,61 @@ flux_quality(
 
 \item{fit_type}{expression used to fit the data, linear or exponential}
 
-\item{ambient_conc}{ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)}
+\item{ambient_conc}{ambient gas concentration in ppm at the site of
+measurement (used to detect measurement that started with a polluted setup)}
 
-\item{error}{error of the setup, defines a window in which the starting values are considered acceptable}
+\item{error}{error of the setup, defines a window in which
+the starting values are considered acceptable}
 
 \item{fluxID_col}{column containing unique IDs for each flux}
 
-\item{slope_col}{column containing the slope of each flux (ideally as calculated by the flux_fitting function)}
+\item{slope_col}{column containing the slope of each flux
+(as calculated by the flux_fitting function)}
 
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
+\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+by the user's decision}
 
 \item{pvalue_col}{column containing the p-value of each flux (linear fit)}
 
-\item{rsquared_col}{column containing the r squared to be used for the quality assessment (linear fit)}
+\item{rsquared_col}{column containing the r squared to be used for
+the quality assessment (linear fit)}
 
-\item{pvalue_threshold}{threshold of p-value below which the change of gas concentration over time is considered not significant (linear fit)}
+\item{pvalue_threshold}{threshold of p-value below which the change of
+gas concentration over time is considered not significant (linear fit)}
 
-\item{rsquared_threshold}{threshold of r squared value below which the linear model is considered an unsatisfactory fit (linear fit)}
+\item{rsquared_threshold}{threshold of r squared value below which
+the linear model is considered an unsatisfactory fit (linear fit)}
 
-\item{conc_col}{column containing the measured gas concentration (exponential fit)}
+\item{conc_col}{column containing the measured gas concentration
+(exponential fit)}
 
-\item{b_col}{column containing the b parameter of the exponential expression (exponential fit)}
+\item{b_col}{column containing the b parameter of the exponential expression
+(exponential fit)}
 
-\item{time_col}{column containing the time of each measurement in seconds (exponential fit)}
+\item{time_col}{column containing the time of each measurement in seconds
+(exponential fit)}
 
 \item{fit_col}{column containing the modeled data (exponential fit)}
 
 \item{cut_col}{column containing the cutting information}
 
-\item{RMSE_threshold}{threshold for the RMSE of each flux above which the fit is considered unsatisfactory (exponential fit)}
+\item{RMSE_threshold}{threshold for the RMSE of each flux above which
+the fit is considered unsatisfactory (exponential fit)}
 
-\item{cor_threshold}{threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant (exponential fit)}
+\item{cor_threshold}{threshold for the correlation coefficient of
+gas concentration with time below which the correlation
+is considered non significant (exponential fit)}
 
-\item{b_threshold}{threshold for the b parameter. Defines a window with its opposite inside which the fit is considered good enough (exponential fit)}
+\item{b_threshold}{threshold for the b parameter.
+Defines a window with its opposite inside which the fit is
+considered good enough (exponential fit)}
 }
 \value{
 same dataframe with added flag and corrected slopes columns
 }
 \description{
-indicates if fluxes should be discarded or replaced by 0 according to parameters set by user
+indicates if fluxes should be discarded or replaced
+by 0 according to parameters set by user
 }
 \examples{
 data(slopes0lin)

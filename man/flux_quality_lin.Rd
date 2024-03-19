@@ -21,33 +21,44 @@ flux_quality_lin(
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
 
-\item{ambient_conc}{ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)}
+\item{ambient_conc}{ambient gas concentration in ppm at the site of
+measurement (used to detect measurement that started with a polluted setup)}
 
-\item{error}{error of the setup, defines a window in which the starting values are considered acceptable}
+\item{error}{error of the setup, defines a window in
+which the starting values are considered acceptable}
 
 \item{fluxID_col}{column containing unique IDs for each flux}
 
-\item{slope_col}{column containing the slope of each flux (ideally as calculated by the flux_fitting function)}
+\item{slope_col}{column containing the slope of each flux
+(as calculated by the flux_fitting function)}
 
 \item{conc_col}{column containing the measured gas concentration}
 
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
+\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+by the user's decision}
 
 \item{pvalue_col}{column containing the p-value of each flux}
 
-\item{rsquared_col}{column containing the r squared to be used for the quality assessment}
+\item{rsquared_col}{column containing the r squared to be used for
+the quality assessment}
 
-\item{pvalue_threshold}{threshold of p-value below which the change of gas concentration over time is considered not significant (user decided)}
+\item{pvalue_threshold}{threshold of p-value below which the change
+of gas concentration over time is considered not significant (user decided)}
 
-\item{rsquared_threshold}{threshold of r squared value below which the linear model is considered an unsatisfactory fit}
+\item{rsquared_threshold}{threshold of r squared value below which
+the linear model is considered an unsatisfactory fit}
 }
 \value{
 same dataframe with added flag and corrected slopes columns
 }
 \description{
-indicates if fluxes should be discarded or replaced by 0 according to parameters set by user
+indicates if fluxes should be discarded or replaced by 0
+according to parameters set by user
 }
 \examples{
 data(slopes0lin)
-flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
+flux_quality_lin(slopes0lin,
+  fluxID_col = "fluxID",
+  slope_col = "slope", conc_col = "conc"
+)
 }

@@ -1,15 +1,19 @@
 #' ploting fluxes for fit evaluation
-#' @description plots the fluxes and indicates what should be discarded or replaced by zero
+#' @description plots the fluxes and indicates what should be
+#' discarded or replaced by zero
 #' @param slopes_df dataset containing slopes
-#' @param datetime_col column containing datetime of each concentration measurement
+#' @param datetime_col column containing datetime of
+#' each concentration measurement
 #' @param conc_col column containing gas concentration data
-#' @param cut_col column containing cut factor from the flux_fitting function ("cut" or "keep")
+#' @param cut_col column containing cut factor from the
+#' flux_fitting function ("cut" or "keep")
 #' @param fit_col column containing the modelled fit of the flux
 #' @param quality_flag_col column containing the flags produced by flux_quality
 #' @param fluxID_col column containing unique IDs for each flux
 #' @param fit_slope_col column containing the modelled slope at tz
 #' @param b_col column containing the b parameter of the exponential fit
-#' @param cor_coef_col column containing the correlation coefficient produced by flux_quality
+#' @param cor_coef_col column containing the correlation coefficient
+#' produced by flux_quality
 #' @param RMSE_col column containing the RMSE produced by flux_quality
 #' @param start_col column containing the datetime of the start of each flux
 #' @param f_date_breaks date_breaks argument for scale_x_datetime
@@ -19,12 +23,13 @@
 #' @param f_ylim_lower y axis lower limit
 #' @param f_scales argument for scales in facet_wrap ("fixed" or "free")
 #' @param f_plotname filename for the extracted pdf file
-# #' @param f_paper = "a4r", for next version of package, paper size
 #' @param f_nrow number of row per page in extracted pdf file
 #' @param f_ncol ncol argument for facet_wrap
-#' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R but will take time depending on the size of the dataset
+#' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
+#' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
-#' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
+#' @importFrom ggplot2 ggplot aes geom_point geom_line
+#' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom grDevices pdf dev.off
@@ -62,7 +67,6 @@ flux_plot_exp <- function(slopes_df,
                           f_ylim_lower = 400,
                           f_scales = "free",
                           f_plotname = "plot_quality_exp",
-                          # f_paper = "a4r",
                           f_ncol = 4,
                           f_nrow = 3,
                           print_plot = "FALSE") {
@@ -74,7 +78,6 @@ flux_plot_exp <- function(slopes_df,
     dir.create(folder)
   }
 
-  # print_plot <- match.arg(print_plot, c("TRUE", "FALSE"))
 
 
   slopes_df <- slopes_df |>
@@ -93,7 +96,9 @@ flux_plot_exp <- function(slopes_df,
     )
 
   param_df <- slopes_df |>
-    select("f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut") |>
+    select(
+      "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut"
+    ) |>
     filter(.data$f_cut == "keep") |>
     group_by(.data$f_fluxID) |>
     mutate(
@@ -106,16 +111,27 @@ flux_plot_exp <- function(slopes_df,
       f_RMSE = round(.data$f_RMSE, digits = 1),
       f_cor_coef = round(.data$f_cor_coef, digits = 2),
       f_b = round(.data$f_b, digits = 5),
-      # print_col = paste("RMSE =", f_RMSE)
-      print_col = paste("RMSE = ", .data$f_RMSE, "\n", "Corr coef = ", .data$f_cor_coef, "\n", "b = ", .data$f_b, sep = "")
-      # print_col = as.character(print_col)
+      print_col = paste(
+        "RMSE = ", .data$f_RMSE, "\n", "Corr coef = ",
+        .data$f_cor_coef, "\n", "b = ", .data$f_b,
+        sep = ""
+      )
     )
 
   plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
-    geom_point(aes(y = .data$f_conc, color = .data$f_cut), size = 0.2) +
-    geom_line(aes(y = .data$f_fit, color = .data$f_quality_flag), linetype = "longdash") +
-    geom_line(aes(y = .data$f_fit_slope, color = .data$f_quality_flag), linetype = "dashed") +
+    geom_point(
+      aes(y = .data$f_conc, color = .data$f_cut),
+      size = 0.2
+    ) +
+    geom_line(
+      aes(y = .data$f_fit, color = .data$f_quality_flag),
+      linetype = "longdash"
+    ) +
+    geom_line(
+      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
+      linetype = "dashed"
+    ) +
     scale_color_manual(values = c(
       "keep" = "green",
       "cut" = "red",
@@ -125,11 +141,21 @@ flux_plot_exp <- function(slopes_df,
       "start_error" = "red",
       "weird_flux" = "purple"
     )) +
-    scale_x_datetime(date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)), date_labels = ((f_date_labels))) +
+    scale_x_datetime(
+      date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
+      date_labels = ((f_date_labels))
+    ) +
     ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-    geom_text(data = param_df, aes(x = .data$f_start, y = .data$conc_start, label = .data$print_col), vjust = 0, hjust = "inward", nudge_y = 100) +
+    geom_text(
+      data = param_df,
+      aes(x = .data$f_start, y = .data$conc_start, label = .data$print_col),
+      vjust = 0, hjust = "inward", nudge_y = 100
+    ) +
     #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
-    facet_wrap_paginate(~f_fluxID, ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))) +
+    facet_wrap_paginate(
+      ~f_fluxID,
+      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
+    ) +
     labs(
       title = "Fluxes quality assessment",
       x = "Datetime",

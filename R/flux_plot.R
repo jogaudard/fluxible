@@ -1,18 +1,23 @@
 #' ploting fluxes for fit evaluation
-#' @description plots the fluxes and indicates what should be discarded or replaced by zero
+#' @description plots the fluxes and indicates what should be discarded
+#' or replaced by zero
 #' @param fit_type model used in flux_fitting, exponential or linear
 #' @param slopes_df dataset containing slopes
-#' @param datetime_col column containing datetime of each concentration measurement
+#' @param datetime_col column containing datetime of
+#' each concentration measurement
 #' @param conc_col column containing gas concentration data
-#' @param cut_col column containing cut factor from the flux_fitting function ("cut" or "keep")
+#' @param cut_col column containing cut factor from the
+#' flux_fitting function ("cut" or "keep")
 #' @param fit_col column containing the modelled fit of the flux
 #' @param quality_flag_col column containing the flags produced by flux_quality
 #' @param fluxID_col column containing unique IDs for each flux
 #' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared to be used for the quality assessment
+#' @param rsquared_col column containing the r squared to be used
+#' for the quality assessment
 #' @param fit_slope_col column containing the modelled slope at tz
 #' @param b_col column containing the b parameter of the exponential fit
-#' @param cor_coef_col column containing the correlation coefficient produced by flux_quality
+#' @param cor_coef_col column containing the correlation coefficient
+#' produced by flux_quality
 #' @param RMSE_col column containing the RMSE produced by flux_quality
 #' @param start_col column containing the datetime of the start of each flux
 #' @param f_date_breaks date_breaks argument for scale_x_datetime
@@ -22,12 +27,13 @@
 #' @param f_ylim_lower y axis lower limit
 #' @param f_scales argument for scales in facet_wrap ("fixed" or "free")
 #' @param f_plotname filename for the extracted pdf file
-# #' @param f_paper = "a4r", for next version of package, paper size
 #' @param f_nrow number of row per page in extracted pdf file
 #' @param f_ncol ncol argument for facet_wrap
-#' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R but will take time depending on the size of the dataset
+#' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
+#' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
-#' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
+#' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
+#' scale_x_datetime ylim facet_wrap labs geom_text
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @examples
@@ -60,7 +66,6 @@ flux_plot <- function(slopes_df,
                       f_ylim_lower = 400,
                       f_scales = "free",
                       f_plotname = "plot_quality",
-                      # f_paper = "a4r",
                       f_ncol = 4,
                       f_nrow = 3,
                       print_plot = "FALSE") {

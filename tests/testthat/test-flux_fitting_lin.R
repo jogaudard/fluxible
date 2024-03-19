@@ -1,11 +1,5 @@
 test_that("fitting works with 0 second end cut", {
-  ### setup
-  # co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-  # slopes0lin <- readr::read_csv("data/slopes0lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
-
-  ### test
-
-  qflux_fitting_lin <- purrr::quietly(flux_fitting_lin) # to make the warnings quiet
+  qflux_fitting_lin <- purrr::quietly(flux_fitting_lin)
 
   fitting_lin_call <- qflux_fitting_lin(
     co2_conc
@@ -20,11 +14,6 @@ test_that("fitting works with 0 second end cut", {
 })
 
 test_that("fitting works with 30 second end cut", {
-  ### setup
-  # co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-  # slopes30lin <- readr::read_csv("data/slopes30lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
-
-  ### test
   output <- flux_fitting_lin(
     co2_conc,
     end_cut = 30
@@ -36,11 +25,6 @@ test_that("fitting works with 30 second end cut", {
 })
 
 test_that("fitting works with 60 second end cut", {
-  ### setup
-  # co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-  # slopes60lin <- readr::read_csv("data/slopes60lin.csv", col_types = "TddddffTTfddcdfddddddddddddT")
-
-  ### test
   output <- flux_fitting_lin(
     co2_conc,
     end_cut = 60
@@ -55,8 +39,6 @@ test_that("fitting works with 60 second end cut", {
 # warning that NAs were dropped in some fluxID
 
 test_that("warnings when NAs are dropped in conc", {
-  #  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
-
   expect_warning(
     flux_fitting_lin(co2_conc_missing),
     " fluxID 1 : slope was estimated on 70 points out of 210 seconds because data are missing
@@ -69,8 +51,6 @@ test_that("warnings when NAs are dropped in conc", {
 # warning when there is no data in some fluxID
 
 test_that("warnings when thre is no data in conc", {
-  #  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
-
   expect_warning(
     flux_fitting_lin(co2_conc_missing),
     " fluxID 6 : slope could not be estimated because there are no data in the conc column"
@@ -78,8 +58,6 @@ test_that("warnings when thre is no data in conc", {
 })
 
 test_that("warnings with cutting", {
-  #  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
-
   expect_warning(
     flux_fitting_lin(
       co2_conc_missing,
@@ -93,8 +71,6 @@ test_that("warnings with cutting", {
 })
 
 test_that("error on arguments", {
-  #  co2_conc_missing <- readr::read_csv("data/co2_conc_missing.csv", col_types = "TddddffTTfddc")
-
   expect_error(
     flux_fitting_lin(
       co2_conc_missing,
@@ -107,8 +83,6 @@ test_that("error on arguments", {
 
 
 test_that("cutting too much", {
-  #  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-
   expect_error(
     flux_fitting_lin(
       co2_conc,
@@ -121,9 +95,6 @@ test_that("cutting too much", {
 })
 
 test_that("renaming works", {
-  #  co2_conc <- readr::read_csv("data/co2_conc.csv", col_types = "TddddffTTfddc")
-
-
   co2_conc_names <- co2_conc %>%
     dplyr::rename(
       date_time = datetime,
@@ -131,7 +102,7 @@ test_that("renaming works", {
       co2 = conc
     )
 
-  qflux_fitting_lin <- purrr::quietly(flux_fitting_lin) # to make the warnings quiet
+  qflux_fitting_lin <- purrr::quietly(flux_fitting_lin)
 
 
   expect_no_error(

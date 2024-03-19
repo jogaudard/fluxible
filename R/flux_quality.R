@@ -1,24 +1,40 @@
-#' assessing quality of slopes calculated with the exponential or the linear model
-#' @description indicates if fluxes should be discarded or replaced by 0 according to parameters set by user
+#' assessing quality of slopes calculated
+#' @description indicates if fluxes should be discarded or replaced
+#' by 0 according to parameters set by user
 #' @param slopes_df dataset containing slopes
 #' @param fit_type expression used to fit the data, linear or exponential
-#' @param ambient_conc ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)
-#' @param error error of the setup, defines a window in which the starting values are considered acceptable
+#' @param ambient_conc ambient gas concentration in ppm at the site of
+#' measurement (used to detect measurement that started with a polluted setup)
+#' @param error error of the setup, defines a window in which
+#' the starting values are considered acceptable
 #' @param fluxID_col column containing unique IDs for each flux
-#' @param slope_col column containing the slope of each flux (ideally as calculated by the flux_fitting function)
-#' @param weird_fluxesID vector of fluxIDs that should be discarded by the user's decision
+#' @param slope_col column containing the slope of each flux
+#' (as calculated by the flux_fitting function)
+#' @param weird_fluxesID vector of fluxIDs that should be discarded
+#' by the user's decision
 #' @param pvalue_col column containing the p-value of each flux (linear fit)
-#' @param rsquared_col column containing the r squared to be used for the quality assessment (linear fit)
-#' @param pvalue_threshold threshold of p-value below which the change of gas concentration over time is considered not significant (linear fit)
-#' @param rsquared_threshold threshold of r squared value below which the linear model is considered an unsatisfactory fit (linear fit)
-#' @param conc_col column containing the measured gas concentration (exponential fit)
-#' @param b_col column containing the b parameter of the exponential expression (exponential fit)
-#' @param time_col column containing the time of each measurement in seconds (exponential fit)
+#' @param rsquared_col column containing the r squared to be used for
+#' the quality assessment (linear fit)
+#' @param pvalue_threshold threshold of p-value below which the change of
+#' gas concentration over time is considered not significant (linear fit)
+#' @param rsquared_threshold threshold of r squared value below which
+#' the linear model is considered an unsatisfactory fit (linear fit)
+#' @param conc_col column containing the measured gas concentration
+#' (exponential fit)
+#' @param b_col column containing the b parameter of the exponential expression
+#' (exponential fit)
+#' @param time_col column containing the time of each measurement in seconds
+#' (exponential fit)
 #' @param fit_col column containing the modeled data (exponential fit)
-#' @param RMSE_threshold threshold for the RMSE of each flux above which the fit is considered unsatisfactory (exponential fit)
-#' @param cor_threshold threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant (exponential fit)
+#' @param RMSE_threshold threshold for the RMSE of each flux above which
+#' the fit is considered unsatisfactory (exponential fit)
+#' @param cor_threshold threshold for the correlation coefficient of
+#' gas concentration with time below which the correlation
+#' is considered non significant (exponential fit)
 #' @param cut_col column containing the cutting information
-#' @param b_threshold threshold for the b parameter. Defines a window with its opposite inside which the fit is considered good enough (exponential fit)
+#' @param b_threshold threshold for the b parameter.
+#' Defines a window with its opposite inside which the fit is
+#' considered good enough (exponential fit)
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest

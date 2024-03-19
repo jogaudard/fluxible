@@ -1,21 +1,32 @@
 #' quality assessment for the fluxes calculated with the linear model
-#' @description indicates if fluxes should be discarded or replaced by 0 according to parameters set by user
+#' @description indicates if fluxes should be discarded or replaced by 0
+#' according to parameters set by user
 #' @param slopes_df dataset containing slopes, fluxID, p.value and r.squared
-#' @param pvalue_threshold threshold of p-value below which the change of gas concentration over time is considered not significant (user decided)
-#' @param rsquared_threshold threshold of r squared value below which the linear model is considered an unsatisfactory fit
+#' @param pvalue_threshold threshold of p-value below which the change
+#' of gas concentration over time is considered not significant (user decided)
+#' @param rsquared_threshold threshold of r squared value below which
+#' the linear model is considered an unsatisfactory fit
 #' @param fluxID_col column containing unique IDs for each flux
 #' @param conc_col column containing the measured gas concentration
-#' @param slope_col column containing the slope of each flux (ideally as calculated by the flux_fitting function)
-#' @param weird_fluxesID vector of fluxIDs that should be discarded by the user's decision
+#' @param slope_col column containing the slope of each flux
+#' (as calculated by the flux_fitting function)
+#' @param weird_fluxesID vector of fluxIDs that should be discarded
+#' by the user's decision
 #' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared to be used for the quality assessment
-#' @param ambient_conc ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)
-#' @param error error of the setup, defines a window in which the starting values are considered acceptable
+#' @param rsquared_col column containing the r squared to be used for
+#' the quality assessment
+#' @param ambient_conc ambient gas concentration in ppm at the site of
+#' measurement (used to detect measurement that started with a polluted setup)
+#' @param error error of the setup, defines a window in
+#' which the starting values are considered acceptable
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename left_join
 #' @examples
 #' data(slopes0lin)
-#' flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
+#' flux_quality_lin(slopes0lin,
+#'   fluxID_col = "fluxID",
+#'   slope_col = "slope", conc_col = "conc"
+#' )
 #' @export
 
 # need to add start error
@@ -60,8 +71,10 @@ flux_quality_lin <- function(slopes_df,
       f_quality_flag = case_when(
         .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
-        .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
-        .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
+        .data$f_rsquared < ((rsquared_threshold)) &
+          .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
+        .data$f_rsquared < ((rsquared_threshold)) &
+          .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "weird_flux" ~ NA_real_,

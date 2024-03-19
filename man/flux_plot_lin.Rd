@@ -30,11 +30,13 @@ flux_plot_lin(
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{datetime_col}{column containing datetime of each concentration measurement}
+\item{datetime_col}{column containing datetime of
+each concentration measurement}
 
 \item{conc_col}{column containing gas concentration data}
 
-\item{cut_col}{column containing cut factor from the flux_fitting function ("cut" or "keep")}
+\item{cut_col}{column containing cut factor from the
+flux_fitting function ("cut" or "keep")}
 
 \item{fit_col}{column containing the modelled fit of the flux}
 
@@ -44,7 +46,8 @@ flux_plot_lin(
 
 \item{pvalue_col}{column containing the p-value of each flux}
 
-\item{rsquared_col}{column containing the r squared to be used for the quality assessment}
+\item{rsquared_col}{column containing the r squared
+used for the quality assessment}
 
 \item{start_col}{column containing the datetime of the start of each flux}
 
@@ -66,10 +69,12 @@ flux_plot_lin(
 
 \item{f_nrow}{number of row per page in extracted pdf file}
 
-\item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R but will take time depending on the size of the dataset}
+\item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
+but will take time depending on the size of the dataset}
 }
 \description{
-plots the fluxes and indicates what should be discarded or replaced by zero
+plots the fluxes and indicates what should be
+discarded or replaced by zero
 }
 \examples{
 data(slopes0lin_flag)

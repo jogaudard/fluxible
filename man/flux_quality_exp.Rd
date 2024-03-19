@@ -23,17 +23,22 @@ flux_quality_exp(
 )
 }
 \arguments{
-\item{slopes_df}{dataset containing slopes, fluxID, and parameters of the exponential expression}
+\item{slopes_df}{dataset containing slopes, fluxID,
+and parameters of the exponential expression}
 
-\item{ambient_conc}{ambient gas concentration in ppm at the site of measurement (used to detect measurement that started with a polluted setup)}
+\item{ambient_conc}{ambient gas concentration in ppm at the site of
+measurement (used to detect measurement that started with a polluted setup)}
 
-\item{error}{error of the setup, defines a window in which the starting values are considered acceptable}
+\item{error}{error of the setup, defines a window in which
+the starting values are considered acceptable}
 
 \item{fluxID_col}{column containing unique IDs for each flux}
 
-\item{slope_col}{column containing the slope of the exponential expression used for the calculation}
+\item{slope_col}{column containing the slope of the exponential expression
+used for the calculation}
 
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded by the user's decision}
+\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+by the user's decision}
 
 \item{conc_col}{column containing the measured gas concentration}
 
@@ -45,17 +50,22 @@ flux_quality_exp(
 
 \item{cut_col}{column containing the cutting information}
 
-\item{RMSE_threshold}{threshold for the RMSE of each flux above which the fit is considered unsatisfactory}
+\item{RMSE_threshold}{threshold for the RMSE of each flux above
+which the fit is considered unsatisfactory}
 
-\item{cor_threshold}{threshold for the correlation coefficient of gas concentration with time below which the correlation is considered non significant}
+\item{cor_threshold}{threshold for the correlation coefficient
+of gas concentration with time below which the correlation
+is considered non significant}
 
-\item{b_threshold}{threshold for the b parameter. Defines a window with its opposite inside which the fit is considered good enough.}
+\item{b_threshold}{threshold for the b parameter. Defines a window
+with its opposite inside which the fit is considered good enough.}
 }
 \value{
 same dataframe with added flag and corrected slopes columns
 }
 \description{
-indicates if fluxes should be discarded or replaced by 0 according to parameters set by user
+indicates if fluxes should be discarded or replaced
+by 0 according to parameters set by user
 }
 \examples{
 data(slopes0)
