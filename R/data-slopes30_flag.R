@@ -1,6 +1,6 @@
 #' Slopes for each flux
 #' 
-#' Slopes of C(t) for each flux with 30 seconds end cut.
+#' Slopes of C(t) for each flux with 30 seconds end cut, with quality flags.
 #' 
 #' @format A tibble with 1251 rows and 36 variables
 #' \describe{

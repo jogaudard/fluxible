@@ -40,11 +40,19 @@ flux_plot_exp(
 
 \item{fit_col}{column containing the modelled fit of the flux}
 
+\item{fit_slope_col}{column containing the modelled slope at tz}
+
 \item{quality_flag_col}{column containing the flags produced by flux_quality}
 
 \item{fluxID_col}{column containing unique IDs for each flux}
 
 \item{start_col}{column containing the datetime of the start of each flux}
+
+\item{b_col}{column containing the b parameter of the exponential fit}
+
+\item{cor_coef_col}{column containing the correlation coefficient produced by flux_quality}
+
+\item{RMSE_col}{column containing the RMSE produced by flux_quality}
 
 \item{f_date_breaks}{date_breaks argument for scale_x_datetime}
 
@@ -65,10 +73,6 @@ flux_plot_exp(
 \item{f_nrow}{number of row per page in extracted pdf file}
 
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R but will take time depending on the size of the dataset}
-
-\item{pvalue_col}{column containing the p-value of each flux}
-
-\item{rsquared_col}{column containing the r squared to be used for the quality assessment}
 }
 \description{
 plots the fluxes and indicates what should be discarded or replaced by zero
@@ -77,5 +81,5 @@ plots the fluxes and indicates what should be discarded or replaced by zero
 data(slopes0_flag)
 flux_plot_exp(slopes0_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = FALSE)
 data(slopes30_flag)
-flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = TRUE)
+flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = TRUE, f_plotname = "exemple")
 }

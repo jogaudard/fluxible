@@ -7,8 +7,10 @@
 #' @param fit_col column containing the modelled fit of the flux
 #' @param quality_flag_col column containing the flags produced by flux_quality
 #' @param fluxID_col column containing unique IDs for each flux
-#' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared to be used for the quality assessment
+#' @param fit_slope_col column containing the modelled slope at tz
+#' @param b_col column containing the b parameter of the exponential fit
+#' @param cor_coef_col column containing the correlation coefficient produced by flux_quality
+#' @param RMSE_col column containing the RMSE produced by flux_quality
 #' @param start_col column containing the datetime of the start of each flux
 #' @param f_date_breaks date_breaks argument for scale_x_datetime
 #' @param f_minor_breaks minor breaks argument for scale_x_datetime
@@ -29,7 +31,7 @@
 #' data(slopes0_flag)
 #' flux_plot_exp(slopes0_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = FALSE)
 #' data(slopes30_flag)
-#' flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = TRUE)
+#' flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope", start_col = "start", print_plot = TRUE, f_plotname = "exemple")
 #' @export
 #' 
 #' 
@@ -60,7 +62,13 @@ flux_plot_exp <- function(slopes_df,
 ){  
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
-  f_plotname <- paste(f_plotname, ".pdf", sep = "")
+  f_plotname <- paste("f_quality_plots/", f_plotname, ".pdf", sep = "")
+  
+  folder <- "./f_quality_plots"
+  if (!file.exists(folder)) {
+  dir.create(folder)
+  }
+
   # print_plot <- match.arg(print_plot, c("TRUE", "FALSE"))
 
 
@@ -138,6 +146,8 @@ print(plot_exp +
 facet_wrap_paginate(~ f_fluxID, ncol = ((f_ncol)), nrow = ((f_nrow)), page = i, scales = ((f_scales))))
 }
 quietly(dev.off())
+
+print("Saving plots in f_quality_plots folder.")
 
 if(((print_plot)) == TRUE) {return(plot_exp)}
 

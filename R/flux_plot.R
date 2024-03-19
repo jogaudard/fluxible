@@ -1,5 +1,6 @@
 #' ploting fluxes for fit evaluation
 #' @description plots the fluxes and indicates what should be discarded or replaced by zero
+#' @param fit_type model used in flux_fitting, exponential or linear
 #' @param slopes_df dataset containing slopes
 #' @param datetime_col column containing datetime of each concentration measurement
 #' @param conc_col column containing gas concentration data
@@ -9,6 +10,10 @@
 #' @param fluxID_col column containing unique IDs for each flux
 #' @param pvalue_col column containing the p-value of each flux
 #' @param rsquared_col column containing the r squared to be used for the quality assessment
+#' @param fit_slope_col column containing the modelled slope at tz
+#' @param b_col column containing the b parameter of the exponential fit
+#' @param cor_coef_col column containing the correlation coefficient produced by flux_quality
+#' @param RMSE_col column containing the RMSE produced by flux_quality
 #' @param start_col column containing the datetime of the start of each flux
 #' @param f_date_breaks date_breaks argument for scale_x_datetime
 #' @param f_minor_breaks minor breaks argument for scale_x_datetime

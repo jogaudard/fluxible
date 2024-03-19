@@ -3,4 +3,6 @@
     Code
       flux_plot_lin(slopes30lin_flag, datetime_col = "datetime", cut_col = "cut",
         fit_col = "fit", start_col = "start")
+    Output
+      [1] "Saving plots in f_quality_plots folder."
 

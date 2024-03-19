@@ -58,9 +58,13 @@ flux_plot_lin <- function(slopes_df,
 ){  
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
-  f_plotname <- paste(f_plotname, ".pdf", sep = "")
+  f_plotname <- paste("f_quality_plots/", f_plotname, ".pdf", sep = "")
   # print_plot <- match.arg(print_plot, c("TRUE", "FALSE"))
 
+  folder <- "./f_quality_plots"
+  if (!file.exists(folder)) {
+  dir.create(folder)
+  }
 
     slopes_df <- slopes_df |>
         rename(
@@ -130,6 +134,9 @@ print(plot_lin +
 facet_wrap_paginate(~ f_fluxID, ncol = ((f_ncol)), nrow = ((f_nrow)), page = i, scales = ((f_scales))))
 }
 quietly(dev.off())
+
+print("Saving plots in f_quality_plots folder.")
+
 
 if(((print_plot)) == TRUE) {return(plot_lin)}
 
