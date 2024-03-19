@@ -60,12 +60,12 @@ indicates if fluxes should be discarded or replaced by 0 according to parameters
 \examples{
 data(slopes0)
 flux_quality_exp(slopes0,
-fluxID_col = "fluxID",
-conc_col = "conc",
-b_col = "b",
-time_col = "time",
-fit_col = "fit",
-slope_col = "slope_tz",
-cut_col = "cut"
+  fluxID_col = "fluxID",
+  conc_col = "conc",
+  b_col = "b",
+  time_col = "time",
+  fit_col = "fit",
+  slope_col = "slope_tz",
+  cut_col = "cut"
 )
 }

@@ -1,7 +1,7 @@
 #' Slopes for each flux
-#' 
+#'
 #' Slopes of C(t) for each flux with air temperature in various units.
-#' 
+#'
 #' @format A tibble with 1251 rows and 30 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -35,6 +35,6 @@
 #' \item{temp_fahr}{Air temperature inside the flux chamber in Fahrenheit averaged over the flux measurement.}
 #' \item{temp_kelvin}{Air temperature inside the flux chamber in Kelvin averaged over the flux measurement.}
 #' }
-#' @examples 
+#' @examples
 #' slopes0_temp
 "slopes0_temp"

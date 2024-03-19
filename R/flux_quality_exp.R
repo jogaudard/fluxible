@@ -19,85 +19,83 @@
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
-#' @examples 
+#' @examples
 #' data(slopes0)
 #' flux_quality_exp(slopes0,
-#' fluxID_col = "fluxID",
-#' conc_col = "conc",
-#' b_col = "b",
-#' time_col = "time",
-#' fit_col = "fit",
-#' slope_col = "slope_tz",
-#' cut_col = "cut"
+#'   fluxID_col = "fluxID",
+#'   conc_col = "conc",
+#'   b_col = "b",
+#'   time_col = "time",
+#'   fit_col = "fit",
+#'   slope_col = "slope_tz",
+#'   cut_col = "cut"
 #' )
-#' @export 
-#' 
-#' 
+#' @export
+#'
+#'
 
 # need to check time vs time_cut, we want the quality assessment only on the part that we keep
 
 flux_quality_exp <- function(slopes_df,
-                            ambient_conc = 421,
-                            error = 100,
-                            fluxID_col = "f_fluxID",
-                            slope_col = "f_slope",
-                            weird_fluxesID = c(),
-                            conc_col = "f_conc",
-                            b_col = "f_b",
-                            time_col = "f_time",
-                            fit_col = "f_fit",
-                            cut_col = "f_cut",
-                            RMSE_threshold = 25,
-                            cor_threshold = 0.5,
-                            b_threshold = 1
-                        ){
+                             ambient_conc = 421,
+                             error = 100,
+                             fluxID_col = "f_fluxID",
+                             slope_col = "f_slope",
+                             weird_fluxesID = c(),
+                             conc_col = "f_conc",
+                             b_col = "f_b",
+                             time_col = "f_time",
+                             fit_col = "f_fit",
+                             cut_col = "f_cut",
+                             RMSE_threshold = 25,
+                             cor_threshold = 0.5,
+                             b_threshold = 1) {
+  slopes_df <- slopes_df |>
+    rename(
+      f_fluxID = all_of((fluxID_col)),
+      f_conc = all_of((conc_col)),
+      f_b = all_of((b_col)),
+      f_time = all_of((time_col)),
+      f_fit = all_of((fit_col)),
+      f_slope_tz = all_of((slope_col)),
+      f_cut = all_of((cut_col))
+    )
 
-    slopes_df <- slopes_df |>
-        rename(
-            f_fluxID = all_of((fluxID_col)),
-            f_conc = all_of((conc_col)),
-            f_b = all_of((b_col)),
-            f_time = all_of((time_col)),
-            f_fit = all_of((fit_col)),
-            f_slope_tz = all_of((slope_col)),
-            f_cut = all_of((cut_col))
-        )
 
-    
-    quality_par <- slopes_df |>
-        group_by(.data$f_fluxID, .data$f_cut) |> # we want to evaluate the part of the flux that we are keeping
-        nest() |>
-        rowwise() |>
-        summarise(
-            f_cor_coef = cor(data$f_conc, data$f_time),
-            f_RMSE = sqrt((1/length(data$f_time)) * sum((data$f_fit - data$f_conc)^2))
+  quality_par <- slopes_df |>
+    group_by(.data$f_fluxID, .data$f_cut) |> # we want to evaluate the part of the flux that we are keeping
+    nest() |>
+    rowwise() |>
+    summarise(
+      f_cor_coef = cor(data$f_conc, data$f_time),
+      f_RMSE = sqrt((1 / length(data$f_time)) * sum((data$f_fit - data$f_conc)^2))
     ) |>
     unnest(c("f_fluxID", "f_cut")) |>
     ungroup()
 
-    quality_par_start <- slopes_df |>
-        group_by(.data$f_fluxID) |> # for the start error we take the entire flux into account
-        nest() |>
-        rowwise() |>
-        summarise(
-            f_start_error = case_when(
-                data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
-                data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
+  quality_par_start <- slopes_df |>
+    group_by(.data$f_fluxID) |> # for the start error we take the entire flux into account
+    nest() |>
+    rowwise() |>
+    summarise(
+      f_start_error = case_when(
+        data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
+        data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
         TRUE ~ "ok"
       )
     ) |>
     unnest("f_fluxID") |>
     ungroup()
 
-    quality_flag <- slopes_df |>
-      left_join(quality_par) |>
-      left_join(quality_par_start) |>
+  quality_flag <- slopes_df |>
+    left_join(quality_par) |>
+    left_join(quality_par_start) |>
     mutate(
-        f_fit_quality = case_when(
-            .data$f_b >= ((b_threshold)) ~ "bad_b",
-            .data$f_RMSE > ((RMSE_threshold)) ~ "bad_RMSE"
-        ),
-        f_correlation = case_when(
+      f_fit_quality = case_when(
+        .data$f_b >= ((b_threshold)) ~ "bad_b",
+        .data$f_RMSE > ((RMSE_threshold)) ~ "bad_RMSE"
+      ),
+      f_correlation = case_when(
         abs(.data$f_cor_coef) < ((cor_threshold)) ~ "no",
         TRUE ~ "yes"
       ),
@@ -119,7 +117,5 @@ flux_quality_exp <- function(slopes_df,
       )
     )
 
-    quality_flag
-
-
+  quality_flag
 }

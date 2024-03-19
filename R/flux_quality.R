@@ -23,73 +23,73 @@
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
-#' @examples 
+#' @examples
 #' data(slopes0lin)
-#' flux_quality(slopes0lin, fit_type = "li", fluxID_col = "fluxID",
-#' slope_col = "slope", conc_col = "conc")
-#' @export 
-#' 
-#' 
+#' flux_quality(slopes0lin,
+#'   fit_type = "li", fluxID_col = "fluxID",
+#'   slope_col = "slope", conc_col = "conc"
+#' )
+#' @export
+#'
+#'
 
 flux_quality <- function(slopes_df,
-                        fit_type, #need to use attribute here
-                        ambient_conc = 421,
-                        error = 100,
-                        fluxID_col = "f_fluxID",
-                        slope_col = "f_slope",
-                        weird_fluxesID = c(),
-                        pvalue_col = "p.value",
-                        rsquared_col = "r.squared",
-                        pvalue_threshold = 0.3,
-                        rsquared_threshold = 0.7,
-                        conc_col = "f_conc",
-                        b_col = "f_b",
-                        time_col = "f_time",
-                        fit_col = "f_fit",
-                        cut_col = "f_cut",
-                        RMSE_threshold = 25,
-                        cor_threshold = 0.5,
-                        b_threshold = 1
+                         fit_type, # need to use attribute here
+                         ambient_conc = 421,
+                         error = 100,
+                         fluxID_col = "f_fluxID",
+                         slope_col = "f_slope",
+                         weird_fluxesID = c(),
+                         pvalue_col = "p.value",
+                         rsquared_col = "r.squared",
+                         pvalue_threshold = 0.3,
+                         rsquared_threshold = 0.7,
+                         conc_col = "f_conc",
+                         b_col = "f_b",
+                         time_col = "f_time",
+                         fit_col = "f_fit",
+                         cut_col = "f_cut",
+                         RMSE_threshold = 25,
+                         cor_threshold = 0.5,
+                         b_threshold = 1) {
+  fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
 
-){
-    fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
-
-    if(((fit_type)) == "exponential") {
-        quality_flag <- flux_quality_exp(
-            ((slopes_df)),
-            ambient_conc = ((ambient_conc)),
-            error = ((error)),
-            fluxID_col = ((fluxID_col)),
-            slope_col = ((slope_col)),
-            weird_fluxesID = ((weird_fluxesID)),
-            conc_col = ((conc_col)),
-            b_col = ((b_col)),
-            time_col = ((time_col)),
-            fit_col = ((fit_col)),
-            cut_col = ((cut_col)),
-            RMSE_threshold = ((RMSE_threshold)),
-            cor_threshold = ((cor_threshold)),
-            b_threshold = ((b_threshold))
-            )
-        }
+  if (((fit_type)) == "exponential") {
+    quality_flag <- flux_quality_exp(
+      ((slopes_df)),
+      ambient_conc = ((ambient_conc)),
+      error = ((error)),
+      fluxID_col = ((fluxID_col)),
+      slope_col = ((slope_col)),
+      weird_fluxesID = ((weird_fluxesID)),
+      conc_col = ((conc_col)),
+      b_col = ((b_col)),
+      time_col = ((time_col)),
+      fit_col = ((fit_col)),
+      cut_col = ((cut_col)),
+      RMSE_threshold = ((RMSE_threshold)),
+      cor_threshold = ((cor_threshold)),
+      b_threshold = ((b_threshold))
+    )
+  }
 
 
-    if(((fit_type)) == "linear") {
-        quality_flag <- flux_quality_lin(
-            ((slopes_df)),
-            ambient_conc = ((ambient_conc)),
-            error = ((error)),
-            fluxID_col = ((fluxID_col)),
-            slope_col = ((slope_col)),
-            weird_fluxesID = ((weird_fluxesID)),
-            pvalue_col = ((pvalue_col)),
-            rsquared_col = ((rsquared_col)),
-            pvalue_threshold = ((pvalue_threshold)),
-            rsquared_threshold = ((rsquared_threshold)),
-            conc_col = ((conc_col))
-            )
-        }
+  if (((fit_type)) == "linear") {
+    quality_flag <- flux_quality_lin(
+      ((slopes_df)),
+      ambient_conc = ((ambient_conc)),
+      error = ((error)),
+      fluxID_col = ((fluxID_col)),
+      slope_col = ((slope_col)),
+      weird_fluxesID = ((weird_fluxesID)),
+      pvalue_col = ((pvalue_col)),
+      rsquared_col = ((rsquared_col)),
+      pvalue_threshold = ((pvalue_threshold)),
+      rsquared_threshold = ((rsquared_threshold)),
+      conc_col = ((conc_col))
+    )
+  }
 
 
-    quality_flag
+  quality_flag
 }

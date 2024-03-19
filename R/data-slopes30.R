@@ -1,7 +1,7 @@
 #' Slopes for each flux
-#' 
+#'
 #' Slopes of C(t) for each flux with a 30 seconds cut at the end of each flux.
-#' 
+#'
 #' @format A tibble with 1251 rows and 28 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -33,6 +33,6 @@
 #' \item{fit_slope}{Output of linear model of CO2 concentration passing by C(tz) and a slope of slope_tz.}
 #' \item{start_z}{Datetime format of tz}
 #' }
-#' @examples 
+#' @examples
 #' slopes30
 "slopes30"

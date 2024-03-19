@@ -17,3 +17,6 @@ devtools::test()
 devtools::document()
 devtools::run_examples()
 devtools::check()
+
+styler::style_pkg()
+lintr::lint_package()

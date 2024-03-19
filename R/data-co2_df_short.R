@@ -1,7 +1,7 @@
 #' CO2 concentration
-#' 
+#'
 #' Continous CO2 concentration as measured on the field
-#' 
+#'
 #' @format A tibble with 1801 rows and 5 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -10,6 +10,6 @@
 #' \item{conc}{CO2 concentration in ppm.}
 #' \item{PAR}{Photosyntethically active radiation inside the chamber in micromol/s/sqm.}
 #' }
-#' @examples 
+#' @examples
 #' co2_df_short
 "co2_df_short"

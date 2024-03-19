@@ -1,7 +1,7 @@
 #' Slopes for each flux
-#' 
+#'
 #' Slopes of C(t) for each flux with 0 second cut, with quality flags.
-#' 
+#'
 #' @format A tibble with 1251 rows and 36 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -40,6 +40,6 @@
 #' \item{f_quality_flag}{quality flag advising if the slope has to be replaced by 0 or NA}
 #' \item{f_slope_corr}{slope corrected according to quality flag}
 #' }
-#' @examples 
+#' @examples
 #' slopes0_flag
 "slopes0_flag"

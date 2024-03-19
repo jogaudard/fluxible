@@ -1,7 +1,7 @@
 #' CO2 fluxes
-#' 
+#'
 #' Calculated CO2 fluxes
-#' 
+#'
 #' @format A tibble with 6 rows and 11 variables
 #' \describe{
 #' \item{fluxID}{Unique ID for each flux.}
@@ -16,6 +16,6 @@
 #' \item{temp_fahr}{Air temperature inside the flux chamber in Fahrenheit averaged over the flux measurement.}
 #' \item{temp_kelvin}{Air temperature inside the flux chamber in Kelvin averaged over the flux measurement.}
 #' }
-#' @examples 
+#' @examples
 #' co2_fluxes
 "co2_fluxes"

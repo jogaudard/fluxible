@@ -1,7 +1,7 @@
 #' Slopes for each flux
-#' 
+#'
 #' Slopes of linear fit for each flux without cut.
-#' 
+#'
 #' @format A tibble with 1251 rows and 22 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -27,6 +27,6 @@
 #' \item{slope}{Slope of the linear model of CO2 concentration over time.}
 #' \item{fit}{Output of the linear model of CO2 concentration over time.}
 #' }
-#' @examples 
+#' @examples
 #' slopes0lin
 "slopes0lin"

@@ -1,7 +1,7 @@
 #' CO2 concentration
-#' 
+#'
 #' CO2 concentration with measurements meta data, with missing data.
-#' 
+#'
 #' @format A tibble with 668 rows and 13 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -18,6 +18,6 @@
 #' \item{ratio}{Ratio of n_conc over length of the measurement (in seconds).}
 #' \item{flag}{Data quality flags.}
 #' }
-#' @examples 
+#' @examples
 #' co2_conc_missing
 "co2_conc_missing"

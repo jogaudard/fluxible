@@ -32,94 +32,92 @@
 #' @importFrom purrr quietly
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag, fit_type = "exp", datetime_col = "datetime", fit_slope_col = "fit_slope",
-#' start_col = "start", print_plot = TRUE)
+#' flux_plot(slopes0_flag,
+#'   fit_type = "exp", datetime_col = "datetime", fit_slope_col = "fit_slope",
+#'   start_col = "start", print_plot = TRUE
+#' )
 #' @export
 
 flux_plot <- function(slopes_df,
-                            fit_type,
-                            datetime_col = "f_datetime",
-                            conc_col = "f_conc",
-                            cut_col = "f_cut",
-                            fit_col = "f_fit",
-                            fit_slope_col = "f_fit_slope",
-                            quality_flag_col = "f_quality_flag",
-                            fluxID_col = "f_fluxID",
-                            pvalue_col = "f_pvalue",
-                            rsquared_col = "f_rsquared",
-                            start_col = "f_start",
-                            b_col = "f_b",
-                            cor_coef_col = "f_cor_coef",
-                            RMSE_col = "f_RMSE",
-                            f_date_breaks = "1 min",
-                            f_minor_breaks = "10 sec",
-                            f_date_labels = "%e/%m \n %H:%M",
-                            f_ylim_upper = 800,
-                            f_ylim_lower = 400,
-                            f_scales = "free",
-                            f_plotname = "plot_quality",
-                            # f_paper = "a4r",
-                            f_ncol = 4,
-                            f_nrow = 3,
-                            print_plot = "FALSE"
+                      fit_type,
+                      datetime_col = "f_datetime",
+                      conc_col = "f_conc",
+                      cut_col = "f_cut",
+                      fit_col = "f_fit",
+                      fit_slope_col = "f_fit_slope",
+                      quality_flag_col = "f_quality_flag",
+                      fluxID_col = "f_fluxID",
+                      pvalue_col = "f_pvalue",
+                      rsquared_col = "f_rsquared",
+                      start_col = "f_start",
+                      b_col = "f_b",
+                      cor_coef_col = "f_cor_coef",
+                      RMSE_col = "f_RMSE",
+                      f_date_breaks = "1 min",
+                      f_minor_breaks = "10 sec",
+                      f_date_labels = "%e/%m \n %H:%M",
+                      f_ylim_upper = 800,
+                      f_ylim_lower = 400,
+                      f_scales = "free",
+                      f_plotname = "plot_quality",
+                      # f_paper = "a4r",
+                      f_ncol = 4,
+                      f_nrow = 3,
+                      print_plot = "FALSE") {
+  fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
 
-){
-    fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
+  if (((fit_type)) == "exponential") {
+    f_plot <- flux_plot_exp(
+      ((slopes_df)),
+      datetime_col = ((datetime_col)),
+      conc_col = ((conc_col)),
+      cut_col = ((cut_col)),
+      fit_col = ((fit_col)),
+      fit_slope_col = ((fit_slope_col)),
+      quality_flag_col = ((quality_flag_col)),
+      fluxID_col = ((fluxID_col)),
+      start_col = ((start_col)),
+      b_col = ((b_col)),
+      cor_coef_col = ((cor_coef_col)),
+      RMSE_col = ((RMSE_col)),
+      f_date_breaks = ((f_date_breaks)),
+      f_minor_breaks = ((f_minor_breaks)),
+      f_date_labels = ((f_date_labels)),
+      f_ylim_upper = ((f_ylim_upper)),
+      f_ylim_lower = ((f_ylim_lower)),
+      f_scales = ((f_scales)),
+      f_plotname = ((f_plotname)),
+      f_ncol = ((f_ncol)),
+      f_nrow = ((f_nrow)),
+      print_plot = ((print_plot))
+    )
+  }
 
- if(((fit_type)) == "exponential") {
-        f_plot <- flux_plot_exp(
-            ((slopes_df)),
-            datetime_col = ((datetime_col)),
-            conc_col = ((conc_col)),
-            cut_col = ((cut_col)),
-            fit_col = ((fit_col)),
-            fit_slope_col = ((fit_slope_col)),
-            quality_flag_col = ((quality_flag_col)),
-            fluxID_col = ((fluxID_col)),
-            start_col = ((start_col)),
-            b_col = ((b_col)),
-            cor_coef_col = ((cor_coef_col)),
-            RMSE_col = ((RMSE_col)),
-            f_date_breaks = ((f_date_breaks)),
-            f_minor_breaks = ((f_minor_breaks)),
-            f_date_labels = ((f_date_labels)),
-            f_ylim_upper = ((f_ylim_upper)),
-            f_ylim_lower = ((f_ylim_lower)),
-            f_scales = ((f_scales)),
-            f_plotname = ((f_plotname)),
-            f_ncol = ((f_ncol)),
-            f_nrow = ((f_nrow)),
-            print_plot = ((print_plot))
-        )
-    }
 
-   
-    if(((fit_type)) == "linear") {
-        f_plot <- flux_plot_lin(
-            ((slopes_df)),
-            datetime_col = ((datetime_col)),
-            conc_col = ((conc_col)),
-            cut_col = ((cut_col)),
-            fit_col = ((fit_col)),
-            quality_flag_col = ((quality_flag_col)),
-            pvalue_col = ((pvalue_col)),
-            rsquared_col = ((rsquared_col)),
-            fluxID_col = ((fluxID_col)),
-            start_col = ((start_col)),
-            f_date_breaks = ((f_date_breaks)),
-            f_minor_breaks = ((f_minor_breaks)),
-            f_date_labels = ((f_date_labels)),
-            f_ylim_upper = ((f_ylim_upper)),
-            f_ylim_lower = ((f_ylim_lower)),
-            f_scales = ((f_scales)),
-            f_plotname = ((f_plotname)),
-            f_ncol = ((f_ncol)),
-            f_nrow = ((f_nrow)),
-            print_plot = ((print_plot))
-        )
-    }
+  if (((fit_type)) == "linear") {
+    f_plot <- flux_plot_lin(
+      ((slopes_df)),
+      datetime_col = ((datetime_col)),
+      conc_col = ((conc_col)),
+      cut_col = ((cut_col)),
+      fit_col = ((fit_col)),
+      quality_flag_col = ((quality_flag_col)),
+      pvalue_col = ((pvalue_col)),
+      rsquared_col = ((rsquared_col)),
+      fluxID_col = ((fluxID_col)),
+      start_col = ((start_col)),
+      f_date_breaks = ((f_date_breaks)),
+      f_minor_breaks = ((f_minor_breaks)),
+      f_date_labels = ((f_date_labels)),
+      f_ylim_upper = ((f_ylim_upper)),
+      f_ylim_lower = ((f_ylim_lower)),
+      f_scales = ((f_scales)),
+      f_plotname = ((f_plotname)),
+      f_ncol = ((f_ncol)),
+      f_nrow = ((f_nrow)),
+      print_plot = ((print_plot))
+    )
+  }
 
-f_plot
-    
-
+  f_plot
 }

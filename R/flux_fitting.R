@@ -22,61 +22,60 @@
 #' @importFrom stringr str_c
 #' @importFrom stats lm optim
 #' @importFrom purrr map
-#' @examples 
+#' @examples
 #' data(co2_conc)
 #' flux_fitting(co2_conc, fit_type = "exp")
 #' @export
-#' 
+#'
 
 flux_fitting <- function(conc_df,
-                        start_cut = 0, # to cut at the start
-                        end_cut = 0, # to cut at the end, if you notice on the graphs that the match was not precise enough
-                        start_col = "start",
-                        end_col = "end",
-                        datetime_col = "datetime",
-                        conc_col = "conc",
-                        fluxID_col = "fluxID",
-                        t_window = 20, # enlarge focus window before and after tmin and tmax
-                        Cz_window = 15, # window used to calculate Cz, at the beginning of cut window
-                        b_window = 10, # window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly
-                        a_window = 10, # window at the end of the flux to estimate a
-                        roll_width = 15, # width of the rolling mean for CO2 when looking for tz, idaelly same as Cz_window
-                        fit_type
-){
-    fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
+                         start_cut = 0, # to cut at the start
+                         end_cut = 0, # to cut at the end, if you notice on the graphs that the match was not precise enough
+                         start_col = "start",
+                         end_col = "end",
+                         datetime_col = "datetime",
+                         conc_col = "conc",
+                         fluxID_col = "fluxID",
+                         t_window = 20, # enlarge focus window before and after tmin and tmax
+                         Cz_window = 15, # window used to calculate Cz, at the beginning of cut window
+                         b_window = 10, # window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly
+                         a_window = 10, # window at the end of the flux to estimate a
+                         roll_width = 15, # width of the rolling mean for CO2 when looking for tz, idaelly same as Cz_window
+                         fit_type) {
+  fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
 
-    if(((fit_type)) == "exponential") {
-        conc_fitting <- flux_fitting_exp(
-            conc_df,
-            start_cut = ((start_cut)),
-            end_cut = ((end_cut)),
-            start_col = ((start_col)),
-            end_col = ((end_col)),
-            datetime_col = ((datetime_col)),
-            conc_col = ((conc_col)),
-            fluxID_col = ((fluxID_col)),
-            t_window = ((t_window)),
-            Cz_window = ((Cz_window)),
-            b_window = ((b_window)),
-            a_window = ((a_window)),
-            roll_width = ((roll_width))
-            )
-        }
-
-
-    if(((fit_type)) == "linear") {
-        conc_fitting <- flux_fitting_lin(
-            conc_df,
-            start_cut = ((start_cut)),
-            end_cut = ((end_cut)),
-            start_col = ((start_col)),
-            end_col = ((end_col)),
-            datetime_col = ((datetime_col)),
-            conc_col = ((conc_col)),
-            fluxID_col = ((fluxID_col))
-            )
-        }
+  if (((fit_type)) == "exponential") {
+    conc_fitting <- flux_fitting_exp(
+      conc_df,
+      start_cut = ((start_cut)),
+      end_cut = ((end_cut)),
+      start_col = ((start_col)),
+      end_col = ((end_col)),
+      datetime_col = ((datetime_col)),
+      conc_col = ((conc_col)),
+      fluxID_col = ((fluxID_col)),
+      t_window = ((t_window)),
+      Cz_window = ((Cz_window)),
+      b_window = ((b_window)),
+      a_window = ((a_window)),
+      roll_width = ((roll_width))
+    )
+  }
 
 
-    conc_fitting
+  if (((fit_type)) == "linear") {
+    conc_fitting <- flux_fitting_lin(
+      conc_df,
+      start_cut = ((start_cut)),
+      end_cut = ((end_cut)),
+      start_col = ((start_col)),
+      end_col = ((end_col)),
+      datetime_col = ((datetime_col)),
+      conc_col = ((conc_col)),
+      fluxID_col = ((fluxID_col))
+    )
+  }
+
+
+  conc_fitting
 }

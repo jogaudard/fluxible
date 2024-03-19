@@ -79,9 +79,13 @@ plots the fluxes and indicates what should be discarded or replaced by zero
 }
 \examples{
 data(slopes0_flag)
-flux_plot_exp(slopes0_flag, datetime_col = "datetime", fit_slope_col = "fit_slope",
-start_col = "start", print_plot = FALSE)
+flux_plot_exp(slopes0_flag,
+  datetime_col = "datetime", fit_slope_col = "fit_slope",
+  start_col = "start", print_plot = FALSE
+)
 data(slopes30_flag)
-flux_plot_exp(slopes30_flag, datetime_col = "datetime", fit_slope_col = "fit_slope",
-start_col = "start", print_plot = TRUE, f_plotname = "exemple")
+flux_plot_exp(slopes30_flag,
+  datetime_col = "datetime", fit_slope_col = "fit_slope",
+  start_col = "start", print_plot = TRUE, f_plotname = "exemple"
+)
 }

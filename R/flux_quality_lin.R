@@ -13,65 +13,63 @@
 #' @param error error of the setup, defines a window in which the starting values are considered acceptable
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename left_join
-#' @examples 
+#' @examples
 #' data(slopes0lin)
 #' flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope", conc_col = "conc")
-#' @export 
+#' @export
 
 # need to add start error
 
 flux_quality_lin <- function(slopes_df,
-                            ambient_conc = 421,
-                            error = 100,
-                            fluxID_col = "f_fluxID",
-                            slope_col = "f_slope",
-                            conc_col = "f_conc",
-                            weird_fluxesID = c(),
-                            pvalue_col = "p.value",
-                            rsquared_col = "r.squared",
-                            pvalue_threshold = 0.3,
-                            rsquared_threshold = 0.7
-                            ){
+                             ambient_conc = 421,
+                             error = 100,
+                             fluxID_col = "f_fluxID",
+                             slope_col = "f_slope",
+                             conc_col = "f_conc",
+                             weird_fluxesID = c(),
+                             pvalue_col = "p.value",
+                             rsquared_col = "r.squared",
+                             pvalue_threshold = 0.3,
+                             rsquared_threshold = 0.7) {
+  slopes_df <- slopes_df |>
+    rename(
+      f_fluxID = all_of((fluxID_col)),
+      f_slope = all_of((slope_col)),
+      f_conc = all_of((conc_col)),
+      f_pvalue = all_of((pvalue_col)),
+      f_rsquared = all_of((rsquared_col))
+    )
 
-    slopes_df <- slopes_df |>
-        rename(
-            f_fluxID = all_of((fluxID_col)),
-            f_slope = all_of((slope_col)),
-            f_conc = all_of((conc_col)),
-            f_pvalue = all_of((pvalue_col)),
-            f_rsquared = all_of((rsquared_col))
-        )
-
-    quality_par_start <- slopes_df |>
-        group_by(.data$f_fluxID) |> 
-        nest() |>
-        rowwise() |>
-        summarise(
-            f_start_error = case_when(
-                data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
-                data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
+  quality_par_start <- slopes_df |>
+    group_by(.data$f_fluxID) |>
+    nest() |>
+    rowwise() |>
+    summarise(
+      f_start_error = case_when(
+        data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
+        data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
         TRUE ~ "ok"
       )
     ) |>
     unnest("f_fluxID") |>
     ungroup()
 
-    slopes_df <- slopes_df |>
-        left_join(quality_par_start) |>
-        mutate(
-            f_quality_flag = case_when(
-                .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
-                .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
-                .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
-                .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
-            ),
-            f_slope_corr = case_when(
-                    .data$f_quality_flag == "weird_flux" ~ NA_real_,
-                    .data$f_quality_flag == "ok" ~ .data$f_slope,
-                    .data$f_quality_flag == "discard" ~ NA_real_,
-                    .data$f_quality_flag == "zero" ~ 0
-            )
-        )
+  slopes_df <- slopes_df |>
+    left_join(quality_par_start) |>
+    mutate(
+      f_quality_flag = case_when(
+        .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
+        .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
+        .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
+        .data$f_rsquared < ((rsquared_threshold)) & .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
+      ),
+      f_slope_corr = case_when(
+        .data$f_quality_flag == "weird_flux" ~ NA_real_,
+        .data$f_quality_flag == "ok" ~ .data$f_slope,
+        .data$f_quality_flag == "discard" ~ NA_real_,
+        .data$f_quality_flag == "zero" ~ 0
+      )
+    )
 
-    slopes_df
+  slopes_df
 }

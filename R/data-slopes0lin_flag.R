@@ -1,7 +1,7 @@
 #' Slopes for each flux
-#' 
+#'
 #' Slopes of linear fit for each flux without cut, with quality flags.
-#' 
+#'
 #' @format A tibble with 1251 rows and 22 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -29,6 +29,6 @@
 #' \item{f_quality_flag}{quality flag advising if the slope has to be replaced by 0 or NA}
 #' \item{f_slope_corr}{slope corrected according to quality flag}
 #' }
-#' @examples 
+#' @examples
 #' slopes0lin_flag
 "slopes0lin_flag"

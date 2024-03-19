@@ -1,32 +1,32 @@
 test_that("flux calculation is correct", {
-    # co2_fluxes <- readr::read_csv("data/fluxes.csv")
-    # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+  # co2_fluxes <- readr::read_csv("data/fluxes.csv")
+  # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
-    output <- flux_calc(slopes0, slope_col = "slope_tz")
+  output <- flux_calc(slopes0, slope_col = "slope_tz")
 
   expect_equal(
     output$flux,
     co2_fluxes$flux,
-    tolerance = 0.001 #took 3 decimals for air temperature when manually calculating fluxes for the test
+    tolerance = 0.001 # took 3 decimals for air temperature when manually calculating fluxes for the test
   )
 })
 
 
 test_that("averaging works", {
-    # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffT")
-    # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+  # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffT")
+  # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
-    output <- flux_calc(
-        slopes0,
-        slope_col = "slope_tz",
-        cols_ave = c("PAR", "temp_soil")
-        )
+  output <- flux_calc(
+    slopes0,
+    slope_col = "slope_tz",
+    cols_ave = c("PAR", "temp_soil")
+  )
 
-    # output <- dplyr::select(output, PAR, temp_soil, temp_air_ave)
+  # output <- dplyr::select(output, PAR, temp_soil, temp_air_ave)
 
-    expect_snapshot(output)
+  expect_snapshot(output)
 
-    # expected <- dplyr::select(co2_fluxes, PAR, temp_soil, temp_air_ave)
+  # expected <- dplyr::select(co2_fluxes, PAR, temp_soil, temp_air_ave)
   # expect_snapshot(
   #   output,
   #   expected,
@@ -35,68 +35,58 @@ test_that("averaging works", {
 })
 
 test_that("keeping works", {
-    # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffT")
-    # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
-
-
-    expect_snapshot(flux_calc(
-        slopes0,
-        slope_col = "slope_tz",
-        cols_keep = c("turfID", "type", "start")
-        ))
-
-   
-
-})
-
-test_that("keeping and averaging work together", {
-    # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffT")
-    # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+  # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffT")
+  # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
 
 
   expect_snapshot(flux_calc(
-        slopes0,
-        slope_col = "slope_tz",
-        cols_keep = c("turfID", "type", "start"),
-        cols_ave = c("PAR", "temp_soil")
-        ))
+    slopes0,
+    slope_col = "slope_tz",
+    cols_keep = c("turfID", "type", "start")
+  ))
+})
 
+test_that("keeping and averaging work together", {
+  # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffT")
+  # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddT")
+
+
+  expect_snapshot(flux_calc(
+    slopes0,
+    slope_col = "slope_tz",
+    cols_keep = c("turfID", "type", "start"),
+    cols_ave = c("PAR", "temp_soil")
+  ))
 })
 
 test_that("fahrenheit conversion works", {
-# co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffTdd")
-#     slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTd")
+  # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffTdd")
+  #     slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTd")
 
-expect_snapshot(flux_calc(
-  slopes0_temp,
-  slope_col = "slope_tz",
-  temp_air_col = "temp_fahr",
-  temp_air_unit = "fahrenheit"
-))
-
-
-
-    
-  
+  expect_snapshot(flux_calc(
+    slopes0_temp,
+    slope_col = "slope_tz",
+    temp_air_col = "temp_fahr",
+    temp_air_unit = "fahrenheit"
+  ))
 })
 
 test_that("kelvin conversion works", {
   # co2_fluxes <- readr::read_csv("data/fluxes.csv", col_types = "fdddddffTdd")
   #   slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
 
-expect_snapshot(flux_calc(
-  slopes0_temp,
-  slope_col = "slope_tz",
-  temp_air_col = "temp_kelvin",
-  temp_air_unit = "kelvin"
-))
-
+  expect_snapshot(flux_calc(
+    slopes0_temp,
+    slope_col = "slope_tz",
+    temp_air_col = "temp_kelvin",
+    temp_air_unit = "kelvin"
+  ))
 })
 
 
 
 test_that("errors on arguments types", {
-      # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
+  # slopes0 <- readr::read_csv("data/slopes0.csv", col_types = "TddddffTTfddcdfddddddddddddTdd")
 
   expect_error(
     flux_calc(
@@ -106,7 +96,6 @@ test_that("errors on arguments types", {
     ),
     "chamber_volume has to be a double"
   )
-  
 })
 
 test_that("error on air temp units", {
