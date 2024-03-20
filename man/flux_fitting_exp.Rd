@@ -27,15 +27,18 @@ flux_fitting_exp(
 
 \item{Cz_window}{window used to calculate Cz, at the beginning of cut window}
 
-\item{b_window}{window to estimate b. It is an interval after tz where it is assumed that C fits the data perfectly}
+\item{b_window}{window to estimate b. It is an interval after tz
+where it is assumed that C fits the data perfectly}
 
 \item{a_window}{window at the end of the flux to estimate a}
 
-\item{roll_width}{width of the rolling mean for CO2 when looking for tz, idaelly same as Cz_window}
+\item{roll_width}{width of the rolling mean for CO2 when looking for tz,
+ideally same as Cz_window}
 
 \item{start_cut}{to cut at the start}
 
-\item{end_cut}{to cut at the end, if you notice on the graphs that the match was not precise enough}
+\item{end_cut}{to cut at the end, if you notice on the plots
+that the match was not precise enough}
 
 \item{start_col}{column with datetime when the measurement started}
 
@@ -48,10 +51,12 @@ flux_fitting_exp(
 \item{fluxID_col}{column with ID of each flux}
 }
 \value{
-a dataframe with the slope at t zero (should be used for flux calculation), modelled concentration over time and exponential expression parameters
+a dataframe with the slope at t zero,
+modelled concentration over time and exponential expression parameters
 }
 \description{
-Fits an exponential expression to the concentration evolution over time
+Fits an exponential expression to the concentration evolution
+over time, as described in Zhao 2018
 }
 \examples{
 data(co2_conc)

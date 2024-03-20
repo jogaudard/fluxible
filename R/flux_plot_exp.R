@@ -174,7 +174,10 @@ flux_plot_exp <- function(slopes_df,
   pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
   for (i in 1:n_pages(plot_exp)) {
     print(plot_exp +
-      facet_wrap_paginate(~f_fluxID, ncol = ((f_ncol)), nrow = ((f_nrow)), page = i, scales = ((f_scales))))
+      facet_wrap_paginate(~f_fluxID,
+        ncol = ((f_ncol)), nrow = ((f_nrow)),
+        page = i, scales = ((f_scales))
+      ))
   }
   quietly(dev.off())
 

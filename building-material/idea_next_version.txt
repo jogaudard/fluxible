@@ -3,3 +3,5 @@ use user's columns names instead of renaming
 graphs on american paper format
 give choice to overwrite plot or not
 giga warp up function doing the fitting, quality, and plot to test different cuts and quality thresholds
+make flux_fitting_exp more resilient in case of issue with optim in one flux (so far it crashes the entire thing, would prefer to take out the problematic flux and fit the rest)
+add vertical line in plot for tz
