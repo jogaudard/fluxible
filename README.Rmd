@@ -18,7 +18,11 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of fluxible is to ...
+The goal of fluxible is to provide a workflow that removes individual evaluation of each flux, reduces risk of bias, and makes it reproducible.
+Users set specific data quality standards and selection parameters as function arguments that are applied to the entire dataset.
+The package runs the calculations automatically, without prompting the user to take decisions mid-way, and provides quality flags and plots at the end of the process for a visual check.
+This makes it easy to use with large flux datasets and to integrate into a reproducible workflow.
+Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.
 
 ## Installation
 
@@ -31,12 +35,18 @@ devtools::install_github("jogaudard/wtflux")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example with some sample data from the Plant Functional Traits Course 6 (2022).
+The flux_match function matches field measured gas concentration data with flux meta data:
 
 ```{r example}
 library(fluxible)
 ## basic example code
 ```
+
+
+
+
+
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
