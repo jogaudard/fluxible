@@ -49,13 +49,13 @@ flux_match <- function(raw_conc,
                        start_col = "start") {
   raw_conc <- raw_conc |>
     rename(
-      f_datetime = all_of(datetime_col),
-      f_conc = all_of(conc_col)
+      f_datetime = all_of((datetime_col)),
+      f_conc = all_of((conc_col))
     )
 
   field_record <- field_record |>
     rename(
-      f_start = all_of(start_col)
+      f_start = all_of((start_col))
     )
 
   # this should be moved in a check data function

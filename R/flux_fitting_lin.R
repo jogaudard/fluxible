@@ -26,18 +26,18 @@
 flux_fitting_lin <- function(conc_df,
                              start_cut = 0,
                              end_cut = 0,
-                             start_col = "start",
-                             end_col = "end",
-                             datetime_col = "datetime",
-                             conc_col = "conc",
-                             fluxID_col = "fluxID") {
+                             start_col = "f_start",
+                             end_col = "f_end",
+                             datetime_col = "f_datetime",
+                             conc_col = "f_conc",
+                             fluxID_col = "f_fluxID") {
   conc_df <- conc_df |>
     rename(
-      start = all_of((start_col)),
-      end = all_of((end_col)),
-      datetime = all_of((datetime_col)),
-      conc = all_of((conc_col)),
-      fluxID = all_of((fluxID_col))
+      f_start = all_of((start_col)),
+      f_end = all_of((end_col)),
+      f_datetime = all_of((datetime_col)),
+      f_conc = all_of((conc_col)),
+      f_fluxID = all_of((fluxID_col))
     )
 
   if (!is.double(start_cut)) stop("start_cut has to be a double")
@@ -45,7 +45,7 @@ flux_fitting_lin <- function(conc_df,
 
   length_flux_max <- conc_df |>
     mutate(
-      length_flux = difftime(.data$end, .data$start, units = "sec"),
+      length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
       length_flux = as.double(.data$length_flux)
     ) |>
     select("length_flux") |>
@@ -58,49 +58,49 @@ flux_fitting_lin <- function(conc_df,
   }
 
   conc_df <- conc_df |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     mutate(
-      time = difftime(.data$datetime[seq_along(.data$datetime)],
-        .data$datetime[1],
+      f_time = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
+        .data$f_datetime[1],
         units = "secs"
       ),
-      time = as.double(.data$time),
-      start = .data$start + ((start_cut)),
-      end = .data$end - ((end_cut)),
-      cut = case_when(
-        .data$datetime < .data$start | .data$datetime >= .data$end ~ "cut",
+      f_time = as.double(.data$f_time),
+      f_start = .data$f_start + ((start_cut)),
+      f_end = .data$f_end - ((end_cut)),
+      f_cut = case_when(
+        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end ~ "cut",
         TRUE ~ "keep"
       ),
-      cut = as_factor(.data$cut),
-      n_conc = sum(!is.na(.data$conc))
+      f_cut = as_factor(.data$f_cut),
+      n_conc = sum(!is.na(.data$f_conc))
     ) |>
     ungroup()
 
   conc_df_cut <- conc_df |>
     filter(
-      cut == "keep"
+      f_cut == "keep"
     ) |>
-    drop_na("conc") |>
-    group_by(.data$fluxID) |>
+    drop_na("f_conc") |>
+    group_by(.data$f_fluxID) |>
     mutate(
-      time_cut = difftime(.data$datetime[1:length(.data$datetime)],
-        .data$datetime[1],
+      f_time_cut = difftime(.data$f_datetime[1:length(.data$f_datetime)],
+        .data$f_datetime[1],
         units = "secs"
       ),
-      time_cut = as.double(.data$time_cut),
-      length_window = max(.data$time_cut),
-      length_flux = difftime(.data$end, .data$start, units = "sec"),
-      time_diff = .data$time - .data$time_cut,
-      n_conc_cut = sum(!is.na(.data$conc))
+      f_time_cut = as.double(.data$f_time_cut),
+      length_window = max(.data$f_time_cut),
+      length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
+      time_diff = .data$f_time - .data$f_time_cut,
+      n_conc_cut = sum(!is.na(.data$f_conc))
     ) |>
     ungroup()
 
   fitting_par <- conc_df_cut |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     nest() |>
     mutate(
       temp = map(.data$data, \(d) {
-        model <- lm(conc ~ time_cut, data = d)
+        model <- lm(f_conc ~ f_time_cut, data = d)
         glance <- broom::glance(model) |>
           select("r.squared", "adj.r.squared", "p.value")
         tidy <- broom::tidy(model) |>
@@ -112,31 +112,34 @@ flux_fitting_lin <- function(conc_df,
     select(!"data") |>
     unnest("temp") |>
     rename(
-      slope = "time_cut",
-      intercept = "(Intercept)"
+      f_slope = "f_time_cut",
+      f_intercept = "(Intercept)",
+      f_rsquared = "r.squared",
+      f_adj_rsquared = "adj.r.squared",
+      f_pvalue = "p.value"
     ) |>
-    fill("intercept", .direction = "down") |>
-    drop_na("slope") |>
+    fill("f_intercept", .direction = "down") |>
+    drop_na("f_slope") |>
     ungroup()
 
   conc_fitting <- conc_df |>
     left_join(fitting_par) |>
     mutate(
-      fit = .data$intercept + .data$slope * (.data$time - ((start_cut)))
+      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - ((start_cut)))
     )
 
   warning_msg <- conc_df |>
     left_join(conc_df_cut) |>
-    select("fluxID", "n_conc", "n_conc_cut", "length_flux") |>
+    select("f_fluxID", "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
-        "\n", "fluxID", .data$fluxID, ": slope was estimated on",
+        "\n", "fluxID", .data$f_fluxID, ": slope was estimated on",
         .data$n_conc_cut, "points out of", .data$length_flux,
         "seconds because data are missing"
       ),
       no_data = paste(
-        "\n", "fluxID", .data$fluxID,
+        "\n", "fluxID", .data$f_fluxID,
         ": slope could not be estimated because there are no data in the conc column"
       ),
       warnings = case_when(

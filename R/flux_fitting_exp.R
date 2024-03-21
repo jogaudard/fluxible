@@ -42,19 +42,19 @@ flux_fitting_exp <- function(conc_df,
                              roll_width = 15,
                              start_cut = 0,
                              end_cut = 0,
-                             start_col = "start",
-                             end_col = "end",
-                             datetime_col = "datetime",
-                             conc_col = "conc",
-                             fluxID_col = "fluxID") {
+                             start_col = "f_start",
+                             end_col = "f_end",
+                             datetime_col = "f_datetime",
+                             conc_col = "f_conc",
+                             fluxID_col = "f_fluxID") {
   # renaming columns
   conc_df <- conc_df |>
     rename(
-      start = all_of((start_col)),
-      end = all_of((end_col)),
-      datetime = all_of((datetime_col)),
-      conc = all_of((conc_col)),
-      fluxID = all_of((fluxID_col))
+      f_start = all_of((start_col)),
+      f_end = all_of((end_col)),
+      f_datetime = all_of((datetime_col)),
+      f_conc = all_of((conc_col)),
+      f_fluxID = all_of((fluxID_col))
     )
 
 
@@ -72,7 +72,7 @@ flux_fitting_exp <- function(conc_df,
 
   length_flux_max <- conc_df |>
     mutate(
-      length_flux = difftime(.data$end, .data$start, units = "sec"),
+      length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
       length_flux = as.double(.data$length_flux)
     ) |>
     select("length_flux") |>
@@ -87,36 +87,36 @@ flux_fitting_exp <- function(conc_df,
 
 
   conc_df <- conc_df |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     mutate(
-      time = difftime(.data$datetime[seq_along(.data$datetime)],
-        .data$datetime[1],
+      f_time = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
+        .data$f_datetime[1],
         units = "secs"
       ),
-      time = as.double(.data$time),
-      start = .data$start + ((start_cut)),
-      end = .data$end - ((end_cut)),
-      cut = case_when(
-        .data$datetime < .data$start | .data$datetime >= .data$end ~ "cut",
+      f_time = as.double(.data$f_time),
+      f_start = .data$f_start + ((start_cut)),
+      f_end = .data$f_end - ((end_cut)),
+      f_cut = case_when(
+        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end ~ "cut",
         TRUE ~ "keep"
       ),
-      cut = as_factor(.data$cut),
-      n_conc = sum(!is.na(.data$conc))
+      f_cut = as_factor(.data$f_cut),
+      n_conc = sum(!is.na(.data$f_conc))
     ) |>
     ungroup()
 
   conc_df_cut <- conc_df |>
     filter(
-      cut == "keep"
+      f_cut == "keep"
     ) |>
-    drop_na("conc") |>
-    group_by(.data$fluxID) |>
+    drop_na("f_conc") |>
+    group_by(.data$f_fluxID) |>
     mutate(
-      time_cut = difftime(.data$datetime[seq_along(.data$datetime)],
-        .data$datetime[1],
+      f_time_cut = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
+        .data$f_datetime[1],
         units = "secs"
       ),
-      time_cut = as.double(.data$time_cut),
+      f_time_cut = as.double(.data$f_time_cut),
       length_window = max(.data$time_cut),
       length_flux = difftime(.data$end, .data$start, units = "sec"),
       time_diff = .data$time - .data$time_cut,
@@ -126,24 +126,24 @@ flux_fitting_exp <- function(conc_df,
 
 
   Cm_temp <- conc_df_cut |>
-    group_by(.data$fluxID) |>
-    distinct(.data$conc, .keep_all = TRUE) |>
+    group_by(.data$f_fluxID) |>
+    distinct(.data$f_conc, .keep_all = TRUE) |>
     mutate(
-      Cmax = max(.data$conc),
-      Cmin = min(.data$conc),
-      tmax = .data$time_cut[.data$conc == .data$Cmax],
-      tmin = .data$time_cut[.data$conc == .data$Cmin]
+      Cmax = max(.data$f_conc),
+      Cmin = min(.data$f_conc),
+      tmax = .data$f_time_cut[.data$f_conc == .data$Cmax],
+      tmin = .data$f_time_cut[.data$f_conc == .data$Cmin]
     ) |>
-    select("fluxID", "Cmax", "Cmin", "tmax", "tmin") |>
+    select("f_fluxID", "Cmax", "Cmin", "tmax", "tmin") |>
     ungroup() |>
     distinct(.data$Cmax, .data$Cmin, .keep_all = TRUE)
 
   Cm_slope <- conc_df_cut |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     nest() |>
     mutate(
       model_Cm = map(.data$data, \(d) {
-        lm(conc ~ time_cut, data = d) |>
+        lm(f_conc ~ f_time_cut, data = d) |>
           broom::tidy() |>
           select("term", "estimate") |>
           pivot_wider(names_from = "term", values_from = "estimate")
@@ -151,7 +151,7 @@ flux_fitting_exp <- function(conc_df,
     ) |>
     unnest("model_Cm") |>
     rename(slope_Cm = "time_cut") |>
-    select("fluxID", "slope_Cm") |>
+    select("f_fluxID", "slope_Cm") |>
     ungroup()
 
   Cm_df <- left_join(Cm_temp, Cm_slope) |>
@@ -166,18 +166,18 @@ flux_fitting_exp <- function(conc_df,
         .data$slope_Cm > 0 ~ .data$tmax
       )
     ) |>
-    select("fluxID", "Cm_est", "tm", "slope_Cm") |>
+    select("f_fluxID", "Cm_est", "tm", "slope_Cm") |>
     ungroup()
 
   Cz_df <- conc_df_cut |>
     group_by(.data$fluxID) |>
     filter(
-      .data$time_cut <= ((Cz_window))
+      .data$f_time_cut <= ((Cz_window))
     ) |>
     nest() |>
     mutate(
       model_Cz = map(.data$data, \(d) {
-        lm(conc ~ time_cut, data = d) |>
+        lm(f_conc ~ f_time_cut, data = d) |>
           broom::tidy() |>
           select("term", "estimate") |>
           pivot_wider(names_from = "term", values_from = "estimate")
@@ -186,53 +186,53 @@ flux_fitting_exp <- function(conc_df,
     unnest("model_Cz") |>
     rename(
       slope_Cz = "time_cut",
-      Cz = "(Intercept)"
+      f_Cz = "(Intercept)"
     ) |>
-    select("fluxID", "slope_Cz", "Cz") |>
+    select("f_fluxID", "slope_Cz", "Cz") |>
     ungroup()
 
 
 
   tz_df <- conc_df_cut |>
     left_join(Cz_df) |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     filter(
       # tz should be in the first half of the flux
-      .data$time_cut < .data$length_window / 2
+      .data$f_time_cut < .data$length_window / 2
     ) |>
     mutate(
-      conc_roll = zoo::rollmean(.data$conc,
+      conc_roll = zoo::rollmean(.data$f_conc,
         k = ((roll_width)),
         fill = NA, align = "right"
       ),
-      Cd = abs(.data$conc_roll - .data$Cz),
+      Cd = abs(.data$conc_roll - .data$f_Cz),
       minCd = min(.data$Cd, na.rm = TRUE),
-      tz_est = min(.data$time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
+      tz_est = min(.data$f_time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
     ) |>
     ungroup() |>
-    select("fluxID", "tz_est") |>
+    select("f_fluxID", "tz_est") |>
     distinct()
 
 
 
   Cb_df <- conc_df_cut |>
     left_join(tz_df) |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     mutate(
-      Cb = .data$conc[.data$time_cut == .data$tz_est - ((b_window))]
+      f_Cb = .data$f_conc[.data$f_time_cut == .data$tz_est - ((b_window))]
     ) |>
     ungroup() |>
-    select("fluxID", "Cb") |>
+    select("f_fluxID", "f_Cb") |>
     distinct()
 
   a_df <- conc_df_cut |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     mutate(
       ta = .data$length_window - ((a_window)),
-      Ca = .data$conc[.data$time_cut == .data$ta]
+      Ca = .data$conc[.data$f_time_cut == .data$ta]
     ) |>
     ungroup() |>
-    select("fluxID", "ta", "Ca") |>
+    select("f_fluxID", "ta", "Ca") |>
     distinct()
 
   estimates_df <- left_join(Cm_df, Cz_df) |>
@@ -241,9 +241,9 @@ flux_fitting_exp <- function(conc_df,
     left_join(Cb_df) |>
     mutate(
       b_est = case_when(
-        .data$Cb == .data$Cm_est ~ 0, # special case or flat flux
-        .data$Cz == .data$Cm_est ~ 0, # special case or flat flux
-        TRUE ~ log(abs((.data$Cb - .data$Cm_est) / (.data$Cz - .data$Cm_est)))
+        .data$f_Cb == .data$Cm_est ~ 0, # special case or flat flux
+        .data$f_Cz == .data$Cm_est ~ 0, # special case or flat flux
+        TRUE ~ log(abs((.data$f_Cb - .data$Cm_est) / (.data$f_Cz - .data$Cm_est)))
         * (1 / ((b_window))),
       ),
       a_est = case_when(
@@ -259,11 +259,11 @@ flux_fitting_exp <- function(conc_df,
 
 
 
-  myfn <- function(time, conc, par, Cz) {
-    sqrt((1 / length(time)) * sum((par[1] + par[2] * (time - exp(par[4]))
-      + (Cz - par[1])
-      * exp(-par[3] * (time - exp(par[4])))
-      - conc)^2))
+  fc_myfn <- function(fc_time, fc_conc, fc_par, fc_Cz) {
+    sqrt((1 / length(fc_time)) * sum((fc_par[1] + fc_par[2] * (fc_time - exp(fc_par[4]))
+      + (fc_Cz - fc_par[1])
+      * exp(-fc_par[3] * (fc_time - exp(fc_par[4])))
+      - fc_conc)^2))
   }
 
 
@@ -271,11 +271,11 @@ flux_fitting_exp <- function(conc_df,
   fitting_par <- conc_df_cut |>
     left_join(estimates_df) |>
     select(
-      "fluxID", "Cm_est", "a_est", "b_est", "tz_est",
-      "Cz", "time_cut", "conc", "time_diff"
+      "f_fluxID", "Cm_est", "a_est", "b_est", "tz_est",
+      "f_Cz", "f_time_cut", "f_conc", "time_diff"
     ) |>
     group_by(
-      .data$fluxID, .data$Cm_est, .data$a_est, .data$b_est,
+      .data$f_fluxID, .data$Cm_est, .data$a_est, .data$b_est,
       .data$tz_est, .data$Cz, .data$time_diff
     ) |>
     nest() |>
@@ -286,14 +286,14 @@ flux_fitting_exp <- function(conc_df,
           .data$Cm_est, .data$a_est, .data$b_est,
           log(.data$tz_est)
         ),
-        fn = myfn, conc = data$conc,
-        time = data$time_cut, Cz = .data$Cz
+        fn = fc_myfn, fc_conc = data$f_conc,
+        fc_time = data$f_time_cut, fc_Cz = .data$f_Cz
       )),
-      Cm = .data$results$par[1],
-      a = .data$results$par[2],
-      b = .data$results$par[3],
-      tz = exp(.data$results$par[4]), # we force tz to be positive
-      slope_tz = .data$a + .data$b * (.data$Cm - .data$Cz),
+      f_Cm = .data$results$fc_par[1],
+      f_a = .data$results$fc_par[2],
+      f_b = .data$results$fc_par[3],
+      f_tz = exp(.data$results$fc_par[4]), # we force tz to be positive
+      f_slope_tz = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz),
     ) |>
     ungroup() |>
     select(!"results")
@@ -301,14 +301,14 @@ flux_fitting_exp <- function(conc_df,
 
   conc_fitting <- conc_df |>
     left_join(fitting_par) |>
-    group_by(.data$fluxID) |>
+    group_by(.data$f_fluxID) |>
     mutate(
-      fit = .data$Cm + .data$a * (.data$time - .data$tz - .data$time_diff)
-        + (.data$Cz - .data$Cm) * exp(-.data$b
-        * (.data$time - .data$tz - .data$time_diff)),
-      fit_slope = .data$slope_tz * (.data$time) + .data$Cz - .data$slope_tz
-        * (.data$tz + .data$time_diff),
-      start_z = .data$start + .data$tz
+      f_fit = .data$f_Cm + .data$f_a * (.data$f_time - .data$f_tz - .data$time_diff)
+        + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b
+        * (.data$f_time - .data$f_tz - .data$time_diff)),
+      f_fit_slope = .data$f_slope_tz * (.data$f_time) + .data$f_Cz - .data$f_slope_tz
+        * (.data$f_tz + .data$time_diff),
+      f_start_z = .data$f_start + .data$f_tz
     ) |>
     ungroup()
 
@@ -318,16 +318,16 @@ flux_fitting_exp <- function(conc_df,
 
   warning_msg <- conc_df |>
     left_join(conc_df_cut) |> # we want n_conc after cutting
-    select("fluxID", "n_conc", "n_conc_cut", "length_flux") |>
+    select("f_fluxID", "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
-        "\n", "fluxID", .data$fluxID, ": slope was estimated on",
+        "\n", "fluxID", .data$f_fluxID, ": slope was estimated on",
         .data$n_conc_cut, "points out of", .data$length_flux,
         "seconds because data are missing"
       ),
       no_data = paste(
-        "\n", "fluxID", .data$fluxID,
+        "\n", "fluxID", .data$f_fluxID,
         ": slope could not be estimated because there are no data in the conc column"
       ),
       warnings = case_when(

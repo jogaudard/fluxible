@@ -38,8 +38,8 @@ flux_quality_lin <- function(slopes_df,
                              slope_col = "f_slope",
                              conc_col = "f_conc",
                              weird_fluxesID = c(),
-                             pvalue_col = "p.value",
-                             rsquared_col = "r.squared",
+                             pvalue_col = "f_pvalue",
+                             rsquared_col = "f_rsquared",
                              pvalue_threshold = 0.3,
                              rsquared_threshold = 0.7) {
   slopes_df <- slopes_df |>
