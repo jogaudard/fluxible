@@ -1,0 +1,31 @@
+Package: fluxible
+Title: Calculate Ecosystem Gas Fluxes From Raw Data
+Version: 0.0.0.9000
+Authors@R: 
+    person("Joseph", "Gaudard", , "joseph.gaudard@pm.me", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-6989-7624"))
+Description: The fluxible package calculates a flux in mmol/sqm/h from raw data of gas concentration measured over time. It is initially designed for CO2 fluxes but could work for other gases as well. It applies the calculations described in “On the Calculation of Daytime CO2 Fluxes Measured by Automated Closed Transparent Chambers.” (Zhao, Peng, Albin Hammerle, Matthias Zeeman, and Georg Wohlfahrt, 2018, DOI 10.1016/j.agrformet.2018.08.022). It provides functions to slice the continuously logged gas concentration data with measurement ID, fit a slope at the right moment and calculate fluxes based on it, apply the same quality thresholds to the entire dataset and flag fuxes with quality issues, and apply various correction, such as light availability or stable layer issue.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    broom,
+    dplyr,
+    ggforce,
+    ggplot2,
+    haven,
+    lubridate,
+    rlang,
+    purrr,
+    stats,
+    stringr,
+    tidyr,
+    zoo
+Depends: 
+    R (>= 4.1)
+LazyData: true
+URL: https://jogaudard.github.io/fluxible/

@@ -35,17 +35,59 @@ devtools::install_github("jogaudard/wtflux")
 
 ## Example
 
-This is a basic example with some sample data from the Plant Functional Traits Course 6 (2022).
-The flux_match function matches field measured gas concentration data with flux meta data:
+This is a basic example with some sample data from the Plant Functional Traits Course 6 (2022):
 
 ```{r example}
 library(fluxible)
-## basic example code
 ```
 
+The flux_match function matches field measured gas concentration data with flux meta data:
 
+```{r example}
+conc_liahovden <- flux_match(co2_liahovden, record_liahovden)
+```
 
+To calculate a flux the slopes of each flux is necessary.
+The flux_fitting function can provide a linear or an exponential fit.
+Let's start with a linear fit.
 
+```{r example}
+slopes_lin_liahovden <- flux_fitting(conc_liahovden, fit_type = "linear")
+```
+
+To assess the quality of the fit we use flux_quality.
+This will add quality flags advising if the calculated slopes should be kept, or replaced by 0 or NA.
+
+```{r example}
+slopes_lin_liahovden <- flux_quality(slopes_lin_liahovden, fit_type = "lin")
+```
+
+Users should still do a visual check with the flux_plot function.
+The flux_plot function plots all the fluxes with their fluxID, both modelled and measured concentration, and indicating quality flags with color codes.
+Those plots can be printed in the R console, but they will be saved as a pdf document for easier use.
+Depending on the plots the user can re-run flux_fitting with cuts at the start or the end of the measurements (applied to the entire dataset), change the type of fit, or decide to exclude specific fluxes using the 'weird_fluxes' argument.
+
+```{r example}
+flux_plot(slopes_lin_liahovden, fit_type = "lin", print_plot = TRUE)
+```
+
+The exponential fit is used in a similar way.
+
+```{r example}
+slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
+```
+
+Then the quality assessment.
+
+```{r example}
+slopes_exp_liahovden <- flux_quality(slopes_exp_liahovden, fit_type = "expo")
+```
+
+The plots will also show the modelled slope at t zero.
+
+```{r example}
+flux_plot(slopes_exp_liahovden, fit_type = "exp", print_plot = TRUE)
+```
 
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
