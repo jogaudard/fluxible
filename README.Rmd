@@ -70,7 +70,14 @@ Depending on the plots the user can re-run flux_fitting with cuts at the start o
 ```{r plot_lin}
 slopes_lin_liahovden |>
   dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
-flux_plot(fit_type = "lin", print_plot = TRUE, f_plotname = "example_lia", f_ylim_lower = 300, f_ylim_upper = 600)
+    flux_plot(
+      fit_type = "lin",
+      print_plot = TRUE,
+      f_plotname = "example_lia",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
 ```
 
 When using a linear fit, it might be better to use only a short portion at the start of the flux.
@@ -83,7 +90,14 @@ slopes_lin_liahovden_120 <- conc_liahovden |>
 
 slopes_lin_liahovden_120 |>
   dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
-    flux_plot(fit_type = "lin", print_plot = TRUE, f_plotname = "example_lia_lin", f_ylim_lower = 300, f_ylim_upper = 600)
+    flux_plot(
+      fit_type = "lin",
+      print_plot = TRUE,
+      f_plotname = "example_lia_lin",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
 ```
 
 The exponential fit is used in a similar way.
@@ -106,7 +120,14 @@ The plots will also show the modelled slope at t zero.
 ```{r plot_exp}
 slopes_exp_liahovden |>
   dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
-    flux_plot(fit_type = "exp", print_plot = TRUE, f_plotname = "example_lia_lin", f_ylim_lower = 300, f_ylim_upper = 600)
+    flux_plot(
+      fit_type = "exp",
+      print_plot = TRUE,
+      f_plotname = "example_lia_lin",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
 ```
 
 Again, we can try to cut it if needed.
@@ -118,21 +139,12 @@ slopes_exp_liahovden_30 <- conc_liahovden |>
 
 slopes_exp_liahovden_30 |>
   dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
-    flux_plot(fit_type = "exp", print_plot = TRUE, f_plotname = "example_lia_lin", f_ylim_lower = 300, f_ylim_upper = 600)
+    flux_plot(
+      fit_type = "exp",
+      print_plot = TRUE,
+      f_plotname = "example_lia_lin",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
