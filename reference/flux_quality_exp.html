@@ -143,19 +143,9 @@ with its opposite inside which the fit is considered good enough.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">slopes0</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">flux_quality_exp</span><span class="op">(</span><span class="va">slopes0</span>,</span></span>
-<span class="r-in"><span>  fluxID_col <span class="op">=</span> <span class="st">"fluxID"</span>,</span></span>
-<span class="r-in"><span>  conc_col <span class="op">=</span> <span class="st">"conc"</span>,</span></span>
-<span class="r-in"><span>  b_col <span class="op">=</span> <span class="st">"b"</span>,</span></span>
-<span class="r-in"><span>  time_col <span class="op">=</span> <span class="st">"time"</span>,</span></span>
-<span class="r-in"><span>  fit_col <span class="op">=</span> <span class="st">"fit"</span>,</span></span>
-<span class="r-in"><span>  slope_col <span class="op">=</span> <span class="st">"slope_tz"</span>,</span></span>
-<span class="r-in"><span>  cut_col <span class="op">=</span> <span class="st">"cut"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(f_fluxID, f_cut)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(f_fluxID)`</span>
+<span class="r-in"><span><span class="fu">flux_quality_exp</span><span class="op">(</span><span class="va">slopes0</span>, slope_col <span class="op">=</span> <span class="st">"f_slope_tz"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,251 × 36</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    datetime            temp_air temp_soil f_conc   PAR turfID       type </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    f_datetime          temp_air temp_soil f_conc   PAR turfID       type </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2022-07-28 <span style="color: #949494;">23:43:35</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>     447. <span style="color: #BB0000;">NA</span>    156 AN2C 156 ER   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2022-07-28 <span style="color: #949494;">23:43:36</span>     7.22      10.9   447.  1.68 156 AN2C 156 ER   </span>
@@ -168,12 +158,12 @@ with its opposite inside which the fit is considered good enough.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-07-28 <span style="color: #949494;">23:43:43</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>     453. <span style="color: #BB0000;">NA</span>    156 AN2C 156 ER   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-07-28 <span style="color: #949494;">23:43:44</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>     453. <span style="color: #BB0000;">NA</span>    156 AN2C 156 ER   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,241 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 29 more variables: start &lt;dttm&gt;, end &lt;dttm&gt;, f_fluxID &lt;dbl&gt;, n_conc &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ratio &lt;dbl&gt;, flag &lt;lgl&gt;, f_time &lt;dbl&gt;, f_cut &lt;chr&gt;, Cm_est &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   a_est &lt;dbl&gt;, b_est &lt;dbl&gt;, tz_est &lt;dbl&gt;, Cz &lt;dbl&gt;, time_diff &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Cm &lt;dbl&gt;, a &lt;dbl&gt;, f_b &lt;dbl&gt;, tz &lt;dbl&gt;, f_slope_tz &lt;dbl&gt;, f_fit &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   fit_slope &lt;dbl&gt;, start_z &lt;dttm&gt;, f_cor_coef &lt;dbl&gt;, f_RMSE &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   f_start_error &lt;chr&gt;, f_fit_quality &lt;chr&gt;, f_correlation &lt;chr&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 29 more variables: f_start &lt;dttm&gt;, f_end &lt;dttm&gt;, f_fluxID &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   n_conc &lt;dbl&gt;, ratio &lt;dbl&gt;, flag &lt;lgl&gt;, f_time &lt;dbl&gt;, f_cut &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Cm_est &lt;dbl&gt;, a_est &lt;dbl&gt;, b_est &lt;dbl&gt;, tz_est &lt;dbl&gt;, f_Cz &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   time_diff &lt;dbl&gt;, f_Cm &lt;dbl&gt;, f_a &lt;dbl&gt;, f_b &lt;dbl&gt;, f_tz &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   f_slope_tz &lt;dbl&gt;, f_fit &lt;dbl&gt;, f_fit_slope &lt;dbl&gt;, f_start_z &lt;dttm&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   f_cor_coef &lt;dbl&gt;, f_RMSE &lt;dbl&gt;, f_start_error &lt;chr&gt;, f_fit_quality &lt;chr&gt;, …</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

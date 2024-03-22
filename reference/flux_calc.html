@@ -55,7 +55,7 @@ of gas concentration over time</p>
 <span>  R_const <span class="op">=</span> <span class="fl">0.082057</span>,</span>
 <span>  cols_keep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  cols_ave <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  fluxID_col <span class="op">=</span> <span class="st">"fluxID"</span>,</span>
+<span>  fluxID_col <span class="op">=</span> <span class="st">"f_fluxID"</span>,</span>
 <span>  temp_air_col <span class="op">=</span> <span class="st">"temp_air"</span>,</span>
 <span>  temp_air_unit <span class="op">=</span> <span class="st">"celsius"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -128,16 +128,16 @@ and any columns specified in cols_keep and cols_ave</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">slopes0</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">flux_calc</span><span class="op">(</span><span class="va">slopes0</span>, slope_col <span class="op">=</span> <span class="st">"slope_tz"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">flux_calc</span><span class="op">(</span><span class="va">slopes0</span>, slope_col <span class="op">=</span> <span class="st">"f_slope_tz"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   fluxID slope temp_air_ave  flux</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      1 1.56          7.31  95.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>      2 0.853         7.38  52.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>      3 0.303         7.46  18.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>      4 1.13          7.77  69.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>      5 1.46          7.71  89.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>      6 0.426         7.75  26.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   f_fluxID f_slope temp_air_ave  flux</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        1   1.56          7.31  95.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>        2   0.853         7.38  52.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>        3   0.303         7.46  18.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>        4   1.13          7.77  69.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>        5   1.46          7.71  89.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>        6   0.426         7.75  26.2</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
