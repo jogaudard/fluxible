@@ -94,8 +94,6 @@ or replaced by zero
 }
 \examples{
 data(slopes0_flag)
-flux_plot(slopes0_flag,
-  fit_type = "exp", fit_slope_col = "f_fit_slope",
-  print_plot = TRUE
-)
+flux_plot(slopes0_flag, fit_type = "exp",
+fit_slope_col = "f_fit_slope", print_plot = TRUE)
 }

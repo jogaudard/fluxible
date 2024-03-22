@@ -154,7 +154,7 @@ flux_fitting_exp <- function(conc_df,
     select("f_fluxID", "slope_Cm") |>
     ungroup()
 
-  Cm_df <- left_join(Cm_temp, Cm_slope) |>
+  Cm_df <- left_join(Cm_temp, Cm_slope, by = "f_fluxID") |>
     mutate(
       Cm_est = case_when(
         # Cm is the max mixing point, which is the lim C(t) when t tends to infinite.
@@ -194,7 +194,7 @@ flux_fitting_exp <- function(conc_df,
 
 
   tz_df <- conc_df_cut |>
-    left_join(Cz_df) |>
+    left_join(Cz_df, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     filter(
       # tz should be in the first half of the flux
@@ -216,7 +216,7 @@ flux_fitting_exp <- function(conc_df,
 
 
   Cb_df <- conc_df_cut |>
-    left_join(tz_df) |>
+    left_join(tz_df, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     mutate(
       f_Cb = .data$f_conc[.data$f_time_cut == .data$tz_est - ((b_window))]
@@ -235,10 +235,10 @@ flux_fitting_exp <- function(conc_df,
     select("f_fluxID", "ta", "Ca") |>
     distinct()
 
-  estimates_df <- left_join(Cm_df, Cz_df) |>
-    left_join(tz_df) |>
-    left_join(a_df) |>
-    left_join(Cb_df) |>
+  estimates_df <- left_join(Cm_df, Cz_df, by = "f_fluxID") |>
+    left_join(tz_df, by = "f_fluxID") |>
+    left_join(a_df, by = "f_fluxID") |>
+    left_join(Cb_df, by = "f_fluxID") |>
     mutate(
       b_est = case_when(
         .data$f_Cb == .data$Cm_est ~ 0, # special case or flat flux
@@ -269,7 +269,7 @@ flux_fitting_exp <- function(conc_df,
 
 
   fitting_par <- conc_df_cut |>
-    left_join(estimates_df) |>
+    left_join(estimates_df, by = "f_fluxID") |>
     select(
       "f_fluxID", "Cm_est", "a_est", "b_est", "tz_est",
       "f_Cz", "f_time_cut", "f_conc", "time_diff"
@@ -300,7 +300,7 @@ flux_fitting_exp <- function(conc_df,
 
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par) |>
+    left_join(fitting_par, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_a * (.data$f_time - .data$f_tz - .data$time_diff)
@@ -317,7 +317,7 @@ flux_fitting_exp <- function(conc_df,
 
 
   warning_msg <- conc_df |>
-    left_join(conc_df_cut) |> # we want n_conc after cutting
+    left_join(conc_df_cut, by = c("f_fluxID", "n_conc", "f_datetime")) |> # we want n_conc after cutting
     select("f_fluxID", "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(

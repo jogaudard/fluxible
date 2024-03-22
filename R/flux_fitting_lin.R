@@ -123,13 +123,13 @@ flux_fitting_lin <- function(conc_df,
     ungroup()
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par) |>
+    left_join(fitting_par, by = c("f_fluxID")) |>
     mutate(
       f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - ((start_cut)))
     )
 
   warning_msg <- conc_df |>
-    left_join(conc_df_cut) |>
+    left_join(conc_df_cut, by = c("f_datetime", "f_fluxID", "n_conc")) |>
     select("f_fluxID", "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(

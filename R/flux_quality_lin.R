@@ -62,7 +62,7 @@ flux_quality_lin <- function(slopes_df,
     ungroup()
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start) |>
+    left_join(quality_par_start, by = "f_fluxID") |>
     mutate(
       f_quality_flag = case_when(
         .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",

@@ -2,9 +2,6 @@
 
     Code
       flux_quality_exp(slopes0, slope_col = "f_slope_tz")
-    Message <rlang_message>
-      Joining with `by = join_by(f_fluxID, f_cut)`
-      Joining with `by = join_by(f_fluxID)`
     Output
       # A tibble: 1,251 x 36
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 

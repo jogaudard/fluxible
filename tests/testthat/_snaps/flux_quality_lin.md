@@ -2,8 +2,6 @@
 
     Code
       flux_quality_lin(slopes0lin)
-    Message <rlang_message>
-      Joining with `by = join_by(f_fluxID)`
     Output
       # A tibble: 1,251 x 24
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
