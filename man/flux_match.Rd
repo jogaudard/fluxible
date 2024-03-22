@@ -17,29 +17,45 @@ flux_match(
 )
 }
 \arguments{
-\item{raw_conc}{dataframe of CO2 concentration measured continuously. Has to contain at least a datetime column in ymd_hms format and a CO2 concentration column as double.}
+\item{raw_conc}{dataframe of CO2 concentration measured continuously.
+Has to contain at least a datetime column in ymd_hms format and
+a gas concentration column as double.}
 
-\item{field_record}{dataframe recording which measurement happened when. Has to contain at least a column telling at what time (in ymd_hms) the measurement started, and any other column allowing for identification of measurements.}
+\item{field_record}{dataframe recording which measurement happened when.
+Has to contain at least a column telling at what time measurements started,
+and any other column allowing for identification of measurements.}
 
-\item{startcrop}{how many seconds should be discarded at the beginning of the measurement}
+\item{startcrop}{how many seconds should be discarded at the beginning of
+the measurement}
 
-\item{measurement_length}{length of the measurement (in seconds) from the start specified in the field_record}
+\item{measurement_length}{length of the measurement (in seconds)
+from the start specified in the field_record}
 
-\item{ratio_threshold}{ratio (number of concentration measurement compared to length of measurement in seconds) below which the data should be flagged as too little}
+\item{ratio_threshold}{ratio (number of concentration measurement compared to
+length of measurement in seconds) below which the data should be flagged as
+too little}
 
-\item{time_diff}{time difference (in seconds) between the two datasets. Will be added to the datetime column of the raw_conc dataset}
+\item{time_diff}{time difference (in seconds) between the two datasets.
+Will be added to the datetime column of the raw_conc dataset}
 
-\item{datetime_col}{to specify the name of the datetime column in raw_conc}
+\item{datetime_col}{to specify the name of the datetime column in raw_conc
+(dmy_hms format)}
 
 \item{conc_col}{to specify the name of the concentration column in raw_conc}
 
-\item{start_col}{to specify the name of the start column in field_record}
+\item{start_col}{to specify the name of the start column in field_record
+(dmy_hms format)}
 }
 \value{
-a dataframe with concentration measurements and corresponding datetime, fluxID, start and end of measurement, flags in case of no data or low number of data, and any variables present in both inputs
+a dataframe with concentration measurements, corresponding datetime,
+flux ID, start and end of measurement, flags in case of no data or low number
+of data, and any variables present in one of the inputs.
 }
 \description{
-Function to match a dataframe of continuously measured CO2 concentration with measurement IDs from another dataframe. Uses datetime to tell which measurements happened when. Extra variables in both dataframes will appear in the output.
+Function to match a dataframe of continuously measured
+CO2 concentration with measurement IDs from another dataframe. Uses datetime
+to tell which measurements happened when. Extra variables in both dataframes
+will appear in the output.
 }
 \examples{
 data(co2_df_short, record_short)

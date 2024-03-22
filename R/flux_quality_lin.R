@@ -23,13 +23,9 @@
 #' @importFrom dplyr mutate case_when rename left_join
 #' @examples
 #' data(slopes0lin)
-#' flux_quality_lin(slopes0lin,
-#'   fluxID_col = "fluxID",
-#'   slope_col = "slope", conc_col = "conc"
-#' )
+#' flux_quality_lin(slopes0lin)
 #' @export
 
-# need to add start error
 
 flux_quality_lin <- function(slopes_df,
                              ambient_conc = 421,
@@ -38,8 +34,8 @@ flux_quality_lin <- function(slopes_df,
                              slope_col = "f_slope",
                              conc_col = "f_conc",
                              weird_fluxesID = c(),
-                             pvalue_col = "p.value",
-                             rsquared_col = "r.squared",
+                             pvalue_col = "f_pvalue",
+                             rsquared_col = "f_rsquared",
                              pvalue_threshold = 0.3,
                              rsquared_threshold = 0.7) {
   slopes_df <- slopes_df |>
@@ -66,7 +62,7 @@ flux_quality_lin <- function(slopes_df,
     ungroup()
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start) |>
+    left_join(quality_par_start, by = "f_fluxID") |>
     mutate(
       f_quality_flag = case_when(
         .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",

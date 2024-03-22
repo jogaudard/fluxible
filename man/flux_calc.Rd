@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_calc.R
 \name{flux_calc}
 \alias{flux_calc}
-\title{to calculate a flux based on the rate of change of gas concentration over time}
+\title{calculates fluxes}
 \usage{
 flux_calc(
   slope_df,
@@ -14,7 +14,7 @@ flux_calc(
   R_const = 0.082057,
   cols_keep = c(),
   cols_ave = c(),
-  fluxID_col = "fluxID",
+  fluxID_col = "f_fluxID",
   temp_air_col = "temp_air",
   temp_air_unit = "celsius"
 )
@@ -24,7 +24,8 @@ flux_calc(
 
 \item{slope_col}{column containing the slope to calculate the flux}
 
-\item{chamber_volume}{volume of the flux chamber in L, default for Three-D chamber (25x24.5x40cm)}
+\item{chamber_volume}{volume of the flux chamber in L,
+default for Three-D project chamber (25x24.5x40cm)}
 
 \item{tube_volume}{volume of the tubing in L, default for summer 2020 setup}
 
@@ -34,23 +35,30 @@ flux_calc(
 
 \item{R_const}{gas constant, in L\emph{atm}K^(-1)*mol^(-1)}
 
-\item{cols_keep}{columns to keep from the input to the input. Those columns need to have unique values for each flux}
+\item{cols_keep}{columns to keep from the input to the output.
+Those columns need to have unique values for each flux.}
 
-\item{cols_ave}{columns with values that should be averaged for each flux in the ouput. Not that NA are removed in mean calculation}
+\item{cols_ave}{columns with values that should be averaged
+for each flux in the ouput. Note that NA are removed in mean calculation}
 
 \item{fluxID_col}{column containing the fluxID}
 
-\item{temp_air_col}{column containing the air temperature used to caculate fluxes. Will be averaged with NA removed.}
+\item{temp_air_col}{column containing the air temperature used
+to caculate fluxes. Will be averaged with NA removed.}
 
-\item{temp_air_unit}{units for air temperature. Has to be either celsius, fahrenheit or kelvin}
+\item{temp_air_unit}{units in which air temperature was measured.
+Has to be either celsius, fahrenheit or kelvin}
 }
 \value{
-a df containing fluxID, fluxes, temperature average for each flux, slope used for each flux calculation, and any columns specified in cols_keep and cols_ave
+a df containing fluxID, fluxes, temperature average for each flux,
+slope used for each flux calculation,
+and any columns specified in cols_keep and cols_ave
 }
 \description{
-to calculate a flux based on the rate of change of gas concentration over time
+calculates a flux based on the rate of change
+of gas concentration over time
 }
 \examples{
 data(slopes0)
-flux_calc(slopes0, slope_col = "slope_tz")
+flux_calc(slopes0, slope_col = "f_slope_tz")
 }

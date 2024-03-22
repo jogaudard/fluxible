@@ -8,11 +8,11 @@ flux_fitting_lin(
   conc_df,
   start_cut = 0,
   end_cut = 0,
-  start_col = "start",
-  end_col = "end",
-  datetime_col = "datetime",
-  conc_col = "conc",
-  fluxID_col = "fluxID"
+  start_col = "f_start",
+  end_col = "f_end",
+  datetime_col = "f_datetime",
+  conc_col = "f_conc",
+  fluxID_col = "f_fluxID"
 )
 }
 \arguments{
@@ -20,7 +20,8 @@ flux_fitting_lin(
 
 \item{start_cut}{to cut at the start}
 
-\item{end_cut}{to cut at the end, if you notice on the graphs that the match was not precise enough}
+\item{end_cut}{to cut at the end, if you notice on the plots
+that the match was not precise enough}
 
 \item{start_col}{column with datetime when the measurement started}
 
@@ -33,7 +34,8 @@ flux_fitting_lin(
 \item{fluxID_col}{column with ID of each flux}
 }
 \value{
-a df with the modelled gas concentration, slope, intercept, std error, r square and p value of the linear model
+a df with the modelled gas concentration, slope, intercept,
+std error, r square and p value of the linear model
 }
 \description{
 fits a linear model to the gas concentration over time
