@@ -78,7 +78,7 @@ flux_fitting_lin <- function(conc_df,
 
   conc_df_cut <- conc_df |>
     filter(
-      f_cut == "keep"
+      .data$f_cut == "keep"
     ) |>
     drop_na("f_conc") |>
     group_by(.data$f_fluxID) |>

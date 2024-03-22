@@ -23,13 +23,9 @@
 #' @importFrom dplyr mutate case_when rename left_join
 #' @examples
 #' data(slopes0lin)
-#' flux_quality_lin(slopes0lin,
-#'   fluxID_col = "fluxID",
-#'   slope_col = "slope", conc_col = "conc"
-#' )
+#' flux_quality_lin(slopes0lin)
 #' @export
 
-# need to add start error
 
 flux_quality_lin <- function(slopes_df,
                              ambient_conc = 421,

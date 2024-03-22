@@ -24,7 +24,7 @@ test_that("keeping works", {
   expect_snapshot(flux_calc(
     slopes0,
     slope_col = "f_slope_tz",
-    cols_keep = c("turfID", "type", "start")
+    cols_keep = c("turfID", "type", "f_start")
   ))
 })
 
@@ -32,7 +32,7 @@ test_that("keeping and averaging work together", {
   expect_snapshot(flux_calc(
     slopes0,
     slope_col = "f_slope_tz",
-    cols_keep = c("turfID", "type", "start"),
+    cols_keep = c("turfID", "type", "f_start"),
     cols_ave = c("PAR", "temp_soil")
   ))
 })

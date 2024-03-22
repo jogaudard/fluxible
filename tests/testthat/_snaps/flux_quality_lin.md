@@ -1,13 +1,12 @@
 # quality works on linear fit
 
     Code
-      flux_quality_lin(slopes0lin, fluxID_col = "fluxID", slope_col = "slope",
-        conc_col = "conc")
+      flux_quality_lin(slopes0lin)
     Message <rlang_message>
       Joining with `by = join_by(f_fluxID)`
     Output
       # A tibble: 1,251 x 24
-         datetime            temp_air temp_soil f_conc   PAR turfID       type 
+         f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl>  <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA     447. NA    156 AN2C 156 ER   
        2 2022-07-28 23:43:36     7.22      10.9   447.  1.68 156 AN2C 156 ER   
@@ -20,8 +19,9 @@
        9 2022-07-28 23:43:43    NA         NA     453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA     453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 17 more variables: start <dttm>, end <dttm>, f_fluxID <fct>, n_conc <dbl>,
-      #   ratio <dbl>, flag <chr>, time <dbl>, cut <fct>, f_pvalue <dbl>,
-      #   f_rsquared <dbl>, adj.r.squared <dbl>, intercept <dbl>, f_slope <dbl>,
-      #   fit <dbl>, f_start_error <chr>, f_quality_flag <chr>, f_slope_corr <dbl>
+      # i 17 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
+      #   n_conc <dbl>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_pvalue <dbl>, f_rsquared <dbl>, f_adj_rsquared <dbl>, f_intercept <dbl>,
+      #   f_slope <dbl>, f_fit <dbl>, f_start_error <chr>, f_quality_flag <chr>,
+      #   f_slope_corr <dbl>
 

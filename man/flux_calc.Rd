@@ -14,7 +14,7 @@ flux_calc(
   R_const = 0.082057,
   cols_keep = c(),
   cols_ave = c(),
-  fluxID_col = "fluxID",
+  fluxID_col = "f_fluxID",
   temp_air_col = "temp_air",
   temp_air_unit = "celsius"
 )
@@ -60,5 +60,5 @@ of gas concentration over time
 }
 \examples{
 data(slopes0)
-flux_calc(slopes0, slope_col = "slope_tz")
+flux_calc(slopes0, slope_col = "f_slope_tz")
 }

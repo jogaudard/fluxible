@@ -33,15 +33,9 @@
 #' @importFrom grDevices pdf dev.off
 #' @examples
 #' data(slopes0lin_flag)
-#' flux_plot_lin(slopes0lin_flag,
-#'   datetime_col = "datetime", cut_col = "cut", fit_col = "fit",
-#'   start_col = "start", print_plot = TRUE
-#' )
+#' flux_plot_lin(slopes0lin_flag, print_plot = TRUE)
 #' data(slopes30lin_flag)
-#' flux_plot_lin(slopes30lin_flag,
-#'   datetime_col = "datetime", cut_col = "cut", fit_col = "fit",
-#'   start_col = "start", print_plot = TRUE
-#' )
+#' flux_plot_lin(slopes30lin_flag, print_plot = TRUE)
 #' @export
 #'
 #'

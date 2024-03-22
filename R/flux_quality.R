@@ -41,10 +41,7 @@
 #' @importFrom stats cor
 #' @examples
 #' data(slopes0lin)
-#' flux_quality(slopes0lin,
-#'   fit_type = "li", fluxID_col = "fluxID",
-#'   slope_col = "slope", conc_col = "conc"
-#' )
+#' flux_quality(slopes0lin, fit_type = "li")
 #' @export
 #'
 #'
