@@ -76,9 +76,3 @@ but will take time depending on the size of the dataset}
 plots the fluxes and indicates what should be
 discarded or replaced by zero
 }
-\examples{
-data(slopes0lin_flag)
-flux_plot_lin(slopes0lin_flag, print_plot = TRUE)
-data(slopes30lin_flag)
-flux_plot_lin(slopes30lin_flag, print_plot = TRUE)
-}

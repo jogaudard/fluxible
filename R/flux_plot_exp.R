@@ -28,23 +28,13 @@
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
-#' @importFrom ggplot2 ggplot aes geom_point geom_line
+#' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom grDevices pdf dev.off
-#' @examples
-#' data(slopes0_flag)
-#' flux_plot_exp(slopes0_flag, fit_slope_col = "f_fit_slope",
-#'   print_plot = FALSE
-#' )
-#' data(slopes30_flag)
-#' flux_plot_exp(slopes30_flag, fit_slope_col = "f_fit_slope",
-#'   print_plot = TRUE, f_plotname = "exemple"
-#' )
-#' @export
-#'
-#'
+
+
 
 flux_plot_exp <- function(slopes_df,
                           datetime_col = "f_datetime",
@@ -118,6 +108,7 @@ flux_plot_exp <- function(slopes_df,
 
   plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
+    theme_bw() +
     geom_point(
       aes(y = .data$f_conc, color = .data$f_cut),
       size = 0.2

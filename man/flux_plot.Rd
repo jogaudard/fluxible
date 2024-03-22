@@ -96,4 +96,6 @@ or replaced by zero
 data(slopes0_flag)
 flux_plot(slopes0_flag, fit_type = "exp",
 fit_slope_col = "f_fit_slope", print_plot = TRUE)
+data(slopes30lin_flag)
+flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE)
 }
