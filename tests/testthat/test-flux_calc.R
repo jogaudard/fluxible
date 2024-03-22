@@ -1,5 +1,5 @@
 test_that("flux calculation is correct", {
-  output <- flux_calc(slopes0, slope_col = "slope_tz")
+  output <- flux_calc(slopes0, slope_col = "f_slope_tz")
 
   expect_equal(
     output$flux,
@@ -12,7 +12,7 @@ test_that("flux calculation is correct", {
 test_that("averaging works", {
   output <- flux_calc(
     slopes0,
-    slope_col = "slope_tz",
+    slope_col = "f_slope_tz",
     cols_ave = c("PAR", "temp_soil")
   )
 
@@ -23,7 +23,7 @@ test_that("averaging works", {
 test_that("keeping works", {
   expect_snapshot(flux_calc(
     slopes0,
-    slope_col = "slope_tz",
+    slope_col = "f_slope_tz",
     cols_keep = c("turfID", "type", "start")
   ))
 })
@@ -31,7 +31,7 @@ test_that("keeping works", {
 test_that("keeping and averaging work together", {
   expect_snapshot(flux_calc(
     slopes0,
-    slope_col = "slope_tz",
+    slope_col = "f_slope_tz",
     cols_keep = c("turfID", "type", "start"),
     cols_ave = c("PAR", "temp_soil")
   ))
@@ -40,7 +40,7 @@ test_that("keeping and averaging work together", {
 test_that("fahrenheit conversion works", {
   expect_snapshot(flux_calc(
     slopes0_temp,
-    slope_col = "slope_tz",
+    slope_col = "f_slope_tz",
     temp_air_col = "temp_fahr",
     temp_air_unit = "fahrenheit"
   ))
@@ -49,7 +49,7 @@ test_that("fahrenheit conversion works", {
 test_that("kelvin conversion works", {
   expect_snapshot(flux_calc(
     slopes0_temp,
-    slope_col = "slope_tz",
+    slope_col = "f_slope_tz",
     temp_air_col = "temp_kelvin",
     temp_air_unit = "kelvin"
   ))
@@ -114,7 +114,7 @@ test_that("error some cols_keep do not exist", {
   expect_error(
     flux_calc(
       slopes0,
-      slope_col = "slope_tz",
+      slope_col = "f_slope_tz",
       cols_keep = c("PAR", "site")
     ),
     "some names in cols_keep cannot be found in slope_df"

@@ -26,7 +26,7 @@
 #' ungroup mutate case_when distinct left_join summarize_all
 #' @examples
 #' data(slopes0)
-#' flux_calc(slopes0, slope_col = "slope_tz")
+#' flux_calc(slopes0, slope_col = "f_slope_tz")
 #' @export
 
 # to do list
@@ -41,7 +41,7 @@ flux_calc <- function(slope_df,
                       R_const = 0.082057,
                       cols_keep = c(),
                       cols_ave = c(),
-                      fluxID_col = "fluxID",
+                      fluxID_col = "f_fluxID",
                       temp_air_col = "temp_air",
                       temp_air_unit = "celsius") {
   if (!is.double(chamber_volume)) stop("chamber_volume has to be a double")
@@ -72,17 +72,17 @@ flux_calc <- function(slope_df,
 
   slope_df <- slope_df |>
     rename(
-      fluxID = all_of(fluxID_col),
+      f_fluxID = all_of(fluxID_col),
       air_temp = all_of(temp_air_col),
-      slope = all_of(slope_col)
+      f_slope = all_of(slope_col)
     )
 
 
   vol <- chamber_volume + tube_volume
 
   slope_temp <- slope_df |>
-    select("slope", "fluxID", "air_temp") |>
-    group_by(.data$fluxID, .data$slope) |>
+    select("f_slope", "f_fluxID", "air_temp") |>
+    group_by(.data$f_fluxID, .data$f_slope) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
     ) |>
@@ -100,9 +100,9 @@ flux_calc <- function(slope_df,
   # a df with all the columns we just want to keep and join back in the end
   if (length((cols_keep)) > 0) {
     slope_keep <- slope_df |>
-      select(all_of(cols_keep), "fluxID") |>
+      select(all_of(cols_keep), "f_fluxID") |>
       distinct() |>
-      left_join(slope_temp, by = "fluxID")
+      left_join(slope_temp, by = "f_fluxID")
   } else {
     slope_keep <- slope_temp
   }
@@ -110,11 +110,11 @@ flux_calc <- function(slope_df,
   # a df with the columns that have to be averaged
   if (length((cols_ave)) > 0) {
     slope_ave <- slope_df |>
-      select(all_of(cols_ave), "fluxID") |>
-      group_by(.data$fluxID) |>
+      select(all_of(cols_ave), "f_fluxID") |>
+      group_by(.data$f_fluxID) |>
       summarize_all(mean, na.rm = TRUE) |>
       ungroup() |>
-      left_join(slope_keep, by = "fluxID")
+      left_join(slope_keep, by = "f_fluxID")
   } else {
     slope_ave <- slope_keep
   }
@@ -126,7 +126,7 @@ flux_calc <- function(slope_df,
 
   fluxes <- slope_ave |>
     mutate(
-      flux = (.data$slope * ((atm_pressure)) * ((vol)))
+      flux = (.data$f_slope * ((atm_pressure)) * ((vol)))
       / (((R_const)) * .data$temp_air_ave
          * ((plot_area))) # flux in micromol/s/m^2
       * 3600 # secs to hours
