@@ -1,0 +1,12 @@
+^wtflux\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^data-raw$
+^building-material$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^README\.Rmd$
+^README\.html$
+^\.github$
+^f_quality_plots$
