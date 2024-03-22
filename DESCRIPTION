@@ -7,7 +7,7 @@ Authors@R:
     person("Richard J", "Telford", , "richard.telford@uib.no", role = "aut",
             comment = c(ORCID = "0000-0001-9826-3076"))
     )
-Description: The fluxible package calculates a flux in mmol/sqm/h from raw data of gas concentration measured over time. It is initially designed for CO2 fluxes but could work for other gases as well. It applies the calculations described in “On the Calculation of Daytime CO2 Fluxes Measured by Automated Closed Transparent Chambers.” (Zhao, Peng, Albin Hammerle, Matthias Zeeman, and Georg Wohlfahrt, 2018, DOI 10.1016/j.agrformet.2018.08.022). It provides functions to slice the continuously logged gas concentration data with measurement ID, fit a slope at the right moment and calculate fluxes based on it, apply the same quality thresholds to the entire dataset and flag fuxes with quality issues, and apply various correction, such as light availability or stable layer issue.
+Description: The fluxible package calculates a flux in mmol/sqm/h from raw data of gas concentration measured over time. It provides functions to slice the continuously logged gas concentration data with measurement ID, fit a slope at the right moment and calculate fluxes based on it, apply the same quality thresholds to the entire dataset, flag fuxes with quality issues, and plot fluxes for visual checks.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
