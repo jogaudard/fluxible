@@ -33,13 +33,15 @@
 #' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
-#' scale_x_datetime ylim facet_wrap labs geom_text
+#' scale_x_datetime ylim facet_wrap labs geom_text theme_bw
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @examples
 #' data(slopes0_flag)
 #' flux_plot(slopes0_flag, fit_type = "exp",
 #' fit_slope_col = "f_fit_slope", print_plot = TRUE)
+#' data(slopes30lin_flag)
+#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE)
 #' @export
 
 flux_plot <- function(slopes_df,

@@ -29,9 +29,6 @@
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
-#' @examples
-#' data(slopes0)
-#' flux_quality_exp(slopes0, slope_col = "f_slope_tz")
 
 
 

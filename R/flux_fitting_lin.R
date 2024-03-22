@@ -17,9 +17,6 @@
 #' @importFrom tidyr drop_na pivot_wider fill
 #' @importFrom haven as_factor
 #' @importFrom stringr str_c
-#' @examples
-#' data(co2_conc)
-#' flux_fitting_lin(co2_conc)
 
 
 flux_fitting_lin <- function(conc_df,

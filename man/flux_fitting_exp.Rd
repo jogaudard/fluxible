@@ -58,7 +58,3 @@ modelled concentration over time and exponential expression parameters
 Fits an exponential expression to the concentration evolution
 over time, as described in Zhao 2018
 }
-\examples{
-data(co2_conc)
-flux_fitting_exp(co2_conc)
-}

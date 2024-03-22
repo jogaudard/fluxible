@@ -26,16 +26,12 @@
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
-#' @importFrom ggplot2 ggplot aes geom_point geom_line
+#' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom grDevices pdf dev.off
-#' @examples
-#' data(slopes0lin_flag)
-#' flux_plot_lin(slopes0lin_flag, print_plot = TRUE)
-#' data(slopes30lin_flag)
-#' flux_plot_lin(slopes30lin_flag, print_plot = TRUE)
+
 
 
 flux_plot_lin <- function(slopes_df,
@@ -99,6 +95,7 @@ flux_plot_lin <- function(slopes_df,
 
   plot_lin <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
+    theme_bw() +
     geom_point(aes(y = .data$f_conc, color = .data$f_cut), size = 0.2) +
     geom_line(
       aes(y = .data$f_fit, color = .data$f_quality_flag),

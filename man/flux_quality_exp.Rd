@@ -67,7 +67,3 @@ same dataframe with added flag and corrected slopes columns
 indicates if fluxes should be discarded or replaced
 by 0 according to parameters set by user
 }
-\examples{
-data(slopes0)
-flux_quality_exp(slopes0, slope_col = "f_slope_tz")
-}
