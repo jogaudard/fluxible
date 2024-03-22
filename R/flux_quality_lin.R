@@ -21,10 +21,7 @@
 #' which the starting values are considered acceptable
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename left_join
-#' @examples
-#' data(slopes0lin)
-#' flux_quality_lin(slopes0lin)
-#' @export
+
 
 
 flux_quality_lin <- function(slopes_df,

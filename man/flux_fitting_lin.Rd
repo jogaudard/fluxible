@@ -40,7 +40,3 @@ std error, r square and p value of the linear model
 \description{
 fits a linear model to the gas concentration over time
 }
-\examples{
-data(co2_conc)
-flux_fitting_lin(co2_conc)
-}
