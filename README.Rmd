@@ -51,7 +51,7 @@ Let's start with a linear fit.
 
 ```{r fitting_lin}
 slopes_lin_liahovden <- flux_fitting(conc_liahovden, fit_type = "linear")
-head(slopes_lin)
+head(slopes_lin_liahovden)
 ```
 
 To assess the quality of the fit we use flux_quality.
@@ -69,7 +69,7 @@ Depending on the plots the user can re-run flux_fitting with cuts at the start o
 
 ```{r plot_lin}
 slopes_lin_liahovden |>
-  filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
 flux_plot(fit_type = "lin", print_plot = TRUE, f_plotname = "example_lia", f_ylim_lower = 300, f_ylim_upper = 600)
 ```
 
@@ -82,7 +82,7 @@ slopes_lin_liahovden_120 <- conc_liahovden |>
     flux_quality(fit_type = "linear")
 
 slopes_lin_liahovden_120 |>
-  filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
     flux_plot(fit_type = "lin", print_plot = TRUE, f_plotname = "example_lia_lin", f_ylim_lower = 300, f_ylim_upper = 600)
 ```
 
@@ -105,7 +105,7 @@ The plots will also show the modelled slope at t zero.
 
 ```{r plot_exp}
 slopes_exp_liahovden |>
-  filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
     flux_plot(fit_type = "exp", print_plot = TRUE, f_plotname = "example_lia_lin", f_ylim_lower = 300, f_ylim_upper = 600)
 ```
 
@@ -117,7 +117,7 @@ slopes_exp_liahovden_30 <- conc_liahovden |>
     flux_quality(fit_type = "exp", slope_col = "f_slope_tz")
 
 slopes_exp_liahovden_30 |>
-  filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
     flux_plot(fit_type = "exp", print_plot = TRUE, f_plotname = "example_lia_lin", f_ylim_lower = 300, f_ylim_upper = 600)
 ```
 
