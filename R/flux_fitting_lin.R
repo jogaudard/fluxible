@@ -20,7 +20,6 @@
 #' @examples
 #' data(co2_conc)
 #' flux_fitting_lin(co2_conc)
-#' @export
 
 
 flux_fitting_lin <- function(conc_df,

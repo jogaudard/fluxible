@@ -36,9 +36,7 @@
 #' flux_plot_lin(slopes0lin_flag, print_plot = TRUE)
 #' data(slopes30lin_flag)
 #' flux_plot_lin(slopes30lin_flag, print_plot = TRUE)
-#' @export
-#'
-#'
+
 
 flux_plot_lin <- function(slopes_df,
                           datetime_col = "f_datetime",

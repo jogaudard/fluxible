@@ -40,11 +40,8 @@
 #' )
 #' data(slopes30_flag)
 #' flux_plot_exp(slopes30_flag, fit_slope_col = "f_fit_slope",
-#'   print_plot = TRUE, f_plotname = "exemple"
-#' )
-#' @export
-#'
-#'
+#'   print_plot = TRUE, f_plotname = "exemple")
+
 
 flux_plot_exp <- function(slopes_df,
                           datetime_col = "f_datetime",

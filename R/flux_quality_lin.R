@@ -24,7 +24,6 @@
 #' @examples
 #' data(slopes0lin)
 #' flux_quality_lin(slopes0lin)
-#' @export
 
 
 flux_quality_lin <- function(slopes_df,

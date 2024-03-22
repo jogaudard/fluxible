@@ -32,9 +32,7 @@
 #' @examples
 #' data(slopes0)
 #' flux_quality_exp(slopes0, slope_col = "f_slope_tz")
-#' @export
-#'
-#'
+
 
 
 flux_quality_exp <- function(slopes_df,
