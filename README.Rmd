@@ -1,0 +1,150 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# fluxible
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of fluxible is to provide a workflow that removes individual evaluation of each flux, reduces risk of bias, and makes it reproducible.
+Users set specific data quality standards and selection parameters as function arguments that are applied to the entire dataset.
+The package runs the calculations automatically, without prompting the user to take decisions mid-way, and provides quality flags and plots at the end of the process for a visual check.
+This makes it easy to use with large flux datasets and to integrate into a reproducible workflow.
+Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.
+
+## Installation
+
+You can install the development version of fluxible from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jogaudard/fluxible")
+```
+
+## Example
+
+This is a basic example with some sample data from the Plant Functional Traits Course 6 (2022).
+The flux_match function matches field measured gas concentration data with flux meta data:
+
+```{r match}
+library(fluxible)
+
+conc_liahovden <- flux_match(co2_liahovden, record_liahovden)
+head(conc_liahovden)
+```
+
+To calculate a flux the slopes of each flux is necessary.
+The flux_fitting function can provide a linear or an exponential fit.
+Let's start with a linear fit.
+
+```{r fitting_lin}
+slopes_lin_liahovden <- flux_fitting(conc_liahovden, fit_type = "linear")
+head(slopes_lin_liahovden)
+```
+
+To assess the quality of the fit we use flux_quality.
+This will add quality flags advising if the calculated slopes should be kept, or replaced by 0 or NA.
+
+```{r quality_lin}
+slopes_lin_liahovden <- flux_quality(slopes_lin_liahovden, fit_type = "lin")
+head(slopes_lin_liahovden)
+```
+
+Users should still do a visual check with the flux_plot function.
+The flux_plot function plots all the fluxes with their fluxID, both modelled and measured concentration, and indicating quality flags with color codes.
+Those plots can be printed in the R console, but they will be saved as a pdf document for easier use.
+Depending on the plots the user can re-run flux_fitting with cuts at the start or the end of the measurements (applied to the entire dataset), change the type of fit, or decide to exclude specific fluxes using the 'weird_fluxes' argument.
+
+```{r plot_lin}
+slopes_lin_liahovden |>
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+    flux_plot(
+      fit_type = "lin",
+      print_plot = TRUE,
+      f_plotname = "example_lia",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
+```
+
+When using a linear fit, it might be better to use only a short portion at the start of the flux.
+We can re run 'flux_fitting' with an end cut, then run 'flux_quality' and 'flux_plot' again to see if it is better.
+
+```{r plot_lin_cut}
+slopes_lin_liahovden_120 <- conc_liahovden |>
+  flux_fitting(fit_type = "linear", end_cut = 120) |>
+    flux_quality(fit_type = "linear")
+
+slopes_lin_liahovden_120 |>
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+    flux_plot(
+      fit_type = "lin",
+      print_plot = TRUE,
+      f_plotname = "example_lia_lin",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
+```
+
+The exponential fit is used in a similar way.
+
+```{r fitting_exp}
+slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
+head(slopes_exp_liahovden)
+```
+
+Then the quality assessment.
+The default slope_col argument is for the linear fit, so we now have to specify it.
+
+```{r quality_exp}
+slopes_exp_liahovden <- flux_quality(slopes_exp_liahovden, fit_type = "expo", slope_col = "f_slope_tz")
+head(slopes_exp_liahovden)
+```
+
+The plots will also show the modelled slope at t zero.
+
+```{r plot_exp}
+slopes_exp_liahovden |>
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+    flux_plot(
+      fit_type = "exp",
+      print_plot = TRUE,
+      f_plotname = "example_lia_lin",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
+```
+
+Again, we can try to cut it if needed.
+
+```{r plot_exp_cut}
+slopes_exp_liahovden_30 <- conc_liahovden |>
+  flux_fitting(fit_type = "exp", start_cut = 30) |>
+    flux_quality(fit_type = "exp", slope_col = "f_slope_tz")
+
+slopes_exp_liahovden_30 |>
+  dplyr::filter(f_fluxID %in% c(53:56)) |> # we just show a sample of the plots to avoid slowing down the example
+    flux_plot(
+      fit_type = "exp",
+      print_plot = TRUE,
+      f_plotname = "example_lia_lin",
+      f_ylim_lower = 300,
+      f_ylim_upper = 600,
+      f_nrow = 1
+      )
+```
