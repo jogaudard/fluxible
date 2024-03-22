@@ -8,11 +8,11 @@ flux_fitting_lin(
   conc_df,
   start_cut = 0,
   end_cut = 0,
-  start_col = "start",
-  end_col = "end",
-  datetime_col = "datetime",
-  conc_col = "conc",
-  fluxID_col = "fluxID"
+  start_col = "f_start",
+  end_col = "f_end",
+  datetime_col = "f_datetime",
+  conc_col = "f_conc",
+  fluxID_col = "f_fluxID"
 )
 }
 \arguments{

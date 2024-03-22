@@ -38,10 +38,8 @@
 #' @importFrom purrr quietly
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag,
-#'   fit_type = "exp", datetime_col = "datetime", fit_slope_col = "fit_slope",
-#'   start_col = "start", print_plot = TRUE
-#' )
+#' flux_plot(slopes0_flag, fit_type = "exp",
+#' fit_slope_col = "f_fit_slope", print_plot = TRUE)
 #' @export
 
 flux_plot <- function(slopes_df,

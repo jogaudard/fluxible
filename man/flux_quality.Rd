@@ -12,8 +12,8 @@ flux_quality(
   fluxID_col = "f_fluxID",
   slope_col = "f_slope",
   weird_fluxesID = c(),
-  pvalue_col = "p.value",
-  rsquared_col = "r.squared",
+  pvalue_col = "f_pvalue",
+  rsquared_col = "f_rsquared",
   pvalue_threshold = 0.3,
   rsquared_threshold = 0.7,
   conc_col = "f_conc",
@@ -89,8 +89,5 @@ by 0 according to parameters set by user
 }
 \examples{
 data(slopes0lin)
-flux_quality(slopes0lin,
-  fit_type = "li", fluxID_col = "fluxID",
-  slope_col = "slope", conc_col = "conc"
-)
+flux_quality(slopes0lin, fit_type = "li")
 }

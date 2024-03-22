@@ -8,8 +8,8 @@ test_that("fitting works with 0 second end cut", {
   output <- fitting_lin_call$result
 
   expect_equal(
-    output$slope,
-    slopes0lin$slope
+    output$f_slope,
+    slopes0lin$f_slope
   )
 })
 
@@ -19,8 +19,8 @@ test_that("fitting works with 30 second end cut", {
     end_cut = 30
   )
   expect_equal(
-    output$slope,
-    slopes30lin$slope
+    output$f_slope,
+    slopes30lin$f_slope
   )
 })
 
@@ -30,8 +30,8 @@ test_that("fitting works with 60 second end cut", {
     end_cut = 60
   )
   expect_equal(
-    output$slope,
-    slopes60lin$slope
+    output$f_slope,
+    slopes60lin$f_slope
   )
 })
 
@@ -97,9 +97,9 @@ test_that("cutting too much", {
 test_that("renaming works", {
   co2_conc_names <- co2_conc %>%
     dplyr::rename(
-      date_time = datetime,
-      finish = end,
-      co2 = conc
+      date_time = f_datetime,
+      finish = f_end,
+      co2 = f_conc
     )
 
   qflux_fitting_lin <- purrr::quietly(flux_fitting_lin)

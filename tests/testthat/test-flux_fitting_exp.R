@@ -84,9 +84,9 @@ test_that("cutting too much", {
 test_that("renaming works", {
   co2_conc_names <- co2_conc %>%
     dplyr::rename(
-      date_time = datetime,
-      finish = end,
-      co2 = conc
+      date_time = f_datetime,
+      finish = f_end,
+      co2 = f_conc
     )
 
   qflux_fitting_exp <- purrr::quietly(flux_fitting_exp)

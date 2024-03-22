@@ -31,15 +31,7 @@
 #' @importFrom stats cor
 #' @examples
 #' data(slopes0)
-#' flux_quality_exp(slopes0,
-#'   fluxID_col = "fluxID",
-#'   conc_col = "conc",
-#'   b_col = "b",
-#'   time_col = "time",
-#'   fit_col = "fit",
-#'   slope_col = "slope_tz",
-#'   cut_col = "cut"
-#' )
+#' flux_quality_exp(slopes0, slope_col = "f_slope_tz")
 #' @export
 #'
 #'
@@ -100,8 +92,8 @@ flux_quality_exp <- function(slopes_df,
     ungroup()
 
   quality_flag <- slopes_df |>
-    left_join(quality_par) |>
-    left_join(quality_par_start) |>
+    left_join(quality_par, by = c("f_fluxID", "f_cut")) |>
+    left_join(quality_par_start, by = "f_fluxID") |>
     mutate(
       f_fit_quality = case_when(
         .data$f_b >= ((b_threshold)) ~ "bad_b",
