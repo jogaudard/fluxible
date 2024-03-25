@@ -83,7 +83,7 @@ slopes_lin_liahovden |>
 ```
 
 When using a linear fit, it might be better to use only a short portion at the start of the flux.
-We can re run 'flux_fitting' with an end cut, then run 'flux_quality' and 'flux_plot' again to see if it is better.
+We can re run flux_fitting with an end cut, then run flux_quality and flux_plot again to see if it is better.
 
 ```{r plot_lin_cut}
 slopes_lin_liahovden_120 <- conc_liahovden |>
@@ -152,7 +152,7 @@ slopes_exp_liahovden_30 |>
       )
 ```
 
-Once we are satisfied with the fit, we can calculate fluxes with '''flux_calc'.
+Once we are satisfied with the fit, we can calculate fluxes with flux_calc.
 
 ```{r calc}
 fluxes_exp_liahovden <- slopes_exp_liahovden |>

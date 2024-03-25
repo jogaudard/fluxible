@@ -125,8 +125,8 @@ slopes_lin_liahovden |>
 <img src="man/figures/README-plot_lin-1.png" width="100%" />
 
 When using a linear fit, it might be better to use only a short portion
-at the start of the flux. We can re run ‘flux_fitting’ with an end cut,
-then run ‘flux_quality’ and ‘flux_plot’ again to see if it is better.
+at the start of the flux. We can re run flux_fitting with an end cut,
+then run flux_quality and flux_plot again to see if it is better.
 
 ``` r
 slopes_lin_liahovden_120 <- conc_liahovden |>
@@ -242,7 +242,7 @@ slopes_exp_liahovden_30 |>
 <img src="man/figures/README-plot_exp_cut-1.png" width="100%" />
 
 Once we are satisfied with the fit, we can calculate fluxes with
-’‘’flux_calc’.
+flux_calc.
 
 ``` r
 fluxes_exp_liahovden <- slopes_exp_liahovden |>
