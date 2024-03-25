@@ -148,7 +148,8 @@ slopes_lin_liahovden_120 |>
 
 <img src="man/figures/README-plot_lin_cut-1.png" width="100%" />
 
-The exponential fit is used in a similar way.
+The exponential fit is used in a similar way. It uses the exponential
+expression shown in Zhao *et al.* (2018).
 
 ``` r
 slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
@@ -239,3 +240,37 @@ slopes_exp_liahovden_30 |>
 ```
 
 <img src="man/figures/README-plot_exp_cut-1.png" width="100%" />
+
+Once we are satisfied with the fit, we can calculate fluxes with
+’‘’flux_calc’.
+
+``` r
+fluxes_exp_liahovden <- slopes_exp_liahovden |>
+  flux_calc(
+    slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
+  ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
+head(fluxes_exp_liahovden)
+#> # A tibble: 6 × 4
+#>   f_fluxID  f_slope temp_air_ave    flux
+#>   <fct>       <dbl>        <dbl>   <dbl>
+#> 1 1        -0.156           3.27  -9.76 
+#> 2 2         0.146           3.31   9.10 
+#> 3 3        -0.227           3.15 -14.2  
+#> 4 4         0.143           2.98   8.93 
+#> 5 5        -0.139           2.86  -8.67 
+#> 6 6        -0.00487         2.91  -0.304
+```
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+
+<div id="ref-zhaoCalculationDaytimeCO22018a" class="csl-entry">
+
+Zhao, P., Hammerle, A., Zeeman, M. and Wohlfahrt, G. (2018), “[On the
+calculation of daytime CO2 fluxes measured by automated closed
+transparent chambers](https://doi.org/10.1016/j.agrformet.2018.08.022)”,
+*Agricultural and Forest Meteorology*, Vol. 263, pp. 267–275.
+
+</div>
+
+</div>

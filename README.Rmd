@@ -1,5 +1,7 @@
 ---
 output: github_document
+bibliography: /home/jga051/Dropbox/PhD/biblio_phd_zot.bib
+csl: /home/jga051/Documents/01_PhD/emerald-harvard.csl
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -101,6 +103,7 @@ slopes_lin_liahovden_120 |>
 ```
 
 The exponential fit is used in a similar way.
+It uses the exponential expression shown in @zhaoCalculationDaytimeCO22018a.
 
 ```{r fitting_exp}
 slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
@@ -147,4 +150,14 @@ slopes_exp_liahovden_30 |>
       f_ylim_upper = 600,
       f_nrow = 1
       )
+```
+
+Once we are satisfied with the fit, we can calculate fluxes with '''flux_calc'.
+
+```{r calc}
+fluxes_exp_liahovden <- slopes_exp_liahovden |>
+  flux_calc(
+    slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
+  ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
+head(fluxes_exp_liahovden)
 ```
