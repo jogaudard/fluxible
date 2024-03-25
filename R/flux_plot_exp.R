@@ -25,6 +25,8 @@
 #' @param f_plotname filename for the extracted pdf file
 #' @param f_nrow number of row per page in extracted pdf file
 #' @param f_ncol ncol argument for facet_wrap
+#' @param y_text_position position of the text box
+#' @param f_nudge_y to nudge the text box with the parameters above the modelled flux
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
@@ -57,6 +59,8 @@ flux_plot_exp <- function(slopes_df,
                           f_plotname = "plot_quality_exp",
                           f_ncol = 4,
                           f_nrow = 3,
+                          y_text_position = 500,
+                          f_nudge_y = 100,
                           print_plot = "FALSE") {
   f_scales <- match.arg(f_scales, c("free", "fixed"))
   f_plotname <- paste("f_quality_plots/", f_plotname, ".pdf", sep = "")
@@ -85,7 +89,8 @@ flux_plot_exp <- function(slopes_df,
 
   param_df <- slopes_df |>
     select(
-      "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut"
+      "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
+      "f_quality_flag"
     ) |>
     filter(.data$f_cut == "keep") |>
     group_by(.data$f_fluxID) |>
@@ -100,6 +105,7 @@ flux_plot_exp <- function(slopes_df,
       f_cor_coef = round(.data$f_cor_coef, digits = 2),
       f_b = round(.data$f_b, digits = 5),
       print_col = paste(
+        .data$f_quality_flag, "\n",
         "RMSE = ", .data$f_RMSE, "\n", "Corr coef = ",
         .data$f_cor_coef, "\n", "b = ", .data$f_b,
         sep = ""
@@ -137,8 +143,8 @@ flux_plot_exp <- function(slopes_df,
     ylim(((f_ylim_lower)), ((f_ylim_upper))) +
     geom_text(
       data = param_df,
-      aes(x = .data$f_start, y = .data$conc_start, label = .data$print_col),
-      vjust = 0, hjust = "inward", nudge_y = 100
+      aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
+      vjust = 0, hjust = "inward", nudge_y = ((f_nudge_y))
     ) +
     #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
     facet_wrap_paginate(
