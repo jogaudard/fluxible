@@ -15,7 +15,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-# fluxible
+# Fluxible
+
+*Note:* fluxible is still in an early testing phase, please get in touch for any problems or suggestions.
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -161,3 +163,14 @@ fluxes_exp_liahovden <- slopes_exp_liahovden |>
   ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
 head(fluxes_exp_liahovden)
 ```
+
+## Further developments
+
+### Flux tent
+Currently fluxible is thought for setups using a flux chamber.
+Flux chambers can be assumed to have no leak.
+As flux tents tend to leak, a different fitting function is needed to account for potential leaks.
+
+### More fits
+As we want fluxible to fit the use of as many projects as possible, more fitting expressions will be included in the flux_fitting function.
+Feel welcome to get in touch if you wish to include yours in fluxible.

@@ -1,7 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# fluxible
+# Fluxible
+
+*Note:* fluxible is still in an early testing phase, please get in touch
+for any problems or suggestions.
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -260,6 +263,20 @@ head(fluxes_exp_liahovden)
 #> 5 5        -0.139           2.86  -8.67 
 #> 6 6        -0.00487         2.91  -0.304
 ```
+
+## Further developments
+
+### Flux tent
+
+Currently fluxible is thought for setups using a flux chamber. Flux
+chambers can be assumed to have no leak. As flux tents tend to leak, a
+different fitting function is needed to account for potential leaks.
+
+### More fits
+
+As we want fluxible to fit the use of as many projects as possible, more
+fitting expressions will be included in the flux_fitting function. Feel
+welcome to get in touch if you wish to include yours in fluxible.
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">
