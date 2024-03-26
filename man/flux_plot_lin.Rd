@@ -24,6 +24,8 @@ flux_plot_lin(
   f_plotname = "plot_quality_lin",
   f_ncol = 4,
   f_nrow = 3,
+  y_text_position = 500,
+  f_nudge_y = 100,
   print_plot = "FALSE"
 )
 }
@@ -68,6 +70,10 @@ used for the quality assessment}
 \item{f_ncol}{ncol argument for facet_wrap}
 
 \item{f_nrow}{number of row per page in extracted pdf file}
+
+\item{y_text_position}{position of the text box}
+
+\item{f_nudge_y}{to nudge the text box with the parameters above the modelled flux}
 
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset}

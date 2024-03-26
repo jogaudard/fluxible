@@ -29,6 +29,8 @@
 #' @param f_plotname filename for the extracted pdf file
 #' @param f_nrow number of row per page in extracted pdf file
 #' @param f_ncol ncol argument for facet_wrap
+#' @param y_text_position position of the text box
+#' @param f_nudge_y to nudge the text box with the parameters above the modelled flux
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
@@ -68,6 +70,8 @@ flux_plot <- function(slopes_df,
                       f_plotname = "plot_quality",
                       f_ncol = 4,
                       f_nrow = 3,
+                      y_text_position = 500,
+                      f_nudge_y = 100,
                       print_plot = "FALSE") {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
 
@@ -94,6 +98,8 @@ flux_plot <- function(slopes_df,
       f_plotname = ((f_plotname)),
       f_ncol = ((f_ncol)),
       f_nrow = ((f_nrow)),
+      y_text_position = ((y_text_position)),
+      f_nudge_y = ((f_nudge_y)),
       print_plot = ((print_plot))
     )
   }
@@ -120,6 +126,8 @@ flux_plot <- function(slopes_df,
       f_plotname = ((f_plotname)),
       f_ncol = ((f_ncol)),
       f_nrow = ((f_nrow)),
+      y_text_position = ((y_text_position)),
+      f_nudge_y = ((f_nudge_y)),
       print_plot = ((print_plot))
     )
   }
