@@ -1,44 +1,12 @@
-#' ploting fluxes for fit evaluation
-#' @description plots the fluxes and indicates what should be
-#' discarded or replaced by zero
-#' @param slopes_df dataset containing slopes
-#' @param datetime_col column containing datetime of
-#' each concentration measurement
-#' @param conc_col column containing gas concentration data
-#' @param cut_col column containing cut factor from the
-#' flux_fitting function ("cut" or "keep")
-#' @param fit_col column containing the modelled fit of the flux
-#' @param quality_flag_col column containing the flags produced by flux_quality
-#' @param fluxID_col column containing unique IDs for each flux
-#' @param fit_slope_col column containing the modelled slope at tz
-#' @param b_col column containing the b parameter of the exponential fit
-#' @param cor_coef_col column containing the correlation coefficient
-#' produced by flux_quality
-#' @param RMSE_col column containing the RMSE produced by flux_quality
-#' @param start_col column containing the datetime of the start of each flux
-#' @param f_date_breaks date_breaks argument for scale_x_datetime
-#' @param f_minor_breaks minor breaks argument for scale_x_datetime
-#' @param f_date_labels date_labels argument for scale_x_datetime
-#' @param f_ylim_upper y axis upper limit
-#' @param f_ylim_lower y axis lower limit
-#' @param f_scales argument for scales in facet_wrap ("fixed" or "free")
-#' @param f_plotname filename for the extracted pdf file
-#' @param f_nrow number of row per page in extracted pdf file
-#' @param f_ncol ncol argument for facet_wrap
-#' @param y_text_position position of the text box
-#' @param f_nudge_y to nudge the text box with the parameters above the modelled flux
-#' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
-#' but will take time depending on the size of the dataset
-#' @importFrom dplyr rename select distinct mutate
-#' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
-#' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
-#' @importFrom ggforce facet_wrap_paginate n_pages
-#' @importFrom purrr quietly
-#' @importFrom grDevices pdf dev.off
+# just a script to produce plots to include in the poster
+# we can use the lia data used in the readme
 
+conc_liahovden <- flux_match(co2_liahovden, record_liahovden)
+slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
+slopes_exp_liahovden <- flux_quality(slopes_exp_liahovden, fit_type = "expo", slope_col = "f_slope_tz")
 
-
-flux_plot_exp <- function(slopes_df,
+# special function to make the plots for the poster (bigger and co)
+flux_plot_exp_poster <- function(slopes_df,
                           datetime_col = "f_datetime",
                           conc_col = "f_conc",
                           cut_col = "f_cut",
@@ -117,15 +85,15 @@ flux_plot_exp <- function(slopes_df,
     theme_bw() +
     geom_point(
       aes(y = .data$f_conc, color = .data$f_cut),
-      size = 0.2
+      size = 0.8
     ) +
     geom_line(
       aes(y = .data$f_fit, color = .data$f_quality_flag),
-      linetype = "longdash"
+      linetype = "longdash", linewidth = 0.8
     ) +
     geom_line(
       aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
-      linetype = "dashed"
+      linetype = "dashed", linewidth = 0.8
     ) +
     scale_color_manual(values = c(
       "keep" = "green",
@@ -182,3 +150,27 @@ flux_plot_exp <- function(slopes_df,
     return(plot_exp)
   }
 }
+
+
+
+slopes_exp_liahovden |>
+  dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
+    mutate(
+        f_fluxID = case_when(
+            f_fluxID == 28 ~ "The Good",
+            f_fluxID == 51 ~ "The Bad",
+            f_fluxID == 100 ~ "The Ugly"
+        ),
+        f_fluxID = factor(f_fluxID, levels = c("The Good", "The Bad", "The Ugly"))
+    ) |>
+    flux_plot_exp_poster(
+      # fit_type = "exp",
+      print_plot = TRUE,
+      f_plotname = "poster_plot",
+      f_ylim_lower = 375,
+      f_ylim_upper = 525,
+      f_ncol = 2,
+      f_nrow = 2,
+      y_text_position = 470,
+      f_nudge_y = 0
+      )
