@@ -3,8 +3,8 @@
 
 # Fluxible
 
-*Note:* fluxible is still in an early testing phase, please get in touch
-for any problems or suggestions.
+**Note:** fluxible is still in an early testing phase, please get in
+touch for any problems or suggestions.
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -120,7 +120,8 @@ slopes_lin_liahovden |>
       f_plotname = "example_lia",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1
+      f_nrow = 1,
+      y_text_position = 400
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
@@ -144,7 +145,8 @@ slopes_lin_liahovden_120 |>
       f_plotname = "example_lia_lin",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1
+      f_nrow = 1,
+      y_text_position = 400
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
@@ -212,7 +214,8 @@ slopes_exp_liahovden |>
       f_plotname = "example_lia_lin",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1
+      f_nrow = 1,
+      y_text_position = 400
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
@@ -237,7 +240,8 @@ slopes_exp_liahovden_30 |>
       f_plotname = "example_lia_lin",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1
+      f_nrow = 1,
+      y_text_position = 400
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
@@ -277,6 +281,8 @@ different fitting function is needed to account for potential leaks.
 As we want fluxible to fit the use of as many projects as possible, more
 fitting expressions will be included in the flux_fitting function. Feel
 welcome to get in touch if you wish to include yours in fluxible.
+
+#### References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">
