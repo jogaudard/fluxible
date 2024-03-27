@@ -18,6 +18,11 @@ flux_plot_exp_poster <- function(slopes_df,
                           b_col = "f_b",
                           cor_coef_col = "f_cor_coef",
                           RMSE_col = "f_RMSE",
+                          color_discard = "#D55E00",
+                          color_cut = "#D55E00",
+                          color_keep = "#009E73",
+                          color_ok = "#000000",
+                          color_zero = "#CC79A7",
                           f_date_breaks = "1 min",
                           f_minor_breaks = "10 sec",
                           f_date_labels = "%e/%m \n %H:%M",
@@ -81,8 +86,8 @@ flux_plot_exp_poster <- function(slopes_df,
     )
 
   plot_exp <- slopes_df |>
+    theme_classic() +
     ggplot(aes(.data$f_datetime)) +
-    theme_bw() +
     geom_point(
       aes(y = .data$f_conc, color = .data$f_cut),
       size = 0.8
@@ -96,13 +101,13 @@ flux_plot_exp_poster <- function(slopes_df,
       linetype = "dashed", linewidth = 0.8
     ) +
     scale_color_manual(values = c(
-      "keep" = "green",
-      "cut" = "red",
-      "ok" = "black",
-      "discard" = "red",
-      "zero" = "grey",
-      "start_error" = "red",
-      "weird_flux" = "purple"
+     "keep" = ((color_keep)),
+      "cut" = ((color_cut)),
+      "ok" = ((color_ok)),
+      "discard" = ((color_discard)),
+      "zero" = ((color_zero)),
+      "start_error" = ((color_discard)),
+      "weird_flux" = ((color_discard))
     )) +
     scale_x_datetime(
       date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
