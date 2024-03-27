@@ -16,6 +16,11 @@
 #' produced by flux_quality
 #' @param RMSE_col column containing the RMSE produced by flux_quality
 #' @param start_col column containing the datetime of the start of each flux
+#' @param color_discard color for fits with a discard quality flag
+#' @param color_cut color for the part of the flux that is cut
+#' @param color_keep color for the part of the flux that is kept
+#' @param color_ok color for fits with an ok quality flag
+#' @param color_zero color for fits with a zero quality flag
 #' @param f_date_breaks date_breaks argument for scale_x_datetime
 #' @param f_minor_breaks minor breaks argument for scale_x_datetime
 #' @param f_date_labels date_labels argument for scale_x_datetime
@@ -50,6 +55,11 @@ flux_plot_exp <- function(slopes_df,
                           b_col = "f_b",
                           cor_coef_col = "f_cor_coef",
                           RMSE_col = "f_RMSE",
+                          color_discard = "#D55E00",
+                          color_cut = "#D55E00",
+                          color_keep = "#009E73",
+                          color_ok = "#000000",
+                          color_zero = "#CC79A7",
                           f_date_breaks = "1 min",
                           f_minor_breaks = "10 sec",
                           f_date_labels = "%e/%m \n %H:%M",
@@ -128,13 +138,13 @@ flux_plot_exp <- function(slopes_df,
       linetype = "dashed"
     ) +
     scale_color_manual(values = c(
-      "keep" = "green",
-      "cut" = "red",
-      "ok" = "black",
-      "discard" = "red",
-      "zero" = "grey",
-      "start_error" = "red",
-      "weird_flux" = "purple"
+      "keep" = ((color_keep)),
+      "cut" = ((color_cut)),
+      "ok" = ((color_ok)),
+      "discard" = ((color_discard)),
+      "zero" = ((color_zero)),
+      "start_error" = ((color_discard)),
+      "weird_flux" = ((color_discard))
     )) +
     scale_x_datetime(
       date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
