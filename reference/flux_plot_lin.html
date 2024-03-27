@@ -56,6 +56,11 @@ discarded or replaced by zero</p>
 <span>  pvalue_col <span class="op">=</span> <span class="st">"f_pvalue"</span>,</span>
 <span>  rsquared_col <span class="op">=</span> <span class="st">"f_rsquared"</span>,</span>
 <span>  start_col <span class="op">=</span> <span class="st">"f_start"</span>,</span>
+<span>  color_discard <span class="op">=</span> <span class="st">"#D55E00"</span>,</span>
+<span>  color_cut <span class="op">=</span> <span class="st">"#D55E00"</span>,</span>
+<span>  color_keep <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
+<span>  color_ok <span class="op">=</span> <span class="st">"#000000"</span>,</span>
+<span>  color_zero <span class="op">=</span> <span class="st">"#CC79A7"</span>,</span>
 <span>  f_date_breaks <span class="op">=</span> <span class="st">"1 min"</span>,</span>
 <span>  f_minor_breaks <span class="op">=</span> <span class="st">"10 sec"</span>,</span>
 <span>  f_date_labels <span class="op">=</span> <span class="st">"%e/%m \n %H:%M"</span>,</span>
@@ -114,6 +119,26 @@ used for the quality assessment</p></dd>
 
 <dt>start_col</dt>
 <dd><p>column containing the datetime of the start of each flux</p></dd>
+
+
+<dt>color_discard</dt>
+<dd><p>color for fits with a discard quality flag</p></dd>
+
+
+<dt>color_cut</dt>
+<dd><p>color for the part of the flux that is cut</p></dd>
+
+
+<dt>color_keep</dt>
+<dd><p>color for the part of the flux that is kept</p></dd>
+
+
+<dt>color_ok</dt>
+<dd><p>color for fits with an ok quality flag</p></dd>
+
+
+<dt>color_zero</dt>
+<dd><p>color for fits with a zero quality flag</p></dd>
 
 
 <dt>f_date_breaks</dt>
