@@ -15,6 +15,11 @@ flux_plot_lin(
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
   start_col = "f_start",
+  color_discard = "#D55E00",
+  color_cut = "#D55E00",
+  color_keep = "#009E73",
+  color_ok = "#000000",
+  color_zero = "#CC79A7",
   f_date_breaks = "1 min",
   f_minor_breaks = "10 sec",
   f_date_labels = "\%e/\%m \\n \%H:\%M",
@@ -52,6 +57,16 @@ flux_fitting function ("cut" or "keep")}
 used for the quality assessment}
 
 \item{start_col}{column containing the datetime of the start of each flux}
+
+\item{color_discard}{color for fits with a discard quality flag}
+
+\item{color_cut}{color for the part of the flux that is cut}
+
+\item{color_keep}{color for the part of the flux that is kept}
+
+\item{color_ok}{color for fits with an ok quality flag}
+
+\item{color_zero}{color for fits with a zero quality flag}
 
 \item{f_date_breaks}{date_breaks argument for scale_x_datetime}
 
