@@ -8,7 +8,7 @@ Authors@R:
             comment = c(ORCID = "0000-0001-9826-3076"))
     )
 Description: The fluxible package calculates a flux in mmol/sqm/h from raw data of gas concentration measured over time. It provides functions to slice the continuously logged gas concentration data with measurement ID, fit a slope at the right moment and calculate fluxes based on it, apply the same quality thresholds to the entire dataset, flag fuxes with quality issues, and plot fluxes for visual checks.
-License: MIT + file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
