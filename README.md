@@ -22,8 +22,8 @@ compatibility across studies, and is more time efficient.
 
 ## Installation
 
-You can install the development version of fluxible from
-[GitHub](https://github.com/) with:
+You can install the development version of fluxible from the [GitHub
+repo](https://github.com/jogaudard/fluxible) with:
 
 ``` r
 # install.packages("devtools")
