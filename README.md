@@ -282,6 +282,12 @@ As we want fluxible to fit the use of as many projects as possible, more
 fitting expressions will be included in the flux_fitting function. Feel
 welcome to get in touch if you wish to include yours in fluxible.
 
+## Contact
+
+Joseph Gaudard, University of Bergen
+
+<joseph.gaudard@pm.me>
+
 #### References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
