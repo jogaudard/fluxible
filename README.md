@@ -293,7 +293,7 @@ Joseph Gaudard, University of Bergen, Norway
 EGU 2024, poster
 
 [Link to the
-poster](https://github.com/jogaudard/fluxible/dissemination/poster_EGU24_jgaudard.pdf)
+poster](https://github.com/jogaudard/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
 
 [Link to the
 abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html)
