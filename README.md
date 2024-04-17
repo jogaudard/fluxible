@@ -3,8 +3,9 @@
 
 # Fluxible
 
-**Note:** fluxible is still in an early testing phase, please get in
-touch for any problems or suggestions.
+**Note:** fluxible is still in an early phase, it is fully functional
+but can be improved in many ways. Please get in touch for any problems
+or suggestions.
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -19,6 +20,12 @@ the end of the process for a visual check. This makes it easy to use
 with large flux datasets and to integrate into a reproducible workflow.
 Using the Fluxible R package makes the workflow reproducible, increases
 compatibility across studies, and is more time efficient.
+
+The Fluxible R package is made to transform any dataset of gas
+concentration over time into a flux dataset. It was originally made to
+be used with a closed loop chamber system connected to a gas analyzer. A
+function for use with a tent is in development (see further
+developments).
 
 ## Installation
 
