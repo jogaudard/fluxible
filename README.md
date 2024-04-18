@@ -161,7 +161,7 @@ slopes_lin_liahovden_120 |>
 <img src="man/figures/README-plot_lin_cut-1.png" width="100%" />
 
 The exponential fit is used in a similar way. It uses the exponential
-expression shown in Zhao *et al.* (2018).
+expression shown in (**zhaoCalculationDaytimeCO22018a?**).
 
 ``` r
 slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
@@ -295,6 +295,8 @@ Joseph Gaudard, University of Bergen, Norway
 
 <joseph.gaudard@pm.me>
 
+[CV](https://jogaudard.github.io/CV_jgaudard/)
+
 ## Dissemination
 
 Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible:
@@ -309,17 +311,3 @@ poster](https://github.com/jogaudard/fluxible/blob/main/dissemination/poster_EGU
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
 
 #### References
-
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0" line-spacing="2">
-
-<div id="ref-zhaoCalculationDaytimeCO22018a" class="csl-entry">
-
-Zhao, P., Hammerle, A., Zeeman, M. and Wohlfahrt, G. (2018), “[On the
-calculation of daytime CO2 fluxes measured by automated closed
-transparent chambers](https://doi.org/10.1016/j.agrformet.2018.08.022)”,
-*Agricultural and Forest Meteorology*, Vol. 263, pp. 267–275.
-
-</div>
-
-</div>
