@@ -297,13 +297,16 @@ Joseph Gaudard, University of Bergen, Norway
 
 ## Dissemination
 
-EGU 2024, poster
+Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible:
+an R package to calculate ecosystem gas fluxes in a reproducible and
+automated workflow., EGU General Assembly 2024, Vienna, Austria, 14–19
+Apr 2024, EGU24-956, <https://doi.org/10.5194/egusphere-egu24-956>,
+2024.
 
-[Link to the
+[Direct link to the
 poster](https://github.com/jogaudard/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
 
-[Link to the
-abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html)
+<!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
 
 #### References
 
