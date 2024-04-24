@@ -172,17 +172,28 @@ fluxes_exp_liahovden <- slopes_exp_liahovden |>
 head(fluxes_exp_liahovden)
 ```
 
-The output is in mmol/m^2/h and the calculation used is as follow:
+The output is in mmol/m^2^/h and the calculation used is as follow:
 
-<img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}">
+<!-- <img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}"> -->
+
+$$
+ \text{flux}=\text{slope}\times \frac{P\times V}{R\times T\times A}
+$$
 
 where
+
 flux: the flux of gas at the surface of the plot (mmol/m^2^/h)
-slope: slope estimate (ppm^-1^)
+
+slope: slope estimate (ppm*s^-1^)
+
 P: pressure, assumed  (atm)
+
 V: volume of the chamber and tubing (L)
+
 R: gas constant (0.082057 L\*atm\*K^-1^\*mol^-1^)
+
 T: chamber air temperature (K)
+
 A: area of chamber frame base (m^2^)
 
 ## Further developments

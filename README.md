@@ -275,15 +275,30 @@ head(fluxes_exp_liahovden)
 #> 6 6        -0.00487         2.91  -0.304
 ```
 
-The output is in mmol/m^2/h and the calculation used is as follow:
+The output is in mmol/m<sup>2</sup>/h and the calculation used is as
+follow:
 
-<img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}">
+<!-- <img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}"> -->
 
-where flux: the flux of gas at the surface of the plot
-(mmol/m<sup>2</sup>/h) slope: slope estimate (ppm<sup>-1</sup>) P:
-pressure, assumed (atm) V: volume of the chamber and tubing (L) R: gas
-constant (0.082057 L\*atm\*K<sup>-1</sup>\*mol<sup>-1</sup>) T: chamber
-air temperature (K) A: area of chamber frame base (m<sup>2</sup>)
+$$
+ \text{flux}=\text{slope}\times \frac{P\times V}{R\times T\times A}
+$$
+
+where
+
+flux: the flux of gas at the surface of the plot (mmol/m<sup>2</sup>/h)
+
+slope: slope estimate (ppm\*s<sup>-1</sup>)
+
+P: pressure, assumed (atm)
+
+V: volume of the chamber and tubing (L)
+
+R: gas constant (0.082057 L\*atm\*K<sup>-1</sup>\*mol<sup>-1</sup>)
+
+T: chamber air temperature (K)
+
+A: area of chamber frame base (m<sup>2</sup>)
 
 ## Further developments
 
