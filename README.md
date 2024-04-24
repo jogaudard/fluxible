@@ -300,6 +300,9 @@ T: chamber air temperature (K)
 
 A: area of chamber frame base (m<sup>2</sup>)
 
+The conversion from micromol/m<sup>2</sup>/s to mmol/m<sup>2</sup>/h is
+included in the function.
+
 ## Further developments
 
 ### Flux tent
