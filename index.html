@@ -253,9 +253,19 @@
 <span><span class="co">#&gt; 4 4         0.143           2.98   8.93 </span></span>
 <span><span class="co">#&gt; 5 5        -0.139           2.86  -8.67 </span></span>
 <span><span class="co">#&gt; 6 6        -0.00487         2.91  -0.304</span></span></code></pre></div>
-<p>The output is in mmol/m^2/h and the calculation used is as follow:</p>
-<p><img src="https://render.githubusercontent.com/render/math?math=flux=slope%5Ctimes%20%5Cfrac%7BP%5Ctimes%20V%7D%7BR%5Ctimes%20T%5Ctimes%20A%7D"></p>
-<p>where flux: the flux of gas at the surface of the plot (mmol/m<sup>2</sup>/h) slope: slope estimate (ppm<sup>-1</sup>) P: pressure, assumed (atm) V: volume of the chamber and tubing (L) R: gas constant (0.082057 L*atm*K<sup>-1</sup>*mol<sup>-1</sup>) T: chamber air temperature (K) A: area of chamber frame base (m<sup>2</sup>)</p>
+<p>The output is in mmol/m<sup>2</sup>/h and the calculation used is as follow:</p>
+<!-- <img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}"> -->
+<p><span class="math display">$$
+ \text{flux}=\text{slope}\times \frac{P\times V}{R\times T\times A}
+$$</span></p>
+<p>where</p>
+<p>flux: the flux of gas at the surface of the plot (mmol/m<sup>2</sup>/h)</p>
+<p>slope: slope estimate (ppm*s<sup>-1</sup>)</p>
+<p>P: pressure, assumed (atm)</p>
+<p>V: volume of the chamber and tubing (L)</p>
+<p>R: gas constant (0.082057 L*atm*K<sup>-1</sup>*mol<sup>-1</sup>)</p>
+<p>T: chamber air temperature (K)</p>
+<p>A: area of chamber frame base (m<sup>2</sup>)</p>
 </div>
 <div class="section level2">
 <h2 id="further-developments">Further developments<a class="anchor" aria-label="anchor" href="#further-developments"></a>
