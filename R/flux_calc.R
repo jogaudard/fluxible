@@ -2,13 +2,13 @@
 #' @description calculates a flux based on the rate of change
 #' of gas concentration over time
 #' @param slope_df dataframe of flux slopes
-#' @param slope_col column containing the slope to calculate the flux
+#' @param slope_col column containing the slope to calculate the flux (in ppm*s^(-1))
 #' @param chamber_volume volume of the flux chamber in L,
 #' default for Three-D project chamber (25x24.5x40cm)
 #' @param tube_volume volume of the tubing in L, default for summer 2020 setup
 #' @param atm_pressure atmoshperic pressure, assumed 1 atm
 #' @param plot_area area of the plot in m^2, default for Three-D
-#' @param R_const gas constant, in L*atm*K^(-1)*mol^(-1)
+#' @param R_const gas constant (0.082057 L*atm*K^(-1)*mol^(-1))
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux.
 #' @param cols_ave columns with values that should be averaged
@@ -18,9 +18,9 @@
 #' to caculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
 #' Has to be either celsius, fahrenheit or kelvin
-#' @return a df containing fluxID, fluxes, temperature average for each flux,
+#' @return a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)), temperature average for each flux,
 #' slope used for each flux calculation,
-#' and any columns specified in cols_keep and cols_ave
+#' and any columns specified in cols_keep and cols_ave.
 #' @importFrom rlang .data
 #' @importFrom dplyr .data rename all_of select group_by summarise
 #' ungroup mutate case_when distinct left_join summarize_all
