@@ -81,7 +81,8 @@ flux_plot <- function(slopes_df,
                       f_nrow = 3,
                       y_text_position = 500,
                       f_nudge_y = 100,
-                      print_plot = "FALSE") {
+                      print_plot = "FALSE"
+                      ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
@@ -106,23 +107,6 @@ flux_plot <- function(slopes_df,
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
       RMSE_col = ((RMSE_col))
-      # color_discard = ((color_discard)),
-      # color_ok = ((color_ok)),
-      # color_zero = ((color_zero)),
-      # color_keep = ((color_keep)),
-      # color_cut = ((color_cut)),
-      # f_date_breaks = ((f_date_breaks)),
-      # f_minor_breaks = ((f_minor_breaks)),
-      # f_date_labels = ((f_date_labels)),
-      # f_ylim_upper = ((f_ylim_upper)),
-      # f_ylim_lower = ((f_ylim_lower)),
-      # f_scales = ((f_scales)),
-      # f_plotname = ((f_plotname)),
-      # f_ncol = ((f_ncol)),
-      # f_nrow = ((f_nrow)),
-      # y_text_position = ((y_text_position)),
-      # f_nudge_y = ((f_nudge_y)),
-      # print_plot = ((print_plot))
     )
   }
 
@@ -139,23 +123,6 @@ flux_plot <- function(slopes_df,
       rsquared_col = ((rsquared_col)),
       fluxID_col = ((fluxID_col)),
       start_col = ((start_col))
-      # color_discard = ((color_discard)),
-      # color_ok = ((color_ok)),
-      # color_zero = ((color_zero)),
-      # color_keep = ((color_keep)),
-      # color_cut = ((color_cut)),
-      # f_date_breaks = ((f_date_breaks)),
-      # f_minor_breaks = ((f_minor_breaks)),
-      # f_date_labels = ((f_date_labels)),
-      # f_ylim_upper = ((f_ylim_upper)),
-      # f_ylim_lower = ((f_ylim_lower)),
-      # f_scales = ((f_scales)),
-      # f_plotname = ((f_plotname)),
-      # f_ncol = ((f_ncol)),
-      # f_nrow = ((f_nrow)),
-      # y_text_position = ((y_text_position)),
-      # f_nudge_y = ((f_nudge_y)),
-      # print_plot = ((print_plot))
     )
   }
 
@@ -174,7 +141,6 @@ flux_plot <- function(slopes_df,
       date_labels = ((f_date_labels))
     ) +
     ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-    #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
     facet_wrap_paginate(
       ~f_fluxID,
       ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))

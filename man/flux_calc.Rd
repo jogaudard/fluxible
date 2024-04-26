@@ -22,7 +22,7 @@ flux_calc(
 \arguments{
 \item{slope_df}{dataframe of flux slopes}
 
-\item{slope_col}{column containing the slope to calculate the flux}
+\item{slope_col}{column containing the slope to calculate the flux (in ppm*s^(-1))}
 
 \item{chamber_volume}{volume of the flux chamber in L,
 default for Three-D project chamber (25x24.5x40cm)}
@@ -33,7 +33,7 @@ default for Three-D project chamber (25x24.5x40cm)}
 
 \item{plot_area}{area of the plot in m^2, default for Three-D}
 
-\item{R_const}{gas constant, in L\emph{atm}K^(-1)*mol^(-1)}
+\item{R_const}{gas constant (0.082057 L\emph{atm}K^(-1)*mol^(-1))}
 
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux.}
@@ -50,9 +50,9 @@ to caculate fluxes. Will be averaged with NA removed.}
 Has to be either celsius, fahrenheit or kelvin}
 }
 \value{
-a df containing fluxID, fluxes, temperature average for each flux,
+a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)), temperature average for each flux,
 slope used for each flux calculation,
-and any columns specified in cols_keep and cols_ave
+and any columns specified in cols_keep and cols_ave.
 }
 \description{
 calculates a flux based on the rate of change

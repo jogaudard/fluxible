@@ -17,23 +17,7 @@ flux_plot_exp(
   b_col = "f_b",
   cor_coef_col = "f_cor_coef",
   RMSE_col = "f_RMSE",
-  color_discard = "#D55E00",
-  color_cut = "#D55E00",
-  color_keep = "#009E73",
-  color_ok = "#000000",
-  color_zero = "#CC79A7",
-  f_date_breaks = "1 min",
-  f_minor_breaks = "10 sec",
-  f_date_labels = "\%e/\%m \\n \%H:\%M",
-  f_ylim_upper = 800,
-  f_ylim_lower = 400,
-  f_scales = "free",
-  f_plotname = "plot_quality_exp",
-  f_ncol = 4,
-  f_nrow = 3,
-  y_text_position = 500,
-  f_nudge_y = 100,
-  print_plot = "FALSE"
+  y_text_position = 500
 )
 }
 \arguments{
@@ -64,39 +48,7 @@ produced by flux_quality}
 
 \item{RMSE_col}{column containing the RMSE produced by flux_quality}
 
-\item{color_discard}{color for fits with a discard quality flag}
-
-\item{color_cut}{color for the part of the flux that is cut}
-
-\item{color_keep}{color for the part of the flux that is kept}
-
-\item{color_ok}{color for fits with an ok quality flag}
-
-\item{color_zero}{color for fits with a zero quality flag}
-
-\item{f_date_breaks}{date_breaks argument for scale_x_datetime}
-
-\item{f_minor_breaks}{minor breaks argument for scale_x_datetime}
-
-\item{f_date_labels}{date_labels argument for scale_x_datetime}
-
-\item{f_ylim_upper}{y axis upper limit}
-
-\item{f_ylim_lower}{y axis lower limit}
-
-\item{f_scales}{argument for scales in facet_wrap ("fixed" or "free")}
-
-\item{f_plotname}{filename for the extracted pdf file}
-
-\item{f_ncol}{ncol argument for facet_wrap}
-
-\item{f_nrow}{number of row per page in extracted pdf file}
-
-\item{y_text_position}{position of the text box}
-
-\item{f_nudge_y}{to nudge the text box with the parameters above the modelled flux}
-
-\item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
+\item{y_text_position}{position of the text box
 but will take time depending on the size of the dataset}
 }
 \description{
