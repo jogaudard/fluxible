@@ -58,6 +58,7 @@
 <!-- badges: end -->
 <p>The goal of fluxible is to provide a workflow that removes individual evaluation of each flux, reduces risk of bias, and makes it reproducible. Users set specific data quality standards and selection parameters as function arguments that are applied to the entire dataset. The package runs the calculations automatically, without prompting the user to take decisions mid-way, and provides quality flags and plots at the end of the process for a visual check. This makes it easy to use with large flux datasets and to integrate into a reproducible workflow. Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.</p>
 <p>The Fluxible R package is made to transform any dataset of gas concentration over time into a flux dataset. It was originally made to be used with a closed loop chamber system connected to a gas analyzer. A function for use with a tent is in development (see further developments).</p>
+<p>For a quick overview of how the package works, you can look at <a href="https://github.com/jogaudard/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf" class="external-link">the poster</a> that was presented at the European Geoscience Union Annual Meeting 2024.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -266,6 +267,7 @@ $$</span></p>
 <p>R: gas constant (0.082057 L*atm*K<sup>-1</sup>*mol<sup>-1</sup>)</p>
 <p>T: chamber air temperature (K)</p>
 <p>A: area of chamber frame base (m<sup>2</sup>)</p>
+<p>The conversion from micromol/m<sup>2</sup>/s to mmol/m<sup>2</sup>/h is included in the function.</p>
 </div>
 <div class="section level2">
 <h2 id="further-developments">Further developments<a class="anchor" aria-label="anchor" href="#further-developments"></a>
