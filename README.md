@@ -27,6 +27,10 @@ be used with a closed loop chamber system connected to a gas analyzer. A
 function for use with a tent is in development (see further
 developments).
 
+For a quick overview of how the package works, you can look at [the
+poster](https://github.com/jogaudard/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
+that was presented at the European Geoscience Union Annual Meeting 2024.
+
 ## Installation
 
 You can install the development version of fluxible from the [GitHub
