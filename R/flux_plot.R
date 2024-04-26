@@ -45,8 +45,7 @@
 #' @importFrom purrr quietly
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag, fit_type = "exp",
-#' fit_slope_col = "f_fit_slope", print_plot = TRUE)
+#' flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope", print_plot = TRUE)
 #' data(slopes30lin_flag)
 #' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE)
 #' @export
@@ -85,6 +84,14 @@ flux_plot <- function(slopes_df,
                       print_plot = "FALSE") {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
 
+  f_scales <- match.arg(f_scales, c("free", "fixed"))
+  f_plotname <- paste("f_quality_plots/", f_plotname, ".pdf", sep = "")
+
+  folder <- "./f_quality_plots"
+  if (!file.exists(folder)) {
+    dir.create(folder)
+  }
+
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
       ((slopes_df)),
@@ -98,24 +105,24 @@ flux_plot <- function(slopes_df,
       start_col = ((start_col)),
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
-      RMSE_col = ((RMSE_col)),
-      color_discard = ((color_discard)),
-      color_ok = ((color_ok)),
-      color_zero = ((color_zero)),
-      color_keep = ((color_keep)),
-      color_cut = ((color_cut)),
-      f_date_breaks = ((f_date_breaks)),
-      f_minor_breaks = ((f_minor_breaks)),
-      f_date_labels = ((f_date_labels)),
-      f_ylim_upper = ((f_ylim_upper)),
-      f_ylim_lower = ((f_ylim_lower)),
-      f_scales = ((f_scales)),
-      f_plotname = ((f_plotname)),
-      f_ncol = ((f_ncol)),
-      f_nrow = ((f_nrow)),
-      y_text_position = ((y_text_position)),
-      f_nudge_y = ((f_nudge_y)),
-      print_plot = ((print_plot))
+      RMSE_col = ((RMSE_col))
+      # color_discard = ((color_discard)),
+      # color_ok = ((color_ok)),
+      # color_zero = ((color_zero)),
+      # color_keep = ((color_keep)),
+      # color_cut = ((color_cut)),
+      # f_date_breaks = ((f_date_breaks)),
+      # f_minor_breaks = ((f_minor_breaks)),
+      # f_date_labels = ((f_date_labels)),
+      # f_ylim_upper = ((f_ylim_upper)),
+      # f_ylim_lower = ((f_ylim_lower)),
+      # f_scales = ((f_scales)),
+      # f_plotname = ((f_plotname)),
+      # f_ncol = ((f_ncol)),
+      # f_nrow = ((f_nrow)),
+      # y_text_position = ((y_text_position)),
+      # f_nudge_y = ((f_nudge_y)),
+      # print_plot = ((print_plot))
     )
   }
 
@@ -131,26 +138,71 @@ flux_plot <- function(slopes_df,
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
       fluxID_col = ((fluxID_col)),
-      start_col = ((start_col)),
-      color_discard = ((color_discard)),
-      color_ok = ((color_ok)),
-      color_zero = ((color_zero)),
-      color_keep = ((color_keep)),
-      color_cut = ((color_cut)),
-      f_date_breaks = ((f_date_breaks)),
-      f_minor_breaks = ((f_minor_breaks)),
-      f_date_labels = ((f_date_labels)),
-      f_ylim_upper = ((f_ylim_upper)),
-      f_ylim_lower = ((f_ylim_lower)),
-      f_scales = ((f_scales)),
-      f_plotname = ((f_plotname)),
-      f_ncol = ((f_ncol)),
-      f_nrow = ((f_nrow)),
-      y_text_position = ((y_text_position)),
-      f_nudge_y = ((f_nudge_y)),
-      print_plot = ((print_plot))
+      start_col = ((start_col))
+      # color_discard = ((color_discard)),
+      # color_ok = ((color_ok)),
+      # color_zero = ((color_zero)),
+      # color_keep = ((color_keep)),
+      # color_cut = ((color_cut)),
+      # f_date_breaks = ((f_date_breaks)),
+      # f_minor_breaks = ((f_minor_breaks)),
+      # f_date_labels = ((f_date_labels)),
+      # f_ylim_upper = ((f_ylim_upper)),
+      # f_ylim_lower = ((f_ylim_lower)),
+      # f_scales = ((f_scales)),
+      # f_plotname = ((f_plotname)),
+      # f_ncol = ((f_ncol)),
+      # f_nrow = ((f_nrow)),
+      # y_text_position = ((y_text_position)),
+      # f_nudge_y = ((f_nudge_y)),
+      # print_plot = ((print_plot))
     )
   }
 
-  f_plot
+  f_plot <- f_plot +
+    scale_color_manual(values = c(
+      "keep" = ((color_keep)),
+      "cut" = ((color_cut)),
+      "ok" = ((color_ok)),
+      "discard" = ((color_discard)),
+      "zero" = ((color_zero)),
+      "start_error" = ((color_discard)),
+      "weird_flux" = ((color_discard))
+    )) +
+    scale_x_datetime(
+      date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
+      date_labels = ((f_date_labels))
+    ) +
+    ylim(((f_ylim_lower)), ((f_ylim_upper))) +
+    #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
+    facet_wrap_paginate(
+      ~f_fluxID,
+      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
+    ) +
+    labs(
+      title = "Fluxes quality assessment",
+      x = "Datetime",
+      y = "Concentration",
+      colour = "Quality flags"
+    )
+
+    pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
+  for (i in 1:n_pages(f_plot)) {
+    print(f_plot +
+      facet_wrap_paginate(
+        ~f_fluxID,
+        ncol = ((f_ncol)), nrow = ((f_nrow)),
+        page = i, scales = ((f_scales))
+      ))
+  }
+  quietly(dev.off())
+
+  print("Saving plots in f_quality_plots folder.")
+
+
+  if (((print_plot)) == TRUE) {
+    return(f_plot)
+  }
+
+  
 }

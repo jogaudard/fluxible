@@ -55,30 +55,31 @@ flux_plot_exp <- function(slopes_df,
                           b_col = "f_b",
                           cor_coef_col = "f_cor_coef",
                           RMSE_col = "f_RMSE",
-                          color_discard = "#D55E00",
-                          color_cut = "#D55E00",
-                          color_keep = "#009E73",
-                          color_ok = "#000000",
-                          color_zero = "#CC79A7",
-                          f_date_breaks = "1 min",
-                          f_minor_breaks = "10 sec",
-                          f_date_labels = "%e/%m \n %H:%M",
-                          f_ylim_upper = 800,
-                          f_ylim_lower = 400,
-                          f_scales = "free",
-                          f_plotname = "plot_quality_exp",
-                          f_ncol = 4,
-                          f_nrow = 3,
-                          y_text_position = 500,
-                          f_nudge_y = 100,
-                          print_plot = "FALSE") {
-  f_scales <- match.arg(f_scales, c("free", "fixed"))
-  f_plotname <- paste("f_quality_plots/", f_plotname, ".pdf", sep = "")
+                          # color_discard = "#D55E00",
+                          # color_cut = "#D55E00",
+                          # color_keep = "#009E73",
+                          # color_ok = "#000000",
+                          # color_zero = "#CC79A7",
+                          # f_date_breaks = "1 min",
+                          # f_minor_breaks = "10 sec",
+                          # f_date_labels = "%e/%m \n %H:%M",
+                          # f_ylim_upper = 800,
+                          # f_ylim_lower = 400,
+                          # f_scales = "free",
+                          # f_plotname = "plot_quality_exp",
+                          # f_ncol = 4,
+                          # f_nrow = 3,
+                          y_text_position = 500
+                          # f_nudge_y = 100,
+                          # print_plot = "FALSE"
+                          ) {
+  # f_scales <- match.arg(f_scales, c("free", "fixed"))
+  # f_plotname <- paste("f_quality_plots/", f_plotname, ".pdf", sep = "")
 
-  folder <- "./f_quality_plots"
-  if (!file.exists(folder)) {
-    dir.create(folder)
-  }
+  # folder <- "./f_quality_plots"
+  # if (!file.exists(folder)) {
+  #   dir.create(folder)
+  # }
 
 
 
@@ -137,36 +138,36 @@ flux_plot_exp <- function(slopes_df,
       aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
       linetype = "dashed"
     ) +
-    scale_color_manual(values = c(
-      "keep" = ((color_keep)),
-      "cut" = ((color_cut)),
-      "ok" = ((color_ok)),
-      "discard" = ((color_discard)),
-      "zero" = ((color_zero)),
-      "start_error" = ((color_discard)),
-      "weird_flux" = ((color_discard))
-    )) +
-    scale_x_datetime(
-      date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
-      date_labels = ((f_date_labels))
-    ) +
-    ylim(((f_ylim_lower)), ((f_ylim_upper))) +
+    # scale_color_manual(values = c(
+    #   "keep" = ((color_keep)),
+    #   "cut" = ((color_cut)),
+    #   "ok" = ((color_ok)),
+    #   "discard" = ((color_discard)),
+    #   "zero" = ((color_zero)),
+    #   "start_error" = ((color_discard)),
+    #   "weird_flux" = ((color_discard))
+    # )) +
+    # scale_x_datetime(
+    #   date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
+    #   date_labels = ((f_date_labels))
+    # ) +
+    # ylim(((f_ylim_lower)), ((f_ylim_upper))) +
     geom_text(
       data = param_df,
       aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
-      vjust = 0, hjust = "inward", nudge_y = ((f_nudge_y))
-    ) +
-    #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
-    facet_wrap_paginate(
-      ~f_fluxID,
-      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
-    ) +
-    labs(
-      title = "Fluxes quality assessment",
-      x = "Datetime",
-      y = "Concentration",
-      colour = "Quality flags"
-    )
+      vjust = 0, hjust = "inward"
+    ) 
+    # #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
+    # facet_wrap_paginate(
+    #   ~f_fluxID,
+    #   ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
+    # ) +
+    # labs(
+    #   title = "Fluxes quality assessment",
+    #   x = "Datetime",
+    #   y = "Concentration",
+    #   colour = "Quality flags"
+    # )
 
 
 
@@ -176,19 +177,22 @@ flux_plot_exp <- function(slopes_df,
 
 
 
-  pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
-  for (i in 1:n_pages(plot_exp)) {
-    print(plot_exp +
-      facet_wrap_paginate(~f_fluxID,
-        ncol = ((f_ncol)), nrow = ((f_nrow)),
-        page = i, scales = ((f_scales))
-      ))
-  }
-  quietly(dev.off())
+  # pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
+  # for (i in 1:n_pages(plot_exp)) {
+  #   print(plot_exp +
+  #     facet_wrap_paginate(~f_fluxID,
+  #       ncol = ((f_ncol)), nrow = ((f_nrow)),
+  #       page = i, scales = ((f_scales))
+  #     ))
+  # }
+  # quietly(dev.off())
 
-  print("Saving plots in f_quality_plots folder.")
+  # print("Saving plots in f_quality_plots folder.")
 
-  if (((print_plot)) == TRUE) {
-    return(plot_exp)
-  }
+  # if (((print_plot)) == TRUE) {
+  #   return(plot_exp)
+  # }
+
+  plot_exp
+  
 }
