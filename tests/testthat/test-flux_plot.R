@@ -18,6 +18,31 @@ test_that("plot for linear fit", {
   )
 })
 
+# test_that("plot for linear fit with jpg extension works", {
+#   expect_snapshot(
+#     flux_plot(slopes30lin_flag,
+#       fit_type = "lin",
+#       fit_slope_col = "f_fit_slope",
+#       f_plotname = "test_lin_plot",
+#       print_plot = TRUE,
+#       output = "ggsave",
+#       device = "jpg"
+#     )
+#   )
+# })
+
+# test_that("plot for linear fit with jpg extension works (without device)", {
+#   expect_snapshot(
+#     flux_plot(slopes30lin_flag,
+#       fit_type = "lin",
+#       fit_slope_col = "f_fit_slope",
+#       f_plotname = "test_lin_plot.jpg",
+#       print_plot = TRUE,
+#       output = "ggsave"
+#     )
+#   )
+# })
+
 
 # test_that("plot for exponential fit", {
 #   expect_equal(

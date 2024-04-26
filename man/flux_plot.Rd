@@ -36,7 +36,18 @@ flux_plot(
   f_nrow = 3,
   y_text_position = 500,
   f_nudge_y = 100,
-  print_plot = "FALSE"
+  print_plot = "FALSE",
+  output = "pdfpages",
+  device = NULL,
+  path = NULL,
+  scale = 1,
+  width = NA,
+  height = NA,
+  units = c("in", "cm", "mm", "px"),
+  dpi = 300,
+  limitsize = TRUE,
+  bg = NULL,
+  create.dir = FALSE
 )
 }
 \arguments{
@@ -108,6 +119,29 @@ produced by flux_quality}
 
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset}
+
+\item{output}{if "pdfpages", the plots are saved as A4 landscape pdf pages (default);
+if "ggsave", the plots can be saved with the ggsave function}
+
+\item{device}{see ggsave()}
+
+\item{path}{see ggsave()}
+
+\item{scale}{see ggsave()}
+
+\item{width}{see ggsave()}
+
+\item{height}{see ggsave()}
+
+\item{units}{see ggsave()}
+
+\item{dpi}{see ggsave()}
+
+\item{limitsize}{see ggsave()}
+
+\item{bg}{see ggsave()}
+
+\item{create.dir}{see ggsave()}
 }
 \description{
 plots the fluxes and indicates what should be discarded
@@ -117,5 +151,7 @@ or replaced by zero
 data(slopes0_flag)
 flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope", print_plot = TRUE)
 data(slopes30lin_flag)
-flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE)
+flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, f_plotname = "pdf_quality_plots")
+flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", device = "jpg", f_plotname = "jpg_quality_plots")
+flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", f_plotname = "jpg_quality_plots.jpg")
 }
