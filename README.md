@@ -222,7 +222,7 @@ slopes_exp_liahovden |>
     flux_plot(
       fit_type = "exp",
       print_plot = TRUE,
-      f_plotname = "example_lia_lin",
+      f_plotname = "example_lia_exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 1,
@@ -266,17 +266,18 @@ flux_calc.
 fluxes_exp_liahovden <- slopes_exp_liahovden |>
   flux_calc(
     slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
+    cols_keep = "f_start"
   ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
 head(fluxes_exp_liahovden)
-#> # A tibble: 6 × 4
-#>   f_fluxID  f_slope temp_air_ave    flux
-#>   <fct>       <dbl>        <dbl>   <dbl>
-#> 1 1        -0.156           3.27  -9.76 
-#> 2 2         0.146           3.31   9.10 
-#> 3 3        -0.227           3.15 -14.2  
-#> 4 4         0.143           2.98   8.93 
-#> 5 5        -0.139           2.86  -8.67 
-#> 6 6        -0.00487         2.91  -0.304
+#> # A tibble: 6 × 5
+#>   f_start             f_fluxID  f_slope temp_air_ave    flux
+#>   <dttm>              <fct>       <dbl>        <dbl>   <dbl>
+#> 1 2022-07-27 05:37:40 1        -0.156           3.27  -9.76 
+#> 2 2022-07-27 05:42:10 2         0.146           3.31   9.10 
+#> 3 2022-07-27 05:47:05 3        -0.227           3.15 -14.2  
+#> 4 2022-07-27 05:50:55 4         0.143           2.98   8.93 
+#> 5 2022-07-27 05:57:40 5        -0.139           2.86  -8.67 
+#> 6 2022-07-27 06:02:10 6        -0.00487         2.91  -0.304
 ```
 
 The output is in mmol/m<sup>2</sup>/h and the calculation used is as
