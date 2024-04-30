@@ -7,3 +7,7 @@ make flux_fitting_exp more resilient in case of issue with optim in one flux (so
 add vertical line in plot for tz
 actions on other columns in flux_calc: mean (done), sum, median
 flux_calc: automatically keep f_start column
+
+
+IMPORTANT FIXES
+flux_calc: filter out cuts otherwise it calculates two fluxes (keep and cut)
