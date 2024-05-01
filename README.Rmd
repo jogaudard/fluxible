@@ -113,7 +113,7 @@ slopes_lin_liahovden_120 |>
 ```
 
 The exponential fit is used in a similar way.
-It uses the exponential expression shown in @zhaoCalculationDaytimeCO22018a.
+It uses the exponential expression shown in @zhaoCalculationDaytimeCO22018.
 
 ```{r fitting_exp}
 slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
