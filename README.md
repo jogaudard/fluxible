@@ -131,8 +131,9 @@ slopes_lin_liahovden |>
       f_plotname = "example_lia",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1,
-      y_text_position = 400
+      f_nrow = 2,
+      f_ncol = 2,
+      y_text_position = 500
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
@@ -156,8 +157,9 @@ slopes_lin_liahovden_120 |>
       f_plotname = "example_lia_lin",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1,
-      y_text_position = 400
+      f_nrow = 2,
+      f_ncol = 2,
+      y_text_position = 500
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
@@ -225,8 +227,9 @@ slopes_exp_liahovden |>
       f_plotname = "example_lia_exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1,
-      y_text_position = 400
+      f_nrow = 2,
+      f_ncol = 2,
+      y_text_position = 500
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
@@ -251,8 +254,9 @@ slopes_exp_liahovden_30 |>
       f_plotname = "example_lia_lin",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
-      f_nrow = 1,
-      y_text_position = 400
+      f_nrow = 2,
+      f_ncol = 2,
+      y_text_position = 500
       )
 #> [1] "Saving plots in f_quality_plots folder."
 ```
