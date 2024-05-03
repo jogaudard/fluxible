@@ -77,7 +77,18 @@ or replaced by zero</p>
 <span>  f_nrow <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  y_text_position <span class="op">=</span> <span class="fl">500</span>,</span>
 <span>  f_nudge_y <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  print_plot <span class="op">=</span> <span class="st">"FALSE"</span></span>
+<span>  print_plot <span class="op">=</span> <span class="st">"FALSE"</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"pdfpages"</span>,</span>
+<span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  width <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  height <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"in"</span>, <span class="st">"cm"</span>, <span class="st">"mm"</span>, <span class="st">"px"</span><span class="op">)</span>,</span>
+<span>  dpi <span class="op">=</span> <span class="fl">300</span>,</span>
+<span>  limitsize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  create.dir <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -215,19 +226,71 @@ produced by flux_quality</p></dd>
 <dd><p>FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset</p></dd>
 
+
+<dt>output</dt>
+<dd><p>if "pdfpages", the plots are saved as A4 landscape pdf pages (default);
+if "ggsave", the plots can be saved with the ggsave function</p></dd>
+
+
+<dt>device</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>path</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>scale</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>width</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>height</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>units</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>dpi</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>limitsize</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>bg</dt>
+<dd><p>see ggsave()</p></dd>
+
+
+<dt>create.dir</dt>
+<dd><p>see ggsave()</p></dd>
+
 </dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">slopes0_flag</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">flux_plot</span><span class="op">(</span><span class="va">slopes0_flag</span>, fit_type <span class="op">=</span> <span class="st">"exp"</span>,</span></span>
-<span class="r-in"><span>fit_slope_col <span class="op">=</span> <span class="st">"f_fit_slope"</span>, print_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">flux_plot</span><span class="op">(</span><span class="va">slopes0_flag</span>, fit_type <span class="op">=</span> <span class="st">"exp"</span>, fit_slope_col <span class="op">=</span> <span class="st">"f_fit_slope"</span>, print_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Saving plots in f_quality_plots folder."</span>
 <span class="r-plt img"><img src="flux_plot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">slopes30lin_flag</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">flux_plot</span><span class="op">(</span><span class="va">slopes30lin_flag</span>, fit_type <span class="op">=</span> <span class="st">"lin"</span>, print_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">flux_plot</span><span class="op">(</span><span class="va">slopes30lin_flag</span>, fit_type <span class="op">=</span> <span class="st">"lin"</span>, print_plot <span class="op">=</span> <span class="cn">TRUE</span>, f_plotname <span class="op">=</span> <span class="st">"pdf_quality_plots"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Saving plots in f_quality_plots folder."</span>
 <span class="r-plt img"><img src="flux_plot-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">flux_plot</span><span class="op">(</span><span class="va">slopes30lin_flag</span>, fit_type <span class="op">=</span> <span class="st">"lin"</span>, print_plot <span class="op">=</span> <span class="cn">TRUE</span>, output <span class="op">=</span> <span class="st">"ggsave"</span>, device <span class="op">=</span> <span class="st">"jpg"</span>, f_plotname <span class="op">=</span> <span class="st">"jpg_quality_plots"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving 6.67 x 6.67 in image</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Saving plots in f_quality_plots folder."</span>
+<span class="r-plt img"><img src="flux_plot-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">flux_plot</span><span class="op">(</span><span class="va">slopes30lin_flag</span>, fit_type <span class="op">=</span> <span class="st">"lin"</span>, print_plot <span class="op">=</span> <span class="cn">TRUE</span>, output <span class="op">=</span> <span class="st">"ggsave"</span>, f_plotname <span class="op">=</span> <span class="st">"jpg_quality_plots.jpg"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving 6.67 x 6.67 in image</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Saving plots in f_quality_plots folder."</span>
+<span class="r-plt img"><img src="flux_plot-4.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

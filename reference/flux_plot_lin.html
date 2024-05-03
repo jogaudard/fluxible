@@ -56,23 +56,7 @@ discarded or replaced by zero</p>
 <span>  pvalue_col <span class="op">=</span> <span class="st">"f_pvalue"</span>,</span>
 <span>  rsquared_col <span class="op">=</span> <span class="st">"f_rsquared"</span>,</span>
 <span>  start_col <span class="op">=</span> <span class="st">"f_start"</span>,</span>
-<span>  color_discard <span class="op">=</span> <span class="st">"#D55E00"</span>,</span>
-<span>  color_cut <span class="op">=</span> <span class="st">"#D55E00"</span>,</span>
-<span>  color_keep <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
-<span>  color_ok <span class="op">=</span> <span class="st">"#000000"</span>,</span>
-<span>  color_zero <span class="op">=</span> <span class="st">"#CC79A7"</span>,</span>
-<span>  f_date_breaks <span class="op">=</span> <span class="st">"1 min"</span>,</span>
-<span>  f_minor_breaks <span class="op">=</span> <span class="st">"10 sec"</span>,</span>
-<span>  f_date_labels <span class="op">=</span> <span class="st">"%e/%m \n %H:%M"</span>,</span>
-<span>  f_ylim_upper <span class="op">=</span> <span class="fl">800</span>,</span>
-<span>  f_ylim_lower <span class="op">=</span> <span class="fl">400</span>,</span>
-<span>  f_scales <span class="op">=</span> <span class="st">"free"</span>,</span>
-<span>  f_plotname <span class="op">=</span> <span class="st">"plot_quality_lin"</span>,</span>
-<span>  f_ncol <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  f_nrow <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  y_text_position <span class="op">=</span> <span class="fl">500</span>,</span>
-<span>  f_nudge_y <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  print_plot <span class="op">=</span> <span class="st">"FALSE"</span></span>
+<span>  y_text_position <span class="op">=</span> <span class="fl">500</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,72 +105,8 @@ used for the quality assessment</p></dd>
 <dd><p>column containing the datetime of the start of each flux</p></dd>
 
 
-<dt>color_discard</dt>
-<dd><p>color for fits with a discard quality flag</p></dd>
-
-
-<dt>color_cut</dt>
-<dd><p>color for the part of the flux that is cut</p></dd>
-
-
-<dt>color_keep</dt>
-<dd><p>color for the part of the flux that is kept</p></dd>
-
-
-<dt>color_ok</dt>
-<dd><p>color for fits with an ok quality flag</p></dd>
-
-
-<dt>color_zero</dt>
-<dd><p>color for fits with a zero quality flag</p></dd>
-
-
-<dt>f_date_breaks</dt>
-<dd><p>date_breaks argument for scale_x_datetime</p></dd>
-
-
-<dt>f_minor_breaks</dt>
-<dd><p>minor breaks argument for scale_x_datetime</p></dd>
-
-
-<dt>f_date_labels</dt>
-<dd><p>date_labels argument for scale_x_datetime</p></dd>
-
-
-<dt>f_ylim_upper</dt>
-<dd><p>y axis upper limit</p></dd>
-
-
-<dt>f_ylim_lower</dt>
-<dd><p>y axis lower limit</p></dd>
-
-
-<dt>f_scales</dt>
-<dd><p>argument for scales in facet_wrap ("fixed" or "free")</p></dd>
-
-
-<dt>f_plotname</dt>
-<dd><p>filename for the extracted pdf file</p></dd>
-
-
-<dt>f_ncol</dt>
-<dd><p>ncol argument for facet_wrap</p></dd>
-
-
-<dt>f_nrow</dt>
-<dd><p>number of row per page in extracted pdf file</p></dd>
-
-
 <dt>y_text_position</dt>
-<dd><p>position of the text box</p></dd>
-
-
-<dt>f_nudge_y</dt>
-<dd><p>to nudge the text box with the parameters above the modelled flux</p></dd>
-
-
-<dt>print_plot</dt>
-<dd><p>FALSE or TRUE, if TRUE it prints the plot in R
+<dd><p>position of the text box
 but will take time depending on the size of the dataset</p></dd>
 
 </dl></div>

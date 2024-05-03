@@ -48,6 +48,8 @@ of gas concentration over time</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">flux_calc</span><span class="op">(</span></span>
 <span>  <span class="va">slope_df</span>,</span>
 <span>  <span class="va">slope_col</span>,</span>
+<span>  cut_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  keep_filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  chamber_volume <span class="op">=</span> <span class="fl">24.5</span>,</span>
 <span>  tube_volume <span class="op">=</span> <span class="fl">0.075</span>,</span>
 <span>  atm_pressure <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -71,6 +73,14 @@ of gas concentration over time</p>
 <dd><p>column containing the slope to calculate the flux</p></dd>
 
 
+<dt>cut_col</dt>
+<dd><p>column containing cutting information</p></dd>
+
+
+<dt>keep_filter</dt>
+<dd><p>name in cut_col of data to keep</p></dd>
+
+
 <dt>chamber_volume</dt>
 <dd><p>volume of the flux chamber in L,
 default for Three-D project chamber (25x24.5x40cm)</p></dd>
@@ -89,7 +99,7 @@ default for Three-D project chamber (25x24.5x40cm)</p></dd>
 
 
 <dt>R_const</dt>
-<dd><p>gas constant, in L<em>atm</em>K^(-1)*mol^(-1)</p></dd>
+<dd><p>gas constant (0.082057 L<em>atm</em>K^(-1)*mol^(-1))</p></dd>
 
 
 <dt>cols_keep</dt>
@@ -120,9 +130,9 @@ Has to be either celsius, fahrenheit or kelvin</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a df containing fluxID, fluxes, temperature average for each flux,
+<p>a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)), temperature average for each flux,
 slope used for each flux calculation,
-and any columns specified in cols_keep and cols_ave</p>
+and any columns specified in cols_keep and cols_ave.</p>
     </div>
 
     <div class="section level2">
