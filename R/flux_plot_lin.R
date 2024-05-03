@@ -41,14 +41,14 @@ flux_plot_lin <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     rename(
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col)),
-      f_cut = all_of((cut_col)),
-      f_fit = all_of((fit_col)),
-      f_quality_flag = all_of((quality_flag_col)),
-      f_fluxID = all_of((fluxID_col)),
-      f_pvalue = all_of((pvalue_col)),
-      f_rsquared = all_of((rsquared_col)),
+      f_datetime = all_of(((datetime_col))),
+      f_conc = all_of(((conc_col))),
+      f_cut = all_of(((cut_col))),
+      f_fit = all_of(((fit_col))),
+      f_quality_flag = all_of(((quality_flag_col))),
+      f_fluxID = all_of(((fluxID_col))),
+      f_pvalue = all_of(((pvalue_col))),
+      f_rsquared = all_of(((rsquared_col))),
       f_start = all_of(((start_col)))
     )
 

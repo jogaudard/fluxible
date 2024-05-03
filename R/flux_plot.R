@@ -131,7 +131,8 @@ flux_plot <- function(slopes_df,
       start_col = ((start_col)),
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
-      RMSE_col = ((RMSE_col))
+      RMSE_col = ((RMSE_col)),
+      y_text_position = ((y_text_position))
     )
   }
 
@@ -147,7 +148,8 @@ flux_plot <- function(slopes_df,
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
       fluxID_col = ((fluxID_col)),
-      start_col = ((start_col))
+      start_col = ((start_col)),
+      y_text_position = ((y_text_position))
     )
   }
 

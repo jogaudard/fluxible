@@ -10,4 +10,4 @@ flux_calc: automatically keep f_start column
 
 
 IMPORTANT FIXES
-flux_calc: filter out cuts otherwise it calculates two fluxes (keep and cut)
+fixed flux_calc: filter out cuts otherwise it calculates two fluxes (keep and cut)

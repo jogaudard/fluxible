@@ -41,21 +41,21 @@ flux_plot_exp <- function(slopes_df,
                           RMSE_col = "f_RMSE",
                           y_text_position = 500
                           ) {
-
+  
 
 
 
   slopes_df <- slopes_df |>
     rename(
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col)),
-      f_cut = all_of((cut_col)),
-      f_fit = all_of((fit_col)),
+      f_datetime = all_of(((datetime_col))),
+      f_conc = all_of(((conc_col))),
+      f_cut = all_of(((cut_col))),
+      f_fit = all_of(((fit_col))),
       f_fit_slope = all_of(((fit_slope_col))),
-      f_quality_flag = all_of((quality_flag_col)),
-      f_fluxID = all_of((fluxID_col)),
+      f_quality_flag = all_of(((quality_flag_col))),
+      f_fluxID = all_of(((fluxID_col))),
       f_start = all_of(((start_col))),
-      f_b = all_of((b_col)),
+      f_b = all_of(((b_col))),
       f_cor_coef = all_of(((cor_coef_col))),
       f_RMSE = all_of(((RMSE_col)))
     )

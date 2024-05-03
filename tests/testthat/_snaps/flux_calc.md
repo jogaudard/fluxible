@@ -78,3 +78,19 @@
       5        5   1.46          281.  89.9
       6        6   0.426         281.  26.2
 
+# calculating fluxes on dataset with cuts filters out the cuts first
+
+    Code
+      flux_calc(slopes30_flag, slope_col = "f_slope_corr", cut_col = "f_cut",
+        keep_filter = "keep")
+    Output
+      # A tibble: 6 x 4
+        f_fluxID f_slope temp_air_ave  flux
+           <dbl>   <dbl>        <dbl> <dbl>
+      1        1   0.775         7.29  47.7
+      2        2   0.504         7.37  31.0
+      3        3   0.337         7.45  20.7
+      4        4   0.676         7.77  41.5
+      5        5   1.12          7.70  68.7
+      6        6   0.425         7.74  26.1
+

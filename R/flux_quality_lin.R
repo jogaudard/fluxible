@@ -37,11 +37,11 @@ flux_quality_lin <- function(slopes_df,
                              rsquared_threshold = 0.7) {
   slopes_df <- slopes_df |>
     rename(
-      f_fluxID = all_of((fluxID_col)),
-      f_slope = all_of((slope_col)),
-      f_conc = all_of((conc_col)),
-      f_pvalue = all_of((pvalue_col)),
-      f_rsquared = all_of((rsquared_col))
+      f_fluxID = all_of(((fluxID_col))),
+      f_slope = all_of(((slope_col))),
+      f_conc = all_of(((conc_col))),
+      f_pvalue = all_of(((pvalue_col))),
+      f_rsquared = all_of(((rsquared_col)))
     )
 
   quality_par_start <- slopes_df |>
@@ -50,8 +50,8 @@ flux_quality_lin <- function(slopes_df,
     rowwise() |>
     summarise(
       f_start_error = case_when(
-        data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
-        data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
+        data$f_conc[1] < (((ambient_conc)) - ((error))) ~ "error",
+        data$f_conc[1] > (((ambient_conc)) + ((error))) ~ "error",
         TRUE ~ "ok"
       )
     ) |>

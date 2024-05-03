@@ -2,7 +2,8 @@
 
     Code
       flux_fitting_exp(co2_conc)
-    Warning <simpleWarning>
+    Condition
+      Warning in `flux_fitting_exp()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds because data are missing
        fluxID 6 : slope was estimated on 206 points out of 210 seconds because data are missing
