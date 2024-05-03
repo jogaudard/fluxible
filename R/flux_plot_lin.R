@@ -14,23 +14,7 @@
 #' @param rsquared_col column containing the r squared
 #' used for the quality assessment
 #' @param start_col column containing the datetime of the start of each flux
-#' @param color_discard color for fits with a discard quality flag
-#' @param color_cut color for the part of the flux that is cut
-#' @param color_keep color for the part of the flux that is kept
-#' @param color_ok color for fits with an ok quality flag
-#' @param color_zero color for fits with a zero quality flag
-#' @param f_date_breaks date_breaks argument for scale_x_datetime
-#' @param f_minor_breaks minor breaks argument for scale_x_datetime
-#' @param f_date_labels date_labels argument for scale_x_datetime
-#' @param f_ylim_upper y axis upper limit
-#' @param f_ylim_lower y axis lower limit
-#' @param f_scales argument for scales in facet_wrap ("fixed" or "free")
-#' @param f_plotname filename for the extracted pdf file
-#' @param f_nrow number of row per page in extracted pdf file
-#' @param f_ncol ncol argument for facet_wrap
 #' @param y_text_position position of the text box
-#' @param f_nudge_y to nudge the text box with the parameters above the modelled flux
-#' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
@@ -51,41 +35,20 @@ flux_plot_lin <- function(slopes_df,
                           pvalue_col = "f_pvalue",
                           rsquared_col = "f_rsquared",
                           start_col = "f_start",
-                          color_discard = "#D55E00",
-                          color_cut = "#D55E00",
-                          color_keep = "#009E73",
-                          color_ok = "#000000",
-                          color_zero = "#CC79A7",
-                          f_date_breaks = "1 min",
-                          f_minor_breaks = "10 sec",
-                          f_date_labels = "%e/%m \n %H:%M",
-                          f_ylim_upper = 800,
-                          f_ylim_lower = 400,
-                          f_scales = "free",
-                          f_plotname = "plot_quality_lin",
-                          f_ncol = 4,
-                          f_nrow = 3,
-                          y_text_position = 500,
-                          f_nudge_y = 100,
-                          print_plot = "FALSE") {
-  f_scales <- match.arg(f_scales, c("free", "fixed"))
-  f_plotname <- paste("f_quality_plots/", f_plotname, ".pdf", sep = "")
-
-  folder <- "./f_quality_plots"
-  if (!file.exists(folder)) {
-    dir.create(folder)
-  }
+                          y_text_position = 500
+                          ) {
+  
 
   slopes_df <- slopes_df |>
     rename(
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col)),
-      f_cut = all_of((cut_col)),
-      f_fit = all_of((fit_col)),
-      f_quality_flag = all_of((quality_flag_col)),
-      f_fluxID = all_of((fluxID_col)),
-      f_pvalue = all_of((pvalue_col)),
-      f_rsquared = all_of((rsquared_col)),
+      f_datetime = all_of(((datetime_col))),
+      f_conc = all_of(((conc_col))),
+      f_cut = all_of(((cut_col))),
+      f_fit = all_of(((fit_col))),
+      f_quality_flag = all_of(((quality_flag_col))),
+      f_fluxID = all_of(((fluxID_col))),
+      f_pvalue = all_of(((pvalue_col))),
+      f_rsquared = all_of(((rsquared_col))),
       f_start = all_of(((start_col)))
     )
 
@@ -116,63 +79,15 @@ flux_plot_lin <- function(slopes_df,
       aes(y = .data$f_fit, color = .data$f_quality_flag),
       linetype = "longdash"
     ) +
-    scale_color_manual(values = c(
-      "keep" = ((color_keep)),
-      "cut" = ((color_cut)),
-      "ok" = ((color_ok)),
-      "discard" = ((color_discard)),
-      "zero" = ((color_zero)),
-      "start_error" = ((color_discard)),
-      "weird_flux" = ((color_discard))
-    )) +
-    scale_x_datetime(
-      date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
-      date_labels = ((f_date_labels))
-    ) +
-    ylim(((f_ylim_lower)), ((f_ylim_upper))) +
     geom_text(
       data = param_df,
       aes(
         x = .data$f_start, y = ((y_text_position)),
         label = .data$print_col
       ),
-      vjust = 0, hjust = "inward", nudge_y = ((f_nudge_y))
-    ) +
-    #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
-    facet_wrap_paginate(
-      ~f_fluxID,
-      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
-    ) +
-    labs(
-      title = "Fluxes quality assessment",
-      x = "Datetime",
-      y = "Concentration",
-      colour = "Quality flags"
+      vjust = 0, hjust = "inward"
     )
 
+plot_lin
 
-
-
-
-
-
-
-
-  pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
-  for (i in 1:n_pages(plot_lin)) {
-    print(plot_lin +
-      facet_wrap_paginate(
-        ~f_fluxID,
-        ncol = ((f_ncol)), nrow = ((f_nrow)),
-        page = i, scales = ((f_scales))
-      ))
-  }
-  quietly(dev.off())
-
-  print("Saving plots in f_quality_plots folder.")
-
-
-  if (((print_plot)) == TRUE) {
-    return(plot_lin)
-  }
 }

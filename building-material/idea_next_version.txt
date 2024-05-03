@@ -5,3 +5,9 @@ give choice to overwrite plot or not
 giga warp up function doing the fitting, quality, and plot to test different cuts and quality thresholds
 make flux_fitting_exp more resilient in case of issue with optim in one flux (so far it crashes the entire thing, would prefer to take out the problematic flux and fit the rest)
 add vertical line in plot for tz
+actions on other columns in flux_calc: mean (done), sum, median
+flux_calc: automatically keep f_start column
+
+
+IMPORTANT FIXES
+fixed flux_calc: filter out cuts otherwise it calculates two fluxes (keep and cut)

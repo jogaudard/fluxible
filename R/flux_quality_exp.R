@@ -48,13 +48,13 @@ flux_quality_exp <- function(slopes_df,
                              b_threshold = 1) {
   slopes_df <- slopes_df |>
     rename(
-      f_fluxID = all_of((fluxID_col)),
-      f_conc = all_of((conc_col)),
-      f_b = all_of((b_col)),
-      f_time = all_of((time_col)),
-      f_fit = all_of((fit_col)),
-      f_slope_tz = all_of((slope_col)),
-      f_cut = all_of((cut_col))
+      f_fluxID = all_of(((fluxID_col))),
+      f_conc = all_of(((conc_col))),
+      f_b = all_of(((b_col))),
+      f_time = all_of(((time_col))),
+      f_fit = all_of(((fit_col))),
+      f_slope_tz = all_of(((slope_col))),
+      f_cut = all_of(((cut_col)))
     )
 
 
@@ -78,8 +78,8 @@ flux_quality_exp <- function(slopes_df,
     rowwise() |>
     summarise(
       f_start_error = case_when(
-        data$f_conc[1] < (((ambient_conc)) - error) ~ "error",
-        data$f_conc[1] > (((ambient_conc)) + error) ~ "error",
+        data$f_conc[1] < (((ambient_conc)) - ((error))) ~ "error",
+        data$f_conc[1] > (((ambient_conc)) + ((error))) ~ "error",
         TRUE ~ "ok"
       )
     ) |>

@@ -69,19 +69,19 @@ flux_match <- function(raw_conc,
     stop("start in field_record dataframe is not ymd_hms!")
   }
 
-  if (!is.double(startcrop)) {
+  if (!is.double(((startcrop)))) {
     stop("startcrop has to be a double")
   }
-  if (!is.double(time_diff)) {
+  if (!is.double(((time_diff)))) {
     stop("time_diff has to be a double")
   }
-  if (!is.double(measurement_length)) {
+  if (!is.double(((measurement_length)))) {
     stop("measurement_length has to be a double")
   }
-  if (!is.double(ratio_threshold)) {
+  if (!is.double(((ratio_threshold)))) {
     stop("ratio_threshold has to be a number between 0 and 1")
   }
-  if (ratio_threshold < 0 || ratio_threshold > 1) {
+  if (((ratio_threshold)) < 0 || ((ratio_threshold)) > 1) {
     stop("ratio_threshold has to be a number between 0 and 1")
   }
 

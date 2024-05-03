@@ -38,17 +38,30 @@
 #' @param f_nudge_y to nudge the text box with the parameters above the modelled flux
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
+#' @param output if "pdfpages", the plots are saved as A4 landscape pdf pages (default);
+#' if "ggsave", the plots can be saved with the ggsave function
+#' @param device see ggsave()
+#' @param path see ggsave()
+#' @param scale see ggsave()
+#' @param width see ggsave()
+#' @param height see ggsave()
+#' @param units see ggsave()
+#' @param dpi see ggsave()
+#' @param limitsize see ggsave()
+#' @param bg see ggsave()
+#' @param create.dir see ggsave()
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
-#' scale_x_datetime ylim facet_wrap labs geom_text theme_bw
+#' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag, fit_type = "exp",
-#' fit_slope_col = "f_fit_slope", print_plot = TRUE)
+#' flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope", print_plot = TRUE)
 #' data(slopes30lin_flag)
-#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE)
+#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, f_plotname = "pdf_quality_plots")
+#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", device = "jpg", f_plotname = "jpg_quality_plots")
+#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", f_plotname = "jpg_quality_plots.jpg")
 #' @export
 
 flux_plot <- function(slopes_df,
@@ -82,8 +95,28 @@ flux_plot <- function(slopes_df,
                       f_nrow = 3,
                       y_text_position = 500,
                       f_nudge_y = 100,
-                      print_plot = "FALSE") {
+                      print_plot = "FALSE",
+                      output = "pdfpages",
+                      device = NULL,
+                      path = NULL,
+                      scale = 1,
+                      width = NA,
+                      height = NA,
+                      units = c("in", "cm", "mm", "px"),
+                      dpi = 300,
+                      limitsize = TRUE,
+                      bg = NULL,
+                      create.dir = FALSE
+                      ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
+
+  f_scales <- match.arg(f_scales, c("free", "fixed"))
+  f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
+
+  folder <- "./f_quality_plots"
+  if (!file.exists(folder)) {
+    dir.create(folder)
+  }
 
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
@@ -99,23 +132,7 @@ flux_plot <- function(slopes_df,
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
       RMSE_col = ((RMSE_col)),
-      color_discard = ((color_discard)),
-      color_ok = ((color_ok)),
-      color_zero = ((color_zero)),
-      color_keep = ((color_keep)),
-      color_cut = ((color_cut)),
-      f_date_breaks = ((f_date_breaks)),
-      f_minor_breaks = ((f_minor_breaks)),
-      f_date_labels = ((f_date_labels)),
-      f_ylim_upper = ((f_ylim_upper)),
-      f_ylim_lower = ((f_ylim_lower)),
-      f_scales = ((f_scales)),
-      f_plotname = ((f_plotname)),
-      f_ncol = ((f_ncol)),
-      f_nrow = ((f_nrow)),
-      y_text_position = ((y_text_position)),
-      f_nudge_y = ((f_nudge_y)),
-      print_plot = ((print_plot))
+      y_text_position = ((y_text_position))
     )
   }
 
@@ -132,25 +149,64 @@ flux_plot <- function(slopes_df,
       rsquared_col = ((rsquared_col)),
       fluxID_col = ((fluxID_col)),
       start_col = ((start_col)),
-      color_discard = ((color_discard)),
-      color_ok = ((color_ok)),
-      color_zero = ((color_zero)),
-      color_keep = ((color_keep)),
-      color_cut = ((color_cut)),
-      f_date_breaks = ((f_date_breaks)),
-      f_minor_breaks = ((f_minor_breaks)),
-      f_date_labels = ((f_date_labels)),
-      f_ylim_upper = ((f_ylim_upper)),
-      f_ylim_lower = ((f_ylim_lower)),
-      f_scales = ((f_scales)),
-      f_plotname = ((f_plotname)),
-      f_ncol = ((f_ncol)),
-      f_nrow = ((f_nrow)),
-      y_text_position = ((y_text_position)),
-      f_nudge_y = ((f_nudge_y)),
-      print_plot = ((print_plot))
+      y_text_position = ((y_text_position))
     )
   }
 
-  f_plot
+  f_plot <- f_plot +
+    scale_color_manual(values = c(
+      "keep" = ((color_keep)),
+      "cut" = ((color_cut)),
+      "ok" = ((color_ok)),
+      "discard" = ((color_discard)),
+      "zero" = ((color_zero)),
+      "start_error" = ((color_discard)),
+      "weird_flux" = ((color_discard))
+    )) +
+    scale_x_datetime(
+      date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
+      date_labels = ((f_date_labels))
+    ) +
+    ylim(((f_ylim_lower)), ((f_ylim_upper))) +
+    facet_wrap_paginate(
+      ~f_fluxID,
+      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
+    ) +
+    labs(
+      title = "Fluxes quality assessment",
+      x = "Datetime",
+      y = "Concentration",
+      colour = "Quality flags"
+    )
+
+if(((output)) == "pdfpages") {
+  f_plotname <- paste(f_plotname, ".pdf", sep = "")
+    pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
+  for (i in 1:n_pages(f_plot)) {
+    print(f_plot +
+      facet_wrap_paginate(
+        ~f_fluxID,
+        ncol = ((f_ncol)), nrow = ((f_nrow)),
+        page = i, scales = ((f_scales))
+      ))
+  }
+  quietly(dev.off())
+}
+
+if(((output)) == "ggsave"){
+  ggsave(
+    ((f_plotname)),
+    plot = f_plot,
+    device = ((device))
+  )
+}
+
+  print("Saving plots in f_quality_plots folder.")
+
+
+  if (((print_plot)) == TRUE) {
+    return(f_plot)
+  }
+
+  
 }

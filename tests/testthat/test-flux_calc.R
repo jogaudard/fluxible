@@ -120,3 +120,17 @@ test_that("error some cols_keep do not exist", {
     "some names in cols_keep cannot be found in slope_df"
   )
 })
+
+# reproducing the error I had in the example in the manuscript
+# when there is a cut, flux_calc calculates a flux for keep and a flux for cut, which is wrong. I need to discard the cut data first.
+
+test_that("calculating fluxes on dataset with cuts filters out the cuts first", {
+  expect_snapshot(
+    flux_calc(
+  slopes30_flag,
+  slope_col = "f_slope_corr",
+  cut_col = "f_cut",
+  keep_filter = "keep"
+  )
+  )
+})

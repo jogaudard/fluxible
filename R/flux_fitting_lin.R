@@ -29,15 +29,15 @@ flux_fitting_lin <- function(conc_df,
                              fluxID_col = "f_fluxID") {
   conc_df <- conc_df |>
     rename(
-      f_start = all_of((start_col)),
-      f_end = all_of((end_col)),
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col)),
-      f_fluxID = all_of((fluxID_col))
+      f_start = all_of(((start_col))),
+      f_end = all_of(((end_col))),
+      f_datetime = all_of(((datetime_col))),
+      f_conc = all_of(((conc_col))),
+      f_fluxID = all_of(((fluxID_col)))
     )
 
-  if (!is.double(start_cut)) stop("start_cut has to be a double")
-  if (!is.double(end_cut)) stop("end_cut has to be a double")
+  if (!is.double(((start_cut)))) stop("start_cut has to be a double")
+  if (!is.double(((end_cut)))) stop("end_cut has to be a double")
 
   length_flux_max <- conc_df |>
     mutate(
@@ -97,9 +97,9 @@ flux_fitting_lin <- function(conc_df,
     mutate(
       temp = map(.data$data, \(d) {
         model <- lm(f_conc ~ f_time_cut, data = d)
-        glance <- broom::glance(model) |>
+        glance <- broom::glance(((model))) |>
           select("r.squared", "adj.r.squared", "p.value")
-        tidy <- broom::tidy(model) |>
+        tidy <- broom::tidy(((model))) |>
           select("term", "estimate") |>
           pivot_wider(names_from = "term", values_from = "estimate")
         bind_cols(((glance)), ((tidy)))
