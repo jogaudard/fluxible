@@ -18,6 +18,7 @@ flux_fitting(
   b_window = 10,
   a_window = 10,
   roll_width = 15,
+  t_zero = 0,
   fit_type
 )
 }
@@ -51,6 +52,8 @@ it is assumed that C fits the data perfectly}
 \item{roll_width}{width of the rolling mean for CO2 when looking for tz,
 ideally same as Cz_window}
 
+\item{t_zero}{time at which the slope should be calculated (for fits that do not include t_zero as a parameter)}
+
 \item{fit_type}{exponential or linear, depending on the wish of the user.
 Exponential is using the fit described in Zhao 2018}
 }
@@ -65,4 +68,5 @@ linear model
 \examples{
 data(co2_conc)
 flux_fitting(co2_conc, fit_type = "exp")
+flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30)
 }

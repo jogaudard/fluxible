@@ -431,8 +431,16 @@ usethis::use_test(name = "flux_fitting_lin")
 
 
 
+# making quadratic datasets
+
+slopes30qua <- flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30) |>
+   flux_quality(fit_type = "quadratic")
+
+# head(slopes0qua)
+# str(slopes0qua)
 
 
+flux_plot(slopes0qua, fit_type = "quadratic", print_plot = TRUE, f_ncol = 3)
 
 
 

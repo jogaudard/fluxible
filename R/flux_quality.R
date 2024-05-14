@@ -65,7 +65,7 @@ flux_quality <- function(slopes_df,
                          RMSE_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1) {
-  fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
+  fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
   if (((fit_type)) == "exponential") {
     quality_flag <- flux_quality_exp(
@@ -89,6 +89,22 @@ flux_quality <- function(slopes_df,
 
   if (((fit_type)) == "linear") {
     quality_flag <- flux_quality_lin(
+      ((slopes_df)),
+      ambient_conc = ((ambient_conc)),
+      error = ((error)),
+      fluxID_col = ((fluxID_col)),
+      slope_col = ((slope_col)),
+      weird_fluxesID = ((weird_fluxesID)),
+      pvalue_col = ((pvalue_col)),
+      rsquared_col = ((rsquared_col)),
+      pvalue_threshold = ((pvalue_threshold)),
+      rsquared_threshold = ((rsquared_threshold)),
+      conc_col = ((conc_col))
+    )
+  }
+
+  if (((fit_type)) == "quadratic") {
+    quality_flag <- flux_quality_quadratic(
       ((slopes_df)),
       ambient_conc = ((ambient_conc)),
       error = ((error)),

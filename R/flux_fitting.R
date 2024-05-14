@@ -19,6 +19,7 @@
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
 #' @param fluxID_col column with ID of each flux
+#' @param t_zero time at which the slope should be calculated (for fits that do not include t_zero as a parameter)
 #' @return a dataframe with the slope at t zero,
 #' modelled concentration over time and exponential expression parameters
 #' @importFrom rlang .data
@@ -32,6 +33,7 @@
 #' @examples
 #' data(co2_conc)
 #' flux_fitting(co2_conc, fit_type = "exp")
+#' flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30)
 #' @export
 #'
 
@@ -48,8 +50,9 @@ flux_fitting <- function(conc_df,
                          b_window = 10,
                          a_window = 10,
                          roll_width = 15,
+                         t_zero = 0,
                          fit_type) {
-  fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
+  fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
   if (((fit_type)) == "exponential") {
     conc_fitting <- flux_fitting_exp(
@@ -80,6 +83,20 @@ flux_fitting <- function(conc_df,
       datetime_col = ((datetime_col)),
       conc_col = ((conc_col)),
       fluxID_col = ((fluxID_col))
+    )
+  }
+
+  if (((fit_type)) == "quadratic") {
+    conc_fitting <- flux_fitting_quadratic(
+      conc_df,
+      start_cut = ((start_cut)),
+      end_cut = ((end_cut)),
+      start_col = ((start_col)),
+      end_col = ((end_col)),
+      datetime_col = ((datetime_col)),
+      conc_col = ((conc_col)),
+      fluxID_col = ((fluxID_col)),
+      t_zero = ((t_zero))
     )
   }
 
