@@ -62,6 +62,7 @@
 #' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, f_plotname = "pdf_quality_plots")
 #' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", device = "jpg", f_plotname = "jpg_quality_plots")
 #' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", f_plotname = "jpg_quality_plots.jpg")
+#' flux_plot(slopes0qua, fit_type = "quadratic", print_plot = TRUE)
 #' @export
 
 flux_plot <- function(slopes_df,

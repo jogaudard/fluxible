@@ -71,13 +71,17 @@ flux_plot_quadratic <- function(slopes_df,
       )
     )
 
-  plot_lin <- slopes_df |>
+  plot_quadratic <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     theme_bw() +
     geom_point(aes(y = .data$f_conc, color = .data$f_cut), size = 0.2) +
     geom_line(
       aes(y = .data$f_fit, color = .data$f_quality_flag),
       linetype = "longdash"
+    ) +
+    geom_line(
+      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
+      linetype = "dashed"
     ) +
     geom_text(
       data = param_df,

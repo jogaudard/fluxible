@@ -9,6 +9,7 @@
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
 #' @param fluxID_col column with ID of each flux
+#' @param t_zero time at which the slope should be calculated (for fits that do not include t_zero as a parameter)
 #' @return a df with the modelled gas concentration, slope, intercept,
 #' std error, r square and p value of the linear model
 #' @importFrom rlang .data
@@ -26,7 +27,9 @@ flux_fitting_quadratic <- function(conc_df,
                              end_col = "f_end",
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
-                             fluxID_col = "f_fluxID") {
+                             fluxID_col = "f_fluxID",
+                             t_zero = 0
+                             ) {
   conc_df <- conc_df |>
     rename(
       f_start = all_of(((start_col))),
@@ -84,6 +87,7 @@ flux_fitting_quadratic <- function(conc_df,
         units = "secs"
       ),
       f_time_cut = as.double(.data$f_time_cut),
+      f_time_cut2 = (.data$f_time_cut)^2,
       length_window = max(.data$f_time_cut),
       length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
       time_diff = .data$f_time - .data$f_time_cut,
@@ -96,7 +100,7 @@ flux_fitting_quadratic <- function(conc_df,
     nest() |>
     mutate(
       temp = map(.data$data, \(d) {
-        model <- lm(f_conc ~ f_time_cut + f_time_cut^2, data = d)
+        model <- lm(f_conc ~ f_time_cut + f_time_cut2, data = d)
         glance <- broom::glance(((model))) |>
           select("r.squared", "adj.r.squared", "p.value")
         tidy <- broom::tidy(((model))) |>
@@ -108,20 +112,24 @@ flux_fitting_quadratic <- function(conc_df,
     select(!"data") |>
     unnest("temp") |>
     rename(
-      f_slope = "f_time_cut",
+      f_param1 = "f_time_cut",
+      f_param2 = "f_time_cut2",
       f_intercept = "(Intercept)",
       f_rsquared = "r.squared",
       f_adj_rsquared = "adj.r.squared",
       f_pvalue = "p.value"
     ) |>
     fill("f_intercept", .direction = "down") |>
-    drop_na("f_slope") |>
+    drop_na("f_param1", "f_param2") |>
     ungroup()
 
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = c("f_fluxID")) |>
     mutate(
-      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - ((start_cut)))
+      f_slope = .data$f_param1 + 2 * .data$f_param2 * ((t_zero)),
+      f_fit = .data$f_intercept + .data$f_param1 * (.data$f_time - ((start_cut))) + .data$f_param2 * (.data$f_time - ((start_cut)))^2,
+      f_fit_slope = f_intercept - f_param2 * ((t_zero))^2 + (f_param1 + 2 * f_param2 * ((t_zero))) * (.data$f_time - ((start_cut)))
+        # f_fit_slope = f_intercept + f_slope * .data$f_time
     )
 
   warning_msg <- conc_df |>
