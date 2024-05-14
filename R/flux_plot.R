@@ -108,7 +108,7 @@ flux_plot <- function(slopes_df,
                       bg = NULL,
                       create.dir = FALSE
                       ) {
-  fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
+  fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
   f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
@@ -139,6 +139,22 @@ flux_plot <- function(slopes_df,
 
   if (((fit_type)) == "linear") {
     f_plot <- flux_plot_lin(
+      ((slopes_df)),
+      datetime_col = ((datetime_col)),
+      conc_col = ((conc_col)),
+      cut_col = ((cut_col)),
+      fit_col = ((fit_col)),
+      quality_flag_col = ((quality_flag_col)),
+      pvalue_col = ((pvalue_col)),
+      rsquared_col = ((rsquared_col)),
+      fluxID_col = ((fluxID_col)),
+      start_col = ((start_col)),
+      y_text_position = ((y_text_position))
+    )
+  }
+
+  if (((fit_type)) == "quadratic") {
+    f_plot <- flux_plot_quadratic(
       ((slopes_df)),
       datetime_col = ((datetime_col)),
       conc_col = ((conc_col)),

@@ -49,7 +49,7 @@ flux_fitting <- function(conc_df,
                          a_window = 10,
                          roll_width = 15,
                          fit_type) {
-  fit_type <- match.arg(((fit_type)), c("exponential", "linear"))
+  fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
   if (((fit_type)) == "exponential") {
     conc_fitting <- flux_fitting_exp(
@@ -72,6 +72,19 @@ flux_fitting <- function(conc_df,
 
   if (((fit_type)) == "linear") {
     conc_fitting <- flux_fitting_lin(
+      conc_df,
+      start_cut = ((start_cut)),
+      end_cut = ((end_cut)),
+      start_col = ((start_col)),
+      end_col = ((end_col)),
+      datetime_col = ((datetime_col)),
+      conc_col = ((conc_col)),
+      fluxID_col = ((fluxID_col))
+    )
+  }
+
+  if (((fit_type)) == "quadratic") {
+    conc_fitting <- flux_fitting_quadratic(
       conc_df,
       start_cut = ((start_cut)),
       end_cut = ((end_cut)),
