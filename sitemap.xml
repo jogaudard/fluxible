@@ -49,6 +49,9 @@
     <loc>https://jogaudard.github.io/fluxible/reference/flux_fitting_lin.html</loc>
   </url>
   <url>
+    <loc>https://jogaudard.github.io/fluxible/reference/flux_fitting_quadratic.html</loc>
+  </url>
+  <url>
     <loc>https://jogaudard.github.io/fluxible/reference/flux_match.html</loc>
   </url>
   <url>
@@ -61,6 +64,9 @@
     <loc>https://jogaudard.github.io/fluxible/reference/flux_plot_lin.html</loc>
   </url>
   <url>
+    <loc>https://jogaudard.github.io/fluxible/reference/flux_plot_quadratic.html</loc>
+  </url>
+  <url>
     <loc>https://jogaudard.github.io/fluxible/reference/flux_quality.html</loc>
   </url>
   <url>
@@ -68,6 +74,9 @@
   </url>
   <url>
     <loc>https://jogaudard.github.io/fluxible/reference/flux_quality_lin.html</loc>
+  </url>
+  <url>
+    <loc>https://jogaudard.github.io/fluxible/reference/flux_quality_quadratic.html</loc>
   </url>
   <url>
     <loc>https://jogaudard.github.io/fluxible/reference/index.html</loc>
@@ -104,6 +113,9 @@
   </url>
   <url>
     <loc>https://jogaudard.github.io/fluxible/reference/slopes30lin_flag.html</loc>
+  </url>
+  <url>
+    <loc>https://jogaudard.github.io/fluxible/reference/slopes30qua.html</loc>
   </url>
   <url>
     <loc>https://jogaudard.github.io/fluxible/reference/slopes60.html</loc>
