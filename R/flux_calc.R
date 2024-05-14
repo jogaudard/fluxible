@@ -79,7 +79,7 @@ flux_calc <- function(slope_df,
     rename(
       f_fluxID = all_of(((fluxID_col))),
       air_temp = all_of(((temp_air_col))),
-      f_slope = all_of(((slope_col)))
+      f_slope_calc = all_of(((slope_col)))
     )
 
 
@@ -94,8 +94,8 @@ flux_calc <- function(slope_df,
   }
 
   slope_temp <- slope_df |>
-    select("f_slope", "f_fluxID", "air_temp") |>
-    group_by(.data$f_fluxID, .data$f_slope) |>
+    select("f_slope_calc", "f_fluxID", "air_temp") |>
+    group_by(.data$f_fluxID, .data$f_slope_calc) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
     ) |>
@@ -139,7 +139,7 @@ flux_calc <- function(slope_df,
 
   fluxes <- slope_ave |>
     mutate(
-      flux = (.data$f_slope * ((atm_pressure)) * ((vol)))
+      flux = (.data$f_slope_calc * ((atm_pressure)) * ((vol)))
       / (((R_const)) * .data$temp_air_ave
          * ((plot_area))) # flux in micromol/s/m^2
       * 3600 # secs to hours

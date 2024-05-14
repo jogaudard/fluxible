@@ -274,14 +274,14 @@ fluxes_exp_liahovden <- slopes_exp_liahovden |>
   ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
 head(fluxes_exp_liahovden)
 #> # A tibble: 6 × 5
-#>   f_start             f_fluxID  f_slope temp_air_ave    flux
-#>   <dttm>              <fct>       <dbl>        <dbl>   <dbl>
-#> 1 2022-07-27 05:37:40 1        -0.156           3.27  -9.76 
-#> 2 2022-07-27 05:42:10 2         0.146           3.31   9.10 
-#> 3 2022-07-27 05:47:05 3        -0.227           3.15 -14.2  
-#> 4 2022-07-27 05:50:55 4         0.143           2.98   8.93 
-#> 5 2022-07-27 05:57:40 5        -0.139           2.86  -8.67 
-#> 6 2022-07-27 06:02:10 6        -0.00487         2.91  -0.304
+#>   f_start             f_fluxID f_slope_calc temp_air_ave    flux
+#>   <dttm>              <fct>           <dbl>        <dbl>   <dbl>
+#> 1 2022-07-27 05:37:40 1            -0.156           3.27  -9.76 
+#> 2 2022-07-27 05:42:10 2             0.146           3.31   9.10 
+#> 3 2022-07-27 05:47:05 3            -0.227           3.15 -14.2  
+#> 4 2022-07-27 05:50:55 4             0.143           2.98   8.93 
+#> 5 2022-07-27 05:57:40 5            -0.139           2.86  -8.67 
+#> 6 2022-07-27 06:02:10 6            -0.00487         2.91  -0.304
 ```
 
 The output is in mmol/m<sup>2</sup>/h and the calculation used is as
