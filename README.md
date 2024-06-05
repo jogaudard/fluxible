@@ -28,17 +28,17 @@ function for use with a tent is in development (see further
 developments).
 
 For a quick overview of how the package works, you can look at [the
-poster](https://github.com/jogaudard/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
+poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
 that was presented at the European Geoscience Union Annual Meeting 2024.
 
 ## Installation
 
 You can install the development version of fluxible from the [GitHub
-repo](https://github.com/jogaudard/fluxible) with:
+repo](https://github.com/Plant-Functional-Trait-Course/fluxible) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("jogaudard/fluxible")
+devtools::install_github("plant-functional-trait-course/fluxible")
 ```
 
 ## Example
@@ -343,7 +343,7 @@ Apr 2024, EGU24-956, <https://doi.org/10.5194/egusphere-egu24-956>,
 2024.
 
 [Direct link to the
-poster](https://github.com/jogaudard/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
+poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
 
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
 
