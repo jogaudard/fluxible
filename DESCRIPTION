@@ -31,4 +31,4 @@ Imports:
 Depends: 
     R (>= 4.1)
 LazyData: true
-URL: https://plant-functional-trait-course.github.io/fluxible/authors.html#citation
+URL: https://plant-functional-trait-course.github.io/fluxible
