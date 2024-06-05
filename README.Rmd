@@ -26,7 +26,7 @@ Using the Fluxible R package makes the workflow reproducible, increases compatib
 
 ## Installation
 
-You can install the development version of fluxible from [GitHub](https://github.com/) with:
+You can install the development version of fluxible from [GitHub](https://github.com/Plant-Functional-Trait-Course/fluxible) with:
 
 ``` r
 # install.packages("devtools")
