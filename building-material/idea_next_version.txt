@@ -8,6 +8,7 @@ add vertical line in plot for tz
 actions on other columns in flux_calc: mean (done), sum, median
 flux_calc: automatically keep f_start column
 flux_fitting: make it so that estimates for optim and optim are arguments, so users who want to build their own model/estimations can do it
+a function to assess how many fluxes were discarded, zero or ok. to see if changing the fitting arguments improve the situation or not
 
 
 IMPORTANT FIXES
