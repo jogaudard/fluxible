@@ -52,7 +52,7 @@ The flux_match function matches field measured gas concentration data with flux 
 library(fluxible)
 
 conc_liahovden <- flux_match(co2_liahovden, record_liahovden)
-head(conc_liahovden)
+str(conc_liahovden)
 ```
 
 To calculate a flux the slopes of each flux is necessary.
@@ -61,7 +61,7 @@ Let's start with a linear fit.
 
 ```{r fitting_lin}
 slopes_lin_liahovden <- flux_fitting(conc_liahovden, fit_type = "linear")
-head(slopes_lin_liahovden)
+str(slopes_lin_liahovden)
 ```
 
 To assess the quality of the fit we use flux_quality.
@@ -69,7 +69,7 @@ This will add quality flags advising if the calculated slopes should be kept, or
 
 ```{r quality_lin}
 slopes_lin_liahovden <- flux_quality(slopes_lin_liahovden, fit_type = "lin")
-head(slopes_lin_liahovden)
+str(slopes_lin_liahovden)
 ```
 
 Users should still do a visual check with the flux_plot function.
@@ -119,7 +119,7 @@ It uses the exponential expression shown in @zhaoCalculationDaytimeCO22018.
 
 ```{r fitting_exp}
 slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
-head(slopes_exp_liahovden)
+str(slopes_exp_liahovden)
 ```
 
 Then the quality assessment.
@@ -127,7 +127,7 @@ The default slope_col argument is for the linear fit, so we now have to specify 
 
 ```{r quality_exp}
 slopes_exp_liahovden <- flux_quality(slopes_exp_liahovden, fit_type = "expo", slope_col = "f_slope_tz")
-head(slopes_exp_liahovden)
+str(slopes_exp_liahovden)
 ```
 
 The plots will also show the modelled slope at t zero.
@@ -176,7 +176,7 @@ fluxes_exp_liahovden <- slopes_exp_liahovden |>
     slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
     cols_keep = "f_start"
   ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
-head(fluxes_exp_liahovden)
+str(fluxes_exp_liahovden)
 ```
 
 The output is in mmol/m^2^/h and the calculation used is as follow:
