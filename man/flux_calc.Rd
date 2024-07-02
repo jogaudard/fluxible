@@ -31,11 +31,14 @@ flux_calc(
 \item{keep_filter}{name in cut_col of data to keep}
 
 \item{chamber_volume}{volume of the flux chamber in L,
-default for Three-D project chamber (25x24.5x40cm)}
+default for Three-D project chamber (25x24.5x40cm),
+can also be a column in case it is a variable}
 
-\item{tube_volume}{volume of the tubing in L, default for summer 2020 setup}
+\item{tube_volume}{volume of the tubing in L, default for summer 2020 setup,
+can also be a column in case it is a variable}
 
-\item{atm_pressure}{atmoshperic pressure, assumed 1 atm}
+\item{atm_pressure}{atmoshperic pressure, assumed 1 atm,
+can be a constant (numerical) or a variable (column name)}
 
 \item{plot_area}{area of the plot in m^2, default for Three-D}
 

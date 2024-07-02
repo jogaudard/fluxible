@@ -468,5 +468,3 @@ flux_plot(slopes0qua, fit_type = "quadratic", print_plot = TRUE, f_ncol = 3)
 
 
 
-
-

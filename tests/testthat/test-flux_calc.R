@@ -57,16 +57,16 @@ test_that("kelvin conversion works", {
 
 
 
-test_that("errors on arguments types", {
-  expect_error(
-    flux_calc(
-      slopes0,
-      slope_col = "slope_tz",
-      chamber_volume = "sort of big"
-    ),
-    "chamber_volume has to be a double"
-  )
-})
+# test_that("errors on arguments types", {
+#   expect_error(
+#     flux_calc(
+#       slopes0,
+#       slope_col = "slope_tz",
+#       chamber_volume = "sort of big"
+#     ),
+#     "chamber_volume has to be a double"
+#   )
+# })
 
 test_that("error on air temp units", {
   expect_error(
@@ -132,5 +132,28 @@ test_that("calculating fluxes on dataset with cuts filters out the cuts first", 
   cut_col = "f_cut",
   keep_filter = "keep"
   )
+  )
+})
+
+# testing having the chamber volume as a variable
+test_that("volume can be a variable instead of a constant, giving different fluxes", {
+  expect_snapshot(
+    flux_calc(
+  slopes0_vol,
+  slope_col = "f_slope_tz",
+  chamber_volume = "volume"
+  )
+  )
+})
+
+test_that("volume can be a variable instead of a constant, giving different fluxes (testing the tubes)", {
+  expect_snapshot(
+    flux_calc(
+  slopes0_vol_tube,
+  slope_col = "f_slope_tz",
+  chamber_volume = "volume",
+  tube_volume = "tube_vol"
+  ) |>
+  select(!c(chamber_volume, tube_volume))
   )
 })
