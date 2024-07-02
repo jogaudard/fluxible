@@ -7,9 +7,12 @@
 #' @param cut_col column containing cutting information
 #' @param keep_filter name in cut_col of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
-#' default for Three-D project chamber (25x24.5x40cm)
-#' @param tube_volume volume of the tubing in L, default for summer 2020 setup
-#' @param atm_pressure atmoshperic pressure, assumed 1 atm
+#' default for Three-D project chamber (25x24.5x40cm),
+#' can also be a column in case it is a variable
+#' @param tube_volume volume of the tubing in L, default for summer 2020 setup,
+#' can also be a column in case it is a variable
+#' @param atm_pressure atmoshperic pressure, assumed 1 atm,
+#' can be a constant (numerical) or a variable (column name)
 #' @param plot_area area of the plot in m^2, default for Three-D
 #' @param R_const gas constant (0.082057 L*atm*K^(-1)*mol^(-1))
 #' @param cols_keep columns to keep from the input to the output.
@@ -101,6 +104,20 @@ if (is.character(((tube_volume)))) {
     )
 }
 
+if (is.double((atm_pressure))) {
+  slope_df <- slope_df |>
+    mutate(
+      atm_pressure = ((atm_pressure))
+    )
+}
+
+if (is.character(((atm_pressure)))) {
+  slope_df <- slope_df |>
+    rename(
+      atm_pressure = all_of(((atm_pressure)))
+    )
+}
+
 
 
   slope_df <- slope_df |>
@@ -123,8 +140,8 @@ if (is.character(((tube_volume)))) {
   }
 
   slope_temp <- slope_df |>
-    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume") |>
-    group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume) |>
+    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume", "atm_pressure") |>
+    group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume, .data$atm_pressure) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
     ) |>
@@ -169,7 +186,7 @@ if (is.character(((tube_volume)))) {
   fluxes <- slope_ave |>
     mutate(
       volume_setup = .data$chamber_volume + .data$tube_volume,
-      flux = (.data$f_slope_calc * ((atm_pressure)) * volume_setup)
+      flux = (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
       / (((R_const)) * .data$temp_air_ave
          * ((plot_area))) # flux in micromol/s/m^2
       * 3600 # secs to hours
