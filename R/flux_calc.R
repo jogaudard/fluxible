@@ -7,9 +7,12 @@
 #' @param cut_col column containing cutting information
 #' @param keep_filter name in cut_col of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
-#' default for Three-D project chamber (25x24.5x40cm)
-#' @param tube_volume volume of the tubing in L, default for summer 2020 setup
-#' @param atm_pressure atmoshperic pressure, assumed 1 atm
+#' default for Three-D project chamber (25x24.5x40cm),
+#' can also be a column in case it is a variable
+#' @param tube_volume volume of the tubing in L, default for summer 2020 setup,
+#' can also be a column in case it is a variable
+#' @param atm_pressure atmoshperic pressure, assumed 1 atm,
+#' can be a constant (numerical) or a variable (column name)
 #' @param plot_area area of the plot in m^2, default for Three-D
 #' @param R_const gas constant (0.082057 L*atm*K^(-1)*mol^(-1))
 #' @param cols_keep columns to keep from the input to the output.
@@ -49,8 +52,8 @@ flux_calc <- function(slope_df,
                       fluxID_col = "f_fluxID",
                       temp_air_col = "temp_air",
                       temp_air_unit = "celsius") {
-  if (!is.double(((chamber_volume)))) stop("chamber_volume has to be a double")
-  if (!is.double(((tube_volume)))) stop("tube_volume has to be a double")
+  # if (!is.double(((chamber_volume)))) stop("chamber_volume has to be a double")
+  # if (!is.double(((tube_volume)))) stop("tube_volume has to be a double")
   if (!is.double(((atm_pressure)))) stop("atm_pressure has to be a double")
   if (!is.double(((plot_area)))) stop("plot_area has to be a double")
   if (!is.double(((R_const)))) stop("R_const has to be a double")
@@ -73,6 +76,48 @@ flux_calc <- function(slope_df,
     stop("some names in cols_ave cannot be found in slope_df")
   }
 
+if (is.double((chamber_volume))) {
+  slope_df <- slope_df |>
+    mutate(
+      chamber_volume = ((chamber_volume))
+    )
+}
+
+if (is.character(((chamber_volume)))) {
+  slope_df <- slope_df |>
+    rename(
+      chamber_volume = all_of(((chamber_volume)))
+    )
+}
+
+if (is.double((tube_volume))) {
+  slope_df <- slope_df |>
+    mutate(
+      tube_volume = ((tube_volume))
+    )
+}
+
+if (is.character(((tube_volume)))) {
+  slope_df <- slope_df |>
+    rename(
+      tube_volume = all_of(((tube_volume)))
+    )
+}
+
+if (is.double((atm_pressure))) {
+  slope_df <- slope_df |>
+    mutate(
+      atm_pressure = ((atm_pressure))
+    )
+}
+
+if (is.character(((atm_pressure)))) {
+  slope_df <- slope_df |>
+    rename(
+      atm_pressure = all_of(((atm_pressure)))
+    )
+}
+
 
 
   slope_df <- slope_df |>
@@ -80,10 +125,11 @@ flux_calc <- function(slope_df,
       f_fluxID = all_of(((fluxID_col))),
       air_temp = all_of(((temp_air_col))),
       f_slope_calc = all_of(((slope_col)))
+      # chamber_volume = all_of(((chamber_volume)))
     )
 
 
-  vol <- ((chamber_volume)) + ((tube_volume))
+  # vol <- ((chamber_volume)) + ((tube_volume))
 
   if(length(((cut_col))) > 0) {
     slope_df <- flux_cut(
@@ -94,8 +140,8 @@ flux_calc <- function(slope_df,
   }
 
   slope_temp <- slope_df |>
-    select("f_slope_calc", "f_fluxID", "air_temp") |>
-    group_by(.data$f_fluxID, .data$f_slope_calc) |>
+    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume", "atm_pressure") |>
+    group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume, .data$atm_pressure) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
     ) |>
@@ -139,7 +185,8 @@ flux_calc <- function(slope_df,
 
   fluxes <- slope_ave |>
     mutate(
-      flux = (.data$f_slope_calc * ((atm_pressure)) * ((vol)))
+      volume_setup = .data$chamber_volume + .data$tube_volume,
+      flux = (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
       / (((R_const)) * .data$temp_air_ave
          * ((plot_area))) # flux in micromol/s/m^2
       * 3600 # secs to hours
@@ -151,5 +198,5 @@ flux_calc <- function(slope_df,
         ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
       )
     )
-  return(fluxes)
+    fluxes
 }
