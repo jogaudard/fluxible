@@ -87,6 +87,20 @@ if (is.character(((chamber_volume)))) {
     )
 }
 
+if (is.double((tube_volume))) {
+  slope_df <- slope_df |>
+    mutate(
+      tube_volume = ((tube_volume))
+    )
+}
+
+if (is.character(((tube_volume)))) {
+  slope_df <- slope_df |>
+    rename(
+      tube_volume = all_of(((tube_volume)))
+    )
+}
+
 
 
   slope_df <- slope_df |>
@@ -109,8 +123,8 @@ if (is.character(((chamber_volume)))) {
   }
 
   slope_temp <- slope_df |>
-    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume") |>
-    group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume) |>
+    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume") |>
+    group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
     ) |>
@@ -154,7 +168,7 @@ if (is.character(((chamber_volume)))) {
 
   fluxes <- slope_ave |>
     mutate(
-      volume_setup = .data$chamber_volume + ((tube_volume)),
+      volume_setup = .data$chamber_volume + .data$tube_volume,
       flux = (.data$f_slope_calc * ((atm_pressure)) * volume_setup)
       / (((R_const)) * .data$temp_air_ave
          * ((plot_area))) # flux in micromol/s/m^2
@@ -167,5 +181,5 @@ if (is.character(((chamber_volume)))) {
         ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
       )
     )
-  return(fluxes)
+    fluxes
 }

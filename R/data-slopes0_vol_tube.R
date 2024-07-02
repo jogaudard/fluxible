@@ -33,7 +33,8 @@
 #' \item{fit_slope}{Output of linear model of CO2 concentration passing by C(tz) and a slope of slope_tz.}
 #' \item{start_z}{Datetime format of tz}
 #' \item{volume}{volume of chamber in L}
+#' \item{tube_vol}{volume of tubes in L}
 #' }
 #' @examples
-#' slopes0_vol
-"slopes0_vol"
+#' slopes0_vol_tube
+"slopes0_vol_tube"
