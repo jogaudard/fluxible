@@ -32,6 +32,7 @@
 #' gas concentration with time below which the correlation
 #' is considered non significant (exponential fit)
 #' @param cut_col column containing the cutting information
+#' @param cut_arg argument defining that the data point should be cut out
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
 #' considered good enough (exponential fit)
@@ -65,9 +66,8 @@ flux_quality <- function(slopes_df,
                          RMSE_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1,
-                         f_flags = c("ok", "discard", "zero", "weird_flux", "start_error"),
-                         flags_col = "f_quality_flag",
-                         cut_col = "f_cut",
+                        #  f_flags = c("ok", "discard", "zero", "weird_flux", "start_error"),
+                        #  flags_col = "f_quality_flag",
                          cut_arg = "cut"
                          ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
@@ -125,35 +125,21 @@ flux_quality <- function(slopes_df,
   }
 
   flag_count <- flux_flag_count(
-    ((slopes_df)),
-    f_flags = ((f_flags)),
-    fluxID_col = ((fluxID_col)),
-    flags_col = ((flags_col)),
-    cut_col = ((cut_col)),
+    ((quality_flag)),
     cut_arg = ((cut_arg))
   )
 
+flag_msg <- flag_count |>
+                mutate(
+                  message = paste("\n", .data$f_quality_flag, "\t", .data$n, "\t", round(.data$ratio, 2) * 100, "%")
+                ) |>
+                pull(message)
+
+message(paste("\n", "Total number of measurements:", sum(flag_count$n)))
+message(flag_msg)
 
 
   quality_flag
 }
-
-
-
-# trying stuff (to delete later)
-
-flag_count <- flux_flag_count(slopes_df)
-
-message(paste("Total number of measurements:", sum(flag_count$n)))
-
-flag_msg <- flag_count |>
-                mutate(
-                  message = paste("\n", f_quality_flag, n, round(ratio, 2))
-                ) |>
-                pull(message)
-
-
-
-message(flag_msg)
 
 

@@ -2,8 +2,6 @@
 
     Code
       flux_flag_count(slopes30lin_flag)
-    Message
-      Joining with `by = join_by(f_quality_flag)`
     Output
       # A tibble: 5 x 3
         f_quality_flag     n ratio

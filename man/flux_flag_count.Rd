@@ -32,3 +32,6 @@ a dataframe with the number of fluxes for each flags and their proportion to the
 \description{
 provides a table of how many fluxes were attributed which quality flag
 }
+\author{
+Vincent Belde
+}
