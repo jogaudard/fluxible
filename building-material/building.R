@@ -452,13 +452,20 @@ flux_plot(fit_type = "lin",
 view(slopes0_flag)
 max(slopes0_flag$f_conc)
 
+library(progress)
+pb <- progress_bar$new(total = 100)
+purrr::walk(1:100, flux_plot(slopes0lin_flag, fit_type = "lin"))
+foo <- flux_plot()
 
 
+pb <- progress_bar$new(total = 100)
 
+foo <- function(x){
+  pb$tick()
+  Sys.sleep(0.1)
+}
 
-
-
-
+purrr::walk(1:100, foo)
 
 
 
