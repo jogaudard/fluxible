@@ -442,12 +442,15 @@ slopes30qua <- flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_c
 
 flux_plot(slopes0qua, fit_type = "quadratic", print_plot = TRUE, f_ncol = 3)
 
+# reproducing group aesthetics error
+slopes0lin_flag |>
+filter(f_fluxID == 1) |>
+flux_plot(fit_type = "lin",
+            f_ylim_upper = 432)
 
 
-
-
-
-
+view(slopes0_flag)
+max(slopes0_flag$f_conc)
 
 
 

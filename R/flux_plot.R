@@ -119,6 +119,35 @@ flux_plot <- function(slopes_df,
     dir.create(folder)
   }
 
+  slopes_df <- slopes_df |>
+    rename(
+      f_datetime = all_of(((datetime_col))),
+      f_conc = all_of(((conc_col))),
+      f_cut = all_of(((cut_col))),
+      f_fit = all_of(((fit_col))),
+      f_quality_flag = all_of(((quality_flag_col))),
+      f_fluxID = all_of(((fluxID_col))),
+      f_start = all_of(((start_col)))
+    )
+
+  if (max(((slopes_df$f_conc))) > ((f_ylim_upper))) {
+    message("Some concentration data points will not be displayed because f_ylim_upper is too low.")
+  }
+
+    if (max(((slopes_df$f_fit))) > ((f_ylim_upper))) {
+    message("Part of the fit will not be displayed because f_ylim_upper is too low.")
+  }
+
+    if (min(((slopes_df$f_conc))) < ((f_ylim_lower))) {
+    message("Some concentration data points will not be displayed because f_ylim_lower is too high.")
+  }
+
+    if (min(((slopes_df$f_fit))) < ((f_ylim_lower))) {
+    message("Part of the fit will not be displayed because f_ylim_lower is too high.")
+  }
+
+
+
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
       ((slopes_df)),
@@ -218,7 +247,7 @@ if(((output)) == "ggsave"){
   )
 }
 
-  print("Saving plots in f_quality_plots folder.")
+  message("Saving plots in f_quality_plots folder.")
 
 
   if (((print_plot)) == TRUE) {
