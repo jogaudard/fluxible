@@ -35,7 +35,7 @@ slopes_df <- slopes_df |>
                                                 select("f_fluxID", "f_quality_flag") |>
                                                 unique()
 
-                                flags <- tibble(f_quality_flag = ((f_flags)))
+                                flags <- tibble(f_quality_flag = factor(((f_flags)), levels = ((f_flags))))
 
                                 count_table <- flag_df  |>
                                                     group_by(.data$f_quality_flag) |>
