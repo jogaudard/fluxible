@@ -82,23 +82,23 @@ flux_plot_exp <- function(slopes_df,
     ggplot(aes(.data$f_datetime)) +
     theme_bw() +
     geom_point(
-      aes(y = .data$f_conc, color = .data$f_cut),
+      aes(y = .data$f_conc, color = .data$f_cut, group = .data$f_fluxID),
       size = 0.2,
       na.rm = TRUE
     ) +
     geom_line(
-      aes(y = .data$f_fit, color = .data$f_quality_flag),
+      aes(y = .data$f_fit, color = .data$f_quality_flag, group = .data$f_fluxID),
       linetype = "longdash",
       na.rm = TRUE
     ) +
     geom_line(
-      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
+      aes(y = .data$f_fit_slope, color = .data$f_quality_flag, group = .data$f_fluxID),
       linetype = "dashed",
       na.rm = TRUE
     ) +
     geom_text(
       data = param_df,
-      aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
+      aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col, group = .data$f_fluxID),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
     )
