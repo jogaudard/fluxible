@@ -81,7 +81,7 @@ flux_fitting_exp <- function(conc_df,
     )
   }
 
-
+message("Cutting measurements...")
 
   conc_df <- conc_df |>
     group_by(.data$f_fluxID) |>
@@ -121,6 +121,7 @@ flux_fitting_exp <- function(conc_df,
     ) |>
     ungroup()
 
+message("Estimating starting parameters for optimization...")
 
   Cm_temp <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
@@ -263,7 +264,7 @@ flux_fitting_exp <- function(conc_df,
       - fc_conc)^2))
   }
 
-
+message("Optimizing fitting parameters...")
 
   fitting_par <- conc_df_cut |>
     left_join(estimates_df, by = "f_fluxID") |>
@@ -295,6 +296,7 @@ flux_fitting_exp <- function(conc_df,
     ungroup() |>
     select(!"results")
 
+message("Calculating fits and slopes...")
 
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = "f_fluxID") |>
@@ -310,7 +312,7 @@ flux_fitting_exp <- function(conc_df,
     ungroup()
 
 
-
+message("Done.")
 
 
   warning_msg <- conc_df |>

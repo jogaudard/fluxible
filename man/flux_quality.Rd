@@ -23,7 +23,8 @@ flux_quality(
   cut_col = "f_cut",
   RMSE_threshold = 25,
   cor_threshold = 0.5,
-  b_threshold = 1
+  b_threshold = 1,
+  cut_arg = "cut"
 )
 }
 \arguments{
@@ -79,6 +80,8 @@ is considered non significant (exponential fit)}
 \item{b_threshold}{threshold for the b parameter.
 Defines a window with its opposite inside which the fit is
 considered good enough (exponential fit)}
+
+\item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
 same dataframe with added flag and corrected slopes columns
