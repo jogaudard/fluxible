@@ -5,7 +5,7 @@
     Output
       # A tibble: 5 x 3
         f_quality_flag     n ratio
-        <chr>          <int> <dbl>
+        <fct>          <int> <dbl>
       1 ok                 5 0.833
       2 zero               1 0.167
       3 discard            0 0    
