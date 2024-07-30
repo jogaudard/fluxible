@@ -508,7 +508,7 @@ for (i in 1:100) {
 }
 
 
-flux_plot(slopes0_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1)
+flux_plot(slopes0_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1, f_ylim_upper = 430)
 
 
 

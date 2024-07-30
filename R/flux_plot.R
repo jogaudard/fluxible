@@ -131,19 +131,19 @@ flux_plot <- function(slopes_df,
       f_start = all_of(((start_col)))
     )
 
-  if (max(((slopes_df$f_conc))) > ((f_ylim_upper))) {
+  if (max(slopes_df$f_conc, na.rm = TRUE) > ((f_ylim_upper))) {
     message("Some concentration data points will not be displayed because f_ylim_upper is too low.")
   }
 
-    if (max(((slopes_df$f_fit))) > ((f_ylim_upper))) {
+    if (max(slopes_df$f_fit, na.rm = TRUE) > ((f_ylim_upper))) {
     message("Part of the fit will not be displayed because f_ylim_upper is too low.")
   }
 
-    if (min(((slopes_df$f_conc))) < ((f_ylim_lower))) {
+    if (min(slopes_df$f_conc, na.rm = TRUE) < ((f_ylim_lower))) {
     message("Some concentration data points will not be displayed because f_ylim_lower is too high.")
   }
 
-    if (min(((slopes_df$f_fit))) < ((f_ylim_lower))) {
+    if (min(slopes_df$f_fit, na.rm = TRUE) < ((f_ylim_lower))) {
     message("Part of the fit will not be displayed because f_ylim_lower is too high.")
   }
 
