@@ -457,21 +457,58 @@ pb <- progress_bar$new(total = 100)
 purrr::walk(1:100, flux_plot(slopes0lin_flag, fit_type = "lin"))
 foo <- flux_plot()
 
+foo2 <- function(slopes_df, fit_type){
+
 
 pb <- progress_bar$new(total = 100)
 
+
+
 foo <- function(x){
+   
   pb$tick()
+
   Sys.sleep(0.1)
+   #  flux_plot(slopes_df = ((slopes_df)), fit_type = ((fit_type)))
+
+
 }
 
+
+
 purrr::walk(1:100, foo)
+flux_plot(slopes_df = ((slopes_df)), fit_type = ((fit_type)))
 
 
+}
+
+foo2(slopes0_flag, fit_type = "exp")
 
 
+testdf <- tibble(
+   a = c(1:10),
+   b = c(11:20)
+)
+testdf
+pb <- progress_bar$new(total = 10)
+
+for(i in 1:10){
+     pb$tick()
+  Sys.sleep(0.1)
+
+   testdf$c[i] = testdf$a[i] * testdf$b[i]
+}
+
+testdf
+
+pb <- progress_bar$new(total = 100)
+for (i in 1:100) {
+  pb$tick()
+  i + 1
+}
 
 
+flux_plot(slopes0_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1)
 
 
 

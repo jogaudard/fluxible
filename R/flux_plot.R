@@ -55,6 +55,7 @@
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
+#' @importFrom progress progress_bar
 #' @examples
 #' data(slopes0_flag)
 #' flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope", print_plot = TRUE)
@@ -199,6 +200,8 @@ flux_plot <- function(slopes_df,
     )
   }
 
+message("Plotting in progress")
+
   f_plot <- f_plot +
     scale_color_manual(values = c(
       "keep" = ((color_keep)),
@@ -228,7 +231,15 @@ flux_plot <- function(slopes_df,
 if(((output)) == "pdfpages") {
   f_plotname <- paste(f_plotname, ".pdf", sep = "")
     pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
+    pb <- progress_bar$new(
+      format = "  Printing plots in pdf document [:bar] :current/:total (:percent)",
+      total = n_pages(f_plot)
+      )
+    pb$tick(0)
+  Sys.sleep(3)
   for (i in 1:n_pages(f_plot)) {
+    pb$tick()
+  Sys.sleep(0.1)
     print(f_plot +
       facet_wrap_paginate(
         ~f_fluxID,
@@ -240,6 +251,7 @@ if(((output)) == "pdfpages") {
 }
 
 if(((output)) == "ggsave"){
+  message("Saving plots with ggsave.")
   ggsave(
     ((f_plotname)),
     plot = f_plot,
@@ -247,7 +259,7 @@ if(((output)) == "ggsave"){
   )
 }
 
-  message("Saving plots in f_quality_plots folder.")
+  message("Plots saved in f_quality_plots folder.")
 
 
   if (((print_plot)) == TRUE) {

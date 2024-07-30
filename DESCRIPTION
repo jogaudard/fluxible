@@ -30,7 +30,8 @@ Imports:
     stats,
     stringr,
     tidyr,
-    zoo
+    zoo,
+    progress
 Depends: 
     R (>= 4.1)
 LazyData: true
