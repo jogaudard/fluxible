@@ -76,29 +76,33 @@ flux_plot_exp <- function(slopes_df,
         .data$f_cor_coef, "\n", "b = ", .data$f_b,
         sep = ""
       )
-    )
+    ) |>
+    select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
+
+  slopes_df <- slopes_df |>
+    select(!c("f_quality_flag")) |>
+      left_join(param_df, by = "f_fluxID")
 
   plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     theme_bw() +
     geom_point(
-      aes(y = .data$f_conc, color = .data$f_cut, group = .data$f_fluxID),
+      aes(y = .data$f_conc, color = .data$f_cut),
       size = 0.2,
       na.rm = TRUE
     ) +
     geom_line(
-      aes(y = .data$f_fit, color = .data$f_quality_flag, group = .data$f_fluxID),
+      aes(y = .data$f_fit, color = .data$f_quality_flag),
       linetype = "longdash",
       na.rm = TRUE
     ) +
     geom_line(
-      aes(y = .data$f_fit_slope, color = .data$f_quality_flag, group = .data$f_fluxID),
+      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
       linetype = "dashed",
       na.rm = TRUE
     ) +
     geom_text(
-      data = param_df,
-      aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col, group = .data$f_fluxID),
+      aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
     )
