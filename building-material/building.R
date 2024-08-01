@@ -507,9 +507,10 @@ for (i in 1:100) {
   i + 1
 }
 
+slopes60_flag <- flux_quality(slopes60, fit_type = "exp", slope_col = "f_slope_tz")
 
+flux_plot(slopes60_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1)
 flux_plot(slopes0_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1)
-
 
 
 
