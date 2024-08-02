@@ -84,7 +84,7 @@ flux_plot <- function(slopes_df,
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_keep = "#009E73",
-                      color_ok = "#000000",
+                      color_ok = "#009E73",
                       color_zero = "#CC79A7",
                       f_date_breaks = "1 min",
                       f_minor_breaks = "10 sec",
@@ -108,7 +108,8 @@ flux_plot <- function(slopes_df,
                       dpi = 300,
                       limitsize = TRUE,
                       bg = NULL,
-                      create.dir = FALSE
+                      create.dir = FALSE,
+                          cut_arg = "cut"
                       ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
@@ -149,23 +150,27 @@ flux_plot <- function(slopes_df,
 
 
 
+
+
+
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
       ((slopes_df)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      cut_col = ((cut_col)),
-      fit_col = ((fit_col)),
+      # datetime_col = "f_datetime",
+      # conc_col = "f_conc",
+      # cut_col = "f_cut",
+      # fit_col = "f_fit",
       fit_slope_col = ((fit_slope_col)),
-      quality_flag_col = ((quality_flag_col)),
-      fluxID_col = ((fluxID_col)),
-      start_col = ((start_col)),
+      # quality_flag_col = "f_quality_flag",
+      # fluxID_col = "f_fluxID",
+      # start_col = "f_start",
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
       RMSE_col = ((RMSE_col)),
-      y_text_position = ((y_text_position)),
-      f_ylim_upper = ((f_ylim_upper)),
-      f_ylim_lower = ((f_ylim_lower))
+      cut_arg = ((cut_arg))
+      # y_text_position = ((y_text_position)),
+      # f_ylim_upper = ((f_ylim_upper)),
+      # f_ylim_lower = ((f_ylim_lower))
     )
   }
 
@@ -189,16 +194,16 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "quadratic") {
     f_plot <- flux_plot_quadratic(
       ((slopes_df)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      cut_col = ((cut_col)),
-      fit_col = ((fit_col)),
-      quality_flag_col = ((quality_flag_col)),
+      # datetime_col = ((datetime_col)),
+      # conc_col = ((conc_col)),
+      # cut_col = ((cut_col)),
+      # fit_col = ((fit_col)),
+      # quality_flag_col = ((quality_flag_col)),
       pvalue_col = ((pvalue_col)),
-      rsquared_col = ((rsquared_col)),
-      fluxID_col = ((fluxID_col)),
-      start_col = ((start_col)),
-      y_text_position = ((y_text_position))
+      rsquared_col = ((rsquared_col))
+      # fluxID_col = ((fluxID_col)),
+      # start_col = ((start_col)),
+      # y_text_position = ((y_text_position))
     )
   }
 

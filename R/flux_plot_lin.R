@@ -26,65 +26,46 @@
 
 
 flux_plot_lin <- function(slopes_df,
-                          datetime_col = "f_datetime",
-                          conc_col = "f_conc",
-                          cut_col = "f_cut",
-                          fit_col = "f_fit",
-                          quality_flag_col = "f_quality_flag",
-                          fluxID_col = "f_fluxID",
+                          # datetime_col = "f_datetime",
+                          # conc_col = "f_conc",
+                          # cut_col = "f_cut",
+                          # fit_col = "f_fit",
+                          # quality_flag_col = "f_quality_flag",
+                          # fluxID_col = "f_fluxID",
                           pvalue_col = "f_pvalue",
-                          rsquared_col = "f_rsquared",
-                          start_col = "f_start",
-                          y_text_position = 500
+                          rsquared_col = "f_rsquared"
+                          # start_col = "f_start",
+                          # y_text_position = 500
                           ) {
   
 
   slopes_df <- slopes_df |>
     rename(
-      f_datetime = all_of(((datetime_col))),
-      f_conc = all_of(((conc_col))),
-      f_cut = all_of(((cut_col))),
-      f_fit = all_of(((fit_col))),
-      f_quality_flag = all_of(((quality_flag_col))),
-      f_fluxID = all_of(((fluxID_col))),
+      # f_datetime = all_of(((datetime_col))),
+      # f_conc = all_of(((conc_col))),
+      # f_cut = all_of(((cut_col))),
+      # f_fit = all_of(((fit_col))),
+      # f_quality_flag = all_of(((quality_flag_col))),
+      # f_fluxID = all_of(((fluxID_col))),
       f_pvalue = all_of(((pvalue_col))),
-      f_rsquared = all_of(((rsquared_col))),
-      f_start = all_of(((start_col)))
+      f_rsquared = all_of(((rsquared_col)))
+      # f_start = all_of(((start_col)))
     )
 
-  param_df <- slopes_df |>
-    select("f_conc", "f_start", "f_fluxID", "f_rsquared", "f_pvalue", "f_quality_flag") |>
-    group_by(.data$f_fluxID) |>
-    mutate(
-      conc_start = .data$f_conc[1]
-    ) |>
-    ungroup() |>
-    select(!"f_conc") |>
-    distinct() |>
-    mutate(
-      f_rsquared = round(.data$f_rsquared, digits = 2),
-      f_pvalue = round(.data$f_pvalue, digits = 4),
-      print_col = paste(
-        .data$f_quality_flag, "\n",
-        "R2 = ", .data$f_rsquared, "\n", "p-value = ", .data$f_pvalue,
-        sep = ""
-      )
-    ) |>
-    select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
+  param_df <- flux_param_lm(((slopes_df)))
 
-  slopes_df <- slopes_df |>
-    select(!c("f_quality_flag")) |>
-      left_join(param_df, by = "f_fluxID")
+  slopes_df <- flux_plot_flag(((slopes_df)), ((param_df)))
 
+  
   plot_lin <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     theme_bw() +
-    geom_point(aes(y = .data$f_conc, color = .data$f_cut),
+    geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag),
       size = 0.2,
       na.rm = TRUE
       ) +
     geom_line(
-      aes(y = .data$f_fit, color = .data$f_quality_flag),
+      aes(y = .data$f_fit),
       linetype = "longdash",
       na.rm = TRUE
     ) +

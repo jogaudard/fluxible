@@ -28,25 +28,21 @@
 
 
 flux_plot_exp <- function(slopes_df,
-                          datetime_col = "f_datetime",
-                          conc_col = "f_conc",
-                          cut_col = "f_cut",
-                          fit_col = "f_fit",
+                          # datetime_col = "f_datetime",
+                          # conc_col = "f_conc",
+                          # cut_col = "f_cut",
+                          # cut_arg = "cut",
+                          # fit_col = "f_fit",
                           fit_slope_col = "f_fit_slope",
-                          quality_flag_col = "f_quality_flag",
-                          fluxID_col = "f_fluxID",
-                          start_col = "f_start",
+                          # quality_flag_col = "f_quality_flag",
+                          # fluxID_col = "f_fluxID",
+                          # start_col = "f_start",
                           b_col = "f_b",
                           cor_coef_col = "f_cor_coef",
-                          RMSE_col = "f_RMSE",
-                          y_text_position = 500,
-                          f_ylim_upper = 800,
-                          f_ylim_lower = 400,
-                          color_discard = "#D55E00",
-                      color_cut = "#D55E00",
-                      color_keep = "#009E73",
-                      color_ok = "#000000",
-                      color_zero = "#CC79A7"
+                          RMSE_col = "f_RMSE"
+                          # y_text_position = 500,
+                          # f_ylim_upper = 800,
+                          # f_ylim_lower = 400
                           ) {
   
 
@@ -60,61 +56,32 @@ flux_plot_exp <- function(slopes_df,
       f_RMSE = all_of(((RMSE_col)))
     )
 
-  param_df <- slopes_df |>
-    select(
-      "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
-      "f_quality_flag"
-    ) |>
-    filter(.data$f_cut == "keep") |>
-    group_by(.data$f_fluxID) |>
-    mutate(
-      conc_start = .data$f_conc[1]
-    ) |>
-    ungroup() |>
-    select(!"f_conc") |>
-    distinct() |>
-    mutate(
-      f_RMSE = round(.data$f_RMSE, digits = 1),
-      f_cor_coef = round(.data$f_cor_coef, digits = 2),
-      f_b = round(.data$f_b, digits = 5),
-      print_col = paste(
-        .data$f_quality_flag, "\n",
-        "RMSE = ", .data$f_RMSE, "\n", "Corr coef = ",
-        .data$f_cor_coef, "\n", "b = ", .data$f_b,
-        sep = ""
-      ),
-      strip = case_when(
-        f_quality_flag == "ok" ~ ((color_ok)),
-        f_quality_flag == "discard" ~ ((color_discard)),
-        f_quality_flag == "zero" ~ ((color_zero)),
-        f_quality_flag == "start_error" ~ ((color_discard)),
-        f_quality_flag == "weird_flux" ~ ((color_discard)),
-      )
-    ) |>
-    select("f_fluxID", "conc_start", "print_col", "f_quality_flag", "strip")
-
-  strips <- strip_themed(
-    background_x = elem_list_rect(fill = param_df$strip),
-    by_layer_x = TRUE
+  param_df <- flux_param_exp(
+    ((slopes_df)),
+    # conc_col = "f_conc",
+    # quality_flag_col = "f_quality_flag",
+    # fluxID_col = "f_fluxID",
+    # start_col = "f_start",
+    # b_col = "f_b",
+    # cor_coef_col = "f_cor_coef",
+    # RMSE_col = "f_RMSE",
+    # cut_col = "f_cut",
+    cut_arg = ((cut_arg))
   )
 
-  slopes_df <- slopes_df |>
-    select(!c("f_quality_flag")) |>
-      left_join(param_df, by = "f_fluxID")
+  slopes_df <- flux_plot_flag(((slopes_df)),
+                              ((param_df))
+                              )
 
-  # slopes_df <- slopes_df |>
-  #   mutate(
-  #     f_fit_slope = case_when(
-  #       f_fit_slope < f_ylim_upper ~ f_fit_slope,
-  #       f_fit_slope >= f_ylim_upper ~ NA_real_
-  #     )
-  #   )
+  
+
+
 
   plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     theme_bw() +
     geom_point(
-      aes(y = .data$f_conc, color = .data$f_cut),
+      aes(y = .data$f_conc, color = .data$f_quality_flag),
       size = 0.2,
       na.rm = TRUE
     ) +
@@ -135,7 +102,6 @@ flux_plot_exp <- function(slopes_df,
       vjust = 0, hjust = "inward",
       na.rm = TRUE
     ) 
-    # facet_grid2(~f_fluxID, strip = strips)
 
   plot_exp
   
