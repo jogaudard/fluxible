@@ -69,7 +69,7 @@ flux_plot_quadratic <- function(slopes_df,
         "R2 = ", .data$f_rsquared, "\n", "p-value = ", .data$f_pvalue,
         sep = ""
       )
-    )
+    ) 
 
   plot_quadratic <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +

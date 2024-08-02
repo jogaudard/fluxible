@@ -76,7 +76,7 @@ flux_plot_exp <- function(slopes_df,
         .data$f_cor_coef, "\n", "b = ", .data$f_b,
         sep = ""
       )
-    )
+    )    
 
   plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +

@@ -69,7 +69,7 @@ flux_plot_lin <- function(slopes_df,
         "R2 = ", .data$f_rsquared, "\n", "p-value = ", .data$f_pvalue,
         sep = ""
       )
-    )
+    ) 
 
   plot_lin <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
