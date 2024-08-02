@@ -39,7 +39,14 @@ flux_plot_exp <- function(slopes_df,
                           b_col = "f_b",
                           cor_coef_col = "f_cor_coef",
                           RMSE_col = "f_RMSE",
-                          y_text_position = 500
+                          y_text_position = 500,
+                          f_ylim_upper = 800,
+                          f_ylim_lower = 400,
+                          color_discard = "#D55E00",
+                      color_cut = "#D55E00",
+                      color_keep = "#009E73",
+                      color_ok = "#000000",
+                      color_zero = "#CC79A7"
                           ) {
   
 
@@ -75,13 +82,33 @@ flux_plot_exp <- function(slopes_df,
         "RMSE = ", .data$f_RMSE, "\n", "Corr coef = ",
         .data$f_cor_coef, "\n", "b = ", .data$f_b,
         sep = ""
+      ),
+      strip = case_when(
+        f_quality_flag == "ok" ~ ((color_ok)),
+        f_quality_flag == "discard" ~ ((color_discard)),
+        f_quality_flag == "zero" ~ ((color_zero)),
+        f_quality_flag == "start_error" ~ ((color_discard)),
+        f_quality_flag == "weird_flux" ~ ((color_discard)),
       )
     ) |>
-    select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
+    select("f_fluxID", "conc_start", "print_col", "f_quality_flag", "strip")
+
+  strips <- strip_themed(
+    background_x = elem_list_rect(fill = param_df$strip),
+    by_layer_x = TRUE
+  )
 
   slopes_df <- slopes_df |>
     select(!c("f_quality_flag")) |>
       left_join(param_df, by = "f_fluxID")
+
+  # slopes_df <- slopes_df |>
+  #   mutate(
+  #     f_fit_slope = case_when(
+  #       f_fit_slope < f_ylim_upper ~ f_fit_slope,
+  #       f_fit_slope >= f_ylim_upper ~ NA_real_
+  #     )
+  #   )
 
   plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
@@ -92,20 +119,23 @@ flux_plot_exp <- function(slopes_df,
       na.rm = TRUE
     ) +
     geom_line(
-      aes(y = .data$f_fit, color = .data$f_quality_flag),
+      aes(y = .data$f_fit),
       linetype = "longdash",
+      linewidth = 0.3,
       na.rm = TRUE
     ) +
     geom_line(
-      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
+      aes(y = .data$f_fit_slope),
       linetype = "dashed",
+      linewidth = 0.2,
       na.rm = TRUE
     ) +
     geom_text(
       aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
-    )
+    ) 
+    # facet_grid2(~f_fluxID, strip = strips)
 
   plot_exp
   
