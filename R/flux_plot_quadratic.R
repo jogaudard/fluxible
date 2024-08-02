@@ -69,7 +69,12 @@ flux_plot_quadratic <- function(slopes_df,
         "R2 = ", .data$f_rsquared, "\n", "p-value = ", .data$f_pvalue,
         sep = ""
       )
-    ) 
+) |>
+    select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
+
+  slopes_df <- slopes_df |>
+    select(!c("f_quality_flag")) |>
+      left_join(param_df, by = "f_fluxID")
 
   plot_quadratic <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
@@ -89,7 +94,6 @@ flux_plot_quadratic <- function(slopes_df,
       na.rm = TRUE
     ) +
     geom_text(
-      data = param_df,
       aes(
         x = .data$f_start, y = ((y_text_position)),
         label = .data$print_col

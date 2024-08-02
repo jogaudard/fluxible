@@ -76,7 +76,12 @@ flux_plot_exp <- function(slopes_df,
         .data$f_cor_coef, "\n", "b = ", .data$f_b,
         sep = ""
       )
-    )    
+    ) |>
+    select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
+
+  slopes_df <- slopes_df |>
+    select(!c("f_quality_flag")) |>
+      left_join(param_df, by = "f_fluxID")
 
   plot_exp <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
@@ -97,7 +102,6 @@ flux_plot_exp <- function(slopes_df,
       na.rm = TRUE
     ) +
     geom_text(
-      data = param_df,
       aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
