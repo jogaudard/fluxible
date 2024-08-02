@@ -69,7 +69,7 @@ flux_plot_quadratic <- function(slopes_df,
         "R2 = ", .data$f_rsquared, "\n", "p-value = ", .data$f_pvalue,
         sep = ""
       )
-    ) |>
+) |>
     select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
 
   slopes_df <- slopes_df |>
