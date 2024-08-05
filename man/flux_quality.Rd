@@ -47,6 +47,10 @@ the starting values are considered acceptable}
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded
 by the user's decision}
 
+\item{ratio_threshold}{ratio of gas concentration data points over length of
+measurment (in second) below which the measurement will be considered as
+not having enough data points to be considered for calculations}
+
 \item{pvalue_col}{column containing the p-value of each flux (linear fit)}
 
 \item{rsquared_col}{column containing the r squared to be used for

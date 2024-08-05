@@ -19,8 +19,8 @@ flux_quality_exp(
 \item{slopes_df}{dataset containing slopes, fluxID,
 and parameters of the exponential expression}
 
-\item{slope_col}{column containing the slope of the exponential expression
-used for the calculation}
+\item{slope_col}{column containing the slope of each flux
+(as calculated by the flux_fitting function)}
 
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded
 by the user's decision}
@@ -36,22 +36,6 @@ is considered non significant}
 
 \item{b_threshold}{threshold for the b parameter. Defines a window
 with its opposite inside which the fit is considered good enough.}
-
-\item{fluxID_col}{column containing unique IDs for each flux}
-
-\item{conc_col}{column containing the measured gas concentration}
-
-\item{time_col}{column containing the time of each measurement in seconds}
-
-\item{fit_col}{column containing the modeled data}
-
-\item{cut_col}{column containing the cutting information}
-
-\item{ambient_conc}{ambient gas concentration in ppm at the site of
-measurement (used to detect measurement that started with a polluted setup)}
-
-\item{error}{error of the setup, defines a window in which
-the starting values are considered acceptable}
 }
 \value{
 same dataframe with added flag and corrected slopes columns

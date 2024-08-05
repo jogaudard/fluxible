@@ -4,14 +4,9 @@
 #' by 0 according to parameters set by user
 #' @param slopes_df dataset containing slopes, fluxID,
 #' and parameters of the exponential expression
-#' @param fluxID_col column containing unique IDs for each flux
-#' @param conc_col column containing the measured gas concentration
+#' @param slope_col column containing the slope of each flux
+#' (as calculated by the flux_fitting function)
 #' @param b_col column containing the b parameter of the exponential expression
-#' @param time_col column containing the time of each measurement in seconds
-#' @param fit_col column containing the modeled data
-#' @param slope_col column containing the slope of the exponential expression
-#' used for the calculation
-#' @param cut_col column containing the cutting information
 #' @param weird_fluxesID vector of fluxIDs that should be discarded
 #' by the user's decision
 #' @param RMSE_threshold threshold for the RMSE of each flux above
@@ -21,10 +16,6 @@
 #' is considered non significant
 #' @param b_threshold threshold for the b parameter. Defines a window
 #' with its opposite inside which the fit is considered good enough.
-#' @param ambient_conc ambient gas concentration in ppm at the site of
-#' measurement (used to detect measurement that started with a polluted setup)
-#' @param error error of the setup, defines a window in which
-#' the starting values are considered acceptable
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
