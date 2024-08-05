@@ -48,7 +48,8 @@ flux_plot(
   limitsize = TRUE,
   bg = NULL,
   create.dir = FALSE,
-  cut_arg = "cut"
+  cut_arg = "cut",
+  no_data_flag = "no_data"
 )
 }
 \arguments{
@@ -145,6 +146,8 @@ if "ggsave", the plots can be saved with the ggsave function}
 \item{create.dir}{see ggsave()}
 
 \item{cut_arg}{argument pointing rows to be cut from the measurements}
+
+\item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
 }
 \description{
 plots the fluxes and indicates what should be discarded

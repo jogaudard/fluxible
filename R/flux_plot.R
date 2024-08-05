@@ -51,6 +51,7 @@
 #' @param bg see ggsave()
 #' @param create.dir see ggsave()
 #' @param cut_arg argument pointing rows to be cut from the measurements
+#' @param no_data_flag flag marking fluxID without data in f_quality_flag
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
@@ -110,7 +111,8 @@ flux_plot <- function(slopes_df,
                       limitsize = TRUE,
                       bg = NULL,
                       create.dir = FALSE,
-                          cut_arg = "cut"
+                      cut_arg = "cut",
+                      no_data_flag = "no_data"
                       ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
@@ -149,7 +151,26 @@ flux_plot <- function(slopes_df,
     message("Part of the fit will not be displayed because f_ylim_lower is too high.")
   }
 
+flags <- slopes_df |>
+    select("f_fluxID", "f_quality_flag") |>
+    filter(f_quality_flag == ((no_data_flag))) |>
+    mutate(
+      f_warnings = paste(
+        "\n", "fluxID", .data$f_fluxID, "dropped because there is no data"
+      ),
+      f_warnings = as.character(.data$f_warnings)
+    ) |>
+    pull(.data$f_warnings)
 
+  f_warnings <- stringr::str_c(flags)
+
+
+  if (any(!is.na(f_warnings))) message(f_warnings)
+
+  slopes_df <- slopes_df |>
+    filter(
+      .data$f_quality_flag != ((no_data_flag))
+    )
 
 
 
