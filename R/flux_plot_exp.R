@@ -2,21 +2,22 @@
 #' @description plots the fluxes and indicates what should be
 #' discarded or replaced by zero
 #' @param slopes_df dataset containing slopes
-#' @param datetime_col column containing datetime of
-#' each concentration measurement
-#' @param conc_col column containing gas concentration data
-#' @param cut_col column containing cut factor from the
-#' flux_fitting function ("cut" or "keep")
-#' @param fit_col column containing the modelled fit of the flux
-#' @param quality_flag_col column containing the flags produced by flux_quality
-#' @param fluxID_col column containing unique IDs for each flux
+# #' @param datetime_col column containing datetime of
+# #' each concentration measurement
+# #' @param conc_col column containing gas concentration data
+# #' @param cut_col column containing cut factor from the
+# #' flux_fitting function ("cut" or "keep")
+# #' @param fit_col column containing the modelled fit of the flux
+# #' @param quality_flag_col column containing the flags produced by flux_quality
+# #' @param fluxID_col column containing unique IDs for each flux
 #' @param fit_slope_col column containing the modelled slope at tz
 #' @param b_col column containing the b parameter of the exponential fit
 #' @param cor_coef_col column containing the correlation coefficient
 #' produced by flux_quality
 #' @param RMSE_col column containing the RMSE produced by flux_quality
-#' @param start_col column containing the datetime of the start of each flux
+# #' @param start_col column containing the datetime of the start of each flux
 #' @param y_text_position position of the text box
+#' @param cut_arg argument pointing rows to be cut from the measurements
 #' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
@@ -31,7 +32,7 @@ flux_plot_exp <- function(slopes_df,
                           # datetime_col = "f_datetime",
                           # conc_col = "f_conc",
                           # cut_col = "f_cut",
-                          # cut_arg = "cut",
+                          cut_arg = "cut",
                           # fit_col = "f_fit",
                           fit_slope_col = "f_fit_slope",
                           # quality_flag_col = "f_quality_flag",
@@ -39,8 +40,8 @@ flux_plot_exp <- function(slopes_df,
                           # start_col = "f_start",
                           b_col = "f_b",
                           cor_coef_col = "f_cor_coef",
-                          RMSE_col = "f_RMSE"
-                          # y_text_position = 500,
+                          RMSE_col = "f_RMSE",
+                          y_text_position = 500
                           # f_ylim_upper = 800,
                           # f_ylim_lower = 400
                           ) {
@@ -70,7 +71,8 @@ flux_plot_exp <- function(slopes_df,
   )
 
   slopes_df <- flux_plot_flag(((slopes_df)),
-                              ((param_df))
+                              ((param_df)),
+                              cut_arg = ((cut_arg))
                               )
 
   

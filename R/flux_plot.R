@@ -50,6 +50,7 @@
 #' @param limitsize see ggsave()
 #' @param bg see ggsave()
 #' @param create.dir see ggsave()
+#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
@@ -167,8 +168,8 @@ flux_plot <- function(slopes_df,
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
       RMSE_col = ((RMSE_col)),
-      cut_arg = ((cut_arg))
-      # y_text_position = ((y_text_position)),
+      cut_arg = ((cut_arg)),
+      y_text_position = ((y_text_position))
       # f_ylim_upper = ((f_ylim_upper)),
       # f_ylim_lower = ((f_ylim_lower))
     )
@@ -178,15 +179,16 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "linear") {
     f_plot <- flux_plot_lin(
       ((slopes_df)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      cut_col = ((cut_col)),
-      fit_col = ((fit_col)),
-      quality_flag_col = ((quality_flag_col)),
+      # datetime_col = ((datetime_col)),
+      # conc_col = ((conc_col)),
+      # cut_col = ((cut_col)),
+      # fit_col = ((fit_col)),
+      # quality_flag_col = ((quality_flag_col)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
-      fluxID_col = ((fluxID_col)),
-      start_col = ((start_col)),
+      cut_arg = ((cut_arg)),
+      # fluxID_col = ((fluxID_col)),
+      # start_col = ((start_col)),
       y_text_position = ((y_text_position))
     )
   }
@@ -200,10 +202,11 @@ flux_plot <- function(slopes_df,
       # fit_col = ((fit_col)),
       # quality_flag_col = ((quality_flag_col)),
       pvalue_col = ((pvalue_col)),
-      rsquared_col = ((rsquared_col))
+      rsquared_col = ((rsquared_col)),
+      cut_arg = ((cut_arg)),
       # fluxID_col = ((fluxID_col)),
       # start_col = ((start_col)),
-      # y_text_position = ((y_text_position))
+      y_text_position = ((y_text_position))
     )
   }
 

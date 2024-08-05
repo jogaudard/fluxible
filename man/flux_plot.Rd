@@ -23,7 +23,7 @@ flux_plot(
   color_discard = "#D55E00",
   color_cut = "#D55E00",
   color_keep = "#009E73",
-  color_ok = "#000000",
+  color_ok = "#009E73",
   color_zero = "#CC79A7",
   f_date_breaks = "1 min",
   f_minor_breaks = "10 sec",
@@ -47,7 +47,8 @@ flux_plot(
   dpi = 300,
   limitsize = TRUE,
   bg = NULL,
-  create.dir = FALSE
+  create.dir = FALSE,
+  cut_arg = "cut"
 )
 }
 \arguments{
@@ -142,6 +143,8 @@ if "ggsave", the plots can be saved with the ggsave function}
 \item{bg}{see ggsave()}
 
 \item{create.dir}{see ggsave()}
+
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 }
 \description{
 plots the fluxes and indicates what should be discarded
