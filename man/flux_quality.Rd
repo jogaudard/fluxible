@@ -12,6 +12,7 @@ flux_quality(
   fluxID_col = "f_fluxID",
   slope_col = "f_slope",
   weird_fluxesID = c(),
+  ratio_threshold = 0,
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
   pvalue_threshold = 0.3,

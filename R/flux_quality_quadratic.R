@@ -25,11 +25,6 @@
 
 
 flux_quality_quadratic <- function(slopes_df,
-                             ambient_conc = 421,
-                             error = 100,
-                             fluxID_col = "f_fluxID",
-                             slope_col = "f_slope",
-                             conc_col = "f_conc",
                              weird_fluxesID = c(),
                              pvalue_col = "f_pvalue",
                              rsquared_col = "f_rsquared",
@@ -37,9 +32,6 @@ flux_quality_quadratic <- function(slopes_df,
                              rsquared_threshold = 0.7) {
   slopes_df <- slopes_df |>
     rename(
-      f_fluxID = all_of(((fluxID_col))),
-      f_slope = all_of(((slope_col))),
-      f_conc = all_of(((conc_col))),
       f_pvalue = all_of(((pvalue_col))),
       f_rsquared = all_of(((rsquared_col)))
     )

@@ -1,6 +1,6 @@
 #' Slopes for each flux
 #'
-#' Slopes of quadratic fit for each flux with 30 seconds end cut and t_zero of 10 seconds, without quality flags.
+#' Slopes of quadratic fit for each flux with 30 seconds end cut and t_zero of 10 seconds, with quality flags.
 #' C(t) = a + b*t + c*t^2
 #'
 #' @format A tibble with 1251 rows and 27 variables
@@ -29,7 +29,10 @@
 #' \item{f_slope}{Slope of the quadratic model of gas concentration over time at t_zero.}
 #' \item{f_fit}{Output of the quadratic model of gas concentration over time.}
 #' \item{f_fit_slope}{output of linear expression describing the slope at t_zero}
+#' \item{f_start_error}{flagging if measurement started outside of the possible ambiant concentration}
+#' \item{f_quality_flag}{quality flag advising if the slope has to be replaced by 0 or NA}
+#' \item{f_slope_corr}{slope corrected according to quality flag}
 #' }
 #' @examples
-#' slopes30qua
-"slopes30qua"
+#' slopes30qua_flag
+"slopes30qua_flag"

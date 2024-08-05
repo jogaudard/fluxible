@@ -6,11 +6,6 @@
 \usage{
 flux_quality_quadratic(
   slopes_df,
-  ambient_conc = 421,
-  error = 100,
-  fluxID_col = "f_fluxID",
-  slope_col = "f_slope",
-  conc_col = "f_conc",
   weird_fluxesID = c(),
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
@@ -20,19 +15,6 @@ flux_quality_quadratic(
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
-
-\item{ambient_conc}{ambient gas concentration in ppm at the site of
-measurement (used to detect measurement that started with a polluted setup)}
-
-\item{error}{error of the setup, defines a window in
-which the starting values are considered acceptable}
-
-\item{fluxID_col}{column containing unique IDs for each flux}
-
-\item{slope_col}{column containing the slope of each flux
-(as calculated by the flux_fitting function)}
-
-\item{conc_col}{column containing the measured gas concentration}
 
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded
 by the user's decision}
@@ -47,6 +29,19 @@ of gas concentration over time is considered not significant (user decided)}
 
 \item{rsquared_threshold}{threshold of r squared value below which
 the linear model is considered an unsatisfactory fit}
+
+\item{fluxID_col}{column containing unique IDs for each flux}
+
+\item{conc_col}{column containing the measured gas concentration}
+
+\item{slope_col}{column containing the slope of each flux
+(as calculated by the flux_fitting function)}
+
+\item{ambient_conc}{ambient gas concentration in ppm at the site of
+measurement (used to detect measurement that started with a polluted setup)}
+
+\item{error}{error of the setup, defines a window in
+which the starting values are considered acceptable}
 }
 \value{
 same dataframe with added flag and corrected slopes columns

@@ -25,11 +25,6 @@
 
 
 flux_quality_lin <- function(slopes_df,
-                             ambient_conc = 421,
-                             error = 100,
-                             fluxID_col = "f_fluxID",
-                             slope_col = "f_slope",
-                             conc_col = "f_conc",
                              weird_fluxesID = c(),
                              pvalue_col = "f_pvalue",
                              rsquared_col = "f_rsquared",
@@ -37,32 +32,20 @@ flux_quality_lin <- function(slopes_df,
                              rsquared_threshold = 0.7) {
   slopes_df <- slopes_df |>
     rename(
-      f_fluxID = all_of(((fluxID_col))),
-      f_slope = all_of(((slope_col))),
-      f_conc = all_of(((conc_col))),
       f_pvalue = all_of(((pvalue_col))),
       f_rsquared = all_of(((rsquared_col)))
     )
 
-  quality_par_start <- slopes_df |>
-    group_by(.data$f_fluxID) |>
-    nest() |>
-    rowwise() |>
-    summarise(
-      f_start_error = case_when(
-        data$f_conc[1] < (((ambient_conc)) - ((error))) ~ "error",
-        data$f_conc[1] > (((ambient_conc)) + ((error))) ~ "error",
-        TRUE ~ "ok"
-      )
-    ) |>
-    unnest("f_fluxID") |>
-    ungroup()
+  
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start, by = "f_fluxID") |>
+      group_by(.data$f_fluxID, .data$f_cut) |>
     mutate(
       f_quality_flag = case_when(
+        .data$f_flag_ratio == "no_data" ~ "no_data",
+        .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
+        .data$f_start_error == "error" ~ "start_error",
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
           .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
@@ -70,12 +53,14 @@ flux_quality_lin <- function(slopes_df,
           .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
       ),
       f_slope_corr = case_when(
+        .data$f_quality_flag == "no_data" ~ NA_real_,
         .data$f_quality_flag == "weird_flux" ~ NA_real_,
         .data$f_quality_flag == "ok" ~ .data$f_slope,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "zero" ~ 0
       )
-    )
+    ) |>
+    ungroup()
 
   slopes_df
 }

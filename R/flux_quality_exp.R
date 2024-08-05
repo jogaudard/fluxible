@@ -33,28 +33,17 @@
 
 
 flux_quality_exp <- function(slopes_df,
-                             ambient_conc = 421,
-                             error = 100,
-                             fluxID_col = "f_fluxID",
-                             slope_col = "f_slope",
+                             slope_col = "f_slope_tz",
                              weird_fluxesID = c(),
-                             conc_col = "f_conc",
                              b_col = "f_b",
-                             time_col = "f_time",
-                             fit_col = "f_fit",
-                             cut_col = "f_cut",
                              RMSE_threshold = 25,
                              cor_threshold = 0.5,
                              b_threshold = 1) {
+
   slopes_df <- slopes_df |>
     rename(
-      f_fluxID = all_of(((fluxID_col))),
-      f_conc = all_of(((conc_col))),
       f_b = all_of(((b_col))),
-      f_time = all_of(((time_col))),
-      f_fit = all_of(((fit_col))),
-      f_slope_tz = all_of(((slope_col))),
-      f_cut = all_of(((cut_col)))
+      f_slope_tz = all_of(((slope_col)))
     )
 
 
@@ -71,24 +60,10 @@ flux_quality_exp <- function(slopes_df,
     unnest(c("f_fluxID", "f_cut")) |>
     ungroup()
 
-  quality_par_start <- slopes_df |>
-    # for the start error we take the entire flux into account
-    group_by(.data$f_fluxID) |>
-    nest() |>
-    rowwise() |>
-    summarise(
-      f_start_error = case_when(
-        data$f_conc[1] < (((ambient_conc)) - ((error))) ~ "error",
-        data$f_conc[1] > (((ambient_conc)) + ((error))) ~ "error",
-        TRUE ~ "ok"
-      )
-    ) |>
-    unnest("f_fluxID") |>
-    ungroup()
+  
 
   quality_flag <- slopes_df |>
     left_join(quality_par, by = c("f_fluxID", "f_cut")) |>
-    left_join(quality_par_start, by = "f_fluxID") |>
     mutate(
       f_fit_quality = case_when(
         .data$f_b >= ((b_threshold)) ~ "bad_b",
@@ -99,6 +74,8 @@ flux_quality_exp <- function(slopes_df,
         TRUE ~ "yes"
       ),
       f_quality_flag = case_when(
+        .data$f_flag_ratio == "no_data" ~ "no_data",
+        .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
         .data$f_start_error == "error" ~ "start_error",
         .data$f_fit_quality == "bad_b" &
@@ -112,11 +89,12 @@ flux_quality_exp <- function(slopes_df,
         TRUE ~ "ok"
       ),
       f_slope_corr = case_when(
+        .data$f_quality_flag == "no_data" ~ NA_real_,
         .data$f_quality_flag == "weird_flux" ~ NA_real_,
         .data$f_quality_flag == "start_error" ~ NA_real_,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "zero" ~ 0,
-        .data$f_quality_flag == "ok" ~ .data$f_slope_tz,
+        .data$f_quality_flag == "ok" ~ .data$f_slope_tz
       )
     )
 
