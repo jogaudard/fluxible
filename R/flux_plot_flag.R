@@ -8,8 +8,6 @@
 
 flux_plot_flag <- function(slopes_df,
                            param_df,
-                          #  quality_flag_col = "f_quality_flag",
-                          #  fluxID_col = "f_fluxID",
                            cut_arg = "cut"
 
 ){

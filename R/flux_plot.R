@@ -157,21 +157,12 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
       ((slopes_df)),
-      # datetime_col = "f_datetime",
-      # conc_col = "f_conc",
-      # cut_col = "f_cut",
-      # fit_col = "f_fit",
       fit_slope_col = ((fit_slope_col)),
-      # quality_flag_col = "f_quality_flag",
-      # fluxID_col = "f_fluxID",
-      # start_col = "f_start",
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
       RMSE_col = ((RMSE_col)),
       cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
-      # f_ylim_upper = ((f_ylim_upper)),
-      # f_ylim_lower = ((f_ylim_lower))
     )
   }
 
@@ -179,16 +170,9 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "linear") {
     f_plot <- flux_plot_lin(
       ((slopes_df)),
-      # datetime_col = ((datetime_col)),
-      # conc_col = ((conc_col)),
-      # cut_col = ((cut_col)),
-      # fit_col = ((fit_col)),
-      # quality_flag_col = ((quality_flag_col)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
       cut_arg = ((cut_arg)),
-      # fluxID_col = ((fluxID_col)),
-      # start_col = ((start_col)),
       y_text_position = ((y_text_position))
     )
   }
@@ -196,16 +180,9 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "quadratic") {
     f_plot <- flux_plot_quadratic(
       ((slopes_df)),
-      # datetime_col = ((datetime_col)),
-      # conc_col = ((conc_col)),
-      # cut_col = ((cut_col)),
-      # fit_col = ((fit_col)),
-      # quality_flag_col = ((quality_flag_col)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
       cut_arg = ((cut_arg)),
-      # fluxID_col = ((fluxID_col)),
-      # start_col = ((start_col)),
       y_text_position = ((y_text_position))
     )
   }
