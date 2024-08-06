@@ -73,8 +73,6 @@ flux_quality <- function(slopes_df,
                          RMSE_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1,
-                        #  f_flags = c("ok", "discard", "zero", "weird_flux", "start_error"),
-                        #  flags_col = "f_quality_flag",
                          cut_arg = "cut"
                          ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))

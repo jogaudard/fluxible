@@ -8,7 +8,7 @@ flux_calc(
   slope_df,
   slope_col,
   cut_col = c(),
-  keep_filter = c(),
+  keep_arg = c(),
   chamber_volume = 24.5,
   tube_volume = 0.075,
   atm_pressure = 1,
@@ -28,7 +28,7 @@ flux_calc(
 
 \item{cut_col}{column containing cutting information}
 
-\item{keep_filter}{name in cut_col of data to keep}
+\item{keep_arg}{name in cut_col of data to keep}
 
 \item{chamber_volume}{volume of the flux chamber in L,
 default for Three-D project chamber (25x24.5x40cm),
