@@ -54,12 +54,18 @@ flux_calc <- function(slope_df,
                       temp_air_unit = "celsius") {
   # if (!is.double(((chamber_volume)))) stop("chamber_volume has to be a double")
   # if (!is.double(((tube_volume)))) stop("tube_volume has to be a double")
+
+temp_air_unit <- match.arg(
+    ((temp_air_unit)),
+    c("celsius", "fahrenheit", "kelvin")
+  )
+
   if (!is.double(((atm_pressure)))) stop("atm_pressure has to be a double")
   if (!is.double(((plot_area)))) stop("plot_area has to be a double")
   if (!is.double(((R_const)))) stop("R_const has to be a double")
-  if (!(((temp_air_unit)) %in% list("celsius", "fahrenheit", "kelvin"))) {
-    stop("temp_air_unit has to be either celsius, fahrenheit or kelvin")
-  }
+  # if (!(((temp_air_unit)) %in% list("celsius", "fahrenheit", "kelvin"))) {
+  #   stop("temp_air_unit has to be either celsius, fahrenheit or kelvin")
+  # }
 
   colnames <- colnames(slope_df)
   if (!(((slope_col)) %in% ((colnames)))) stop("could not find slope_col in slope_df")
@@ -132,6 +138,7 @@ if (is.character(((atm_pressure)))) {
   # vol <- ((chamber_volume)) + ((tube_volume))
 
   if(length(((cut_col))) > 0) {
+    message("Cutting data according to 'keep_arg'...")
     slope_df <- flux_cut(
                         slope_df,
                         cut_col = ((cut_col)),
@@ -139,6 +146,7 @@ if (is.character(((atm_pressure)))) {
       )
   }
 
+  message("Averaging air temperature for each flux...")
   slope_temp <- slope_df |>
     select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume", "atm_pressure") |>
     group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume, .data$atm_pressure) |>
@@ -158,6 +166,7 @@ if (is.character(((atm_pressure)))) {
 
   # a df with all the columns we just want to keep and join back in the end
   if (length(((cols_keep))) > 0) {
+    message("Creating a dataframe with the columns from 'cols_keep' argument...")
     slope_keep <- slope_df |>
       select(all_of(((cols_keep))), "f_fluxID") |>
       distinct() |>
@@ -168,6 +177,7 @@ if (is.character(((atm_pressure)))) {
 
   # a df with the columns that have to be averaged
   if (length((cols_ave)) > 0) {
+        message("Creating a dataframe with the columns from 'cols_ave' argument...")
     slope_ave <- slope_df |>
       select(all_of(((cols_ave))), "f_fluxID") |>
       group_by(.data$f_fluxID) |>
@@ -178,10 +188,7 @@ if (is.character(((atm_pressure)))) {
     slope_ave <- slope_keep
   }
 
-  temp_air_unit <- match.arg(
-    ((temp_air_unit)),
-    c("celsius", "fahrenheit", "kelvin")
-  )
+  message("Calculating fluxes...")
 
   fluxes <- slope_ave |>
     mutate(
