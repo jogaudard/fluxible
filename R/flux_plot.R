@@ -153,7 +153,7 @@ flux_plot <- function(slopes_df,
 
 flags <- slopes_df |>
     select("f_fluxID", "f_quality_flag") |>
-    filter(f_quality_flag == ((no_data_flag))) |>
+    filter(.data$f_quality_flag == ((no_data_flag))) |>
     mutate(
       f_warnings = paste(
         "\n", "fluxID", .data$f_fluxID, "dropped because there is no data"
