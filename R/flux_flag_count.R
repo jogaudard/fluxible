@@ -10,10 +10,11 @@
 #' @importFrom dplyr .data rename all_of select group_by summarise tibble right_join filter
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
+#' @export 
 
 
 flux_flag_count <- function(slopes_df,
-                            f_flags = c("ok", "discard", "zero", "weird_flux", "start_error"),
+                            f_flags = c("ok", "discard", "zero", "weird_flux", "start_error", "no_data"),
                             fluxID_col = "f_fluxID",
                             flags_col = "f_quality_flag",
                             cut_col = "f_cut",
@@ -27,27 +28,28 @@ slopes_df <- slopes_df |>
         f_cut = all_of(((cut_col)))
     )
 
-                                flag_df <- slopes_df |>
-                                                filter(.data$f_cut != ((cut_arg))) |>
-                                                mutate(
-                                                    f_quality_flag = as.factor(.data$f_quality_flag)
-                                                ) |>
-                                                select("f_fluxID", "f_quality_flag") |>
-                                                unique()
+  flag_df <- slopes_df |>
+    filter(.data$f_cut != ((cut_arg))) |>
+         mutate(
+            f_quality_flag = as.factor(.data$f_quality_flag)
+                ) |>
+            select("f_fluxID", "f_quality_flag") |>
+            unique()
 
-                                flags <- tibble(f_quality_flag = factor(((f_flags)), levels = ((f_flags))))
+    flags <- tibble(f_quality_flag = factor(((f_flags)), levels = ((f_flags))))
 
-                                count_table <- flag_df  |>
-                                                    group_by(.data$f_quality_flag) |>
-                                                    summarise(
-                                                        n = length(.data$f_quality_flag)
-                                                    ) |>
-                                                    right_join(flags, by = "f_quality_flag") |>
-                                                    mutate(
-                                                        n = replace_na(.data$n, 0),
-                                                        ratio = .data$n/sum(.data$n)
-                                                    )
+    count_table <- flag_df  |>
+        group_by(.data$f_quality_flag) |>
+            summarise(
+                    n = length(.data$f_quality_flag)
+                    ) |>
+                    right_join(flags, by = "f_quality_flag") |>
+                    mutate(
+                        n = replace_na(.data$n, 0),
+                        ratio = .data$n/sum(.data$n)
+                        )
 
-                                count_table
+                        count_table
+
                             }
 

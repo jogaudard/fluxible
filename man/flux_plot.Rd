@@ -23,7 +23,7 @@ flux_plot(
   color_discard = "#D55E00",
   color_cut = "#D55E00",
   color_keep = "#009E73",
-  color_ok = "#000000",
+  color_ok = "#009E73",
   color_zero = "#CC79A7",
   f_date_breaks = "1 min",
   f_minor_breaks = "10 sec",
@@ -47,7 +47,9 @@ flux_plot(
   dpi = 300,
   limitsize = TRUE,
   bg = NULL,
-  create.dir = FALSE
+  create.dir = FALSE,
+  cut_arg = "cut",
+  no_data_flag = "no_data"
 )
 }
 \arguments{
@@ -142,6 +144,10 @@ if "ggsave", the plots can be saved with the ggsave function}
 \item{bg}{see ggsave()}
 
 \item{create.dir}{see ggsave()}
+
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
+
+\item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
 }
 \description{
 plots the fluxes and indicates what should be discarded
@@ -154,5 +160,5 @@ data(slopes30lin_flag)
 flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, f_plotname = "pdf_quality_plots")
 flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", device = "jpg", f_plotname = "jpg_quality_plots")
 flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", f_plotname = "jpg_quality_plots.jpg")
-flux_plot(slopes30qua, fit_type = "quadratic", print_plot = TRUE)
+flux_plot(slopes30qua_flag, fit_type = "quadratic", print_plot = TRUE)
 }

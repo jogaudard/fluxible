@@ -12,6 +12,9 @@
 #' (as calculated by the flux_fitting function)
 #' @param weird_fluxesID vector of fluxIDs that should be discarded
 #' by the user's decision
+#' @param ratio_threshold ratio of gas concentration data points over length of
+#' measurment (in second) below which the measurement will be considered as 
+#' not having enough data points to be considered for calculations
 #' @param pvalue_col column containing the p-value of each flux (linear fit)
 #' @param rsquared_col column containing the r squared to be used for
 #' the quality assessment (linear fit)
@@ -54,6 +57,7 @@ flux_quality <- function(slopes_df,
                          fluxID_col = "f_fluxID",
                          slope_col = "f_slope",
                          weird_fluxesID = c(),
+                         ratio_threshold = 0,
                          pvalue_col = "f_pvalue",
                          rsquared_col = "f_rsquared",
                          pvalue_threshold = 0.3,
@@ -72,19 +76,52 @@ flux_quality <- function(slopes_df,
                          ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
+  slopes_df <- slopes_df |>
+    rename(
+      f_fluxID = all_of(((fluxID_col))),
+      f_conc = all_of(((conc_col))),
+      f_time = all_of(((time_col))),
+      f_fit = all_of(((fit_col))),
+      f_cut = all_of(((cut_col)))
+    )
+
+  slopes_df <- slopes_df |>
+  group_by(.data$f_fluxID, .data$f_cut) |>
+    mutate(
+      f_n_conc = sum(!is.na(.data$f_conc)),
+            f_ratio = .data$f_n_conc / as.double((difftime(.data$f_end, .data$f_start, units = "secs"))),
+      f_flag_ratio = case_when(
+        .data$f_ratio == 0 ~ "no_data",
+        .data$f_ratio <= ((ratio_threshold)) ~ "too_low",
+        TRUE ~ "ok"
+      )
+    ) |>
+    ungroup()
+
+  quality_par_start <- slopes_df |>
+    # for the start error we take the entire flux into account
+    group_by(.data$f_fluxID) |>
+    nest() |>
+    rowwise() |>
+    summarise(
+      f_start_error = case_when(
+        data$f_conc[1] < (((ambient_conc)) - ((error))) ~ "error",
+        data$f_conc[1] > (((ambient_conc)) + ((error))) ~ "error",
+        TRUE ~ "ok"
+      )
+    ) |>
+    unnest("f_fluxID") |>
+    ungroup()
+
+    slopes_df <- slopes_df |>
+      left_join(quality_par_start, by = "f_fluxID")
+
   if (((fit_type)) == "exponential") {
     quality_flag <- flux_quality_exp(
       ((slopes_df)),
-      ambient_conc = ((ambient_conc)),
-      error = ((error)),
-      fluxID_col = ((fluxID_col)),
       slope_col = ((slope_col)),
       weird_fluxesID = ((weird_fluxesID)),
-      conc_col = ((conc_col)),
       b_col = ((b_col)),
-      time_col = ((time_col)),
-      fit_col = ((fit_col)),
-      cut_col = ((cut_col)),
       RMSE_threshold = ((RMSE_threshold)),
       cor_threshold = ((cor_threshold)),
       b_threshold = ((b_threshold))
@@ -92,37 +129,28 @@ flux_quality <- function(slopes_df,
   }
 
 
-  if (((fit_type)) == "linear") {
-    quality_flag <- flux_quality_lin(
+  if (((fit_type)) %in% c("linear", "quadratic")) {
+    quality_flag <- flux_quality_lm(
       ((slopes_df)),
-      ambient_conc = ((ambient_conc)),
-      error = ((error)),
-      fluxID_col = ((fluxID_col)),
       slope_col = ((slope_col)),
       weird_fluxesID = ((weird_fluxesID)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
       pvalue_threshold = ((pvalue_threshold)),
-      rsquared_threshold = ((rsquared_threshold)),
-      conc_col = ((conc_col))
+      rsquared_threshold = ((rsquared_threshold))
     )
   }
 
-  if (((fit_type)) == "quadratic") {
-    quality_flag <- flux_quality_quadratic(
-      ((slopes_df)),
-      ambient_conc = ((ambient_conc)),
-      error = ((error)),
-      fluxID_col = ((fluxID_col)),
-      slope_col = ((slope_col)),
-      weird_fluxesID = ((weird_fluxesID)),
-      pvalue_col = ((pvalue_col)),
-      rsquared_col = ((rsquared_col)),
-      pvalue_threshold = ((pvalue_threshold)),
-      rsquared_threshold = ((rsquared_threshold)),
-      conc_col = ((conc_col))
-    )
-  }
+  # if (((fit_type)) == "quadratic") {
+  #   quality_flag <- flux_quality_lm(
+  #     ((slopes_df)),
+  #     weird_fluxesID = ((weird_fluxesID)),
+  #     pvalue_col = ((pvalue_col)),
+  #     rsquared_col = ((rsquared_col)),
+  #     pvalue_threshold = ((pvalue_threshold)),
+  #     rsquared_threshold = ((rsquared_threshold))
+  #   )
+  # }
 
   flag_count <- flux_flag_count(
     ((quality_flag)),

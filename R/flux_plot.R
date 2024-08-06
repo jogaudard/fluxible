@@ -50,6 +50,8 @@
 #' @param limitsize see ggsave()
 #' @param bg see ggsave()
 #' @param create.dir see ggsave()
+#' @param cut_arg argument pointing rows to be cut from the measurements
+#' @param no_data_flag flag marking fluxID without data in f_quality_flag
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
@@ -63,7 +65,7 @@
 #' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, f_plotname = "pdf_quality_plots")
 #' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", device = "jpg", f_plotname = "jpg_quality_plots")
 #' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", f_plotname = "jpg_quality_plots.jpg")
-#' flux_plot(slopes30qua, fit_type = "quadratic", print_plot = TRUE)
+#' flux_plot(slopes30qua_flag, fit_type = "quadratic", print_plot = TRUE)
 #' @export
 
 flux_plot <- function(slopes_df,
@@ -84,7 +86,7 @@ flux_plot <- function(slopes_df,
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_keep = "#009E73",
-                      color_ok = "#000000",
+                      color_ok = "#009E73",
                       color_zero = "#CC79A7",
                       f_date_breaks = "1 min",
                       f_minor_breaks = "10 sec",
@@ -108,7 +110,9 @@ flux_plot <- function(slopes_df,
                       dpi = 300,
                       limitsize = TRUE,
                       bg = NULL,
-                      create.dir = FALSE
+                      create.dir = FALSE,
+                      cut_arg = "cut",
+                      no_data_flag = "no_data"
                       ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
@@ -147,22 +151,38 @@ flux_plot <- function(slopes_df,
     message("Part of the fit will not be displayed because f_ylim_lower is too high.")
   }
 
+flags <- slopes_df |>
+    select("f_fluxID", "f_quality_flag") |>
+    filter(f_quality_flag == ((no_data_flag))) |>
+    mutate(
+      f_warnings = paste(
+        "\n", "fluxID", .data$f_fluxID, "dropped because there is no data"
+      ),
+      f_warnings = as.character(.data$f_warnings)
+    ) |>
+    pull(.data$f_warnings)
+
+  f_warnings <- stringr::str_c(flags)
+
+
+  if (any(!is.na(f_warnings))) message(f_warnings)
+
+  slopes_df <- slopes_df |>
+    filter(
+      .data$f_quality_flag != ((no_data_flag))
+    )
+
+
 
 
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
       ((slopes_df)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      cut_col = ((cut_col)),
-      fit_col = ((fit_col)),
       fit_slope_col = ((fit_slope_col)),
-      quality_flag_col = ((quality_flag_col)),
-      fluxID_col = ((fluxID_col)),
-      start_col = ((start_col)),
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
       RMSE_col = ((RMSE_col)),
+      cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
     )
   }
@@ -171,15 +191,9 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "linear") {
     f_plot <- flux_plot_lin(
       ((slopes_df)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      cut_col = ((cut_col)),
-      fit_col = ((fit_col)),
-      quality_flag_col = ((quality_flag_col)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
-      fluxID_col = ((fluxID_col)),
-      start_col = ((start_col)),
+      cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
     )
   }
@@ -187,15 +201,9 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "quadratic") {
     f_plot <- flux_plot_quadratic(
       ((slopes_df)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      cut_col = ((cut_col)),
-      fit_col = ((fit_col)),
-      quality_flag_col = ((quality_flag_col)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
-      fluxID_col = ((fluxID_col)),
-      start_col = ((start_col)),
+      cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
     )
   }

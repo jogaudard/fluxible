@@ -12,6 +12,7 @@ flux_quality(
   fluxID_col = "f_fluxID",
   slope_col = "f_slope",
   weird_fluxesID = c(),
+  ratio_threshold = 0,
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
   pvalue_threshold = 0.3,
@@ -45,6 +46,10 @@ the starting values are considered acceptable}
 
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded
 by the user's decision}
+
+\item{ratio_threshold}{ratio of gas concentration data points over length of
+measurment (in second) below which the measurement will be considered as
+not having enough data points to be considered for calculations}
 
 \item{pvalue_col}{column containing the p-value of each flux (linear fit)}
 
