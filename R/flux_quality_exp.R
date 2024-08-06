@@ -9,6 +9,8 @@
 #' @param b_col column containing the b parameter of the exponential expression
 #' @param weird_fluxesID vector of fluxIDs that should be discarded
 #' by the user's decision
+#' @param force_okID vector of fluxIDs for which the user wants to keep
+#' the calculated slope despite a bad quality flag
 #' @param RMSE_threshold threshold for the RMSE of each flux above
 #' which the fit is considered unsatisfactory
 #' @param cor_threshold threshold for the correlation coefficient
@@ -26,6 +28,7 @@
 flux_quality_exp <- function(slopes_df,
                              slope_col = "f_slope_tz",
                              weird_fluxesID = c(),
+                             force_okID = c(),
                              b_col = "f_b",
                              RMSE_threshold = 25,
                              cor_threshold = 0.5,
@@ -68,6 +71,7 @@ flux_quality_exp <- function(slopes_df,
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
+        .data$f_fluxID %in% ((force_okID)) ~ "force_ok",
         .data$f_start_error == "error" ~ "start_error",
         .data$f_fit_quality == "bad_b" &
           .data$f_correlation == "yes" ~ "discard",
@@ -82,6 +86,7 @@ flux_quality_exp <- function(slopes_df,
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA_real_,
         .data$f_quality_flag == "weird_flux" ~ NA_real_,
+        .data$f_quality_flag == "force_ok" ~ .data$f_slope_tz,
         .data$f_quality_flag == "start_error" ~ NA_real_,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "zero" ~ 0,

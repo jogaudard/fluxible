@@ -9,6 +9,7 @@ flux_quality_exp(
   slopes_df,
   slope_col = "f_slope_tz",
   weird_fluxesID = c(),
+  force_okID = c(),
   b_col = "f_b",
   RMSE_threshold = 25,
   cor_threshold = 0.5,
@@ -24,6 +25,9 @@ and parameters of the exponential expression}
 
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded
 by the user's decision}
+
+\item{force_okID}{vector of fluxIDs for which the user wants to keep
+the calculated slope despite a bad quality flag}
 
 \item{b_col}{column containing the b parameter of the exponential expression}
 

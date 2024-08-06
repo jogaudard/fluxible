@@ -12,6 +12,7 @@
        weird_flux 	 0 	 0 %
        start_error 	 0 	 0 %
        no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
     Output
       # A tibble: 1,251 x 39
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -48,6 +49,7 @@
        weird_flux 	 0 	 0 %
        start_error 	 0 	 0 %
        no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
     Output
       # A tibble: 1,251 x 27
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -84,6 +86,7 @@
        weird_flux 	 0 	 0 %
        start_error 	 0 	 0 %
        no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
     Output
       # A tibble: 1,251 x 30
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 

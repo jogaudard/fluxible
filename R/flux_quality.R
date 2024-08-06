@@ -12,6 +12,8 @@
 #' (as calculated by the flux_fitting function)
 #' @param weird_fluxesID vector of fluxIDs that should be discarded
 #' by the user's decision
+#' @param force_okID vector of fluxIDs for which the user wants to keep
+#' the calculated slope despite a bad quality flag
 #' @param ratio_threshold ratio of gas concentration data points over length of
 #' measurment (in second) below which the measurement will be considered as 
 #' not having enough data points to be considered for calculations
@@ -57,6 +59,7 @@ flux_quality <- function(slopes_df,
                          fluxID_col = "f_fluxID",
                          slope_col = "f_slope",
                          weird_fluxesID = c(),
+                         force_okID = c(),
                          ratio_threshold = 0,
                          pvalue_col = "f_pvalue",
                          rsquared_col = "f_rsquared",
@@ -121,6 +124,7 @@ flux_quality <- function(slopes_df,
       ((slopes_df)),
       slope_col = ((slope_col)),
       weird_fluxesID = ((weird_fluxesID)),
+      force_okID = ((force_okID)),
       b_col = ((b_col)),
       RMSE_threshold = ((RMSE_threshold)),
       cor_threshold = ((cor_threshold)),
@@ -134,6 +138,7 @@ flux_quality <- function(slopes_df,
       ((slopes_df)),
       slope_col = ((slope_col)),
       weird_fluxesID = ((weird_fluxesID)),
+      force_okID = ((force_okID)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
       pvalue_threshold = ((pvalue_threshold)),
