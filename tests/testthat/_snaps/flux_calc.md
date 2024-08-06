@@ -19,6 +19,10 @@
     Code
       flux_calc(slopes0, slope_col = "f_slope_tz", cols_keep = c("turfID", "type",
         "f_start"))
+    Message
+      Averaging air temperature for each flux...
+      Creating a dataframe with the columns from 'cols_keep' argument...
+      Calculating fluxes...
     Output
       # A tibble: 6 x 11
         turfID       type  f_start             f_fluxID f_slope_calc chamber_volume
@@ -37,6 +41,11 @@
     Code
       flux_calc(slopes0, slope_col = "f_slope_tz", cols_keep = c("turfID", "type",
         "f_start"), cols_ave = c("PAR", "temp_soil"))
+    Message
+      Averaging air temperature for each flux...
+      Creating a dataframe with the columns from 'cols_keep' argument...
+      Creating a dataframe with the columns from 'cols_ave' argument...
+      Calculating fluxes...
     Output
       # A tibble: 6 x 13
         f_fluxID   PAR temp_soil turfID       type  f_start             f_slope_calc
@@ -55,6 +64,9 @@
     Code
       flux_calc(slopes0_temp, slope_col = "f_slope_tz", temp_air_col = "temp_fahr",
         temp_air_unit = "fahrenheit")
+    Message
+      Averaging air temperature for each flux...
+      Calculating fluxes...
     Output
       # A tibble: 6 x 8
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
@@ -72,6 +84,9 @@
     Code
       flux_calc(slopes0_temp, slope_col = "f_slope_tz", temp_air_col = "temp_kelvin",
         temp_air_unit = "kelvin")
+    Message
+      Averaging air temperature for each flux...
+      Calculating fluxes...
     Output
       # A tibble: 6 x 8
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
@@ -89,6 +104,10 @@
     Code
       flux_calc(slopes30_flag, slope_col = "f_slope_corr", cut_col = "f_cut",
         keep_arg = "keep")
+    Message
+      Cutting data according to 'keep_arg'...
+      Averaging air temperature for each flux...
+      Calculating fluxes...
     Output
       # A tibble: 6 x 8
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
@@ -105,6 +124,9 @@
 
     Code
       flux_calc(slopes0_vol, slope_col = "f_slope_tz", chamber_volume = "volume")
+    Message
+      Averaging air temperature for each flux...
+      Calculating fluxes...
     Output
       # A tibble: 6 x 8
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
@@ -122,6 +144,9 @@
     Code
       select(flux_calc(slopes0_vol_tube, slope_col = "f_slope_tz", chamber_volume = "volume",
         tube_volume = "tube_vol"), !c(chamber_volume, tube_volume))
+    Message
+      Averaging air temperature for each flux...
+      Calculating fluxes...
     Output
       # A tibble: 6 x 6
         f_fluxID f_slope_calc atm_pressure temp_air_ave volume_setup  flux

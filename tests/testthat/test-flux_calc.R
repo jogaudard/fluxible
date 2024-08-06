@@ -75,7 +75,7 @@ test_that("error on air temp units", {
       slope_col = "slope_tz",
       temp_air_unit = "melvin"
     ),
-    "temp_air_unit has to be either celsius, fahrenheit or kelvin"
+    "'arg' should be one of \"celsius\", \"fahrenheit\", \"kelvin\""
   )
   # Played for Laughs in the 1985 humor book "Science Made Stupid" by Tom Weller,
   # in which a table in its appendix lists such units as the "arg"
