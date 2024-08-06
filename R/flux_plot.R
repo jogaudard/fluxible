@@ -218,7 +218,8 @@ message("Plotting in progress")
       "discard" = ((color_discard)),
       "zero" = ((color_zero)),
       "start_error" = ((color_discard)),
-      "weird_flux" = ((color_discard))
+      "weird_flux" = ((color_discard)),
+      "force_ok" = ((color_ok))
     )) +
     scale_x_datetime(
       date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
