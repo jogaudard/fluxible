@@ -5,7 +5,7 @@
 #' @param slope_col column containing the slope to calculate the flux (in ppm*s^(-1))
 #' @param slope_col column containing the slope to calculate the flux
 #' @param cut_col column containing cutting information
-#' @param keep_filter name in cut_col of data to keep
+#' @param keep_arg name in cut_col of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
 #' default for Three-D project chamber (25x24.5x40cm),
 #' can also be a column in case it is a variable
@@ -41,7 +41,7 @@
 flux_calc <- function(slope_df,
                       slope_col,
                       cut_col = c(),
-                      keep_filter = c(),
+                      keep_arg = c(),
                       chamber_volume = 24.5,
                       tube_volume = 0.075,
                       atm_pressure = 1,
@@ -135,7 +135,7 @@ if (is.character(((atm_pressure)))) {
     slope_df <- flux_cut(
                         slope_df,
                         cut_col = ((cut_col)),
-                        keep_filter = ((keep_filter))
+                        keep_arg = ((keep_arg))
       )
   }
 

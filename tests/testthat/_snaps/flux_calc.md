@@ -88,7 +88,7 @@
 
     Code
       flux_calc(slopes30_flag, slope_col = "f_slope_corr", cut_col = "f_cut",
-        keep_filter = "keep")
+        keep_arg = "keep")
     Output
       # A tibble: 6 x 8
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave

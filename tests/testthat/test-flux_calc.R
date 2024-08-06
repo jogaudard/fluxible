@@ -130,7 +130,7 @@ test_that("calculating fluxes on dataset with cuts filters out the cuts first", 
   slopes30_flag,
   slope_col = "f_slope_corr",
   cut_col = "f_cut",
-  keep_filter = "keep"
+  keep_arg = "keep"
   )
   )
 })
