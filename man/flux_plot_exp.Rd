@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_plot_exp.R
 \name{flux_plot_exp}
 \alias{flux_plot_exp}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes with exponential fit}
 \usage{
 flux_plot_exp(
   slopes_df,
@@ -17,8 +17,7 @@ flux_plot_exp(
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{cut_arg}{argument pointing rows to be cut from the measurements
-but will take time depending on the size of the dataset}
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 
 \item{fit_slope_col}{column containing the modelled slope at tz}
 
@@ -32,6 +31,6 @@ produced by flux_quality}
 \item{y_text_position}{position of the text box}
 }
 \description{
-plots the fluxes and indicates what should be
-discarded or replaced by zero
+plots the fluxes that were fitted with
+an exponential model
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_param_exp.R
 \name{flux_param_exp}
 \alias{flux_param_exp}
-\title{prepares text to print and quality flags for flux_plot function}
+\title{prepares text to print for flux_plot function}
 \usage{
 flux_param_exp(slopes_df, cut_arg = "cut")
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_plot_lin.R
 \name{flux_plot_lin}
 \alias{flux_plot_lin}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes with linear fit}
 \usage{
 flux_plot_lin(
   slopes_df,
@@ -17,15 +17,13 @@ flux_plot_lin(
 
 \item{pvalue_col}{column containing the p-value of each flux}
 
-\item{rsquared_col}{column containing the r squared
-used for the quality assessment}
+\item{rsquared_col}{column containing the r squared of each flux}
 
 \item{y_text_position}{position of the text box}
 
-\item{cut_arg}{argument pointing rows to be cut from the measurements
-but will take time depending on the size of the dataset}
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 }
 \description{
-plots the fluxes and indicates what should be
-discarded or replaced by zero
+plots the fluxes that were fitted
+with a linear model
 }

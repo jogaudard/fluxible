@@ -3,7 +3,7 @@
 \name{flux_fitting_exp}
 \alias{flux_fitting_exp}
 \title{Fitting a model to the gas concentration curve and estimating the slope
-#' over time, using the exponential model from Zhao et al (2018)}
+over time, using the exponential model from Zhao et al (2018)}
 \usage{
 flux_fitting_exp(
   conc_df,
@@ -36,10 +36,10 @@ where it is assumed that C fits the data perfectly}
 \item{roll_width}{width of the rolling mean for CO2 when looking for tz,
 ideally same as Cz_window}
 
-\item{start_cut}{to cut at the start}
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
 
-\item{end_cut}{to cut at the end, if you notice on the plots
-that the match was not precise enough}
+\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
 \item{start_col}{column with datetime when the measurement started}
 

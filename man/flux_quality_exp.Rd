@@ -2,8 +2,7 @@
 % Please edit documentation in R/flux_quality_exp.R
 \name{flux_quality_exp}
 \alias{flux_quality_exp}
-\title{assessing fluxes quality calculated with an exponential fit
-quality assessment for the fluxes calculated with the exponential model}
+\title{quality assessment for the slopes estimated by flux_fitting}
 \usage{
 flux_quality_exp(
   slopes_df,
@@ -45,6 +44,8 @@ with its opposite inside which the fit is considered good enough.}
 same dataframe with added flag and corrected slopes columns
 }
 \description{
-indicates if fluxes should be discarded or replaced
-by 0 according to parameters set by user
+indicates if fluxes should be discarded or replaced by 0
+according to parameters set by user.
+flux_quality_lm is for the model of the lm family.
+flux_quality_exp is for the exponential model.
 }

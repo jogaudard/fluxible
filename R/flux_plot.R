@@ -1,28 +1,33 @@
-#' ploting fluxes for fit evaluation
-#' @description plots the fluxes and indicates what should be discarded
-#' or replaced by zero
-#' @param fit_type model used in flux_fitting, exponential or linear
+#' plotting fluxes for visual evaluation
+#' @description plots the fluxes, fit and slope in facets
+#' with color code indicating quality flags
+#' This function takes time to run and is optional in the workflow,
+#' but it is still highly recommended to use it to visually check
+#' the measurements
+#' @param fit_type model used in flux_fitting, exponential, quadratic or linear
 #' @param slopes_df dataset containing slopes
 #' @param datetime_col column containing datetime of
 #' each concentration measurement
 #' @param conc_col column containing gas concentration data
-#' @param cut_col column containing cut factor from the
-#' flux_fitting function ("cut" or "keep")
+#' @param cut_col column containing cut factor
+#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @param fit_col column containing the modelled fit of the flux
 #' @param quality_flag_col column containing the flags produced by flux_quality
 #' @param fluxID_col column containing unique IDs for each flux
 #' @param pvalue_col column containing the p-value of each flux
+#' (linear and quadratic fits)
 #' @param rsquared_col column containing the r squared to be used
-#' for the quality assessment
+#' for the quality assessment (linear and quadratic fits)
 #' @param fit_slope_col column containing the modelled slope at tz
-#' @param b_col column containing the b parameter of the exponential fit
+#' (for exponential fit)
+#' @param b_col column containing the b parameter (for exponential fit)
 #' @param cor_coef_col column containing the correlation coefficient
-#' produced by flux_quality
+#' produced by flux_quality (for exponential fit)
 #' @param RMSE_col column containing the RMSE produced by flux_quality
+#' (for exponential fit)
 #' @param start_col column containing the datetime of the start of each flux
 #' @param color_discard color for fits with a discard quality flag
 #' @param color_cut color for the part of the flux that is cut
-#' @param color_keep color for the part of the flux that is kept
 #' @param color_ok color for fits with an ok quality flag
 #' @param color_zero color for fits with a zero quality flag
 #' @param f_date_breaks date_breaks argument for scale_x_datetime
@@ -32,10 +37,9 @@
 #' @param f_ylim_lower y axis lower limit
 #' @param f_scales argument for scales in facet_wrap ("fixed" or "free")
 #' @param f_plotname filename for the extracted pdf file
-#' @param f_nrow number of row per page in extracted pdf file
-#' @param f_ncol ncol argument for facet_wrap
+#' @param f_nrow number of rows per page in extracted pdf file
+#' @param f_ncol number of columns per page in extracted pdf file
 #' @param y_text_position position of the text box
-#' @param f_nudge_y to nudge the text box with the parameters above the modelled flux
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
 #' @param output if "pdfpages", the plots are saved as A4 landscape pdf pages (default);
@@ -50,7 +54,6 @@
 #' @param limitsize see ggsave()
 #' @param bg see ggsave()
 #' @param create.dir see ggsave()
-#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @param no_data_flag flag marking fluxID without data in f_quality_flag
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
@@ -85,7 +88,6 @@ flux_plot <- function(slopes_df,
                       RMSE_col = "f_RMSE",
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
-                      color_keep = "#009E73",
                       color_ok = "#009E73",
                       color_zero = "#CC79A7",
                       f_date_breaks = "1 min",
@@ -98,7 +100,6 @@ flux_plot <- function(slopes_df,
                       f_ncol = 4,
                       f_nrow = 3,
                       y_text_position = 500,
-                      f_nudge_y = 100,
                       print_plot = "FALSE",
                       output = "pdfpages",
                       device = NULL,
@@ -212,7 +213,6 @@ message("Plotting in progress")
 
   f_plot <- f_plot +
     scale_color_manual(values = c(
-      "keep" = ((color_keep)),
       "cut" = ((color_cut)),
       "ok" = ((color_ok)),
       "discard" = ((color_discard)),

@@ -100,13 +100,13 @@ test_that("error that slope column is missing", {
   )
 })
 
-test_that("error slope_col cannot be found in slope_df", {
+test_that("error slope_col cannot be found in slopes_df", {
   expect_error(
     flux_calc(
       slopes0,
       slope_col = "column_with_slope"
     ),
-    "could not find slope_col in slope_df"
+    "could not find slope_col in slopes_df"
   )
 })
 
@@ -117,7 +117,7 @@ test_that("error some cols_keep do not exist", {
       slope_col = "f_slope_tz",
       cols_keep = c("PAR", "site")
     ),
-    "some names in cols_keep cannot be found in slope_df"
+    "some names in cols_keep cannot be found in slopes_df"
   )
 })
 

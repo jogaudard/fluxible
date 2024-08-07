@@ -2,10 +2,10 @@
 % Please edit documentation in R/flux_calc.R
 \name{flux_calc}
 \alias{flux_calc}
-\title{calculates fluxes}
+\title{calculates ecosystem gas fluxes}
 \usage{
 flux_calc(
-  slope_df,
+  slopes_df,
   slope_col,
   cut_col = c(),
   keep_arg = c(),
@@ -22,9 +22,10 @@ flux_calc(
 )
 }
 \arguments{
-\item{slope_df}{dataframe of flux slopes}
+\item{slopes_df}{dataframe of flux slopes}
 
-\item{slope_col}{column containing the slope to calculate the flux}
+\item{slope_col}{column containing the slope to calculate the flux
+(in ppm*s^(-1))}
 
 \item{cut_col}{column containing cutting information}
 
@@ -45,10 +46,11 @@ can be a constant (numerical) or a variable (column name)}
 \item{R_const}{gas constant (0.082057 L\emph{atm}K^(-1)*mol^(-1))}
 
 \item{cols_keep}{columns to keep from the input to the output.
-Those columns need to have unique values for each flux.}
+Those columns need to have unique values for each flux,
+as distinct() is applied.}
 
 \item{cols_ave}{columns with values that should be averaged
-for each flux in the ouput. Note that NA are removed in mean calculation}
+for each flux in the ouput. Note that NA are removed in mean calculation.}
 
 \item{fluxID_col}{column containing the fluxID}
 
@@ -56,10 +58,11 @@ for each flux in the ouput. Note that NA are removed in mean calculation}
 to caculate fluxes. Will be averaged with NA removed.}
 
 \item{temp_air_unit}{units in which air temperature was measured.
-Has to be either celsius, fahrenheit or kelvin}
+Has to be either celsius, fahrenheit or kelvin.}
 }
 \value{
-a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)), temperature average for each flux,
+a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
+temperature average for each flux,
 slope used for each flux calculation,
 and any columns specified in cols_keep and cols_ave.
 }

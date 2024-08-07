@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_plot.R
 \name{flux_plot}
 \alias{flux_plot}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes for visual evaluation}
 \usage{
 flux_plot(
   slopes_df,
@@ -22,7 +22,6 @@ flux_plot(
   RMSE_col = "f_RMSE",
   color_discard = "#D55E00",
   color_cut = "#D55E00",
-  color_keep = "#009E73",
   color_ok = "#009E73",
   color_zero = "#CC79A7",
   f_date_breaks = "1 min",
@@ -35,7 +34,6 @@ flux_plot(
   f_ncol = 4,
   f_nrow = 3,
   y_text_position = 500,
-  f_nudge_y = 100,
   print_plot = "FALSE",
   output = "pdfpages",
   device = NULL,
@@ -55,43 +53,43 @@ flux_plot(
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{fit_type}{model used in flux_fitting, exponential or linear}
+\item{fit_type}{model used in flux_fitting, exponential, quadratic or linear}
 
 \item{datetime_col}{column containing datetime of
 each concentration measurement}
 
 \item{conc_col}{column containing gas concentration data}
 
-\item{cut_col}{column containing cut factor from the
-flux_fitting function ("cut" or "keep")}
+\item{cut_col}{column containing cut factor}
 
 \item{fit_col}{column containing the modelled fit of the flux}
 
-\item{fit_slope_col}{column containing the modelled slope at tz}
+\item{fit_slope_col}{column containing the modelled slope at tz
+(for exponential fit)}
 
 \item{quality_flag_col}{column containing the flags produced by flux_quality}
 
 \item{fluxID_col}{column containing unique IDs for each flux}
 
-\item{pvalue_col}{column containing the p-value of each flux}
+\item{pvalue_col}{column containing the p-value of each flux
+(linear and quadratic fits)}
 
 \item{rsquared_col}{column containing the r squared to be used
-for the quality assessment}
+for the quality assessment (linear and quadratic fits)}
 
 \item{start_col}{column containing the datetime of the start of each flux}
 
-\item{b_col}{column containing the b parameter of the exponential fit}
+\item{b_col}{column containing the b parameter (for exponential fit)}
 
 \item{cor_coef_col}{column containing the correlation coefficient
-produced by flux_quality}
+produced by flux_quality (for exponential fit)}
 
-\item{RMSE_col}{column containing the RMSE produced by flux_quality}
+\item{RMSE_col}{column containing the RMSE produced by flux_quality
+(for exponential fit)}
 
 \item{color_discard}{color for fits with a discard quality flag}
 
 \item{color_cut}{color for the part of the flux that is cut}
-
-\item{color_keep}{color for the part of the flux that is kept}
 
 \item{color_ok}{color for fits with an ok quality flag}
 
@@ -111,13 +109,11 @@ produced by flux_quality}
 
 \item{f_plotname}{filename for the extracted pdf file}
 
-\item{f_ncol}{ncol argument for facet_wrap}
+\item{f_ncol}{number of columns per page in extracted pdf file}
 
-\item{f_nrow}{number of row per page in extracted pdf file}
+\item{f_nrow}{number of rows per page in extracted pdf file}
 
 \item{y_text_position}{position of the text box}
-
-\item{f_nudge_y}{to nudge the text box with the parameters above the modelled flux}
 
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset}
@@ -150,8 +146,11 @@ if "ggsave", the plots can be saved with the ggsave function}
 \item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
 }
 \description{
-plots the fluxes and indicates what should be discarded
-or replaced by zero
+plots the fluxes, fit and slope in facets
+with color code indicating quality flags
+This function takes time to run and is optional in the workflow,
+but it is still highly recommended to use it to visually check
+the measurements
 }
 \examples{
 data(slopes0_flag)

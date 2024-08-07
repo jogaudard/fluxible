@@ -1,6 +1,8 @@
-#' quality assessment for the fluxes calculated with the linear model
+#' quality assessment for the slopes estimated by flux_fitting
 #' @description indicates if fluxes should be discarded or replaced by 0
-#' according to parameters set by user
+#' according to parameters set by user.
+#' flux_quality_lm is for the model of the lm family.
+#' flux_quality_exp is for the exponential model.
 #' @param slopes_df dataset containing slopes, fluxID, p.value and r.squared
 #' @param slope_col column containing the slope of each flux
 #' (as calculated by the flux_fitting function)

@@ -1,6 +1,6 @@
-#' ploting fluxes for fit evaluation
-#' @description plots the fluxes and indicates what should be
-#' discarded or replaced by zero
+#' plotting fluxes with exponential fit
+#' @description plots the fluxes that were fitted with
+#' an exponential model
 #' @param slopes_df dataset containing slopes
 #' @param fit_slope_col column containing the modelled slope at tz
 #' @param b_col column containing the b parameter of the exponential fit
@@ -9,7 +9,6 @@
 #' @param RMSE_col column containing the RMSE produced by flux_quality
 #' @param y_text_position position of the text box
 #' @param cut_arg argument pointing rows to be cut from the measurements
-#' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text

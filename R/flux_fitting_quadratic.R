@@ -1,17 +1,17 @@
 #' quadratic fit to gas concentration over time
-#' @description fits a linear model to the gas concentration over time
+#' @description fits a quadratic model to the gas concentration over time
 #' @param conc_df dataframe of gas concentration over time
-#' @param start_cut to cut at the start
-#' @param end_cut to cut at the end, if you notice on the plots
-#' that the match was not precise enough
+#' @param start_cut time to discard at the start of the measurements
+#' (in seconds)
+#' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @param start_col column with datetime when the measurement started
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
 #' @param fluxID_col column with ID of each flux
-#' @param t_zero time at which the slope should be calculated (for fits that do not include t_zero as a parameter)
+#' @param t_zero time at which the slope should be calculated
 #' @return a df with the modelled gas concentration, slope, intercept,
-#' std error, r square and p value of the linear model
+#' std error, r square and p value of the quadratic model
 #' @importFrom rlang .data
 #' @importFrom dplyr rename all_of mutate select group_by case_when
 #' ungroup filter left_join distinct pull bind_cols

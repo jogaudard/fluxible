@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_quality.R
 \name{flux_quality}
 \alias{flux_quality}
-\title{assessing quality of slopes calculated}
+\title{assessing quality of slopes calculated wiht flux_fitting}
 \usage{
 flux_quality(
   slopes_df,
@@ -32,13 +32,13 @@ flux_quality(
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{fit_type}{expression used to fit the data, linear or exponential}
+\item{fit_type}{model fitted to the data, linear, quadratic or exponential}
 
 \item{ambient_conc}{ambient gas concentration in ppm at the site of
 measurement (used to detect measurement that started with a polluted setup)}
 
-\item{error}{error of the setup, defines a window in which
-the starting values are considered acceptable}
+\item{error}{error of the setup, defines a window outside of which
+the starting values indicate a polluted setup}
 
 \item{fluxID_col}{column containing unique IDs for each flux}
 
@@ -52,19 +52,22 @@ by the user's decision}
 the calculated slope despite a bad quality flag}
 
 \item{ratio_threshold}{ratio of gas concentration data points over length of
-measurment (in second) below which the measurement will be considered as
+measurment (in seconds) below which the measurement will be considered as
 not having enough data points to be considered for calculations}
 
-\item{pvalue_col}{column containing the p-value of each flux (linear fit)}
+\item{pvalue_col}{column containing the p-value of each flux
+(linear and quadratic fit)}
 
-\item{rsquared_col}{column containing the r squared to be used for
-the quality assessment (linear fit)}
+\item{rsquared_col}{column containing the r squared of each flux
+(linear and quadratic fit)}
 
 \item{pvalue_threshold}{threshold of p-value below which the change of
-gas concentration over time is considered not significant (linear fit)}
+gas concentration over time is considered not significant
+(linear and quadratic fit)}
 
 \item{rsquared_threshold}{threshold of r squared value below which
-the linear model is considered an unsatisfactory fit (linear fit)}
+the linear model is considered an unsatisfactory fit
+(linear and quadratic fit)}
 
 \item{conc_col}{column containing the measured gas concentration
 (exponential fit)}
@@ -84,7 +87,7 @@ the fit is considered unsatisfactory (exponential fit)}
 
 \item{cor_threshold}{threshold for the correlation coefficient of
 gas concentration with time below which the correlation
-is considered non significant (exponential fit)}
+is considered not significant (exponential fit)}
 
 \item{b_threshold}{threshold for the b parameter.
 Defines a window with its opposite inside which the fit is
@@ -96,8 +99,8 @@ considered good enough (exponential fit)}
 same dataframe with added flag and corrected slopes columns
 }
 \description{
-indicates if fluxes should be discarded or replaced
-by 0 according to parameters set by user
+indicates if slopes should be discarded or replaced
+by 0 according to quality thresholds set by user
 }
 \examples{
 data(slopes0lin)

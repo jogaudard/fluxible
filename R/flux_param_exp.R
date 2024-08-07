@@ -1,4 +1,4 @@
-#' prepares text to print and quality flags for flux_plot function
+#' prepares text to print for flux_plot function
 #' @description creates a df with quality flags and quality diagnostics
 #' to print on the plots produced by flux_plot.
 #' flux_param_lm is for fit in the lm family (linear and quadratic)

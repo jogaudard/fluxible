@@ -1,5 +1,5 @@
 #' Fitting a model to the gas concentration curve and estimating the slope
-#' #' over time, using the exponential model from Zhao et al (2018)
+#' over time, using the exponential model from Zhao et al (2018)
 #' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 #' On the calculation of daytime CO2 fluxes measured by automated closed
 #' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
@@ -13,9 +13,9 @@
 #' @param a_window window at the end of the flux to estimate a
 #' @param roll_width width of the rolling mean for CO2 when looking for tz,
 #' ideally same as Cz_window
-#' @param start_cut to cut at the start
-#' @param end_cut to cut at the end, if you notice on the plots
-#' that the match was not precise enough
+#' @param start_cut time to discard at the start of the measurements
+#' (in seconds)
+#' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @param start_col column with datetime when the measurement started
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
@@ -48,7 +48,7 @@ flux_fitting_exp <- function(conc_df,
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
                              fluxID_col = "f_fluxID") {
-  # renaming columns
+
   conc_df <- conc_df |>
     rename(
       f_start = all_of((start_col)),
@@ -298,7 +298,6 @@ message("Optimizing fitting parameters...")
       f_slope_tz = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz),
       .groups = "drop"
     ) |>
-    # ungroup() |>
     select(!"results")
 
 message("Calculating fits and slopes...")

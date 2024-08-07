@@ -1,12 +1,10 @@
-#' ploting fluxes for fit evaluation
-#' @description plots the fluxes and indicates what should be
-#' discarded or replaced by zero
+#' plotting fluxes with a quadratic fit
+#' @description specific part of flux_plot for
+#' quadratic fit
 #' @param slopes_df dataset containing slopes
 #' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared
-#' used for the quality assessment
+#' @param rsquared_col column containing the r squared of each flux
 #' @param y_text_position position of the text box
-#' but will take time depending on the size of the dataset
 #' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw

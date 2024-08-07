@@ -1,9 +1,9 @@
 #' linear fit to gas concentration over time
 #' @description fits a linear model to the gas concentration over time
 #' @param conc_df dataframe of gas concentration over time
-#' @param start_cut to cut at the start
-#' @param end_cut to cut at the end, if you notice on the plots
-#' that the match was not precise enough
+#' @param start_cut time to discard at the start of the measurements
+#' (in seconds)
+#' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @param start_col column with datetime when the measurement started
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement

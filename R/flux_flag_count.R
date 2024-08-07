@@ -1,13 +1,19 @@
 #' counts quality flags
-#' @description provides a table of how many fluxes were attributed which quality flag
+#' @description provides a table of how many fluxes were attributed
+#' which quality flag
 #' @param slopes_df dataframe of flux slopes
-#' @param f_flags list of flags used in the dataset (if different from default from flux_quality)
+#' @param f_flags list of flags used in the dataset
+#' (if different from default from flux_quality).
+#' If not provided, it will list only the flags that are
+#' present in the dataset (no showing 0).
 #' @param fluxID_col column containing fluxes unique ID
 #' @param flags_col column containing the quality flags
 #' @param cut_col column indicating which part of the flux is being cut
 #' @param cut_arg argument defining that the data point should be cut out
-#' @return a dataframe with the number of fluxes for each flags and their proportion to the total
-#' @importFrom dplyr .data rename all_of select group_by summarise tibble right_join filter
+#' @return a dataframe with the number of fluxes for each flags
+#' and their proportion to the total
+#' @importFrom dplyr .data rename all_of select group_by summarise
+#' tibble right_join filter
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
 #' @export 

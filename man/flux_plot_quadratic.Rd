@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_plot_quadratic.R
 \name{flux_plot_quadratic}
 \alias{flux_plot_quadratic}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes with a quadratic fit}
 \usage{
 flux_plot_quadratic(
   slopes_df,
@@ -17,15 +17,13 @@ flux_plot_quadratic(
 
 \item{pvalue_col}{column containing the p-value of each flux}
 
-\item{rsquared_col}{column containing the r squared
-used for the quality assessment}
+\item{rsquared_col}{column containing the r squared of each flux}
 
-\item{y_text_position}{position of the text box
-but will take time depending on the size of the dataset}
+\item{y_text_position}{position of the text box}
 
 \item{cut_arg}{argument pointing rows to be cut from the measurements}
 }
 \description{
-plots the fluxes and indicates what should be
-discarded or replaced by zero
+specific part of flux_plot for
+quadratic fit
 }

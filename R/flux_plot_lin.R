@@ -1,13 +1,11 @@
-#' ploting fluxes for fit evaluation
-#' @description plots the fluxes and indicates what should be
-#' discarded or replaced by zero
+#' plotting fluxes with linear fit
+#' @description plots the fluxes that were fitted
+#' with a linear model
 #' @param slopes_df dataset containing slopes
 #' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared
-#' used for the quality assessment
+#' @param rsquared_col column containing the r squared of each flux
 #' @param y_text_position position of the text box
 #' @param cut_arg argument pointing rows to be cut from the measurements
-#' but will take time depending on the size of the dataset
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text

@@ -1,12 +1,12 @@
-#' assessing quality of slopes calculated
-#' @description indicates if fluxes should be discarded or replaced
-#' by 0 according to parameters set by user
+#' assessing quality of slopes calculated wiht flux_fitting
+#' @description indicates if slopes should be discarded or replaced
+#' by 0 according to quality thresholds set by user
 #' @param slopes_df dataset containing slopes
-#' @param fit_type expression used to fit the data, linear or exponential
+#' @param fit_type model fitted to the data, linear, quadratic or exponential
 #' @param ambient_conc ambient gas concentration in ppm at the site of
 #' measurement (used to detect measurement that started with a polluted setup)
-#' @param error error of the setup, defines a window in which
-#' the starting values are considered acceptable
+#' @param error error of the setup, defines a window outside of which
+#' the starting values indicate a polluted setup
 #' @param fluxID_col column containing unique IDs for each flux
 #' @param slope_col column containing the slope of each flux
 #' (as calculated by the flux_fitting function)
@@ -15,15 +15,18 @@
 #' @param force_okID vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
 #' @param ratio_threshold ratio of gas concentration data points over length of
-#' measurment (in second) below which the measurement will be considered as 
+#' measurment (in seconds) below which the measurement will be considered as 
 #' not having enough data points to be considered for calculations
-#' @param pvalue_col column containing the p-value of each flux (linear fit)
-#' @param rsquared_col column containing the r squared to be used for
-#' the quality assessment (linear fit)
+#' @param pvalue_col column containing the p-value of each flux
+#' (linear and quadratic fit)
+#' @param rsquared_col column containing the r squared of each flux
+#' (linear and quadratic fit)
 #' @param pvalue_threshold threshold of p-value below which the change of
-#' gas concentration over time is considered not significant (linear fit)
+#' gas concentration over time is considered not significant
+#' (linear and quadratic fit)
 #' @param rsquared_threshold threshold of r squared value below which
-#' the linear model is considered an unsatisfactory fit (linear fit)
+#' the linear model is considered an unsatisfactory fit
+#' (linear and quadratic fit)
 #' @param conc_col column containing the measured gas concentration
 #' (exponential fit)
 #' @param b_col column containing the b parameter of the exponential expression
@@ -35,7 +38,7 @@
 #' the fit is considered unsatisfactory (exponential fit)
 #' @param cor_threshold threshold for the correlation coefficient of
 #' gas concentration with time below which the correlation
-#' is considered non significant (exponential fit)
+#' is considered not significant (exponential fit)
 #' @param cut_col column containing the cutting information
 #' @param cut_arg argument defining that the data point should be cut out
 #' @param b_threshold threshold for the b parameter.
@@ -49,11 +52,9 @@
 #' data(slopes0lin)
 #' flux_quality(slopes0lin, fit_type = "li")
 #' @export
-#'
-#'
 
 flux_quality <- function(slopes_df,
-                         fit_type, # need to use attribute here
+                         fit_type,
                          ambient_conc = 421,
                          error = 100,
                          fluxID_col = "f_fluxID",
@@ -113,7 +114,6 @@ flux_quality <- function(slopes_df,
       .groups = "drop"
     ) |>
     unnest("f_fluxID")
-    # ungroup()
 
     slopes_df <- slopes_df |>
       left_join(quality_par_start, by = "f_fluxID")
@@ -145,16 +145,6 @@ flux_quality <- function(slopes_df,
     )
   }
 
-  # if (((fit_type)) == "quadratic") {
-  #   quality_flag <- flux_quality_lm(
-  #     ((slopes_df)),
-  #     weird_fluxesID = ((weird_fluxesID)),
-  #     pvalue_col = ((pvalue_col)),
-  #     rsquared_col = ((rsquared_col)),
-  #     pvalue_threshold = ((pvalue_threshold)),
-  #     rsquared_threshold = ((rsquared_threshold))
-  #   )
-  # }
 
   flag_count <- flux_flag_count(
     ((quality_flag)),

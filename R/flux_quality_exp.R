@@ -1,7 +1,8 @@
-#' assessing fluxes quality calculated with an exponential fit
-#' quality assessment for the fluxes calculated with the exponential model
-#' @description indicates if fluxes should be discarded or replaced
-#' by 0 according to parameters set by user
+#' quality assessment for the slopes estimated by flux_fitting
+#' @description indicates if fluxes should be discarded or replaced by 0
+#' according to parameters set by user.
+#' flux_quality_lm is for the model of the lm family.
+#' flux_quality_exp is for the exponential model.
 #' @param slopes_df dataset containing slopes, fluxID,
 #' and parameters of the exponential expression
 #' @param slope_col column containing the slope of each flux
@@ -42,7 +43,6 @@ flux_quality_exp <- function(slopes_df,
 
 
   quality_par <- slopes_df |>
-    # we want to evaluate the part of the flux that we are keeping
     group_by(.data$f_fluxID, .data$f_cut) |>
     nest() |>
     rowwise() |>
@@ -53,7 +53,6 @@ flux_quality_exp <- function(slopes_df,
       .groups = "drop"
     ) |>
     unnest(c("f_fluxID", "f_cut"))
-    # ungroup()
 
   
 
