@@ -2,7 +2,8 @@
 % Please edit documentation in R/flux_fitting_exp.R
 \name{flux_fitting_exp}
 \alias{flux_fitting_exp}
-\title{Fitting a model to the gas concentration curve and estimating the slope}
+\title{Fitting a model to the gas concentration curve and estimating the slope
+#' over time, using the exponential model from Zhao et al (2018)}
 \usage{
 flux_fitting_exp(
   conc_df,
@@ -56,5 +57,10 @@ modelled concentration over time and exponential expression parameters
 }
 \description{
 Fits an exponential expression to the concentration evolution
-over time, as described in Zhao 2018
+}
+\references{
+Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
+On the calculation of daytime CO2 fluxes measured by automated closed
+transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
+https://doi.org/10.1016/j.agrformet.2018.08.022
 }

@@ -5,7 +5,6 @@
 #' flux_param_exp is for the exponential fit
 #' @param slopes_df the slopes_df that is being provided to flux_plot
 #' @param cut_arg argument pointing rows to be cut from the measurements
-
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_lm <- function(slopes_df,

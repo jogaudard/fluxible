@@ -1,6 +1,10 @@
 #' Fitting a model to the gas concentration curve and estimating the slope
+#' #' over time, using the exponential model from Zhao et al (2018)
+#' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
+#' On the calculation of daytime CO2 fluxes measured by automated closed
+#' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
+#' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' @description Fits an exponential expression to the concentration evolution
-#' over time, as described in Zhao 2018
 #' @param conc_df dataframe of gas concentration over time
 #' @param t_window enlarge focus window before and after tmin and tmax
 #' @param Cz_window window used to calculate Cz, at the beginning of cut window
