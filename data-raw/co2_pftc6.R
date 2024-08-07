@@ -1,14 +1,4 @@
 library(tidyverse)
-library(dataDownloader)
-
-# getting data for example
-# fetching the data
-get_file(
-  node = "fcbw4",
-  file = "PFTC6_CO2_liahovden_2022.csv",
-  path = "data-raw",
-  remote_path = "raw_data/v. c_flux_raw_data"
-)
 
 
 # making the dataset we want
@@ -30,13 +20,7 @@ co2_liahovden <- co2_liahovden %>%
 
 usethis::use_data(co2_liahovden, overwrite = TRUE)
 
-# we also need the field record with the meta data
-get_file(
-  node = "fcbw4",
-  file = "PFTC6_cflux_field-record_liahovden.csv",
-  path = "data-raw",
-  remote_path = "raw_data/v. c_flux_raw_data"
-)
+
 
 # making the dataset we want
 record_liahovden <- read_csv("data-raw/PFTC6_cflux_field-record_liahovden.csv")

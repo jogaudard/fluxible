@@ -1,14 +1,4 @@
 library(tidyverse)
-library(dataDownloader)
-
-# fetching the data
-get_file(
-  node = "fcbw4",
-  file = "PFTC6_CO2_joasete_2022.csv",
-  path = "data-raw",
-  remote_path = "raw_data/v. c_flux_raw_data"
-)
-
 
 # making the dataset we want
 co2_df <- read_csv("data-raw/PFTC6_CO2_joasete_2022.csv", col_types = "ccdddddd", na = c("#N/A", "Over", "Invalid"))

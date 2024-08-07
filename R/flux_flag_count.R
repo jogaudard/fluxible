@@ -16,6 +16,9 @@
 #' tibble right_join filter
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
+#' @examples 
+#' data(slopes30qua_flag)
+#' flux_flag_count(slopes30qua_flag)
 #' @export 
 
 

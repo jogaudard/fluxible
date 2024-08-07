@@ -38,6 +38,10 @@ and their proportion to the total
 provides a table of how many fluxes were attributed
 which quality flag
 }
+\examples{
+data(slopes30qua_flag)
+flux_flag_count(slopes30qua_flag)
+}
 \author{
 Vincent Belde
 }

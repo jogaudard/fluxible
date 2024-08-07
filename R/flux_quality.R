@@ -51,6 +51,8 @@
 #' @examples
 #' data(slopes0lin)
 #' flux_quality(slopes0lin, fit_type = "li")
+#' data(slopes30)
+#' flux_quality(slopes30, fit_type = "expo", slope_col = "f_slope_tz")
 #' @export
 
 flux_quality <- function(slopes_df,

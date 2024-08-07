@@ -30,14 +30,6 @@
 #' (for quadratic fit)
 #' @return a dataframe with the slope at t zero,
 #' and parameters of a model of gas concentration over time 
-# #' @importFrom rlang .data
-# #' @importFrom dplyr rename all_of mutate select group_by case_when ungroup
-# #' filter distinct left_join rowwise summarize pull
-# #' @importFrom tidyr pivot_wider drop_na nest unnest
-# #' @importFrom haven as_factor
-# #' @importFrom stringr str_c
-# #' @importFrom stats lm optim
-# #' @importFrom purrr map
 #' @examples
 #' data(co2_conc)
 #' flux_fitting(co2_conc, fit_type = "exp")

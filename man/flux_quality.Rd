@@ -105,4 +105,6 @@ by 0 according to quality thresholds set by user
 \examples{
 data(slopes0lin)
 flux_quality(slopes0lin, fit_type = "li")
+data(slopes30)
+flux_quality(slopes30, fit_type = "expo", slope_col = "f_slope_tz")
 }

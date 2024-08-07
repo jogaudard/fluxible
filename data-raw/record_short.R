@@ -1,14 +1,6 @@
 library(tidyverse)
-library(dataDownloader)
 library(timetk)
 
-# fetching the data
-get_file(
-  node = "fcbw4",
-  file = "PFTC6_cflux_field-record_joasete.csv",
-  path = "data-raw",
-  remote_path = "raw_data/v. c_flux_raw_data"
-)
 
 # making the dataset we want
 record <- read_csv("data-raw/PFTC6_cflux_field-record_joasete.csv")
