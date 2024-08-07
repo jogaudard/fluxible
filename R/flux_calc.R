@@ -29,7 +29,7 @@
 #' and any columns specified in cols_keep and cols_ave.
 #' @importFrom rlang .data
 #' @importFrom dplyr .data rename all_of select group_by summarise
-#' ungroup mutate case_when distinct left_join summarize_all
+#' ungroup mutate case_when distinct left_join across everything
 #' @examples
 #' data(slopes0)
 #' flux_calc(slopes0, slope_col = "f_slope_tz")
@@ -151,9 +151,10 @@ if (is.character(((atm_pressure)))) {
     select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume", "atm_pressure") |>
     group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume, .data$atm_pressure) |>
     summarise(
-      temp_air_ave = mean(.data$air_temp, na.rm = TRUE)
+      temp_air_ave = mean(.data$air_temp, na.rm = TRUE),
+      .groups = "drop"
     ) |>
-    ungroup() |>
+    # ungroup() |>
     mutate(
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave + 273.15,
@@ -181,8 +182,7 @@ if (is.character(((atm_pressure)))) {
     slope_ave <- slope_df |>
       select(all_of(((cols_ave))), "f_fluxID") |>
       group_by(.data$f_fluxID) |>
-      summarize_all(mean, na.rm = TRUE) |>
-      ungroup() |>
+      summarise(across(everything(), ~ mean(.x, na.rm = TRUE)), .groups = "drop") |>
       left_join(slope_keep, by = "f_fluxID")
   } else {
     slope_ave <- slope_keep

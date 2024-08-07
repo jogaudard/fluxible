@@ -109,10 +109,11 @@ flux_quality <- function(slopes_df,
         data$f_conc[1] < (((ambient_conc)) - ((error))) ~ "error",
         data$f_conc[1] > (((ambient_conc)) + ((error))) ~ "error",
         TRUE ~ "ok"
-      )
+      ),
+      .groups = "drop"
     ) |>
-    unnest("f_fluxID") |>
-    ungroup()
+    unnest("f_fluxID")
+    # ungroup()
 
     slopes_df <- slopes_df |>
       left_join(quality_par_start, by = "f_fluxID")

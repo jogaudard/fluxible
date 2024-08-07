@@ -292,8 +292,9 @@ message("Optimizing fitting parameters...")
       f_b = .data$results$par[3],
       f_tz = exp(.data$results$par[4]), # we force tz to be positive
       f_slope_tz = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz),
+      .groups = "drop"
     ) |>
-    ungroup() |>
+    # ungroup() |>
     select(!"results")
 
 message("Calculating fits and slopes...")

@@ -41,7 +41,8 @@ slopes_df <- slopes_df |>
     count_table <- flag_df  |>
         group_by(.data$f_quality_flag) |>
             summarise(
-                    n = length(.data$f_quality_flag)
+                    n = length(.data$f_quality_flag),
+                    .groups = "drop"
                     ) |>
                     right_join(flags, by = "f_quality_flag") |>
                     mutate(
