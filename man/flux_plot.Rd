@@ -118,8 +118,11 @@ produced by flux_quality (for exponential fit)}
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset}
 
-\item{output}{if "pdfpages", the plots are saved as A4 landscape pdf pages (default);
-if "ggsave", the plots can be saved with the ggsave function}
+\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages
+(default);
+"ggsave", the plots can be saved with the ggsave function;
+"print_only" prints the plot without creating a file
+(independantly from 'print_plot' being TRUE or FALSE)}
 
 \item{device}{see ggsave()}
 

@@ -12,7 +12,7 @@ usethis::use_pkgdown_github_pages()
 
 usethis::use_readme_rmd()
 devtools::build_readme()
-
+usethis::use_vignette("my-vignette")
 
 devtools::test()
 devtools::document()
