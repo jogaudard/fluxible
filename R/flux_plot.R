@@ -42,8 +42,11 @@
 #' @param y_text_position position of the text box
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
-#' @param output if "pdfpages", the plots are saved as A4 landscape pdf pages (default);
-#' if "ggsave", the plots can be saved with the ggsave function
+#' @param output "pdfpages", the plots are saved as A4 landscape pdf pages
+#' (default);
+#' "ggsave", the plots can be saved with the ggsave function;
+#' "print_only" prints the plot without creating a file
+#' (independantly from 'print_plot' being TRUE or FALSE)
 #' @param device see ggsave()
 #' @param path see ggsave()
 #' @param scale see ggsave()
@@ -241,6 +244,10 @@ message("Plotting in progress")
       colour = "Quality flags"
     )
 
+if(((output)) == "print_only") {
+  return(f_plot)
+}
+
 if(((output)) == "pdfpages") {
   f_plotname <- paste(f_plotname, ".pdf", sep = "")
     pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
@@ -261,6 +268,10 @@ if(((output)) == "pdfpages") {
       ))
   }
   quietly(dev.off())
+  message("Plots saved in f_quality_plots folder.")
+  if (((print_plot)) == TRUE) {
+    return(f_plot)
+  }
 }
 
 if(((output)) == "ggsave"){
@@ -270,14 +281,10 @@ if(((output)) == "ggsave"){
     plot = f_plot,
     device = ((device))
   )
-}
-
   message("Plots saved in f_quality_plots folder.")
-
-
   if (((print_plot)) == TRUE) {
     return(f_plot)
   }
+}
 
-  
 }

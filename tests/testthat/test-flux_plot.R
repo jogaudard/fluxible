@@ -43,6 +43,20 @@ test_that("plot for linear fit with jpg extension works", {
   unlink("f_quality_plots/", recursive = TRUE, force = TRUE)
 })
 
+test_that("plot can be exported as an object", {
+  # expect_snapshot(
+    # suppressMessages( #because the progress bar is messing with check()
+    plot_object <- flux_plot(slopes30lin_flag,
+      fit_type = "lin",
+      fit_slope_col = "f_fit_slope",
+      output = "print_only"
+    )
+  # )
+  vdiffr::expect_doppelganger("plot as an object", plot_object)
+  # )
+  # the plots are quite heavy so we do not keep them
+})
+
 # test_that("plot for linear fit with jpg extension works (without device)", {
 #   expect_snapshot(
 #     flux_plot(slopes30lin_flag,
