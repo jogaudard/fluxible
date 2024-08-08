@@ -1,49 +1,19 @@
 ---
-output: github_document
-bibliography: /home/jga051/Dropbox/PhD/biblio_phd_zot.bib
-csl: /home/jga051/Documents/01_PhD/emerald-harvard.csl
+title: "my-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  comment = "#>"
 )
+# library(tidyverse)
 ```
-
-# Fluxible
-
-**Note:** fluxible is still in an early phase, it is fully functional but can be improved in many ways. Please get in touch for any problems or suggestions.
-
-<!-- badges: start -->
-<!-- badges: end -->
-The Fluxible R package is made to transform any dataset of gas concentration over time into a gas flux dataset.
-It was originally made to be used with a closed loop chamber system connected to a gas analyzer.
-A function for use with a tent (taking leakage into account) is in development (see further developments).
-
-The goal of fluxible is to provide a workflow that removes individual evaluation of each flux, reduces risk of bias, and makes it reproducible.
-Users set specific data quality standards and selection parameters as function arguments that are applied to the entire dataset.
-The package runs the calculations automatically, without prompting the user to take decisions mid-way, and provides quality flags and plots at the end of the process for a visual check.
-This makes it easy to use with large flux datasets and to integrate into a reproducible workflow.
-Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.
-
-For a quick overview of how the package works, you can look at [the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) that was presented at the European Geoscience Union Annual Meeting 2024.
-
-## Installation
-
-You can install the development version of fluxible from the [GitHub repo](https://github.com/Plant-Functional-Trait-Course/fluxible) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("plant-functional-trait-course/fluxible")
-```
-
-## Example
-
 
 For this exemple we will use the data that were recorded during the Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site called Liahovden (CITE when data paper out).
 The CO~2~ concentration data as well as air and soil temperature and photosynthetically active radiations (PAR) were recorded in a dataframe named co2_liahovden.
@@ -101,7 +71,7 @@ slopes_exp_liahovden |>
       )
 
 # the pdf files are heavy and there is not need to keep them here for the example
-unlink("f_quality_plots/example_lia_exp.pdf", recursive = TRUE, force = TRUE)
+unlink("vignettes/f_quality_plots/example_lia_exp.pdf", recursive = TRUE, force = TRUE)
 ```
 
 <!-- We might be getting better fits by using only the first part of the measurements. -->
@@ -123,12 +93,12 @@ slopes_exp_liahovden_60 <- conc_liahovden |>
                     )
                 )
 
-slopes_exp_liahovden_60 |>
+example_lia_exp_60 <- slopes_exp_liahovden_60 |>
   dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> # we just show a sample of the plots to avoid slowing down the example
     flux_plot(
       fit_type = "exp",
       print_plot = TRUE,
-      f_plotname = "example_lia_exp",
+      f_plotname = "example_lia_exp_60",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 2,
@@ -137,33 +107,11 @@ slopes_exp_liahovden_60 |>
       )
 
 # the pdf files are heavy and there is not need to keep them here for the example
-unlink("f_quality_plots/example_lia_exp_60.pdf", recursive = TRUE, force = TRUE)
+unlink("vignettes/f_quality_plots/example_lia_exp_60.pdf", recursive = TRUE, force = TRUE)
+
+example_lia_exp_60
 ```
 
-```{r plot_exp_cut_all, include = FALSE}
-
-# that part was to creat the plots of all the fluxes to find the intersting ones for the example, no need to re run it everytime.
-
-# slopes_exp_liahovden_60 <- conc_liahovden |>
-#   flux_fitting(fit_type = "exp", end_cut = 60) |>
-#     flux_quality(fit_type = "exp",
-#                 slope_col = "f_slope_tz",
-#                 weird_fluxesID = c(
-#                     101, # plot has a high peak at the start. CO2 accumulation in the canopy?
-#                     106 # peak at the beginning of the flux that is messing up the fit
-#                     )
-#                 )
-
-# slopes_exp_liahovden_60 |>
-#     flux_plot(
-#       fit_type = "exp",
-#       f_plotname = "example_lia_exp",
-#       f_ylim_lower = 300,
-#       f_ylim_upper = 600,
-#       f_nrow = 2,
-#       y_text_position = 400
-#       )
-```
 
 Once we are satisfied with the fit, we can calculate fluxes with flux_calc.
 Here the volume is defined as a constant for all the measurements but it is also possible to provide a specific volume for each plot in case that is different.
@@ -209,36 +157,9 @@ Fluxes were calculated in five steps from raw gas concentration data and the pro
 Here is a plot of the results.
 
 ```{r 24h_fluxes}
+# library(ggplot2)
 fluxes_exp_liahovden_60 |>
     dplyr::filter(type == "NEE") |>
         ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
         ggplot2::geom_point()
 ```
-
-
-## Further developments
-
-### Flux tent
-Currently fluxible is thought for setups using a flux chamber.
-Flux chambers can be assumed to have no leak.
-As flux tents tend to leak, a different fitting function is needed to account for potential leaks.
-
-### More fits
-As we want fluxible to fit the use of as many projects as possible, more fitting expressions will be included in the flux_fitting function.
-Feel welcome to get in touch if you wish to include yours in fluxible.
-
-## Contact
-Joseph Gaudard, University of Bergen, Norway
-
-joseph.gaudard@pm.me
-
-[CV](https://jogaudard.github.io/CV_jgaudard/)
-
-## Dissemination
-Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible: an R package to calculate ecosystem gas fluxes in a reproducible and automated workflow., EGU General Assembly 2024, Vienna, Austria, 14–19 Apr 2024, EGU24-956, https://doi.org/10.5194/egusphere-egu24-956, 2024. 
-
-[Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
-
-<!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
-
-#### References
