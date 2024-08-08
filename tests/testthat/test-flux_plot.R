@@ -1,30 +1,34 @@
 test_that("plot for exponential fit", {
   expect_snapshot(
-    suppressMessages(
+    suppressMessages( #because the progress bar is messing with check()
       flux_plot(slopes0_flag,
       fit_type = "exp",
       fit_slope_col = "f_fit_slope",
       f_plotname = "test_exp_plot", print_plot = FALSE
     )
-    )
   )
+  )
+  # the plots are quite heavy so we do not keep them
+    unlink("f_quality_plots/", recursive = TRUE, force = TRUE)
 })
 
 test_that("plot for linear fit", {
   expect_snapshot(
-    suppressMessages(
+    suppressMessages( #because the progress bar is messing with check()
     flux_plot(slopes30lin_flag,
       fit_type = "lin",
       fit_slope_col = "f_fit_slope",
       f_plotname = "test_lin_plot", print_plot = FALSE
     )
-    )
   )
+  )
+  # the plots are quite heavy so we do not keep them
+    unlink("f_quality_plots/", recursive = TRUE, force = TRUE)
 })
 
 test_that("plot for linear fit with jpg extension works", {
   expect_snapshot(
-    suppressMessages(
+    suppressMessages( #because the progress bar is messing with check()
     flux_plot(slopes30lin_flag,
       fit_type = "lin",
       fit_slope_col = "f_fit_slope",
@@ -33,8 +37,10 @@ test_that("plot for linear fit with jpg extension works", {
       output = "ggsave",
       device = "jpg"
     )
-    )
   )
+  )
+  # the plots are quite heavy so we do not keep them
+  unlink("f_quality_plots/", recursive = TRUE, force = TRUE)
 })
 
 # test_that("plot for linear fit with jpg extension works (without device)", {
@@ -75,3 +81,5 @@ test_that("plot for linear fit with jpg extension works", {
 #     )
 #   )
 # })
+
+# removing the f_quality_plot folder because it is taking quite some space
