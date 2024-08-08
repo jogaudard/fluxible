@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(tidyverse)
 ```
 
 # Fluxible
@@ -59,13 +60,12 @@ The flux_match function matches field measured gas concentration data with measu
 
 ```{r match}
 library(fluxible)
-library(tidyverse)
 
-head(record_liahovden)
-head(co2_liahovden)
+str(record_liahovden)
+str(co2_liahovden)
 
 conc_liahovden <- flux_match(co2_liahovden, record_liahovden)
-head(conc_liahovden)
+str(conc_liahovden)
 ```
 
 Before calculating fluxes we need to fit a model to each measurement and estimate a slope of the concentration changing rate.
@@ -76,7 +76,7 @@ The function flux_quality also provides a quadratic and a linear fit.
 
 ```{r fitting_exp}
 slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
-head(slopes_exp_liahovden)
+str(slopes_exp_liahovden)
 ```
 
 The function flux_quality is used to provide diagnostics about the quality of the fit, eventually advising to discard some measurements or replace them by zero.
@@ -84,7 +84,7 @@ The function flux_quality is used to provide diagnostics about the quality of th
 
 ```{r quality_exp}
 slopes_exp_liahovden <- flux_quality(slopes_exp_liahovden, fit_type = "expo", slope_col = "f_slope_tz")
-head(slopes_exp_liahovden)
+str(slopes_exp_liahovden)
 ```
 
 The function flux_plot provides plots for a visual assessment of the measurements, explicitly displaying the quality flags from flux_quality and the cuts from flux_fitting.
@@ -171,7 +171,7 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_60 |>
     cut_col = "f_cut",
     keep_arg = "keep"
   ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
-head(fluxes_exp_liahovden_60)
+str(fluxes_exp_liahovden_60)
 ```
 
 The output is in mmol/m^2^/h and the calculation used is as follow:
