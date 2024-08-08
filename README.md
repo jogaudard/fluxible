@@ -43,8 +43,6 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 
 ## Example
 
-## Practical example
-
 For this exemple we will use the data that were recorded during the
 Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site
 called Liahovden (CITE when data paper out). The CO<sub>2</sub>
@@ -59,9 +57,6 @@ respiration (ER), measured with a dark chamber.
 
 We use the flux_match function to slice the data from co2_liahovden into
 each measurement and discard what was recorded in between.
-
-<!-- This is a basic example with some sample data from the Plant Functional Traits Course 6 (2022).
-The flux_match function matches field measured gas concentration data with measurements meta data: -->
 
 ``` r
 library(fluxible)
@@ -155,7 +150,11 @@ replace them by zero.
 <!-- We run flux_quality to assess the quality of the fits. -->
 
 ``` r
-slopes_exp_liahovden <- flux_quality(slopes_exp_liahovden, fit_type = "expo", slope_col = "f_slope_tz")
+slopes_exp_liahovden <- flux_quality(
+                                  slopes_exp_liahovden,
+                                  fit_type = "expo",
+                                  slope_col = "f_slope_tz"
+                                  )
 #> 
 #>  Total number of measurements: 138
 #> 
@@ -215,24 +214,21 @@ and the cuts from flux_fitting.
 
 ``` r
 slopes_exp_liahovden |>
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> # we just show a sample of the plots to avoid slowing down the example
+  # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
     flux_plot(
       fit_type = "exp",
-      print_plot = TRUE,
-      f_plotname = "example_lia_exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 2,
       f_ncol = 2,
-      y_text_position = 400
+      y_text_position = 400,
+      output = "print_only"
       )
 #> Plotting in progress
-#> Plots saved in f_quality_plots folder.
 ```
 
 <img src="man/figures/README-plot_exp-1.png" width="100%" />
-
-<!-- We might be getting better fits by using only the first part of the measurements. -->
 
 Based on the quality flags and the plots, the user can decide to run
 flux_fitting again with different arguments. Here we will do it while
@@ -248,10 +244,10 @@ justification.
 slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
       flux_quality(fit_type = "exp",
-                slope_col = "f_slope_tz",
-                weird_fluxesID = c(
-                    101, # plot has a high peak at the start. CO2 accumulation in the canopy?
-                    106 # peak at the beginning of the flux that is messing up the fit
+            slope_col = "f_slope_tz",
+            weird_fluxesID = c(
+              101, # plot starts with a high peak: accumulation in the canopy?
+              106 # peak at the beginning of the flux that is messing up the fit
                     )
                 )
 #> Cutting measurements...
@@ -271,19 +267,18 @@ slopes_exp_liahovden_60 <- conc_liahovden |>
 #>  force_ok     0   0 %
 
 slopes_exp_liahovden_60 |>
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> # we just show a sample of the plots to avoid slowing down the example
+# we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
     flux_plot(
       fit_type = "exp",
-      print_plot = TRUE,
-      f_plotname = "example_lia_exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 2,
       f_ncol = 2,
-      y_text_position = 400
+      y_text_position = 400,
+      output = "print_only"
       )
 #> Plotting in progress
-#> Plots saved in f_quality_plots folder.
 ```
 
 <img src="man/figures/README-plot_exp_cut-1.png" width="100%" />
@@ -300,11 +295,12 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_60 |>
     cols_keep = c("f_start", "type"),
     cut_col = "f_cut",
     keep_arg = "keep"
-  ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
+  ) # there is no need to specify the other arguments because
 #> Cutting data according to 'keep_arg'...
 #> Averaging air temperature for each flux...
 #> Creating a dataframe with the columns from 'cols_keep' argument...
 #> Calculating fluxes...
+    # the defaults are for our experiment, other users might want to check that
 str(fluxes_exp_liahovden_60)
 #> tibble [138 × 10] (S3: tbl_df/tbl/data.frame)
 #>  $ f_start       : POSIXct[1:138], format: "2022-07-27 05:37:40" "2022-07-27 05:42:10" ...
@@ -351,11 +347,10 @@ Fluxes were calculated in five steps from raw gas concentration data and
 the process is entirely reproducible. Here is a plot of the results.
 
 ``` r
-library(ggplot2)
 fluxes_exp_liahovden_60 |>
-    filter(type == "NEE") |>
-        ggplot(aes(f_start, flux)) +
-        geom_point()
+    dplyr::filter(type == "NEE") |>
+        ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
+        ggplot2::geom_point()
 #> Warning: Removed 3 rows containing missing values or values outside the scale range
 #> (`geom_point()`).
 ```

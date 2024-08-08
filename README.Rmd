@@ -79,7 +79,11 @@ The function flux_quality is used to provide diagnostics about the quality of th
 <!-- We run flux_quality to assess the quality of the fits. -->
 
 ```{r quality_exp}
-slopes_exp_liahovden <- flux_quality(slopes_exp_liahovden, fit_type = "expo", slope_col = "f_slope_tz")
+slopes_exp_liahovden <- flux_quality(
+                                  slopes_exp_liahovden,
+                                  fit_type = "expo",
+                                  slope_col = "f_slope_tz"
+                                  )
 str(slopes_exp_liahovden)
 ```
 
@@ -88,7 +92,8 @@ The function flux_plot provides plots for a visual assessment of the measurement
 
 ```{r plot_exp}
 slopes_exp_liahovden |>
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> # we just show a sample of the plots to avoid slowing down the example
+  # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
     flux_plot(
       fit_type = "exp",
       f_ylim_lower = 300,
@@ -100,7 +105,6 @@ slopes_exp_liahovden |>
       )
 ```
 
-<!-- We might be getting better fits by using only the first part of the measurements. -->
 Based on the quality flags and the plots, the user can decide to run flux_fitting again with different arguments.
 Here we will do it while cutting the last 60 seconds of the fluxes (cutting the last third).
 We also detected two fluxes (101 and 106) that do not look correct.
@@ -112,15 +116,16 @@ For the sake of reproducibility, this argument should be the last option and be 
 slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
       flux_quality(fit_type = "exp",
-                slope_col = "f_slope_tz",
-                weird_fluxesID = c(
-                    101, # plot has a high peak at the start. CO2 accumulation in the canopy?
-                    106 # peak at the beginning of the flux that is messing up the fit
+            slope_col = "f_slope_tz",
+            weird_fluxesID = c(
+              101, # plot starts with a high peak: accumulation in the canopy?
+              106 # peak at the beginning of the flux that is messing up the fit
                     )
                 )
 
 slopes_exp_liahovden_60 |>
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> # we just show a sample of the plots to avoid slowing down the example
+# we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
     flux_plot(
       fit_type = "exp",
       f_ylim_lower = 300,
@@ -167,7 +172,8 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_60 |>
     cols_keep = c("f_start", "type"),
     cut_col = "f_cut",
     keep_arg = "keep"
-  ) # there is no need to specify the other arguments because the defaults are from our experiment, other users might want to check that
+  ) # there is no need to specify the other arguments because
+    # the defaults are for our experiment, other users might want to check that
 str(fluxes_exp_liahovden_60)
 ```
 
