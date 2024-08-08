@@ -7,8 +7,10 @@
 # plot for linear fit
 
     Code
-      suppressMessages(flux_plot(slopes30lin_flag, fit_type = "lin", fit_slope_col = "f_fit_slope",
-        f_plotname = "test_lin_plot", print_plot = FALSE))
+      vdiffr::expect_doppelganger("plot for linear fit", flux_plot(slopes30lin_flag,
+        fit_type = "lin", fit_slope_col = "f_fit_slope", output = "print_only"))
+    Message
+      Plotting in progress
 
 # plot for linear fit with jpg extension works
 

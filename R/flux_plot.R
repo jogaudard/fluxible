@@ -67,15 +67,10 @@
 #' @examples
 #' data(slopes0_flag)
 #' flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope",
-#' print_plot = TRUE)
+#' output = "print_only")
 #' data(slopes30lin_flag)
-#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE,
-#' f_plotname = "pdf_quality_plots")
-#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE,
-#' output = "ggsave", device = "jpg", f_plotname = "jpg_quality_plots")
-#' flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE,
-#' output = "ggsave", f_plotname = "jpg_quality_plots.jpg")
-#' flux_plot(slopes30qua_flag, fit_type = "quadratic", print_plot = TRUE)
+#' flux_plot(slopes30lin_flag, fit_type = "lin", output = "print_only")
+#' flux_plot(slopes30qua_flag, fit_type = "quadratic", output = "print_only")
 #' @export
 
 flux_plot <- function(slopes_df,
@@ -123,13 +118,17 @@ flux_plot <- function(slopes_df,
                       no_data_flag = "no_data"
                       ) {
   fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
+  output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
+
+  if(((output)) %in% c("pdfpages", "ggsave")){
   f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
   folder <- "./f_quality_plots"
   if (!file.exists(folder)) {
     dir.create(folder)
+  }
   }
 
   slopes_df <- slopes_df |>

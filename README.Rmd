@@ -91,17 +91,13 @@ slopes_exp_liahovden |>
   dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> # we just show a sample of the plots to avoid slowing down the example
     flux_plot(
       fit_type = "exp",
-      print_plot = TRUE,
-      f_plotname = "example_lia_exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 2,
       f_ncol = 2,
-      y_text_position = 400
+      y_text_position = 400,
+      output = "print_only"
       )
-
-# the pdf files are heavy and there is not need to keep them here for the example
-unlink("f_quality_plots/example_lia_exp.pdf", recursive = TRUE, force = TRUE)
 ```
 
 <!-- We might be getting better fits by using only the first part of the measurements. -->
@@ -127,17 +123,13 @@ slopes_exp_liahovden_60 |>
   dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> # we just show a sample of the plots to avoid slowing down the example
     flux_plot(
       fit_type = "exp",
-      print_plot = TRUE,
-      f_plotname = "example_lia_exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 2,
       f_ncol = 2,
-      y_text_position = 400
+      y_text_position = 400,
+      output = "print_only"
       )
-
-# the pdf files are heavy and there is not need to keep them here for the example
-unlink("f_quality_plots/example_lia_exp_60.pdf", recursive = TRUE, force = TRUE)
 ```
 
 ```{r plot_exp_cut_all, include = FALSE}
