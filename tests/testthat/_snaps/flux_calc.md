@@ -3,7 +3,7 @@
     Code
       output
     Output
-      # A tibble: 6 x 10
+      # A tibble: 6 x 11
         f_fluxID   PAR temp_soil f_slope_calc chamber_volume tube_volume atm_pressure
            <dbl> <dbl>     <dbl>        <dbl>          <dbl>       <dbl>        <dbl>
       1        1  1.95      10.8        1.56            24.5       0.075            1
@@ -12,7 +12,8 @@
       4        4  1.84      10.8        1.13            24.5       0.075            1
       5        5  1.66      10.6        1.46            24.5       0.075            1
       6        6  1.78      12.2        0.426           24.5       0.075            1
-      # i 3 more variables: temp_air_ave <dbl>, volume_setup <dbl>, flux <dbl>
+      # i 4 more variables: temp_air_ave <dbl>, datetime <dttm>, volume_setup <dbl>,
+      #   flux <dbl>
 
 # keeping works
 
@@ -24,7 +25,7 @@
       Creating a dataframe with the columns from 'cols_keep' argument...
       Calculating fluxes...
     Output
-      # A tibble: 6 x 11
+      # A tibble: 6 x 12
         turfID       type  f_start             f_fluxID f_slope_calc chamber_volume
         <chr>        <chr> <dttm>                 <dbl>        <dbl>          <dbl>
       1 156 AN2C 156 ER    2022-07-28 23:43:35        1        1.56            24.5
@@ -33,8 +34,8 @@
       4 109 AN3C 109 NEE   2022-07-28 23:59:32        4        1.13            24.5
       5 109 AN3C 109 ER    2022-07-29 00:03:10        5        1.46            24.5
       6 29 WN3C 106  NEE   2022-07-29 00:06:35        6        0.426           24.5
-      # i 5 more variables: tube_volume <dbl>, atm_pressure <dbl>,
-      #   temp_air_ave <dbl>, volume_setup <dbl>, flux <dbl>
+      # i 6 more variables: tube_volume <dbl>, atm_pressure <dbl>,
+      #   temp_air_ave <dbl>, datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
 # keeping and averaging work together
 
@@ -47,7 +48,7 @@
       Creating a dataframe with the columns from 'cols_ave' argument...
       Calculating fluxes...
     Output
-      # A tibble: 6 x 13
+      # A tibble: 6 x 14
         f_fluxID   PAR temp_soil turfID       type  f_start             f_slope_calc
            <dbl> <dbl>     <dbl> <chr>        <chr> <dttm>                     <dbl>
       1        1  1.95      10.8 156 AN2C 156 ER    2022-07-28 23:43:35        1.56 
@@ -56,8 +57,9 @@
       4        4  1.84      10.8 109 AN3C 109 NEE   2022-07-28 23:59:32        1.13 
       5        5  1.66      10.6 109 AN3C 109 ER    2022-07-29 00:03:10        1.46 
       6        6  1.78      12.2 29 WN3C 106  NEE   2022-07-29 00:06:35        0.426
-      # i 6 more variables: chamber_volume <dbl>, tube_volume <dbl>,
-      #   atm_pressure <dbl>, temp_air_ave <dbl>, volume_setup <dbl>, flux <dbl>
+      # i 7 more variables: chamber_volume <dbl>, tube_volume <dbl>,
+      #   atm_pressure <dbl>, temp_air_ave <dbl>, datetime <dttm>,
+      #   volume_setup <dbl>, flux <dbl>
 
 # fahrenheit conversion works
 
@@ -68,7 +70,7 @@
       Averaging air temperature for each flux...
       Calculating fluxes...
     Output
-      # A tibble: 6 x 8
+      # A tibble: 6 x 9
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
            <dbl>        <dbl>          <dbl>       <dbl>        <dbl>        <dbl>
       1        1        1.56            24.5       0.075            1         45.2
@@ -77,7 +79,7 @@
       4        4        1.13            24.5       0.075            1         46.0
       5        5        1.46            24.5       0.075            1         45.9
       6        6        0.426           24.5       0.075            1         45.9
-      # i 2 more variables: volume_setup <dbl>, flux <dbl>
+      # i 3 more variables: datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
 # kelvin conversion works
 
@@ -88,7 +90,7 @@
       Averaging air temperature for each flux...
       Calculating fluxes...
     Output
-      # A tibble: 6 x 8
+      # A tibble: 6 x 9
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
            <dbl>        <dbl>          <dbl>       <dbl>        <dbl>        <dbl>
       1        1        1.56            24.5       0.075            1         280.
@@ -97,7 +99,7 @@
       4        4        1.13            24.5       0.075            1         281.
       5        5        1.46            24.5       0.075            1         281.
       6        6        0.426           24.5       0.075            1         281.
-      # i 2 more variables: volume_setup <dbl>, flux <dbl>
+      # i 3 more variables: datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
 # calculating fluxes on dataset with cuts filters out the cuts first
 
@@ -109,7 +111,7 @@
       Averaging air temperature for each flux...
       Calculating fluxes...
     Output
-      # A tibble: 6 x 8
+      # A tibble: 6 x 9
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
            <dbl>        <dbl>          <dbl>       <dbl>        <dbl>        <dbl>
       1        1        0.775           24.5       0.075            1         7.29
@@ -118,7 +120,7 @@
       4        4        0.676           24.5       0.075            1         7.77
       5        5        1.12            24.5       0.075            1         7.70
       6        6        0.425           24.5       0.075            1         7.74
-      # i 2 more variables: volume_setup <dbl>, flux <dbl>
+      # i 3 more variables: datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
 # volume can be a variable instead of a constant, giving different fluxes
 
@@ -128,7 +130,7 @@
       Averaging air temperature for each flux...
       Calculating fluxes...
     Output
-      # A tibble: 6 x 8
+      # A tibble: 6 x 9
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure temp_air_ave
            <dbl>        <dbl>          <dbl>       <dbl>        <dbl>        <dbl>
       1        1        1.56              18       0.075            1         7.31
@@ -137,7 +139,7 @@
       4        4        1.13              24       0.075            1         7.77
       5        5        1.46               4       0.075            1         7.71
       6        6        0.426             35       0.075            1         7.75
-      # i 2 more variables: volume_setup <dbl>, flux <dbl>
+      # i 3 more variables: datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
 # volume can be a variable instead of a constant, giving different fluxes (testing the tubes)
 
@@ -148,28 +150,30 @@
       Averaging air temperature for each flux...
       Calculating fluxes...
     Output
-      # A tibble: 6 x 6
-        f_fluxID f_slope_calc atm_pressure temp_air_ave volume_setup  flux
-           <dbl>        <dbl>        <dbl>        <dbl>        <dbl> <dbl>
-      1        1        1.56             1         7.31         19    74.0
-      2        2        0.853            1         7.38         32    68.3
-      3        3        0.303            1         7.46         20.2  15.3
-      4        4        1.13             1         7.77         24.1  68.0
-      5        5        1.46             1         7.71          6    21.9
-      6        6        0.426            1         7.75         35.5  37.8
+      # A tibble: 6 x 7
+        f_fluxID f_slope_calc atm_pressure temp_air_ave datetime           
+           <dbl>        <dbl>        <dbl>        <dbl> <dttm>             
+      1        1        1.56             1         7.31 2022-07-28 23:43:35
+      2        2        0.853            1         7.38 2022-07-28 23:47:22
+      3        3        0.303            1         7.46 2022-07-28 23:52:10
+      4        4        1.13             1         7.77 2022-07-28 23:59:32
+      5        5        1.46             1         7.71 2022-07-29 00:03:10
+      6        6        0.426            1         7.75 2022-07-29 00:06:35
+      # i 2 more variables: volume_setup <dbl>, flux <dbl>
 
 # Fluxible workflow works from start to finish
 
     Code
       str(fluxes_test)
     Output
-      tibble [6 x 9] (S3: tbl_df/tbl/data.frame)
+      tibble [6 x 10] (S3: tbl_df/tbl/data.frame)
        $ f_fluxID      : Factor w/ 6 levels "1","2","3","4",..: 1 2 3 4 5 6
        $ f_slope_calc  : num [1:6] 1.555 0.853 0.303 1.13 1.463 ...
        $ chamber_volume: num [1:6] 24.5 24.5 24.5 24.5 24.5 24.5
        $ tube_volume   : num [1:6] 0.075 0.075 0.075 0.075 0.075 0.075
        $ atm_pressure  : num [1:6] 1 1 1 1 1 1
        $ temp_air_ave  : num [1:6] 7.31 7.38 7.46 7.77 7.71 ...
+       $ datetime      : POSIXct[1:6], format: "2022-07-28 23:43:35" "2022-07-28 23:47:22" ...
        $ volume_setup  : num [1:6] 24.6 24.6 24.6 24.6 24.6 ...
        $ flux          : num [1:6] 95.6 52.4 18.6 69.4 89.9 ...
        $ model         : chr [1:6] "exponential" "exponential" "exponential" "exponential" ...

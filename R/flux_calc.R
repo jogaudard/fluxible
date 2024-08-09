@@ -4,6 +4,9 @@
 #' @param slopes_df dataframe of flux slopes
 #' @param slope_col column containing the slope to calculate the flux
 #' (in ppm*s^(-1))
+#' @param datetime_col column containing the datetime of each gas concentration
+#' measurements in slopes_df. The first one after cutting will be kept as
+#' datetime of each flux in the output.
 #' @param cut_col column containing cutting information
 #' @param keep_arg name in cut_col of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
@@ -43,6 +46,7 @@
 
 flux_calc <- function(slopes_df,
                       slope_col,
+                      datetime_col = "f_datetime",
                       cut_col = c(),
                       keep_arg = c(),
                       chamber_volume = 24.5,
@@ -133,6 +137,7 @@ if (is.character(((atm_pressure)))) {
   slopes_df <- slopes_df |>
     rename(
       f_fluxID = all_of(((fluxID_col))),
+      f_datetime = all_of(((datetime_col))),
       air_temp = all_of(((temp_air_col))),
       f_slope_calc = all_of(((slope_col)))
     )
@@ -150,13 +155,13 @@ if (is.character(((atm_pressure)))) {
 
   message("Averaging air temperature for each flux...")
   slope_temp <- slopes_df |>
-    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume", "atm_pressure") |>
+    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume", "atm_pressure", "f_datetime") |>
     group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume, .data$atm_pressure) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE),
+      datetime = .data$f_datetime[1],
       .groups = "drop"
     ) |>
-    # ungroup() |>
     mutate(
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave + 273.15,
