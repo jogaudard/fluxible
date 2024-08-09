@@ -7,6 +7,7 @@
 flux_calc(
   slopes_df,
   slope_col,
+  datetime_col = "f_datetime",
   cut_col = c(),
   keep_arg = c(),
   chamber_volume = 24.5,
@@ -27,6 +28,10 @@ flux_calc(
 
 \item{slope_col}{column containing the slope to calculate the flux
 (in ppm*s^(-1))}
+
+\item{datetime_col}{column containing the datetime of each gas concentration
+measurements in slopes_df. The first one after cutting will be kept as
+datetime of each flux in the output.}
 
 \item{cut_col}{column containing cutting information}
 
