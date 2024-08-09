@@ -158,7 +158,6 @@ flux_fitting_quadratic <- function(conc_df,
 
   if (any(!is.na(warnings))) warning(warnings)
 
-  attr(conc_fitting, "fit_type") <- "quadratic"
 
   conc_fitting
 }

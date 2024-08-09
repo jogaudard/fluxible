@@ -346,7 +346,6 @@ message("Done.")
 
   if (any(!is.na(warnings))) warning(warnings)
 
-  attr(conc_fitting, "fit_type") <- "exponential"
 
   conc_fitting
 }

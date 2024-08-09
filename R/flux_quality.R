@@ -2,7 +2,8 @@
 #' @description indicates if slopes should be discarded or replaced
 #' by 0 according to quality thresholds set by user
 #' @param slopes_df dataset containing slopes
-#' @param fit_type model fitted to the data, linear, quadratic or exponential
+#' @param fit_type model fitted to the data, linear, quadratic or exponential.
+#' Will be automatically filled if slopes_df was produced using flux_fitting()
 #' @param ambient_conc ambient gas concentration in ppm at the site of
 #' measurement (used to detect measurement that started with a polluted setup)
 #' @param error error of the setup, defines a window outside of which
@@ -56,7 +57,7 @@
 #' @export
 
 flux_quality <- function(slopes_df,
-                         fit_type,
+                         fit_type = NA,
                          ambient_conc = 421,
                          error = 100,
                          fluxID_col = "f_fluxID",
@@ -78,7 +79,6 @@ flux_quality <- function(slopes_df,
                          b_threshold = 1,
                          cut_arg = "cut"
                          ) {
-  fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
 
   slopes_df <- slopes_df |>
     rename(
@@ -88,6 +88,11 @@ flux_quality <- function(slopes_df,
       f_fit = all_of(((fit_col))),
       f_cut = all_of(((cut_col)))
     )
+
+  fit_type <- flux_fit_type(
+    slopes_df,
+    fit_type = ((fit_type))
+  )
 
   slopes_df <- slopes_df |>
   group_by(.data$f_fluxID, .data$f_cut) |>
@@ -162,6 +167,7 @@ flag_msg <- flag_count |>
 message(paste("\n", "Total number of measurements:", sum(flag_count$n)))
 message(flag_msg)
 
+  attr(quality_flag, "fit_type") <- ((fit_type))
 
   quality_flag
 }

@@ -157,3 +157,20 @@ test_that("volume can be a variable instead of a constant, giving different flux
   select(!c(chamber_volume, tube_volume))
   )
 })
+
+test_that("Fluxible workflow works from start to finish", {
+  conc_test <- flux_match(
+     co2_df_short,
+     record_short
+  )
+  slopes_test <- suppressWarnings(flux_fitting(
+      conc_test,
+      fit_type = "exp"
+    ))
+  slopes_flag_test <- flux_quality(slopes_test, slope_col = "f_slope_tz")
+  fluxes_test <- flux_calc(slopes_flag_test, slope_col = "f_slope_corr")
+
+  expect_snapshot(
+    str(fluxes_test)
+  )
+})
