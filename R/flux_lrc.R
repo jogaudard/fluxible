@@ -1,6 +1,7 @@
 
 
 flux_lrc <- function(fluxes_df,
+                    flux_col = "fluxes",
                     type_col = "type",
                     lrc_arg = "LRC",
                     nee_arg = "NEE",
@@ -8,13 +9,13 @@ flux_lrc <- function(fluxes_df,
                     lrc_group = c(),
                     PARfix = 300,
                     PARnull = 0
-    )
-  
-  
-  
-{
-  coefficients_lrc <- lrc_df %>%
-    group_by_at(vars(all_of(group))) %>% 
+                    ){
+
+  coefficients_lrc <- fluxes_df %>%
+    filter(
+        type == ((lrc_arg))
+    ) |>
+    group_by_at(vars(all_of(((lrc_group))))) |>
     nest %>% 
     mutate(lm = map(data, ~ lm(flux ~ PARavg + I(PARavg^2), data = .x)),
            table = map(lm, tidy),
