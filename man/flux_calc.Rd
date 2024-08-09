@@ -18,7 +18,8 @@ flux_calc(
   cols_ave = c(),
   fluxID_col = "f_fluxID",
   temp_air_col = "temp_air",
-  temp_air_unit = "celsius"
+  temp_air_unit = "celsius",
+  fit_type = c()
 )
 }
 \arguments{
@@ -59,6 +60,9 @@ to caculate fluxes. Will be averaged with NA removed.}
 
 \item{temp_air_unit}{units in which air temperature was measured.
 Has to be either celsius, fahrenheit or kelvin.}
+
+\item{fit_type}{(optional) model used in flux_fitting, exponential, quadratic or linear.
+Will be automatically filled if slopes_df was produced using flux_quality().}
 }
 \value{
 a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),

@@ -51,7 +51,11 @@ flux_fitting <- function(conc_df,
                          roll_width = 15,
                          t_zero = 0,
                          fit_type) {
-  fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
+
+  fit_type <- flux_fit_type(
+    ((conc_df)),
+    fit_type = ((fit_type))
+  )
 
   if (((fit_type)) == "exponential") {
     conc_fitting <- flux_fitting_exp(
@@ -99,6 +103,7 @@ flux_fitting <- function(conc_df,
     )
   }
 
+  attr(conc_fitting, "fit_type") <- ((fit_type))
 
   conc_fitting
 }

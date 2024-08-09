@@ -6,7 +6,7 @@
 \usage{
 flux_quality(
   slopes_df,
-  fit_type,
+  fit_type = c(),
   ambient_conc = 421,
   error = 100,
   fluxID_col = "f_fluxID",
@@ -32,7 +32,8 @@ flux_quality(
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{fit_type}{model fitted to the data, linear, quadratic or exponential}
+\item{fit_type}{model fitted to the data, linear, quadratic or exponential.
+Will be automatically filled if slopes_df was produced using flux_fitting()}
 
 \item{ambient_conc}{ambient gas concentration in ppm at the site of
 measurement (used to detect measurement that started with a polluted setup)}

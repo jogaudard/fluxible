@@ -25,6 +25,8 @@
 #' to caculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
 #' Has to be either celsius, fahrenheit or kelvin.
+#' @param fit_type (optional) model used in flux_fitting, exponential, quadratic or linear.
+#' Will be automatically filled if slopes_df was produced using flux_quality().
 #' @return a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
 #' temperature average for each flux,
 #' slope used for each flux calculation,
@@ -52,8 +54,13 @@ flux_calc <- function(slopes_df,
                       cols_ave = c(),
                       fluxID_col = "f_fluxID",
                       temp_air_col = "temp_air",
-                      temp_air_unit = "celsius") {
+                      temp_air_unit = "celsius",
+                      fit_type = c()) {
 
+fit_type <- flux_fit_type(
+    slopes_df,
+    fit_type = ((fit_type))
+  )
 
 temp_air_unit <- match.arg(
     ((temp_air_unit)),
@@ -198,7 +205,8 @@ if (is.character(((atm_pressure)))) {
         ((temp_air_unit)) == "fahrenheit"
         ~ ((.data$temp_air_ave - 273.15) * (9 / 5)) + 32,
         ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
-      )
+      ),
+      model = ((fit_type))
     )
     fluxes
 }

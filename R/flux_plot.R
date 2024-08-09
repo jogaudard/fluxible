@@ -4,8 +4,9 @@
 #' This function takes time to run and is optional in the workflow,
 #' but it is still highly recommended to use it to visually check
 #' the measurements
-#' @param fit_type model used in flux_fitting, exponential, quadratic or linear
 #' @param slopes_df dataset containing slopes
+#' @param fit_type model used in flux_fitting, exponential, quadratic or linear.
+#' Will be automatically filled if slopes_df was produced using flux_quality()
 #' @param datetime_col column containing datetime of
 #' each concentration measurement
 #' @param conc_col column containing gas concentration data
@@ -74,7 +75,7 @@
 #' @export
 
 flux_plot <- function(slopes_df,
-                      fit_type,
+                      fit_type = c(),
                       datetime_col = "f_datetime",
                       conc_col = "f_conc",
                       cut_col = "f_cut",
@@ -117,8 +118,12 @@ flux_plot <- function(slopes_df,
                       cut_arg = "cut",
                       no_data_flag = "no_data"
                       ) {
-  fit_type <- match.arg(((fit_type)), c("exponential", "linear", "quadratic"))
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
+
+  fit_type <- flux_fit_type(
+    slopes_df,
+    fit_type = ((fit_type))
+  )
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
 

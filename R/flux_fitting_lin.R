@@ -151,7 +151,6 @@ flux_fitting_lin <- function(conc_df,
 
   if (any(!is.na(warnings))) warning(warnings)
 
-  attr(conc_fitting, "fit_type") <- "linear"
 
   conc_fitting
 }

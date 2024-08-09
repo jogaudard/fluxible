@@ -158,3 +158,19 @@
       5        5        1.46             1         7.71          6    21.9
       6        6        0.426            1         7.75         35.5  37.8
 
+# Fluxible workflow works from start to finish
+
+    Code
+      str(fluxes_test)
+    Output
+      tibble [6 x 9] (S3: tbl_df/tbl/data.frame)
+       $ f_fluxID      : Factor w/ 6 levels "1","2","3","4",..: 1 2 3 4 5 6
+       $ f_slope_calc  : num [1:6] 1.555 0.853 0.303 1.13 1.463 ...
+       $ chamber_volume: num [1:6] 24.5 24.5 24.5 24.5 24.5 24.5
+       $ tube_volume   : num [1:6] 0.075 0.075 0.075 0.075 0.075 0.075
+       $ atm_pressure  : num [1:6] 1 1 1 1 1 1
+       $ temp_air_ave  : num [1:6] 7.31 7.38 7.46 7.77 7.71 ...
+       $ volume_setup  : num [1:6] 24.6 24.6 24.6 24.6 24.6 ...
+       $ flux          : num [1:6] 95.6 52.4 18.6 69.4 89.9 ...
+       $ model         : chr [1:6] "exponential" "exponential" "exponential" "exponential" ...
+

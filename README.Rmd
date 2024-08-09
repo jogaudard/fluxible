@@ -81,8 +81,7 @@ The function flux_quality is used to provide diagnostics about the quality of th
 ```{r quality_exp}
 slopes_exp_liahovden <- flux_quality(
                                   slopes_exp_liahovden,
-                                  fit_type = "expo",
-                                  slope_col = "f_slope_tz"
+                                  slope_col = "f_slope"
                                   )
 str(slopes_exp_liahovden)
 ```
@@ -95,7 +94,6 @@ slopes_exp_liahovden |>
   # we just show a sample of the plots to avoid slowing down the example
   dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
     flux_plot(
-      fit_type = "exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 2,
@@ -115,8 +113,8 @@ For the sake of reproducibility, this argument should be the last option and be 
 ```{r plot_exp_cut}
 slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
-      flux_quality(fit_type = "exp",
-            slope_col = "f_slope_tz",
+      flux_quality(
+            slope_col = "f_slope",
             weird_fluxesID = c(
               101, # plot starts with a high peak: accumulation in the canopy?
               106 # peak at the beginning of the flux that is messing up the fit
@@ -127,7 +125,6 @@ slopes_exp_liahovden_60 |>
 # we just show a sample of the plots to avoid slowing down the example
   dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
     flux_plot(
-      fit_type = "exp",
       f_ylim_lower = 300,
       f_ylim_upper = 600,
       f_nrow = 2,
@@ -144,7 +141,7 @@ slopes_exp_liahovden_60 |>
 # slopes_exp_liahovden_60 <- conc_liahovden |>
 #   flux_fitting(fit_type = "exp", end_cut = 60) |>
 #     flux_quality(fit_type = "exp",
-#                 slope_col = "f_slope_tz",
+#                 slope_col = "f_slope",
 #                 weird_fluxesID = c(
 #                     101, # plot has a high peak at the start. CO2 accumulation in the canopy?
 #                     106 # peak at the beginning of the flux that is messing up the fit

@@ -6,7 +6,7 @@
 \usage{
 flux_plot(
   slopes_df,
-  fit_type,
+  fit_type = c(),
   datetime_col = "f_datetime",
   conc_col = "f_conc",
   cut_col = "f_cut",
@@ -53,7 +53,8 @@ flux_plot(
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{fit_type}{model used in flux_fitting, exponential, quadratic or linear}
+\item{fit_type}{model used in flux_fitting, exponential, quadratic or linear.
+Will be automatically filled if slopes_df was produced using flux_quality()}
 
 \item{datetime_col}{column containing datetime of
 each concentration measurement}

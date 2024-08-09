@@ -4,8 +4,6 @@
 #' flux_quality_lm is for the model of the lm family.
 #' flux_quality_exp is for the exponential model.
 #' @param slopes_df dataset containing slopes, fluxID, p.value and r.squared
-#' @param slope_col column containing the slope of each flux
-#' (as calculated by the flux_fitting function)
 #' @param pvalue_threshold threshold of p-value below which the change
 #' of gas concentration over time is considered not significant (user decided)
 #' @param rsquared_threshold threshold of r squared value below which
@@ -23,18 +21,17 @@
 
 
 flux_quality_lm <- function(slopes_df,
-                            slope_col = "f_slope",
                              weird_fluxesID = c(),
                              force_okID = c(),
                              pvalue_col = "f_pvalue",
                              rsquared_col = "f_rsquared",
                              pvalue_threshold = 0.3,
                              rsquared_threshold = 0.7) {
+
   slopes_df <- slopes_df |>
     rename(
       f_pvalue = all_of(((pvalue_col))),
-      f_rsquared = all_of(((rsquared_col))),
-      f_slope = all_of(((slope_col)))
+      f_rsquared = all_of(((rsquared_col)))
     )
 
   

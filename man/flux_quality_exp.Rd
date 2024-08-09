@@ -6,7 +6,6 @@
 \usage{
 flux_quality_exp(
   slopes_df,
-  slope_col = "f_slope_tz",
   weird_fluxesID = c(),
   force_okID = c(),
   b_col = "f_b",
@@ -18,9 +17,6 @@ flux_quality_exp(
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID,
 and parameters of the exponential expression}
-
-\item{slope_col}{column containing the slope of each flux
-(as calculated by the flux_fitting function)}
 
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded
 by the user's decision}

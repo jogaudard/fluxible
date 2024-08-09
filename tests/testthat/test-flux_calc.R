@@ -72,7 +72,7 @@ test_that("error on air temp units", {
   expect_error(
     flux_calc(
       slopes0,
-      slope_col = "slope_tz",
+      slope_col = "f_slope",
       temp_air_unit = "melvin"
     ),
     "'arg' should be one of \"celsius\", \"fahrenheit\", \"kelvin\""
@@ -155,5 +155,22 @@ test_that("volume can be a variable instead of a constant, giving different flux
   tube_volume = "tube_vol"
   ) |>
   select(!c(chamber_volume, tube_volume))
+  )
+})
+
+test_that("Fluxible workflow works from start to finish", {
+  conc_test <- flux_match(
+     co2_df_short,
+     record_short
+  )
+  slopes_test <- suppressWarnings(flux_fitting(
+      conc_test,
+      fit_type = "exp"
+    ))
+  slopes_flag_test <- flux_quality(slopes_test)
+  fluxes_test <- flux_calc(slopes_flag_test, slope_col = "f_slope_corr")
+
+  expect_snapshot(
+    str(fluxes_test)
   )
 })
