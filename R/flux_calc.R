@@ -55,7 +55,7 @@ flux_calc <- function(slopes_df,
                       fluxID_col = "f_fluxID",
                       temp_air_col = "temp_air",
                       temp_air_unit = "celsius",
-                      fit_type = NA) {
+                      fit_type = c()) {
 
 fit_type <- flux_fit_type(
     slopes_df,

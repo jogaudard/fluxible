@@ -5,8 +5,6 @@
 #' flux_quality_exp is for the exponential model.
 #' @param slopes_df dataset containing slopes, fluxID,
 #' and parameters of the exponential expression
-#' @param slope_col column containing the slope of each flux
-#' (as calculated by the flux_fitting function)
 #' @param b_col column containing the b parameter of the exponential expression
 #' @param weird_fluxesID vector of fluxIDs that should be discarded
 #' by the user's decision
@@ -27,7 +25,6 @@
 
 
 flux_quality_exp <- function(slopes_df,
-                             slope_col = "f_slope_tz",
                              weird_fluxesID = c(),
                              force_okID = c(),
                              b_col = "f_b",
@@ -37,8 +34,7 @@ flux_quality_exp <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     rename(
-      f_b = all_of(((b_col))),
-      f_slope_tz = all_of(((slope_col)))
+      f_b = all_of(((b_col)))
     )
 
 
@@ -86,11 +82,11 @@ flux_quality_exp <- function(slopes_df,
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA_real_,
         .data$f_quality_flag == "weird_flux" ~ NA_real_,
-        .data$f_quality_flag == "force_ok" ~ .data$f_slope_tz,
+        .data$f_quality_flag == "force_ok" ~ .data$f_slope,
         .data$f_quality_flag == "start_error" ~ NA_real_,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "zero" ~ 0,
-        .data$f_quality_flag == "ok" ~ .data$f_slope_tz
+        .data$f_quality_flag == "ok" ~ .data$f_slope
       )
     )
 

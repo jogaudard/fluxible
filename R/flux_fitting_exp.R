@@ -295,7 +295,7 @@ message("Optimizing fitting parameters...")
       f_a = .data$results$par[2],
       f_b = .data$results$par[3],
       f_tz = exp(.data$results$par[4]), # we force tz to be positive
-      f_slope_tz = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz),
+      f_slope = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz),
       .groups = "drop"
     ) |>
     select(!"results")
@@ -309,7 +309,7 @@ message("Calculating fits and slopes...")
       f_fit = .data$f_Cm + .data$f_a * (.data$f_time - .data$f_tz - .data$time_diff)
         + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b
         * (.data$f_time - .data$f_tz - .data$time_diff)),
-      f_fit_slope = .data$f_slope_tz * (.data$f_time) + .data$f_Cz - .data$f_slope_tz
+      f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
         * (.data$f_tz + .data$time_diff),
       f_start_z = .data$f_start + .data$f_tz
     ) |>

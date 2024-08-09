@@ -6,8 +6,8 @@
 \usage{
 flux_fit_type(
   df,
-  fit_type = NA,
-  fit_type_list = c("exponential", "linear", "quadratic", NA)
+  fit_type = c(),
+  fit_type_list = c("exponential", "linear", "quadratic")
 )
 }
 \arguments{

@@ -6,7 +6,6 @@
 \usage{
 flux_quality_lm(
   slopes_df,
-  slope_col = "f_slope",
   weird_fluxesID = c(),
   force_okID = c(),
   pvalue_col = "f_pvalue",
@@ -17,9 +16,6 @@ flux_quality_lm(
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
-
-\item{slope_col}{column containing the slope of each flux
-(as calculated by the flux_fitting function)}
 
 \item{weird_fluxesID}{vector of fluxIDs that should be discarded
 by the user's decision}

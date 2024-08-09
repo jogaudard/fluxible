@@ -6,7 +6,7 @@
 \usage{
 flux_quality(
   slopes_df,
-  fit_type = NA,
+  fit_type = c(),
   ambient_conc = 421,
   error = 100,
   fluxID_col = "f_fluxID",

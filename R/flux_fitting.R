@@ -53,7 +53,7 @@ flux_fitting <- function(conc_df,
                          fit_type) {
 
   fit_type <- flux_fit_type(
-    slopes_df,
+    ((conc_df)),
     fit_type = ((fit_type))
   )
 

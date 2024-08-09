@@ -57,7 +57,7 @@
 #' @export
 
 flux_quality <- function(slopes_df,
-                         fit_type = NA,
+                         fit_type = c(),
                          ambient_conc = 421,
                          error = 100,
                          fluxID_col = "f_fluxID",
@@ -83,6 +83,7 @@ flux_quality <- function(slopes_df,
   slopes_df <- slopes_df |>
     rename(
       f_fluxID = all_of(((fluxID_col))),
+      f_slope = all_of(((slope_col))),
       f_conc = all_of(((conc_col))),
       f_time = all_of(((time_col))),
       f_fit = all_of(((fit_col))),
@@ -128,7 +129,6 @@ flux_quality <- function(slopes_df,
   if (((fit_type)) == "exponential") {
     quality_flag <- flux_quality_exp(
       ((slopes_df)),
-      slope_col = ((slope_col)),
       weird_fluxesID = ((weird_fluxesID)),
       force_okID = ((force_okID)),
       b_col = ((b_col)),
@@ -142,7 +142,6 @@ flux_quality <- function(slopes_df,
   if (((fit_type)) %in% c("linear", "quadratic")) {
     quality_flag <- flux_quality_lm(
       ((slopes_df)),
-      slope_col = ((slope_col)),
       weird_fluxesID = ((weird_fluxesID)),
       force_okID = ((force_okID)),
       pvalue_col = ((pvalue_col)),

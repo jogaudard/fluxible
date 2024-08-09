@@ -6,7 +6,7 @@
 \usage{
 flux_plot(
   slopes_df,
-  fit_type = NA,
+  fit_type = c(),
   datetime_col = "f_datetime",
   conc_col = "f_conc",
   cut_col = "f_cut",

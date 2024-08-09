@@ -19,7 +19,7 @@ flux_calc(
   fluxID_col = "f_fluxID",
   temp_air_col = "temp_air",
   temp_air_unit = "celsius",
-  fit_type = NA
+  fit_type = c()
 )
 }
 \arguments{
