@@ -5,6 +5,8 @@ vignette: >
   %\VignetteIndexEntry{Practical example: from raw gas concentration data to clean ecosystem gas fluxes.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: /home/jga051/Dropbox/PhD/biblio_phd_zot.bib
+csl: /home/jga051/Documents/01_PhD/emerald-harvard.csl
 ---
 
 ```{r, include = FALSE}
@@ -14,13 +16,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-For this exemple we will use the data that were recorded during the Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site called Liahovden (CITE when data paper out).
-The CO~2~ concentration data as well as air and soil temperature and photosynthetically active radiations (PAR) were recorded in a dataframe named co2_liahovden.
-The metadata for each measurements are in a dataframe called record_liahovden.
+For this exemple we will use the data that were recorded during the Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site called Liahovden. 
+<!-- (CITE when data paper out). -->
+The CO~2~ concentration data as well as air and soil temperature and photosynthetically active radiations (PAR) were recorded in a dataframe named `co2_liahovden`.
+The metadata for each measurements are in a dataframe called `record_liahovden`.
 This dataframe contains the starting time of each measurements, the type of measurement and the unique ID for each turf.
 The type of measurement describes if it was net ecosystem exchange (NEE), measured with a transparent chamber, or ecosystem respiration (ER), measured with a dark chamber.
 
-We use the flux_match function to slice the data from co2_liahovden into each measurement and discard what was recorded in between.
+We use the `flux_match` function to slice the data from `co2_liahovden` into each measurement and discard what was recorded in between.
 
 
 ```{r match}
@@ -34,8 +37,8 @@ str(conc_liahovden)
 ```
 
 Before calculating fluxes we need to fit a model to each measurement and estimate a slope of the concentration changing rate.
-We use the flux_fitting function with the model provided by @zhaoCalculationDaytimeCO22018.
-The function flux_quality also provides a quadratic and a linear fit.
+We use the `flux_fitting` function with the model provided by @zhaoCalculationDaytimeCO22018.
+The function `flux_fitting` also provides a quadratic and a linear fit.
 
 
 ```{r fitting_exp}
@@ -43,7 +46,7 @@ slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
 str(slopes_exp_liahovden)
 ```
 
-The function flux_quality is used to provide diagnostics about the quality of the fit, eventually advising to discard some measurements or replace them by zero.
+The function `flux_quality` is used to provide diagnostics about the quality of the fit, eventually advising to discard some measurements or replace them by zero.
 
 ```{r quality_exp}
 slopes_exp_liahovden <- flux_quality(
@@ -54,7 +57,7 @@ slopes_exp_liahovden <- flux_quality(
 str(slopes_exp_liahovden)
 ```
 
-The function flux_plot provides plots for a visual assessment of the measurements, explicitly displaying the quality flags from flux_quality and the cuts from flux_fitting.
+The function `flux_plot` provides plots for a visual assessment of the measurements, explicitly displaying the quality flags from `flux_quality` and the cuts from `flux_fitting`.
 
 ```{r plot_exp, fig.width = 8, fig.height = 9}
 slopes_exp_liahovden |>
@@ -71,11 +74,11 @@ slopes_exp_liahovden |>
       )
 ```
 
-Based on the quality flags and the plots, the user can decide to run flux_fitting again with different arguments.
+Based on the quality flags and the plots, the user can decide to run `flux_fitting` again with different arguments.
 Here we will do it while cutting the last 60 seconds of the fluxes (cutting the last third).
 We also detected two fluxes (101 and 106) that do not look correct.
 Sometimes some measurements will pass the automated quality control but are obvioulsy wrong for an experience user.
-That is what the weird_fluxesID argument is for.
+That is what the `weird_fluxesID` argument is for.
 For the sake of reproducibility, this argument should be the last option and be accompagnied with a justification.
 
 ```{r plot_exp_cut, fig.width = 8, fig.height = 9}
@@ -103,7 +106,7 @@ slopes_exp_liahovden_60 |>
 ```
 
 
-Once we are satisfied with the fit, we can calculate fluxes with flux_calc.
+Once we are satisfied with the fit, we can calculate fluxes with `flux_calc`.
 Here the volume is defined as a constant for all the measurements but it is also possible to provide a specific volume for each plot in case that is different.
 
 ```{r calc}
@@ -147,10 +150,12 @@ The conversion from micromol/m^2^/s to mmol/m^2^/h is included in the function.
 Fluxes were calculated in five steps from raw gas concentration data and the process is entirely reproducible.
 Here is a plot of the results.
 
-```{r 24h_fluxes, fig.width = 8, fig.height = 9}
+```{r 24h_fluxes, fig.width = 8, fig.height = 9, warning = FALSE}
 # library(ggplot2)
 fluxes_exp_liahovden_60 |>
     dplyr::filter(type == "NEE") |>
         ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
         ggplot2::geom_point()
 ```
+
+#### References
