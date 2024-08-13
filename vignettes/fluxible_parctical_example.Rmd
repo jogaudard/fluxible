@@ -86,7 +86,7 @@ slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
   flux_quality(
     slope_col = "f_slope",
-    weird_fluxesID = c(
+    weird_fluxes_id = c(
       101, # plot starts with a high peak: accumulation in the canopy?
       106 # peak at the beginning of the flux that is messing up the fit
     )
