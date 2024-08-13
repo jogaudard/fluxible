@@ -57,7 +57,7 @@
 #' @param dpi see ggsave()
 #' @param limitsize see ggsave()
 #' @param bg see ggsave()
-#' @param create.dir see ggsave()
+#' @param create_dir see ggsave(), create.dir
 #' @param no_data_flag flag marking fluxID without data in f_quality_flag
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
@@ -116,7 +116,7 @@ flux_plot <- function(slopes_df,
                       dpi = 300,
                       limitsize = TRUE,
                       bg = NULL,
-                      create.dir = FALSE,
+                      create_dir = FALSE,
                       cut_arg = "cut",
                       no_data_flag = "no_data") {
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
@@ -261,8 +261,8 @@ flux_plot <- function(slopes_df,
     f_plotname <- paste(f_plotname, ".pdf", sep = "")
     pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
     pb <- progress_bar$new(
-      format = 
-      "Printing plots in pdf document [:bar] :current/:total (:percent)",
+      format =
+        "Printing plots in pdf document [:bar] :current/:total (:percent)",
       total = n_pages(f_plot)
     )
     pb$tick(0)
@@ -289,7 +289,17 @@ flux_plot <- function(slopes_df,
     ggsave(
       ((f_plotname)),
       plot = f_plot,
-      device = ((device))
+      device = ((device)),
+      path = ((path)),
+      scale = ((scale)),
+      width = ((width)),
+      height = ((height)),
+      units = ((units)),
+      dpi = ((dpi)),
+      limitsize = ((limitsize)),
+      bg = ((bg)),
+      create.dir = ((create_dir))
+
     )
     message("Plots saved in f_quality_plots folder.")
     if (((print_plot)) == TRUE) {

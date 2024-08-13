@@ -11,6 +11,5 @@ slopes0_vol <- slopes0 |>
     )
   )
 
-# write_csv(slopes0_vol, "data-raw/slopes0_vol.csv")
 
 usethis::use_data(slopes0_vol, overwrite = TRUE)

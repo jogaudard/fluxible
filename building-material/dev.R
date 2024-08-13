@@ -14,6 +14,7 @@ usethis::use_vignette("my-vignette")
 
 usethis::use_readme_rmd()
 devtools::build_readme()
+usethis::use_package_doc()
 
 devtools::test()
 devtools::document()

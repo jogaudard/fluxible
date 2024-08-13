@@ -32,7 +32,7 @@ test_that("warnings when NAs are dropped in conc", {
  fluxID 2 : slope was estimated on 121 points out of 210 seconds
  fluxID 3 : slope was estimated on 102 points out of 210 seconds
  fluxID 5 : slope was estimated on 161 points out of 210 seconds",
-  fixed = TRUE # need that because there parenthesis in the error message
+    fixed = TRUE # need that because there parenthesis in the error message
   )
 })
 
@@ -42,7 +42,7 @@ test_that("warnings when there is no data in conc", {
   expect_warning(
     flux_fitting_exp(co2_conc_missing),
     " fluxID 6 dropped (no data in the conc column)",
-  fixed = TRUE # need that because there parenthesis in the error message
+    fixed = TRUE # need that because there parenthesis in the error message
   )
 })
 
@@ -56,7 +56,7 @@ test_that("warnings with cutting", {
  fluxID 2 : slope was estimated on 121 points out of 200 seconds
  fluxID 3 : slope was estimated on 102 points out of 200 seconds
  fluxID 5 : slope was estimated on 151 points out of 200 seconds",
-  fixed = TRUE # need that because there parenthesis in the error message
+    fixed = TRUE # need that because there parenthesis in the error message
   )
 })
 

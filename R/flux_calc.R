@@ -28,7 +28,8 @@
 #' to caculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
 #' Has to be either celsius, fahrenheit or kelvin.
-#' @param fit_type (optional) model used in flux_fitting, exponential, quadratic or linear.
+#' @param fit_type (optional) model used in flux_fitting, exponential,
+#' quadratic or linear.
 #' Will be automatically filled if slopes_df was produced using flux_quality().
 #' @return a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
 #' temperature average for each flux,
@@ -75,8 +76,12 @@ flux_calc <- function(slopes_df,
   if (!is.double(((r_const)))) stop("r_const has to be a double")
 
   colnames <- colnames(slopes_df)
-  if (!(((slope_col)) %in% ((colnames)))) stop("could not find slope_col in slopes_df")
-  if (!(((fluxid_col)) %in% ((colnames)))) stop("could not find fluxid_col in slopes_df")
+  if (!(((slope_col)) %in% ((colnames)))) {
+    stop("could not find slope_col in slopes_df")
+  }
+  if (!(((fluxid_col)) %in% ((colnames)))) {
+    stop("could not find fluxid_col in slopes_df")
+  }
   if (!(((temp_air_col)) %in% ((colnames)))) {
     stop("could not find temp_air_col in slopes_df")
   }
@@ -154,8 +159,14 @@ flux_calc <- function(slopes_df,
 
   message("Averaging air temperature for each flux...")
   slope_temp <- slopes_df |>
-    select("f_slope_calc", "f_fluxID", "air_temp", "chamber_volume", "tube_volume", "atm_pressure", "f_datetime") |>
-    group_by(.data$f_fluxID, .data$f_slope_calc, .data$chamber_volume, .data$tube_volume, .data$atm_pressure) |>
+    select(
+      "f_slope_calc", "f_fluxID", "air_temp", "chamber_volume",
+      "tube_volume", "atm_pressure", "f_datetime"
+    ) |>
+    group_by(
+      .data$f_fluxID, .data$f_slope_calc, .data$chamber_volume,
+      .data$tube_volume, .data$atm_pressure
+    ) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE),
       datetime = .data$f_datetime[1],
@@ -164,7 +175,8 @@ flux_calc <- function(slopes_df,
     mutate(
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave + 273.15,
-        ((temp_air_unit)) == "fahrenheit" ~ (.data$temp_air_ave + 459.67) * (5 / 9),
+        ((temp_air_unit)) == "fahrenheit"
+        ~ (.data$temp_air_ave + 459.67) * (5 / 9),
         ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
       )
     )
@@ -173,7 +185,7 @@ flux_calc <- function(slopes_df,
 
   # a df with all the columns we just want to keep and join back in the end
   if (length(((cols_keep))) > 0) {
-    message("Creating a dataframe with the columns from 'cols_keep' argument...")
+    message("Creating a df with the columns from 'cols_keep' argument...")
     slope_keep <- slopes_df |>
       select(all_of(((cols_keep))), "f_fluxID") |>
       distinct() |>
@@ -184,11 +196,14 @@ flux_calc <- function(slopes_df,
 
   # a df with the columns that have to be averaged
   if (length((cols_ave)) > 0) {
-    message("Creating a dataframe with the columns from 'cols_ave' argument...")
+    message("Creating a df with the columns from 'cols_ave' argument...")
     slope_ave <- slopes_df |>
       select(all_of(((cols_ave))), "f_fluxID") |>
       group_by(.data$f_fluxID) |>
-      summarise(across(everything(), ~ mean(.x, na.rm = TRUE)), .groups = "drop") |>
+      summarise(across(
+        everything(),
+        ~ mean(.x, na.rm = TRUE)
+      ), .groups = "drop") |>
       left_join(slope_keep, by = "f_fluxID")
   } else {
     slope_ave <- slope_keep
@@ -199,9 +214,11 @@ flux_calc <- function(slopes_df,
   fluxes <- slope_ave |>
     mutate(
       volume_setup = .data$chamber_volume + .data$tube_volume,
-      flux = (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
-      / (((r_const)) * .data$temp_air_ave
-          * ((plot_area))) # flux in micromol/s/m^2
+      flux =
+        (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
+        / (((r_const)) *
+           .data$temp_air_ave
+           * ((plot_area))) # flux in micromol/s/m^2
         * 3600 # secs to hours
         / 1000, # micromol to mmol flux is now in mmol/m^2/h
       temp_air_ave = case_when(

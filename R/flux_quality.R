@@ -98,7 +98,9 @@ flux_quality <- function(slopes_df,
     mutate(
       f_n_conc = sum(!is.na(.data$f_conc)),
       f_ratio = .data$f_n_conc / as.double((difftime(
-        .data$f_end, .data$f_start, units = "secs"))),
+        .data$f_end, .data$f_start,
+        units = "secs"
+      ))),
       f_flag_ratio = case_when(
         .data$f_ratio == 0 ~ "no_data",
         .data$f_ratio <= ((ratio_threshold)) ~ "too_low",
@@ -158,8 +160,10 @@ flux_quality <- function(slopes_df,
 
   flag_msg <- flag_count |>
     mutate(
-      message = paste("\n", .data$f_quality_flag, "\t", .data$n,
-        "\t", round(.data$ratio, 2) * 100, "%")
+      message = paste(
+        "\n", .data$f_quality_flag, "\t", .data$n,
+        "\t", round(.data$ratio, 2) * 100, "%"
+      )
     ) |>
     pull(message)
 

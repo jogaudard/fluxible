@@ -66,7 +66,8 @@ to caculate fluxes. Will be averaged with NA removed.}
 \item{temp_air_unit}{units in which air temperature was measured.
 Has to be either celsius, fahrenheit or kelvin.}
 
-\item{fit_type}{(optional) model used in flux_fitting, exponential, quadratic or linear.
+\item{fit_type}{(optional) model used in flux_fitting, exponential,
+quadratic or linear.
 Will be automatically filled if slopes_df was produced using flux_quality().}
 }
 \value{

@@ -64,7 +64,8 @@ flux_fitting_lin <- function(conc_df,
       f_start = .data$f_start + ((start_cut)),
       f_end = .data$f_end - ((end_cut)),
       f_cut = case_when(
-        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end ~ "cut",
+        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end
+        ~ "cut",
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
@@ -79,7 +80,7 @@ flux_fitting_lin <- function(conc_df,
     drop_na("f_conc") |>
     group_by(.data$f_fluxID) |>
     mutate(
-      f_time_cut = difftime(.data$f_datetime[1:length(.data$f_datetime)],
+      f_time_cut = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
         .data$f_datetime[1],
         units = "secs"
       ),

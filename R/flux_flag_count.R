@@ -23,7 +23,15 @@
 
 
 flux_flag_count <- function(slopes_df,
-                            f_flags = c("ok", "discard", "zero", "weird_flux", "start_error", "no_data", "force_ok"),
+                            f_flags = c(
+                              "ok",
+                              "discard",
+                              "zero",
+                              "weird_flux",
+                              "start_error",
+                              "no_data",
+                              "force_ok"
+                            ),
                             fluxid_col = "f_fluxID",
                             flags_col = "f_quality_flag",
                             cut_col = "f_cut",

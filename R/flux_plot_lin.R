@@ -29,7 +29,9 @@ flux_plot_lin <- function(slopes_df,
   param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
 
   slopes_df <- flux_plot_flag(((slopes_df)),
-    ((param_df)), cut_arg = ((cut_arg)))
+    ((param_df)),
+    cut_arg = ((cut_arg))
+  )
 
 
   plot_lin <- slopes_df |>

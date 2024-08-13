@@ -1,4 +1,6 @@
-slopes30qua <- flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30)
+slopes30qua <- flux_fitting(
+  co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30
+)
 
 usethis::use_data(slopes30qua, overwrite = TRUE)
 

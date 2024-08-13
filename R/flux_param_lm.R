@@ -10,7 +10,10 @@
 flux_param_lm <- function(slopes_df,
                           cut_arg = "cut") {
   param_df <- slopes_df |>
-    select("f_conc", "f_start", "f_fluxID", "f_rsquared", "f_pvalue", "f_quality_flag", "f_cut") |>
+    select(
+      "f_conc", "f_start", "f_fluxID", "f_rsquared", "f_pvalue",
+      "f_quality_flag", "f_cut"
+    ) |>
     filter(.data$f_cut != ((cut_arg))) |>
     group_by(.data$f_fluxID) |>
     mutate(

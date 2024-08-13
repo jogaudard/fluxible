@@ -97,7 +97,8 @@ flux_fitting_exp <- function(conc_df,
       f_start = .data$f_start + ((start_cut)),
       f_end = .data$f_end - ((end_cut)),
       f_cut = case_when(
-        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end ~ "cut",
+        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end
+        ~ "cut",
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
@@ -126,7 +127,7 @@ flux_fitting_exp <- function(conc_df,
 
   message("Estimating starting parameters for optimization...")
 
-  Cm_temp <- conc_df_cut |>
+  cm_temp <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
     distinct(.data$f_conc, .keep_all = TRUE) |>
     mutate(
@@ -139,7 +140,7 @@ flux_fitting_exp <- function(conc_df,
     ungroup() |>
     distinct(.data$Cmax, .data$Cmin, .keep_all = TRUE)
 
-  Cm_slope <- conc_df_cut |>
+  cm_slope <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
     nest() |>
     mutate(
@@ -155,7 +156,7 @@ flux_fitting_exp <- function(conc_df,
     select("f_fluxID", "slope_Cm") |>
     ungroup()
 
-  Cm_df <- left_join(Cm_temp, Cm_slope, by = "f_fluxID") |>
+  cm_df <- left_join(cm_temp, cm_slope, by = "f_fluxID") |>
     mutate(
       Cm_est = case_when(
         # Cm is the max mixing point,
@@ -171,7 +172,7 @@ flux_fitting_exp <- function(conc_df,
     select("f_fluxID", "Cm_est", "tm", "slope_Cm") |>
     ungroup()
 
-  Cz_df <- conc_df_cut |>
+  cz_df <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
     filter(
       .data$f_time_cut <= ((cz_window))
@@ -196,7 +197,7 @@ flux_fitting_exp <- function(conc_df,
 
 
   tz_df <- conc_df_cut |>
-    left_join(Cz_df, by = "f_fluxID") |>
+    left_join(cz_df, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     filter(
       # tz should be in the first half of the flux
@@ -217,7 +218,7 @@ flux_fitting_exp <- function(conc_df,
 
 
 
-  Cb_df <- conc_df_cut |>
+  cb_df <- conc_df_cut |>
     left_join(tz_df, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     mutate(
@@ -237,16 +238,17 @@ flux_fitting_exp <- function(conc_df,
     select("f_fluxID", "ta", "Ca") |>
     distinct()
 
-  estimates_df <- left_join(Cm_df, Cz_df, by = "f_fluxID") |>
+  estimates_df <- left_join(cm_df, cz_df, by = "f_fluxID") |>
     left_join(tz_df, by = "f_fluxID") |>
     left_join(a_df, by = "f_fluxID") |>
-    left_join(Cb_df, by = "f_fluxID") |>
+    left_join(cb_df, by = "f_fluxID") |>
     mutate(
       b_est = case_when(
         .data$f_Cb == .data$Cm_est ~ 0, # special case or flat flux
         .data$f_Cz == .data$Cm_est ~ 0, # special case or flat flux
-        TRUE ~ log(abs((.data$f_Cb - .data$Cm_est) /
-        (.data$f_Cz - .data$Cm_est)))
+        TRUE ~ log(
+          abs((.data$f_Cb - .data$Cm_est) / (.data$f_Cz - .data$Cm_est))
+        )
         * (1 / ((b_window))),
       ),
       a_est = case_when(
@@ -254,7 +256,7 @@ flux_fitting_exp <- function(conc_df,
         .data$ta == .data$tz_est ~ 0,
         TRUE ~
           (.data$Ca - .data$Cm_est - (.data$f_Cz - .data$Cm_est)
-          * exp(-.data$b_est * (.data$ta - .data$tz_est)))
+           * exp(-.data$b_est * (.data$ta - .data$tz_est)))
           / (.data$ta - .data$tz_est)
       )
     )
@@ -262,11 +264,14 @@ flux_fitting_exp <- function(conc_df,
 
 
 
-  fc_myfn <- function(fc_time, fc_conc, par, fc_Cz) {
-    sqrt((1 / length(fc_time)) * sum((par[1] + par[2] * (fc_time - exp(par[4]))
-      + (fc_Cz - par[1])
-      * exp(-par[3] * (fc_time - exp(par[4])))
-      - fc_conc)^2))
+  fc_myfn <- function(fc_time, fc_conc, par, fc_cz) {
+    sqrt(
+      (1 / length(fc_time))
+      * sum((par[1] + par[2] * (fc_time - exp(par[4]))
+             + (fc_cz - par[1])
+             * exp(-par[3] * (fc_time - exp(par[4])))
+             - fc_conc)^2)
+    )
   }
 
   message("Optimizing fitting parameters...")
@@ -290,7 +295,7 @@ flux_fitting_exp <- function(conc_df,
           log(.data$tz_est)
         ),
         fn = fc_myfn, fc_conc = data$f_conc,
-        fc_time = data$f_time_cut, fc_Cz = .data$f_Cz
+        fc_time = data$f_time_cut, fc_cz = .data$f_Cz
       )),
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
@@ -308,11 +313,11 @@ flux_fitting_exp <- function(conc_df,
     group_by(.data$f_fluxID) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_a *
-      (.data$f_time - .data$f_tz - .data$time_diff)
-        + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b
-        * (.data$f_time - .data$f_tz - .data$time_diff)),
+        (.data$f_time - .data$f_tz - .data$time_diff)
+      + (.data$f_Cz - .data$f_Cm)
+      * exp(-.data$f_b * (.data$f_time - .data$f_tz - .data$time_diff)),
       f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
-        * (.data$f_tz + .data$time_diff),
+      * (.data$f_tz + .data$time_diff),
       f_start_z = .data$f_start + .data$f_tz
     ) |>
     ungroup()
@@ -323,7 +328,8 @@ flux_fitting_exp <- function(conc_df,
 
   warning_msg <- conc_df |>
     left_join(conc_df_cut,
-    by = c("f_fluxID", "n_conc", "f_datetime")) |> # we want n_conc after cut
+      by = c("f_fluxID", "n_conc", "f_datetime")
+    ) |> # we want n_conc after cut
     select("f_fluxID", "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(

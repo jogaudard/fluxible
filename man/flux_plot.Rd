@@ -45,7 +45,7 @@ flux_plot(
   dpi = 300,
   limitsize = TRUE,
   bg = NULL,
-  create.dir = FALSE,
+  create_dir = FALSE,
   cut_arg = "cut",
   no_data_flag = "no_data"
 )
@@ -143,7 +143,7 @@ but will take time depending on the size of the dataset}
 
 \item{bg}{see ggsave()}
 
-\item{create.dir}{see ggsave()}
+\item{create_dir}{see ggsave(), create.dir}
 
 \item{cut_arg}{argument pointing rows to be cut from the measurements}
 
