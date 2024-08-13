@@ -12,7 +12,7 @@ flux_fitting_lin(
   end_col = "f_end",
   datetime_col = "f_datetime",
   conc_col = "f_conc",
-  fluxID_col = "f_fluxID"
+  fluxid_col = "f_fluxID"
 )
 }
 \arguments{
@@ -31,7 +31,7 @@ flux_fitting_lin(
 
 \item{conc_col}{column with gas concentration data}
 
-\item{fluxID_col}{column with ID of each flux}
+\item{fluxid_col}{column with ID of each flux}
 }
 \value{
 a df with the modelled gas concentration, slope, intercept,

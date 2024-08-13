@@ -19,10 +19,7 @@ flux_plot_lin <- function(slopes_df,
                           pvalue_col = "f_pvalue",
                           rsquared_col = "f_rsquared",
                           y_text_position = 500,
-                          cut_arg = "cut"
-                          ) {
-  
-
+                          cut_arg = "cut") {
   slopes_df <- slopes_df |>
     rename(
       f_pvalue = all_of(((pvalue_col))),
@@ -31,16 +28,17 @@ flux_plot_lin <- function(slopes_df,
 
   param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
 
-  slopes_df <- flux_plot_flag(((slopes_df)), ((param_df)), cut_arg = ((cut_arg)))
+  slopes_df <- flux_plot_flag(((slopes_df)),
+    ((param_df)), cut_arg = ((cut_arg)))
 
-  
+
   plot_lin <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     theme_bw() +
     geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag),
       size = 0.2,
       na.rm = TRUE
-      ) +
+    ) +
     geom_line(
       aes(y = .data$f_fit),
       linetype = "longdash",
@@ -55,6 +53,5 @@ flux_plot_lin <- function(slopes_df,
       na.rm = TRUE
     )
 
-plot_lin
-
+  plot_lin
 }

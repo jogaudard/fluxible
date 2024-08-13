@@ -35,4 +35,4 @@ record_liahovden <- record_liahovden %>%
   ) %>%
   select(!c(starting_time, date))
 
-  usethis::use_data(record_liahovden, overwrite = TRUE)
+usethis::use_data(record_liahovden, overwrite = TRUE)

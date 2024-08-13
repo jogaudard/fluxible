@@ -14,7 +14,7 @@
 #' @param cut_arg argument pointing rows to be cut from the measurements
 #' @param fit_col column containing the modelled fit of the flux
 #' @param quality_flag_col column containing the flags produced by flux_quality
-#' @param fluxID_col column containing unique IDs for each flux
+#' @param fluxid_col column containing unique IDs for each flux
 #' @param pvalue_col column containing the p-value of each flux
 #' (linear and quadratic fits)
 #' @param rsquared_col column containing the r squared to be used
@@ -24,7 +24,7 @@
 #' @param b_col column containing the b parameter (for exponential fit)
 #' @param cor_coef_col column containing the correlation coefficient
 #' produced by flux_quality (for exponential fit)
-#' @param RMSE_col column containing the RMSE produced by flux_quality
+#' @param rmse_col column containing the RMSE produced by flux_quality
 #' (for exponential fit)
 #' @param start_col column containing the datetime of the start of each flux
 #' @param color_discard color for fits with a discard quality flag
@@ -67,8 +67,10 @@
 #' @importFrom progress progress_bar
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope",
-#' output = "print_only")
+#' flux_plot(slopes0_flag,
+#'   fit_type = "exp", fit_slope_col = "f_fit_slope",
+#'   output = "print_only"
+#' )
 #' data(slopes30lin_flag)
 #' flux_plot(slopes30lin_flag, fit_type = "lin", output = "print_only")
 #' flux_plot(slopes30qua_flag, fit_type = "quadratic", output = "print_only")
@@ -82,13 +84,13 @@ flux_plot <- function(slopes_df,
                       fit_col = "f_fit",
                       fit_slope_col = "f_fit_slope",
                       quality_flag_col = "f_quality_flag",
-                      fluxID_col = "f_fluxID",
+                      fluxid_col = "f_fluxID",
                       pvalue_col = "f_pvalue",
                       rsquared_col = "f_rsquared",
                       start_col = "f_start",
                       b_col = "f_b",
                       cor_coef_col = "f_cor_coef",
-                      RMSE_col = "f_RMSE",
+                      rmse_col = "f_RMSE",
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_ok = "#009E73",
@@ -116,8 +118,7 @@ flux_plot <- function(slopes_df,
                       bg = NULL,
                       create.dir = FALSE,
                       cut_arg = "cut",
-                      no_data_flag = "no_data"
-                      ) {
+                      no_data_flag = "no_data") {
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
   fit_type <- flux_fit_type(
@@ -127,13 +128,13 @@ flux_plot <- function(slopes_df,
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
 
-  if(((output)) %in% c("pdfpages", "ggsave")){
-  f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
+  if (((output)) %in% c("pdfpages", "ggsave")) {
+    f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
-  folder <- "./f_quality_plots"
-  if (!file.exists(folder)) {
-    dir.create(folder)
-  }
+    folder <- "./f_quality_plots"
+    if (!file.exists(folder)) {
+      dir.create(folder)
+    }
   }
 
   slopes_df <- slopes_df |>
@@ -143,27 +144,31 @@ flux_plot <- function(slopes_df,
       f_cut = all_of(((cut_col))),
       f_fit = all_of(((fit_col))),
       f_quality_flag = all_of(((quality_flag_col))),
-      f_fluxID = all_of(((fluxID_col))),
+      f_fluxID = all_of(((fluxid_col))),
       f_start = all_of(((start_col)))
     )
 
   if (max(slopes_df$f_conc, na.rm = TRUE) > ((f_ylim_upper))) {
-    message("Some concentration data points will not be displayed because f_ylim_upper is too low.")
+    message("Some concentration data points will not be displayed
+    because f_ylim_upper is too low.")
   }
 
-    if (max(slopes_df$f_fit, na.rm = TRUE) > ((f_ylim_upper))) {
-    message("Part of the fit will not be displayed because f_ylim_upper is too low.")
+  if (max(slopes_df$f_fit, na.rm = TRUE) > ((f_ylim_upper))) {
+    message("Part of the fit will not be displayed
+    because f_ylim_upper is too low.")
   }
 
-    if (min(slopes_df$f_conc, na.rm = TRUE) < ((f_ylim_lower))) {
-    message("Some concentration data points will not be displayed because f_ylim_lower is too high.")
+  if (min(slopes_df$f_conc, na.rm = TRUE) < ((f_ylim_lower))) {
+    message("Some concentration data points will not be displayed
+    because f_ylim_lower is too high.")
   }
 
-    if (min(slopes_df$f_fit, na.rm = TRUE) < ((f_ylim_lower))) {
-    message("Part of the fit will not be displayed because f_ylim_lower is too high.")
+  if (min(slopes_df$f_fit, na.rm = TRUE) < ((f_ylim_lower))) {
+    message("Part of the fit will not be displayed
+    because f_ylim_lower is too high.")
   }
 
-flags <- slopes_df |>
+  flags <- slopes_df |>
     select("f_fluxID", "f_quality_flag") |>
     filter(.data$f_quality_flag == ((no_data_flag))) |>
     mutate(
@@ -193,7 +198,7 @@ flags <- slopes_df |>
       fit_slope_col = ((fit_slope_col)),
       b_col = ((b_col)),
       cor_coef_col = ((cor_coef_col)),
-      RMSE_col = ((RMSE_col)),
+      rmse_col = ((rmse_col)),
       cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
     )
@@ -220,7 +225,7 @@ flags <- slopes_df |>
     )
   }
 
-message("Plotting in progress")
+  message("Plotting in progress")
 
   f_plot <- f_plot +
     scale_color_manual(values = c(
@@ -248,47 +253,47 @@ message("Plotting in progress")
       colour = "Quality flags"
     )
 
-if(((output)) == "print_only") {
-  return(f_plot)
-}
+  if (((output)) == "print_only") {
+    return(f_plot)
+  }
 
-if(((output)) == "pdfpages") {
-  f_plotname <- paste(f_plotname, ".pdf", sep = "")
+  if (((output)) == "pdfpages") {
+    f_plotname <- paste(f_plotname, ".pdf", sep = "")
     pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
     pb <- progress_bar$new(
-      format = "  Printing plots in pdf document [:bar] :current/:total (:percent)",
+      format = 
+      "Printing plots in pdf document [:bar] :current/:total (:percent)",
       total = n_pages(f_plot)
-      )
+    )
     pb$tick(0)
-  Sys.sleep(3)
-  for (i in 1:n_pages(f_plot)) {
-    pb$tick()
-  Sys.sleep(0.1)
-    print(f_plot +
-      facet_wrap_paginate(
-        ~f_fluxID,
-        ncol = ((f_ncol)), nrow = ((f_nrow)),
-        page = i, scales = ((f_scales))
-      ))
+    Sys.sleep(3)
+    for (i in 1:n_pages(f_plot)) {
+      pb$tick()
+      Sys.sleep(0.1)
+      print(f_plot +
+        facet_wrap_paginate(
+          ~f_fluxID,
+          ncol = ((f_ncol)), nrow = ((f_nrow)),
+          page = i, scales = ((f_scales))
+        ))
+    }
+    quietly(dev.off())
+    message("Plots saved in f_quality_plots folder.")
+    if (((print_plot)) == TRUE) {
+      return(f_plot)
+    }
   }
-  quietly(dev.off())
-  message("Plots saved in f_quality_plots folder.")
-  if (((print_plot)) == TRUE) {
-    return(f_plot)
-  }
-}
 
-if(((output)) == "ggsave"){
-  message("Saving plots with ggsave.")
-  ggsave(
-    ((f_plotname)),
-    plot = f_plot,
-    device = ((device))
-  )
-  message("Plots saved in f_quality_plots folder.")
-  if (((print_plot)) == TRUE) {
-    return(f_plot)
+  if (((output)) == "ggsave") {
+    message("Saving plots with ggsave.")
+    ggsave(
+      ((f_plotname)),
+      plot = f_plot,
+      device = ((device))
+    )
+    message("Plots saved in f_quality_plots folder.")
+    if (((print_plot)) == TRUE) {
+      return(f_plot)
+    }
   }
-}
-
 }

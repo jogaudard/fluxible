@@ -8,7 +8,7 @@
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
-#' @param fluxID_col column with ID of each flux
+#' @param fluxid_col column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
 #' @return a df with the modelled gas concentration, slope, intercept,
 #' std error, r square and p value of the quadratic model
@@ -21,22 +21,21 @@
 
 
 flux_fitting_quadratic <- function(conc_df,
-                             start_cut = 0,
-                             end_cut = 0,
-                             start_col = "f_start",
-                             end_col = "f_end",
-                             datetime_col = "f_datetime",
-                             conc_col = "f_conc",
-                             fluxID_col = "f_fluxID",
-                             t_zero = 0
-                             ) {
+                                   start_cut = 0,
+                                   end_cut = 0,
+                                   start_col = "f_start",
+                                   end_col = "f_end",
+                                   datetime_col = "f_datetime",
+                                   conc_col = "f_conc",
+                                   fluxid_col = "f_fluxID",
+                                   t_zero = 0) {
   conc_df <- conc_df |>
     rename(
       f_start = all_of(((start_col))),
       f_end = all_of(((end_col))),
       f_datetime = all_of(((datetime_col))),
       f_conc = all_of(((conc_col))),
-      f_fluxID = all_of(((fluxID_col)))
+      f_fluxID = all_of(((fluxid_col)))
     )
 
   if (!is.double(((start_cut)))) stop("start_cut has to be a double")
@@ -52,7 +51,8 @@ flux_fitting_quadratic <- function(conc_df,
 
   if ((start_cut + end_cut) >= length_flux_max) {
     stop(
-      "You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)"
+      "You cannot cut more than the length of the measurements!
+      ((start_cut + end_cut) >= length_flux_max)"
     )
   }
 

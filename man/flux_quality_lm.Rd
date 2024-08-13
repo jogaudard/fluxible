@@ -6,8 +6,8 @@
 \usage{
 flux_quality_lm(
   slopes_df,
-  weird_fluxesID = c(),
-  force_okID = c(),
+  weird_fluxes_id = c(),
+  force_ok_id = c(),
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
   pvalue_threshold = 0.3,
@@ -17,10 +17,10 @@ flux_quality_lm(
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
 
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+\item{weird_fluxes_id}{vector of fluxIDs that should be discarded
 by the user's decision}
 
-\item{force_okID}{vector of fluxIDs for which the user wants to keep
+\item{force_ok_id}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
 
 \item{pvalue_col}{column containing the p-value of each flux}

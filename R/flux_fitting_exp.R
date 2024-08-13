@@ -7,12 +7,12 @@
 #' @description Fits an exponential expression to the concentration evolution
 #' @param conc_df dataframe of gas concentration over time
 #' @param t_window enlarge focus window before and after tmin and tmax
-#' @param Cz_window window used to calculate Cz, at the beginning of cut window
+#' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' @param b_window window to estimate b. It is an interval after tz
 #' where it is assumed that C fits the data perfectly
 #' @param a_window window at the end of the flux to estimate a
 #' @param roll_width width of the rolling mean for CO2 when looking for tz,
-#' ideally same as Cz_window
+#' ideally same as cz_window
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
@@ -20,7 +20,7 @@
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
-#' @param fluxID_col column with ID of each flux
+#' @param fluxid_col column with ID of each flux
 #' @return a dataframe with the slope at t zero,
 #' modelled concentration over time and exponential expression parameters
 #' @importFrom rlang .data
@@ -37,7 +37,7 @@
 
 flux_fitting_exp <- function(conc_df,
                              t_window = 20,
-                             Cz_window = 15,
+                             cz_window = 15,
                              b_window = 10,
                              a_window = 10,
                              roll_width = 15,
@@ -47,21 +47,20 @@ flux_fitting_exp <- function(conc_df,
                              end_col = "f_end",
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
-                             fluxID_col = "f_fluxID") {
-
+                             fluxid_col = "f_fluxID") {
   conc_df <- conc_df |>
     rename(
       f_start = all_of((start_col)),
       f_end = all_of((end_col)),
       f_datetime = all_of((datetime_col)),
       f_conc = all_of((conc_col)),
-      f_fluxID = all_of((fluxID_col))
+      f_fluxID = all_of((fluxid_col))
     )
 
 
 
   if (!is.double(t_window)) stop("t_window has to be a double")
-  if (!is.double(Cz_window)) stop("Cz_window has to be a double")
+  if (!is.double(cz_window)) stop("cz_window has to be a double")
   if (!is.double(b_window)) stop("b_window has to be a double")
   if (!is.double(a_window)) stop("a_window has to be a double")
   if (!is.double(roll_width)) stop("roll_width has to be a double")
@@ -81,11 +80,11 @@ flux_fitting_exp <- function(conc_df,
 
   if ((start_cut + end_cut) >= length_flux_max) {
     stop(
-      "You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)"
+      "You cannot cut more than the length of the measurements!"
     )
   }
 
-message("Cutting measurements...")
+  message("Cutting measurements...")
 
   conc_df <- conc_df |>
     group_by(.data$f_fluxID) |>
@@ -125,7 +124,7 @@ message("Cutting measurements...")
     ) |>
     ungroup()
 
-message("Estimating starting parameters for optimization...")
+  message("Estimating starting parameters for optimization...")
 
   Cm_temp <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
@@ -159,7 +158,8 @@ message("Estimating starting parameters for optimization...")
   Cm_df <- left_join(Cm_temp, Cm_slope, by = "f_fluxID") |>
     mutate(
       Cm_est = case_when(
-        # Cm is the max mixing point, which is the lim C(t) when t tends to infinite.
+        # Cm is the max mixing point,
+        # which is the lim C(t) when t tends to infinite.
         .data$slope_Cm < 0 ~ .data$Cmin,
         .data$slope_Cm > 0 ~ .data$Cmax
       ),
@@ -174,7 +174,7 @@ message("Estimating starting parameters for optimization...")
   Cz_df <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
     filter(
-      .data$f_time_cut <= ((Cz_window))
+      .data$f_time_cut <= ((cz_window))
     ) |>
     nest() |>
     mutate(
@@ -245,7 +245,8 @@ message("Estimating starting parameters for optimization...")
       b_est = case_when(
         .data$f_Cb == .data$Cm_est ~ 0, # special case or flat flux
         .data$f_Cz == .data$Cm_est ~ 0, # special case or flat flux
-        TRUE ~ log(abs((.data$f_Cb - .data$Cm_est) / (.data$f_Cz - .data$Cm_est)))
+        TRUE ~ log(abs((.data$f_Cb - .data$Cm_est) /
+        (.data$f_Cz - .data$Cm_est)))
         * (1 / ((b_window))),
       ),
       a_est = case_when(
@@ -268,7 +269,7 @@ message("Estimating starting parameters for optimization...")
       - fc_conc)^2))
   }
 
-message("Optimizing fitting parameters...")
+  message("Optimizing fitting parameters...")
 
   fitting_par <- conc_df_cut |>
     left_join(estimates_df, by = "f_fluxID") |>
@@ -300,13 +301,14 @@ message("Optimizing fitting parameters...")
     ) |>
     select(!"results")
 
-message("Calculating fits and slopes...")
+  message("Calculating fits and slopes...")
 
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     mutate(
-      f_fit = .data$f_Cm + .data$f_a * (.data$f_time - .data$f_tz - .data$time_diff)
+      f_fit = .data$f_Cm + .data$f_a *
+      (.data$f_time - .data$f_tz - .data$time_diff)
         + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b
         * (.data$f_time - .data$f_tz - .data$time_diff)),
       f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
@@ -316,22 +318,23 @@ message("Calculating fits and slopes...")
     ungroup()
 
 
-message("Done.")
+  message("Done.")
 
 
   warning_msg <- conc_df |>
-    left_join(conc_df_cut, by = c("f_fluxID", "n_conc", "f_datetime")) |> # we want n_conc after cutting
+    left_join(conc_df_cut,
+    by = c("f_fluxID", "n_conc", "f_datetime")) |> # we want n_conc after cut
     select("f_fluxID", "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
         "\n", "fluxID", .data$f_fluxID, ": slope was estimated on",
         .data$n_conc_cut, "points out of", .data$length_flux,
-        "seconds because data are missing"
+        "seconds"
       ),
       no_data = paste(
         "\n", "fluxID", .data$f_fluxID,
-        ": slope could not be estimated because there are no data in the conc column"
+        "dropped (no data in the conc column)"
       ),
       warnings = case_when(
         .data$n_conc == 0 ~ .data$no_data,

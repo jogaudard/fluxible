@@ -80,9 +80,9 @@ The function flux_quality is used to provide diagnostics about the quality of th
 
 ```{r quality_exp}
 slopes_exp_liahovden <- flux_quality(
-                                  slopes_exp_liahovden,
-                                  slope_col = "f_slope"
-                                  )
+  slopes_exp_liahovden,
+  slope_col = "f_slope"
+)
 str(slopes_exp_liahovden)
 ```
 
@@ -92,15 +92,15 @@ The function flux_plot provides plots for a visual assessment of the measurement
 ```{r plot_exp}
 slopes_exp_liahovden |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
-    flux_plot(
-      f_ylim_lower = 300,
-      f_ylim_upper = 600,
-      f_nrow = 2,
-      f_ncol = 2,
-      y_text_position = 400,
-      output = "print_only"
-      )
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  flux_plot(
+    f_ylim_lower = 300,
+    f_ylim_upper = 600,
+    f_nrow = 2,
+    f_ncol = 2,
+    y_text_position = 400,
+    output = "print_only"
+  )
 ```
 
 Based on the quality flags and the plots, the user can decide to run flux_fitting again with different arguments.
@@ -113,29 +113,28 @@ For the sake of reproducibility, this argument should be the last option and be 
 ```{r plot_exp_cut}
 slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
-      flux_quality(
-            slope_col = "f_slope",
-            weird_fluxesID = c(
-              101, # plot starts with a high peak: accumulation in the canopy?
-              106 # peak at the beginning of the flux that is messing up the fit
-                    )
-                )
+  flux_quality(
+    slope_col = "f_slope",
+    weird_fluxesID = c(
+      101, # plot starts with a high peak: accumulation in the canopy?
+      106 # peak at the beginning of the flux that is messing up the fit
+    )
+  )
 
 slopes_exp_liahovden_60 |>
-# we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
-    flux_plot(
-      f_ylim_lower = 300,
-      f_ylim_upper = 600,
-      f_nrow = 2,
-      f_ncol = 2,
-      y_text_position = 400,
-      output = "print_only"
-      )
+  # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  flux_plot(
+    f_ylim_lower = 300,
+    f_ylim_upper = 600,
+    f_nrow = 2,
+    f_ncol = 2,
+    y_text_position = 400,
+    output = "print_only"
+  )
 ```
 
 ```{r plot_exp_cut_all, include = FALSE}
-
 # that part was to creat the plots of all the fluxes to find the intersting ones for the example, no need to re run it everytime.
 
 # slopes_exp_liahovden_60 <- conc_liahovden |>
@@ -170,7 +169,7 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_60 |>
     cut_col = "f_cut",
     keep_arg = "keep"
   ) # there is no need to specify the other arguments because
-    # the defaults are for our experiment, other users might want to check that
+# the defaults are for our experiment, other users might want to check that
 str(fluxes_exp_liahovden_60)
 ```
 
@@ -205,9 +204,9 @@ Here is a plot of the results.
 
 ```{r 24h_fluxes}
 fluxes_exp_liahovden_60 |>
-    dplyr::filter(type == "NEE") |>
-        ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
-        ggplot2::geom_point()
+  dplyr::filter(type == "NEE") |>
+  ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
+  ggplot2::geom_point()
 ```
 
 

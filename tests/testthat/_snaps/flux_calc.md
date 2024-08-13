@@ -101,7 +101,7 @@
       6        6        0.426           24.5       0.075            1         281.
       # i 3 more variables: datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
-# calculating fluxes on dataset with cuts filters out the cuts first
+# calculating fluxes on dataset with cuts
 
     Code
       flux_calc(slopes30_flag, slope_col = "f_slope_corr", cut_col = "f_cut",
@@ -122,7 +122,7 @@
       6        6        0.425           24.5       0.075            1         7.74
       # i 3 more variables: datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
-# volume can be a variable instead of a constant, giving different fluxes
+# volume can be a variable instead of a constant
 
     Code
       flux_calc(slopes0_vol, slope_col = "f_slope_tz", chamber_volume = "volume")
@@ -141,7 +141,7 @@
       6        6        0.426             35       0.075            1         7.75
       # i 3 more variables: datetime <dttm>, volume_setup <dbl>, flux <dbl>
 
-# volume can be a variable instead of a constant, giving different fluxes (testing the tubes)
+# volume can be a variable instead of a constant (volume)
 
     Code
       select(flux_calc(slopes0_vol_tube, slope_col = "f_slope_tz", chamber_volume = "volume",

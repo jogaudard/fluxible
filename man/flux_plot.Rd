@@ -13,13 +13,13 @@ flux_plot(
   fit_col = "f_fit",
   fit_slope_col = "f_fit_slope",
   quality_flag_col = "f_quality_flag",
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
   start_col = "f_start",
   b_col = "f_b",
   cor_coef_col = "f_cor_coef",
-  RMSE_col = "f_RMSE",
+  rmse_col = "f_RMSE",
   color_discard = "#D55E00",
   color_cut = "#D55E00",
   color_ok = "#009E73",
@@ -70,7 +70,7 @@ each concentration measurement}
 
 \item{quality_flag_col}{column containing the flags produced by flux_quality}
 
-\item{fluxID_col}{column containing unique IDs for each flux}
+\item{fluxid_col}{column containing unique IDs for each flux}
 
 \item{pvalue_col}{column containing the p-value of each flux
 (linear and quadratic fits)}
@@ -85,7 +85,7 @@ for the quality assessment (linear and quadratic fits)}
 \item{cor_coef_col}{column containing the correlation coefficient
 produced by flux_quality (for exponential fit)}
 
-\item{RMSE_col}{column containing the RMSE produced by flux_quality
+\item{rmse_col}{column containing the RMSE produced by flux_quality
 (for exponential fit)}
 
 \item{color_discard}{color for fits with a discard quality flag}
@@ -158,8 +158,10 @@ the measurements
 }
 \examples{
 data(slopes0_flag)
-flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope",
-output = "print_only")
+flux_plot(slopes0_flag,
+  fit_type = "exp", fit_slope_col = "f_fit_slope",
+  output = "print_only"
+)
 data(slopes30lin_flag)
 flux_plot(slopes30lin_flag, fit_type = "lin", output = "print_only")
 flux_plot(slopes30qua_flag, fit_type = "quadratic", output = "print_only")

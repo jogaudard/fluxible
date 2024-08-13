@@ -6,11 +6,11 @@
 #' @param slopes_df dataset containing slopes, fluxID,
 #' and parameters of the exponential expression
 #' @param b_col column containing the b parameter of the exponential expression
-#' @param weird_fluxesID vector of fluxIDs that should be discarded
+#' @param weird_fluxes_id vector of fluxIDs that should be discarded
 #' by the user's decision
-#' @param force_okID vector of fluxIDs for which the user wants to keep
+#' @param force_ok_id vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
-#' @param RMSE_threshold threshold for the RMSE of each flux above
+#' @param rmse_threshold threshold for the RMSE of each flux above
 #' which the fit is considered unsatisfactory
 #' @param cor_threshold threshold for the correlation coefficient
 #' of gas concentration with time below which the correlation
@@ -25,13 +25,12 @@
 
 
 flux_quality_exp <- function(slopes_df,
-                             weird_fluxesID = c(),
-                             force_okID = c(),
+                             weird_fluxes_id = c(),
+                             force_ok_id = c(),
                              b_col = "f_b",
-                             RMSE_threshold = 25,
+                             rmse_threshold = 25,
                              cor_threshold = 0.5,
                              b_threshold = 1) {
-
   slopes_df <- slopes_df |>
     rename(
       f_b = all_of(((b_col)))
@@ -50,14 +49,14 @@ flux_quality_exp <- function(slopes_df,
     ) |>
     unnest(c("f_fluxID", "f_cut"))
 
-  
+
 
   quality_flag <- slopes_df |>
     left_join(quality_par, by = c("f_fluxID", "f_cut")) |>
     mutate(
       f_fit_quality = case_when(
         .data$f_b >= ((b_threshold)) ~ "bad_b",
-        .data$f_RMSE > ((RMSE_threshold)) ~ "bad_RMSE"
+        .data$f_RMSE > ((rmse_threshold)) ~ "bad_RMSE"
       ),
       f_correlation = case_when(
         abs(.data$f_cor_coef) < ((cor_threshold)) ~ "no",
@@ -66,8 +65,8 @@ flux_quality_exp <- function(slopes_df,
       f_quality_flag = case_when(
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
-        .data$f_fluxID %in% ((force_okID)) ~ "force_ok",
+        .data$f_fluxID %in% ((weird_fluxes_id)) ~ "weird_flux",
+        .data$f_fluxID %in% ((force_ok_id)) ~ "force_ok",
         .data$f_start_error == "error" ~ "start_error",
         .data$f_fit_quality == "bad_b" &
           .data$f_correlation == "yes" ~ "discard",

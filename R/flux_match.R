@@ -55,7 +55,7 @@ flux_match <- function(raw_conc,
       f_start = all_of((start_col))
     )
 
- 
+
   if (!is.POSIXct(raw_conc$f_datetime)) {
     stop("datetime in raw_conc dataframe is not ymd_hms!")
   }

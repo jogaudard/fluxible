@@ -41,19 +41,21 @@ test_that("fitting works with 60 second end cut", {
 test_that("warnings when NAs are dropped in conc", {
   expect_warning(
     flux_fitting_lin(co2_conc_missing),
-    " fluxID 1 : slope was estimated on 70 points out of 210 seconds because data are missing
- fluxID 2 : slope was estimated on 121 points out of 210 seconds because data are missing
- fluxID 3 : slope was estimated on 102 points out of 210 seconds because data are missing
- fluxID 5 : slope was estimated on 161 points out of 210 seconds because data are missing"
+    " fluxID 1 : slope was estimated on 70 points out of 210 seconds
+ fluxID 2 : slope was estimated on 121 points out of 210 seconds
+ fluxID 3 : slope was estimated on 102 points out of 210 seconds
+ fluxID 5 : slope was estimated on 161 points out of 210 seconds",
+  fixed = TRUE # need that because there parenthesis in the error message
   )
 })
 
 # warning when there is no data in some fluxID
 
-test_that("warnings when thre is no data in conc", {
+test_that("warnings when there is no data in conc", {
   expect_warning(
     flux_fitting_lin(co2_conc_missing),
-    " fluxID 6 : slope could not be estimated because there are no data in the conc column"
+    " fluxID 6 dropped (no data in the conc column)",
+  fixed = TRUE # need that because there parenthesis in the error message
   )
 })
 
@@ -63,10 +65,11 @@ test_that("warnings with cutting", {
       co2_conc_missing,
       start_cut = 10
     ),
-    " fluxID 1 : slope was estimated on 70 points out of 200 seconds because data are missing
- fluxID 2 : slope was estimated on 121 points out of 200 seconds because data are missing
- fluxID 3 : slope was estimated on 102 points out of 200 seconds because data are missing
- fluxID 5 : slope was estimated on 151 points out of 200 seconds because data are missing"
+    " fluxID 1 : slope was estimated on 70 points out of 200 seconds
+ fluxID 2 : slope was estimated on 121 points out of 200 seconds
+ fluxID 3 : slope was estimated on 102 points out of 200 seconds
+ fluxID 5 : slope was estimated on 151 points out of 200 seconds",
+  fixed = TRUE # need that because there parenthesis in the error message
   )
 })
 
@@ -89,8 +92,7 @@ test_that("cutting too much", {
       start_cut = 120,
       end_cut = 100
     ),
-    "You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)",
-    fixed = TRUE # need that because there parenthesis in the error message
+    "You cannot cut more than the length of the measurements!",
   )
 })
 

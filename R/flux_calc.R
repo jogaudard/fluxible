@@ -17,13 +17,13 @@
 #' @param atm_pressure atmoshperic pressure, assumed 1 atm,
 #' can be a constant (numerical) or a variable (column name)
 #' @param plot_area area of the plot in m^2, default for Three-D
-#' @param R_const gas constant (0.082057 L*atm*K^(-1)*mol^(-1))
+#' @param r_const gas constant (0.082057 L*atm*K^(-1)*mol^(-1))
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux,
 #' as distinct() is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the ouput. Note that NA are removed in mean calculation.
-#' @param fluxID_col column containing the fluxID
+#' @param fluxid_col column containing the fluxID
 #' @param temp_air_col column containing the air temperature used
 #' to caculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
@@ -53,31 +53,30 @@ flux_calc <- function(slopes_df,
                       tube_volume = 0.075,
                       atm_pressure = 1,
                       plot_area = 0.0625,
-                      R_const = 0.082057,
+                      r_const = 0.082057,
                       cols_keep = c(),
                       cols_ave = c(),
-                      fluxID_col = "f_fluxID",
+                      fluxid_col = "f_fluxID",
                       temp_air_col = "temp_air",
                       temp_air_unit = "celsius",
                       fit_type = c()) {
-
-fit_type <- flux_fit_type(
+  fit_type <- flux_fit_type(
     slopes_df,
     fit_type = ((fit_type))
   )
 
-temp_air_unit <- match.arg(
+  temp_air_unit <- match.arg(
     ((temp_air_unit)),
     c("celsius", "fahrenheit", "kelvin")
   )
 
   if (!is.double(((atm_pressure)))) stop("atm_pressure has to be a double")
   if (!is.double(((plot_area)))) stop("plot_area has to be a double")
-  if (!is.double(((R_const)))) stop("R_const has to be a double")
+  if (!is.double(((r_const)))) stop("r_const has to be a double")
 
   colnames <- colnames(slopes_df)
   if (!(((slope_col)) %in% ((colnames)))) stop("could not find slope_col in slopes_df")
-  if (!(((fluxID_col)) %in% ((colnames)))) stop("could not find fluxID_col in slopes_df")
+  if (!(((fluxid_col)) %in% ((colnames)))) stop("could not find fluxid_col in slopes_df")
   if (!(((temp_air_col)) %in% ((colnames)))) {
     stop("could not find temp_air_col in slopes_df")
   }
@@ -90,53 +89,53 @@ temp_air_unit <- match.arg(
     stop("some names in cols_ave cannot be found in slopes_df")
   }
 
-if (is.double((chamber_volume))) {
-  slopes_df <- slopes_df |>
-    mutate(
-      chamber_volume = ((chamber_volume))
-    )
-}
+  if (is.double((chamber_volume))) {
+    slopes_df <- slopes_df |>
+      mutate(
+        chamber_volume = ((chamber_volume))
+      )
+  }
 
-if (is.character(((chamber_volume)))) {
+  if (is.character(((chamber_volume)))) {
+    slopes_df <- slopes_df |>
+      rename(
+        chamber_volume = all_of(((chamber_volume)))
+      )
+  }
+
+  if (is.double((tube_volume))) {
+    slopes_df <- slopes_df |>
+      mutate(
+        tube_volume = ((tube_volume))
+      )
+  }
+
+  if (is.character(((tube_volume)))) {
+    slopes_df <- slopes_df |>
+      rename(
+        tube_volume = all_of(((tube_volume)))
+      )
+  }
+
+  if (is.double((atm_pressure))) {
+    slopes_df <- slopes_df |>
+      mutate(
+        atm_pressure = ((atm_pressure))
+      )
+  }
+
+  if (is.character(((atm_pressure)))) {
+    slopes_df <- slopes_df |>
+      rename(
+        atm_pressure = all_of(((atm_pressure)))
+      )
+  }
+
+
+
   slopes_df <- slopes_df |>
     rename(
-      chamber_volume = all_of(((chamber_volume)))
-    )
-}
-
-if (is.double((tube_volume))) {
-  slopes_df <- slopes_df |>
-    mutate(
-      tube_volume = ((tube_volume))
-    )
-}
-
-if (is.character(((tube_volume)))) {
-  slopes_df <- slopes_df |>
-    rename(
-      tube_volume = all_of(((tube_volume)))
-    )
-}
-
-if (is.double((atm_pressure))) {
-  slopes_df <- slopes_df |>
-    mutate(
-      atm_pressure = ((atm_pressure))
-    )
-}
-
-if (is.character(((atm_pressure)))) {
-  slopes_df <- slopes_df |>
-    rename(
-      atm_pressure = all_of(((atm_pressure)))
-    )
-}
-
-
-
-  slopes_df <- slopes_df |>
-    rename(
-      f_fluxID = all_of(((fluxID_col))),
+      f_fluxID = all_of(((fluxid_col))),
       f_datetime = all_of(((datetime_col))),
       air_temp = all_of(((temp_air_col))),
       f_slope_calc = all_of(((slope_col)))
@@ -144,13 +143,13 @@ if (is.character(((atm_pressure)))) {
 
 
 
-  if(length(((cut_col))) > 0) {
+  if (length(((cut_col))) > 0) {
     message("Cutting data according to 'keep_arg'...")
     slopes_df <- flux_cut(
-                        slopes_df,
-                        cut_col = ((cut_col)),
-                        keep_arg = ((keep_arg))
-      )
+      slopes_df,
+      cut_col = ((cut_col)),
+      keep_arg = ((keep_arg))
+    )
   }
 
   message("Averaging air temperature for each flux...")
@@ -185,7 +184,7 @@ if (is.character(((atm_pressure)))) {
 
   # a df with the columns that have to be averaged
   if (length((cols_ave)) > 0) {
-        message("Creating a dataframe with the columns from 'cols_ave' argument...")
+    message("Creating a dataframe with the columns from 'cols_ave' argument...")
     slope_ave <- slopes_df |>
       select(all_of(((cols_ave))), "f_fluxID") |>
       group_by(.data$f_fluxID) |>
@@ -201,10 +200,10 @@ if (is.character(((atm_pressure)))) {
     mutate(
       volume_setup = .data$chamber_volume + .data$tube_volume,
       flux = (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
-      / (((R_const)) * .data$temp_air_ave
-         * ((plot_area))) # flux in micromol/s/m^2
-      * 3600 # secs to hours
-      / 1000, # micromol to mmol flux is now in mmol/m^2/h
+      / (((r_const)) * .data$temp_air_ave
+          * ((plot_area))) # flux in micromol/s/m^2
+        * 3600 # secs to hours
+        / 1000, # micromol to mmol flux is now in mmol/m^2/h
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,
         ((temp_air_unit)) == "fahrenheit"
@@ -213,5 +212,5 @@ if (is.character(((atm_pressure)))) {
       ),
       model = ((fit_type))
     )
-    fluxes
+  fluxes
 }

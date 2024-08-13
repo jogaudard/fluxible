@@ -10,7 +10,7 @@ flux_plot_exp(
   fit_slope_col = "f_fit_slope",
   b_col = "f_b",
   cor_coef_col = "f_cor_coef",
-  RMSE_col = "f_RMSE",
+  rmse_col = "f_RMSE",
   y_text_position = 500
 )
 }
@@ -26,7 +26,7 @@ flux_plot_exp(
 \item{cor_coef_col}{column containing the correlation coefficient
 produced by flux_quality}
 
-\item{RMSE_col}{column containing the RMSE produced by flux_quality}
+\item{rmse_col}{column containing the RMSE produced by flux_quality}
 
 \item{y_text_position}{position of the text box}
 }

@@ -8,7 +8,7 @@
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
-#' @param fluxID_col column with ID of each flux
+#' @param fluxid_col column with ID of each flux
 #' @return a df with the modelled gas concentration, slope, intercept,
 #' std error, r square and p value of the linear model
 #' @importFrom rlang .data
@@ -26,14 +26,14 @@ flux_fitting_lin <- function(conc_df,
                              end_col = "f_end",
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
-                             fluxID_col = "f_fluxID") {
+                             fluxid_col = "f_fluxID") {
   conc_df <- conc_df |>
     rename(
       f_start = all_of(((start_col))),
       f_end = all_of(((end_col))),
       f_datetime = all_of(((datetime_col))),
       f_conc = all_of(((conc_col))),
-      f_fluxID = all_of(((fluxID_col)))
+      f_fluxID = all_of(((fluxid_col)))
     )
 
   if (!is.double(((start_cut)))) stop("start_cut has to be a double")
@@ -49,7 +49,7 @@ flux_fitting_lin <- function(conc_df,
 
   if ((start_cut + end_cut) >= length_flux_max) {
     stop(
-      "You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)"
+      "You cannot cut more than the length of the measurements!"
     )
   }
 
@@ -132,11 +132,11 @@ flux_fitting_lin <- function(conc_df,
       low_data = paste(
         "\n", "fluxID", .data$f_fluxID, ": slope was estimated on",
         .data$n_conc_cut, "points out of", .data$length_flux,
-        "seconds because data are missing"
+        "seconds"
       ),
       no_data = paste(
         "\n", "fluxID", .data$f_fluxID,
-        ": slope could not be estimated because there are no data in the conc column"
+        "dropped (no data in the conc column)"
       ),
       warnings = case_when(
         .data$n_conc == 0 ~ .data$no_data,

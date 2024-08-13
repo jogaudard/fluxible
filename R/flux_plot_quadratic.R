@@ -16,29 +16,24 @@
 
 
 flux_plot_quadratic <- function(slopes_df,
-                          pvalue_col = "f_pvalue",
-                          rsquared_col = "f_rsquared",
-                          y_text_position = 500,
-                          cut_arg = "cut"
-                          ) {
-  
+                                pvalue_col = "f_pvalue",
+                                rsquared_col = "f_rsquared",
+                                y_text_position = 500,
+                                cut_arg = "cut") {
+  plot_quadratic <- slopes_df |>
+    flux_plot_lin(
+      pvalue_col = ((pvalue_col)),
+      rsquared_col = ((rsquared_col)),
+      y_text_position = ((y_text_position)),
+      cut_arg = ((cut_arg))
+    )
 
-
- plot_quadratic <- slopes_df |>
-        flux_plot_lin(
-          pvalue_col = ((pvalue_col)),
-          rsquared_col = ((rsquared_col)),
-          y_text_position = ((y_text_position)),
-          cut_arg = ((cut_arg))
-        )
-
- plot_quadratic <- plot_quadratic +
-  geom_line(
+  plot_quadratic <- plot_quadratic +
+    geom_line(
       aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
       linetype = "dashed",
       na.rm = TRUE
     )
 
-plot_quadratic
-
+  plot_quadratic
 }
