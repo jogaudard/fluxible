@@ -1,8 +1,8 @@
 ---
-title: "Vignette"
+title: "Practical example: from raw gas concentration data to clean ecosystem gas fluxes."
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{Practical example: from raw gas concentration data to clean ecosystem gas fluxes.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -56,7 +56,7 @@ str(slopes_exp_liahovden)
 
 The function flux_plot provides plots for a visual assessment of the measurements, explicitly displaying the quality flags from flux_quality and the cuts from flux_fitting.
 
-```{r plot_exp}
+```{r plot_exp, fig.width = 8, fig.height = 9}
 slopes_exp_liahovden |>
   # we just show a sample of the plots to avoid slowing down the example
   dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
@@ -78,7 +78,7 @@ Sometimes some measurements will pass the automated quality control but are obvi
 That is what the weird_fluxesID argument is for.
 For the sake of reproducibility, this argument should be the last option and be accompagnied with a justification.
 
-```{r plot_exp_cut}
+```{r plot_exp_cut, fig.width = 8, fig.height = 9}
 slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
       flux_quality(
@@ -147,7 +147,7 @@ The conversion from micromol/m^2^/s to mmol/m^2^/h is included in the function.
 Fluxes were calculated in five steps from raw gas concentration data and the process is entirely reproducible.
 Here is a plot of the results.
 
-```{r 24h_fluxes}
+```{r 24h_fluxes, fig.width = 8, fig.height = 9}
 # library(ggplot2)
 fluxes_exp_liahovden_60 |>
     dplyr::filter(type == "NEE") |>
