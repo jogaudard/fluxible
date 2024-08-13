@@ -1,5 +1,5 @@
 #' to check the type of fit
-#' @description extracts the type of fit that was appplied in flux_fitting
+#' @description extracts the type of fit that was applied in flux_fitting
 #' or checks that the fit_type provided by the user is compatible with Fluxible
 #' @param df any dataframe
 #' @param fit_type type of fit that was applied in flux_fitting. Needs to be

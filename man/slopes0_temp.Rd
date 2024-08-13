@@ -11,7 +11,7 @@ A tibble with 1251 rows and 30 variables
 \item{temp_air}{Air temperature inside the flux chamber in Celsius.}
 \item{temp_soil}{Ground temperature inside the flux chamber in Celsius.}
 \item{conc}{CO2 concentration in ppm.}
-\item{PAR}{Photosyntethically active radiation inside the chamber
+\item{PAR}{Photosynthetically active radiation inside the chamber
 in micromol/s/sqm.}
 \item{turfID}{Unique ID of the turf in which the measurement took place.}
 \item{type}{Type of measurement: ecosystems respiration (ER)
@@ -39,7 +39,7 @@ b_est as starting point.}
 \item{tz}{tz parameter of the C(t) function, calculated by optim() with
 tz_est as starting point.}
 \item{slope_tz}{Slope of C(t) at tz}
-\item{fit}{C(t), modelled CO2 concentration as a function of time.}
+\item{fit}{C(t), modeled CO2 concentration as a function of time.}
 \item{fit_slope}{Output of linear model of CO2 concentration passing by C(tz)
 and a slope of slope_tz.}
 \item{start_z}{Datetime format of tz}

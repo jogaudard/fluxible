@@ -12,7 +12,7 @@ A tibble with 6 rows and 11 variables
 \item{temp_air_ave}{Air temperature inside the flux chamber in Celsius
 averaged over the flux measurement.}
 \item{flux}{CO2 flux in mmol/sqm/hour.}
-\item{PAR}{Photosyntethically active radiation inside the chamber in
+\item{PAR}{Photosynthetically active radiation inside the chamber in
 micromol/s/sqm averaged over the flux measurement.}
 \item{temp_soil}{Ground temperature inside the flux chamber in Celsius
 averaged over the flux measurement.}

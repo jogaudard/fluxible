@@ -31,7 +31,7 @@ The package runs the calculations automatically, without prompting the user to t
 This makes it easy to use with large flux datasets and to integrate into a reproducible workflow.
 Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.
 
-For a quick overview of how the package works, you can look at [the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) that was presented at the European Geoscience Union Annual Meeting 2024.
+For a quick overview of how the package works, you can look at [the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) that was presented at the European Geosciences Union Annual Meeting 2024.
 
 ## Installation
 
@@ -45,7 +45,7 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 ## Example
 
 
-For this exemple we will use the data that were recorded during the Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site called Liahovden (CITE when data paper out).
+For this example we will use the data that were recorded during the Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site called Liahovden (CITE when data paper out).
 The CO~2~ concentration data as well as air and soil temperature and photosynthetically active radiations (PAR) were recorded in a dataframe named co2_liahovden.
 The metadata for each measurements are in a dataframe called record_liahovden.
 This dataframe contains the starting time of each measurements, the type of measurement and the unique ID for each turf.
@@ -106,16 +106,16 @@ slopes_exp_liahovden |>
 Based on the quality flags and the plots, the user can decide to run flux_fitting again with different arguments.
 Here we will do it while cutting the last 60 seconds of the fluxes (cutting the last third).
 We also detected two fluxes (101 and 106) that do not look correct.
-Sometimes some measurements will pass the automated quality control but are obvioulsy wrong for an experience user.
+Sometimes some measurements will pass the automated quality control but are obviously wrong for an experience user.
 That is what the weird_fluxesID argument is for.
-For the sake of reproducibility, this argument should be the last option and be accompagnied with a justification.
+For the sake of reproducibility, this argument should be the last option and be accompanied with a justification.
 
 ```{r plot_exp_cut}
 slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
   flux_quality(
     slope_col = "f_slope",
-    weird_fluxesID = c(
+    weird_fluxes_id = c(
       101, # plot starts with a high peak: accumulation in the canopy?
       106 # peak at the beginning of the flux that is messing up the fit
     )

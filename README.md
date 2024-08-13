@@ -29,7 +29,8 @@ compatibility across studies, and is more time efficient.
 
 For a quick overview of how the package works, you can look at [the
 poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
-that was presented at the European Geoscience Union Annual Meeting 2024.
+that was presented at the European Geosciences Union Annual Meeting
+2024.
 
 ## Installation
 
@@ -43,7 +44,7 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 
 ## Example
 
-For this exemple we will use the data that were recorded during the
+For this example we will use the data that were recorded during the
 Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site
 called Liahovden (CITE when data paper out). The CO<sub>2</sub>
 concentration data as well as air and soil temperature and
@@ -107,8 +108,8 @@ slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
 #> Calculating fits and slopes...
 #> Done.
 #> Warning in flux_fitting_exp(conc_df, start_cut = ((start_cut)), end_cut = ((end_cut)), : 
-#>  fluxID 77 : slope was estimated on 194 points out of 210 seconds because data are missing
-#>  fluxID 85 : slope was estimated on 175 points out of 210 seconds because data are missing
+#>  fluxID 77 : slope was estimated on 194 points out of 210 seconds
+#>  fluxID 85 : slope was estimated on 175 points out of 210 seconds
 str(slopes_exp_liahovden)
 #> tibble [28,929 × 30] (S3: tbl_df/tbl/data.frame)
 #>  $ f_datetime  : POSIXct[1:28929], format: "2022-07-27 05:37:40" "2022-07-27 05:37:41" ...
@@ -151,9 +152,9 @@ replace them by zero.
 
 ``` r
 slopes_exp_liahovden <- flux_quality(
-                                  slopes_exp_liahovden,
-                                  slope_col = "f_slope"
-                                  )
+  slopes_exp_liahovden,
+  slope_col = "f_slope"
+)
 #> 
 #>  Total number of measurements: 138
 #> 
@@ -215,15 +216,15 @@ and the cuts from flux_fitting.
 ``` r
 slopes_exp_liahovden |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
-    flux_plot(
-      f_ylim_lower = 300,
-      f_ylim_upper = 600,
-      f_nrow = 2,
-      f_ncol = 2,
-      y_text_position = 400,
-      output = "print_only"
-      )
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  flux_plot(
+    f_ylim_lower = 300,
+    f_ylim_upper = 600,
+    f_nrow = 2,
+    f_ncol = 2,
+    y_text_position = 400,
+    output = "print_only"
+  )
 #> Plotting in progress
 ```
 
@@ -234,21 +235,21 @@ flux_fitting again with different arguments. Here we will do it while
 cutting the last 60 seconds of the fluxes (cutting the last third). We
 also detected two fluxes (101 and 106) that do not look correct.
 Sometimes some measurements will pass the automated quality control but
-are obvioulsy wrong for an experience user. That is what the
+are obviously wrong for an experience user. That is what the
 weird_fluxesID argument is for. For the sake of reproducibility, this
-argument should be the last option and be accompagnied with a
+argument should be the last option and be accompanied with a
 justification.
 
 ``` r
 slopes_exp_liahovden_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
-      flux_quality(
-            slope_col = "f_slope",
-            weird_fluxesID = c(
-              101, # plot starts with a high peak: accumulation in the canopy?
-              106 # peak at the beginning of the flux that is messing up the fit
-                    )
-                )
+  flux_quality(
+    slope_col = "f_slope",
+    weird_fluxes_id = c(
+      101, # plot starts with a high peak: accumulation in the canopy?
+      106 # peak at the beginning of the flux that is messing up the fit
+    )
+  )
 #> Cutting measurements...
 #> Estimating starting parameters for optimization...
 #> Optimizing fitting parameters...
@@ -266,16 +267,16 @@ slopes_exp_liahovden_60 <- conc_liahovden |>
 #>  force_ok     0   0 %
 
 slopes_exp_liahovden_60 |>
-# we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |> 
-    flux_plot(
-      f_ylim_lower = 300,
-      f_ylim_upper = 600,
-      f_nrow = 2,
-      f_ncol = 2,
-      y_text_position = 400,
-      output = "print_only"
-      )
+  # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  flux_plot(
+    f_ylim_lower = 300,
+    f_ylim_upper = 600,
+    f_nrow = 2,
+    f_ncol = 2,
+    y_text_position = 400,
+    output = "print_only"
+  )
 #> Plotting in progress
 ```
 
@@ -296,9 +297,9 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_60 |>
   ) # there is no need to specify the other arguments because
 #> Cutting data according to 'keep_arg'...
 #> Averaging air temperature for each flux...
-#> Creating a dataframe with the columns from 'cols_keep' argument...
+#> Creating a df with the columns from 'cols_keep' argument...
 #> Calculating fluxes...
-    # the defaults are for our experiment, other users might want to check that
+# the defaults are for our experiment, other users might want to check that
 str(fluxes_exp_liahovden_60)
 #> tibble [138 × 12] (S3: tbl_df/tbl/data.frame)
 #>  $ f_start       : POSIXct[1:138], format: "2022-07-27 05:37:40" "2022-07-27 05:42:10" ...
@@ -349,9 +350,9 @@ the process is entirely reproducible. Here is a plot of the results.
 
 ``` r
 fluxes_exp_liahovden_60 |>
-    dplyr::filter(type == "NEE") |>
-        ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
-        ggplot2::geom_point()
+  dplyr::filter(type == "NEE") |>
+  ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
+  ggplot2::geom_point()
 #> Warning: Removed 3 rows containing missing values or values outside the scale range
 #> (`geom_point()`).
 ```

@@ -12,14 +12,14 @@
 #' @param conc_col column containing gas concentration data
 #' @param cut_col column containing cut factor
 #' @param cut_arg argument pointing rows to be cut from the measurements
-#' @param fit_col column containing the modelled fit of the flux
+#' @param fit_col column containing the modeled fit of the flux
 #' @param quality_flag_col column containing the flags produced by flux_quality
 #' @param fluxid_col column containing unique IDs for each flux
 #' @param pvalue_col column containing the p-value of each flux
 #' (linear and quadratic fits)
 #' @param rsquared_col column containing the r squared to be used
 #' for the quality assessment (linear and quadratic fits)
-#' @param fit_slope_col column containing the modelled slope at tz
+#' @param fit_slope_col column containing the modeled slope at tz
 #' (for exponential fit)
 #' @param b_col column containing the b parameter (for exponential fit)
 #' @param cor_coef_col column containing the correlation coefficient
@@ -47,7 +47,7 @@
 #' (default);
 #' "ggsave", the plots can be saved with the ggsave function;
 #' "print_only" prints the plot without creating a file
-#' (independantly from 'print_plot' being TRUE or FALSE)
+#' (independently from 'print_plot' being TRUE or FALSE)
 #' @param device see ggsave()
 #' @param path see ggsave()
 #' @param scale see ggsave()

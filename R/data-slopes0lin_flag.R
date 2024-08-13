@@ -8,7 +8,7 @@
 #' \item{temp_air}{Air temperature inside the flux chamber in Celsius.}
 #' \item{temp_soil}{Ground temperature inside the flux chamber in Celsius.}
 #' \item{f_conc}{CO2 concentration in ppm.}
-#' \item{PAR}{Photosyntethically active radiation inside the chamber
+#' \item{PAR}{Photosynthetically active radiation inside the chamber
 #' in micromol/s/sqm.}
 #' \item{turfID}{Unique ID of the turf in which the measurement took place.}
 #' \item{type}{Type of measurement: ecosystems respiration (ER)
@@ -32,7 +32,7 @@
 #' \item{f_slope}{Slope of the linear model of CO2 concentration over time.}
 #' \item{fit}{Output of the linear model of CO2 concentration over time.}
 #' \item{f_start_error}{flagging if measurement started outside of the possible
-#' ambiant concentration}
+#' ambient concentration}
 #' \item{f_quality_flag}{quality flag advising if the slope has to be replaced
 #' by 0 or NA}
 #' \item{f_slope_corr}{slope corrected according to quality flag}

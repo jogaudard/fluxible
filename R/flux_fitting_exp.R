@@ -22,7 +22,7 @@
 #' @param conc_col column with gas concentration data
 #' @param fluxid_col column with ID of each flux
 #' @return a dataframe with the slope at t zero,
-#' modelled concentration over time and exponential expression parameters
+#' modeled concentration over time and exponential expression parameters
 #' @importFrom rlang .data
 #' @importFrom dplyr rename all_of mutate select group_by case_when
 #' ungroup filter distinct left_join rowwise summarize pull

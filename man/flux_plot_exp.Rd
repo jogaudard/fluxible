@@ -19,7 +19,7 @@ flux_plot_exp(
 
 \item{cut_arg}{argument pointing rows to be cut from the measurements}
 
-\item{fit_slope_col}{column containing the modelled slope at tz}
+\item{fit_slope_col}{column containing the modeled slope at tz}
 
 \item{b_col}{column containing the b parameter of the exponential fit}
 

@@ -53,7 +53,7 @@ ideally same as cz_window}
 }
 \value{
 a dataframe with the slope at t zero,
-modelled concentration over time and exponential expression parameters
+modeled concentration over time and exponential expression parameters
 }
 \description{
 Fits an exponential expression to the concentration evolution

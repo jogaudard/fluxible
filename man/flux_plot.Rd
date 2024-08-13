@@ -63,9 +63,9 @@ each concentration measurement}
 
 \item{cut_col}{column containing cut factor}
 
-\item{fit_col}{column containing the modelled fit of the flux}
+\item{fit_col}{column containing the modeled fit of the flux}
 
-\item{fit_slope_col}{column containing the modelled slope at tz
+\item{fit_slope_col}{column containing the modeled slope at tz
 (for exponential fit)}
 
 \item{quality_flag_col}{column containing the flags produced by flux_quality}
@@ -123,7 +123,7 @@ but will take time depending on the size of the dataset}
 (default);
 "ggsave", the plots can be saved with the ggsave function;
 "print_only" prints the plot without creating a file
-(independantly from 'print_plot' being TRUE or FALSE)}
+(independently from 'print_plot' being TRUE or FALSE)}
 
 \item{device}{see ggsave()}
 

@@ -1,4 +1,4 @@
-#' assessing quality of slopes calculated wiht flux_fitting
+#' assessing quality of slopes calculated with flux_fitting
 #' @description indicates if slopes should be discarded or replaced
 #' by 0 according to quality thresholds set by user
 #' @param slopes_df dataset containing slopes
@@ -16,7 +16,7 @@
 #' @param force_ok_id vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
 #' @param ratio_threshold ratio of gas concentration data points over length of
-#' measurment (in seconds) below which the measurement will be considered as
+#' measurement (in seconds) below which the measurement will be considered as
 #' not having enough data points to be considered for calculations
 #' @param pvalue_col column containing the p-value of each flux
 #' (linear and quadratic fit)

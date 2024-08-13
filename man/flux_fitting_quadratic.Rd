@@ -37,7 +37,7 @@ flux_fitting_quadratic(
 \item{t_zero}{time at which the slope should be calculated}
 }
 \value{
-a df with the modelled gas concentration, slope, intercept,
+a df with the modeled gas concentration, slope, intercept,
 std error, r square and p value of the quadratic model
 }
 \description{

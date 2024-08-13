@@ -34,7 +34,7 @@ flux_fitting_lin(
 \item{fluxid_col}{column with ID of each flux}
 }
 \value{
-a df with the modelled gas concentration, slope, intercept,
+a df with the modeled gas concentration, slope, intercept,
 std error, r square and p value of the linear model
 }
 \description{

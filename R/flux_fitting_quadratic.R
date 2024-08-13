@@ -10,7 +10,7 @@
 #' @param conc_col column with gas concentration data
 #' @param fluxid_col column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
-#' @return a df with the modelled gas concentration, slope, intercept,
+#' @return a df with the modeled gas concentration, slope, intercept,
 #' std error, r square and p value of the quadratic model
 #' @importFrom rlang .data
 #' @importFrom dplyr rename all_of mutate select group_by case_when

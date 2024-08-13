@@ -1,4 +1,4 @@
-#' Matching continously measured fluxes with measurement IDs and meta data
+#' Matching continuously measured fluxes with measurement IDs and meta data
 #' @description Matching a dataframe of continuously measured
 #' gas concentration data with measurement metadata from another dataframe.
 #' Measurements are paired with their metadata based on datetime.

@@ -2,7 +2,7 @@
 #' @description plots the fluxes that were fitted with
 #' an exponential model
 #' @param slopes_df dataset containing slopes
-#' @param fit_slope_col column containing the modelled slope at tz
+#' @param fit_slope_col column containing the modeled slope at tz
 #' @param b_col column containing the b parameter of the exponential fit
 #' @param cor_coef_col column containing the correlation coefficient
 #' produced by flux_quality

@@ -9,7 +9,7 @@
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
 #' @param fluxid_col column with ID of each flux
-#' @return a df with the modelled gas concentration, slope, intercept,
+#' @return a df with the modeled gas concentration, slope, intercept,
 #' std error, r square and p value of the linear model
 #' @importFrom rlang .data
 #' @importFrom dplyr rename all_of mutate select group_by case_when

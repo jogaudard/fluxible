@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_quality.R
 \name{flux_quality}
 \alias{flux_quality}
-\title{assessing quality of slopes calculated wiht flux_fitting}
+\title{assessing quality of slopes calculated with flux_fitting}
 \usage{
 flux_quality(
   slopes_df,
@@ -53,7 +53,7 @@ by the user's decision}
 the calculated slope despite a bad quality flag}
 
 \item{ratio_threshold}{ratio of gas concentration data points over length of
-measurment (in seconds) below which the measurement will be considered as
+measurement (in seconds) below which the measurement will be considered as
 not having enough data points to be considered for calculations}
 
 \item{pvalue_col}{column containing the p-value of each flux

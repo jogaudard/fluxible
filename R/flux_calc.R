@@ -14,20 +14,20 @@
 #' can also be a column in case it is a variable
 #' @param tube_volume volume of the tubing in L, default for summer 2020 setup,
 #' can also be a column in case it is a variable
-#' @param atm_pressure atmoshperic pressure, assumed 1 atm,
+#' @param atm_pressure atmospheric pressure, assumed 1 atm,
 #' can be a constant (numerical) or a variable (column name)
 #' @param plot_area area of the plot in m^2, default for Three-D
-#' @param r_const gas constant (0.082057 L*atm*K^(-1)*mol^(-1))
+#' @param r_const gas constant (0.082057 L x atm x K^(-1) x mol^(-1))
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux,
 #' as distinct() is applied.
 #' @param cols_ave columns with values that should be averaged
-#' for each flux in the ouput. Note that NA are removed in mean calculation.
+#' for each flux in the output. Note that NA are removed in mean calculation.
 #' @param fluxid_col column containing the fluxID
 #' @param temp_air_col column containing the air temperature used
-#' to caculate fluxes. Will be averaged with NA removed.
+#' to calculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
-#' Has to be either celsius, fahrenheit or kelvin.
+#' Has to be either Celsius, Fahrenheit or Kelvin.
 #' @param fit_type (optional) model used in flux_fitting, exponential,
 #' quadratic or linear.
 #' Will be automatically filled if slopes_df was produced using flux_quality().
