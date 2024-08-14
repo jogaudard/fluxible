@@ -4,7 +4,7 @@
 \name{fluxible-package}
 \alias{fluxible}
 \alias{fluxible-package}
-\title{fluxible: ECOSYSTEM GAS FLUXES CALCULATIONS FOR CLOSED LOOP CHAMBER SETUP}
+\title{fluxible: Ecosystem Gas Fluxes Calculations for Closed Loop Chamber Setup}
 \description{
 Processes the raw data from closed loop flux chamber (or tent) setups into ecosystem gas fluxes usable for analysis. It goes from a data frame of gas concentration over time (which can contain several measurements) and a meta data file indicating which measurement was done when, to a data frame of ecosystem gas fluxes including quality diagnostics. Functions provided include different models (exponential, quadratic and linear) to estimate the fluxes from the raw data, quality assessment, plotting for visual check and calculation of fluxes based on the setup specific parameters (chamber size, plot area, ...).
 }
