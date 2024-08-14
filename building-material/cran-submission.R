@@ -5,7 +5,7 @@ release()
 spell_check()
 
 check()
-check_rhub()
+# check_rhub()
 # This function is deprecated and defunct since rhub v2.
 # Please see `?rhubv2` on transitioning to the new rhub functions.
 # rhubv2 is not available on my version of R
@@ -29,6 +29,8 @@ rhub::rhub_setup()
 #   package.
 
 rhub::rhub_doctor()
+
+rhub::rhub_check()
 
 check_win_devel()
 usethis::use_news_md()
