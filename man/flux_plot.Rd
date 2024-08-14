@@ -68,9 +68,7 @@ but will take time depending on the size of the dataset}
 "print_only" prints the plot without creating a file
 (independently from 'print_plot' being TRUE or FALSE)}
 
-\item{ggsave_args}{list of arguments for
-\link{ggsave}(https://www.rdocumentation.org/packages/
-ggplot2/versions/3.5.0/topics/ggsave)
+\item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}
 
 \item{cut_arg}{argument pointing rows to be cut from the measurements}

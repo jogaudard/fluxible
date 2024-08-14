@@ -4,14 +4,14 @@
 \name{fluxible-package}
 \alias{fluxible}
 \alias{fluxible-package}
-\title{fluxible: Ecosystem Gas Fluxes Calculations For Closed Loop Chamber Setup}
+\title{fluxible: ECOSYSTEM GAS FLUXES CALCULATIONS FOR CLOSED LOOP CHAMBER SETUP}
 \description{
-Processes the raw data from closed loop flux chamber (or tent) setups into ecosystem gas fluxes usable for analysis. It goes from a dataframe of gas concentration over time (which can contain several measurements) and a meta data file indicating which measurement was done when, to a dataframe of ecosystem gas fluxes including quality diagnostics. Functions provided include different models (exponential, quadratic and linear) to estimate the fluxes from the raw data, quality assessment, plotting for visual check and calculation of fluxes based on the setup specific parameters (chamber size, plot area, ...).
+Processes the raw data from closed loop flux chamber (or tent) setups into ecosystem gas fluxes usable for analysis. It goes from a data frame of gas concentration over time (which can contain several measurements) and a meta data file indicating which measurement was done when, to a data frame of ecosystem gas fluxes including quality diagnostics. Functions provided include different models (exponential, quadratic and linear) to estimate the fluxes from the raw data, quality assessment, plotting for visual check and calculation of fluxes based on the setup specific parameters (chamber size, plot area, ...).
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://plant-functional-trait-course.github.io/fluxible}
+  \item \url{https://plant-functional-trait-course.github.io/fluxible/}
 }
 
 }

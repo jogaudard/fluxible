@@ -27,9 +27,7 @@
 #' "ggsave", the plots can be saved with the ggsave function;
 #' "print_only" prints the plot without creating a file
 #' (independently from 'print_plot' being TRUE or FALSE)
-#' @param ggsave_args list of arguments for
-#' [ggsave](https://www.rdocumentation.org/packages/
-#' ggplot2/versions/3.5.0/topics/ggsave)
+#' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @param no_data_flag flag marking fluxID without data in f_quality_flag
 #' @param cut_arg argument pointing rows to be cut from the measurements

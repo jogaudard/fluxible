@@ -1,7 +1,7 @@
 ---
 output: github_document
-bibliography: /home/jga051/Dropbox/PhD/biblio_phd_zot.bib
-csl: /home/jga051/Documents/01_PhD/emerald-harvard.csl
+bibliography: vignettes/biblio_phd_zot.bib
+csl: vignettes/emerald-harvard.csl
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->

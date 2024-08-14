@@ -15,3 +15,5 @@
 ^dissemination$
 ^dissemination_fluxible\.bib$
 ^incline_test$
+^\.bib$
+^\.csl$

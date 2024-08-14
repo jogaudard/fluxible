@@ -1,6 +1,6 @@
 library(devtools)
 
-release() 
+release()
 
 spell_check()
 
