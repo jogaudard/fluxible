@@ -11,6 +11,12 @@ flux_lrc <- function(fluxes_df,
                     PARnull = 0
                     ){
 
+fluxes_df <- fluxes_df |>
+  rename(
+    fluxes = all_of(((flux_col))),
+    type = all_of(((type_col)))
+  )
+
   coefficients_lrc <- fluxes_df %>%
     filter(
         type == ((lrc_arg))
