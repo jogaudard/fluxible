@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_fitting.R
 \name{flux_fitting}
 \alias{flux_fitting}
-\title{wrap up function for fitting}
+\title{Fitting a model to concentration data and estimating the slope}
 \usage{
 flux_fitting(
   conc_df,
@@ -12,9 +12,9 @@ flux_fitting(
   end_col = "f_end",
   datetime_col = "f_datetime",
   conc_col = "f_conc",
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   t_window = 20,
-  Cz_window = 15,
+  cz_window = 15,
   b_window = 10,
   a_window = 10,
   roll_width = 15,
@@ -25,10 +25,10 @@ flux_fitting(
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
 
-\item{start_cut}{to cut at the start}
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
 
-\item{end_cut}{to cut at the end, if you notice on the plots that the match
-was not precise enough}
+\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
 \item{start_col}{column with datetime when the measurement started}
 
@@ -38,35 +38,45 @@ was not precise enough}
 
 \item{conc_col}{column with gas concentration data}
 
-\item{fluxID_col}{column with ID of each flux}
+\item{fluxid_col}{column with ID of each flux}
 
-\item{t_window}{enlarge focus window before and after tmin and tmax}
+\item{t_window}{enlarge focus window before and after tmin and tmax
+(exponential fit)}
 
-\item{Cz_window}{window used to calculate Cz, at the beginning of cut window}
+\item{cz_window}{window used to calculate Cz, at the beginning of cut window
+(exponential fit)}
 
 \item{b_window}{window to estimate b. It is an interval after tz where
-it is assumed that C fits the data perfectly}
+it is assumed that the model fits the data perfectly (exponential fit)}
 
-\item{a_window}{window at the end of the flux to estimate a}
+\item{a_window}{window at the end of the flux to estimate a (exponential fit)}
 
 \item{roll_width}{width of the rolling mean for CO2 when looking for tz,
-ideally same as Cz_window}
+ideally same as cz_window (exponential fit)}
 
-\item{t_zero}{time at which the slope should be calculated (for fits that do not include t_zero as a parameter)}
+\item{t_zero}{time at which the slope should be calculated
+(for quadratic fit)}
 
-\item{fit_type}{exponential or linear, depending on the wish of the user.
-Exponential is using the fit described in Zhao 2018}
+\item{fit_type}{exponential, quadratic or linear.
+Exponential is using the exponential model from Zhao et al (2018)}
 }
 \value{
 a dataframe with the slope at t zero,
-modelled concentration over time and exponential expression parameters
+and parameters of a model of gas concentration over time
 }
 \description{
-fits gas concentration over time with an exponential or
-linear model
+fits gas concentration over time data with a model
+(exponential, quadratic or linear) and provides the slope later used
+to calculate gas fluxes with flux_calc
 }
 \examples{
 data(co2_conc)
 flux_fitting(co2_conc, fit_type = "exp")
 flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30)
+}
+\references{
+Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
+On the calculation of daytime CO2 fluxes measured by automated closed
+transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
+https://doi.org/10.1016/j.agrformet.2018.08.022
 }

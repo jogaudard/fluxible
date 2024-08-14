@@ -508,10 +508,13 @@ for (i in 1:100) {
 }
 
 
-flux_plot(slopes0_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1)
+flux_plot(slopes0_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1, f_ylim_upper = 430)
 
 
-
-
-
-
+# trying some attribute stuff
+slopes_test <- flux_fitting(co2_conc, fit_type = "exp")
+str(slopes_test)
+attr_slopes_test <- attributes(slopes_test)
+attr_slopes_test$fit_type
+attributes(slopes30qua)$fit_type
+str(co2_fluxes)

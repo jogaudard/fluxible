@@ -8,5 +8,14 @@
 ^pkgdown$
 ^README\.Rmd$
 ^README\.html$
+^README\.pdf$
 ^\.github$
 ^f_quality_plots$
+^PFTC_collab$
+^dissemination$
+^dissemination_fluxible\.bib$
+^incline_test$
+^\.bib$
+^\.csl$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

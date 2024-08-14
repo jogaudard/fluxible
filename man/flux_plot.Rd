@@ -2,28 +2,13 @@
 % Please edit documentation in R/flux_plot.R
 \name{flux_plot}
 \alias{flux_plot}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes for visual evaluation}
 \usage{
 flux_plot(
   slopes_df,
-  fit_type,
-  datetime_col = "f_datetime",
-  conc_col = "f_conc",
-  cut_col = "f_cut",
-  fit_col = "f_fit",
-  fit_slope_col = "f_fit_slope",
-  quality_flag_col = "f_quality_flag",
-  fluxID_col = "f_fluxID",
-  pvalue_col = "f_pvalue",
-  rsquared_col = "f_rsquared",
-  start_col = "f_start",
-  b_col = "f_b",
-  cor_coef_col = "f_cor_coef",
-  RMSE_col = "f_RMSE",
   color_discard = "#D55E00",
   color_cut = "#D55E00",
-  color_keep = "#009E73",
-  color_ok = "#000000",
+  color_ok = "#009E73",
   color_zero = "#CC79A7",
   f_date_breaks = "1 min",
   f_minor_breaks = "10 sec",
@@ -35,61 +20,20 @@ flux_plot(
   f_ncol = 4,
   f_nrow = 3,
   y_text_position = 500,
-  f_nudge_y = 100,
   print_plot = "FALSE",
   output = "pdfpages",
-  device = NULL,
-  path = NULL,
-  scale = 1,
-  width = NA,
-  height = NA,
-  units = c("in", "cm", "mm", "px"),
-  dpi = 300,
-  limitsize = TRUE,
-  bg = NULL,
-  create.dir = FALSE
+  ggsave_args = list(),
+  cut_arg = "cut",
+  no_data_flag = "no_data"
 )
 }
 \arguments{
-\item{slopes_df}{dataset containing slopes}
-
-\item{fit_type}{model used in flux_fitting, exponential or linear}
-
-\item{datetime_col}{column containing datetime of
-each concentration measurement}
-
-\item{conc_col}{column containing gas concentration data}
-
-\item{cut_col}{column containing cut factor from the
-flux_fitting function ("cut" or "keep")}
-
-\item{fit_col}{column containing the modelled fit of the flux}
-
-\item{fit_slope_col}{column containing the modelled slope at tz}
-
-\item{quality_flag_col}{column containing the flags produced by flux_quality}
-
-\item{fluxID_col}{column containing unique IDs for each flux}
-
-\item{pvalue_col}{column containing the p-value of each flux}
-
-\item{rsquared_col}{column containing the r squared to be used
-for the quality assessment}
-
-\item{start_col}{column containing the datetime of the start of each flux}
-
-\item{b_col}{column containing the b parameter of the exponential fit}
-
-\item{cor_coef_col}{column containing the correlation coefficient
-produced by flux_quality}
-
-\item{RMSE_col}{column containing the RMSE produced by flux_quality}
+\item{slopes_df}{dataset containing slopes,
+with flags produced by flux_quality}
 
 \item{color_discard}{color for fits with a discard quality flag}
 
 \item{color_cut}{color for the part of the flux that is cut}
-
-\item{color_keep}{color for the part of the flux that is kept}
 
 \item{color_ok}{color for fits with an ok quality flag}
 
@@ -109,50 +53,39 @@ produced by flux_quality}
 
 \item{f_plotname}{filename for the extracted pdf file}
 
-\item{f_ncol}{ncol argument for facet_wrap}
+\item{f_ncol}{number of columns per page in extracted pdf file}
 
-\item{f_nrow}{number of row per page in extracted pdf file}
+\item{f_nrow}{number of rows per page in extracted pdf file}
 
 \item{y_text_position}{position of the text box}
-
-\item{f_nudge_y}{to nudge the text box with the parameters above the modelled flux}
 
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset}
 
-\item{output}{if "pdfpages", the plots are saved as A4 landscape pdf pages (default);
-if "ggsave", the plots can be saved with the ggsave function}
+\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages
+(default);
+"ggsave", the plots can be saved with the ggsave function;
+"print_only" prints the plot without creating a file
+(independently from 'print_plot' being TRUE or FALSE)}
 
-\item{device}{see ggsave()}
+\item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
+(in case \code{output = "ggsave"})}
 
-\item{path}{see ggsave()}
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 
-\item{scale}{see ggsave()}
-
-\item{width}{see ggsave()}
-
-\item{height}{see ggsave()}
-
-\item{units}{see ggsave()}
-
-\item{dpi}{see ggsave()}
-
-\item{limitsize}{see ggsave()}
-
-\item{bg}{see ggsave()}
-
-\item{create.dir}{see ggsave()}
+\item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
 }
 \description{
-plots the fluxes and indicates what should be discarded
-or replaced by zero
+plots the fluxes, fit and slope in facets
+with color code indicating quality flags
+This function takes time to run and is optional in the workflow,
+but it is still highly recommended to use it to visually check
+the measurements.
 }
 \examples{
 data(slopes0_flag)
-flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope", print_plot = TRUE)
+flux_plot(slopes0_flag, output = "print_only")
 data(slopes30lin_flag)
-flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, f_plotname = "pdf_quality_plots")
-flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", device = "jpg", f_plotname = "jpg_quality_plots")
-flux_plot(slopes30lin_flag, fit_type = "lin", print_plot = TRUE, output = "ggsave", f_plotname = "jpg_quality_plots.jpg")
-flux_plot(slopes30qua, fit_type = "quadratic", print_plot = TRUE)
+flux_plot(slopes30lin_flag, output = "print_only")
+flux_plot(slopes30qua_flag, output = "print_only")
 }

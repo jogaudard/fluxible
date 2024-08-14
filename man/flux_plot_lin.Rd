@@ -2,50 +2,18 @@
 % Please edit documentation in R/flux_plot_lin.R
 \name{flux_plot_lin}
 \alias{flux_plot_lin}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes with linear fit}
 \usage{
-flux_plot_lin(
-  slopes_df,
-  datetime_col = "f_datetime",
-  conc_col = "f_conc",
-  cut_col = "f_cut",
-  fit_col = "f_fit",
-  quality_flag_col = "f_quality_flag",
-  fluxID_col = "f_fluxID",
-  pvalue_col = "f_pvalue",
-  rsquared_col = "f_rsquared",
-  start_col = "f_start",
-  y_text_position = 500
-)
+flux_plot_lin(slopes_df, y_text_position = 500, cut_arg = "cut")
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{datetime_col}{column containing datetime of
-each concentration measurement}
+\item{y_text_position}{position of the text box}
 
-\item{conc_col}{column containing gas concentration data}
-
-\item{cut_col}{column containing cut factor from the
-flux_fitting function ("cut" or "keep")}
-
-\item{fit_col}{column containing the modelled fit of the flux}
-
-\item{quality_flag_col}{column containing the flags produced by flux_quality}
-
-\item{fluxID_col}{column containing unique IDs for each flux}
-
-\item{pvalue_col}{column containing the p-value of each flux}
-
-\item{rsquared_col}{column containing the r squared
-used for the quality assessment}
-
-\item{start_col}{column containing the datetime of the start of each flux}
-
-\item{y_text_position}{position of the text box
-but will take time depending on the size of the dataset}
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 }
 \description{
-plots the fluxes and indicates what should be
-discarded or replaced by zero
+plots the fluxes that were fitted
+with a linear model
 }
