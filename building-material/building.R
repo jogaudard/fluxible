@@ -442,29 +442,79 @@ slopes30qua <- flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_c
 
 flux_plot(slopes0qua, fit_type = "quadratic", print_plot = TRUE, f_ncol = 3)
 
+# reproducing group aesthetics error
+slopes0lin_flag |>
+filter(f_fluxID == 1) |>
+flux_plot(fit_type = "lin",
+            f_ylim_upper = 432)
+
+
+view(slopes0_flag)
+max(slopes0_flag$f_conc)
+
+library(progress)
+pb <- progress_bar$new(total = 100)
+purrr::walk(1:100, flux_plot(slopes0lin_flag, fit_type = "lin"))
+foo <- flux_plot()
+
+foo2 <- function(slopes_df, fit_type){
+
+
+pb <- progress_bar$new(total = 100)
 
 
 
+foo <- function(x){
+   
+  pb$tick()
+
+  Sys.sleep(0.1)
+   #  flux_plot(slopes_df = ((slopes_df)), fit_type = ((fit_type)))
+
+
+}
 
 
 
+purrr::walk(1:100, foo)
+flux_plot(slopes_df = ((slopes_df)), fit_type = ((fit_type)))
 
 
+}
+
+foo2(slopes0_flag, fit_type = "exp")
 
 
+testdf <- tibble(
+   a = c(1:10),
+   b = c(11:20)
+)
+testdf
+pb <- progress_bar$new(total = 10)
+
+for(i in 1:10){
+     pb$tick()
+  Sys.sleep(0.1)
+
+   testdf$c[i] = testdf$a[i] * testdf$b[i]
+}
+
+testdf
+
+pb <- progress_bar$new(total = 100)
+for (i in 1:100) {
+  pb$tick()
+  i + 1
+}
 
 
+flux_plot(slopes0_flag, fit_type = "exp", f_ncol = 1, f_nrow = 1, f_ylim_upper = 430)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+# trying some attribute stuff
+slopes_test <- flux_fitting(co2_conc, fit_type = "exp")
+str(slopes_test)
+attr_slopes_test <- attributes(slopes_test)
+attr_slopes_test$fit_type
+attributes(slopes30qua)$fit_type
+str(co2_fluxes)

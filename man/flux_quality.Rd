@@ -2,16 +2,18 @@
 % Please edit documentation in R/flux_quality.R
 \name{flux_quality}
 \alias{flux_quality}
-\title{assessing quality of slopes calculated}
+\title{assessing quality of slopes calculated with flux_fitting}
 \usage{
 flux_quality(
   slopes_df,
-  fit_type,
+  fit_type = c(),
   ambient_conc = 421,
   error = 100,
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   slope_col = "f_slope",
-  weird_fluxesID = c(),
+  weird_fluxes_id = c(),
+  force_ok_id = c(),
+  ratio_threshold = 0,
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
   pvalue_threshold = 0.3,
@@ -21,40 +23,52 @@ flux_quality(
   time_col = "f_time",
   fit_col = "f_fit",
   cut_col = "f_cut",
-  RMSE_threshold = 25,
+  rmse_threshold = 25,
   cor_threshold = 0.5,
-  b_threshold = 1
+  b_threshold = 1,
+  cut_arg = "cut"
 )
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{fit_type}{expression used to fit the data, linear or exponential}
+\item{fit_type}{model fitted to the data, linear, quadratic or exponential.
+Will be automatically filled if slopes_df was produced using flux_fitting()}
 
 \item{ambient_conc}{ambient gas concentration in ppm at the site of
 measurement (used to detect measurement that started with a polluted setup)}
 
-\item{error}{error of the setup, defines a window in which
-the starting values are considered acceptable}
+\item{error}{error of the setup, defines a window outside of which
+the starting values indicate a polluted setup}
 
-\item{fluxID_col}{column containing unique IDs for each flux}
+\item{fluxid_col}{column containing unique IDs for each flux}
 
 \item{slope_col}{column containing the slope of each flux
 (as calculated by the flux_fitting function)}
 
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+\item{weird_fluxes_id}{vector of fluxIDs that should be discarded
 by the user's decision}
 
-\item{pvalue_col}{column containing the p-value of each flux (linear fit)}
+\item{force_ok_id}{vector of fluxIDs for which the user wants to keep
+the calculated slope despite a bad quality flag}
 
-\item{rsquared_col}{column containing the r squared to be used for
-the quality assessment (linear fit)}
+\item{ratio_threshold}{ratio of gas concentration data points over length of
+measurement (in seconds) below which the measurement will be considered as
+not having enough data points to be considered for calculations}
+
+\item{pvalue_col}{column containing the p-value of each flux
+(linear and quadratic fit)}
+
+\item{rsquared_col}{column containing the r squared of each flux
+(linear and quadratic fit)}
 
 \item{pvalue_threshold}{threshold of p-value below which the change of
-gas concentration over time is considered not significant (linear fit)}
+gas concentration over time is considered not significant
+(linear and quadratic fit)}
 
 \item{rsquared_threshold}{threshold of r squared value below which
-the linear model is considered an unsatisfactory fit (linear fit)}
+the linear model is considered an unsatisfactory fit
+(linear and quadratic fit)}
 
 \item{conc_col}{column containing the measured gas concentration
 (exponential fit)}
@@ -69,25 +83,29 @@ the linear model is considered an unsatisfactory fit (linear fit)}
 
 \item{cut_col}{column containing the cutting information}
 
-\item{RMSE_threshold}{threshold for the RMSE of each flux above which
+\item{rmse_threshold}{threshold for the RMSE of each flux above which
 the fit is considered unsatisfactory (exponential fit)}
 
 \item{cor_threshold}{threshold for the correlation coefficient of
 gas concentration with time below which the correlation
-is considered non significant (exponential fit)}
+is considered not significant (exponential fit)}
 
 \item{b_threshold}{threshold for the b parameter.
 Defines a window with its opposite inside which the fit is
 considered good enough (exponential fit)}
+
+\item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
 same dataframe with added flag and corrected slopes columns
 }
 \description{
-indicates if fluxes should be discarded or replaced
-by 0 according to parameters set by user
+indicates if slopes should be discarded or replaced
+by 0 according to quality thresholds set by user
 }
 \examples{
 data(slopes0lin)
 flux_quality(slopes0lin, fit_type = "li")
+data(slopes30)
+flux_quality(slopes30, fit_type = "expo", slope_col = "f_slope")
 }

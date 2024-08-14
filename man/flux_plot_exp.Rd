@@ -2,56 +2,18 @@
 % Please edit documentation in R/flux_plot_exp.R
 \name{flux_plot_exp}
 \alias{flux_plot_exp}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes with exponential fit}
 \usage{
-flux_plot_exp(
-  slopes_df,
-  datetime_col = "f_datetime",
-  conc_col = "f_conc",
-  cut_col = "f_cut",
-  fit_col = "f_fit",
-  fit_slope_col = "f_fit_slope",
-  quality_flag_col = "f_quality_flag",
-  fluxID_col = "f_fluxID",
-  start_col = "f_start",
-  b_col = "f_b",
-  cor_coef_col = "f_cor_coef",
-  RMSE_col = "f_RMSE",
-  y_text_position = 500
-)
+flux_plot_exp(slopes_df, cut_arg = "cut", y_text_position = 500)
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{datetime_col}{column containing datetime of
-each concentration measurement}
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 
-\item{conc_col}{column containing gas concentration data}
-
-\item{cut_col}{column containing cut factor from the
-flux_fitting function ("cut" or "keep")}
-
-\item{fit_col}{column containing the modelled fit of the flux}
-
-\item{fit_slope_col}{column containing the modelled slope at tz}
-
-\item{quality_flag_col}{column containing the flags produced by flux_quality}
-
-\item{fluxID_col}{column containing unique IDs for each flux}
-
-\item{start_col}{column containing the datetime of the start of each flux}
-
-\item{b_col}{column containing the b parameter of the exponential fit}
-
-\item{cor_coef_col}{column containing the correlation coefficient
-produced by flux_quality}
-
-\item{RMSE_col}{column containing the RMSE produced by flux_quality}
-
-\item{y_text_position}{position of the text box
-but will take time depending on the size of the dataset}
+\item{y_text_position}{position of the text box}
 }
 \description{
-plots the fluxes and indicates what should be
-discarded or replaced by zero
+plots the fluxes that were fitted with
+an exponential model
 }

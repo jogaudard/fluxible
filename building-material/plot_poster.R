@@ -87,49 +87,49 @@ flux_plot_exp_poster <- function(slopes_df,
 
   plot_exp <- slopes_df |>
     theme_classic() +
-    ggplot(aes(.data$f_datetime)) +
-    geom_point(
-      aes(y = .data$f_conc, color = .data$f_cut),
-      size = 0.8
-    ) +
-    geom_line(
-      aes(y = .data$f_fit, color = .data$f_quality_flag),
-      linetype = "longdash", linewidth = 0.8
-    ) +
-    geom_line(
-      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
-      linetype = "dashed", linewidth = 0.8
-    ) +
-    scale_color_manual(values = c(
-     "keep" = ((color_keep)),
-      "cut" = ((color_cut)),
-      "ok" = ((color_ok)),
-      "discard" = ((color_discard)),
-      "zero" = ((color_zero)),
-      "start_error" = ((color_discard)),
-      "weird_flux" = ((color_discard))
-    )) +
-    scale_x_datetime(
-      date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
-      date_labels = ((f_date_labels))
-    ) +
-    ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-    geom_text(
-      data = param_df,
-      aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
-      vjust = 0, hjust = "inward", nudge_y = ((f_nudge_y))
-    ) +
+    ggplot(aes(x = .data$f_datetime)) +
+    # geom_point(
+    #   aes(y = .data$f_conc, color = .data$f_cut),
+    #   size = 0.8
+    # ) +
+    # geom_line(
+    #   aes(y = .data$f_fit, color = .data$f_quality_flag),
+    #   linetype = "longdash", linewidth = 0.8
+    # ) +
+    # geom_line(
+    #   aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
+    #   linetype = "dashed", linewidth = 0.8
+    # ) +
+    # scale_color_manual(values = c(
+    #  "keep" = ((color_keep)),
+    #   "cut" = ((color_cut)),
+    #   "ok" = ((color_ok)),
+    #   "discard" = ((color_discard)),
+    #   "zero" = ((color_zero)),
+    #   "start_error" = ((color_discard)),
+    #   "weird_flux" = ((color_discard))
+    # )) +
+    # scale_x_datetime(
+    #   date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
+    #   date_labels = ((f_date_labels))
+    # ) +
+    # ylim(((f_ylim_lower)), ((f_ylim_upper))) +
+    # geom_text(
+    #   data = param_df,
+    #   aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
+    #   vjust = 0, hjust = "inward", nudge_y = ((f_nudge_y))
+    # ) +
     #   facet_wrap(~f_fluxID, scales = ((f_scales))) +
-    facet_wrap_paginate(
-      ~f_fluxID,
-      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
-    ) +
-    labs(
-      title = "Fluxes quality assessment",
-      x = "Datetime",
-      y = "Concentration",
-      colour = "Quality flags"
-    )
+    # facet_wrap_paginate(
+    #   ~f_fluxID,
+    #   ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
+    # ) +
+    # labs(
+    #   title = "Fluxes quality assessment",
+    #   x = "Datetime",
+    #   y = "Concentration",
+    #   colour = "Quality flags"
+    # )
 
 
 
@@ -160,16 +160,17 @@ flux_plot_exp_poster <- function(slopes_df,
 
 slopes_exp_liahovden |>
   dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
-    mutate(
-        f_fluxID = case_when(
-            f_fluxID == 28 ~ "The Good",
-            f_fluxID == 51 ~ "The Bad",
-            f_fluxID == 100 ~ "The Ugly"
-        ),
-        f_fluxID = factor(f_fluxID, levels = c("The Good", "The Bad", "The Ugly"))
-    ) |>
-    flux_plot_exp_poster(
-      # fit_type = "exp",
+    # mutate(
+    #     f_fluxID = case_when(
+    #         f_fluxID == 28 ~ "The Good",
+    #         f_fluxID == 51 ~ "The Bad",
+    #         f_fluxID == 100 ~ "The Ugly"
+    #     ),
+    #     f_fluxID = factor(f_fluxID, levels = c("The Good", "The Bad", "The Ugly"))
+    # ) |>
+    # view()
+    flux_plot(
+      fit_type = "exp",
       print_plot = TRUE,
       f_plotname = "poster_plot",
       f_ylim_lower = 375,

@@ -12,17 +12,17 @@ flux_fitting_quadratic(
   end_col = "f_end",
   datetime_col = "f_datetime",
   conc_col = "f_conc",
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   t_zero = 0
 )
 }
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
 
-\item{start_cut}{to cut at the start}
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
 
-\item{end_cut}{to cut at the end, if you notice on the plots
-that the match was not precise enough}
+\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
 \item{start_col}{column with datetime when the measurement started}
 
@@ -32,14 +32,14 @@ that the match was not precise enough}
 
 \item{conc_col}{column with gas concentration data}
 
-\item{fluxID_col}{column with ID of each flux}
+\item{fluxid_col}{column with ID of each flux}
 
-\item{t_zero}{time at which the slope should be calculated (for fits that do not include t_zero as a parameter)}
+\item{t_zero}{time at which the slope should be calculated}
 }
 \value{
-a df with the modelled gas concentration, slope, intercept,
-std error, r square and p value of the linear model
+a df with the modeled gas concentration, slope, intercept,
+std error, r square and p value of the quadratic model
 }
 \description{
-fits a linear model to the gas concentration over time
+fits a quadratic model to the gas concentration over time
 }

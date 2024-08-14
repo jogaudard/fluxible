@@ -2,11 +2,17 @@
 
     Code
       flux_fitting_exp(co2_conc)
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
     Condition
       Warning in `flux_fitting_exp()`:
       
-       fluxID 5 : slope was estimated on 205 points out of 210 seconds because data are missing
-       fluxID 6 : slope was estimated on 206 points out of 210 seconds because data are missing
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 1,251 x 29
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -26,12 +32,18 @@
       #   n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
       #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
-      #   f_slope_tz <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
 # fitting works with 30 second end cut
 
     Code
       flux_fitting_exp(co2_conc, end_cut = 30)
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
     Output
       # A tibble: 1,251 x 29
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -51,12 +63,18 @@
       #   n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
       #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
-      #   f_slope_tz <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
 # fitting works with 60 second end cut
 
     Code
       flux_fitting_exp(co2_conc, end_cut = 60)
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
     Output
       # A tibble: 1,251 x 29
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -76,5 +94,5 @@
       #   n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
       #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
-      #   f_slope_tz <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 

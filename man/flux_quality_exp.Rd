@@ -2,22 +2,14 @@
 % Please edit documentation in R/flux_quality_exp.R
 \name{flux_quality_exp}
 \alias{flux_quality_exp}
-\title{assessing fluxes quality calculated with an exponential fit
-quality assessment for the fluxes calculated with the exponential model}
+\title{quality assessment for the slopes estimated by flux_fitting}
 \usage{
 flux_quality_exp(
   slopes_df,
-  ambient_conc = 421,
-  error = 100,
-  fluxID_col = "f_fluxID",
-  slope_col = "f_slope",
-  weird_fluxesID = c(),
-  conc_col = "f_conc",
+  weird_fluxes_id = c(),
+  force_ok_id = c(),
   b_col = "f_b",
-  time_col = "f_time",
-  fit_col = "f_fit",
-  cut_col = "f_cut",
-  RMSE_threshold = 25,
+  rmse_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1
 )
@@ -26,31 +18,15 @@ flux_quality_exp(
 \item{slopes_df}{dataset containing slopes, fluxID,
 and parameters of the exponential expression}
 
-\item{ambient_conc}{ambient gas concentration in ppm at the site of
-measurement (used to detect measurement that started with a polluted setup)}
-
-\item{error}{error of the setup, defines a window in which
-the starting values are considered acceptable}
-
-\item{fluxID_col}{column containing unique IDs for each flux}
-
-\item{slope_col}{column containing the slope of the exponential expression
-used for the calculation}
-
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+\item{weird_fluxes_id}{vector of fluxIDs that should be discarded
 by the user's decision}
 
-\item{conc_col}{column containing the measured gas concentration}
+\item{force_ok_id}{vector of fluxIDs for which the user wants to keep
+the calculated slope despite a bad quality flag}
 
 \item{b_col}{column containing the b parameter of the exponential expression}
 
-\item{time_col}{column containing the time of each measurement in seconds}
-
-\item{fit_col}{column containing the modeled data}
-
-\item{cut_col}{column containing the cutting information}
-
-\item{RMSE_threshold}{threshold for the RMSE of each flux above
+\item{rmse_threshold}{threshold for the RMSE of each flux above
 which the fit is considered unsatisfactory}
 
 \item{cor_threshold}{threshold for the correlation coefficient
@@ -64,6 +40,8 @@ with its opposite inside which the fit is considered good enough.}
 same dataframe with added flag and corrected slopes columns
 }
 \description{
-indicates if fluxes should be discarded or replaced
-by 0 according to parameters set by user
+indicates if fluxes should be discarded or replaced by 0
+according to parameters set by user.
+flux_quality_lm is for the model of the lm family.
+flux_quality_exp is for the exponential model.
 }

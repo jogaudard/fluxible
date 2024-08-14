@@ -11,14 +11,15 @@ A tibble with 1801 rows and 5 variables
 \item{temp_air}{Air temperature inside the flux chamber in Celsius.}
 \item{temp_soil}{Ground temperature inside the flux chamber in Celsius.}
 \item{conc}{CO2 concentration in ppm.}
-\item{PAR}{Photosyntethically active radiation inside the chamber in micromol/s/sqm.}
+\item{PAR}{Photosynthetically active radiation inside the chamber
+in micromol/s/sqm.}
 }
 }
 \usage{
 co2_df_short
 }
 \description{
-Continous CO2 concentration as measured on the field
+Continuous CO2 concentration as measured on the field
 }
 \examples{
 co2_df_short

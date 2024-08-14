@@ -1,14 +1,14 @@
-#' Matching continously measured fluxes with measurement IDs
-#' @description Function to match a dataframe of continuously measured
-#' CO2 concentration with measurement IDs from another dataframe. Uses datetime
-#' to tell which measurements happened when. Extra variables in both dataframes
-#' will appear in the output.
+#' Matching continuously measured fluxes with measurement IDs and meta data
+#' @description Matching a dataframe of continuously measured
+#' gas concentration data with measurement metadata from another dataframe.
+#' Measurements are paired with their metadata based on datetime.
+#' Extra variables in both dataframes are kept in the output.
 #' @param raw_conc dataframe of CO2 concentration measured continuously.
 #' Has to contain at least a datetime column in ymd_hms format and
 #' a gas concentration column as double.
 #' @param field_record dataframe recording which measurement happened when.
-#' Has to contain at least a column telling at what time measurements started,
-#' and any other column allowing for identification of measurements.
+#' Has to contain at least a column containing the start of each measurement,
+#' and any other column identifying the measurements.
 #' @param startcrop how many seconds should be discarded at the beginning of
 #' the measurement
 #' @param measurement_length length of the measurement (in seconds)
@@ -17,14 +17,13 @@
 #' length of measurement in seconds) below which the data should be flagged as
 #' too little
 #' @param time_diff time difference (in seconds) between the two datasets.
-#' Will be added to the datetime column of the raw_conc dataset
-#' @param datetime_col to specify the name of the datetime column in raw_conc
-#' (dmy_hms format)
-#' @param conc_col to specify the name of the concentration column in raw_conc
-#' @param start_col to specify the name of the start column in field_record
-#' (dmy_hms format)
+#' Will be added to the datetime column of the raw_conc dataset.
+#' For situations where the time was not synchronized correctly.
+#' @param datetime_col datetime column in raw_conc (dmy_hms format)
+#' @param conc_col concentration column in raw_conc
+#' @param start_col start column in field_record (dmy_hms format)
 #' @return a dataframe with concentration measurements, corresponding datetime,
-#' flux ID, start and end of measurement, flags in case of no data or low number
+#' flux ID, measurements start and end, flags in case of no data or low number
 #' of data, and any variables present in one of the inputs.
 #' @importFrom dplyr rename arrange mutate row_number full_join case_when
 #' group_by filter ungroup select distinct pull
@@ -35,8 +34,6 @@
 #' flux_match(co2_df_short, record_short)
 #' @export
 
-
-# should I describe all the variables in the output?
 
 flux_match <- function(raw_conc,
                        field_record,
@@ -58,8 +55,7 @@ flux_match <- function(raw_conc,
       f_start = all_of((start_col))
     )
 
-  # this should be moved in a check data function
-  # need to include a test for the format of the column, especially the date
+
   if (!is.POSIXct(raw_conc$f_datetime)) {
     stop("datetime in raw_conc dataframe is not ymd_hms!")
   }
@@ -117,7 +113,7 @@ flux_match <- function(raw_conc,
     fill(names(field_record)) |>
     filter(
       (.data$f_datetime < .data$f_end &
-        .data$f_datetime >= .data$f_start)
+         .data$f_datetime >= .data$f_start)
     ) |>
     mutate(
       f_n_conc = sum(!is.na(.data$f_conc)),
@@ -136,7 +132,6 @@ flux_match <- function(raw_conc,
     ) |>
     arrange(.data$f_fluxID)
 
-  # print warnings when there are flags
 
   flags <- conc_df |>
     select("f_fluxID", "f_flag_match") |>
