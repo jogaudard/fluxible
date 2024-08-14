@@ -11,3 +11,5 @@ check_rhub()
 # rhubv2 is not available on my version of R
 
 check_win_devel()
+usethis::use_news_md()
+usethis::use_cran_comments()
