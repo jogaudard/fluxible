@@ -11,8 +11,8 @@
     Condition
       Warning in `flux_fitting_exp()`:
       
-       fluxID 5 : slope was estimated on 205 points out of 210 seconds because data are missing
-       fluxID 6 : slope was estimated on 206 points out of 210 seconds because data are missing
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 1,251 x 29
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -41,8 +41,8 @@
     Condition
       Warning in `flux_fitting_lin()`:
       
-       fluxID 5 : slope was estimated on 205 points out of 210 seconds because data are missing
-       fluxID 6 : slope was estimated on 206 points out of 210 seconds because data are missing
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 1,251 x 21
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -76,8 +76,8 @@
     Condition
       Warning in `flux_fitting_exp()`:
       
-       fluxID 5 : slope was estimated on 185 points out of 190 seconds because data are missing
-       fluxID 6 : slope was estimated on 186 points out of 190 seconds because data are missing
+       fluxID 5 : slope was estimated on 185 points out of 190 seconds
+       fluxID 6 : slope was estimated on 186 points out of 190 seconds
     Output
       # A tibble: 1,251 x 29
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -106,8 +106,8 @@
     Condition
       Warning in `flux_fitting_lin()`:
       
-       fluxID 5 : slope was estimated on 185 points out of 190 seconds because data are missing
-       fluxID 6 : slope was estimated on 186 points out of 190 seconds because data are missing
+       fluxID 5 : slope was estimated on 185 points out of 190 seconds
+       fluxID 6 : slope was estimated on 186 points out of 190 seconds
     Output
       # A tibble: 1,251 x 21
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 

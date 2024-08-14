@@ -19,6 +19,6 @@ filled only if the df was produced outside of the Fluxible workflow.}
 \item{fit_type_list}{list of fit types in use with Fluxible.}
 }
 \description{
-extracts the type of fit that was appplied in flux_fitting
+extracts the type of fit that was applied in flux_fitting
 or checks that the fit_type provided by the user is compatible with Fluxible
 }

@@ -8,10 +8,13 @@
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_lm <- function(slopes_df,
-                          cut_arg = "cut"){
-    param_df <- slopes_df |>
-    select("f_conc", "f_start", "f_fluxID", "f_rsquared", "f_pvalue", "f_quality_flag", "f_cut") |>
-        filter(.data$f_cut != ((cut_arg))) |>
+                          cut_arg = "cut") {
+  param_df <- slopes_df |>
+    select(
+      "f_conc", "f_start", "f_fluxID", "f_rsquared", "f_pvalue",
+      "f_quality_flag", "f_cut"
+    ) |>
+    filter(.data$f_cut != ((cut_arg))) |>
     group_by(.data$f_fluxID) |>
     mutate(
       conc_start = .data$f_conc[1]
@@ -27,8 +30,8 @@ flux_param_lm <- function(slopes_df,
         "R2 = ", .data$f_rsquared, "\n", "p-value = ", .data$f_pvalue,
         sep = ""
       )
-) |>
+    ) |>
     select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
 
-    param_df
+  param_df
 }

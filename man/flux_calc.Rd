@@ -14,10 +14,9 @@ flux_calc(
   tube_volume = 0.075,
   atm_pressure = 1,
   plot_area = 0.0625,
-  R_const = 0.082057,
   cols_keep = c(),
   cols_ave = c(),
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   temp_air_col = "temp_air",
   temp_air_unit = "celsius",
   fit_type = c()
@@ -44,29 +43,28 @@ can also be a column in case it is a variable}
 \item{tube_volume}{volume of the tubing in L, default for summer 2020 setup,
 can also be a column in case it is a variable}
 
-\item{atm_pressure}{atmoshperic pressure, assumed 1 atm,
+\item{atm_pressure}{atmospheric pressure, assumed 1 atm,
 can be a constant (numerical) or a variable (column name)}
 
 \item{plot_area}{area of the plot in m^2, default for Three-D}
-
-\item{R_const}{gas constant (0.082057 L\emph{atm}K^(-1)*mol^(-1))}
 
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux,
 as distinct() is applied.}
 
 \item{cols_ave}{columns with values that should be averaged
-for each flux in the ouput. Note that NA are removed in mean calculation.}
+for each flux in the output. Note that NA are removed in mean calculation.}
 
-\item{fluxID_col}{column containing the fluxID}
+\item{fluxid_col}{column containing the fluxID}
 
 \item{temp_air_col}{column containing the air temperature used
-to caculate fluxes. Will be averaged with NA removed.}
+to calculate fluxes. Will be averaged with NA removed.}
 
 \item{temp_air_unit}{units in which air temperature was measured.
-Has to be either celsius, fahrenheit or kelvin.}
+Has to be either Celsius, Fahrenheit or Kelvin.}
 
-\item{fit_type}{(optional) model used in flux_fitting, exponential, quadratic or linear.
+\item{fit_type}{(optional) model used in flux_fitting, exponential,
+quadratic or linear.
 Will be automatically filled if slopes_df was produced using flux_quality().}
 }
 \value{
@@ -81,5 +79,5 @@ of gas concentration over time
 }
 \examples{
 data(slopes0)
-flux_calc(slopes0, slope_col = "f_slope_tz")
+flux_calc(slopes0, slope_col = "f_slope")
 }

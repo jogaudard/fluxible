@@ -8,7 +8,7 @@ flux_flag_count(
   slopes_df,
   f_flags = c("ok", "discard", "zero", "weird_flux", "start_error", "no_data",
     "force_ok"),
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   flags_col = "f_quality_flag",
   cut_col = "f_cut",
   cut_arg = "cut"
@@ -22,7 +22,7 @@ flux_flag_count(
 If not provided, it will list only the flags that are
 present in the dataset (no showing 0).}
 
-\item{fluxID_col}{column containing fluxes unique ID}
+\item{fluxid_col}{column containing fluxes unique ID}
 
 \item{flags_col}{column containing the quality flags}
 

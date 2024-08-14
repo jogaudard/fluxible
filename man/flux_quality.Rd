@@ -2,17 +2,17 @@
 % Please edit documentation in R/flux_quality.R
 \name{flux_quality}
 \alias{flux_quality}
-\title{assessing quality of slopes calculated wiht flux_fitting}
+\title{assessing quality of slopes calculated with flux_fitting}
 \usage{
 flux_quality(
   slopes_df,
   fit_type = c(),
   ambient_conc = 421,
   error = 100,
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   slope_col = "f_slope",
-  weird_fluxesID = c(),
-  force_okID = c(),
+  weird_fluxes_id = c(),
+  force_ok_id = c(),
   ratio_threshold = 0,
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
@@ -23,7 +23,7 @@ flux_quality(
   time_col = "f_time",
   fit_col = "f_fit",
   cut_col = "f_cut",
-  RMSE_threshold = 25,
+  rmse_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1,
   cut_arg = "cut"
@@ -41,19 +41,19 @@ measurement (used to detect measurement that started with a polluted setup)}
 \item{error}{error of the setup, defines a window outside of which
 the starting values indicate a polluted setup}
 
-\item{fluxID_col}{column containing unique IDs for each flux}
+\item{fluxid_col}{column containing unique IDs for each flux}
 
 \item{slope_col}{column containing the slope of each flux
 (as calculated by the flux_fitting function)}
 
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+\item{weird_fluxes_id}{vector of fluxIDs that should be discarded
 by the user's decision}
 
-\item{force_okID}{vector of fluxIDs for which the user wants to keep
+\item{force_ok_id}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
 
 \item{ratio_threshold}{ratio of gas concentration data points over length of
-measurment (in seconds) below which the measurement will be considered as
+measurement (in seconds) below which the measurement will be considered as
 not having enough data points to be considered for calculations}
 
 \item{pvalue_col}{column containing the p-value of each flux
@@ -83,7 +83,7 @@ the linear model is considered an unsatisfactory fit
 
 \item{cut_col}{column containing the cutting information}
 
-\item{RMSE_threshold}{threshold for the RMSE of each flux above which
+\item{rmse_threshold}{threshold for the RMSE of each flux above which
 the fit is considered unsatisfactory (exponential fit)}
 
 \item{cor_threshold}{threshold for the correlation coefficient of
@@ -107,5 +107,5 @@ by 0 according to quality thresholds set by user
 data(slopes0lin)
 flux_quality(slopes0lin, fit_type = "li")
 data(slopes30)
-flux_quality(slopes30, fit_type = "expo", slope_col = "f_slope_tz")
+flux_quality(slopes30, fit_type = "expo", slope_col = "f_slope")
 }

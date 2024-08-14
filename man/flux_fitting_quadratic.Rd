@@ -12,7 +12,7 @@ flux_fitting_quadratic(
   end_col = "f_end",
   datetime_col = "f_datetime",
   conc_col = "f_conc",
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   t_zero = 0
 )
 }
@@ -32,12 +32,12 @@ flux_fitting_quadratic(
 
 \item{conc_col}{column with gas concentration data}
 
-\item{fluxID_col}{column with ID of each flux}
+\item{fluxid_col}{column with ID of each flux}
 
 \item{t_zero}{time at which the slope should be calculated}
 }
 \value{
-a df with the modelled gas concentration, slope, intercept,
+a df with the modeled gas concentration, slope, intercept,
 std error, r square and p value of the quadratic model
 }
 \description{

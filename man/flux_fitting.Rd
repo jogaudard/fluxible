@@ -12,9 +12,9 @@ flux_fitting(
   end_col = "f_end",
   datetime_col = "f_datetime",
   conc_col = "f_conc",
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   t_window = 20,
-  Cz_window = 15,
+  cz_window = 15,
   b_window = 10,
   a_window = 10,
   roll_width = 15,
@@ -38,12 +38,12 @@ flux_fitting(
 
 \item{conc_col}{column with gas concentration data}
 
-\item{fluxID_col}{column with ID of each flux}
+\item{fluxid_col}{column with ID of each flux}
 
 \item{t_window}{enlarge focus window before and after tmin and tmax
 (exponential fit)}
 
-\item{Cz_window}{window used to calculate Cz, at the beginning of cut window
+\item{cz_window}{window used to calculate Cz, at the beginning of cut window
 (exponential fit)}
 
 \item{b_window}{window to estimate b. It is an interval after tz where
@@ -52,7 +52,7 @@ it is assumed that the model fits the data perfectly (exponential fit)}
 \item{a_window}{window at the end of the flux to estimate a (exponential fit)}
 
 \item{roll_width}{width of the rolling mean for CO2 when looking for tz,
-ideally same as Cz_window (exponential fit)}
+ideally same as cz_window (exponential fit)}
 
 \item{t_zero}{time at which the slope should be calculated
 (for quadratic fit)}

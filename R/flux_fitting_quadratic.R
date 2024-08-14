@@ -8,9 +8,9 @@
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
-#' @param fluxID_col column with ID of each flux
+#' @param fluxid_col column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
-#' @return a df with the modelled gas concentration, slope, intercept,
+#' @return a df with the modeled gas concentration, slope, intercept,
 #' std error, r square and p value of the quadratic model
 #' @importFrom rlang .data
 #' @importFrom dplyr rename all_of mutate select group_by case_when
@@ -21,22 +21,21 @@
 
 
 flux_fitting_quadratic <- function(conc_df,
-                             start_cut = 0,
-                             end_cut = 0,
-                             start_col = "f_start",
-                             end_col = "f_end",
-                             datetime_col = "f_datetime",
-                             conc_col = "f_conc",
-                             fluxID_col = "f_fluxID",
-                             t_zero = 0
-                             ) {
+                                   start_cut = 0,
+                                   end_cut = 0,
+                                   start_col = "f_start",
+                                   end_col = "f_end",
+                                   datetime_col = "f_datetime",
+                                   conc_col = "f_conc",
+                                   fluxid_col = "f_fluxID",
+                                   t_zero = 0) {
   conc_df <- conc_df |>
     rename(
       f_start = all_of(((start_col))),
       f_end = all_of(((end_col))),
       f_datetime = all_of(((datetime_col))),
       f_conc = all_of(((conc_col))),
-      f_fluxID = all_of(((fluxID_col)))
+      f_fluxID = all_of(((fluxid_col)))
     )
 
   if (!is.double(((start_cut)))) stop("start_cut has to be a double")
@@ -52,7 +51,8 @@ flux_fitting_quadratic <- function(conc_df,
 
   if ((start_cut + end_cut) >= length_flux_max) {
     stop(
-      "You cannot cut more than the length of the measurements! ((start_cut + end_cut) >= length_flux_max)"
+      "You cannot cut more than the length of the measurements!
+      ((start_cut + end_cut) >= length_flux_max)"
     )
   }
 
@@ -67,7 +67,8 @@ flux_fitting_quadratic <- function(conc_df,
       f_start = .data$f_start + ((start_cut)),
       f_end = .data$f_end - ((end_cut)),
       f_cut = case_when(
-        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end ~ "cut",
+        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end
+        ~ "cut",
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
@@ -82,7 +83,7 @@ flux_fitting_quadratic <- function(conc_df,
     drop_na("f_conc") |>
     group_by(.data$f_fluxID) |>
     mutate(
-      f_time_cut = difftime(.data$f_datetime[1:length(.data$f_datetime)],
+      f_time_cut = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
         .data$f_datetime[1],
         units = "secs"
       ),
@@ -127,8 +128,17 @@ flux_fitting_quadratic <- function(conc_df,
     left_join(fitting_par, by = c("f_fluxID")) |>
     mutate(
       f_slope = .data$f_param1 + 2 * .data$f_param2 * ((t_zero)),
-      f_fit = .data$f_intercept + .data$f_param1 * (.data$f_time - ((start_cut))) + .data$f_param2 * (.data$f_time - ((start_cut)))^2,
-      f_fit_slope = .data$f_intercept - .data$f_param2 * ((t_zero))^2 + (.data$f_param1 + 2 * .data$f_param2 * ((t_zero))) * (.data$f_time - ((start_cut)))
+      f_fit =
+        .data$f_intercept
+        + .data$f_param1
+        * (.data$f_time - ((start_cut))) + .data$f_param2
+        * (.data$f_time - ((start_cut)))^2,
+      f_fit_slope =
+        .data$f_intercept
+        - .data$f_param2
+        * ((t_zero))^2
+        + (.data$f_param1 + 2 * .data$f_param2 * ((t_zero)))
+        * (.data$f_time - ((start_cut)))
     )
 
   warning_msg <- conc_df |>
@@ -143,7 +153,7 @@ flux_fitting_quadratic <- function(conc_df,
       ),
       no_data = paste(
         "\n", "fluxID", .data$f_fluxID,
-        ": slope could not be estimated because there are no data in the conc column"
+        "dropped (no data in the conc column)"
       ),
       warnings = case_when(
         .data$n_conc == 0 ~ .data$no_data,

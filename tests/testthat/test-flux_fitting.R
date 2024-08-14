@@ -5,19 +5,19 @@ test_that("works for exponential fitting", {
 })
 
 test_that("works for linear fitting", {
- expect_snapshot(
+  expect_snapshot(
     flux_fitting(co2_conc, fit_type = "lin")
   )
 })
 
 test_that("works for exponential fitting with cut", {
- expect_snapshot(
+  expect_snapshot(
     flux_fitting(co2_conc, fit_type = "expo", start_cut = 20)
   )
 })
 
 test_that("works for linear fitting with cut", {
- expect_snapshot(
+  expect_snapshot(
     flux_fitting(co2_conc, fit_type = "line", start_cut = 20)
   )
 })

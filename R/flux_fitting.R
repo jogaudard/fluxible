@@ -11,13 +11,13 @@
 #' @param conc_df dataframe of gas concentration over time
 #' @param t_window enlarge focus window before and after tmin and tmax
 #' (exponential fit)
-#' @param Cz_window window used to calculate Cz, at the beginning of cut window
+#' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' (exponential fit)
 #' @param b_window window to estimate b. It is an interval after tz where
 #' it is assumed that the model fits the data perfectly (exponential fit)
 #' @param a_window window at the end of the flux to estimate a (exponential fit)
 #' @param roll_width width of the rolling mean for CO2 when looking for tz,
-#' ideally same as Cz_window (exponential fit)
+#' ideally same as cz_window (exponential fit)
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
@@ -25,11 +25,11 @@
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
 #' @param conc_col column with gas concentration data
-#' @param fluxID_col column with ID of each flux
+#' @param fluxid_col column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
 #' (for quadratic fit)
 #' @return a dataframe with the slope at t zero,
-#' and parameters of a model of gas concentration over time 
+#' and parameters of a model of gas concentration over time
 #' @examples
 #' data(co2_conc)
 #' flux_fitting(co2_conc, fit_type = "exp")
@@ -43,15 +43,14 @@ flux_fitting <- function(conc_df,
                          end_col = "f_end",
                          datetime_col = "f_datetime",
                          conc_col = "f_conc",
-                         fluxID_col = "f_fluxID",
+                         fluxid_col = "f_fluxID",
                          t_window = 20,
-                         Cz_window = 15,
+                         cz_window = 15,
                          b_window = 10,
                          a_window = 10,
                          roll_width = 15,
                          t_zero = 0,
                          fit_type) {
-
   fit_type <- flux_fit_type(
     ((conc_df)),
     fit_type = ((fit_type))
@@ -66,9 +65,9 @@ flux_fitting <- function(conc_df,
       end_col = ((end_col)),
       datetime_col = ((datetime_col)),
       conc_col = ((conc_col)),
-      fluxID_col = ((fluxID_col)),
+      fluxid_col = ((fluxid_col)),
       t_window = ((t_window)),
-      Cz_window = ((Cz_window)),
+      cz_window = ((cz_window)),
       b_window = ((b_window)),
       a_window = ((a_window)),
       roll_width = ((roll_width))
@@ -85,7 +84,7 @@ flux_fitting <- function(conc_df,
       end_col = ((end_col)),
       datetime_col = ((datetime_col)),
       conc_col = ((conc_col)),
-      fluxID_col = ((fluxID_col))
+      fluxid_col = ((fluxid_col))
     )
   }
 
@@ -98,7 +97,7 @@ flux_fitting <- function(conc_df,
       end_col = ((end_col)),
       datetime_col = ((datetime_col)),
       conc_col = ((conc_col)),
-      fluxID_col = ((fluxID_col)),
+      fluxid_col = ((fluxid_col)),
       t_zero = ((t_zero))
     )
   }

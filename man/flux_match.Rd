@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_match.R
 \name{flux_match}
 \alias{flux_match}
-\title{Matching continously measured fluxes with measurement IDs and meta data}
+\title{Matching continuously measured fluxes with measurement IDs and meta data}
 \usage{
 flux_match(
   raw_conc,

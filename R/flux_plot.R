@@ -3,30 +3,9 @@
 #' with color code indicating quality flags
 #' This function takes time to run and is optional in the workflow,
 #' but it is still highly recommended to use it to visually check
-#' the measurements
-#' @param slopes_df dataset containing slopes
-#' @param fit_type model used in flux_fitting, exponential, quadratic or linear.
-#' Will be automatically filled if slopes_df was produced using flux_quality()
-#' @param datetime_col column containing datetime of
-#' each concentration measurement
-#' @param conc_col column containing gas concentration data
-#' @param cut_col column containing cut factor
-#' @param cut_arg argument pointing rows to be cut from the measurements
-#' @param fit_col column containing the modelled fit of the flux
-#' @param quality_flag_col column containing the flags produced by flux_quality
-#' @param fluxID_col column containing unique IDs for each flux
-#' @param pvalue_col column containing the p-value of each flux
-#' (linear and quadratic fits)
-#' @param rsquared_col column containing the r squared to be used
-#' for the quality assessment (linear and quadratic fits)
-#' @param fit_slope_col column containing the modelled slope at tz
-#' (for exponential fit)
-#' @param b_col column containing the b parameter (for exponential fit)
-#' @param cor_coef_col column containing the correlation coefficient
-#' produced by flux_quality (for exponential fit)
-#' @param RMSE_col column containing the RMSE produced by flux_quality
-#' (for exponential fit)
-#' @param start_col column containing the datetime of the start of each flux
+#' the measurements.
+#' @param slopes_df dataset containing slopes,
+#' with flags produced by flux_quality
 #' @param color_discard color for fits with a discard quality flag
 #' @param color_cut color for the part of the flux that is cut
 #' @param color_ok color for fits with an ok quality flag
@@ -47,18 +26,11 @@
 #' (default);
 #' "ggsave", the plots can be saved with the ggsave function;
 #' "print_only" prints the plot without creating a file
-#' (independantly from 'print_plot' being TRUE or FALSE)
-#' @param device see ggsave()
-#' @param path see ggsave()
-#' @param scale see ggsave()
-#' @param width see ggsave()
-#' @param height see ggsave()
-#' @param units see ggsave()
-#' @param dpi see ggsave()
-#' @param limitsize see ggsave()
-#' @param bg see ggsave()
-#' @param create.dir see ggsave()
+#' (independently from 'print_plot' being TRUE or FALSE)
+#' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
+#' (in case `output = "ggsave"`)
 #' @param no_data_flag flag marking fluxID without data in f_quality_flag
+#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
@@ -67,28 +39,13 @@
 #' @importFrom progress progress_bar
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag, fit_type = "exp", fit_slope_col = "f_fit_slope",
-#' output = "print_only")
+#' flux_plot(slopes0_flag, output = "print_only")
 #' data(slopes30lin_flag)
-#' flux_plot(slopes30lin_flag, fit_type = "lin", output = "print_only")
-#' flux_plot(slopes30qua_flag, fit_type = "quadratic", output = "print_only")
+#' flux_plot(slopes30lin_flag, output = "print_only")
+#' flux_plot(slopes30qua_flag, output = "print_only")
 #' @export
 
 flux_plot <- function(slopes_df,
-                      fit_type = c(),
-                      datetime_col = "f_datetime",
-                      conc_col = "f_conc",
-                      cut_col = "f_cut",
-                      fit_col = "f_fit",
-                      fit_slope_col = "f_fit_slope",
-                      quality_flag_col = "f_quality_flag",
-                      fluxID_col = "f_fluxID",
-                      pvalue_col = "f_pvalue",
-                      rsquared_col = "f_rsquared",
-                      start_col = "f_start",
-                      b_col = "f_b",
-                      cor_coef_col = "f_cor_coef",
-                      RMSE_col = "f_RMSE",
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_ok = "#009E73",
@@ -105,65 +62,47 @@ flux_plot <- function(slopes_df,
                       y_text_position = 500,
                       print_plot = "FALSE",
                       output = "pdfpages",
-                      device = NULL,
-                      path = NULL,
-                      scale = 1,
-                      width = NA,
-                      height = NA,
-                      units = c("in", "cm", "mm", "px"),
-                      dpi = 300,
-                      limitsize = TRUE,
-                      bg = NULL,
-                      create.dir = FALSE,
+                      ggsave_args = list(),
                       cut_arg = "cut",
-                      no_data_flag = "no_data"
-                      ) {
+                      no_data_flag = "no_data") {
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
   fit_type <- flux_fit_type(
-    slopes_df,
-    fit_type = ((fit_type))
+    slopes_df
   )
 
   f_scales <- match.arg(f_scales, c("free", "fixed"))
 
-  if(((output)) %in% c("pdfpages", "ggsave")){
-  f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
+  if (((output)) %in% c("pdfpages", "ggsave")) {
+    f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
-  folder <- "./f_quality_plots"
-  if (!file.exists(folder)) {
-    dir.create(folder)
+    folder <- "./f_quality_plots"
+    if (!file.exists(folder)) {
+      dir.create(folder)
+    }
   }
-  }
-
-  slopes_df <- slopes_df |>
-    rename(
-      f_datetime = all_of(((datetime_col))),
-      f_conc = all_of(((conc_col))),
-      f_cut = all_of(((cut_col))),
-      f_fit = all_of(((fit_col))),
-      f_quality_flag = all_of(((quality_flag_col))),
-      f_fluxID = all_of(((fluxID_col))),
-      f_start = all_of(((start_col)))
-    )
 
   if (max(slopes_df$f_conc, na.rm = TRUE) > ((f_ylim_upper))) {
-    message("Some concentration data points will not be displayed because f_ylim_upper is too low.")
+    message("Some concentration data points will not be displayed
+    because f_ylim_upper is too low.")
   }
 
-    if (max(slopes_df$f_fit, na.rm = TRUE) > ((f_ylim_upper))) {
-    message("Part of the fit will not be displayed because f_ylim_upper is too low.")
+  if (max(slopes_df$f_fit, na.rm = TRUE) > ((f_ylim_upper))) {
+    message("Part of the fit will not be displayed
+    because f_ylim_upper is too low.")
   }
 
-    if (min(slopes_df$f_conc, na.rm = TRUE) < ((f_ylim_lower))) {
-    message("Some concentration data points will not be displayed because f_ylim_lower is too high.")
+  if (min(slopes_df$f_conc, na.rm = TRUE) < ((f_ylim_lower))) {
+    message("Some concentration data points will not be displayed
+    because f_ylim_lower is too high.")
   }
 
-    if (min(slopes_df$f_fit, na.rm = TRUE) < ((f_ylim_lower))) {
-    message("Part of the fit will not be displayed because f_ylim_lower is too high.")
+  if (min(slopes_df$f_fit, na.rm = TRUE) < ((f_ylim_lower))) {
+    message("Part of the fit will not be displayed
+    because f_ylim_lower is too high.")
   }
 
-flags <- slopes_df |>
+  flags <- slopes_df |>
     select("f_fluxID", "f_quality_flag") |>
     filter(.data$f_quality_flag == ((no_data_flag))) |>
     mutate(
@@ -190,10 +129,6 @@ flags <- slopes_df |>
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
       ((slopes_df)),
-      fit_slope_col = ((fit_slope_col)),
-      b_col = ((b_col)),
-      cor_coef_col = ((cor_coef_col)),
-      RMSE_col = ((RMSE_col)),
       cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
     )
@@ -203,8 +138,6 @@ flags <- slopes_df |>
   if (((fit_type)) == "linear") {
     f_plot <- flux_plot_lin(
       ((slopes_df)),
-      pvalue_col = ((pvalue_col)),
-      rsquared_col = ((rsquared_col)),
       cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
     )
@@ -213,14 +146,12 @@ flags <- slopes_df |>
   if (((fit_type)) == "quadratic") {
     f_plot <- flux_plot_quadratic(
       ((slopes_df)),
-      pvalue_col = ((pvalue_col)),
-      rsquared_col = ((rsquared_col)),
       cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))
     )
   }
 
-message("Plotting in progress")
+  message("Plotting in progress")
 
   f_plot <- f_plot +
     scale_color_manual(values = c(
@@ -248,47 +179,47 @@ message("Plotting in progress")
       colour = "Quality flags"
     )
 
-if(((output)) == "print_only") {
-  return(f_plot)
-}
+  if (((output)) == "print_only") {
+    return(f_plot)
+  }
 
-if(((output)) == "pdfpages") {
-  f_plotname <- paste(f_plotname, ".pdf", sep = "")
+  if (((output)) == "pdfpages") {
+    f_plotname <- paste(f_plotname, ".pdf", sep = "")
     pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
     pb <- progress_bar$new(
-      format = "  Printing plots in pdf document [:bar] :current/:total (:percent)",
+      format =
+        "Printing plots in pdf document [:bar] :current/:total (:percent)",
       total = n_pages(f_plot)
-      )
+    )
     pb$tick(0)
-  Sys.sleep(3)
-  for (i in 1:n_pages(f_plot)) {
-    pb$tick()
-  Sys.sleep(0.1)
-    print(f_plot +
-      facet_wrap_paginate(
-        ~f_fluxID,
-        ncol = ((f_ncol)), nrow = ((f_nrow)),
-        page = i, scales = ((f_scales))
-      ))
+    Sys.sleep(3)
+    for (i in 1:n_pages(f_plot)) {
+      pb$tick()
+      Sys.sleep(0.1)
+      print(f_plot +
+        facet_wrap_paginate(
+          ~f_fluxID,
+          ncol = ((f_ncol)), nrow = ((f_nrow)),
+          page = i, scales = ((f_scales))
+        ))
+    }
+    quietly(dev.off())
+    message("Plots saved in f_quality_plots folder.")
+    if (((print_plot)) == TRUE) {
+      return(f_plot)
+    }
   }
-  quietly(dev.off())
-  message("Plots saved in f_quality_plots folder.")
-  if (((print_plot)) == TRUE) {
-    return(f_plot)
-  }
-}
 
-if(((output)) == "ggsave"){
-  message("Saving plots with ggsave.")
-  ggsave(
-    ((f_plotname)),
-    plot = f_plot,
-    device = ((device))
-  )
-  message("Plots saved in f_quality_plots folder.")
-  if (((print_plot)) == TRUE) {
-    return(f_plot)
-  }
-}
+  if (((output)) == "ggsave") {
+    message("Saving plots with ggsave.")
+    do.call(
+      ggsave,
+      args = c(filename = ((f_plotname)), ((ggsave_args)))
+    )
 
+    message("Plots saved in f_quality_plots folder.")
+    if (((print_plot)) == TRUE) {
+      return(f_plot)
+    }
+  }
 }

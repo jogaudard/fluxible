@@ -1,4 +1,4 @@
-#' Matching continously measured fluxes with measurement IDs and meta data
+#' Matching continuously measured fluxes with measurement IDs and meta data
 #' @description Matching a dataframe of continuously measured
 #' gas concentration data with measurement metadata from another dataframe.
 #' Measurements are paired with their metadata based on datetime.
@@ -55,7 +55,7 @@ flux_match <- function(raw_conc,
       f_start = all_of((start_col))
     )
 
- 
+
   if (!is.POSIXct(raw_conc$f_datetime)) {
     stop("datetime in raw_conc dataframe is not ymd_hms!")
   }
@@ -113,7 +113,7 @@ flux_match <- function(raw_conc,
     fill(names(field_record)) |>
     filter(
       (.data$f_datetime < .data$f_end &
-        .data$f_datetime >= .data$f_start)
+         .data$f_datetime >= .data$f_start)
     ) |>
     mutate(
       f_n_conc = sum(!is.na(.data$f_conc)),

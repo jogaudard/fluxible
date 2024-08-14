@@ -4,20 +4,10 @@
 \alias{flux_plot_lin}
 \title{plotting fluxes with linear fit}
 \usage{
-flux_plot_lin(
-  slopes_df,
-  pvalue_col = "f_pvalue",
-  rsquared_col = "f_rsquared",
-  y_text_position = 500,
-  cut_arg = "cut"
-)
+flux_plot_lin(slopes_df, y_text_position = 500, cut_arg = "cut")
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
-
-\item{pvalue_col}{column containing the p-value of each flux}
-
-\item{rsquared_col}{column containing the r squared of each flux}
 
 \item{y_text_position}{position of the text box}
 

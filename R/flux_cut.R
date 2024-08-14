@@ -4,18 +4,15 @@
 #' @param keep_arg name in cut_col of data to keep
 
 flux_cut <- function(slopes_df,
-                    cut_col,
-                    keep_arg
-)
-{
+                     cut_col,
+                     keep_arg) {
+  if (is.na(((keep_arg)))) {
+    stop("please provide the keep_filter argument to filter the data to keep")
+  }
 
-    if(is.na(((keep_arg)))) {
-      stop("please provide the keep_filter argument to filter the data to keep")
-    }
-
-       slopes_df <- slopes_df |>
-      rename(
-        f_cut = all_of(((cut_col)))
-      ) |>
-      filter(.data$f_cut == ((keep_arg)))
+  slopes_df <- slopes_df |>
+    rename(
+      f_cut = all_of(((cut_col)))
+    ) |>
+    filter(.data$f_cut == ((keep_arg)))
 }
