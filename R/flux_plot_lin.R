@@ -2,8 +2,6 @@
 #' @description plots the fluxes that were fitted
 #' with a linear model
 #' @param slopes_df dataset containing slopes
-#' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared of each flux
 #' @param y_text_position position of the text box
 #' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr rename select distinct mutate
@@ -16,15 +14,8 @@
 
 
 flux_plot_lin <- function(slopes_df,
-                          pvalue_col = "f_pvalue",
-                          rsquared_col = "f_rsquared",
                           y_text_position = 500,
                           cut_arg = "cut") {
-  slopes_df <- slopes_df |>
-    rename(
-      f_pvalue = all_of(((pvalue_col))),
-      f_rsquared = all_of(((rsquared_col)))
-    )
 
   param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
 

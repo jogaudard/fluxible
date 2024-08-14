@@ -2,11 +2,6 @@
 #' @description plots the fluxes that were fitted with
 #' an exponential model
 #' @param slopes_df dataset containing slopes
-#' @param fit_slope_col column containing the modeled slope at tz
-#' @param b_col column containing the b parameter of the exponential fit
-#' @param cor_coef_col column containing the correlation coefficient
-#' produced by flux_quality
-#' @param rmse_col column containing the RMSE produced by flux_quality
 #' @param y_text_position position of the text box
 #' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr rename select distinct mutate
@@ -20,18 +15,7 @@
 
 flux_plot_exp <- function(slopes_df,
                           cut_arg = "cut",
-                          fit_slope_col = "f_fit_slope",
-                          b_col = "f_b",
-                          cor_coef_col = "f_cor_coef",
-                          rmse_col = "f_RMSE",
                           y_text_position = 500) {
-  slopes_df <- slopes_df |>
-    rename(
-      f_fit_slope = all_of(((fit_slope_col))),
-      f_b = all_of(((b_col))),
-      f_cor_coef = all_of(((cor_coef_col))),
-      f_RMSE = all_of(((rmse_col)))
-    )
 
   param_df <- flux_param_exp(
     ((slopes_df)),

@@ -17,7 +17,6 @@
 #' @param atm_pressure atmospheric pressure, assumed 1 atm,
 #' can be a constant (numerical) or a variable (column name)
 #' @param plot_area area of the plot in m^2, default for Three-D
-#' @param r_const gas constant (0.082057 L x atm x K^(-1) x mol^(-1))
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux,
 #' as distinct() is applied.
@@ -40,7 +39,7 @@
 #' ungroup mutate case_when distinct left_join across everything
 #' @examples
 #' data(slopes0)
-#' flux_calc(slopes0, slope_col = "f_slope_tz")
+#' flux_calc(slopes0, slope_col = "f_slope")
 #' @export
 
 
@@ -54,7 +53,6 @@ flux_calc <- function(slopes_df,
                       tube_volume = 0.075,
                       atm_pressure = 1,
                       plot_area = 0.0625,
-                      r_const = 0.082057,
                       cols_keep = c(),
                       cols_ave = c(),
                       fluxid_col = "f_fluxID",
@@ -73,7 +71,6 @@ flux_calc <- function(slopes_df,
 
   if (!is.double(((atm_pressure)))) stop("atm_pressure has to be a double")
   if (!is.double(((plot_area)))) stop("plot_area has to be a double")
-  if (!is.double(((r_const)))) stop("r_const has to be a double")
 
   colnames <- colnames(slopes_df)
   if (!(((slope_col)) %in% ((colnames)))) {
@@ -210,6 +207,8 @@ flux_calc <- function(slopes_df,
   }
 
   message("Calculating fluxes...")
+
+  r_const <- 0.082057
 
   fluxes <- slope_ave |>
     mutate(

@@ -38,7 +38,7 @@ a_est as starting point.}
 b_est as starting point.}
 \item{tz}{tz parameter of the C(t) function, calculated by optim() with
 tz_est as starting point.}
-\item{f_slope_tz}{Slope of C(t) at tz}
+\item{f_slope}{Slope of C(t) at tz}
 \item{f_fit}{C(t), modeled CO2 concentration as a function of time.}
 \item{fit_slope}{Output of linear model of CO2 concentration passing by C(tz)
 and a slope of slope_tz.}

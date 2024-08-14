@@ -64,7 +64,6 @@ slopes_exp_liahovden |>
   # we just show a sample of the plots to avoid slowing down the example
   dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
   flux_plot(
-    fit_type = "exp",
     output = "print_only",
     f_ylim_lower = 300,
     f_ylim_upper = 600,

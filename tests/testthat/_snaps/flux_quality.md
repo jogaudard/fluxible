@@ -1,7 +1,7 @@
 # works for exponential fitting
 
     Code
-      flux_quality(slopes0, fit_type = "expo", slope_col = "f_slope_tz")
+      flux_quality(slopes0, fit_type = "expo", slope_col = "f_slope")
     Message
       
        Total number of measurements: 6

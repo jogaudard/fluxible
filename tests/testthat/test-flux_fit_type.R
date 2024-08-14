@@ -23,7 +23,7 @@ test_that("fit transfer from flux_fitting", {
 
 test_that("fit_type can be NULL", {
   expect_equal(
-    flux_fit_type(slopes0),
+    flux_fit_type(slopes60),
     NULL
   )
 })

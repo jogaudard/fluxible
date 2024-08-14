@@ -2,8 +2,6 @@
 #' @description specific part of flux_plot for
 #' quadratic fit
 #' @param slopes_df dataset containing slopes
-#' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared of each flux
 #' @param y_text_position position of the text box
 #' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr rename select distinct mutate
@@ -16,14 +14,10 @@
 
 
 flux_plot_quadratic <- function(slopes_df,
-                                pvalue_col = "f_pvalue",
-                                rsquared_col = "f_rsquared",
                                 y_text_position = 500,
                                 cut_arg = "cut") {
   plot_quadratic <- slopes_df |>
     flux_plot_lin(
-      pvalue_col = ((pvalue_col)),
-      rsquared_col = ((rsquared_col)),
       y_text_position = ((y_text_position)),
       cut_arg = ((cut_arg))
     )

@@ -46,11 +46,12 @@ slopes0 <- readr::read_csv("data-raw/slopes0.csv") |>
     f_a = "a",
     f_b = "b",
     f_tz = "tz",
-    f_slope_tz = "slope_tz",
+    f_slope = "slope_tz",
     f_fit = "fit",
     f_fit_slope = "fit_slope",
     f_start_z = "start_z"
   )
+attr(slopes0, "fit_type") <- "exponential"
 usethis::use_data(slopes0, overwrite = TRUE)
 
 slopes30 <- readr::read_csv("data-raw/slopes30.csv") |>
@@ -67,11 +68,13 @@ slopes30 <- readr::read_csv("data-raw/slopes30.csv") |>
     f_a = "a",
     f_b = "b",
     f_tz = "tz",
-    f_slope_tz = "slope_tz",
+    f_slope = "slope_tz",
     f_fit = "fit",
     f_fit_slope = "fit_slope",
     f_start_z = "start_z"
   )
+attr(slopes30, "fit_type") <- "exponential"
+
 usethis::use_data(slopes30, overwrite = TRUE)
 
 slopes60 <- readr::read_csv("data-raw/slopes60.csv") |>
@@ -136,6 +139,7 @@ slopes30lin <- readr::read_csv(
     f_slope = "slope",
     f_intercept = "intercept"
   )
+attr(slopes30lin, "fit_type") <- "linear"
 usethis::use_data(slopes30lin, overwrite = TRUE)
 
 slopes60lin <- readr::read_csv(
@@ -183,15 +187,15 @@ usethis::use_data(slopes0_temp, overwrite = TRUE)
 slopes0lin_flag <- flux_quality(slopes0lin, fit_type = "lin")
 usethis::use_data(slopes0lin_flag, overwrite = TRUE)
 
-slopes30lin_flag <- flux_quality(slopes30lin, fit_type = "lin")
+slopes30lin_flag <- flux_quality(slopes30lin)
 usethis::use_data(slopes30lin_flag, overwrite = TRUE)
 
 slopes0_flag <- flux_quality(
-  slopes0, fit_type = "exp", slope_col = "f_slope_tz"
+  slopes0
 )
 usethis::use_data(slopes0_flag, overwrite = TRUE)
 
 slopes30_flag <- flux_quality(
-  slopes30, fit_type = "exp", slope_col = "f_slope_tz"
+  slopes30
 )
 usethis::use_data(slopes30_flag, overwrite = TRUE)
