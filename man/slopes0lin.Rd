@@ -11,9 +11,11 @@ A tibble with 1251 rows and 22 variables
 \item{temp_air}{Air temperature inside the flux chamber in Celsius.}
 \item{temp_soil}{Ground temperature inside the flux chamber in Celsius.}
 \item{conc}{CO2 concentration in ppm.}
-\item{PAR}{Photosyntethically active radiation inside the chamber in micromol/s/sqm.}
+\item{PAR}{Photosynthetically active radiation inside the chamber
+in micromol/s/sqm.}
 \item{turfID}{Unique ID of the turf in which the measurement took place.}
-\item{type}{Type of measurement: ecosystems respiration (ER) or net ecosystem exchange (NEE).}
+\item{type}{Type of measurement: ecosystems respiration (ER)
+or net ecosystem exchange (NEE).}
 \item{start}{Datetime at which the measurement was started.}
 \item{end}{Datetime at which the measurement ended.}
 \item{fluxID}{Unique ID for each flux.}
@@ -21,11 +23,15 @@ A tibble with 1251 rows and 22 variables
 \item{ratio}{Ratio of n_conc over length of the measurement (in seconds).}
 \item{flag}{Data quality flags.}
 \item{time}{Time variable of the flux in seconds.}
-\item{cut}{Indicating if the measurement should be kept (keep) or discarded (cut).}
+\item{cut}{Indicating if the measurement should be kept (keep)
+or discarded (cut).}
 \item{p.value}{P-value of the linear model of CO2 concentration over time.}
-\item{r.squared}{R squared of the linear model of CO2 concentration over time.}
-\item{adj.r.squared}{Adjusted R squared of the linear model of CO2 concentration over time.}
-\item{intercept}{Intercept of the linear model of CO2 concentration over time.}
+\item{r.squared}{R squared of the linear model of CO2 concentration
+over time.}
+\item{adj.r.squared}{Adjusted R squared of the linear model of
+CO2 concentration over time.}
+\item{intercept}{Intercept of the linear model of CO2 concentration
+over time.}
 \item{slope}{Slope of the linear model of CO2 concentration over time.}
 \item{fit}{Output of the linear model of CO2 concentration over time.}
 }

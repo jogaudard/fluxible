@@ -2,36 +2,18 @@
 % Please edit documentation in R/flux_plot_exp.R
 \name{flux_plot_exp}
 \alias{flux_plot_exp}
-\title{ploting fluxes for fit evaluation}
+\title{plotting fluxes with exponential fit}
 \usage{
-flux_plot_exp(
-  slopes_df,
-  cut_arg = "cut",
-  fit_slope_col = "f_fit_slope",
-  b_col = "f_b",
-  cor_coef_col = "f_cor_coef",
-  RMSE_col = "f_RMSE",
-  y_text_position = 500
-)
+flux_plot_exp(slopes_df, cut_arg = "cut", y_text_position = 500)
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{cut_arg}{argument pointing rows to be cut from the measurements
-but will take time depending on the size of the dataset}
-
-\item{fit_slope_col}{column containing the modelled slope at tz}
-
-\item{b_col}{column containing the b parameter of the exponential fit}
-
-\item{cor_coef_col}{column containing the correlation coefficient
-produced by flux_quality}
-
-\item{RMSE_col}{column containing the RMSE produced by flux_quality}
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 
 \item{y_text_position}{position of the text box}
 }
 \description{
-plots the fluxes and indicates what should be
-discarded or replaced by zero
+plots the fluxes that were fitted with
+an exponential model
 }

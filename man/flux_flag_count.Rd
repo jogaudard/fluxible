@@ -8,7 +8,7 @@ flux_flag_count(
   slopes_df,
   f_flags = c("ok", "discard", "zero", "weird_flux", "start_error", "no_data",
     "force_ok"),
-  fluxID_col = "f_fluxID",
+  fluxid_col = "f_fluxID",
   flags_col = "f_quality_flag",
   cut_col = "f_cut",
   cut_arg = "cut"
@@ -17,9 +17,12 @@ flux_flag_count(
 \arguments{
 \item{slopes_df}{dataframe of flux slopes}
 
-\item{f_flags}{list of flags used in the dataset (if different from default from flux_quality)}
+\item{f_flags}{list of flags used in the dataset
+(if different from default from flux_quality).
+If not provided, it will list only the flags that are
+present in the dataset (no showing 0).}
 
-\item{fluxID_col}{column containing fluxes unique ID}
+\item{fluxid_col}{column containing fluxes unique ID}
 
 \item{flags_col}{column containing the quality flags}
 
@@ -28,10 +31,16 @@ flux_flag_count(
 \item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
-a dataframe with the number of fluxes for each flags and their proportion to the total
+a dataframe with the number of fluxes for each flags
+and their proportion to the total
 }
 \description{
-provides a table of how many fluxes were attributed which quality flag
+provides a table of how many fluxes were attributed
+which quality flag
+}
+\examples{
+data(slopes30qua_flag)
+flux_flag_count(slopes30qua_flag)
 }
 \author{
 Vincent Belde

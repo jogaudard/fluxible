@@ -4,10 +4,10 @@
 \alias{flux_cut}
 \title{filter cut data before calculating fluxes}
 \usage{
-flux_cut(slope_df, cut_col, keep_arg)
+flux_cut(slopes_df, cut_col, keep_arg)
 }
 \arguments{
-\item{slope_df}{dataset containing slopes and cut column}
+\item{slopes_df}{dataset containing slopes and cut column}
 
 \item{cut_col}{column containing cutting information}
 

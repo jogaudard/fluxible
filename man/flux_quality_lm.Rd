@@ -2,13 +2,12 @@
 % Please edit documentation in R/flux_quality_lm.R
 \name{flux_quality_lm}
 \alias{flux_quality_lm}
-\title{quality assessment for the fluxes calculated with the linear model}
+\title{quality assessment for the slopes estimated by flux_fitting}
 \usage{
 flux_quality_lm(
   slopes_df,
-  slope_col = "f_slope",
-  weird_fluxesID = c(),
-  force_okID = c(),
+  weird_fluxes_id = c(),
+  force_ok_id = c(),
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
   pvalue_threshold = 0.3,
@@ -18,13 +17,10 @@ flux_quality_lm(
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
 
-\item{slope_col}{column containing the slope of each flux
-(as calculated by the flux_fitting function)}
-
-\item{weird_fluxesID}{vector of fluxIDs that should be discarded
+\item{weird_fluxes_id}{vector of fluxIDs that should be discarded
 by the user's decision}
 
-\item{force_okID}{vector of fluxIDs for which the user wants to keep
+\item{force_ok_id}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
 
 \item{pvalue_col}{column containing the p-value of each flux}
@@ -43,5 +39,7 @@ same dataframe with added flag and corrected slopes columns
 }
 \description{
 indicates if fluxes should be discarded or replaced by 0
-according to parameters set by user
+according to parameters set by user.
+flux_quality_lm is for the model of the lm family.
+flux_quality_exp is for the exponential model.
 }

@@ -1,4 +1,4 @@
-#' prepares text to print and quality flags for flux_plot function
+#' prepares text to print for flux_plot function
 #' @description creates a df with quality flags and quality diagnostics
 #' to print on the plots produced by flux_plot.
 #' flux_param_lm is for fit in the lm family (linear and quadratic)
@@ -8,13 +8,8 @@
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_exp <- function(slopes_df,
-                          cut_arg = "cut"
-){
-
-    
-
-
-    param_df <- slopes_df |>
+                           cut_arg = "cut") {
+  param_df <- slopes_df |>
     select(
       "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
       "f_quality_flag"
@@ -40,5 +35,5 @@ flux_param_exp <- function(slopes_df,
     ) |>
     select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
 
-    param_df
+  param_df
 }

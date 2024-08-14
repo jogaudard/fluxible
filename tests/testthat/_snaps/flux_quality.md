@@ -1,7 +1,7 @@
 # works for exponential fitting
 
     Code
-      flux_quality(slopes0, fit_type = "expo", slope_col = "f_slope_tz")
+      flux_quality(slopes0, fit_type = "expo", slope_col = "f_slope")
     Message
       
        Total number of measurements: 6
@@ -32,7 +32,7 @@
       #   n_conc <dbl>, ratio <dbl>, flag <lgl>, f_time <dbl>, f_cut <chr>,
       #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
       #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
-      #   f_slope_tz <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>,
+      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>,
       #   f_n_conc <int>, f_ratio <dbl>, f_flag_ratio <chr>, f_start_error <chr>, ...
 
 # works for linear fitting

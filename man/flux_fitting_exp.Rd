@@ -2,12 +2,13 @@
 % Please edit documentation in R/flux_fitting_exp.R
 \name{flux_fitting_exp}
 \alias{flux_fitting_exp}
-\title{Fitting a model to the gas concentration curve and estimating the slope}
+\title{Fitting a model to the gas concentration curve and estimating the slope
+over time, using the exponential model from Zhao et al (2018)}
 \usage{
 flux_fitting_exp(
   conc_df,
   t_window = 20,
-  Cz_window = 15,
+  cz_window = 15,
   b_window = 10,
   a_window = 10,
   roll_width = 15,
@@ -17,7 +18,7 @@ flux_fitting_exp(
   end_col = "f_end",
   datetime_col = "f_datetime",
   conc_col = "f_conc",
-  fluxID_col = "f_fluxID"
+  fluxid_col = "f_fluxID"
 )
 }
 \arguments{
@@ -25,7 +26,7 @@ flux_fitting_exp(
 
 \item{t_window}{enlarge focus window before and after tmin and tmax}
 
-\item{Cz_window}{window used to calculate Cz, at the beginning of cut window}
+\item{cz_window}{window used to calculate Cz, at the beginning of cut window}
 
 \item{b_window}{window to estimate b. It is an interval after tz
 where it is assumed that C fits the data perfectly}
@@ -33,12 +34,12 @@ where it is assumed that C fits the data perfectly}
 \item{a_window}{window at the end of the flux to estimate a}
 
 \item{roll_width}{width of the rolling mean for CO2 when looking for tz,
-ideally same as Cz_window}
+ideally same as cz_window}
 
-\item{start_cut}{to cut at the start}
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
 
-\item{end_cut}{to cut at the end, if you notice on the plots
-that the match was not precise enough}
+\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
 \item{start_col}{column with datetime when the measurement started}
 
@@ -48,13 +49,18 @@ that the match was not precise enough}
 
 \item{conc_col}{column with gas concentration data}
 
-\item{fluxID_col}{column with ID of each flux}
+\item{fluxid_col}{column with ID of each flux}
 }
 \value{
 a dataframe with the slope at t zero,
-modelled concentration over time and exponential expression parameters
+modeled concentration over time and exponential expression parameters
 }
 \description{
 Fits an exponential expression to the concentration evolution
-over time, as described in Zhao 2018
+}
+\references{
+Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
+On the calculation of daytime CO2 fluxes measured by automated closed
+transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
+https://doi.org/10.1016/j.agrformet.2018.08.022
 }
