@@ -1,17 +1,21 @@
 
 
 flux_fun_check <- function(df,
-                           col_numeric = c("f_datetime"),
-                           col_time = c("temp_air"),
+                           col_numeric = c(),
+                           col_time = c(),
                            arg_numeric = c()) {
+  type <- c()
+for(i in 1:length(arg_numeric)) {
+  type[i] <- class(eval(as.symbol(arg_numeric[i])))
+}
   arg_df <- tibble(
     name = ((arg_numeric)),
-    type = class()
+    type = type,
+    supposed_type = "numeric"
   )
 
-  # maybe I make a for loop for the arguments??
 
-  check_df <- sapply(slopes0, class) |>
+  check_df <- sapply(((df)), class) |>
     lapply(`[[`, 1) |>
     bind_rows() |>
     pivot_longer(everything(), values_to = "type") |>
@@ -21,23 +25,17 @@ flux_fun_check <- function(df,
         name %in% ((col_time)) ~ "POSIXct"
       )
     ) |>
-    drop_na(supposed_type) |>
+    drop_na(supposed_type)
+
+  check_df <- bind_rows(check_df, arg_df) |>
     mutate(
       stop_msg = case_when(
         type != supposed_type ~ paste("\n", name, "has to be", supposed_type)
       ),
       stop_msg = as.character(stop_msg)
-    )
+    ) |>
+    drop_na(stop_msg)
 
-
-
-
-
-
-
-# if(!is.na(((arg_double)))) {
-# if (!is.double(((arg_double)))) arg_msg <- paste("\n", ((arg_double)), "has to be a double"))
-# }
 
 stop_msg <- stringr::str_c(check_df$stop_msg)
 
