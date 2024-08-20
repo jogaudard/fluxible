@@ -91,7 +91,7 @@ test_that("error on datetime", {
       co2_df_short,
       record_short
     ),
-    "datetime in raw_conc dataframe is not ymd_hms!"
+    "datetime has to be POSIXct"
   )
 })
 
@@ -106,7 +106,7 @@ test_that("error on conc variable", {
       co2_df_short,
       record_short
     ),
-    "conc is not a double"
+    "conc has to be numeric"
   )
 })
 
@@ -121,7 +121,7 @@ test_that("error on start", {
       co2_df_short,
       record_short
     ),
-    "start in field_record dataframe is not ymd_hms!"
+    "start has to be POSIXct"
   )
 })
 
@@ -131,7 +131,7 @@ test_that("error on startcrop", {
       record_short,
       startcrop = "blip"
     ),
-    "startcrop has to be a double"
+    "startcrop has to be numeric"
   )
 })
 
@@ -142,7 +142,7 @@ test_that("error on measurement_length", {
       record_short,
       measurement_length = "blip"
     ),
-    "measurement_length has to be a double"
+    "measurement_length has to be numeric"
   )
 })
 
@@ -164,6 +164,6 @@ test_that("error on time_diff", {
       record_short,
       time_diff = "comment est votre blanquette?"
     ),
-    "time_diff has to be a double"
+    "time_diff has to be numeric"
   )
 })

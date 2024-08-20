@@ -518,3 +518,51 @@ attr_slopes_test <- attributes(slopes_test)
 attr_slopes_test$fit_type
 attributes(slopes30qua)$fit_type
 str(co2_fluxes)
+
+# problem with the fun check
+
+test_fun2 <- function(arg){
+   arg * 2
+}
+
+flux_fun_check_test <- function(
+                           arg_numeric = c()) {
+  type <- c()
+for(i in seq_along(arg_numeric)) {
+  type[i] <- class(eval(as.symbol(arg_numeric[i])))
+}
+  arg_df <- tibble(
+    name = ((arg_numeric)),
+    type = type,
+    supposed_type = "numeric"
+  )
+
+
+arg_df
+
+
+}
+
+arg1 <- 12
+arg2 <- "blop"
+
+flux_fun_check_test(arg_numeric = c("arg1", "arg2"))
+
+
+test_function <- function(df,
+                        arg_test1 = 10,
+                        arg_test2 = "gneu"
+                        ){
+                           # environment(flux_fun_check_test) <- environment()
+                           flux_fun_check_test(
+                              arg_numeric = c("arg_test1", "arg_test2")
+                           )
+                           # test_fun2(arg = arg1)
+                        
+                           # head(df)
+                        }
+                        
+                        # vec <- names(formals(test_function))
+                        # vec
+                        # environment(test_function)
+test_function(slopes0)

@@ -78,6 +78,22 @@ flux_quality <- function(slopes_df,
                          cor_threshold = 0.5,
                          b_threshold = 1,
                          cut_arg = "cut") {
+  environment(flux_fun_check) <- environment()
+
+  flux_fun_check(slopes_df,
+    col_numeric = c(
+      ((slope_col)),
+      ((conc_col)),
+      ((fit_col)),
+      ((time_col))
+    ),
+    arg_numeric = c(
+      "ambient_conc",
+      "error",
+      "ratio_threshold"
+    )
+  )
+
   slopes_df <- slopes_df |>
     rename(
       f_fluxID = all_of(((fluxid_col))),

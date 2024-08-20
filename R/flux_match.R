@@ -44,6 +44,23 @@ flux_match <- function(raw_conc,
                        datetime_col = "datetime",
                        conc_col = "conc",
                        start_col = "start") {
+  environment(flux_fun_check) <- environment()
+
+  flux_fun_check(raw_conc,
+    col_datetime = ((datetime_col)),
+    col_numeric = ((conc_col)),
+    arg_numeric = c(
+      "startcrop",
+      "measurement_length",
+      "ratio_threshold",
+      "time_diff"
+    )
+  )
+
+  flux_fun_check(field_record,
+    col_datetime = ((start_col))
+  )
+
   raw_conc <- raw_conc |>
     rename(
       f_datetime = all_of((datetime_col)),
@@ -56,27 +73,8 @@ flux_match <- function(raw_conc,
     )
 
 
-  if (!is.POSIXct(raw_conc$f_datetime)) {
-    stop("datetime in raw_conc dataframe is not ymd_hms!")
-  }
-  if (!is.double(raw_conc$f_conc)) stop("conc is not a double")
 
-  if (!is.POSIXct(field_record$f_start)) {
-    stop("start in field_record dataframe is not ymd_hms!")
-  }
 
-  if (!is.double(((startcrop)))) {
-    stop("startcrop has to be a double")
-  }
-  if (!is.double(((time_diff)))) {
-    stop("time_diff has to be a double")
-  }
-  if (!is.double(((measurement_length)))) {
-    stop("measurement_length has to be a double")
-  }
-  if (!is.double(((ratio_threshold)))) {
-    stop("ratio_threshold has to be a number between 0 and 1")
-  }
   if (((ratio_threshold)) < 0 || ((ratio_threshold)) > 1) {
     stop("ratio_threshold has to be a number between 0 and 1")
   }

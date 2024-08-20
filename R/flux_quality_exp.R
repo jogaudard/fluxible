@@ -31,6 +31,17 @@ flux_quality_exp <- function(slopes_df,
                              rmse_threshold = 25,
                              cor_threshold = 0.5,
                              b_threshold = 1) {
+  environment(flux_fun_check) <- environment()
+
+  flux_fun_check(slopes_df,
+    col_numeric = ((b_col)),
+    arg_numeric = c(
+      "rmse_threshold",
+      "cor_threshold",
+      "b_threshold"
+    )
+  )
+
   slopes_df <- slopes_df |>
     rename(
       f_b = all_of(((b_col)))

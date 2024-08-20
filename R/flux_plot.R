@@ -65,6 +65,18 @@ flux_plot <- function(slopes_df,
                       ggsave_args = list(),
                       cut_arg = "cut",
                       no_data_flag = "no_data") {
+  environment(flux_fun_check) <- environment()
+
+  flux_fun_check(slopes_df,
+    arg_numeric = c(
+      "f_ylim_upper",
+      "f_ylim_lower",
+      "f_ncol",
+      "f_nrow",
+      "y_text_position"
+    )
+  )
+
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
   fit_type <- flux_fit_type(
