@@ -51,7 +51,10 @@ flux_fitting <- function(conc_df,
                          roll_width = 15,
                          t_zero = 0,
                          fit_type) {
-  environment(flux_fun_check) <- environment()
+  # environment(flux_fun_check) <- environment()
+
+  force(start_cut)
+  force(end_cut)
 
   flux_fun_check(
     conc_df,
