@@ -326,18 +326,19 @@ Fluxes were calculated in five steps from raw gas concentration data and the pro
 Here is a plot of the results.
 
 ```{r 24h_fluxes, fig.width = 8, fig.height = 9, warning = FALSE, message = FALSE}
-# fluxes_liahovden_60 |>
-  dplyr::bind_rows(fluxes_exp_liahovden_60, fluxes_qua_liahovden_60) |>
-  dplyr::filter(type == "NEE") |>
-  ggplot2::ggplot(ggplot2::aes(x = f_start, y = flux, color = model)) +
-  ggplot2::geom_point() +
-  ggplot2::geom_smooth() +
-  ggplot2::labs(
+library(tidyverse)
+bind_rows(fluxes_exp_liahovden_60, fluxes_qua_liahovden_60) |>
+  filter(type == "NEE") |>
+  ggplot(aes(x = f_start, y = flux, color = model)) +
+  geom_point() +
+  geom_smooth() +
+  labs(
     title = "Net Ecosystem Exchange at Upper Site (Liahovden) during 24 hour",
     x = "Datetime",
-    y = bquote(~CO[2]~'flux [mmol/'*m^2*'/h]'),
+    y = bquote(~CO[2]~"flux [mmol/"*m^2*"/h]"),
     color = "Model used in flux_fitting"
-  )
+  ) +
+  theme(legend.position = "bottom")
 ```
 
 #### References
