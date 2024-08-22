@@ -44,7 +44,7 @@ flux_quality_exp <- function(slopes_df,
     summarise(
       f_cor_coef = cor(data$f_conc, data$f_time),
       f_RMSE = sqrt((1 / length(data$f_time))
-                    * sum((data$f_fit - data$f_conc)^2)),
+      * sum((data$f_fit - data$f_conc)^2)),
       .groups = "drop"
     ) |>
     unnest(c("f_fluxID", "f_cut"))

@@ -31,7 +31,7 @@ present in the dataset (no showing 0).}
 \item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
-a dataframe with the number of fluxes for each flags
+a dataframe with the number of fluxes for each quality flags
 and their proportion to the total
 }
 \description{

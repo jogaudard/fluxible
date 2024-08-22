@@ -30,9 +30,10 @@
 #' @param fit_type (optional) model used in flux_fitting, exponential,
 #' quadratic or linear.
 #' Will be automatically filled if slopes_df was produced using flux_quality().
-#' @return a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
+#' @return a dataframe containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
 #' temperature average for each flux,
 #' slope used for each flux calculation,
+#' the model used in `flux_fitting`,
 #' and any columns specified in cols_keep and cols_ave.
 #' @importFrom rlang .data
 #' @importFrom dplyr .data rename all_of select group_by summarise
@@ -216,10 +217,10 @@ flux_calc <- function(slopes_df,
       flux =
         (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
         / (((r_const)) *
-           .data$temp_air_ave
-           * ((plot_area))) # flux in micromol/s/m^2
-        * 3600 # secs to hours
-        / 1000, # micromol to mmol flux is now in mmol/m^2/h
+            .data$temp_air_ave
+            * ((plot_area))) # flux in micromol/s/m^2
+          * 3600 # secs to hours
+          / 1000, # micromol to mmol flux is now in mmol/m^2/h
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,
         ((temp_air_unit)) == "fahrenheit"

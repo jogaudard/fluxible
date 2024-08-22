@@ -16,7 +16,6 @@
 flux_plot_lin <- function(slopes_df,
                           y_text_position = 500,
                           cut_arg = "cut") {
-
   param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
 
   slopes_df <- flux_plot_flag(((slopes_df)),

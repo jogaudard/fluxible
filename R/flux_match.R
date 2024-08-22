@@ -113,7 +113,7 @@ flux_match <- function(raw_conc,
     fill(names(field_record)) |>
     filter(
       (.data$f_datetime < .data$f_end &
-         .data$f_datetime >= .data$f_start)
+        .data$f_datetime >= .data$f_start)
     ) |>
     mutate(
       f_n_conc = sum(!is.na(.data$f_conc)),

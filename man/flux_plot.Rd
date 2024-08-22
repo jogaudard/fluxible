@@ -21,7 +21,7 @@ flux_plot(
   f_nrow = 3,
   y_text_position = 500,
   print_plot = "FALSE",
-  output = "pdfpages",
+  output = "print_only",
   ggsave_args = list(),
   cut_arg = "cut",
   no_data_flag = "no_data"
@@ -62,10 +62,9 @@ with flags produced by flux_quality}
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset}
 
-\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages
-(default);
+\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages;
 "ggsave", the plots can be saved with the ggsave function;
-"print_only" prints the plot without creating a file
+"print_only" (default) prints the plot without creating a file
 (independently from 'print_plot' being TRUE or FALSE)}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
@@ -74,6 +73,11 @@ but will take time depending on the size of the dataset}
 \item{cut_arg}{argument pointing rows to be cut from the measurements}
 
 \item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
+}
+\value{
+a ggplot object if \code{print_plot = TRUE},
+if \code{print_plot = FALSE} it will not return anything but will produce a file
+depending on \code{output}
 }
 \description{
 plots the fluxes, fit and slope in facets

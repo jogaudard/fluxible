@@ -22,15 +22,17 @@
 #' @param y_text_position position of the text box
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
-#' @param output "pdfpages", the plots are saved as A4 landscape pdf pages
-#' (default);
+#' @param output "pdfpages", the plots are saved as A4 landscape pdf pages;
 #' "ggsave", the plots can be saved with the ggsave function;
-#' "print_only" prints the plot without creating a file
+#' "print_only" (default) prints the plot without creating a file
 #' (independently from 'print_plot' being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @param no_data_flag flag marking fluxID without data in f_quality_flag
 #' @param cut_arg argument pointing rows to be cut from the measurements
+#' @return a ggplot object if `print_plot = TRUE`,
+#' if `print_plot = FALSE` it will not return anything but will produce a file
+#' depending on `output`
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
@@ -61,7 +63,7 @@ flux_plot <- function(slopes_df,
                       f_nrow = 3,
                       y_text_position = 500,
                       print_plot = "FALSE",
-                      output = "pdfpages",
+                      output = "print_only",
                       ggsave_args = list(),
                       cut_arg = "cut",
                       no_data_flag = "no_data") {
