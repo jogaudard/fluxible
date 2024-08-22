@@ -15,13 +15,11 @@ flux_plot(
   f_date_labels = "\%e/\%m \\n \%H:\%M",
   f_ylim_upper = 800,
   f_ylim_lower = 400,
-  f_scales = "free",
   f_plotname = "plot_quality",
-  f_ncol = 4,
-  f_nrow = 3,
+  facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
   y_text_position = 500,
   print_plot = "FALSE",
-  output = "pdfpages",
+  output = "print_only",
   ggsave_args = list(),
   cut_arg = "cut",
   no_data_flag = "no_data"
@@ -49,23 +47,19 @@ with flags produced by flux_quality}
 
 \item{f_ylim_lower}{y axis lower limit}
 
-\item{f_scales}{argument for scales in facet_wrap ("fixed" or "free")}
-
 \item{f_plotname}{filename for the extracted pdf file}
 
-\item{f_ncol}{number of columns per page in extracted pdf file}
-
-\item{f_nrow}{number of rows per page in extracted pdf file}
+\item{facet_wrap_args}{list of arguments for
+\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
 
 \item{y_text_position}{position of the text box}
 
 \item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
 but will take time depending on the size of the dataset}
 
-\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages
-(default);
+\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages;
 "ggsave", the plots can be saved with the ggsave function;
-"print_only" prints the plot without creating a file
+"print_only" (default) prints the plot without creating a file
 (independently from 'print_plot' being TRUE or FALSE)}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
@@ -74,6 +68,11 @@ but will take time depending on the size of the dataset}
 \item{cut_arg}{argument pointing rows to be cut from the measurements}
 
 \item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
+}
+\value{
+a ggplot object if \code{print_plot = TRUE},
+if \code{print_plot = FALSE} it will not return anything but will produce a file
+depending on \code{output}
 }
 \description{
 plots the fluxes, fit and slope in facets

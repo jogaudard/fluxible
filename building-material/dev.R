@@ -22,5 +22,5 @@ devtools::run_examples()
 devtools::check()
 
 # making the code better
-styler::style_pkg()
+# styler::style_pkg()
 lintr::lint_package()
