@@ -130,15 +130,15 @@ flux_fitting_quadratic <- function(conc_df,
       f_slope = .data$f_param1 + 2 * .data$f_param2 * ((t_zero)),
       f_fit =
         .data$f_intercept
-          + .data$f_param1
-            * (.data$f_time - ((start_cut))) + .data$f_param2
-            * (.data$f_time - ((start_cut)))^2,
+        + .data$f_param1
+        * (.data$f_time - ((start_cut))) + .data$f_param2
+        * (.data$f_time - ((start_cut)))^2,
       f_fit_slope =
         .data$f_intercept
-          - .data$f_param2
-            * ((t_zero))^2
-          + (.data$f_param1 + 2 * .data$f_param2 * ((t_zero)))
-          * (.data$f_time - ((start_cut)))
+        - .data$f_param2
+        * ((t_zero))^2
+        + (.data$f_param1 + 2 * .data$f_param2 * ((t_zero)))
+        * (.data$f_time - ((start_cut)))
     )
 
   warning_msg <- conc_df |>

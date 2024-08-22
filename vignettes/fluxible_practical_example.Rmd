@@ -42,7 +42,7 @@ conc_liahovden <- flux_match(
   datetime_col = "datetime",
   conc_col = "conc",
   start_col = "start"
-  )
+)
 str(conc_liahovden)
 ```
 
@@ -68,7 +68,7 @@ slopes_exp_liahovden <- flux_fitting(
   roll_width = 15,
   t_zero = 0,
   fit_type = "exponential"
-  )
+)
 str(slopes_exp_liahovden)
 
 slopes_qua_liahovden <- flux_fitting(
@@ -87,7 +87,7 @@ slopes_qua_liahovden <- flux_fitting(
   roll_width = 15,
   t_zero = 5,
   fit_type = "quadratic"
-  )
+)
 str(slopes_qua_liahovden)
 
 slopes_lin_liahovden <- flux_fitting(
@@ -106,7 +106,7 @@ slopes_lin_liahovden <- flux_fitting(
   roll_width = 15,
   t_zero = 5,
   fit_type = "linear"
-  )
+)
 str(slopes_lin_liahovden)
 ```
 
@@ -115,7 +115,6 @@ The function `flux_quality` is used to provide diagnostics about the quality of 
 ```{r quality_exp_qua_lin}
 slopes_exp_liahovden_flag <- flux_quality(
   slopes_df = slopes_exp_liahovden,
-  # fit_type = c(),
   # fit_type is automatically provided as an attribute because
   # slopes_exp_liahovden was produced with flux_fitting
   ambient_conc = 421,
@@ -139,7 +138,6 @@ str(slopes_exp_liahovden_flag)
 
 slopes_qua_liahovden_flag <- flux_quality(
   slopes_df = slopes_qua_liahovden,
-  # fit_type = c(),
   # fit_type is automatically provided as an attribute because
   # slopes_exp_liahovden was produced with flux_fitting
   ambient_conc = 421,
@@ -163,7 +161,6 @@ str(slopes_qua_liahovden_flag)
 
 slopes_lin_liahovden_flag <- flux_quality(
   slopes_df = slopes_lin_liahovden,
-  # fit_type = c(),
   # fit_type is automatically provided as an attribute because
   # slopes_exp_liahovden was produced with flux_fitting
   ambient_conc = 421,
@@ -302,7 +299,6 @@ slopes_exp_liahovden_flag_60 |>
     y_text_position = 400,
     output = "print_only"
   )
-
 ```
 
 We also apply a cut on the dataset that was fitted with a quadratic model.
@@ -447,7 +443,8 @@ Fluxes were calculated in five steps from raw gas concentration data and the pro
 Here is a plot of the results.
 
 ```{r 24h_fluxes, fig.width = 8, fig.height = 9, warning = FALSE, message = FALSE}
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 bind_rows(
   fluxes_exp_liahovden_60,
   fluxes_qua_liahovden_60,
@@ -459,7 +456,7 @@ bind_rows(
   labs(
     title = "Net Ecosystem Exchange at Upper Site (Liahovden) during 24 hour",
     x = "Datetime",
-    y = bquote(~CO[2] ~ "flux [mmol/" * m^2 * "/h]"),
+    y = bquote(~ CO[2] ~ "flux [mmol/" * m^2 * "/h]"),
     color = "Model used in flux_fitting"
   ) +
   theme(legend.position = "bottom") +

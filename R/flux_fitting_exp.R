@@ -256,7 +256,7 @@ flux_fitting_exp <- function(conc_df,
         .data$ta == .data$tz_est ~ 0,
         TRUE ~
           (.data$Ca - .data$Cm_est - (.data$f_Cz - .data$Cm_est)
-          * exp(-.data$b_est * (.data$ta - .data$tz_est)))
+           * exp(-.data$b_est * (.data$ta - .data$tz_est)))
           / (.data$ta - .data$tz_est)
       )
     )
@@ -268,9 +268,9 @@ flux_fitting_exp <- function(conc_df,
     sqrt(
       (1 / length(fc_time))
       * sum((par[1] + par[2] * (fc_time - exp(par[4]))
-          + (fc_cz - par[1])
-          * exp(-par[3] * (fc_time - exp(par[4])))
-          - fc_conc)^2)
+             + (fc_cz - par[1])
+             * exp(-par[3] * (fc_time - exp(par[4])))
+             - fc_conc)^2)
     )
   }
 
@@ -315,9 +315,9 @@ flux_fitting_exp <- function(conc_df,
       f_fit = .data$f_Cm + .data$f_a *
         (.data$f_time - .data$f_tz - .data$time_diff)
       + (.data$f_Cz - .data$f_Cm)
-        * exp(-.data$f_b * (.data$f_time - .data$f_tz - .data$time_diff)),
+      * exp(-.data$f_b * (.data$f_time - .data$f_tz - .data$time_diff)),
       f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
-        * (.data$f_tz + .data$time_diff),
+      * (.data$f_tz + .data$time_diff),
       f_start_z = .data$f_start + .data$f_tz
     ) |>
     ungroup()

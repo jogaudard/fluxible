@@ -217,10 +217,10 @@ flux_calc <- function(slopes_df,
       flux =
         (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
         / (((r_const)) *
-            .data$temp_air_ave
-            * ((plot_area))) # flux in micromol/s/m^2
-          * 3600 # secs to hours
-          / 1000, # micromol to mmol flux is now in mmol/m^2/h
+           .data$temp_air_ave
+           * ((plot_area))) # flux in micromol/s/m^2
+        * 3600 # secs to hours
+        / 1000, # micromol to mmol flux is now in mmol/m^2/h
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,
         ((temp_air_unit)) == "fahrenheit"

@@ -171,7 +171,8 @@ flux_plot <- function(slopes_df,
     ) +
     ylim(((f_ylim_lower)), ((f_ylim_upper))) +
     do.call(facet_wrap_paginate,
-            args = c(facets = ~f_fluxID, ((facet_wrap_args)))) +
+      args = c(facets = ~f_fluxID, ((facet_wrap_args)))
+    ) +
     labs(
       title = "Fluxes quality assessment",
       x = "Datetime",
@@ -197,9 +198,13 @@ flux_plot <- function(slopes_df,
       pb$tick()
       Sys.sleep(0.1)
       print(f_plot +
-          do.call(facet_wrap_paginate,
-                  args = c(facets = ~f_fluxID, page = i, ((facet_wrap_args))))
-      )
+        do.call(facet_wrap_paginate,
+          args = c(
+            facets = ~f_fluxID,
+            page = i,
+            ((facet_wrap_args))
+          )
+        ))
     }
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
