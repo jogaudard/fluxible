@@ -68,9 +68,10 @@ quadratic or linear.
 Will be automatically filled if slopes_df was produced using flux_quality().}
 }
 \value{
-a df containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
+a dataframe containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
 temperature average for each flux,
 slope used for each flux calculation,
+the model used in \code{flux_fitting},
 and any columns specified in cols_keep and cols_ave.
 }
 \description{

@@ -16,7 +16,6 @@
 flux_plot_exp <- function(slopes_df,
                           cut_arg = "cut",
                           y_text_position = 500) {
-
   param_df <- flux_param_exp(
     ((slopes_df)),
     cut_arg = ((cut_arg))

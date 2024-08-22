@@ -31,12 +31,14 @@ present in the dataset (no showing 0).}
 \item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
-a dataframe with the number of fluxes for each flags
+a dataframe with the number of fluxes for each quality flags
 and their proportion to the total
 }
 \description{
 provides a table of how many fluxes were attributed
-which quality flag
+which quality flag.
+This function is incorporated in flux_quality (output as a message)
+but can be used alone to extract a dataframe with the flag count.
 }
 \examples{
 data(slopes30qua_flag)

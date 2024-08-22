@@ -2,7 +2,9 @@ test_that("plot for exponential fit", {
   expect_snapshot(
     suppressMessages( # because the progress bar is messing with check()
       flux_plot(slopes0_flag,
-        f_plotname = "test_exp_plot", print_plot = FALSE
+        f_plotname = "test_exp_plot",
+        print_plot = FALSE,
+        output = "pdfpages"
       )
     )
   )
@@ -14,9 +16,7 @@ test_that("plot for linear fit", {
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for linear fit",
-      flux_plot(slopes30lin_flag,
-        output = "print_only"
-      )
+      flux_plot(slopes30lin_flag)
     )
   )
 })
@@ -37,8 +37,6 @@ test_that("plot for linear fit with jpg extension works", {
 })
 
 test_that("plot can be exported as an object", {
-  plot_object <- flux_plot(slopes30lin_flag,
-    output = "print_only"
-  )
+  plot_object <- flux_plot(slopes30lin_flag)
   vdiffr::expect_doppelganger("plot as an object", plot_object)
 })
