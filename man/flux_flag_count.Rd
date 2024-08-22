@@ -36,7 +36,9 @@ and their proportion to the total
 }
 \description{
 provides a table of how many fluxes were attributed
-which quality flag
+which quality flag.
+This function is incorporated in flux_quality (output as a message)
+but can be used alone to extract a dataframe with the flag count.
 }
 \examples{
 data(slopes30qua_flag)
