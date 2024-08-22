@@ -15,10 +15,8 @@ flux_plot(
   f_date_labels = "\%e/\%m \\n \%H:\%M",
   f_ylim_upper = 800,
   f_ylim_lower = 400,
-  f_scales = "free",
   f_plotname = "plot_quality",
-  f_ncol = 4,
-  f_nrow = 3,
+  facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
   y_text_position = 500,
   print_plot = "FALSE",
   output = "print_only",
@@ -49,13 +47,10 @@ with flags produced by flux_quality}
 
 \item{f_ylim_lower}{y axis lower limit}
 
-\item{f_scales}{argument for scales in facet_wrap ("fixed" or "free")}
-
 \item{f_plotname}{filename for the extracted pdf file}
 
-\item{f_ncol}{number of columns per page in extracted pdf file}
-
-\item{f_nrow}{number of rows per page in extracted pdf file}
+\item{facet_wrap_args}{list of arguments for
+\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
 
 \item{y_text_position}{position of the text box}
 

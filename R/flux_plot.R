@@ -15,10 +15,9 @@
 #' @param f_date_labels date_labels argument for scale_x_datetime
 #' @param f_ylim_upper y axis upper limit
 #' @param f_ylim_lower y axis lower limit
-#' @param f_scales argument for scales in facet_wrap ("fixed" or "free")
 #' @param f_plotname filename for the extracted pdf file
-#' @param f_nrow number of rows per page in extracted pdf file
-#' @param f_ncol number of columns per page in extracted pdf file
+#' @param facet_wrap_args list of arguments for
+#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}
 #' @param y_text_position position of the text box
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
@@ -57,10 +56,12 @@ flux_plot <- function(slopes_df,
                       f_date_labels = "%e/%m \n %H:%M",
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
-                      f_scales = "free",
                       f_plotname = "plot_quality",
-                      f_ncol = 4,
-                      f_nrow = 3,
+                      facet_wrap_args = list(
+                        ncol = 4,
+                        nrow = 3,
+                        scales = "free"
+                      ),
                       y_text_position = 500,
                       print_plot = "FALSE",
                       output = "print_only",
@@ -73,7 +74,6 @@ flux_plot <- function(slopes_df,
     slopes_df
   )
 
-  f_scales <- match.arg(f_scales, c("free", "fixed"))
 
   if (((output)) %in% c("pdfpages", "ggsave")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
@@ -170,10 +170,8 @@ flux_plot <- function(slopes_df,
       date_labels = ((f_date_labels))
     ) +
     ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-    facet_wrap_paginate(
-      ~f_fluxID,
-      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
-    ) +
+    do.call(facet_wrap_paginate,
+            args = c(facets = ~f_fluxID, ((facet_wrap_args)))) +
     labs(
       title = "Fluxes quality assessment",
       x = "Datetime",
@@ -199,11 +197,9 @@ flux_plot <- function(slopes_df,
       pb$tick()
       Sys.sleep(0.1)
       print(f_plot +
-        facet_wrap_paginate(
-          ~f_fluxID,
-          ncol = ((f_ncol)), nrow = ((f_nrow)),
-          page = i, scales = ((f_scales))
-        ))
+          do.call(facet_wrap_paginate,
+                  args = c(facets = ~f_fluxID, page = i, ((facet_wrap_args))))
+      )
     }
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
