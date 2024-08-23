@@ -68,17 +68,17 @@ flux_plot <- function(slopes_df,
                       ggsave_args = list(),
                       cut_arg = "cut",
                       no_data_flag = "no_data") {
-  environment(flux_fun_check) <- environment()
+  args_ok <- flux_fun_check(list(
+    f_ylim_upper = ((f_ylim_upper)),
+    f_ylim_lower = ((f_ylim_lower)),
+    y_text_position = ((y_text_position))
+  ),
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
 
-  flux_fun_check(slopes_df,
-    arg_numeric = c(
-      "f_ylim_upper",
-      "f_ylim_lower",
-      "f_ncol",
-      "f_nrow",
-      "y_text_position"
-    )
-  )
+  
+  if (!args_ok)
+    stop("Please correct the arguments", call. = FALSE)
 
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 

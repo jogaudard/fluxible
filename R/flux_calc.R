@@ -80,18 +80,37 @@ flux_calc <- function(slopes_df,
   }
 
 
-  environment(flux_fun_check) <- environment()
+  args_ok <- flux_fun_check(list(
+    plot_area = ((plot_area))
+  ),
+  fn = list(is.numeric),
+  msg = "has to be numeric")
 
-  flux_fun_check(slopes_df,
-    col_numeric = c(
+  slopes_df_check <- slopes_df |>
+    select(
       ((slope_col)),
-      ((temp_air_col))
-    ),
-    col_datetime = ((datetime_col)),
-    arg_numeric = c(
-      "plot_area"
+      ((temp_air_col)),
+      ((datetime_col))
     )
-  )
+
+  df_ok <- flux_fun_check(slopes_df_check,
+                          fn = list(
+                            is.numeric,
+                            is.numeric,
+                            is.POSIXct()
+                          ),
+                          msg = rep(c(
+                            "has to be numeric",
+                            "has to be POSIXct"
+                          ),
+                          c(2, 1)
+                          ),
+                          origdf = slopes_df)
+
+
+  if (any(!c(args_ok, df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
 
   fit_type <- flux_fit_type(
     slopes_df,
