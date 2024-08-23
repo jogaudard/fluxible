@@ -97,7 +97,7 @@ considered good enough (exponential fit)}
 \item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
-same dataframe with added flag and corrected slopes columns
+same dataframe with added quality flags and corrected slope column
 }
 \description{
 indicates if slopes should be discarded or replaced
