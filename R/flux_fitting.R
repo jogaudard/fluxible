@@ -60,10 +60,10 @@ flux_fitting <- function(conc_df,
 
   conc_df_check <- conc_df |>
     select(
-      ((conc_col)),
-      ((start_col)),
-      ((end_col)),
-      ((datetime_col))
+      all_of(((conc_col))),
+      all_of(((start_col))),
+      all_of(((end_col))),
+      all_of(((datetime_col)))
     )
 
   conc_df_ok <- flux_fun_check(conc_df_check,

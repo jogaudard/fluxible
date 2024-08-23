@@ -27,14 +27,15 @@ flux_fitting_lin <- function(conc_df,
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
                              fluxid_col = "f_fluxID") {
-  environment(flux_fun_check) <- environment()
+  args_ok <- flux_fun_check(list(
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
 
-  flux_fun_check(conc_df,
-    arg_numeric = c(
-      "start_cut",
-      "end_cut"
-    )
-  )
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
 
   conc_df <- conc_df |>
     rename(

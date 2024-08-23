@@ -48,19 +48,31 @@ flux_fitting_exp <- function(conc_df,
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
                              fluxid_col = "f_fluxID") {
-  environment(flux_fun_check) <- environment()
 
-  flux_fun_check(conc_df,
-    arg_numeric = c(
-      "t_window",
-      "cz_window",
-      "b_window",
-      "a_window",
-      "roll_width",
-      "start_cut",
-      "end_cut"
-    )
-  )
+  args_ok <- flux_fun_check(list(
+    t_window = ((t_window)),
+    cz_window = ((cz_window)),
+    b_window = ((b_window)),
+    a_window = ((a_window)),
+    roll_width = ((roll_width)),
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric
+  ),
+  msg = rep("has to be numeric", 7))
+
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
+
+
   conc_df <- conc_df |>
     rename(
       f_start = all_of((start_col)),

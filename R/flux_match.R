@@ -56,10 +56,12 @@ flux_match <- function(raw_conc,
   msg = rep("has to be numeric", 4))
 
   raw_conc_check <- raw_conc |>
-    select(((datetime_col)), ((conc_col)))
+    select(
+      all_of(((datetime_col))),
+      all_of(((conc_col))))
 
   field_record_check <- field_record |>
-    select(((start_col)))
+    select(all_of(((start_col))))
 
   raw_conc_ok <- flux_fun_check(raw_conc_check,
                                 fn = list(is.POSIXct, is.numeric),
@@ -70,11 +72,8 @@ flux_match <- function(raw_conc,
                                 origdf = raw_conc)
 
   field_record_ok <- flux_fun_check(field_record_check,
-                                    fn = list(is.POSIXct, is.numeric),
-                                    msg = c(
-                                      "has to be POSIXct",
-                                      "has to be numeric"
-                                    ),
+                                    fn = list(is.POSIXct),
+                                    msg = "has to be POSIXct",
                                     origdf = field_record)
 
   if (any(!c(args_ok, raw_conc_ok, field_record_ok)))

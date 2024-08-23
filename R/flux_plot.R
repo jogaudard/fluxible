@@ -77,7 +77,7 @@ flux_plot <- function(slopes_df,
   msg = rep("has to be numeric", 3))
 
   
-  if (!args_ok)
+  if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))

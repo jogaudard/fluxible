@@ -88,16 +88,16 @@ flux_calc <- function(slopes_df,
 
   slopes_df_check <- slopes_df |>
     select(
-      ((slope_col)),
-      ((temp_air_col)),
-      ((datetime_col))
+      all_of(((slope_col))),
+      all_of(((temp_air_col))),
+      all_of(((datetime_col)))
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
                           fn = list(
                             is.numeric,
                             is.numeric,
-                            is.POSIXct()
+                            is.POSIXct
                           ),
                           msg = rep(c(
                             "has to be numeric",

@@ -27,18 +27,31 @@ flux_quality_lm <- function(slopes_df,
                             rsquared_col = "f_rsquared",
                             pvalue_threshold = 0.3,
                             rsquared_threshold = 0.7) {
-  environment(flux_fun_check) <- environment()
+  args_ok <- flux_fun_check(list(
+    pvalue_threshold = ((pvalue_threshold)),
+    rsquared_threshold = ((rsquared_threshold))
+  ),
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
 
-  flux_fun_check(slopes_df,
-    col_numeric = c(
-      ((pvalue_col)),
-      ((rsquared_col))
-    ),
-    arg_numeric = c(
-      "pvalue_threshold",
-      "rsquared_threshold"
+  slopes_df_check <- slopes_df |>
+    select(
+      all_of(((pvalue_col))),
+      all_of(((rsquared_col)))
     )
-  )
+
+  slopes_df_ok <- flux_fun_check(slopes_df_check,
+                                 fn = list(
+                                  is.numeric,
+                                  is.numeric
+                                 ),
+                                 msg = rep("has to be numeric", 2),
+                                 origdf = slopes_df
+                                )
+
+
+  if (any(!c(args_ok, slopes_df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
 
   slopes_df <- slopes_df |>
     rename(

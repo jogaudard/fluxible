@@ -4,17 +4,21 @@
 \alias{flux_fun_check}
 \title{checking that arguments and columns are in the correct class}
 \usage{
-flux_fun_check(df, col_numeric = c(), col_datetime = c(), arg_numeric = c())
+flux_fun_check(args, fn, msg, origdf = NA)
 }
 \arguments{
-\item{df}{a dataframe to check}
+\item{args}{list of arguments or dataframe to check}
 
-\item{col_numeric}{a vector of column names that have to be numeric}
+\item{fn}{list of functions used to check (\code{is.numeric}, \code{is.character}, ...)}
 
-\item{col_datetime}{a vector of column names that have to be time}
+\item{msg}{list of messages to return in case of failed check}
 
-\item{arg_numeric}{a vectore of arguments that have to be numeric}
+\item{origdf}{in case args is a df with selected columns to check origdf
+is the orginal df to take the name from for a more obvious error message}
 }
 \description{
 checking that arguments and columns are in the correct class
+}
+\author{
+Adam Klimes
 }

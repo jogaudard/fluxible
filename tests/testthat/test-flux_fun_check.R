@@ -1,11 +1,10 @@
 test_that("gets error with wrong inputs", {
-  expect_error(
+  expect_message(
     flux_fun_check(
-      slopes0,
-      col_numeric = c("f_datetime", "temp_soil"),
-      col_datetime = c("f_start", "f_fluxID")
+      list(ar1 = 3, ar2 = "blop"),
+      fn = list(is.numeric, is.numeric),
+      msg = rep("has to be numeric", 2)
     ),
-    " f_datetime has to be numeric
- f_fluxID has to be POSIXct"
-  )
+"Argument ar2 has to be numeric"
+)
 })

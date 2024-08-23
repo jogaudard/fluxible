@@ -31,16 +31,25 @@ flux_quality_exp <- function(slopes_df,
                              rmse_threshold = 25,
                              cor_threshold = 0.5,
                              b_threshold = 1) {
-  environment(flux_fun_check) <- environment()
+  args_ok <- flux_fun_check(list(
+    rmse_threshold = ((rmse_threshold)),
+    cor_threshold = ((cor_threshold)),
+    b_threshold = ((b_threshold))
+  ),
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
 
-  flux_fun_check(slopes_df,
-    col_numeric = ((b_col)),
-    arg_numeric = c(
-      "rmse_threshold",
-      "cor_threshold",
-      "b_threshold"
-    )
-  )
+  slopes_df_check <- slopes_df |>
+    select(all_of(((b_col))))
+
+  slopes_df_ok <- flux_fun_check(slopes_df_check,
+                                 fn = list(is.numeric),
+                                 msg = "has to be numeric",
+                                 origdf = slopes_df)
+
+
+  if (any(!c(args_ok, slopes_df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
 
   slopes_df <- slopes_df |>
     rename(

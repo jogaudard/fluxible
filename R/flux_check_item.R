@@ -1,5 +1,10 @@
 #' check the items inside `flux_fun_check`
-#' @param 
+#' @param arg argument to be checked by `fn`
+#' @param fn function to check `arg`
+#' @param msg message to display in case `arg` is the wrong class
+#' @param narg name of `arg`
+#' @param df_name name of `arg` in case it is a data frame
+#' @author Adam Klimes
 
 
 flux_check_item <- function(arg,

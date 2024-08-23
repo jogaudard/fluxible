@@ -88,10 +88,10 @@ flux_quality <- function(slopes_df,
 
   slopes_df_check <- slopes_df |>
     select(
-      ((slope_col)),
-      ((conc_col)),
-      ((fit_col)),
-      ((time_col))
+      all_of(((slope_col))),
+      all_of(((conc_col))),
+      all_of(((fit_col))),
+      all_of(((time_col)))
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
