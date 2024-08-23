@@ -76,7 +76,7 @@ flux_plot <- function(slopes_df,
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
-  
+
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 

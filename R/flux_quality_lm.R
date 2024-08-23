@@ -41,13 +41,13 @@ flux_quality_lm <- function(slopes_df,
     )
 
   slopes_df_ok <- flux_fun_check(slopes_df_check,
-                                 fn = list(
-                                  is.numeric,
-                                  is.numeric
-                                 ),
-                                 msg = rep("has to be numeric", 2),
-                                 origdf = slopes_df
-                                )
+    fn = list(
+      is.numeric,
+      is.numeric
+    ),
+    msg = rep("has to be numeric", 2),
+    origdf = slopes_df
+  )
 
 
   if (any(!c(args_ok, slopes_df_ok)))

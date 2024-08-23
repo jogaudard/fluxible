@@ -57,8 +57,8 @@ flux_match <- function(raw_conc,
 
   raw_conc_check <- raw_conc |>
     select(
-      all_of(((datetime_col))),
-      all_of(((conc_col))))
+           all_of(((datetime_col))),
+           all_of(((conc_col))))
 
   field_record_check <- field_record |>
     select(all_of(((start_col))))
