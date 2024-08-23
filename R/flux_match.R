@@ -44,22 +44,45 @@ flux_match <- function(raw_conc,
                        datetime_col = "datetime",
                        conc_col = "conc",
                        start_col = "start") {
-  environment(flux_fun_check) <- environment()
 
-  flux_fun_check(raw_conc,
-    col_datetime = ((datetime_col)),
-    col_numeric = ((conc_col)),
-    arg_numeric = c(
-      "startcrop",
-      "measurement_length",
-      "ratio_threshold",
-      "time_diff"
-    )
-  )
 
-  flux_fun_check(field_record,
-    col_datetime = ((start_col))
-  )
+  args_ok <- flux_fun_check(list(
+    startcrop = ((startcrop)),
+    measurement_length = ((measurement_length)),
+    ratio_threshold = ((ratio_threshold)),
+    time_diff = ((time_diff))
+  ),
+  fn = list(is.numeric, is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 4))
+
+  raw_conc_full <- raw_conc
+
+  raw_conc <- raw_conc |>
+    select(((datetime_col)), ((conc_col)))
+
+  dataframe_ok <- flux_fun_check(raw_conc,
+    fn = list(is.POSIXct, is.numeric),
+    msg = c("has to be POSIXct", "has to be numeric"))
+  if (any(!c(args_ok, dataframe_ok))) stop("Please correct the arguments", call. = FALSE)
+
+  raw_conc <- raw_conc_full
+
+  # environment(flux_fun_check) <- environment()
+
+  # flux_fun_check(raw_conc,
+  #   col_datetime = ((datetime_col)),
+  #   col_numeric = ((conc_col)),
+  #   arg_numeric = c(
+  #     "startcrop",
+  #     "measurement_length",
+  #     "ratio_threshold",
+  #     "time_diff"
+  #   )
+  # )
+
+  # flux_fun_check(field_record,
+  #   col_datetime = ((start_col))
+  # )
 
   raw_conc <- raw_conc |>
     rename(
