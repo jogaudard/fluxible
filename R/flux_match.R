@@ -55,34 +55,31 @@ flux_match <- function(raw_conc,
   fn = list(is.numeric, is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 4))
 
-  raw_conc_full <- raw_conc
-
-  raw_conc <- raw_conc |>
+  raw_conc_check <- raw_conc |>
     select(((datetime_col)), ((conc_col)))
 
-  dataframe_ok <- flux_fun_check(raw_conc,
-    fn = list(is.POSIXct, is.numeric),
-    msg = c("has to be POSIXct", "has to be numeric"))
-  if (any(!c(args_ok, dataframe_ok))) stop("Please correct the arguments", call. = FALSE)
+  field_record_check <- field_record |>
+    select(((start_col)))
 
-  raw_conc <- raw_conc_full
+  raw_conc_ok <- flux_fun_check(raw_conc_check,
+                                fn = list(is.POSIXct, is.numeric),
+                                msg = c(
+                                  "has to be POSIXct",
+                                  "has to be numeric"
+                                ),
+                                origdf = raw_conc)
 
-  # environment(flux_fun_check) <- environment()
+  field_record_ok <- flux_fun_check(field_record_check,
+                                    fn = list(is.POSIXct, is.numeric),
+                                    msg = c(
+                                      "has to be POSIXct",
+                                      "has to be numeric"
+                                    ),
+                                    origdf = field_record)
 
-  # flux_fun_check(raw_conc,
-  #   col_datetime = ((datetime_col)),
-  #   col_numeric = ((conc_col)),
-  #   arg_numeric = c(
-  #     "startcrop",
-  #     "measurement_length",
-  #     "ratio_threshold",
-  #     "time_diff"
-  #   )
-  # )
+  if (any(!c(args_ok, raw_conc_ok, field_record_ok)))
+    stop("Please correct the arguments", call. = FALSE)
 
-  # flux_fun_check(field_record,
-  #   col_datetime = ((start_col))
-  # )
 
   raw_conc <- raw_conc |>
     rename(

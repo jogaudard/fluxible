@@ -78,6 +78,7 @@ flux_calc <- function(slopes_df,
     stop("some names in cols_ave cannot be found in slopes_df")
   }
 
+
   environment(flux_fun_check) <- environment()
 
   flux_fun_check(slopes_df,

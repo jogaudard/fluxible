@@ -78,21 +78,38 @@ flux_quality <- function(slopes_df,
                          cor_threshold = 0.5,
                          b_threshold = 1,
                          cut_arg = "cut") {
-  environment(flux_fun_check) <- environment()
+  args_ok <- flux_fun_check(list(
+    ambient_conc = ((ambient_conc)),
+    error = ((error)),
+    ratio_threshold = ((ratio_threshold))
+  ),
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
 
-  flux_fun_check(slopes_df,
-    col_numeric = c(
+  slopes_df_check <- slopes_df |>
+    select(
       ((slope_col)),
       ((conc_col)),
       ((fit_col)),
       ((time_col))
-    ),
-    arg_numeric = c(
-      "ambient_conc",
-      "error",
-      "ratio_threshold"
     )
-  )
+
+  df_ok <- flux_fun_check(slopes_df_check,
+                          fn = list(
+                            is.numeric,
+                            is.numeric,
+                            is.numeric,
+                            is.numeric
+                          ),
+                          msg = rep(
+                            "has to be numeric",
+                            4
+                          ),
+                          origdf = slopes_df)
+
+
+  if (any(!c(args_ok, df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
 
   slopes_df <- slopes_df |>
     rename(

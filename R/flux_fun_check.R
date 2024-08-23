@@ -2,13 +2,16 @@
 #' @param args list of arguments or dataframe to check
 #' @param fn list of functions used to check (`is.numeric`, `is.character`, ...)
 #' @param msg list of messages to return in case of failed check
+#' @param origdf in case args is a df with selected columns to check origdf
+#' is the orginal df to take the name from for a more obvious error message
 
 
 
 flux_fun_check <- function(args,
                            fn,
-                           msg) {
-  df_name <- if (is.data.frame(args)) deparse(substitute(args)) else NA
+                           msg,
+                           origdf = NA) {
+  df_name <- if (is.data.frame(args)) deparse(substitute(origdf)) else NA
   mapply(flux_check_item, args, fn, msg, names(args), df_name = df_name)
 }
 # fn <- function(ar1 = 1, ar2 = 2, ar3 = 3, ar4 = "text", ar5 = data.frame(A = 1:3, B = LETTERS[1:3])){
