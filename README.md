@@ -730,6 +730,8 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_flag_60 |>
   flux_calc(
     slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
     datetime_col = "f_datetime",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     cut_col = "f_cut",
     keep_arg = "keep",
     chamber_volume = 24.5,
@@ -746,6 +748,9 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_flag_60 |>
 #> Averaging air temperature for each flux...
 #> Creating a df with the columns from 'cols_keep' argument...
 #> Calculating fluxes...
+#> R constant set to 0.082057
+#> Concentration was measured in ppm
+#> Fluxes are in mmol/m2/h
 str(fluxes_exp_liahovden_60)
 #> tibble [138 × 12] (S3: tbl_df/tbl/data.frame)
 #>  $ f_start       : POSIXct[1:138], format: "2022-07-27 05:37:30" "2022-07-27 05:42:00" ...
@@ -766,6 +771,8 @@ fluxes_qua_liahovden_60 <- slopes_qua_liahovden_flag_60 |>
   flux_calc(
     slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
     datetime_col = "f_datetime",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     cut_col = "f_cut",
     keep_arg = "keep",
     chamber_volume = 24.5,
@@ -782,6 +789,9 @@ fluxes_qua_liahovden_60 <- slopes_qua_liahovden_flag_60 |>
 #> Averaging air temperature for each flux...
 #> Creating a df with the columns from 'cols_keep' argument...
 #> Calculating fluxes...
+#> R constant set to 0.082057
+#> Concentration was measured in ppm
+#> Fluxes are in mmol/m2/h
 str(fluxes_qua_liahovden_60)
 #> tibble [138 × 12] (S3: tbl_df/tbl/data.frame)
 #>  $ f_start       : POSIXct[1:138], format: "2022-07-27 05:37:30" "2022-07-27 05:42:00" ...
@@ -802,6 +812,8 @@ fluxes_lin_liahovden_120 <- slopes_lin_liahovden_flag_120 |>
   flux_calc(
     slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
     datetime_col = "f_datetime",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     cut_col = "f_cut",
     keep_arg = "keep",
     chamber_volume = 24.5,
@@ -818,6 +830,9 @@ fluxes_lin_liahovden_120 <- slopes_lin_liahovden_flag_120 |>
 #> Averaging air temperature for each flux...
 #> Creating a df with the columns from 'cols_keep' argument...
 #> Calculating fluxes...
+#> R constant set to 0.082057
+#> Concentration was measured in ppm
+#> Fluxes are in mmol/m2/h
 str(fluxes_lin_liahovden_120)
 #> tibble [138 × 12] (S3: tbl_df/tbl/data.frame)
 #>  $ f_start       : POSIXct[1:138], format: "2022-07-27 05:37:30" "2022-07-27 05:42:00" ...

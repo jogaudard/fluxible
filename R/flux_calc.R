@@ -7,6 +7,11 @@
 #' @param datetime_col column containing the datetime of each gas concentration
 #' measurements in slopes_df. The first one after cutting will be kept as
 #' datetime of each flux in the output.
+#' @param conc_unit unit in which the concentration of gas was measured
+#' ppm or ppb
+#' @param flux_unit unit in which the calculated flux will be
+#' `mmol` outputs fluxes in mmol*m^(-2)*h^(-1);
+#' `micromol` outputs fluxes in micromol*m^(-2)*h^(-1)
 #' @param cut_col column containing cutting information
 #' @param keep_arg name in cut_col of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
@@ -30,7 +35,8 @@
 #' @param fit_type (optional) model used in flux_fitting, exponential,
 #' quadratic or linear.
 #' Will be automatically filled if slopes_df was produced using flux_quality().
-#' @return a dataframe containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
+#' @return a dataframe containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)
+#' or micromol*m^(-2)*h^(-1), depending on the value of `flux_unit`),
 #' temperature average for each flux,
 #' slope used for each flux calculation,
 #' the model used in `flux_fitting`,
@@ -40,7 +46,10 @@
 #' ungroup mutate case_when distinct left_join across everything
 #' @examples
 #' data(slopes0)
-#' flux_calc(slopes0, slope_col = "f_slope")
+#' flux_calc(slopes0,
+#' slope_col = "f_slope",
+#' conc_unit = "ppm",
+#' flux_unit = "mmol")
 #' @export
 
 
@@ -48,6 +57,8 @@
 flux_calc <- function(slopes_df,
                       slope_col,
                       datetime_col = "f_datetime",
+                      conc_unit,
+                      flux_unit,
                       cut_col = c(),
                       keep_arg = c(),
                       chamber_volume = 24.5,
@@ -70,15 +81,12 @@ flux_calc <- function(slopes_df,
   if (!(((temp_air_col)) %in% ((colnames)))) {
     stop("could not find temp_air_col in slopes_df")
   }
-
-
   if (length(setdiff(((cols_keep)), ((colnames)))) > 0) {
     stop("some names in cols_keep cannot be found in slopes_df")
   }
   if (length(setdiff(((cols_ave)), ((colnames)))) > 0) {
     stop("some names in cols_ave cannot be found in slopes_df")
   }
-
 
   args_ok <- flux_fun_check(list(
     plot_area = ((plot_area))
@@ -122,7 +130,15 @@ flux_calc <- function(slopes_df,
     c("celsius", "fahrenheit", "kelvin")
   )
 
+  conc_unit <- match.arg(
+    ((conc_unit)),
+    c("ppm", "ppb")
+  )
 
+  flux_unit <- match.arg(
+    ((flux_unit)),
+    c("micromol", "mmol")
+  )
 
   if (is.double((chamber_volume))) {
     slopes_df <- slopes_df |>
@@ -242,6 +258,20 @@ flux_calc <- function(slopes_df,
   message("Calculating fluxes...")
 
   r_const <- 0.082057
+  message("R constant set to 0.082057")
+
+
+  # putting slope in ppm/s
+  if (((conc_unit)) == "ppm") {
+    message("Concentration was measured in ppm")
+  }
+  if (((conc_unit)) == "ppb") {
+    message("Concentration was measured in ppb")
+    slope_ave <- slope_ave |>
+      mutate(
+        f_slope_calc = .data$f_slope_calc * 0.001 # now the slope is in ppm/s
+      )
+  }
 
   fluxes <- slope_ave |>
     mutate(
@@ -251,8 +281,7 @@ flux_calc <- function(slopes_df,
         / (((r_const)) *
            .data$temp_air_ave
            * ((plot_area))) # flux in micromol/s/m^2
-        * 3600 # secs to hours
-        / 1000, # micromol to mmol flux is now in mmol/m^2/h
+        * 3600, # secs to hours, flux is now in micromol/m^2/h
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,
         ((temp_air_unit)) == "fahrenheit"
@@ -261,5 +290,18 @@ flux_calc <- function(slopes_df,
       ),
       model = ((fit_type))
     )
+
+  # output unit
+  if (((flux_unit)) == "micromol") {
+    message("Fluxes are in micromol/m2/h")
+  }
+  if (((flux_unit)) == "mmol") {
+    fluxes <- fluxes |>
+      mutate(
+        flux = .data$flux / 1000
+      )
+    message("Fluxes are in mmol/m2/h")
+  }
+
   fluxes
 }
