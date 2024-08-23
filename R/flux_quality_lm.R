@@ -27,6 +27,19 @@ flux_quality_lm <- function(slopes_df,
                             rsquared_col = "f_rsquared",
                             pvalue_threshold = 0.3,
                             rsquared_threshold = 0.7) {
+  environment(flux_fun_check) <- environment()
+
+  flux_fun_check(slopes_df,
+    col_numeric = c(
+      ((pvalue_col)),
+      ((rsquared_col))
+    ),
+    arg_numeric = c(
+      "pvalue_threshold",
+      "rsquared_threshold"
+    )
+  )
+
   slopes_df <- slopes_df |>
     rename(
       f_pvalue = all_of(((pvalue_col))),

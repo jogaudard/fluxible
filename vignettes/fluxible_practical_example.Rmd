@@ -461,6 +461,7 @@ bind_rows(
   ) +
   theme(legend.position = "bottom") +
   facet_grid(type ~ ., scales = "free")
+
 ```
 
 #### References

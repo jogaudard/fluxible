@@ -79,7 +79,7 @@ test_that("error on arguments", {
       co2_conc_missing,
       start_cut = "Voldemort"
     ),
-    "start_cut has to be a double"
+    "start_cut has to be numeric"
   )
 })
 
