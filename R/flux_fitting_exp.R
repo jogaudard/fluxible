@@ -48,6 +48,31 @@ flux_fitting_exp <- function(conc_df,
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
                              fluxid_col = "f_fluxID") {
+
+  args_ok <- flux_fun_check(list(
+    t_window = ((t_window)),
+    cz_window = ((cz_window)),
+    b_window = ((b_window)),
+    a_window = ((a_window)),
+    roll_width = ((roll_width)),
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric
+  ),
+  msg = rep("has to be numeric", 7))
+
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
+
+
   conc_df <- conc_df |>
     rename(
       f_start = all_of((start_col)),
@@ -56,19 +81,6 @@ flux_fitting_exp <- function(conc_df,
       f_conc = all_of((conc_col)),
       f_fluxID = all_of((fluxid_col))
     )
-
-
-
-  if (!is.double(t_window)) stop("t_window has to be a double")
-  if (!is.double(cz_window)) stop("cz_window has to be a double")
-  if (!is.double(b_window)) stop("b_window has to be a double")
-  if (!is.double(a_window)) stop("a_window has to be a double")
-  if (!is.double(roll_width)) stop("roll_width has to be a double")
-  if (!is.double(start_cut)) stop("start_cut has to be a double")
-  if (!is.double(end_cut)) stop("end_cut has to be a double")
-
-
-
 
   length_flux_max <- conc_df |>
     mutate(

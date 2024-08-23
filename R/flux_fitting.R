@@ -51,6 +51,40 @@ flux_fitting <- function(conc_df,
                          roll_width = 15,
                          t_zero = 0,
                          fit_type) {
+  args_ok <- flux_fun_check(list(
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
+
+  conc_df_check <- conc_df |>
+    select(
+      all_of(((conc_col))),
+      all_of(((start_col))),
+      all_of(((end_col))),
+      all_of(((datetime_col)))
+    )
+
+  conc_df_ok <- flux_fun_check(conc_df_check,
+                               fn = list(
+                                 is.numeric,
+                                 is.POSIXct,
+                                 is.POSIXct,
+                                 is.POSIXct
+                               ),
+                               msg = rep(c(
+                                 "has to be numeric",
+                                 "has to be POSIXct"
+                               ),
+                               c(1, 3)
+                               ),
+                               origdf = conc_df)
+
+
+  if (any(!c(args_ok, conc_df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
   fit_type <- flux_fit_type(
     ((conc_df)),
     fit_type = ((fit_type))

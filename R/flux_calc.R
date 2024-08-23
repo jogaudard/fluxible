@@ -60,19 +60,6 @@ flux_calc <- function(slopes_df,
                       temp_air_col = "temp_air",
                       temp_air_unit = "celsius",
                       fit_type = c()) {
-  fit_type <- flux_fit_type(
-    slopes_df,
-    fit_type = ((fit_type))
-  )
-
-  temp_air_unit <- match.arg(
-    ((temp_air_unit)),
-    c("celsius", "fahrenheit", "kelvin")
-  )
-
-  if (!is.double(((atm_pressure)))) stop("atm_pressure has to be a double")
-  if (!is.double(((plot_area)))) stop("plot_area has to be a double")
-
   colnames <- colnames(slopes_df)
   if (!(((slope_col)) %in% ((colnames)))) {
     stop("could not find slope_col in slopes_df")
@@ -91,6 +78,51 @@ flux_calc <- function(slopes_df,
   if (length(setdiff(((cols_ave)), ((colnames)))) > 0) {
     stop("some names in cols_ave cannot be found in slopes_df")
   }
+
+
+  args_ok <- flux_fun_check(list(
+    plot_area = ((plot_area))
+  ),
+  fn = list(is.numeric),
+  msg = "has to be numeric")
+
+  slopes_df_check <- slopes_df |>
+    select(
+      all_of(((slope_col))),
+      all_of(((temp_air_col))),
+      all_of(((datetime_col)))
+    )
+
+  df_ok <- flux_fun_check(slopes_df_check,
+                          fn = list(
+                            is.numeric,
+                            is.numeric,
+                            is.POSIXct
+                          ),
+                          msg = rep(c(
+                            "has to be numeric",
+                            "has to be POSIXct"
+                          ),
+                          c(2, 1)
+                          ),
+                          origdf = slopes_df)
+
+
+  if (any(!c(args_ok, df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
+
+  fit_type <- flux_fit_type(
+    slopes_df,
+    fit_type = ((fit_type))
+  )
+
+  temp_air_unit <- match.arg(
+    ((temp_air_unit)),
+    c("celsius", "fahrenheit", "kelvin")
+  )
+
+
 
   if (is.double((chamber_volume))) {
     slopes_df <- slopes_df |>
