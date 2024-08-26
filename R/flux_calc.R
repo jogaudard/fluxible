@@ -21,7 +21,8 @@
 #' can also be a column in case it is a variable
 #' @param atm_pressure atmospheric pressure, assumed 1 atm,
 #' can be a constant (numerical) or a variable (column name)
-#' @param plot_area area of the plot in m^2, default for Three-D
+#' @param plot_area area of the plot in m^2, default for Three-D,
+#' can also be a column in case it is a variable
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux,
 #' as distinct() is applied.
@@ -88,11 +89,6 @@ flux_calc <- function(slopes_df,
     stop("some names in cols_ave cannot be found in slopes_df")
   }
 
-  args_ok <- flux_fun_check(list(
-    plot_area = ((plot_area))
-  ),
-  fn = list(is.numeric),
-  msg = "has to be numeric")
 
   slopes_df_check <- slopes_df |>
     select(
@@ -116,7 +112,7 @@ flux_calc <- function(slopes_df,
                           origdf = slopes_df)
 
 
-  if (any(!c(args_ok, df_ok)))
+  if (any(!df_ok))
     stop("Please correct the arguments", call. = FALSE)
 
 
@@ -182,6 +178,19 @@ flux_calc <- function(slopes_df,
       )
   }
 
+  if (is.double((plot_area))) {
+    slopes_df <- slopes_df |>
+      mutate(
+        plot_area = ((plot_area))
+      )
+  }
+
+  if (is.character(((plot_area)))) {
+    slopes_df <- slopes_df |>
+      rename(
+        plot_area = all_of(((plot_area)))
+      )
+  }
 
 
   slopes_df <- slopes_df |>
@@ -207,11 +216,11 @@ flux_calc <- function(slopes_df,
   slope_temp <- slopes_df |>
     select(
       "f_slope_calc", "f_fluxID", "air_temp", "chamber_volume",
-      "tube_volume", "atm_pressure", "f_datetime"
+      "tube_volume", "atm_pressure", "f_datetime", "plot_area"
     ) |>
     group_by(
       .data$f_fluxID, .data$f_slope_calc, .data$chamber_volume,
-      .data$tube_volume, .data$atm_pressure
+      .data$tube_volume, .data$atm_pressure, .data$plot_area
     ) |>
     summarise(
       temp_air_ave = mean(.data$air_temp, na.rm = TRUE),
@@ -280,7 +289,7 @@ flux_calc <- function(slopes_df,
         (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
         / (((r_const)) *
            .data$temp_air_ave
-           * ((plot_area))) # flux in micromol/s/m^2
+           * .data$plot_area) # flux in micromol/s/m^2
         * 3600, # secs to hours, flux is now in micromol/m^2/h
       temp_air_ave = case_when(
         ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,

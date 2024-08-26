@@ -55,7 +55,8 @@ can also be a column in case it is a variable}
 \item{atm_pressure}{atmospheric pressure, assumed 1 atm,
 can be a constant (numerical) or a variable (column name)}
 
-\item{plot_area}{area of the plot in m^2, default for Three-D}
+\item{plot_area}{area of the plot in m^2, default for Three-D,
+can also be a column in case it is a variable}
 
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux,
