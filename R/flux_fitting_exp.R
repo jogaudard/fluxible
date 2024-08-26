@@ -244,16 +244,6 @@ flux_fitting_exp <- function(conc_df,
     select("f_fluxID", "f_Cb") |>
     distinct()
 
-  # a_df <- conc_df_cut |>
-  #   group_by(.data$f_fluxID) |>
-  #   mutate(
-  #     ta = .data$length_window - ((a_window)),
-  #     Ca = .data$f_conc[.data$f_time_cut == .data$ta]
-  #   ) |>
-  #   ungroup() |>
-  #   select("f_fluxID", "ta", "Ca") |>
-  #   distinct()
-
   a_df <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
     mutate(
