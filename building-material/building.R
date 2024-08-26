@@ -566,3 +566,13 @@ test_function <- function(df,
                         # vec
                         # environment(test_function)
 test_function(slopes0)
+
+# missing data issue with flux_fitting_exp
+test_df <- flux_fitting(co2_conc,
+   fit_type = "expo",
+   end_cut = 30)
+View(test_df)
+
+test_df  |>
+   flux_quality(slope_col = "f_slope") |>
+      flux_plot()

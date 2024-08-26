@@ -234,17 +234,35 @@ flux_fitting_exp <- function(conc_df,
     left_join(tz_df, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     mutate(
-      f_Cb = .data$f_conc[.data$f_time_cut == .data$tz_est - ((b_window))]
+      diff = .data$f_time_cut - .data$tz_est + ((b_window))
+    ) |>
+    distinct(.data$diff, .keep_all = TRUE) |>
+    mutate(
+      f_Cb = .data$f_conc[which.min(.data$diff)]
     ) |>
     ungroup() |>
     select("f_fluxID", "f_Cb") |>
     distinct()
 
+  # a_df <- conc_df_cut |>
+  #   group_by(.data$f_fluxID) |>
+  #   mutate(
+  #     ta = .data$length_window - ((a_window)),
+  #     Ca = .data$f_conc[.data$f_time_cut == .data$ta]
+  #   ) |>
+  #   ungroup() |>
+  #   select("f_fluxID", "ta", "Ca") |>
+  #   distinct()
+
   a_df <- conc_df_cut |>
     group_by(.data$f_fluxID) |>
     mutate(
       ta = .data$length_window - ((a_window)),
-      Ca = .data$f_conc[.data$f_time_cut == .data$ta]
+      ta_diff = .data$f_time_cut - .data$ta
+    ) |>
+    distinct(.data$ta_diff, .keep_all = TRUE) |>
+    mutate(
+      Ca = .data$f_conc[which.min(.data$ta_diff)]
     ) |>
     ungroup() |>
     select("f_fluxID", "ta", "Ca") |>
