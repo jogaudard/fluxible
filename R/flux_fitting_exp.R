@@ -238,7 +238,7 @@ flux_fitting_exp <- function(conc_df,
     ) |>
     distinct(.data$diff, .keep_all = TRUE) |>
     mutate(
-      f_Cb = .data$f_conc[which.min(.data$diff)]
+      f_Cb = .data$f_conc[which.min(abs(.data$diff))]
     ) |>
     ungroup() |>
     select("f_fluxID", "f_Cb") |>
@@ -262,7 +262,7 @@ flux_fitting_exp <- function(conc_df,
     ) |>
     distinct(.data$ta_diff, .keep_all = TRUE) |>
     mutate(
-      Ca = .data$f_conc[which.min(.data$ta_diff)]
+      Ca = .data$f_conc[which.min(abs(.data$ta_diff))]
     ) |>
     ungroup() |>
     select("f_fluxID", "ta", "Ca") |>
