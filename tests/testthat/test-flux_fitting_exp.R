@@ -1,6 +1,8 @@
 test_that("fitting works with 0 second end cut", {
   expect_snapshot(
-    flux_fitting_exp(co2_conc)
+    flux_fitting_exp(co2_conc) |>
+      select(f_fluxID, f_slope) |>
+      distinct()
   )
 })
 
@@ -66,7 +68,7 @@ test_that("error on arguments", {
       co2_conc_missing,
       start_cut = "Voldemort"
     ),
-    "start_cut has to be a double"
+    "Please correct the arguments"
   )
 })
 

@@ -8,6 +8,8 @@ flux_calc(
   slopes_df,
   slope_col,
   datetime_col = "f_datetime",
+  conc_unit,
+  flux_unit,
   cut_col = c(),
   keep_arg = c(),
   chamber_volume = 24.5,
@@ -32,6 +34,13 @@ flux_calc(
 measurements in slopes_df. The first one after cutting will be kept as
 datetime of each flux in the output.}
 
+\item{conc_unit}{unit in which the concentration of gas was measured
+ppm or ppb}
+
+\item{flux_unit}{unit in which the calculated flux will be
+\code{mmol} outputs fluxes in mmol*m^(-2)\emph{h^(-1);
+\code{micromol} outputs fluxes in micromol}m^(-2)*h^(-1)}
+
 \item{cut_col}{column containing cutting information}
 
 \item{keep_arg}{name in cut_col of data to keep}
@@ -46,7 +55,8 @@ can also be a column in case it is a variable}
 \item{atm_pressure}{atmospheric pressure, assumed 1 atm,
 can be a constant (numerical) or a variable (column name)}
 
-\item{plot_area}{area of the plot in m^2, default for Three-D}
+\item{plot_area}{area of the plot in m^2, default for Three-D,
+can also be a column in case it is a variable}
 
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux,
@@ -68,7 +78,8 @@ quadratic or linear.
 Will be automatically filled if slopes_df was produced using flux_quality().}
 }
 \value{
-a dataframe containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)),
+a dataframe containing fluxID, fluxes (in mmol*m^(-2)\emph{h^(-1)
+or micromol}m^(-2)*h^(-1), depending on the value of \code{flux_unit}),
 temperature average for each flux,
 slope used for each flux calculation,
 the model used in \code{flux_fitting},
@@ -80,5 +91,8 @@ of gas concentration over time
 }
 \examples{
 data(slopes0)
-flux_calc(slopes0, slope_col = "f_slope")
+flux_calc(slopes0,
+slope_col = "f_slope",
+conc_unit = "ppm",
+flux_unit = "mmol")
 }

@@ -29,6 +29,18 @@ flux_fitting_quadratic <- function(conc_df,
                                    conc_col = "f_conc",
                                    fluxid_col = "f_fluxID",
                                    t_zero = 0) {
+  args_ok <- flux_fun_check(list(
+    t_zero = ((t_zero)),
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
+
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
+
+
   conc_df <- conc_df |>
     rename(
       f_start = all_of(((start_col))),
@@ -38,8 +50,6 @@ flux_fitting_quadratic <- function(conc_df,
       f_fluxID = all_of(((fluxid_col)))
     )
 
-  if (!is.double(((start_cut)))) stop("start_cut has to be a double")
-  if (!is.double(((end_cut)))) stop("end_cut has to be a double")
 
   length_flux_max <- conc_df |>
     mutate(
