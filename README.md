@@ -34,6 +34,12 @@ that was presented at the European Geosciences Union Annual Meeting
 
 ## Installation
 
+Fluxible can be installed from CRAN.
+
+``` r
+install.packages("fluxible")
+```
+
 You can install the development version of fluxible from the [GitHub
 repo](https://github.com/Plant-Functional-Trait-Course/fluxible) with:
 
