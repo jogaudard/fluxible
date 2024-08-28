@@ -11,6 +11,7 @@ Processes the raw data from closed loop flux chamber (or tent) setups into ecosy
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://cran.r-project.org/package=fluxible}
   \item \url{https://plant-functional-trait-course.github.io/fluxible/}
 }
 
