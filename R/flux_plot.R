@@ -35,15 +35,17 @@
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
+#' scale_linetype_manual guides guide_legend
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom progress progress_bar
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag, output = "print_only")
+#' flux_plot(slopes0_flag)
 #' data(slopes30lin_flag)
-#' flux_plot(slopes30lin_flag, output = "print_only")
-#' flux_plot(slopes30qua_flag, output = "print_only")
+#' flux_plot(slopes30lin_flag)
+#' data(slopes30qua_flag)
+#' flux_plot(slopes30qua_flag)
 #' @export
 
 flux_plot <- function(slopes_df,
@@ -169,6 +171,12 @@ flux_plot <- function(slopes_df,
   message("Plotting in progress")
 
   f_plot <- f_plot +
+    geom_line(
+      aes(y = .data$fit, linetype = .data$linetype),
+      linewidth = 0.3,
+      na.rm = TRUE,
+      show.legend = TRUE
+    ) +
     scale_color_manual(values = c(
       "cut" = ((color_cut)),
       "ok" = ((color_ok)),
@@ -177,6 +185,10 @@ flux_plot <- function(slopes_df,
       "start_error" = ((color_discard)),
       "weird_flux" = ((color_discard)),
       "force_ok" = ((color_ok))
+    )) +
+    scale_linetype_manual(values = c(
+      "fit" = "longdash",
+      "slope" = "dashed"
     )) +
     scale_x_datetime(
       date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
@@ -190,8 +202,10 @@ flux_plot <- function(slopes_df,
       title = "Fluxes quality assessment",
       x = "Datetime",
       y = "Concentration",
-      colour = "Quality flags"
-    )
+      colour = "Quality flags",
+      linetype = "Fits"
+    ) +
+    guides(color = guide_legend(override.aes = list(linetype = 0)))
 
   if (((output)) == "print_only") {
     return(f_plot)
