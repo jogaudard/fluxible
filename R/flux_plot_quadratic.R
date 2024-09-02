@@ -24,7 +24,7 @@ flux_plot_quadratic <- function(slopes_df,
 
   plot_quadratic <- plot_quadratic +
     geom_line(
-      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
+      aes(y = .data$f_fit_slope),
       linetype = "dashed",
       na.rm = TRUE
     )
