@@ -200,6 +200,7 @@ flux_plot <- function(slopes_df,
     ) +
     labs(
       title = "Fluxes quality assessment",
+      subtitle = paste(fit_type, "model"),
       x = "Datetime",
       y = "Concentration",
       colour = "Quality flags",
