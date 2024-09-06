@@ -23,7 +23,7 @@ flux_plot_quadratic <- function(slopes_df,
     ((param_df)),
     cut_arg = ((cut_arg))
   )
-  
+
   slopes_df <- slopes_df |>
     rename(
       fit = "f_fit",

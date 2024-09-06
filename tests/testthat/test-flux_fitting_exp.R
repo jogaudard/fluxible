@@ -94,13 +94,13 @@ test_that("renaming works", {
       co2 = f_conc
     )
 
-  qflux_fitting_exp <- purrr::quietly(flux_fitting_exp)
-  expect_no_error(
-    qflux_fitting_exp(
+  expect_snapshot(
+    flux_fitting(
       co2_conc_names,
       datetime_col = "date_time",
       end_col = "finish",
-      conc_col = "co2"
+      conc_col = "co2",
+      fit_type = "exp"
     )
   )
 })
