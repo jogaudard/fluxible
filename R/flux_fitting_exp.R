@@ -73,14 +73,7 @@ flux_fitting_exp <- function(conc_df,
     stop("Please correct the arguments", call. = FALSE)
 
 
-  conc_df <- conc_df |>
-    rename(
-      f_start = all_of((start_col)),
-      f_end = all_of((end_col)),
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col)),
-      f_fluxID = all_of((fluxid_col))
-    )
+
 
   length_flux_max <- conc_df |>
     mutate(

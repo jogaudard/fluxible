@@ -34,7 +34,9 @@ flux_fitting(
 
 \item{end_col}{column with datetime when the measurement ended}
 
-\item{datetime_col}{column with datetime of each concentration measurement}
+\item{datetime_col}{column with datetime of each concentration measurement
+Note that if there are duplicated datetime in the same f_fluxID only
+the first row will be kept}
 
 \item{conc_col}{column with gas concentration data}
 
