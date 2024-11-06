@@ -21,9 +21,10 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Paul Efren \email{paulefrens@gmail.com}
+  \item Jonas Trepel \email{jonas.trepel@bio.au.dk}
   \item Michael Mustri \email{mustrim@arizona.edu}
   \item Pekka O Niittynen \email{pekka.niittynen@helsinki.fi}
+  \item Paul Efren Santos-Andrade \email{paulefrens@gmail.com}
   \item Richard James Telford \email{richard.telford@uib.no} (\href{https://orcid.org/0000-0001-9826-3076}{ORCID})
 }
 
