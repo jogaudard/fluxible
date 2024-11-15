@@ -66,8 +66,8 @@
 # GEP calculation works with several id cols
 
     Code
-      flux_gep(fluxes, id_cols = c("turfID", "campaign"), flux_col = "flux",
-      type_col = "type", datetime_col = "datetime", par_col = "PAR")
+      flux_gep(fluxes, id_cols = c("turfid", "campaign"), flux_col = "flux",
+      type_col = "type", datetime_col = "datetime", par_col = "par")
     Condition
       Warning:
       Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
@@ -116,7 +116,7 @@
       i See details at <https://tidyselect.r-lib.org/reference/faq-selection-context.html>
     Output
       # A tibble: 9 x 6
-        datetime            turfID campaign   PAR type   flux
+        datetime            turfid campaign   PAR type   flux
         <chr>               <chr>     <dbl> <dbl> <chr> <dbl>
       1 2024-02-11 10:00:00 A             1   300 GEP      -2
       2 2024-02-11 10:00:20 A             2   250 GEP      -5
