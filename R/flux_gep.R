@@ -1,4 +1,24 @@
+#' Calculates GEP
+#' @description to calculate gross ecosystem production (GEP) from net ecosystem
+#' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER
+#' @param fluxes_df a dataframe containing NEE and ER
+#' @param id_cols columns used to identify each pair of ER and NEE
+#' @param flux_col column containing flux values
+#' @param type_col column containing type of flux (NEE or ER)
+#' @param datetime_col column containing start of measurement as datetime
+#' @param par_col column containing PAR values for each flux
+#' @param nee_arg argument designating NEE fluxes in type column
+#' @param er_arg argument designating ER fluxes in type column
+#' @param cols_keep columns to keep from fluxes_df. Values from NEE row will be
+#' filled in GEP row.
+#' @return a df with GEP as a flux type, with PAR and datetime from the NEE
+#' measurement for each pair of ER and NEE
+#' @importFrom dplyr rename select mutate case_when filter full_join
+#' @importFrom tidyr pivot_wider fill
 #' @importFrom purrrlyr slice_rows unslice
+#' @examples
+#' 
+#' @export
 
 flux_gep <- function(fluxes_df,
                      id_cols, #must be factor
@@ -8,7 +28,7 @@ flux_gep <- function(fluxes_df,
                      par_col,
                      nee_arg = "NEE",
                      er_arg = "ER",
-                     cols_keep
+                     cols_keep = c()
 ){
   # dummy check
 
