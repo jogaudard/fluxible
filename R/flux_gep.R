@@ -76,9 +76,9 @@ flux_gep <- function(fluxes_df,
     )
 
   fluxes_gep <- fluxes_gep |>
-    pivot_wider(all_of(((id_cols))),
-      names_from = .data$type,
-      values_from = c(.data$flux, .data$datetime, .data$PAR)
+    pivot_wider(id_cols = all_of(((id_cols))),
+      names_from = "type",
+      values_from = c("flux", "datetime", "PAR")
     ) |>
     rename(
       ER = "flux_ER",
@@ -91,19 +91,19 @@ flux_gep <- function(fluxes_df,
       type = "GEP"
     ) |>
     select(
-      .data$datetime,
+      "datetime",
       all_of(((id_cols))),
-      .data$PAR,
-      .data$type,
-      .data$flux
+      "PAR",
+      "type",
+      "flux"
     )
 
   fluxes_gep <- fluxes_gep |>
     full_join(
       fluxes_df,
-      by = c(all_of(((id_cols))), "PAR", "type", "flux", "datetime")
+      by = c(((id_cols)), "PAR", "type", "flux", "datetime")
     ) |>
-    slice_rows(all_of(((id_cols)))) |>
+    slice_rows(((id_cols))) |>
     fill(all_of(((cols_keep))), .direction = "up") |>
     unslice()
 

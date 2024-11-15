@@ -3,52 +3,6 @@
     Code
       flux_gep(fluxes, id_cols = "turfID", flux_col = "flux", type_col = "type",
         datetime_col = "f_start", par_col = "PAR", cols_keep = c("temp_soil"))
-    Condition
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"type"` instead of `.data$type`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"flux"` instead of `.data$flux`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"datetime"` instead of `.data$datetime`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"PAR"` instead of `.data$PAR`
-      Warning:
-      Specifying the `id_cols` argument by position was deprecated in tidyr 1.3.0.
-      i Please explicitly name `id_cols`, like `id_cols = all_of(((id_cols)))`.
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"type"` instead of `.data$type`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"flux"` instead of `.data$flux`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"datetime"` instead of `.data$datetime`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"PAR"` instead of `.data$PAR`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"datetime"` instead of `.data$datetime`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"PAR"` instead of `.data$PAR`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"type"` instead of `.data$type`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"flux"` instead of `.data$flux`
-      Warning:
-      Using `all_of()` outside of a selecting function was deprecated in tidyselect 1.2.0.
-      i See details at <https://tidyselect.r-lib.org/reference/faq-selection-context.html>
-      Warning:
-      Using `all_of()` outside of a selecting function was deprecated in tidyselect 1.2.0.
-      i See details at <https://tidyselect.r-lib.org/reference/faq-selection-context.html>
     Output
       # A tibble: 8 x 11
         datetime            turfID    PAR type   flux f_fluxID f_slope_tz temp_air_ave
@@ -68,52 +22,6 @@
     Code
       flux_gep(fluxes, id_cols = c("turfid", "campaign"), flux_col = "flux",
       type_col = "type", datetime_col = "datetime", par_col = "par")
-    Condition
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"type"` instead of `.data$type`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"flux"` instead of `.data$flux`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"datetime"` instead of `.data$datetime`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"PAR"` instead of `.data$PAR`
-      Warning:
-      Specifying the `id_cols` argument by position was deprecated in tidyr 1.3.0.
-      i Please explicitly name `id_cols`, like `id_cols = all_of(((id_cols)))`.
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"type"` instead of `.data$type`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"flux"` instead of `.data$flux`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"datetime"` instead of `.data$datetime`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"PAR"` instead of `.data$PAR`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"datetime"` instead of `.data$datetime`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"PAR"` instead of `.data$PAR`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"type"` instead of `.data$type`
-      Warning:
-      Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
-      i Please use `"flux"` instead of `.data$flux`
-      Warning:
-      Using `all_of()` outside of a selecting function was deprecated in tidyselect 1.2.0.
-      i See details at <https://tidyselect.r-lib.org/reference/faq-selection-context.html>
-      Warning:
-      Using `all_of()` outside of a selecting function was deprecated in tidyselect 1.2.0.
-      i See details at <https://tidyselect.r-lib.org/reference/faq-selection-context.html>
     Output
       # A tibble: 9 x 6
         datetime            turfid campaign   PAR type   flux
