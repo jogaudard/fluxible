@@ -17,13 +17,16 @@
 #' @importFrom tidyr pivot_wider fill
 #' @importFrom purrrlyr slice_rows unslice
 #' @examples
-#' 
+#' data(co2_fluxes)
+#' flux_gep(co2_fluxes, id_cols = "turfID", flux_col = "flux",
+#' type_col = "type", datetime_col = "f_start", par_col = "PAR",
+#' cols_keep = c("temp_soil"))
 #' @export
 
 flux_gep <- function(fluxes_df,
-                     id_cols, #must be factor
+                     id_cols,
                      flux_col,
-                     type_col, # must be factor
+                     type_col,
                      datetime_col,
                      par_col,
                      nee_arg = "NEE",
@@ -65,13 +68,13 @@ fluxes_gep <- fluxes_df |>
                 values_from = c(.data$flux, .data$datetime, .data$PAR)
     ) |>
     rename(
-      ER = flux_ER,
-      NEE = flux_NEE,
-      PAR = PAR_NEE,
-      datetime = datetime_NEE
+      ER = "flux_ER",
+      NEE = "flux_NEE",
+      PAR = "PAR_NEE",
+      datetime = "datetime_NEE"
     ) |>
     mutate(
-      flux = NEE - ER,
+      flux = .data$NEE - .data$ER,
       type = "GEP"
     ) |>
     select(.data$datetime, all_of(((id_cols))), .data$PAR, .data$type, .data$flux)
