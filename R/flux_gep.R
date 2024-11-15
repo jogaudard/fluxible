@@ -33,7 +33,21 @@ flux_gep <- function(fluxes_df,
                      er_arg = "ER",
                      cols_keep = c()
 ){
-  # dummy check
+
+
+  fluxes_df_check <- fluxes_df |>
+    select(
+      all_of(((flux_col)))
+    )
+
+  fluxes_df_ok <- flux_fun_check(fluxes_df_check,
+                               fn = list(is.numeric),
+                               msg = "has to be numeric",
+                               origdf = fluxes_df)
+
+
+  if (!fluxes_df_ok)
+    stop("Please correct the arguments", call. = FALSE)
 
 fluxes_df <- fluxes_df |>
   rename(

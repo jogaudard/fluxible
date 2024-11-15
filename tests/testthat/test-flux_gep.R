@@ -52,3 +52,38 @@ fluxes <- tibble(
         )
   )
 })
+
+test_that("GEP error message for non numeric flux", {
+campaign <- c(1, 1, 2, 2, 3, 3)
+turfID <- c("A", "A", "A", "A", "B", "B")
+type <- c("NEE", "ER", "NEE", "ER", "NEE", "ER")
+flux <- c(3, "jasdg", 2, "a", 9, 11)
+datetime <- c(
+    "2024-02-11 10:00:00",
+    "2024-02-11 10:00:10",
+    "2024-02-11 10:00:20",
+    "2024-02-11 10:00:30",
+    "2024-02-11 10:00:40",
+    "2024-02-11 10:00:50"
+    )
+PAR <- c(300, 2, 250, 5, 320, 1)
+
+fluxes <- tibble(
+    campaign,
+    turfID,
+    type,
+    flux,
+    datetime,
+    PAR
+)
+
+  expect_error(
+    flux_gep(fluxes,
+        id_cols = c("turfID", "campaign"),
+        flux_col = "flux",
+        type_col = "type",
+        datetime_col = "datetime",
+        par_col = "PAR"
+        )
+  )
+})
