@@ -45,7 +45,8 @@ Imports:
     stringr,
     tidyr,
     zoo,
-    progress
+    progress,
+    purrrlyr
 Depends: 
     R (>= 4.1)
 LazyData: true
