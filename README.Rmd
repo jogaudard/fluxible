@@ -71,7 +71,7 @@ slopes_flag <- flux_quality(
 flux_plot(
   slopes_flag,
   f_ylim_lower = 390,
-  f_ylim_upper = 550,
+  f_ylim_upper = 650,
   facet_wrap_args = list(
     ncol = 3,
     nrow = 2,
