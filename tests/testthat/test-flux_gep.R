@@ -46,6 +46,44 @@ test_that("GEP calculation works with several id cols", {
   )
 })
 
+test_that("missing NEE and several id cols", {
+  campaign <- c(1, 1, 2, 2, 3, 3, 3, 4, 4)
+  turfid <- c("A", "A", "A", "A", "B", "B", "C", "D", "A")
+  type <- c("NEE", "ER", "NEE", "ER", "NEE", "ER", "ER", "ER", "ER")
+  flux <- c(3, 5, 2, 7, 9, 11, 10, 13, 8)
+  datetime <- c(
+    "2024-02-11 10:00:00",
+    "2024-02-11 10:00:10",
+    "2024-02-11 10:00:20",
+    "2024-02-11 10:00:30",
+    "2024-02-11 10:00:40",
+    "2024-02-11 10:00:50",
+    "2024-02-11 10:01:00",
+    "2024-02-11 10:01:10",
+    "2024-02-11 10:01:20"
+  )
+  par <- c(300, 2, 250, 5, 320, 1, 0, 3, 4)
+
+  fluxes <- tibble(
+    campaign,
+    turfid,
+    type,
+    flux,
+    datetime,
+    par
+  )
+
+  expect_snapshot(
+    flux_gep(fluxes,
+      id_cols = c("turfid", "campaign"),
+      flux_col = "flux",
+      type_col = "type",
+      datetime_col = "datetime",
+      par_col = "par"
+    )
+  )
+})
+
 test_that("GEP error message for non numeric flux", {
   campaign <- c(1, 1, 2, 2, 3, 3)
   turfid <- c("A", "A", "A", "A", "B", "B")

@@ -99,20 +99,23 @@ flux_gep <- function(fluxes_df,
       "type",
       "flux"
     )
-  
-  col_id <- paste(".data$", id_cols, sep = "")
-  str(col_id)
 
   nee_missing <- fluxes_gep |>
     filter(
       is.na(.data$datetime)
     ) |>
-    select(all_of(((id_cols)))) |>
+    select(all_of(((id_cols))))
+
+  nee_missing[] <- Map(paste, names(nee_missing), nee_missing, sep = ": ")
+
+  nee_missing <- nee_missing |>
     mutate(
-      f_warning = paste(
-        "\n", "No GEP calculated for measurement", ((col_id))
+      msg = apply(nee_missing[, ((id_cols))], 1, paste, collapse = ", "),
+      f_warnings = paste(
+        "\n", "NEE missing for measurement", .data$msg
       )
-    )
+    ) |>
+    pull(.data$f_warnings)
 
   fluxes_gep <- fluxes_gep |>
     drop_na("datetime")
@@ -126,7 +129,11 @@ flux_gep <- function(fluxes_df,
     fill(all_of(((cols_keep))), .direction = "up") |>
     unslice()
 
-  # fluxes_gep
-  nee_missing
-  # col_id
+  f_warnings <- stringr::str_c(nee_missing)
+
+
+  if (any(!is.na(nee_missing))) warning(f_warnings)
+
+  fluxes_gep
+
 }
