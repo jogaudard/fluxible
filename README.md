@@ -128,21 +128,22 @@ fluxes_gep <- flux_gep(
   par_col = "PAR",
   cols_keep = c("temp_soil")
 )
+#> Warning in flux_gep(fluxes, id_cols = "turfID", flux_col = "flux", type_col = "type", : 
+#>  NEE missing for measurement turfID: 156 AN2C 156
 
 fluxes_gep
-#> # A tibble: 10 × 15
-#>    datetime            turfID    PAR type   flux f_fluxID temp_soil f_slope_calc
-#>    <dttm>              <chr>   <dbl> <chr> <dbl> <fct>        <dbl>        <dbl>
-#>  1 NA                  156 AN… NA    GEP    NA   <NA>          10.8       NA    
-#>  2 2022-07-28 23:47:22 74 WN2…  2.19 GEP    10.3 <NA>          10.7       NA    
-#>  3 2022-07-28 23:59:32 109 AN…  1.87 GEP   -27.2 <NA>          10.8       NA    
-#>  4 2022-07-29 00:06:35 29 WN3…  1.61 GEP    NA   <NA>          12.2       NA    
-#>  5 2022-07-28 23:43:35 156 AN…  1.88 ER     47.7 1             10.8        0.775
-#>  6 2022-07-28 23:47:22 74 WN2…  2.19 NEE    31.0 2             10.7        0.504
-#>  7 2022-07-28 23:52:10 74 WN2…  2.04 ER     20.7 3             10.7        0.337
-#>  8 2022-07-28 23:59:32 109 AN…  1.87 NEE    41.5 4             10.8        0.676
-#>  9 2022-07-29 00:03:10 109 AN…  1.69 ER     68.7 5             10.5        1.12 
-#> 10 2022-07-29 00:06:35 29 WN3…  1.61 NEE    26.1 6             12.2        0.425
+#> # A tibble: 9 × 15
+#>   datetime            turfID     PAR type   flux f_fluxID temp_soil f_slope_calc
+#>   <dttm>              <chr>    <dbl> <chr> <dbl> <fct>        <dbl>        <dbl>
+#> 1 2022-07-28 23:47:22 74 WN2C…  2.19 GEP    10.3 <NA>          10.7       NA    
+#> 2 2022-07-28 23:59:32 109 AN3…  1.87 GEP   -27.2 <NA>          10.8       NA    
+#> 3 2022-07-29 00:06:35 29 WN3C…  1.61 GEP    NA   <NA>          12.2       NA    
+#> 4 2022-07-28 23:43:35 156 AN2…  1.88 ER     47.7 1             10.8        0.775
+#> 5 2022-07-28 23:47:22 74 WN2C…  2.19 NEE    31.0 2             10.7        0.504
+#> 6 2022-07-28 23:52:10 74 WN2C…  2.04 ER     20.7 3             10.7        0.337
+#> 7 2022-07-28 23:59:32 109 AN3…  1.87 NEE    41.5 4             10.8        0.676
+#> 8 2022-07-29 00:03:10 109 AN3…  1.69 ER     68.7 5             10.5        1.12 
+#> 9 2022-07-29 00:06:35 29 WN3C…  1.61 NEE    26.1 6             12.2        0.425
 #> # ℹ 7 more variables: chamber_volume <dbl>, tube_volume <dbl>,
 #> #   atm_pressure <dbl>, plot_area <dbl>, temp_air_ave <dbl>,
 #> #   volume_setup <dbl>, model <chr>
