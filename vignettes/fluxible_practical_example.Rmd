@@ -28,6 +28,8 @@ We use the `flux_match` function to slice the data from `co2_liahovden` into eac
 
 ```{r match}
 library(fluxible)
+library(dplyr)
+library(forcats)
 
 str(record_liahovden)
 str(co2_liahovden)
@@ -43,6 +45,19 @@ conc_liahovden <- flux_match(
   conc_col = "conc",
   start_col = "start"
 )
+# this exemple does not have a campaign column to pair the measurements
+# we add pairID to pair NEE and ER for GEP calculation later
+conc_liahovden <- conc_liahovden |>
+  mutate(
+    f_fluxID = as.double(f_fluxID),
+    pairID = case_when(
+      type == "NEE" ~ f_fluxID,
+      type == "ER" ~ f_fluxID - 1
+    ),
+    f_fluxID = as_factor(f_fluxID),
+    pairID = as_factor(pairID)
+  )
+
 str(conc_liahovden)
 ```
 
@@ -370,13 +385,12 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_flag_60 |>
     tube_volume = 0.075,
     atm_pressure = 1,
     plot_area = 0.0625,
-    cols_keep = c("f_start", "type"),
-    cols_ave = c(),
+    cols_keep = c("turfID", "type", "pairID"),
+    cols_ave = c("temp_soil", "PAR"),
     fluxid_col = "f_fluxID",
     temp_air_col = "temp_air",
     temp_air_unit = "celsius"
   )
-str(fluxes_exp_liahovden_60)
 
 fluxes_qua_liahovden_60 <- slopes_qua_liahovden_flag_60 |>
   flux_calc(
@@ -390,13 +404,12 @@ fluxes_qua_liahovden_60 <- slopes_qua_liahovden_flag_60 |>
     tube_volume = 0.075,
     atm_pressure = 1,
     plot_area = 0.0625,
-    cols_keep = c("f_start", "type"),
-    cols_ave = c(),
+    cols_keep = c("turfID", "type", "pairID"),
+    cols_ave = c("temp_soil", "PAR"),
     fluxid_col = "f_fluxID",
     temp_air_col = "temp_air",
     temp_air_unit = "celsius"
   )
-str(fluxes_qua_liahovden_60)
 
 fluxes_lin_liahovden_120 <- slopes_lin_liahovden_flag_120 |>
   flux_calc(
@@ -410,13 +423,12 @@ fluxes_lin_liahovden_120 <- slopes_lin_liahovden_flag_120 |>
     tube_volume = 0.075,
     atm_pressure = 1,
     plot_area = 0.0625,
-    cols_keep = c("f_start", "type"),
-    cols_ave = c(),
+    cols_keep = c("turfID", "type", "pairID"),
+    cols_ave = c("temp_soil", "PAR"),
     fluxid_col = "f_fluxID",
     temp_air_col = "temp_air",
     temp_air_unit = "celsius"
   )
-str(fluxes_lin_liahovden_120)
 ```
 
 The output is in mmol/m^2^/h and the calculation used is as follow:
@@ -446,17 +458,56 @@ A: area of chamber frame base (m^2^)
 The conversion from micromol/m^2^/s to mmol/m^2^/h is included in the function.
 
 Fluxes were calculated in five steps from raw gas concentration data and the process is entirely reproducible.
-Here is a plot of the results.
+
+Next we can calculated gross ecosystem production (GEP) and plot the results:
+
+```{r gep}
+fluxes_exp_liahovden_60_gep <- fluxes_exp_liahovden_60 |>
+  flux_gep(
+    id_cols = "pairID",
+    flux_col = "flux",
+    type_col = "type",
+    datetime_col = "datetime",
+    par_col = "PAR",
+    cols_keep = c("temp_soil", "model", "turfID")
+  )
+
+str(fluxes_exp_liahovden_60_gep)
+
+fluxes_qua_liahovden_60_gep <- fluxes_qua_liahovden_60 |>
+  flux_gep(
+    id_cols = "pairID",
+    flux_col = "flux",
+    type_col = "type",
+    datetime_col = "datetime",
+    par_col = "PAR",
+    cols_keep = c("temp_soil", "model", "turfID")
+  )
+
+str(fluxes_qua_liahovden_60_gep)
+
+fluxes_lin_liahovden_120_gep <- fluxes_lin_liahovden_120 |>
+  flux_gep(
+    id_cols = "pairID",
+    flux_col = "flux",
+    type_col = "type",
+    datetime_col = "datetime",
+    par_col = "PAR",
+    cols_keep = c("temp_soil", "model", "turfID")
+  )
+
+str(fluxes_lin_liahovden_120_gep)
+```
+
 
 ```{r 24h_fluxes, fig.width = 8, fig.height = 9, warning = FALSE, message = FALSE}
-library(dplyr)
 library(ggplot2)
 bind_rows(
-  fluxes_exp_liahovden_60,
-  fluxes_qua_liahovden_60,
-  fluxes_lin_liahovden_120
+  fluxes_exp_liahovden_60_gep,
+  fluxes_qua_liahovden_60_gep,
+  fluxes_lin_liahovden_120_gep
 ) |>
-  ggplot(aes(x = f_start, y = flux, color = model)) +
+  ggplot(aes(x = datetime, y = flux, color = model)) +
   geom_point() +
   geom_smooth() +
   labs(
