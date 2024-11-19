@@ -576,3 +576,157 @@ View(test_df)
 test_df  |>
    flux_quality(slope_col = "f_slope") |>
       flux_plot()
+
+
+# gep warning message trials
+campaign <- c(1, 1, 2, 2, 3, 3, 3, 4, 4)
+  turfid <- c("A", "A", "A", "A", "B", "B", "C", "D", "A")
+  type <- c("NEE", "ER", "NEE", "ER", "NEE", "ER", "ER", "ER", "ER")
+  flux <- c(3, 5, 2, 7, 9, 11, 10, 13, 8)
+  datetime <- c(
+    "2024-02-11 10:00:00",
+    "2024-02-11 10:00:10",
+    "2024-02-11 10:00:20",
+    "2024-02-11 10:00:30",
+    "2024-02-11 10:00:40",
+    "2024-02-11 10:00:50",
+    "2024-02-11 10:01:00",
+    "2024-02-11 10:01:10",
+    "2024-02-11 10:01:20"
+  )
+  PAR <- c(300, 2, 250, 5, 320, 1, 0, 3, 4)
+
+  fluxes <- tibble(
+    campaign,
+    turfid,
+    type,
+    flux,
+    datetime,
+    PAR
+  )
+fluxes
+id_cols <- c("campaign", "turfid")
+
+fluxes_gep <- fluxes |>
+    select(
+      "flux",
+      "type",
+      "datetime",
+      "PAR",
+      all_of(((id_cols)))
+    ) |> filter(
+      .data$type == "NEE" |
+        .data$type == "ER"
+    )
+
+  fluxes_gep <- fluxes_gep |>
+    pivot_wider(id_cols = all_of(((id_cols))),
+      names_from = "type",
+      values_from = c("flux", "datetime", "PAR")
+    ) |>
+    rename(
+      ER = "flux_ER",
+      NEE = "flux_NEE",
+      PAR = "PAR_NEE",
+      datetime = "datetime_NEE"
+    ) |>
+    mutate(
+      flux = .data$NEE - .data$ER,
+      type = "GEP"
+    ) |>
+    select(
+      "datetime",
+      all_of(((id_cols))),
+      "PAR",
+      "type",
+      "flux"
+    )
+
+fluxes_gep
+
+  # col_id <- paste(".data$", id_cols, sep = "")
+  # str(col_id)
+
+  nee_missing <- fluxes_gep |>
+    filter(
+      is.na(.data$datetime)
+    ) |>
+    select(all_of(((id_cols))))
+    mutate(
+      rowid = row_number()
+    )
+
+nrow(nee_missing)
+nee_missing[[1]]
+# nee_missing <- nee_missing |>
+#   mutate(
+#   msg_id <- c(seq_len(nrow(nee_missing)))
+# msg_id <- tibble(
+msg_id <- c()
+
+# )
+    for(i in seq_along(((id_cols)))) {
+  msg_id[i] <- paste(id_cols[[i]], nee_missing[[i]], collapse = ", ")
+   # msg_id[1] <- c(paste(id_cols[[i]], nee_missing[[i]]))
+}
+msg_id
+
+# nee_missing_try <- nee_missing |>
+#    mutate(
+#       msg = for(i in seq_along(((id_cols)))) {
+#   paste(id_cols[[i]], nee_missing[[i]], sep = ": ")
+# }
+#    )
+# nee_missing_try
+
+nee_missing_try <- nee_missing |>
+   mutate(
+      rowid = row_number(),
+
+   ) |>
+   pivot_longer(all_of(id_cols))
+
+nee_missing_try
+
+msg_id[1] <- paste(colnames(nee_missing[1]), nee_missing[1])
+ nee_missing[1, "turfid"]
+
+nee_missing <- nee_missing |>
+   mutate(msg = NA)
+
+# msg <- tibble()
+
+for(i in seq_along(((id_cols)))) {
+for(n in seq_along(nrow(nee_missing))) {
+   # nee_missing[n, "msg"] <- paste(colnames(nee_missing[i]), nee_missing[n, i])
+   nee_missing[n, i] <- paste(colnames(nee_missing[i]), nee_missing[[n, i]])
+
+}
+}
+# msg
+
+# for(i in seq_along(((id_cols)))) {
+for(i in 1:2) {
+# for(n in seq_along(nrow(nee_missing))) {
+   # nee_missing[n, "msg"] <- paste(colnames(nee_missing[i]), nee_missing[n, i])
+   # nee_missing[[n, "msg"]] <- paste(colnames(nee_missing[1]), nee_missing[[n, 1]])
+   nee_missing <- nee_missing |>
+      mutate(
+         msg = paste(colnames(nee_missing[i]), collapse = ", ")
+      )
+
+}
+
+df[] <- Map(paste, names(df), df, sep = ':')
+nee_missing
+nee_missing[] <- Map(paste, names(nee_missing), nee_missing, sep = ": ")
+nee_missing
+
+nee_missing_try <- nee_missing |>
+    mutate(
+      msg = apply(nee_missing[, id_cols], 1, paste, collapse = ", "),
+      f_warning = paste(
+        "\n", "NEE missing for measurement", msg
+      )
+    )
+nee_missing_try

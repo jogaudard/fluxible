@@ -1,6 +1,8 @@
 #' Calculates GEP
 #' @description to calculate gross ecosystem production (GEP) from net ecosystem
-#' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER
+#' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.
+#' Datetime, PAR and other variables to keep will be taken from the NEE
+#' measurement. If it is missing, GEP will be dropped for that pair.
 #' @param fluxes_df a dataframe containing NEE and ER
 #' @param id_cols columns used to identify each pair of ER and NEE
 #' @param flux_col column containing flux values
@@ -98,6 +100,26 @@ flux_gep <- function(fluxes_df,
       "flux"
     )
 
+  nee_missing <- fluxes_gep |>
+    filter(
+      is.na(.data$datetime)
+    ) |>
+    select(all_of(((id_cols))))
+
+  nee_missing[] <- Map(paste, names(nee_missing), nee_missing, sep = ": ")
+
+  nee_missing <- nee_missing |>
+    mutate(
+      msg = apply(nee_missing[, ((id_cols))], 1, paste, collapse = ", "),
+      f_warnings = paste(
+        "\n", "NEE missing for measurement", .data$msg
+      )
+    ) |>
+    pull(.data$f_warnings)
+
+  fluxes_gep <- fluxes_gep |>
+    drop_na("datetime")
+
   fluxes_gep <- fluxes_gep |>
     full_join(
       fluxes_df,
@@ -107,5 +129,11 @@ flux_gep <- function(fluxes_df,
     fill(all_of(((cols_keep))), .direction = "up") |>
     unslice()
 
+  f_warnings <- stringr::str_c(nee_missing)
+
+
+  if (any(!is.na(nee_missing))) warning(f_warnings)
+
   fluxes_gep
+
 }
