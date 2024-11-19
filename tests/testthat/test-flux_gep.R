@@ -1,13 +1,6 @@
 test_that("GEP calculation", {
-  fluxes <- co2_fluxes  |>
-    filter(
-      turfID == "74 WN2C 155" |
-        turfID == "109 AN3C 109" |
-        turfID == "29 WN3C 106"
-    )
-
   expect_snapshot(
-    flux_gep(fluxes,
+    flux_gep(co2_fluxes,
       id_cols = "turfID",
       flux_col = "flux",
       type_col = "type",

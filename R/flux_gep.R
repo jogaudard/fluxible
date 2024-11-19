@@ -1,6 +1,8 @@
 #' Calculates GEP
 #' @description to calculate gross ecosystem production (GEP) from net ecosystem
-#' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER
+#' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.
+#' Datetime, PAR and other variables to keep will be taken from the NEE
+#' measurement. If it is missing, GEP will be dropped for that pair.
 #' @param fluxes_df a dataframe containing NEE and ER
 #' @param id_cols columns used to identify each pair of ER and NEE
 #' @param flux_col column containing flux values
@@ -97,6 +99,23 @@ flux_gep <- function(fluxes_df,
       "type",
       "flux"
     )
+  
+  col_id <- paste(".data$", id_cols, sep = "")
+  str(col_id)
+
+  nee_missing <- fluxes_gep |>
+    filter(
+      is.na(.data$datetime)
+    ) |>
+    select(all_of(((id_cols)))) |>
+    mutate(
+      f_warning = paste(
+        "\n", "No GEP calculated for measurement", ((col_id))
+      )
+    )
+
+  fluxes_gep <- fluxes_gep |>
+    drop_na("datetime")
 
   fluxes_gep <- fluxes_gep |>
     full_join(
@@ -107,5 +126,7 @@ flux_gep <- function(fluxes_df,
     fill(all_of(((cols_keep))), .direction = "up") |>
     unslice()
 
-  fluxes_gep
+  # fluxes_gep
+  nee_missing
+  # col_id
 }
