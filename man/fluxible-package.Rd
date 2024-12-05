@@ -21,7 +21,6 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Hilary Rose Dawson \email{hrosedawson@gmail.com}
   \item Jonas Trepel \email{jonas.trepel@bio.au.dk}
   \item Michael Mustri \email{mustrim@arizona.edu}
   \item Pekka O Niittynen \email{pekka.niittynen@helsinki.fi}
