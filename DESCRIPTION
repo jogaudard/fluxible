@@ -5,8 +5,8 @@ Date: 2024-09-03
 Authors@R: 
     c(person(given = "Joseph", family = "Gaudard", , "joseph.gaudard@pm.me", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6989-7624")),
-    person(given = "Hilary Rose", family = "Dawson", , "hrosedawson@gmail.com", role = "aut"),
     person(given = "Jonas", family = "Trepel", , "jonas.trepel@bio.au.dk", role = "aut"),
+    person(given = "Hilary Rose", family = "Dawson", , "hrosedawson@gmail.com", role = "aut"),
     person(given = "Michael", family = "Mustri", , "mustrim@arizona.edu", role = "aut"),
     person(given = c("Pekka", "O"), family = "Niittynen", , "pekka.niittynen@helsinki.fi", role = "aut"),
     person(given = "Paul Efren", family = "Santos-Andrade", , "paulefrens@gmail.com", role = "aut"),
@@ -31,7 +31,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    vdiffr
+    vdiffr,
+    forcats
 Config/testthat/edition: 3
 Imports: 
     broom,
