@@ -45,7 +45,7 @@
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
 #' considered good enough (exponential fit)
-#' @return same dataframe with added flag and corrected slopes columns
+#' @return same dataframe with added quality flags and corrected slope column
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
@@ -78,6 +78,39 @@ flux_quality <- function(slopes_df,
                          cor_threshold = 0.5,
                          b_threshold = 1,
                          cut_arg = "cut") {
+  args_ok <- flux_fun_check(list(
+    ambient_conc = ((ambient_conc)),
+    error = ((error)),
+    ratio_threshold = ((ratio_threshold))
+  ),
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
+
+  slopes_df_check <- slopes_df |>
+    select(
+      all_of(((slope_col))),
+      all_of(((conc_col))),
+      all_of(((fit_col))),
+      all_of(((time_col)))
+    )
+
+  df_ok <- flux_fun_check(slopes_df_check,
+                          fn = list(
+                            is.numeric,
+                            is.numeric,
+                            is.numeric,
+                            is.numeric
+                          ),
+                          msg = rep(
+                            "has to be numeric",
+                            4
+                          ),
+                          origdf = slopes_df)
+
+
+  if (any(!c(args_ok, df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
   slopes_df <- slopes_df |>
     rename(
       f_fluxID = all_of(((fluxid_col))),

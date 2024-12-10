@@ -10,22 +10,44 @@
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom grDevices pdf dev.off
+#' @importFrom tidyr pivot_longer
 
 
 
 flux_plot_quadratic <- function(slopes_df,
                                 y_text_position = 500,
                                 cut_arg = "cut") {
-  plot_quadratic <- slopes_df |>
-    flux_plot_lin(
-      y_text_position = ((y_text_position)),
-      cut_arg = ((cut_arg))
+  param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
+
+  slopes_df <- flux_plot_flag(((slopes_df)),
+    ((param_df)),
+    cut_arg = ((cut_arg))
+  )
+
+  slopes_df <- slopes_df |>
+    rename(
+      fit = "f_fit",
+      slope = "f_fit_slope"
+    ) |>
+    pivot_longer(
+      cols = c("fit", "slope"),
+      names_to = "linetype",
+      values_to = "fit"
     )
 
-  plot_quadratic <- plot_quadratic +
-    geom_line(
-      aes(y = .data$f_fit_slope, color = .data$f_quality_flag),
-      linetype = "dashed",
+  plot_quadratic <- slopes_df |>
+    ggplot(aes(.data$f_datetime)) +
+    theme_bw() +
+    geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag),
+      size = 0.2,
+      na.rm = TRUE
+    ) +
+    geom_text(
+      aes(
+        x = .data$f_start, y = ((y_text_position)),
+        label = .data$print_col
+      ),
+      vjust = 0, hjust = "inward",
       na.rm = TRUE
     )
 

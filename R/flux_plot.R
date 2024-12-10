@@ -15,34 +15,37 @@
 #' @param f_date_labels date_labels argument for scale_x_datetime
 #' @param f_ylim_upper y axis upper limit
 #' @param f_ylim_lower y axis lower limit
-#' @param f_scales argument for scales in facet_wrap ("fixed" or "free")
 #' @param f_plotname filename for the extracted pdf file
-#' @param f_nrow number of rows per page in extracted pdf file
-#' @param f_ncol number of columns per page in extracted pdf file
+#' @param facet_wrap_args list of arguments for
+#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}
 #' @param y_text_position position of the text box
 #' @param print_plot FALSE or TRUE, if TRUE it prints the plot in R
 #' but will take time depending on the size of the dataset
-#' @param output "pdfpages", the plots are saved as A4 landscape pdf pages
-#' (default);
+#' @param output "pdfpages", the plots are saved as A4 landscape pdf pages;
 #' "ggsave", the plots can be saved with the ggsave function;
-#' "print_only" prints the plot without creating a file
+#' "print_only" (default) prints the plot without creating a file
 #' (independently from 'print_plot' being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @param no_data_flag flag marking fluxID without data in f_quality_flag
 #' @param cut_arg argument pointing rows to be cut from the measurements
+#' @return a ggplot object if `print_plot = TRUE`,
+#' if `print_plot = FALSE` it will not return anything but will produce a file
+#' depending on `output`
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
+#' scale_linetype_manual guides guide_legend
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom progress progress_bar
 #' @examples
 #' data(slopes0_flag)
-#' flux_plot(slopes0_flag, output = "print_only")
+#' flux_plot(slopes0_flag)
 #' data(slopes30lin_flag)
-#' flux_plot(slopes30lin_flag, output = "print_only")
-#' flux_plot(slopes30qua_flag, output = "print_only")
+#' flux_plot(slopes30lin_flag)
+#' data(slopes30qua_flag)
+#' flux_plot(slopes30qua_flag)
 #' @export
 
 flux_plot <- function(slopes_df,
@@ -55,23 +58,36 @@ flux_plot <- function(slopes_df,
                       f_date_labels = "%e/%m \n %H:%M",
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
-                      f_scales = "free",
                       f_plotname = "plot_quality",
-                      f_ncol = 4,
-                      f_nrow = 3,
+                      facet_wrap_args = list(
+                        ncol = 4,
+                        nrow = 3,
+                        scales = "free"
+                      ),
                       y_text_position = 500,
                       print_plot = "FALSE",
-                      output = "pdfpages",
+                      output = "print_only",
                       ggsave_args = list(),
                       cut_arg = "cut",
                       no_data_flag = "no_data") {
+  args_ok <- flux_fun_check(list(
+    f_ylim_upper = ((f_ylim_upper)),
+    f_ylim_lower = ((f_ylim_lower)),
+    y_text_position = ((y_text_position))
+  ),
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
+
+
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
+
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
   fit_type <- flux_fit_type(
     slopes_df
   )
 
-  f_scales <- match.arg(f_scales, c("free", "fixed"))
 
   if (((output)) %in% c("pdfpages", "ggsave")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
@@ -104,6 +120,7 @@ flux_plot <- function(slopes_df,
 
   flags <- slopes_df |>
     select("f_fluxID", "f_quality_flag") |>
+    distinct() |>
     filter(.data$f_quality_flag == ((no_data_flag))) |>
     mutate(
       f_warnings = paste(
@@ -154,6 +171,12 @@ flux_plot <- function(slopes_df,
   message("Plotting in progress")
 
   f_plot <- f_plot +
+    geom_line(
+      aes(y = .data$fit, linetype = .data$linetype),
+      linewidth = 0.3,
+      na.rm = TRUE,
+      show.legend = TRUE
+    ) +
     scale_color_manual(values = c(
       "cut" = ((color_cut)),
       "ok" = ((color_ok)),
@@ -163,21 +186,27 @@ flux_plot <- function(slopes_df,
       "weird_flux" = ((color_discard)),
       "force_ok" = ((color_ok))
     )) +
+    scale_linetype_manual(values = c(
+      "fit" = "longdash",
+      "slope" = "dashed"
+    )) +
     scale_x_datetime(
       date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
       date_labels = ((f_date_labels))
     ) +
     ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-    facet_wrap_paginate(
-      ~f_fluxID,
-      ncol = ((f_ncol)), nrow = ((f_nrow)), scales = ((f_scales))
+    do.call(facet_wrap_paginate,
+      args = c(facets = ~f_fluxID, ((facet_wrap_args)))
     ) +
     labs(
       title = "Fluxes quality assessment",
+      subtitle = paste(fit_type, "model"),
       x = "Datetime",
       y = "Concentration",
-      colour = "Quality flags"
-    )
+      colour = "Quality flags",
+      linetype = "Fits"
+    ) +
+    guides(color = guide_legend(override.aes = list(linetype = 0)))
 
   if (((output)) == "print_only") {
     return(f_plot)
@@ -197,10 +226,12 @@ flux_plot <- function(slopes_df,
       pb$tick()
       Sys.sleep(0.1)
       print(f_plot +
-        facet_wrap_paginate(
-          ~f_fluxID,
-          ncol = ((f_ncol)), nrow = ((f_nrow)),
-          page = i, scales = ((f_scales))
+        do.call(facet_wrap_paginate,
+          args = c(
+            facets = ~f_fluxID,
+            page = i,
+            ((facet_wrap_args))
+          )
         ))
     }
     quietly(dev.off())

@@ -1,5 +1,9 @@
 test_that("flux calculation is correct", {
-  output <- flux_calc(slopes0, slope_col = "f_slope")
+  output <- flux_calc(slopes0,
+    slope_col = "f_slope",
+    conc_unit = "ppm",
+    flux_unit = "mmol"
+  )
 
   expect_equal(
     output$flux,
@@ -13,6 +17,8 @@ test_that("averaging works", {
   output <- flux_calc(
     slopes0,
     slope_col = "f_slope",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     cols_ave = c("PAR", "temp_soil")
   )
 
@@ -24,6 +30,8 @@ test_that("keeping works", {
   expect_snapshot(flux_calc(
     slopes0,
     slope_col = "f_slope",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     cols_keep = c("turfID", "type", "f_start")
   ))
 })
@@ -32,6 +40,8 @@ test_that("keeping and averaging work together", {
   expect_snapshot(flux_calc(
     slopes0,
     slope_col = "f_slope",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     cols_keep = c("turfID", "type", "f_start"),
     cols_ave = c("PAR", "temp_soil")
   ))
@@ -41,6 +51,8 @@ test_that("fahrenheit conversion works", {
   expect_snapshot(flux_calc(
     slopes0_temp,
     slope_col = "f_slope",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     temp_air_col = "temp_fahr",
     temp_air_unit = "fahrenheit"
   ))
@@ -50,6 +62,8 @@ test_that("kelvin conversion works", {
   expect_snapshot(flux_calc(
     slopes0_temp,
     slope_col = "f_slope",
+    conc_unit = "ppm",
+    flux_unit = "mmol",
     temp_air_col = "temp_kelvin",
     temp_air_unit = "kelvin"
   ))
@@ -64,6 +78,8 @@ test_that("error on air temp units", {
     flux_calc(
       slopes0,
       slope_col = "f_slope",
+      conc_unit = "ppm",
+      flux_unit = "mmol",
       temp_air_unit = "melvin"
     ),
     "'arg' should be one of \"celsius\", \"fahrenheit\", \"kelvin\""
@@ -85,7 +101,9 @@ test_that("error on air temp units", {
 test_that("error that slope column is missing", {
   expect_error(
     flux_calc(
-      slopes0
+      slopes0,
+      conc_unit = "ppm",
+      flux_unit = "mmol"
     ),
     "argument \"slope_col\" is missing, with no default"
   )
@@ -95,7 +113,9 @@ test_that("error slope_col cannot be found in slopes_df", {
   expect_error(
     flux_calc(
       slopes0,
-      slope_col = "column_with_slope"
+      slope_col = "column_with_slope",
+      conc_unit = "ppm",
+      flux_unit = "mmol"
     ),
     "could not find slope_col in slopes_df"
   )
@@ -106,6 +126,8 @@ test_that("error some cols_keep do not exist", {
     flux_calc(
       slopes0,
       slope_col = "f_slope",
+      conc_unit = "ppm",
+      flux_unit = "mmol",
       cols_keep = c("PAR", "site")
     ),
     "some names in cols_keep cannot be found in slopes_df"
@@ -121,6 +143,8 @@ test_that("calculating fluxes on dataset with cuts", {
     flux_calc(
       slopes30_flag,
       slope_col = "f_slope_corr",
+      conc_unit = "ppm",
+      flux_unit = "mmol",
       cut_col = "f_cut",
       keep_arg = "keep"
     )
@@ -133,6 +157,8 @@ test_that("volume can be a variable instead of a constant", {
     flux_calc(
       slopes0_vol,
       slope_col = "f_slope_tz",
+      conc_unit = "ppm",
+      flux_unit = "mmol",
       chamber_volume = "volume"
     )
   )
@@ -143,6 +169,8 @@ test_that("volume can be a variable instead of a constant (volume)", {
     flux_calc(
       slopes0_vol_tube,
       slope_col = "f_slope_tz",
+      conc_unit = "ppm",
+      flux_unit = "mmol",
       chamber_volume = "volume",
       tube_volume = "tube_vol"
     ) |>
@@ -160,7 +188,12 @@ test_that("Fluxible workflow works from start to finish", {
     fit_type = "exp"
   ))
   slopes_flag_test <- flux_quality(slopes_test)
-  fluxes_test <- flux_calc(slopes_flag_test, slope_col = "f_slope_corr")
+  fluxes_test <- flux_calc(
+    slopes_flag_test,
+    slope_col = "f_slope_corr",
+    conc_unit = "ppm",
+    flux_unit = "mmol"
+  )
 
   expect_snapshot(
     str(fluxes_test)

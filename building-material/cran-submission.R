@@ -1,10 +1,9 @@
-library(devtools)
 
 release()
 
-spell_check()
+devtools::spell_check()
 
-check()
+devtools::check()
 # check_rhub()
 # This function is deprecated and defunct since rhub v2.
 # Please see `?rhubv2` on transitioning to the new rhub functions.
@@ -32,6 +31,6 @@ rhub::rhub_doctor()
 
 rhub::rhub_check()
 
-check_win_devel()
+devtools::check_win_devel()
 usethis::use_news_md()
 usethis::use_cran_comments()

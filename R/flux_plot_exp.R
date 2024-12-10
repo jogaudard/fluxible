@@ -10,13 +10,13 @@
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom grDevices pdf dev.off
+#' @importFrom tidyr pivot_longer
 
 
 
 flux_plot_exp <- function(slopes_df,
                           cut_arg = "cut",
                           y_text_position = 500) {
-
   param_df <- flux_param_exp(
     ((slopes_df)),
     cut_arg = ((cut_arg))
@@ -27,7 +27,16 @@ flux_plot_exp <- function(slopes_df,
     cut_arg = ((cut_arg))
   )
 
-
+  slopes_df <- slopes_df |>
+    rename(
+      fit = "f_fit",
+      slope = "f_fit_slope"
+    ) |>
+    pivot_longer(
+      cols = c("fit", "slope"),
+      names_to = "linetype",
+      values_to = "fit"
+    )
 
 
 
@@ -37,18 +46,6 @@ flux_plot_exp <- function(slopes_df,
     geom_point(
       aes(y = .data$f_conc, color = .data$f_quality_flag),
       size = 0.2,
-      na.rm = TRUE
-    ) +
-    geom_line(
-      aes(y = .data$f_fit),
-      linetype = "longdash",
-      linewidth = 0.3,
-      na.rm = TRUE
-    ) +
-    geom_line(
-      aes(y = .data$f_fit_slope),
-      linetype = "dashed",
-      linewidth = 0.2,
       na.rm = TRUE
     ) +
     geom_text(

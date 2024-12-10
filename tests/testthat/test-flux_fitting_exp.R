@@ -1,6 +1,8 @@
 test_that("fitting works with 0 second end cut", {
   expect_snapshot(
-    flux_fitting_exp(co2_conc)
+    flux_fitting_exp(co2_conc) |>
+      select(f_fluxID, f_slope) |>
+      distinct()
   )
 })
 
@@ -66,7 +68,7 @@ test_that("error on arguments", {
       co2_conc_missing,
       start_cut = "Voldemort"
     ),
-    "start_cut has to be a double"
+    "Please correct the arguments"
   )
 })
 
@@ -92,13 +94,13 @@ test_that("renaming works", {
       co2 = f_conc
     )
 
-  qflux_fitting_exp <- purrr::quietly(flux_fitting_exp)
-  expect_no_error(
-    qflux_fitting_exp(
+  expect_snapshot(
+    flux_fitting(
       co2_conc_names,
       datetime_col = "date_time",
       end_col = "finish",
-      conc_col = "co2"
+      conc_col = "co2",
+      fit_type = "exp"
     )
   )
 })

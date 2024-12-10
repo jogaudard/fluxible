@@ -16,7 +16,6 @@
 flux_plot_lin <- function(slopes_df,
                           y_text_position = 500,
                           cut_arg = "cut") {
-
   param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
 
   slopes_df <- flux_plot_flag(((slopes_df)),
@@ -24,17 +23,17 @@ flux_plot_lin <- function(slopes_df,
     cut_arg = ((cut_arg))
   )
 
+  slopes_df <- slopes_df |>
+    mutate(
+      fit = .data$f_fit,
+      linetype = "fit"
+    )
 
   plot_lin <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     theme_bw() +
     geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag),
       size = 0.2,
-      na.rm = TRUE
-    ) +
-    geom_line(
-      aes(y = .data$f_fit),
-      linetype = "longdash",
       na.rm = TRUE
     ) +
     geom_text(

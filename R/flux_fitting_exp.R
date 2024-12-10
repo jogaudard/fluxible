@@ -48,24 +48,29 @@ flux_fitting_exp <- function(conc_df,
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
                              fluxid_col = "f_fluxID") {
-  conc_df <- conc_df |>
-    rename(
-      f_start = all_of((start_col)),
-      f_end = all_of((end_col)),
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col)),
-      f_fluxID = all_of((fluxid_col))
-    )
 
+  args_ok <- flux_fun_check(list(
+    t_window = ((t_window)),
+    cz_window = ((cz_window)),
+    b_window = ((b_window)),
+    a_window = ((a_window)),
+    roll_width = ((roll_width)),
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric
+  ),
+  msg = rep("has to be numeric", 7))
 
-
-  if (!is.double(t_window)) stop("t_window has to be a double")
-  if (!is.double(cz_window)) stop("cz_window has to be a double")
-  if (!is.double(b_window)) stop("b_window has to be a double")
-  if (!is.double(a_window)) stop("a_window has to be a double")
-  if (!is.double(roll_width)) stop("roll_width has to be a double")
-  if (!is.double(start_cut)) stop("start_cut has to be a double")
-  if (!is.double(end_cut)) stop("end_cut has to be a double")
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
 
 
 
@@ -222,7 +227,11 @@ flux_fitting_exp <- function(conc_df,
     left_join(tz_df, by = "f_fluxID") |>
     group_by(.data$f_fluxID) |>
     mutate(
-      f_Cb = .data$f_conc[.data$f_time_cut == .data$tz_est - ((b_window))]
+      diff = .data$f_time_cut - .data$tz_est + ((b_window))
+    ) |>
+    distinct(.data$diff, .keep_all = TRUE) |>
+    mutate(
+      f_Cb = .data$f_conc[which.min(abs(.data$diff))]
     ) |>
     ungroup() |>
     select("f_fluxID", "f_Cb") |>
@@ -232,7 +241,11 @@ flux_fitting_exp <- function(conc_df,
     group_by(.data$f_fluxID) |>
     mutate(
       ta = .data$length_window - ((a_window)),
-      Ca = .data$f_conc[.data$f_time_cut == .data$ta]
+      ta_diff = .data$f_time_cut - .data$ta
+    ) |>
+    distinct(.data$ta_diff, .keep_all = TRUE) |>
+    mutate(
+      Ca = .data$f_conc[which.min(abs(.data$ta_diff))]
     ) |>
     ungroup() |>
     select("f_fluxID", "ta", "Ca") |>

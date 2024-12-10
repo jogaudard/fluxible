@@ -2,13 +2,12 @@
 
     Code
       suppressMessages(flux_plot(slopes0_flag, f_plotname = "test_exp_plot",
-        print_plot = FALSE))
+        print_plot = FALSE, output = "pdfpages"))
 
 # plot for linear fit
 
     Code
-      vdiffr::expect_doppelganger("plot for linear fit", flux_plot(slopes30lin_flag,
-        output = "print_only"))
+      vdiffr::expect_doppelganger("plot for linear fit", flux_plot(slopes30lin_flag))
     Message
       Plotting in progress
 

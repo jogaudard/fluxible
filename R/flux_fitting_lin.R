@@ -27,17 +27,18 @@ flux_fitting_lin <- function(conc_df,
                              datetime_col = "f_datetime",
                              conc_col = "f_conc",
                              fluxid_col = "f_fluxID") {
-  conc_df <- conc_df |>
-    rename(
-      f_start = all_of(((start_col))),
-      f_end = all_of(((end_col))),
-      f_datetime = all_of(((datetime_col))),
-      f_conc = all_of(((conc_col))),
-      f_fluxID = all_of(((fluxid_col)))
-    )
+  args_ok <- flux_fun_check(list(
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
 
-  if (!is.double(((start_cut)))) stop("start_cut has to be a double")
-  if (!is.double(((end_cut)))) stop("end_cut has to be a double")
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
+
+
+
 
   length_flux_max <- conc_df |>
     mutate(

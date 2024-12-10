@@ -24,6 +24,8 @@
 #' @param start_col column with datetime when the measurement started
 #' @param end_col column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
+#' Note that if there are duplicated datetime in the same f_fluxID only
+#' the first row will be kept
 #' @param conc_col column with gas concentration data
 #' @param fluxid_col column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
@@ -51,6 +53,54 @@ flux_fitting <- function(conc_df,
                          roll_width = 15,
                          t_zero = 0,
                          fit_type) {
+  args_ok <- flux_fun_check(list(
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut))
+  ),
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
+
+  conc_df_check <- conc_df |>
+    select(
+      all_of(((conc_col))),
+      all_of(((start_col))),
+      all_of(((end_col))),
+      all_of(((datetime_col)))
+    )
+
+  conc_df_ok <- flux_fun_check(conc_df_check,
+                               fn = list(
+                                 is.numeric,
+                                 is.POSIXct,
+                                 is.POSIXct,
+                                 is.POSIXct
+                               ),
+                               msg = rep(c(
+                                 "has to be numeric",
+                                 "has to be POSIXct"
+                               ),
+                               c(1, 3)
+                               ),
+                               origdf = conc_df)
+
+
+  if (any(!c(args_ok, conc_df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
+  conc_df <- conc_df |>
+    rename(
+      f_start = all_of((start_col)),
+      f_end = all_of((end_col)),
+      f_datetime = all_of((datetime_col)),
+      f_conc = all_of((conc_col)),
+      f_fluxID = all_of((fluxid_col))
+    )
+
+  conc_df <- conc_df |>
+    group_by(.data$f_fluxID) |>
+    distinct(.data$f_datetime, .keep_all = TRUE) |>
+    ungroup()
+
   fit_type <- flux_fit_type(
     ((conc_df)),
     fit_type = ((fit_type))
@@ -61,11 +111,11 @@ flux_fitting <- function(conc_df,
       conc_df,
       start_cut = ((start_cut)),
       end_cut = ((end_cut)),
-      start_col = ((start_col)),
-      end_col = ((end_col)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      fluxid_col = ((fluxid_col)),
+      start_col = "f_start",
+      end_col = "f_end",
+      datetime_col = "f_datetime",
+      conc_col = "f_conc",
+      fluxid_col = "f_fluxID",
       t_window = ((t_window)),
       cz_window = ((cz_window)),
       b_window = ((b_window)),
@@ -80,11 +130,11 @@ flux_fitting <- function(conc_df,
       conc_df,
       start_cut = ((start_cut)),
       end_cut = ((end_cut)),
-      start_col = ((start_col)),
-      end_col = ((end_col)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      fluxid_col = ((fluxid_col))
+      start_col = "f_start",
+      end_col = "f_end",
+      datetime_col = "f_datetime",
+      conc_col = "f_conc",
+      fluxid_col = "f_fluxID"
     )
   }
 
@@ -93,11 +143,11 @@ flux_fitting <- function(conc_df,
       conc_df,
       start_cut = ((start_cut)),
       end_cut = ((end_cut)),
-      start_col = ((start_col)),
-      end_col = ((end_col)),
-      datetime_col = ((datetime_col)),
-      conc_col = ((conc_col)),
-      fluxid_col = ((fluxid_col)),
+      start_col = "f_start",
+      end_col = "f_end",
+      datetime_col = "f_datetime",
+      conc_col = "f_conc",
+      fluxid_col = "f_fluxID",
       t_zero = ((t_zero))
     )
   }
