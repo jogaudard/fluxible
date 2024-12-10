@@ -1,0 +1,1 @@
+#' add on for flux_calc that will first take the mean of the different segments' slopes before calculating
