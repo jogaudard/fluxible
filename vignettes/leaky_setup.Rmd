@@ -1,0 +1,27 @@
+---
+title: "Using the segmentation tool to work with a leaky setup"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{leaky_setup}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Processing concentration from a setup where leaks cannot be assumed as negligible (typically a tent for taller vegetation) requires some adjustements in the method.
+In this example we present how the Fluxible package is processing such data.
+The data used in this example were measured using a flux tent during the Plant Functional Trait Course (REF to data paper).
+
+<!-- Figure showing a typical flux with clear segments -->
+
+## Concept
+
+```{r setup}
+library(fluxible)
+```
