@@ -21,6 +21,11 @@ The data used in this example were measured using a flux tent during the Plant F
 <!-- Figure showing a typical flux with clear segments -->
 
 ## Concept
+The segmentation tool looks for segments in the measurement that can be modelled linearly.
+The slope of each of those segments is averaged (weighed with the length of the segments) and used to calculate the flux as usual.
+Quality of fit is assessed for each of the segments similarly to the linear fit.
+The difference between the segements' slope is also used as a quality check for the whole measurement.
+The segmentation tool is available in the Fluxible normal workflow, as the other fitting models.
 
 ```{r setup}
 library(fluxible)
