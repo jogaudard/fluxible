@@ -18,6 +18,7 @@ flux_plot_flag <- function(slopes_df,
         f_cut != ((cut_arg)) ~ f_quality_flag
       )
     )
+    # print_col needs to have only 1 row/fluxID
 
   slopes_df
 }
