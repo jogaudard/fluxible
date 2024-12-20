@@ -8,7 +8,6 @@ but can be improved in many ways. Please get in touch for any problems
 or suggestions.
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The Fluxible R package is made to transform any dataset of gas
