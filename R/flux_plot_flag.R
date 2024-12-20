@@ -8,7 +8,7 @@
 
 flux_plot_flag <- function(slopes_df,
                            param_df,
-                           cut_arg = "cut") {
+                           cut_arg) {
   slopes_df <- slopes_df |>
     select(!c("f_quality_flag")) |>
     left_join(param_df, by = "f_fluxID") |>

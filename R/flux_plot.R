@@ -15,7 +15,8 @@
 #' @param f_date_labels date_labels argument for scale_x_datetime
 #' @param f_ylim_upper y axis upper limit
 #' @param f_ylim_lower y axis lower limit
-#' @param f_plotname filename for the extracted pdf file
+#' @param f_plotname filename for the extracted pdf file;
+#' if empty, the name of `slopes_df` will be used
 #' @param facet_wrap_args list of arguments for
 #' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}
 #' @param y_text_position position of the text box
@@ -58,7 +59,7 @@ flux_plot <- function(slopes_df,
                       f_date_labels = "%e/%m \n %H:%M",
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
-                      f_plotname = "plot_quality",
+                      f_plotname = "",
                       facet_wrap_args = list(
                         ncol = 4,
                         nrow = 3,
@@ -84,10 +85,17 @@ flux_plot <- function(slopes_df,
 
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
+  if (((output)) == "print_only"){
+    print_plot <- "TRUE"
+  }
+
   fit_type <- flux_fit_type(
     slopes_df
   )
 
+  if (((f_plotname)) == ""){
+    f_plotname <- deparse(substitute(slopes_df))
+  }
 
   if (((output)) %in% c("pdfpages", "ggsave")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
@@ -214,7 +222,7 @@ flux_plot <- function(slopes_df,
 
   if (((output)) == "pdfpages") {
     f_plotname <- paste(f_plotname, ".pdf", sep = "")
-    pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
+    pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3, title = ((f_plotname)))
     pb <- progress_bar$new(
       format =
         "Printing plots in pdf document [:bar] :current/:total (:percent)",
