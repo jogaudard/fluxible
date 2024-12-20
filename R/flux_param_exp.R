@@ -8,7 +8,7 @@
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_exp <- function(slopes_df,
-                           cut_arg = "cut") {
+                           cut_arg) {
   param_df <- slopes_df |>
     select(
       "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
@@ -33,7 +33,7 @@ flux_param_exp <- function(slopes_df,
         sep = ""
       )
     ) |>
-    select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
+    select("f_start", "f_fluxID", "conc_start", "print_col", "f_quality_flag")
 
   param_df
 }

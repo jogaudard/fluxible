@@ -1,3 +1,7 @@
+# fluxible 0.0.5
+
+* fixed the blurriness of quality flags in flux_plot
+
 # fluxible 0.0.4
 
 * flux_gep function to calculate GEP
