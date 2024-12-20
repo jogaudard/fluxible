@@ -15,7 +15,7 @@ flux_plot(
   f_date_labels = "\%e/\%m \\n \%H:\%M",
   f_ylim_upper = 800,
   f_ylim_lower = 400,
-  f_plotname = "plot_quality",
+  f_plotname = "",
   facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
   y_text_position = 500,
   print_plot = "FALSE",
@@ -47,7 +47,8 @@ with flags produced by flux_quality}
 
 \item{f_ylim_lower}{y axis lower limit}
 
-\item{f_plotname}{filename for the extracted pdf file}
+\item{f_plotname}{filename for the extracted pdf file;
+if empty, the name of \code{slopes_df} will be used}
 
 \item{facet_wrap_args}{list of arguments for
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}

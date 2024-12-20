@@ -15,7 +15,7 @@
 
 
 flux_plot_exp <- function(slopes_df,
-                          cut_arg = "cut",
+                          cut_arg,
                           y_text_position = 500) {
   param_df <- flux_param_exp(
     ((slopes_df)),
@@ -49,6 +49,7 @@ flux_plot_exp <- function(slopes_df,
       na.rm = TRUE
     ) +
     geom_text(
+      data = param_df,
       aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
