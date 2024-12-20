@@ -81,6 +81,7 @@ flux_plot_exp_poster <- function(slopes_df,
       na.rm = TRUE
     ) +
     geom_text(
+      data = param_df,
       aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
@@ -158,7 +159,7 @@ flux_plot_exp_poster <- function(slopes_df,
 
 
 slopes_exp_liahovden |>
-  # dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
   #   mutate(
   #       f_fluxID = case_when(
   #           f_fluxID == 28 ~ "A",
@@ -171,7 +172,7 @@ slopes_exp_liahovden |>
     flux_plot_exp_poster(
       linewidth = 0.8,
       size_point = 1,
-      f_plotname = "poster_plot",
+      f_plotname = "building-material/poster_plot",
       f_ylim_lower = 375,
       f_ylim_upper = 525,
       y_text_position = 470
