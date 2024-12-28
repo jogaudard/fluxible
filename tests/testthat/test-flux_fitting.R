@@ -67,3 +67,12 @@ test_that("correct flux with duplicated datetime", {
     qflux_fitting(co2_conc, fit_type = "exp")
   )
 })
+
+test_that("segmentation tool", {
+  expect_equal(
+    flux_fitting(pftc7_short
+      fit_type = "segments"
+    ),
+    pftc7_segmented_short
+  )
+})

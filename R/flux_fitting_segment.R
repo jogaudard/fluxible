@@ -1,5 +1,20 @@
+#' Fitting function while accounting for leaks
 #' @description separate fluxes in segments of similar slopes with stable PAR
-#' @outputs a df with modeled gas concentration (NA outside of selected segments)
+#' @param flux_df
+#' @param signal_strength_tresh Threshold for valid signal strength
+#' @param par_thresh Photosynthetically Active Radiation (PAR) threshold
+#' @param 
+#' @param 
+#' @param 
+#' @param 
+#' @param 
+#' @param 
+#' @param 
+#' @param 
+#' @param 
+#' @param 
+#' @return a df with modeled gas concentration (NA outside of selected segments)
+#' @importFrom 
 #' flag cut/keep indicating if the row is used in a segment or not (needed for plotting)
 #' ideally flux_segment would be integrated in flux_fitting as an option
 #' 
@@ -14,10 +29,10 @@ require(cowplot)
 require(sarima)
 require(data.table)
 
-flux_segment <- function( 
-    signal_strength_tresh = 95.0,  # Threshold for valid signal strength
-    par_thresh = 650,  # Photosynthetically Active Radiation (PAR) threshold
-    flux_df = dt,  # Data frame containing flux data
+flux_segment <- function(
+    flux_df,
+    signal_strength_tresh = 95.0,
+    par_thresh = 650,
     param = "co2",  # Parameter to analyze, default is CO2
     par_col = "par",  # Column name for PAR in flux_df
     date_time_col = "date_time",  # Column name for datetime in flux_df
@@ -55,6 +70,7 @@ flux_segment <- function(
       
       next
     }  # Skip if n is too small 
+    # this should be a warning at the end of the process
 
     
     # Get the unique flux type from the subset data
