@@ -730,3 +730,26 @@ nee_missing_try <- nee_missing |>
       )
     )
 nee_missing_try
+
+
+try_segment <- pftc7_short |>
+    group_by(.data$file_name) |>
+    mutate(
+      f_time = difftime(.data$date_time[seq_along(.data$date_time)],
+        .data$date_time[1],
+        units = "secs"
+      ),
+      f_time = as.double(.data$f_time),
+      ID = dplyr::cur_group_id()
+    ) |>
+    ungroup()
+
+    str(try_segment)
+
+for(fluxid in unique(try_segment$ID)){
+  dt_sub <- try_segment |>
+    filter(ID == fluxid)
+}
+
+  res <- cpop(try_segment$co2_conc, minseglen = 30)
+  seg <- fitted(res)
