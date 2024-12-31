@@ -772,8 +772,9 @@ pftc7_short <- pftc7_short |>
       h2o_col = "h2o_conc",
       signal_strength_col = "signal_strength",
       fluxid_col = "file_name",
-      h2o_correction = TRUE,
+      h2o_correction = FALSE,
       min_seg_length = 30
     )
 
 str(test_segment)
+View(test_segment)

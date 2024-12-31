@@ -90,7 +90,7 @@ flux_fitting_segment <- function(
   
   # if(is.null(flux_df)){print("Please provide a dataframe with gas concentrations")}
   
-  segmented_fluxes <- data.table::data.table() 
+  segmented_fluxes <- tibble()
   
   # flux <- "data/rawData/LI7500/LI7500_Site 5//5_2800_west_5_day_photo.txt"
   # Loop through each unique flux measurement file_name in the flux data frame
@@ -179,7 +179,15 @@ flux_fitting_segment <- function(
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
-      n_conc = sum(!is.na(.data$f_conc))
+      n_conc = sum(!is.na(.data$f_conc)),
+      f_conc = case_when(
+              h2o_correction == TRUE ~ f_conc / (1 - (h2o_conc / 1000)),
+              h2o_correction == FALSE ~ f_conc
+            ),
+      corrected_for_water_vapor = case_when(
+              h2o_correction == TRUE ~ "yes",
+              h2o_correction == FALSE ~ "no"
+             )
     ) |>
     ungroup()
 
@@ -200,7 +208,8 @@ flux_fitting_segment <- function(
       time_diff = .data$f_time - .data$f_time_cut,
       n_conc_cut = sum(!is.na(.data$f_conc))
     ) |>
-    ungroup()
+    ungroup() |>
+    select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "h2o_conc", "par", "signal_strength")))
     
     # # Determine PAR values; if no PAR data is available or if it's a respiration measurement, set PAR to threshold + 1
     # if(check_night_resp == TRUE | sum(is.na(dt_sub[[par_col]])) == nrow(dt_sub)){ 
@@ -214,13 +223,13 @@ flux_fitting_segment <- function(
     
     # if(correct_for_h2o_conc == TRUE){
       # Calculate c' and w' with respect to the H2O concentration
-      conc_df_cut <- conc_df_cut |>
-          group_by(.data$f_fluxID) |>
-        mutate(
-          f_conc = case_when(
-              h2o_correction == TRUE ~ f_conc / (1 - (h2o_conc / 1000)),
-              h2o_correction == FALSE ~ f_conc
-            )
+      # conc_df_cut <- conc_df_cut |>
+      #     group_by(.data$f_fluxID) |>
+      #   mutate(
+      #     f_conc = case_when(
+      #         h2o_correction == TRUE ~ f_conc / (1 - (h2o_conc / 1000)),
+      #         h2o_correction == FALSE ~ f_conc
+      #       )
       #       c_prime = case_when(
       #         correct_for_h2o_conc == TRUE ~ co2 / (1 - (h2o / 1000)),
       #         correct_for_h2o_conc == FALSE ~ co2
@@ -233,9 +242,9 @@ flux_fitting_segment <- function(
       # cw_prime = case_when(
       #   param == "co2" ~ c_prime,
       #   param == "h2o" ~ w_prime
-      ) |>
-      ungroup() |>
-          select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "h2o_conc", "par", "signal_strength")))
+      # ) |>
+      # ungroup() |>
+          # select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "h2o_conc", "par", "signal_strength")))
      
       
       # c_prime <- co2 / (1 - (h2o / 1000))  
@@ -280,7 +289,6 @@ flux_fitting_segment <- function(
              f_rsq_adj = as.numeric(NA),
              f_pval = as.numeric(NA),
              f_segment_id = as.character(NA),
-             corrected_for_water_vapor = h2o_correction,
              f_par_seg = as.numeric(NA),
              f_sign_str_seg = as.numeric(NA))
 
@@ -393,15 +401,30 @@ flux_fitting_segment <- function(
     
   }
 
-  conc_df <- conc_df |>
-    select(!any_of(c("h2o_conc", "signal_strength", "par")))
+  segmented_fluxes_final <- segmented_fluxes |>
+      mutate(
+        f_fluxID = as.factor(f_fluxID),
+        f_cut = as.factor(f_cut)
+      )
+      # select("f_fluxID", "f_datetime", "f_conc", "f_cut", "f_slope")
 
-  conc_fitting <- left_join(
-    conc_df, segmented_fluxes,
+  conc_df <- conc_df |>
+    select(!any_of(c("h2o_conc", "signal_strength", "par"))) |>
+    mutate(
+      f_fluxID = as.factor(f_fluxID)
+    )
+    # select("f_fluxID", "f_datetime", "f_conc", "f_cut")
+
+  conc_fitting <- conc_df |>
+  left_join(
+    segmented_fluxes_final,
     by = c("f_fluxID", "f_datetime", "f_conc", "f_cut")
+        # by = c("f_fluxID", "f_datetime", "f_cut")
+
   )
 
   # Return the combined data table with segmented fluxes
   conc_fitting
   # segmented_fluxes
+  # conc_df
 }
