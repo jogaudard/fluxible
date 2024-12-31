@@ -24,17 +24,7 @@
 #' @importFrom data.table
 #' flag cut/keep indicating if the row is used in a segment or not (needed for plotting)
 #' ideally flux_segment would be integrated in flux_fitting as an option
-#' 
-#' 
-# require()
-# require()
-# require()
-# require()
-# require(tidyverse)
-# require()
-# require()
-# require()
-# require()
+
 
 flux_fitting_segment <- function(
     conc_df,
@@ -161,7 +151,7 @@ flux_fitting_segment <- function(
     # co2 <- as.numeric(dt_sub[[co2_col]])  # CO2 concentration
     # h2o <- as.numeric(dt_sub[[h2o_col]])  # H2O concentration
 
-
+message("Cutting measurements...")
 
     conc_df <- conc_df |>
     group_by(.data$f_fluxID) |>
@@ -263,7 +253,21 @@ flux_fitting_segment <- function(
     #   cw_prime <- w_prime  # Use w_prime for H2O
     #   tag <- "w_prime"  
     # }
+
+message("Starting segmentation...")
+
+pb <- progress_bar$new(
+      format =
+        "Segmenting flux :current out of :total [:bar] (:percent)",
+      total = length(unique(conc_df_cut$f_fluxID))
+    )
+    pb$tick(0)
+    Sys.sleep(3)
+
     for (flux in unique(conc_df_cut$f_fluxID)){
+
+      pb$tick()
+      Sys.sleep(0.1)
     
   #   if(is.na(flux)){next}  # Skip if the flux file_name is NA
     
@@ -285,9 +289,9 @@ flux_fitting_segment <- function(
       mutate(f_fit = as.numeric(NA),
              f_slope = as.numeric(NA),
             #  f_time_cut = as.numeric(NA),
-             f_rsq = as.numeric(NA),
-             f_rsq_adj = as.numeric(NA),
-             f_pval = as.numeric(NA),
+             f_rsquared = as.numeric(NA),
+             f_adj_rsquared = as.numeric(NA),
+             f_pvalue = as.numeric(NA),
              f_segment_id = as.character(NA),
              f_par_seg = as.numeric(NA),
              f_sign_str_seg = as.numeric(NA))
@@ -360,12 +364,13 @@ flux_fitting_segment <- function(
         # replce by mutate?
         dt_sub[s1:s2, ]$f_slope <- as.numeric(linear.fit$coeff[2])
         # dt_sub[s1:s2, ]$f_time <- c(time_m)
-        dt_sub[s1:s2, ]$f_rsq <- as.numeric(summary(linear.fit)$r.sq)
-        dt_sub[s1:s2, ]$f_rsq_adj <- as.numeric(summary(linear.fit)$adj.r.squared)
-        dt_sub[s1:s2, ]$f_pval <- as.numeric(summary(linear.fit)$coefficients["time_m", 4])
+        dt_sub[s1:s2, ]$f_rsquared <- as.numeric(summary(linear.fit)$r.sq)
+        dt_sub[s1:s2, ]$f_adj_rsquared <- as.numeric(summary(linear.fit)$adj.r.squared)
+        dt_sub[s1:s2, ]$f_pvalue <- as.numeric(summary(linear.fit)$coefficients["time_m", 4])
         dt_sub[s1:s2, ]$f_par_seg <- mean(dt_sub$par[s1:s2])
         dt_sub[s1:s2, ]$f_sign_str_seg <- mean(dt_sub$signal_strength[s1:s2])
         dt_sub[s1:s2, ]$f_segment_id <- paste0("segment_", s)
+        dt_sub[s1:s2, ]$f_segment_length <- difftime(dt_sub$f_time_cut[s2], dt_sub$f_time_cut[s1], units = "secs")
 
         
         # use case when
@@ -397,7 +402,7 @@ flux_fitting_segment <- function(
     # Append the new results to the overall results data table
     segmented_fluxes <- rbind(dt_sub, segmented_fluxes)
    
-    print(paste0(flux, " done")) # should replace with a progress bar
+    # print(paste0(flux, " done")) # should replace with a progress bar
     
   }
 
