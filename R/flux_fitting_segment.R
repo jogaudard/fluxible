@@ -419,9 +419,8 @@ flux_fitting_segment <- function(
   left_join(
     segmented_fluxes_final,
     by = c("f_fluxID", "f_datetime", "f_conc", "f_cut")
-        # by = c("f_fluxID", "f_datetime", "f_cut")
-
-  )
+  ) |>
+  arrange(f_datetime)
 
   # Return the combined data table with segmented fluxes
   conc_fitting
