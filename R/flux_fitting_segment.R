@@ -14,7 +14,7 @@
 #' @param 
 #' @param 
 #' @return a df with modeled gas concentration (NA outside of selected segments)
-#' @importFrom cpop
+#' @importFrom cpop cpop
 #' @importFrom ggplot2
 #' @importFrom dplyr
 #' @importFrom lubridate
@@ -36,33 +36,53 @@
 # require()
 # require()
 
-flux_segment <- function(
+flux_fitting_segment <- function(
     conc_df,
     start_cut,
     end_cut,
-    signal_strength_tresh = 95.0,
-    par_thresh = 650,
-    param = "co2",  # Parameter to analyze, default is CO2
-    par_col = "par",  # Column name for PAR in flux_df
-    date_time_col = "date_time",  # Column name for datetime in flux_df
-    co2_col = "co2_conc",  # Column name for CO2 concentration in flux_df
-    h2o_col = "h2o_conc",  # Column name for H2O concentration in flux_df
-    signal_strength_col = c(),  # Column name for signal strength in flux_df
-    flux_type_col = "measurement",  # Column name for flux type in flux_df
-    day_night_col = "day_night",
-    flux_id_col = "file_name",
+    # start_col,
+    # end_col,
+    # signal_strength_tresh = c(),
+    # par_thresh = c(),
+    # conc_col,  # Parameter to analyze, default is CO2
+    par_col,  # Column name for PAR in flux_df
+    # datetime_col,  # Column name for datetime in flux_df
+    # co2_col = "co2_conc",  # Column name for CO2 concentration in flux_df
+    h2o_col,  # Column name for H2O concentration in flux_df
+    signal_strength_col,  # Column name for signal strength in flux_df
+    # flux_type_col = "measurement",  # Column name for flux type in flux_df
+    # day_night_col = "day_night",
+    # fluxid_col,
     # start_time_col = "start_time",
-    min_length = 60,  # minimum flux length 
-    skip = 7, #number of rows to skip from each flux measurement, 
-    correct_for_h2o_conc = TRUE, 
-    min_seg_length = 30
-){ 
+    # min_length = 60,  # minimum flux length 
+    # skip = 7, #number of rows to skip from each flux measurement, 
+    h2o_correction,
+    min_seg_length
+) {
 
-  if(!is.na(((signal_strength_col))) {
+  if (!is.na(((signal_strength_col)))) {
     conc_df <- conc_df |>
     rename(
       signal_strength = all_of((signal_strength_col))
     )
+  }
+
+  if (!is.na(((par_col)))) {
+    conc_df <- conc_df |>
+    rename(
+      par = all_of((par_col))
+    )
+  }
+
+  if (!is.na(((h2o_col)))) {
+    conc_df <- conc_df |>
+    rename(
+      h2o_conc = all_of((h2o_col))
+    )
+  }
+
+  if (is.na(((h2o_col)))) {
+    h2o_correction <- FALSE
   }
 
   
@@ -70,7 +90,7 @@ flux_segment <- function(
   
   # if(is.null(flux_df)){print("Please provide a dataframe with gas concentrations")}
   
-  # segmented_fluxes <- data.table::data.table() 
+  segmented_fluxes <- data.table::data.table() 
   
   # flux <- "data/rawData/LI7500/LI7500_Site 5//5_2800_west_5_day_photo.txt"
   # Loop through each unique flux measurement file_name in the flux data frame
@@ -194,25 +214,30 @@ flux_segment <- function(
     
     # if(correct_for_h2o_conc == TRUE){
       # Calculate c' and w' with respect to the H2O concentration
-      conc_df <- conc_df |>
+      conc_df_cut <- conc_df_cut |>
           group_by(.data$f_fluxID) |>
         mutate(
-            c_prime = case_when(
-              correct_for_h2o_conc == TRUE ~ co2 / (1 - (h2o / 1000)),
-              correct_for_h2o_conc == FALSE ~ co2
-            ),
-      w_prime = case_when(
-              correct_for_h2o_conc == TRUE ~ h2o / (1 - (h2o / 1000)),
-              correct_for_h2o_conc == FALSE ~ h2o
-      )
-      ,
-      wav_dil = mean(h2o / (1 - (h2o / 1000)))  # Mean H2O dilution factor
-        ),
-      cw_prime = case_when(
-        param == "co2" ~ c_prime,
-        param == "h2o" ~ w_prime
+          f_conc = case_when(
+              h2o_correction == TRUE ~ f_conc / (1 - (h2o_conc / 1000)),
+              h2o_correction == FALSE ~ f_conc
+            )
+      #       c_prime = case_when(
+      #         correct_for_h2o_conc == TRUE ~ co2 / (1 - (h2o / 1000)),
+      #         correct_for_h2o_conc == FALSE ~ co2
+      #       ),
+      # w_prime = case_when(
+      #         correct_for_h2o_conc == TRUE ~ h2o / (1 - (h2o / 1000)),
+      #         correct_for_h2o_conc == FALSE ~ h2o
+      # ),
+      # wav_dil = mean(h2o / (1 - (h2o / 1000)))  # Mean H2O dilution factor
+      # cw_prime = case_when(
+      #   param == "co2" ~ c_prime,
+      #   param == "h2o" ~ w_prime
       ) |>
-      ungroup()
+      ungroup() |>
+          select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "h2o_conc", "par", "signal_strength")))
+     
+      
       # c_prime <- co2 / (1 - (h2o / 1000))  
       # w_prime <- h2o / (1 - (h2o / 1000))  
       # wav_dil <- mean(h2o / (1 - (h2o / 1000)))  # Mean H2O dilution factor
@@ -220,7 +245,7 @@ flux_segment <- function(
       # c_prime <- co2  
       # w_prime <- h2o  
       # wav_dil <- mean(h2o / (1 - (h2o / 1000)))  # Mean H2O dilution factor
-    }
+    # }
     
     # if ("co2" == param) {  
     #   cw_prime <- c_prime  # Use c_prime for CO2
@@ -229,49 +254,78 @@ flux_segment <- function(
     #   cw_prime <- w_prime  # Use w_prime for H2O
     #   tag <- "w_prime"  
     # }
-    for(flux in unique(conc_df$f_fluxid)){
+    for (flux in unique(conc_df_cut$f_fluxID)){
     
   #   if(is.na(flux)){next}  # Skip if the flux file_name is NA
     
   #   # Subset the flux data frame for the current file_name and keep distinct rows
   #   dt_sub <- flux_df[flux_df[[flux_id_col]] == {{flux}}, ] %>% unique()
-  dt_sub <- conc_df |>
-    filter(f_fluxid == flux) |>
-    unique()
+  dt_sub <- conc_df_cut |>
+    filter(f_fluxID == flux)
+    # unique()
     
     # Identify change points in the time series of c'
-    res <- suppressMessages(cpop(cw_prime, minseglen = min_seg_length))  # Identify change points with a minimum segment length of 30 seconds
-    changepoints(res)  # Extract change points from the result
-    cw_prime_seg <- fitted(res)  # Get the fitted values from the change point analysis
+    res <- suppressMessages(cpop(dt_sub$f_conc, minseglen = min_seg_length))  # Identify change points with a minimum segment length of 30 seconds
+    # changepoints(res)  # Extract change points from the result
+    f_conc_seg <- fitted(res)  # Get the fitted values from the change point analysis
     
-    # Create a sequence of segment indices based on the number of rows in cw_prime_seg data frame
-    segs <- c(1:nrow(cw_prime_seg))  
+    # Create a sequence of segment indices based on the number of rows in f_conc_seg data frame
+    segs <- c(1:nrow(f_conc_seg))  
     
-    dt_sub <- dt_sub %>% 
-      mutate(f_fit = as.numeric(NA), 
-             f_slope = as.numeric(NA), 
-             f_time = as.numeric(NA), 
-             f_rsq = as.numeric(NA), 
+    dt_sub <- dt_sub |>
+      mutate(f_fit = as.numeric(NA),
+             f_slope = as.numeric(NA),
+            #  f_time_cut = as.numeric(NA),
+             f_rsq = as.numeric(NA),
              f_rsq_adj = as.numeric(NA),
              f_pval = as.numeric(NA),
-             f_segment_id = as.character(NA), 
-             corrected_for_water_vapor = correct_for_h2o_conc)
+             f_segment_id = as.character(NA),
+             corrected_for_water_vapor = h2o_correction,
+             f_par_seg = as.numeric(NA),
+             f_sign_str_seg = as.numeric(NA))
 
  
     # Loop over each segment to perform calculations
-    for(s in segs){  
+    for (s in segs){
+      # also mutate, and get rid of +1?
+      s1 <- f_conc_seg$x0[s] + 1 # Starting index for current segment
+      s2 <- f_conc_seg$x1[s] + 1 # Ending index for current segment
       
-      s1 <- cw_prime_seg$x0[s] + 1 # Starting index for current segment
-      s2 <- cw_prime_seg$x1[s] + 1 # Starting index for current segment
-      
+      # dt_sub <- dt_sub |>
+      #   mutate(
+      #     s1 = f_conc_seg$x0[s],
+      #     s2 = f_conc_seg$x1[s],
+      #     time_m = f_time_cut - s1,
+      #     f_fit = case_when(
+      #       h2o_correction == TRUE ~ predict(linear.fit)*(1 - (mean(h2o[s1:s2]) / 1000)),
+      #       h2o_correction == FALSE ~ predict(linear.fit)
+      #     ),
+      #     f_slope = ,
+      #     f_time = ,
+      #     f_rsq = ,
+      #     f_rsq_adj = ,
+      #     f_pval = ,
+      #     f_segment_id = ,
+      #     corrected_for_water_vapor = h2o_correction,
+      #     f_par_seg = ,
+      #     f_sign_str_seg = 
+      #   )
+
+# linear.fit <- stats::lm(dt_sub$f_conc[s1:s2] ~ (time_m))
       
       # Calculate the mean signal strength and PAR for the current segment
-      if(is.na(((signal_strength_col))) {
-        mean_si_st <- "no_si_st"
-      } else {
-        mean_si_st <- mean(signal_strength[s1:s2])
-      }
-      mean_par <- mean(par[s1:s2])  
+      # if (is.na(((signal_strength_col)))) {
+      #   mean_si_st <- "no_si_st"
+      # } else {
+      #   mean_si_st <- mean(signal_strength[s1:s2])
+      # }
+
+      # if (is.na(((par_col)))) {
+      #   mean_par <- "no_par"
+      # } else {
+      #   mean_par <- mean(par[s1:s2])
+      # }
+        
       
       # Select the concentration variable based on the parameter specified
       # Tag to identify the parameter being processed
@@ -284,28 +338,32 @@ flux_segment <- function(
       # }
       
       # Proceed only if both signal strength and PAR exceed the respective thresholds
-      if((mean_si_st > signal_strength_tresh | mean_si_st == "no_si_st") && (mean_par > par_thresh)){  
+      # if ((mean_si_st > signal_strength_tresh || mean_si_st == "no_si_st")
+      # && (mean_par > par_thresh || mean_par == "no_par")) {
         
-        time_m <- time[s1:s2] - (time[s1]-1)
+        # time_m <- time[s1:s2] - (time[s1] - 1)
+                time_m <- dt_sub$f_time_cut[s1:s2] - (dt_sub$f_time_cut[s1])
+
         
         # Fit a linear model to the current segment
         # linear.fit <- stats::lm(cw_prime[s1:s2] ~ (time_m))  
-                linear.fit <- stats::lm(dt_sub$cw_prime[s1:s2] ~ (time_m))  
+                linear.fit <- stats::lm(dt_sub$f_conc[s1:s2] ~ (time_m))  
 
-        
+        # replce by mutate?
         dt_sub[s1:s2, ]$f_slope <- as.numeric(linear.fit$coeff[2])
-        dt_sub[s1:s2, ]$f_time <- c(time_m)
+        # dt_sub[s1:s2, ]$f_time <- c(time_m)
         dt_sub[s1:s2, ]$f_rsq <- as.numeric(summary(linear.fit)$r.sq)
         dt_sub[s1:s2, ]$f_rsq_adj <- as.numeric(summary(linear.fit)$adj.r.squared)
         dt_sub[s1:s2, ]$f_pval <- as.numeric(summary(linear.fit)$coefficients["time_m", 4])
-        
+        dt_sub[s1:s2, ]$f_par_seg <- mean(dt_sub$par[s1:s2])
+        dt_sub[s1:s2, ]$f_sign_str_seg <- mean(dt_sub$signal_strength[s1:s2])
         dt_sub[s1:s2, ]$f_segment_id <- paste0("segment_", s)
 
         
-        
-        if(correct_for_h2o_conc == TRUE){
-          dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)*(1 - (mean(h2o[s1:s2]) / 1000)) 
-        }else if(correct_for_h2o_conc == FALSE){
+        # use case when
+        if(h2o_correction == TRUE){
+          dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)*(1 - (mean(dt_sub$h2o_conc[s1:s2]) / 1000)) 
+        }else if(h2o_correction == FALSE){
           dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)
           }
         # Print the current segment index
@@ -314,14 +372,13 @@ flux_segment <- function(
       
     #  print(s)  
       
-    }
+    # }
     
     dt_sub <- dt_sub  |>
       mutate(
         f_cut = case_when(
-          f_cut == "keep" & !is.na(f_slope) ~ "keep",
-          f_cut == "keep" & is.na(f_slope) ~ "cut",
-          f_cut == "cut" ~ "cut"
+          !is.na(f_slope) ~ "keep",
+          is.na(f_slope) ~ "cut"
         )
       )
       # mutate(f_cut = ifelse(is.na(f_slope), "cut", "keep"))
@@ -330,12 +387,21 @@ flux_segment <- function(
     #print(setdiff(names(dt_sub), names(segmented_fluxes)))
     
     # Append the new results to the overall results data table
-    segmented_fluxes <- rbind(dt_sub, segmented_fluxes)  
+    segmented_fluxes <- rbind(dt_sub, segmented_fluxes)
    
     print(paste0(flux, " done")) # should replace with a progress bar
     
   }
-  
+
+  conc_df <- conc_df |>
+    select(!any_of(c("h2o_conc", "signal_strength", "par")))
+
+  conc_fitting <- left_join(
+    conc_df, segmented_fluxes,
+    by = c("f_fluxID", "f_datetime", "f_conc", "f_cut")
+  )
+
   # Return the combined data table with segmented fluxes
-  segmented_fluxes
+  conc_fitting
+  # segmented_fluxes
 }

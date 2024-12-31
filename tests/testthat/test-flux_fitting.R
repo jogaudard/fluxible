@@ -68,11 +68,42 @@ test_that("correct flux with duplicated datetime", {
   )
 })
 
-# test_that("segmentation tool", {
-#   expect_equal(
-#     flux_fitting(pftc7_short
-#       fit_type = "segments"
-#     ),
-#     pftc7_segmented_short
-#   )
-# })
+test_that("segmentation tool", {
+  pftc7_short <- pftc7_short |>
+    mutate(
+      f_end = start_time + 120
+    )
+  
+  pftc7_segmented_short <- pftc7_segmented_short |>
+    rename(
+      f_conc = "co2_conc",
+      f_datetime = "date_time",
+      f_start = "start_time",
+      f_fluxID = "file_name"
+    )
+
+  expect_equal(
+    flux_fitting(
+      pftc7_short,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    ),
+    pftc7_segmented_short
+  )
+})
+
+# segmentation without par
+# segmentation without signal strength
+# segmentation with chamber data
+# segmentation tool without h2o column

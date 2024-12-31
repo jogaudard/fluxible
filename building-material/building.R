@@ -753,3 +753,27 @@ for(fluxid in unique(try_segment$ID)){
 
   res <- cpop(try_segment$co2_conc, minseglen = 30)
   seg <- fitted(res)
+
+pftc7_short <- pftc7_short |>
+    mutate(
+      f_end = start_time + 120
+    )
+
+    test_segment <- flux_fitting(
+      pftc7_short,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    )
+
+str(test_segment)
