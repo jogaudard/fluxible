@@ -778,3 +778,9 @@ pftc7_short <- pftc7_short |>
 
 str(test_segment)
 View(test_segment)
+
+test_seg_quality <- flux_quality(
+  test_segment,
+  par_threshold = 650,
+  sd_threshold = 10
+)

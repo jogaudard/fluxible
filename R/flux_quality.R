@@ -77,6 +77,9 @@ flux_quality <- function(slopes_df,
                          rmse_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1,
+                         par_threshold = c(),
+                         sign_str_threshold = c(),
+                         sd_threshold = c(),
                          cut_arg = "cut") {
   args_ok <- flux_fun_check(list(
     ambient_conc = ((ambient_conc)),
@@ -182,6 +185,20 @@ flux_quality <- function(slopes_df,
       rsquared_col = ((rsquared_col)),
       pvalue_threshold = ((pvalue_threshold)),
       rsquared_threshold = ((rsquared_threshold))
+    )
+  }
+
+  if (((fit_type)) == "segments") {
+    quality_flag <- flux_quality_segment(
+      ((slopes_df)),
+      pvalue_col = ((pvalue_col)),
+      rsquared_col = ((rsquared_col)),
+      pvalue_threshold = ((pvalue_threshold)),
+      rsquared_threshold = ((rsquared_threshold)),
+      par_threshold = ((par_threshold)),
+      sign_str_threshold = ((sign_str_threshold)),
+      sd_threshold = ((sd_threshold)),
+      cut_arg = ((cut_arg))
     )
   }
 

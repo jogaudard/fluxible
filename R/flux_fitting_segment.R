@@ -278,9 +278,9 @@ pb <- progress_bar$new(
     # unique()
     
     # Identify change points in the time series of c'
-    res <- suppressMessages(cpop(dt_sub$f_conc, minseglen = min_seg_length))  # Identify change points with a minimum segment length of 30 seconds
+    res <- suppressMessages(cpop::cpop(dt_sub$f_conc, minseglen = min_seg_length))  # Identify change points with a minimum segment length of 30 seconds
     # changepoints(res)  # Extract change points from the result
-    f_conc_seg <- fitted(res)  # Get the fitted values from the change point analysis
+    f_conc_seg <- cpop::fitted(res)  # Get the fitted values from the change point analysis
     
     # Create a sequence of segment indices based on the number of rows in f_conc_seg data frame
     segs <- c(1:nrow(f_conc_seg))  
@@ -294,7 +294,8 @@ pb <- progress_bar$new(
              f_pvalue = as.numeric(NA),
              f_segment_id = as.character(NA),
              f_par_seg = as.numeric(NA),
-             f_sign_str_seg = as.numeric(NA))
+             f_sign_str_seg = as.numeric(NA),
+             f_segment_length = as.numeric(NA))
 
  
     # Loop over each segment to perform calculations
@@ -370,7 +371,8 @@ pb <- progress_bar$new(
         dt_sub[s1:s2, ]$f_par_seg <- mean(dt_sub$par[s1:s2])
         dt_sub[s1:s2, ]$f_sign_str_seg <- mean(dt_sub$signal_strength[s1:s2])
         dt_sub[s1:s2, ]$f_segment_id <- paste0("segment_", s)
-        dt_sub[s1:s2, ]$f_segment_length <- difftime(dt_sub$f_time_cut[s2], dt_sub$f_time_cut[s1], units = "secs")
+        # dt_sub[s1:s2, ]$f_segment_length <- difftime(dt_sub$f_time_cut[s2], dt_sub$f_time_cut[s1], units = "secs")
+        dt_sub[s1:s2, ]$f_segment_length <- length(time_m)
 
         
         # use case when
