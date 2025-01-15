@@ -12,7 +12,9 @@ flux_quality_segment <- function(slopes_df,
                                  pvalue_threshold,
                                  rsquared_threshold,
                                  sd_threshold,
-                                 cut_arg
+                                 cut_arg,
+                                 weird_fluxes_id,
+                                 force_ok_id
 ) {
 
 #   if (!is.na(((par_threshold)))) {
@@ -54,7 +56,7 @@ flux_quality_segment <- function(slopes_df,
         # !is.na(((par_threshold))) &
         #   .data$f_par_seg <= ((par_threshold)) ~ "low_par",
         # !is.na(((sign_str_threshold))) &
-        #   .data$f_sign_str_seg <= ((sign_str_threshold)) ~ "low_sign_str",
+        #   .data$f_sign_str_seg <= ((sign_str_threshold)) ~ "low_sign_str", # we should keep just ok and discard here, makes it easier for plotting
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
           .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
@@ -62,8 +64,8 @@ flux_quality_segment <- function(slopes_df,
           .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
       ),
       f_slope_corr = case_when(
-        .data$f_quality_flag_seg == "low_par" ~ NA_real_,
-        .data$f_quality_flag_seg == "low_sign_str" ~ NA_real_,
+        # .data$f_quality_flag_seg == "low_par" ~ NA_real_,
+        # .data$f_quality_flag_seg == "low_sign_str" ~ NA_real_,
         .data$f_quality_flag_seg == "ok" ~ .data$f_slope,
         .data$f_quality_flag_seg == "discard" ~ NA_real_,
         .data$f_quality_flag_seg == "zero" ~ 0
@@ -107,8 +109,8 @@ flux_quality_segment <- function(slopes_df,
         .data$f_sd_slope <= ((sd_threshold)) ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
-        # .data$f_fluxID %in% ((weird_fluxes_id)) ~ "weird_flux",
-        # .data$f_fluxID %in% ((force_ok_id)) ~ "force_ok",
+        .data$f_fluxID %in% ((weird_fluxes_id)) ~ "weird_flux",
+        .data$f_fluxID %in% ((force_ok_id)) ~ "force_ok",
         .data$f_start_error == "error" ~ "start_error",
         TRUE ~ "ok"
         ),

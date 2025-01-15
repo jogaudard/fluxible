@@ -200,7 +200,9 @@ flux_quality <- function(slopes_df,
       par_threshold = ((par_threshold)),
       sign_str_threshold = ((sign_str_threshold)),
       sd_threshold = ((sd_threshold)),
-      cut_arg = ((cut_arg))
+      cut_arg = ((cut_arg)),
+      weird_fluxes_id = ((weird_fluxes_id)),
+      force_ok_id = ((force_ok_id))
     )
   }
 
