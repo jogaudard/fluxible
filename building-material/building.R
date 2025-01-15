@@ -813,7 +813,7 @@ View(pftc7_summary)
 # pftc7 <- pftc7 |>
 #   filter(flux_ID %in% c(1:4))
 
-slopes_pftc7 <- pftc7 |>
+slopes_pftc7 <- pftc7_long |>
   # filter(flux_ID %in% c(2:5)) |>
   flux_fitting(
   # conc_df = pftc7,
@@ -834,3 +834,59 @@ slopes_pftc7 <- pftc7 |>
 pftc7 |>
 filter(flux_ID == 4) |>
 View()
+
+flags_pftc7 <- flux_quality(
+  slopes_df = slopes_pftc7,
+  ambient_conc = 421,
+  error = 100,
+  fluxid_col = "f_fluxID",
+  slope_col = "f_slope",
+  pvalue_col = "f_pvalue",
+  rsquared_col = "f_rsquared",
+  f_flag_fit_col = "f_flag_fit",
+  par_threshold = 600,
+  sign_str_threshold = 98,
+  pvalue_threshold = 0.3,
+  rsquared_threshold = 0.7,
+  sd_threshold = 0,
+  ratio_threshold = 0,
+  conc_col = "f_conc",
+  time_col = "f_time",
+  fit_col = "f_fit",
+  cut_col = "f_cut",
+  cut_arg = "cut"
+)
+
+str(flags_pftc7)
+View(flags_pftc7)
+
+flags_pftc7 |>
+filter(f_fluxID == "5_2800_east_2_day_photo.txt") |>
+View()
+
+flags_pftc7_try <- flags_pftc7 |>
+  group_by(f_fluxID) |>
+  count(f_quality_flag_seg) |>
+  top_n(1)
+
+flags_pftc7_try
+
+segment_flag <- flags_pftc7 |>
+  filter(
+    f_cut != "cut"
+  ) |>
+  select(f_fluxID, f_quality_flag_seg) |>
+    drop_na(f_quality_flag_seg) |>
+    distinct() |>
+    group_by(f_fluxID) |>
+    mutate(
+      count = n()
+    ) |>
+    ungroup() |>
+    filter(count == 1) |>
+    rename(
+      f_quality_flag = "f_quality_flag_seg"
+    ) |>
+    select(!count)
+
+segment_flag

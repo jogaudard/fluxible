@@ -62,7 +62,7 @@ flags_pftc7 <- flux_quality(
   sign_str_threshold = 98,
   pvalue_threshold = 0.3,
   rsquared_threshold = 0.7,
-  sd_threshold = 0,
+  sd_threshold = 0.1,
   ratio_threshold = 0,
   conc_col = "f_conc",
   time_col = "f_time",

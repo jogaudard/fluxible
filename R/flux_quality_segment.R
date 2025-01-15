@@ -80,12 +80,13 @@ flux_quality_segment <- function(slopes_df,
 # first we need the mean slope with sd
 
     quality_par <- quality_flag |>
-    select("f_slope_corr", "f_fluxID", "f_segment_length") |>
+    # select("f_slope_corr", "f_fluxID", "f_segment_length") |>
+    drop_na(.data$f_slope_corr) |>
     group_by(.data$f_fluxID) |>
     # nest() |>
     # rowwise() |>
-    # summarise(
-    mutate(
+    summarise(
+    # mutate(
       # nb_segments = length(.data$f_segment_length),
       f_mean_slope = sum(.data$f_slope_corr * .data$f_segment_length) /
         sum(.data$f_segment_length),
@@ -97,16 +98,35 @@ flux_quality_segment <- function(slopes_df,
     ungroup()
     # unnest("f_cut")
 
+  segment_flag <- quality_flag |>
+    select("f_fluxID", "f_quality_flag_seg") |>
+    drop_na(.data$f_quality_flag_seg) |>
+    distinct() |>
+    group_by(.data$f_fluxID) |>
+    mutate(
+      count = n()
+    ) |>
+    ungroup() |>
+    filter(.data$count == 1) |>
+    rename(
+      f_quality_flag = "f_quality_flag_seg"
+    ) |>
+    select(!"count")
+
 
     slopes_df <- slopes_df |>
     select(!any_of(c("f_par_seg", "f_sign_str_seg", "f_rsquared", "f_pvalue", "f_slope", "f_segment_length"))) |>
     left_join(quality_flag, by = c("f_fluxID", "f_cut", "f_segment_id")) |>
     left_join(quality_par, by = "f_fluxID") |>
-    # group_by(.data$f_fluxID, .data$f_cut) |>
+    left_join(segment_flag, by = "f_fluxID") |>
+    group_by(.data$f_fluxID) |>
     mutate(
+      # f_mean_slope = fill(.data$f_mean_slope, .direction = "downup"),
+      # f_sd_slope = fill(.data$f_sd_slope, .direction = "downup"),
       f_quality_flag = case_when(
+        !is.na(.data$f_quality_flag) ~ .data$f_quality_flag,
         .data$f_flag_fit == "too short" ~ "discard",
-        .data$f_sd_slope <= ((sd_threshold)) ~ "discard",
+        .data$f_sd_slope >= ((sd_threshold)) ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_fluxID %in% ((weird_fluxes_id)) ~ "weird_flux",
@@ -118,9 +138,11 @@ flux_quality_segment <- function(slopes_df,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "no_data" ~ NA_real_,
         .data$f_quality_flag == "start_error" ~ NA_real_,
-        .data$f_quality_flag == "ok" ~ f_mean_slope
+        .data$f_quality_flag == "zero" ~ 0,
+        .data$f_quality_flag == "ok" ~ .data$f_mean_slope
       )
-    )
+    ) |>
+    ungroup()
 
   slopes_df
 }

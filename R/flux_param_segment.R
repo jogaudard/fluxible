@@ -11,7 +11,7 @@ flux_param_segment <- function(slopes_df,
                           cut_arg = "cut") {
   param_df <- slopes_df |>
     select(
-      "f_conc", "f_start", "f_fluxID", "f_sd_slope",
+      "f_conc", "f_start", "f_fluxID", "f_sd_slope", "f_mean_slope",
       "f_quality_flag", "f_cut"
     ) |>
     filter(.data$f_cut != ((cut_arg))) |>
@@ -24,8 +24,10 @@ flux_param_segment <- function(slopes_df,
     distinct() |>
     mutate(
       f_sd_slope = round(.data$f_sd_slope, digits = 4),
+      f_mean_slope = round(.data$f_mean_slope, digits = 4),
       print_col = paste(
         .data$f_quality_flag, "\n",
+        "Mean slope = ", .data$f_mean_slope, "\n",
         "SD = ", .data$f_sd_slope,
         sep = ""
       )

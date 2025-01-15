@@ -27,9 +27,9 @@ flux_plot_segment <- function(slopes_df,
     )
 
   plot_seg <- slopes_df |>
-    ggplot(aes(.data$f_datetime)) +
+    ggplot(aes(.data$f_datetime, group = .data$f_segment_id)) +
     theme_bw() +
-    geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag, group = .data$f_segment_id),
+    geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag),
       size = 0.2,
       na.rm = TRUE
     ) +
