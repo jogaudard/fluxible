@@ -164,7 +164,7 @@ message("Cutting measurements...")
       f_start = .data$f_start + ((start_cut)),
       f_end = .data$f_end - ((end_cut)),
       n_conc = sum(!is.na(.data$f_conc)),
-      f_seg_flag = case_when(
+      f_flag_fit = case_when(
         ((min_seg_length)) > ((.data$n_conc - ((start_cut)) - ((end_cut))) / 2) ~ "too short",
       ),
       f_cut = case_when(
@@ -186,7 +186,7 @@ message("Cutting measurements...")
 
   short_df <- conc_df |>
     filter(
-      .data$f_seg_flag == "too short"
+      .data$f_flag_fit == "too short"
       ) |>
     select("f_fluxID") |>
     distinct() |>
@@ -199,15 +199,21 @@ message("Cutting measurements...")
     ) |>
     pull(.data$f_warning)
 
-    f_warning <- stringr::str_c(short_df)
+    explanation <- paste(
+      "\n",
+      "\n",
+      "If the measurement is shorter than double the minimum segment length,",
+      "\n",
+      "there cannot be changepoints.")
+    f_warning <- stringr::str_c(short_df, explanation)
 
-    if (any(!is.na(conc_df$f_seg_flag))) warning(f_warning)
+    if (any(!is.na(conc_df$f_flag_fit))) warning(f_warning)
     
 
   conc_df_cut <- conc_df |>
     filter(
       .data$f_cut == "keep"
-      & is.na(.data$f_seg_flag)
+      & is.na(.data$f_flag_fit)
     ) |>
     drop_na("f_conc") |>
     group_by(.data$f_fluxID) |>

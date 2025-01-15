@@ -168,6 +168,14 @@ flux_plot <- function(slopes_df,
     )
   }
 
+  if (((fit_type)) == "segments") {
+    f_plot <- flux_plot_segment(
+      ((slopes_df)),
+      cut_arg = ((cut_arg)),
+      y_text_position = ((y_text_position))
+    )
+  }
+
   message("Plotting in progress")
 
   f_plot <- f_plot +

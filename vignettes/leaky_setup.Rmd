@@ -32,14 +32,8 @@ library(fluxible)
 
 str(pftc7_long)
 
-# we need to add the end column since this dataset is not an output of flux_match
-pftc7 <- pftc7_long |>
-  mutate(
-    f_end = start_time + 120
-  )
-
 slopes_pftc7 <- flux_fitting(
-  conc_df = pftc7,
+  conc_df = pftc7_long,
   start_cut = 0,
   end_cut = 0,
   start_col = "start_time",
@@ -53,7 +47,29 @@ slopes_pftc7 <- flux_fitting(
   fit_type = "segments"
 )
 
-flags_pftc7 <- flux_quality(slopes_pftc7)
+str(slopes_pftc7)
+
+flags_pftc7 <- flux_quality(
+  slopes_df = slopes_pftc7,
+  ambient_conc = 421,
+  error = 100,
+  fluxid_col = "f_fluxID",
+  slope_col = "f_slope",
+  pvalue_col = "f_pvalue",
+  rsquared_col = "f_rsquared",
+  f_flag_fit_col = "f_flag_fit",
+  par_threshold = 600,
+  sign_str_threshold = 98,
+  pvalue_threshold = 0.3,
+  rsquared_threshold = 0.7,
+  sd_threshold = 0,
+  ratio_threshold = 0,
+  conc_col = "f_conc",
+  time_col = "f_time",
+  fit_col = "f_fit",
+  cut_col = "f_cut",
+  cut_arg = "cut"
+)
 
 flux_plot(flags_pftc7)
 

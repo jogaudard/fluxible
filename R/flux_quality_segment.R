@@ -6,6 +6,7 @@
 flux_quality_segment <- function(slopes_df,
                                  pvalue_col,
                                  rsquared_col,
+                                 f_flag_fit_col,
                                  par_threshold,
                                  sign_str_threshold,
                                  pvalue_threshold,
@@ -35,6 +36,11 @@ flux_quality_segment <- function(slopes_df,
 #       ) |>
 #       ungroup()
 #   }
+
+  slopes_df <- slopes_df |>
+    rename(
+      f_flag_fit = all_of(((f_flag_fit_col)))
+    )
 
   quality_flag <- slopes_df |>
   select(any_of(c("f_fluxID", "f_cut", "f_segment_id", "f_par_seg", "f_sign_str_seg", "f_rsquared", "f_pvalue", "f_slope", "f_segment_length"))) |>
@@ -97,6 +103,7 @@ flux_quality_segment <- function(slopes_df,
     # group_by(.data$f_fluxID, .data$f_cut) |>
     mutate(
       f_quality_flag = case_when(
+        .data$f_flag_fit == "too short" ~ "discard",
         .data$f_sd_slope <= ((sd_threshold)) ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
