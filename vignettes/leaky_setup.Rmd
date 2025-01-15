@@ -71,6 +71,8 @@ flags_pftc7 <- flux_quality(
   cut_arg = "cut"
 )
 
+str(flags_pftc7)
+
 flags_pftc7 |>
 # filter(
 #   f_fluxID %in% c()
@@ -81,5 +83,9 @@ flux_plot(output = "pdfpages",
         y_text_position = 450
         )
 
-flux_pftc7 <- flux_calc(flags_pftc7)
+flux_pftc7 <- flux_calc(flags_pftc7,
+                        slope_col = "f_mean_slope_corr",
+                        conc_unit = "ppm",
+                        flux_unit = "mmol",
+                        )
 ```

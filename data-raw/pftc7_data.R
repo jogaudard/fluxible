@@ -5,7 +5,10 @@ str(flux_tent_output)
 usethis::use_data(flux_tent_output, overwrite = TRUE)
 
 pftc7_short <- readr::read_csv("data-raw/pftc7_site5_photo.csv")
-pftc7_short <- tibble::as_tibble(pftc7_short)
+pftc7_short <- tibble::as_tibble(pftc7_short) |>
+  dplyr::mutate(
+    f_end = start_time + 119
+  )
 str(pftc7_short)
 usethis::use_data(pftc7_short, overwrite = TRUE)
 

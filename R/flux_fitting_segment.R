@@ -50,31 +50,37 @@ flux_fitting_segment <- function(
     min_seg_length
 ) {
 
-  if (!is.na(((signal_strength_col)))) {
-    conc_df <- conc_df |>
-    rename(
-      signal_strength = all_of((signal_strength_col))
-    )
-  }
+  # if (!is.na(((signal_strength_col)))) {
+  #   conc_df <- conc_df |>
+  #   rename(
+  #     signal_strength = all_of((signal_strength_col))
+  #   )
+  # }
 
-  if (!is.na(((par_col)))) {
-    conc_df <- conc_df |>
-    rename(
-      par = all_of((par_col))
-    )
-  }
+  # if (!is.na(((par_col)))) {
+  #   conc_df <- conc_df |>
+  #   rename(
+  #     par = all_of((par_col))
+  #   )
+  # }
 
-  if (!is.na(((h2o_col)))) {
-    conc_df <- conc_df |>
-    rename(
-      h2o_conc = all_of((h2o_col))
-    )
-  }
+  # if (!is.na(((h2o_col)))) {
+  #   conc_df <- conc_df |>
+  #   rename(
+  #     h2o_conc = all_of((h2o_col))
+  #   )
+  # }
 
-  if (is.na(((h2o_col)))) {
-    h2o_correction <- FALSE
-  }
+  # if (is.na(((h2o_col)))) {
+  #   h2o_correction <- FALSE
+  # }
 
+conc_df <- conc_df |>
+rename(
+  h2o_conc = all_of(((h2o_col))),
+  par = all_of(((par_col))),
+  signal_strength = all_of(((signal_strength_col)))
+)
   
   
   
