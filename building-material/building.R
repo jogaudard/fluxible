@@ -784,3 +784,53 @@ test_seg_quality <- flux_quality(
   par_threshold = 650,
   sd_threshold = 10
 )
+
+pftc7 <- pftc7_long |>
+  group_by(file_name) |>
+  mutate(
+    f_end = start_time + 120,
+    flux_ID = cur_group_id(),
+    ndata = n()
+  ) |>
+  ungroup()
+
+  str(pftc7)
+
+pftc7 |>
+group_by(file_name) |>
+count()
+
+pftc7_summary <- pftc7 |>
+  group_by(file_name) |>
+  nest() |>
+  summarise(
+    ndata = nrow(co2_conc)
+  ) |>
+  ungroup()
+
+View(pftc7_summary)
+
+# pftc7 <- pftc7 |>
+#   filter(flux_ID %in% c(1:4))
+
+slopes_pftc7 <- pftc7 |>
+  # filter(flux_ID %in% c(2:5)) |>
+  flux_fitting(
+  # conc_df = pftc7,
+  min_seg_length = 30,
+  start_cut = 0,
+  end_cut = 0,
+  start_col = "start_time",
+  end_col = "f_end",
+  datetime_col = "date_time",
+  conc_col = "co2_conc",
+  fluxid_col = "file_name",
+  signal_strength_col = "signal_strength",
+  par_col = "par",
+  h2o_col = "h2o_conc",
+  fit_type = "segments"
+)
+
+pftc7 |>
+filter(flux_ID == 4) |>
+View()

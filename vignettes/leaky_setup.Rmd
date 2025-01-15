@@ -29,4 +29,33 @@ The segmentation tool is available in the Fluxible normal workflow, as the other
 
 ```{r setup}
 library(fluxible)
+
+str(pftc7_long)
+
+# we need to add the end column since this dataset is not an output of flux_match
+pftc7 <- pftc7_long |>
+  mutate(
+    f_end = start_time + 120
+  )
+
+slopes_pftc7 <- flux_fitting(
+  conc_df = pftc7,
+  start_cut = 0,
+  end_cut = 0,
+  start_col = "start_time",
+  end_col = "f_end",
+  datetime_col = "date_time",
+  conc_col = "co2_conc",
+  fluxid_col = "file_name",
+  signal_strength_col = "signal_strength",
+  par_col = "par",
+  h2o_col = "h2o_conc",
+  fit_type = "segments"
+)
+
+flags_pftc7 <- flux_quality(slopes_pftc7)
+
+flux_plot(flags_pftc7)
+
+flux_pftc7 <- flux_calc(flags_pftc7)
 ```

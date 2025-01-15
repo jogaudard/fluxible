@@ -163,13 +163,16 @@ message("Cutting measurements...")
       f_time = as.double(.data$f_time),
       f_start = .data$f_start + ((start_cut)),
       f_end = .data$f_end - ((end_cut)),
+      n_conc = sum(!is.na(.data$f_conc)),
+      f_seg_flag = case_when(
+        ((min_seg_length)) > ((.data$n_conc - ((start_cut)) - ((end_cut))) / 2) ~ "too short",
+      ),
       f_cut = case_when(
         .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end
         ~ "cut",
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
-      n_conc = sum(!is.na(.data$f_conc)),
       f_conc = case_when(
               h2o_correction == TRUE ~ f_conc / (1 - (h2o_conc / 1000)),
               h2o_correction == FALSE ~ f_conc
@@ -181,9 +184,30 @@ message("Cutting measurements...")
     ) |>
     ungroup()
 
+  short_df <- conc_df |>
+    filter(
+      .data$f_seg_flag == "too short"
+      ) |>
+    select("f_fluxID") |>
+    distinct() |>
+    mutate(
+      f_warning = paste(
+        "\n", "fluxID", .data$f_fluxID,
+        "dropped: measurement too short to find changing points."
+        ),
+      f_warning = as.character(.data$f_warning)
+    ) |>
+    pull(.data$f_warning)
+
+    f_warning <- stringr::str_c(short_df)
+
+    if (any(!is.na(conc_df$f_seg_flag))) warning(f_warning)
+    
+
   conc_df_cut <- conc_df |>
     filter(
       .data$f_cut == "keep"
+      & is.na(.data$f_seg_flag)
     ) |>
     drop_na("f_conc") |>
     group_by(.data$f_fluxID) |>
@@ -410,8 +434,8 @@ pb <- progress_bar$new(
 
   segmented_fluxes_final <- segmented_fluxes |>
       mutate(
-        f_fluxID = as.factor(f_fluxID),
-        f_cut = as.factor(f_cut)
+        f_fluxID = as.factor(.data$f_fluxID),
+        f_cut = as.factor(.data$f_cut)
       )
       # select("f_fluxID", "f_datetime", "f_conc", "f_cut", "f_slope")
 
