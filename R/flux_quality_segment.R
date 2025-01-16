@@ -1,7 +1,7 @@
 #' @description flags measurements where at least one segment has a bad fit
 #' flags measurements where segments are going in opposite direction
 #' flags measurements where segments are too different
-#' @importFrom dplyr n
+#' @importFrom dplyr n n_distinct
 
 flux_quality_segment <- function(slopes_df,
                                  pvalue_col,
@@ -54,9 +54,9 @@ flux_quality_segment <- function(slopes_df,
     mutate(
       f_quality_flag_seg = case_when(
         # !is.na(((par_threshold))) &
-          .data$f_par_seg <= ((par_threshold)) ~ "low_par",
+          .data$f_par_seg <= ((par_threshold)) ~ "discard",
         # !is.na(((sign_str_threshold))) &
-          .data$f_sign_str_seg <= ((sign_str_threshold)) ~ "low_sign_str", # we should keep just ok and discard here, makes it easier for plotting
+          .data$f_sign_str_seg <= ((sign_str_threshold)) ~ "discard", # we should keep just ok and discard here, makes it easier for plotting
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
           .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
@@ -90,9 +90,15 @@ flux_quality_segment <- function(slopes_df,
       # nb_segments = length(.data$f_segment_length),
       f_mean_slope = sum(.data$f_slope_corr * .data$f_segment_length) /
         sum(.data$f_segment_length),
+        nb_segments_ok = dplyr::n_distinct(.data$f_segment_id),
         # https://franksaundersjr.com/2023/01/06/how-to-calculate-weighted-mean-and-weighted-standard-deviation-with-python/
-      f_sd_slope = sqrt(sum(.data$f_segment_length * (.data$f_slope_corr - .data$f_mean_slope)^2) /
-        ((length(.data$f_segment_length) - 1) * sum(.data$f_segment_length) / length(.data$f_segment_length))),
+      f_sd_slope = case_when(
+        .data$nb_segments_ok < 2 ~ NA_real_,
+        .data$nb_segments_ok >= 2 ~ sqrt(
+        sum(.data$f_segment_length * (.data$f_slope_corr - .data$f_mean_slope)^2) /
+        (((.data$nb_segments_ok - 1) * sum(.data$f_segment_length)) / .data$nb_segments_ok)
+        )
+      ),
       # .groups = "drop"
     ) |>
     ungroup()
@@ -104,7 +110,7 @@ flux_quality_segment <- function(slopes_df,
     distinct() |>
     group_by(.data$f_fluxID) |>
     mutate(
-      count = n()
+      count = dplyr::n()
     ) |>
     ungroup() |>
     filter(.data$count == 1) |>
@@ -126,7 +132,7 @@ flux_quality_segment <- function(slopes_df,
       f_quality_flag = case_when(
         !is.na(.data$f_quality_flag) ~ .data$f_quality_flag,
         .data$f_flag_fit == "too short" ~ "discard",
-        .data$f_sd_slope >= ((sd_threshold)) ~ "discard",
+        .data$f_sd_slope >= ((sd_threshold)) & !is.na(.data$f_sd_slope) ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_fluxID %in% ((weird_fluxes_id)) ~ "weird_flux",

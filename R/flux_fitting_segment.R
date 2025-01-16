@@ -188,7 +188,8 @@ message("Cutting measurements...")
               h2o_correction == FALSE ~ "no"
              )
     ) |>
-    ungroup()
+    ungroup() |>
+    arrange("f_datetime")
 
   short_df <- conc_df |>
     filter(
@@ -310,12 +311,12 @@ pb <- progress_bar$new(
   #   # Subset the flux data frame for the current file_name and keep distinct rows
   #   dt_sub <- flux_df[flux_df[[flux_id_col]] == {{flux}}, ] %>% unique()
   dt_sub <- conc_df_cut |>
-    filter(f_fluxID == flux)
+    filter(.data$f_fluxID == flux)
     # unique()
     
     # Identify change points in the time series of c'
-    res <- suppressMessages(cpop::cpop(dt_sub$f_conc, minseglen = min_seg_length))  # Identify change points with a minimum segment length of 30 seconds
-    # changepoints(res)  # Extract change points from the result
+    res <- suppressMessages(cpop::cpop(dt_sub$f_conc, minseglen = ((min_seg_length))))  # Identify change points with a minimum segment length of 30 seconds
+    # cpop::changepoints(res)  # Extract change points from the result
     f_conc_seg <- cpop::fitted(res)  # Get the fitted values from the change point analysis
     
     # Create a sequence of segment indices based on the number of rows in f_conc_seg data frame
@@ -391,7 +392,7 @@ pb <- progress_bar$new(
       # && (mean_par > par_thresh || mean_par == "no_par")) {
         
         # time_m <- time[s1:s2] - (time[s1] - 1)
-                time_m <- dt_sub$f_time_cut[s1:s2] - (dt_sub$f_time_cut[s1])
+                time_m <- dt_sub$f_time_cut[s1:s2] - (dt_sub$f_time_cut[s1] - 1)
 
         
         # Fit a linear model to the current segment
@@ -448,11 +449,12 @@ pb <- progress_bar$new(
       mutate(
         f_fluxID = as.factor(.data$f_fluxID),
         f_cut = as.factor(.data$f_cut)
-      )
+      ) |>
+      select(!c("par", "signal_strength", "h2o_conc"))
       # select("f_fluxID", "f_datetime", "f_conc", "f_cut", "f_slope")
 
   conc_df <- conc_df |>
-    select(!any_of(c("h2o_conc", "signal_strength", "par"))) |>
+    # select(!any_of(c("h2o_conc", "signal_strength"))) |>
     mutate(
       f_fluxID = as.factor(f_fluxID)
     )

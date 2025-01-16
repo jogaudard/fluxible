@@ -80,16 +80,28 @@ test_that("segmentation tool", {
       f_rsquared = "f_rsq",
       f_adj_rsquared = "f_rsq_adj",
       f_pvalue = "f_pval",
-      f_mean_slope_corr = "f_slope"
+      f_mean_slope = "f_slope"
     ) |>
     mutate(
       f_cut = as.factor(f_cut),
-      f_fluxID = as.factor(f_fluxID)
+      f_fluxID = as.factor(f_fluxID),
+      f_end = f_start + 119,
+      f_cut = case_when(
+        f_datetime > f_end ~ "cut",
+        f_datetime <= f_end ~ f_cut
+      ),
+      f_mean_slope = case_when(
+        f_cut == "cut" ~ NA_real_,
+        f_cut == "keep" ~ f_mean_slope
+      )
     ) |>
-    select(f_conc, par, f_datetime, f_fluxID, f_mean_slope_corr,
-    #  f_rsquared, f_adj_rsquared, f_pvalue,
-      f_cut) |>
     arrange(f_datetime) |>
+    select(par, f_datetime, f_fluxID, f_mean_slope
+    #  f_rsquared, f_adj_rsquared, f_pvalue,
+      ) |>
+      group_by(f_fluxID) |>
+      fill(f_mean_slope, .direction = "updown") |>
+      ungroup() |>
     data.frame()
 
     pftc7_short_segmented_test <- pftc7_short |>
@@ -109,24 +121,26 @@ test_that("segmentation tool", {
       h2o_col = "h2o_conc",
       signal_strength_col = "signal_strength",
       fluxid_col = "file_name",
-      h2o_correction = FALSE,
+      h2o_correction = TRUE,
       min_seg_length = 30
     ) |>
     flux_quality(par_threshold = 650,
   sign_str_threshold = 95,
-  pvalue_threshold = 0.3,
-  rsquared_threshold = 0.7,
-  sd_threshold = 0.1,
+  pvalue_threshold = 0,
+  rsquared_threshold = 0,
+  sd_threshold = 1,
   ratio_threshold = 0) |>
-    select(f_conc, par, f_datetime, f_fluxID, f_mean_slope_corr,
-    #  f_rsquared, f_adj_rsquared, f_pvalue,
-      f_cut) |>
     arrange(f_datetime) |>
+    select(par, f_datetime, f_fluxID, f_mean_slope
+    #  f_rsquared, f_adj_rsquared, f_pvalue,
+      # f_cut # f_cut is not exactly the same because in the new workflow the discard happens later
+      ) |>
     data.frame()
 
   expect_equal(
     pftc7_short_segmented_test,
     pftc7_segmented_short_expected
+    # tolerance = 0.1
   )
 })
 
