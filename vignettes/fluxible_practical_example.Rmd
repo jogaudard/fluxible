@@ -136,8 +136,8 @@ slopes_exp_liahovden_flag <- flux_quality(
   error = 100,
   fluxid_col = "f_fluxID",
   slope_col = "f_slope",
-  weird_fluxes_id = c(),
-  force_ok_id = c(),
+  force_discard = c(),
+  force_ok = c(),
   ratio_threshold = 0,
   conc_col = "f_conc",
   b_col = "f_b",
@@ -159,8 +159,8 @@ slopes_qua_liahovden_flag <- flux_quality(
   error = 100,
   fluxid_col = "f_fluxID",
   slope_col = "f_slope",
-  weird_fluxes_id = c(),
-  force_ok_id = c(),
+  force_discard = c(),
+  force_ok = c(),
   ratio_threshold = 0,
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
@@ -182,8 +182,8 @@ slopes_lin_liahovden_flag <- flux_quality(
   error = 100,
   fluxid_col = "f_fluxID",
   slope_col = "f_slope",
-  weird_fluxes_id = c(),
-  force_ok_id = c(),
+  force_discard = c(),
+  force_ok = c(),
   ratio_threshold = 0,
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
@@ -292,7 +292,7 @@ slopes_exp_liahovden_flag_60 <- conc_liahovden |>
   flux_fitting(fit_type = "exp", end_cut = 60) |>
   flux_quality(
     slope_col = "f_slope",
-    weird_fluxes_id = c(
+    force_discard = c(
       51, # slope is much steeper than the flux because t zero was estimated
       # at the very start of the measurement
       101, # plot starts with a high peak: accumulation in the canopy?
