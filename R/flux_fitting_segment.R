@@ -74,7 +74,7 @@ flux_fitting_segment <- function(
   # if (is.na(((h2o_col)))) {
   #   h2o_correction <- FALSE
   # }
-
+# maybe par, signal strenght and h2o are mandatory for that one?
 conc_df <- conc_df |>
 rename(
   h2o_conc = all_of(((h2o_col))),
