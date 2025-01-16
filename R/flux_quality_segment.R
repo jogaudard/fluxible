@@ -1,7 +1,7 @@
 #' @description flags measurements where at least one segment has a bad fit
 #' flags measurements where segments are going in opposite direction
 #' flags measurements where segments are too different
-#' 
+#' @importFrom dplyr n
 
 flux_quality_segment <- function(slopes_df,
                                  pvalue_col,
@@ -54,9 +54,9 @@ flux_quality_segment <- function(slopes_df,
     mutate(
       f_quality_flag_seg = case_when(
         # !is.na(((par_threshold))) &
-        #   .data$f_par_seg <= ((par_threshold)) ~ "low_par",
+          .data$f_par_seg <= ((par_threshold)) ~ "low_par",
         # !is.na(((sign_str_threshold))) &
-        #   .data$f_sign_str_seg <= ((sign_str_threshold)) ~ "low_sign_str", # we should keep just ok and discard here, makes it easier for plotting
+          .data$f_sign_str_seg <= ((sign_str_threshold)) ~ "low_sign_str", # we should keep just ok and discard here, makes it easier for plotting
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
           .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
@@ -81,7 +81,7 @@ flux_quality_segment <- function(slopes_df,
 
     quality_par <- quality_flag |>
     # select("f_slope_corr", "f_fluxID", "f_segment_length") |>
-    drop_na(.data$f_slope_corr) |>
+    drop_na("f_slope_corr") |>
     group_by(.data$f_fluxID) |>
     # nest() |>
     # rowwise() |>
@@ -100,7 +100,7 @@ flux_quality_segment <- function(slopes_df,
 
   segment_flag <- quality_flag |>
     select("f_fluxID", "f_quality_flag_seg") |>
-    drop_na(.data$f_quality_flag_seg) |>
+    drop_na("f_quality_flag_seg") |>
     distinct() |>
     group_by(.data$f_fluxID) |>
     mutate(

@@ -11,6 +11,7 @@ flux_quality(
   error = 100,
   fluxid_col = "f_fluxID",
   slope_col = "f_slope",
+  f_flag_fit_col = "f_flag_fit",
   weird_fluxes_id = c(),
   force_ok_id = c(),
   ratio_threshold = 0,
@@ -26,6 +27,9 @@ flux_quality(
   rmse_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1,
+  par_threshold = c(),
+  sign_str_threshold = c(),
+  sd_threshold = c(),
   cut_arg = "cut"
 )
 }
