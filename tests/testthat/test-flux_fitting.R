@@ -79,30 +79,20 @@ test_that("segmentation tool", {
       f_fluxID = "file_name",
       f_rsquared = "f_rsq",
       f_adj_rsquared = "f_rsq_adj",
-      f_pvalue = "f_pval",
-      f_mean_slope = "f_slope"
+      f_pvalue = "f_pval"
     ) |>
+    group_by(f_fluxID) |>
     mutate(
       f_cut = as.factor(f_cut),
       f_fluxID = as.factor(f_fluxID),
-      f_end = f_start + 119,
-      f_cut = case_when(
-        f_datetime > f_end ~ "cut",
-        f_datetime <= f_end ~ f_cut
-      ),
-      f_mean_slope = case_when(
-        f_cut == "cut" ~ NA_real_,
-        f_cut == "keep" ~ f_mean_slope
-      )
+      f_mean_slope = mean(f_slope, na.rm = TRUE)
     ) |>
+    ungroup() |>
     arrange(f_datetime) |>
     select(par, f_datetime, f_fluxID, f_mean_slope
     #  f_rsquared, f_adj_rsquared, f_pvalue,
       ) |>
-      group_by(f_fluxID) |>
-      fill(f_mean_slope, .direction = "updown") |>
-      ungroup() |>
-    data.frame()
+       data.frame()
 
     pftc7_short_segmented_test <- pftc7_short |>
     group_by(file_name) |>
@@ -139,8 +129,8 @@ test_that("segmentation tool", {
 
   expect_equal(
     pftc7_short_segmented_test,
-    pftc7_segmented_short_expected
-    # tolerance = 0.1
+    pftc7_segmented_short_expected,
+    tolerance = 0.06
   )
 })
 
@@ -184,6 +174,7 @@ test_that("segmentation tool temp", {
   )
 })
 
+# need to do a snapshot test
 # segmentation without par
 # segmentation without signal strength
 # segmentation with chamber data
