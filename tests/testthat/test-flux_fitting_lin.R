@@ -1,11 +1,12 @@
 test_that("fitting works with 0 second end cut", {
-  qflux_fitting_lin <- purrr::quietly(flux_fitting_lin)
+  qflux_fitting <- purrr::quietly(flux_fitting)
 
-  fitting_lin_call <- qflux_fitting_lin(
-    co2_conc
+  fitting_call <- qflux_fitting(
+    co2_conc,
+    fit_type = "lin"
   )
 
-  output <- fitting_lin_call$result
+  output <- fitting_call$result
 
   expect_equal(
     output$f_slope,
@@ -14,9 +15,10 @@ test_that("fitting works with 0 second end cut", {
 })
 
 test_that("fitting works with 30 second end cut", {
-  output <- flux_fitting_lin(
+  output <- flux_fitting(
     co2_conc,
-    end_cut = 30
+    end_cut = 30,
+      fit_type = "lin"
   )
   expect_equal(
     output$f_slope,
@@ -25,9 +27,10 @@ test_that("fitting works with 30 second end cut", {
 })
 
 test_that("fitting works with 60 second end cut", {
-  output <- flux_fitting_lin(
+  output <- flux_fitting(
     co2_conc,
-    end_cut = 60
+    end_cut = 60,
+      fit_type = "lin"
   )
   expect_equal(
     output$f_slope,
@@ -40,7 +43,8 @@ test_that("fitting works with 60 second end cut", {
 
 test_that("warnings when NAs are dropped in conc", {
   expect_warning(
-    flux_fitting_lin(co2_conc_missing),
+    flux_fitting(co2_conc_missing,
+                 fit_type = "lin"),
     " fluxID 1 : slope was estimated on 70 points out of 210 seconds
  fluxID 2 : slope was estimated on 121 points out of 210 seconds
  fluxID 3 : slope was estimated on 102 points out of 210 seconds
@@ -53,7 +57,8 @@ test_that("warnings when NAs are dropped in conc", {
 
 test_that("warnings when there is no data in conc", {
   expect_warning(
-    flux_fitting_lin(co2_conc_missing),
+    flux_fitting(co2_conc_missing,
+                     fit_type = "lin"),
     " fluxID 6 dropped (no data in the conc column)",
     fixed = TRUE # need that because there parenthesis in the error message
   )
@@ -61,9 +66,10 @@ test_that("warnings when there is no data in conc", {
 
 test_that("warnings with cutting", {
   expect_warning(
-    flux_fitting_lin(
+    flux_fitting(
       co2_conc_missing,
-      start_cut = 10
+      start_cut = 10,
+      fit_type = "lin"
     ),
     " fluxID 1 : slope was estimated on 70 points out of 200 seconds
  fluxID 2 : slope was estimated on 121 points out of 200 seconds
@@ -75,9 +81,10 @@ test_that("warnings with cutting", {
 
 test_that("error on arguments", {
   expect_error(
-    flux_fitting_lin(
+    flux_fitting(
       co2_conc_missing,
-      start_cut = "Voldemort"
+      start_cut = "Voldemort",
+      fit_type = "lin"
     ),
     "Please correct the arguments"
   )
