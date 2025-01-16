@@ -36,18 +36,18 @@
 
 
 flux_fitting_exp <- function(conc_df,
-                             t_window = 20,
-                             cz_window = 15,
-                             b_window = 10,
-                             a_window = 10,
-                             roll_width = 15,
-                             start_cut = 0,
-                             end_cut = 0,
-                             start_col = "f_start",
-                             end_col = "f_end",
-                             datetime_col = "f_datetime",
-                             conc_col = "f_conc",
-                             fluxid_col = "f_fluxID") {
+                             t_window,
+                             cz_window,
+                             b_window,
+                             a_window,
+                             roll_width,
+                             start_cut,
+                             end_cut,
+                             start_col,
+                             end_col,
+                             datetime_col,
+                             conc_col,
+                             fluxid_col) {
 
   args_ok <- flux_fun_check(list(
     t_window = ((t_window)),

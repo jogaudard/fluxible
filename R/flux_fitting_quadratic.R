@@ -21,14 +21,14 @@
 
 
 flux_fitting_quadratic <- function(conc_df,
-                                   start_cut = 0,
-                                   end_cut = 0,
-                                   start_col = "f_start",
-                                   end_col = "f_end",
-                                   datetime_col = "f_datetime",
-                                   conc_col = "f_conc",
-                                   fluxid_col = "f_fluxID",
-                                   t_zero = 0) {
+                                   start_cut,
+                                   end_cut,
+                                   start_col,
+                                   end_col,
+                                   datetime_col,
+                                   conc_col,
+                                   fluxid_col,
+                                   t_zero) {
   args_ok <- flux_fun_check(list(
     t_zero = ((t_zero)),
     start_cut = ((start_cut)),
