@@ -40,3 +40,4 @@ test_that("plot can be exported as an object", {
   plot_object <- flux_plot(slopes30lin_flag)
   vdiffr::expect_doppelganger("plot as an object", plot_object)
 })
+
