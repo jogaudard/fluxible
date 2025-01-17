@@ -134,7 +134,7 @@ test_that("segmentation tool", {
   )
 })
 
-test_that("segmentation tool temp", {
+test_that("segmentation tool original data", {
 
   pftc7_segmented_short_expected <- pftc7_segmented_short |>
     rename(
@@ -174,8 +174,28 @@ test_that("segmentation tool temp", {
   )
 })
 
-# need to do a snapshot test
+test_that("segmentation tool snapshot", {
+  expect_snapshot(
+    flux_fitting(
+      conc_df = pftc7_short,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    )
+  )
+})
+
 # segmentation without par
 # segmentation without signal strength
+# segmentation without h20
 # segmentation with chamber data
-# segmentation tool without h2o column

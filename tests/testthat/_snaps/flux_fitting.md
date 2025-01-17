@@ -148,3 +148,64 @@
       #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
       #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
+# segmentation tool snapshot
+
+    Code
+      flux_fitting(conc_df = pftc7_short, fit_type = "segments", start_col = "start_time",
+        end_col = "f_end", start_cut = 0, end_cut = 0, conc_col = "co2_conc",
+        par_col = "par", datetime_col = "date_time", h2o_col = "h2o_conc",
+        signal_strength_col = "signal_strength", fluxid_col = "file_name",
+        h2o_correction = TRUE, min_seg_length = 30)
+    Message
+      Cutting measurements...
+      Starting segmentation...
+      
+      Segmenting flux 1 out of 13 [==>--------------------------------------] (  8%)
+      
+      Segmenting flux 2 out of 13 [=====>-----------------------------------] ( 15%)
+      
+      Segmenting flux 3 out of 13 [========>--------------------------------] ( 23%)
+      
+      Segmenting flux 4 out of 13 [============>----------------------------] ( 31%)
+      
+      Segmenting flux 5 out of 13 [===============>-------------------------] ( 38%)
+      
+      Segmenting flux 6 out of 13 [==================>----------------------] ( 46%)
+      
+      Segmenting flux 7 out of 13 [=====================>-------------------] ( 54%)
+      
+      Segmenting flux 8 out of 13 [========================>----------------] ( 62%)
+      
+      Segmenting flux 9 out of 13 [===========================>-------------] ( 69%)
+      
+      Segmenting flux 10 out of 13 [==============================>---------] ( 77%)
+      
+      Segmenting flux 11 out of 13 [=================================>------] ( 85%)
+      
+      Segmenting flux 12 out of 13 [====================================>---] ( 92%)
+      
+      Segmenting flux 13 out of 13 [========================================] (100%)
+                                                                                    
+      
+    Output
+      # A tibble: 1,665 x 33
+         f_conc h2o_conc temperature_c pressure_kpa signal_strength
+          <dbl>    <dbl>         <dbl>        <dbl>           <dbl>
+       1   426.     14.3          18.7         73.1            99.2
+       2   426.     14.5          18.8         73.1            99.3
+       3   426.     14.7          18.8         73.1            99.2
+       4   426.     14.8          18.8         73.1            99.2
+       5   426.     14.9          18.9         73.1            99.2
+       6   426.     14.9          18.9         73.1            99.2
+       7   426.     15.1          18.9         73.1            99.2
+       8   426.     15.2          19.0         73.1            99.2
+       9   426.     15.3          19.0         73.1            99.2
+      10   426.     15.4          19.0         73.1            99.2
+      # i 1,655 more rows
+      # i 28 more variables: f_datetime <dttm>, f_start <dttm>, f_fluxID <fct>,
+      #   site <dbl>, elevation <dbl>, aspect <chr>, plot <dbl>, day_night <chr>,
+      #   measurement <chr>, redo <lgl>, plot_id <chr>, par <dbl>, f_end <dttm>,
+      #   f_time <dbl>, n_conc <int>, f_flag_fit <chr>, f_cut <fct>,
+      #   corrected_for_water_vapor <chr>, f_time_cut <dbl>, f_fit <dbl>,
+      #   f_slope <dbl>, f_rsquared <dbl>, f_adj_rsquared <dbl>, f_pvalue <dbl>, ...
+

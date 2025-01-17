@@ -52,8 +52,8 @@ pftc7_segmented_short_expected <- pftc7_segmented_short |>
     ) |>
     flux_quality(par_threshold = 650,
   sign_str_threshold = 95,
-  pvalue_threshold = 0,
-  rsquared_threshold = 0,
+  pvalue_threshold = 0.05,
+  rsquared_threshold = 0.7,
   sd_threshold = 1,
   ratio_threshold = 0) |>
     arrange(f_datetime) |>
