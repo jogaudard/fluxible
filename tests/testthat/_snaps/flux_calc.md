@@ -207,3 +207,34 @@
        $ flux          : num [1:6] 95.6 52.4 18.6 69.4 89.9 ...
        $ model         : chr [1:6] "exponential" "exponential" "exponential" "exponential" ...
 
+# flux_calc works with segmentation tool
+
+    Code
+      dplyr::select(flux_calc(slopes_pftc7_flags, slope_col = "f_mean_slope_corr",
+        conc_unit = "ppm", flux_unit = "mmol", temp_air_col = "temperature_c",
+        chamber_volume = 2197, tube_volume = 0, plot_area = 1.44), f_fluxID,
+      volume_setup, temp_air_ave, plot_area, flux, model)
+    Message
+      Averaging air temperature for each flux...
+      Calculating fluxes...
+      R constant set to 0.082057
+      Concentration was measured in ppm
+      Fluxes are in mmol/m2/h
+    Output
+      # A tibble: 13 x 6
+         f_fluxID                     volume_setup temp_air_ave plot_area   flux model
+         <fct>                               <dbl>        <dbl>     <dbl>  <dbl> <chr>
+       1 5_2800_east_1_day_photo.txt          2197         23.0      1.44   3.46 segm~
+       2 5_2800_east_2_day_photo.txt          2197         23.0      1.44   5.96 segm~
+       3 5_2800_east_3_day_photo.txt          2197         22.9      1.44  11.6  segm~
+       4 5_2800_east_4_day_photo.txt          2197         22.2      1.44   0    segm~
+       5 5_2800_east_5_day_photo.txt          2197         19.7      1.44 -19.7  segm~
+       6 5_2800_east_5_day_redo_phot~         2197         19.6      1.44  -6.78 segm~
+       7 5_2800_west_1_day_photo.txt          2197         20.9      1.44 -11.1  segm~
+       8 5_2800_west_2_day_photo.txt          2197         21.7      1.44   0    segm~
+       9 5_2800_west_2_day_redo_phot~         2197         22.0      1.44 -13.2  segm~
+      10 5_2800_west_3_day_photo.txt          2197         21.2      1.44   0    segm~
+      11 5_2800_west_3_day_redo_phot~         2197         20.5      1.44  -9.85 segm~
+      12 5_2800_west_4_day_redo_phot~         2197         20.9      1.44  34.5  segm~
+      13 5_2800_west_5_day_photo.txt          2197         18.7      1.44  -6.12 segm~
+

@@ -61,3 +61,5 @@ slopes_pftc7 <- flux_fitting(
     )
 usethis::use_data(slopes_pftc7, overwrite = TRUE)
 
+slopes_pftc7_flags <- flux_quality(slopes_pftc7)
+usethis::use_data(slopes_pftc7_flags, overwrite = TRUE)
