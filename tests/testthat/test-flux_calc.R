@@ -208,7 +208,7 @@ test_that("flux_calc works with segmentation tool", {
       conc_unit = "ppm",
       flux_unit = "mmol",
       temp_air_col = "temperature_c",
-      chamber_volume = 2197,
+      chamber_volume = 1728,
       tube_volume = 0,
       plot_area = 1.44
       ) |>

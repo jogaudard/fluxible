@@ -79,7 +79,8 @@ test_that("segmentation tool", {
       f_fluxID = "file_name",
       f_rsquared = "f_rsq",
       f_adj_rsquared = "f_rsq_adj",
-      f_pvalue = "f_pval"
+      f_pvalue = "f_pval",
+      f_par = "par"
     ) |>
     group_by(f_fluxID) |>
     mutate(
@@ -89,9 +90,7 @@ test_that("segmentation tool", {
     ) |>
     ungroup() |>
     arrange(f_datetime) |>
-    select(par, f_datetime, f_fluxID, f_mean_slope
-    #  f_rsquared, f_adj_rsquared, f_pvalue,
-      ) |>
+    select(f_par, f_datetime, f_fluxID, f_mean_slope) |>
        data.frame()
 
     pftc7_short_segmented_test <- pftc7_short |>
@@ -121,10 +120,7 @@ test_that("segmentation tool", {
   sd_threshold = 1,
   ratio_threshold = 0) |>
     arrange(f_datetime) |>
-    select(par, f_datetime, f_fluxID, f_mean_slope
-    #  f_rsquared, f_adj_rsquared, f_pvalue,
-      # f_cut # f_cut is not exactly the same because in the new workflow the discard happens later
-      ) |>
+    select(f_par, f_datetime, f_fluxID, f_mean_slope) |>
     data.frame()
 
   expect_equal(
@@ -205,6 +201,111 @@ test_that("segmentation tool snapshot", {
 })
 
 # segmentation without par
+
+test_that("fitting segment works without par", {
+
+  test_data <- pftc7_short |>
+    dplyr::select(!par)
+
+  expect_snapshot(
+    flux_fitting(
+      conc_df = test_data,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      # par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    ) |>
+      dplyr::select(
+        f_fluxID,
+        f_slope,
+        f_rsquared,
+        f_adj_rsquared,
+        f_pvalue,
+        f_segment_length
+      ) |>
+      dplyr::distinct()
+  )
+})
+
 # segmentation without signal strength
+
+test_that("fitting segment works without signal strength", {
+
+  test_data <- pftc7_short |>
+    dplyr::select(!signal_strength)
+
+  expect_snapshot(
+    flux_fitting(
+      conc_df = test_data,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      # signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    ) |>
+      dplyr::select(
+        f_fluxID,
+        f_slope,
+        f_rsquared,
+        f_adj_rsquared,
+        f_pvalue,
+        f_segment_length
+      ) |>
+      dplyr::distinct()
+  )
+})
+
 # segmentation without h20
+
+test_that("fitting segment works without h2o concentration", {
+
+  test_data <- pftc7_short |>
+    dplyr::select(!h2o_conc)
+
+  expect_snapshot(
+    flux_fitting(
+      conc_df = test_data,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      # h2o_col = "h2o_conc",
+      signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = FALSE,
+      min_seg_length = 30
+    ) |>
+      dplyr::select(
+        f_fluxID,
+        f_slope,
+        f_rsquared,
+        f_adj_rsquared,
+        f_pvalue,
+        f_segment_length
+      ) |>
+      dplyr::distinct()
+  )
+})
+
 # segmentation with chamber data

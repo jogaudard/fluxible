@@ -30,32 +30,57 @@ flux_fitting_segment <- function(
     conc_df,
     start_cut,
     end_cut,
-    # start_col,
-    # end_col,
-    # signal_strength_tresh = c(),
-    # par_thresh = c(),
-    # conc_col,  # Parameter to analyze, default is CO2
-    par_col,  # Column name for PAR in flux_df
-    # datetime_col,  # Column name for datetime in flux_df
-    # co2_col = "co2_conc",  # Column name for CO2 concentration in flux_df
-    h2o_col,  # Column name for H2O concentration in flux_df
-    signal_strength_col,  # Column name for signal strength in flux_df
-    # flux_type_col = "measurement",  # Column name for flux type in flux_df
-    # day_night_col = "day_night",
-    # fluxid_col,
-    # start_time_col = "start_time",
-    # min_length = 60,  # minimum flux length 
-    # skip = 7, #number of rows to skip from each flux measurement, 
+    par_col,
+    h2o_col,
+    signal_strength_col,
     h2o_correction,
     min_seg_length
 ) {
 
-  # if (!is.na(((signal_strength_col)))) {
-  #   conc_df <- conc_df |>
-  #   rename(
-  #     signal_strength = all_of((signal_strength_col))
-  #   )
-  # }
+  if (!is.null(((signal_strength_col)))) {
+    conc_df <- conc_df |>
+    rename(
+      f_signal_strength = all_of(((signal_strength_col)))
+    )
+  }
+  
+
+  if (is.null(((signal_strength_col)))) {
+    conc_df <- conc_df |>
+      mutate(
+        f_signal_strength = NA_real_
+      )
+  }
+
+  if (!is.null(((par_col)))) {
+    conc_df <- conc_df |>
+    rename(
+      f_par = all_of(((par_col)))
+    )
+  }
+  
+
+  if (is.null(((par_col)))) {
+    conc_df <- conc_df |>
+      mutate(
+        f_par = NA_real_
+      )
+  }
+
+  if (!is.null(((h2o_col)))) {
+    conc_df <- conc_df |>
+    rename(
+      f_h2o = all_of(((h2o_col)))
+    )
+  }
+  
+
+  if (is.null(((h2o_col)))) {
+    conc_df <- conc_df |>
+      mutate(
+        f_h2o = NA_real_
+      )
+  }
 
   # if (!is.na(((par_col)))) {
   #   conc_df <- conc_df |>
@@ -74,14 +99,7 @@ flux_fitting_segment <- function(
   # if (is.na(((h2o_col)))) {
   #   h2o_correction <- FALSE
   # }
-# maybe par, signal strenght and h2o are mandatory for that one?
-conc_df <- conc_df |>
-rename(
-  h2o_conc = all_of(((h2o_col))),
-  par = all_of(((par_col))),
-  signal_strength = all_of(((signal_strength_col)))
-)
-  
+
   
   
   # if(is.null(flux_df)){print("Please provide a dataframe with gas concentrations")}
@@ -180,7 +198,7 @@ message("Cutting measurements...")
       ),
       f_cut = as_factor(.data$f_cut),
       f_conc = case_when(
-              h2o_correction == TRUE ~ f_conc / (1 - (h2o_conc / 1000)),
+              h2o_correction == TRUE ~ f_conc / (1 - (f_h2o / 1000)),
               h2o_correction == FALSE ~ f_conc
             ),
       corrected_for_water_vapor = case_when(
@@ -236,7 +254,7 @@ message("Cutting measurements...")
       n_conc_cut = sum(!is.na(.data$f_conc))
     ) |>
     ungroup() |>
-    select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "h2o_conc", "par", "signal_strength")))
+    select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "f_h2o", "f_par", "f_signal_strength")))
     
     # # Determine PAR values; if no PAR data is available or if it's a respiration measurement, set PAR to threshold + 1
     # if(check_night_resp == TRUE | sum(is.na(dt_sub[[par_col]])) == nrow(dt_sub)){ 
@@ -405,8 +423,8 @@ pb <- progress_bar$new(
         dt_sub[s1:s2, ]$f_rsquared <- as.numeric(summary(linear.fit)$r.sq)
         dt_sub[s1:s2, ]$f_adj_rsquared <- as.numeric(summary(linear.fit)$adj.r.squared)
         dt_sub[s1:s2, ]$f_pvalue <- as.numeric(summary(linear.fit)$coefficients["time_m", 4])
-        dt_sub[s1:s2, ]$f_par_seg <- mean(dt_sub$par[s1:s2])
-        dt_sub[s1:s2, ]$f_sign_str_seg <- mean(dt_sub$signal_strength[s1:s2])
+        dt_sub[s1:s2, ]$f_par_seg <- mean(dt_sub$f_par[s1:s2])
+        dt_sub[s1:s2, ]$f_sign_str_seg <- mean(dt_sub$f_signal_strength[s1:s2])
         dt_sub[s1:s2, ]$f_segment_id <- paste0("segment_", s)
         # dt_sub[s1:s2, ]$f_segment_length <- difftime(dt_sub$f_time_cut[s2], dt_sub$f_time_cut[s1], units = "secs")
         dt_sub[s1:s2, ]$f_segment_length <- length(time_m)
@@ -414,7 +432,7 @@ pb <- progress_bar$new(
         
         # use case when
         if(h2o_correction == TRUE){
-          dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)*(1 - (mean(dt_sub$h2o_conc[s1:s2]) / 1000)) 
+          dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)*(1 - (mean(dt_sub$f_h2o[s1:s2]) / 1000)) 
         }else if(h2o_correction == FALSE){
           dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)
           }
@@ -450,7 +468,7 @@ pb <- progress_bar$new(
         f_fluxID = as.factor(.data$f_fluxID),
         f_cut = as.factor(.data$f_cut)
       ) |>
-      select(!c("par", "signal_strength", "h2o_conc"))
+      select(!c("f_par", "f_signal_strength", "f_h2o"))
       # select("f_fluxID", "f_datetime", "f_conc", "f_cut", "f_slope")
 
   conc_df <- conc_df |>
