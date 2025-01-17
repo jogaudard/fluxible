@@ -7,6 +7,8 @@ flux_quality_segment <- function(slopes_df,
                                  pvalue_col,
                                  rsquared_col,
                                  f_flag_fit_col,
+                                 par_col,
+                                 sign_str_col,
                                  par_threshold,
                                  sign_str_threshold,
                                  pvalue_threshold,
@@ -41,7 +43,9 @@ flux_quality_segment <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     rename(
-      f_flag_fit = all_of(((f_flag_fit_col)))
+      f_flag_fit = all_of(((f_flag_fit_col))),
+      f_par_seg = all_of(((par_col))),
+      f_sign_str_seg = all_of(((sign_str_col)))
     )
 
   quality_flag <- slopes_df |>
@@ -59,9 +63,9 @@ flux_quality_segment <- function(slopes_df,
           .data$f_sign_str_seg <= ((sign_str_threshold)) ~ "discard", # we should keep just ok and discard here, makes it easier for plotting
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
-          .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
+          .data$f_pvalue <= ((pvalue_threshold)) ~ "discard",
         .data$f_rsquared < ((rsquared_threshold)) &
-          .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
+          .data$f_pvalue > ((pvalue_threshold)) ~ "zero"
       ),
       f_slope_corr = case_when(
         # .data$f_quality_flag_seg == "low_par" ~ NA_real_,

@@ -63,3 +63,21 @@ usethis::use_data(slopes_pftc7, overwrite = TRUE)
 
 slopes_pftc7_flags <- flux_quality(slopes_pftc7)
 usethis::use_data(slopes_pftc7_flags, overwrite = TRUE)
+
+slopes_pftc7_nopar <- pftc7_short |>
+  dplyr::select(!par) |>
+  flux_fitting(
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    )
+usethis::use_data(slopes_pftc7_nopar, overwrite = TRUE)
