@@ -191,7 +191,16 @@ test_that("segmentation tool snapshot", {
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
-    )
+    ) |>
+      dplyr::select(
+        f_fluxID,
+        f_slope,
+        f_rsquared,
+        f_adj_rsquared,
+        f_pvalue,
+        f_segment_length
+      ) |>
+      dplyr::distinct()
   )
 })
 

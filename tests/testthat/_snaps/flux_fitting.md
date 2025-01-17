@@ -151,11 +151,12 @@
 # segmentation tool snapshot
 
     Code
-      flux_fitting(conc_df = pftc7_short, fit_type = "segments", start_col = "start_time",
-        end_col = "f_end", start_cut = 0, end_cut = 0, conc_col = "co2_conc",
-        par_col = "par", datetime_col = "date_time", h2o_col = "h2o_conc",
+      dplyr::distinct(dplyr::select(flux_fitting(conc_df = pftc7_short, fit_type = "segments",
+        start_col = "start_time", end_col = "f_end", start_cut = 0, end_cut = 0,
+        conc_col = "co2_conc", par_col = "par", datetime_col = "date_time", h2o_col = "h2o_conc",
         signal_strength_col = "signal_strength", fluxid_col = "file_name",
-        h2o_correction = TRUE, min_seg_length = 30)
+        h2o_correction = TRUE, min_seg_length = 30), f_fluxID, f_slope, f_rsquared,
+      f_adj_rsquared, f_pvalue, f_segment_length))
     Message
       Cutting measurements...
       Starting segmentation...
@@ -188,24 +189,18 @@
                                                                                     
       
     Output
-      # A tibble: 1,665 x 33
-         f_conc h2o_conc temperature_c pressure_kpa signal_strength
-          <dbl>    <dbl>         <dbl>        <dbl>           <dbl>
-       1   426.     14.3          18.7         73.1            99.2
-       2   426.     14.5          18.8         73.1            99.3
-       3   426.     14.7          18.8         73.1            99.2
-       4   426.     14.8          18.8         73.1            99.2
-       5   426.     14.9          18.9         73.1            99.2
-       6   426.     14.9          18.9         73.1            99.2
-       7   426.     15.1          18.9         73.1            99.2
-       8   426.     15.2          19.0         73.1            99.2
-       9   426.     15.3          19.0         73.1            99.2
-      10   426.     15.4          19.0         73.1            99.2
-      # i 1,655 more rows
-      # i 28 more variables: f_datetime <dttm>, f_start <dttm>, f_fluxID <fct>,
-      #   site <dbl>, elevation <dbl>, aspect <chr>, plot <dbl>, day_night <chr>,
-      #   measurement <chr>, redo <lgl>, plot_id <chr>, par <dbl>, f_end <dttm>,
-      #   f_time <dbl>, n_conc <int>, f_flag_fit <chr>, f_cut <fct>,
-      #   corrected_for_water_vapor <chr>, f_time_cut <dbl>, f_fit <dbl>,
-      #   f_slope <dbl>, f_rsquared <dbl>, f_adj_rsquared <dbl>, f_pvalue <dbl>, ...
+      # A tibble: 51 x 6
+         f_fluxID         f_slope f_rsquared f_adj_rsquared  f_pvalue f_segment_length
+         <fct>              <dbl>      <dbl>          <dbl>     <dbl>            <dbl>
+       1 5_2800_east_5_d~  0.0767     0.688          0.677   1.49e- 8               30
+       2 5_2800_east_5_d~  0.186      0.988          0.988   3.28e-46               48
+       3 5_2800_east_5_d~ -0.0863     0.960          0.959   9.07e-32               45
+       4 5_2800_east_5_d~ NA         NA             NA      NA                      NA
+       5 5_2800_east_5_d~ -0.0882     0.973          0.973   2.78e-32               41
+       6 5_2800_east_5_d~  0.0548     0.619          0.606   1.55e- 7               31
+       7 5_2800_east_5_d~ -0.0158     0.520          0.510   3.43e- 9               50
+       8 5_2800_east_5_d~ NA         NA             NA      NA                      NA
+       9 5_2800_east_4_d~ -0.0367     0.0774         0.0708  8.34e- 4              141
+      10 5_2800_east_4_d~  1.99       0.0806         0.0551  8.40e- 2               38
+      # i 41 more rows
 

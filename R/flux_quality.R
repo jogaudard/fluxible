@@ -78,9 +78,9 @@ flux_quality <- function(slopes_df,
                          rmse_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1,
-                         par_threshold = c(),
-                         sign_str_threshold = c(),
-                         sd_threshold = c(),
+                         par_threshold = 600,
+                         sign_str_threshold = 95,
+                         sd_threshold = 1,
                          cut_arg = "cut") {
   args_ok <- flux_fun_check(list(
     ambient_conc = ((ambient_conc)),

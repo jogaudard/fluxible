@@ -22,3 +22,14 @@ test_that("works for quadratic fitting", {
     )
   )
 })
+
+test_that("segmentation tool", {
+  expect_snapshot(
+    flux_quality(slopes_pftc7
+    ) |>
+    select(
+      f_fluxID, f_mean_slope, f_mean_slope_corr, f_quality_flag, f_sd_slope
+      ) |>
+    dplyr::distinct()
+  )
+})

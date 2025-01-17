@@ -109,3 +109,37 @@
       #   f_fit_slope <dbl>, f_n_conc <int>, f_ratio <dbl>, f_flag_ratio <chr>,
       #   f_start_error <chr>, f_quality_flag <chr>, f_slope_corr <dbl>
 
+# segmentation tool
+
+    Code
+      dplyr::distinct(select(flux_quality(slopes_pftc7), f_fluxID, f_mean_slope,
+      f_mean_slope_corr, f_quality_flag, f_sd_slope))
+    Message
+      
+       Total number of measurements: 13
+      
+       ok 	 12 	 92 %
+       zero 	 1 	 8 %
+       discard 	 0 	 0 %
+       weird_flux 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+    Output
+      # A tibble: 13 x 5
+         f_fluxID             f_mean_slope f_mean_slope_corr f_quality_flag f_sd_slope
+         <fct>                       <dbl>             <dbl> <chr>               <dbl>
+       1 5_2800_east_5_day_p~      -0.0863           -0.0863 ok                NA     
+       2 5_2800_east_5_day_r~      -0.0297           -0.0297 ok                 0.0511
+       3 5_2800_east_4_day_p~       0                 0      zero               0     
+       4 5_2800_east_3_day_p~       0.0515            0.0515 ok                 0.0639
+       5 5_2800_east_2_day_p~       0.0264            0.0264 ok                 0.0283
+       6 5_2800_east_1_day_p~       0.0153            0.0153 ok                 0.0305
+       7 5_2800_west_1_day_p~      -0.0486           -0.0486 ok                 0.0638
+       8 5_2800_west_2_day_p~       0                 0      ok                NA     
+       9 5_2800_west_2_day_r~      -0.0582           -0.0582 ok                NA     
+      10 5_2800_west_3_day_p~       0                 0      ok                NA     
+      11 5_2800_west_3_day_r~      -0.0432           -0.0432 ok                 0.0408
+      12 5_2800_west_4_day_r~       0.151             0.151  ok                NA     
+      13 5_2800_west_5_day_p~      -0.0267           -0.0267 ok                 0.0721
+
