@@ -200,7 +200,6 @@ test_that("segmentation tool snapshot", {
   )
 })
 
-# segmentation without par
 
 test_that("fitting segment works without par", {
 
@@ -236,7 +235,6 @@ test_that("fitting segment works without par", {
   )
 })
 
-# segmentation without signal strength
 
 test_that("fitting segment works without signal strength", {
 
@@ -272,7 +270,6 @@ test_that("fitting segment works without signal strength", {
   )
 })
 
-# segmentation without h20
 
 test_that("fitting segment works without h2o concentration", {
 
@@ -305,6 +302,33 @@ test_that("fitting segment works without h2o concentration", {
         f_segment_length
       ) |>
       dplyr::distinct()
+  )
+})
+
+test_that("error on col format", {
+
+  test_data <- pftc7_short |>
+    dplyr::mutate(
+      h2o_conc = "humide"
+    )
+
+  expect_error(
+    flux_fitting(
+      conc_df = test_data,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      signal_strength_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = FALSE,
+      min_seg_length = 30
+    )
   )
 })
 

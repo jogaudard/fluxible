@@ -1,3 +1,7 @@
+# fluxible 0.0.5
+
+* Error corrected: `zero` and `discard` quality flags were inverted in `flux_quality` when using the linear model.
+
 # fluxible 0.0.4
 
 * flux_gep function to calculate GEP

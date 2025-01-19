@@ -22,162 +22,136 @@
 #' @importFrom cowplot
 #' @importFrom sarima
 #' @importFrom data.table
-#' flag cut/keep indicating if the row is used in a segment or not (needed for plotting)
-#' ideally flux_segment would be integrated in flux_fitting as an option
 
 
 flux_fitting_segment <- function(
-    conc_df,
-    start_cut,
-    end_cut,
-    par_col,
-    h2o_col,
-    signal_strength_col,
-    h2o_correction,
-    min_seg_length
+  conc_df,
+  start_cut,
+  end_cut,
+  par_col,
+  h2o_col,
+  signal_strength_col,
+  h2o_correction,
+  min_seg_length
 ) {
 
+args_ok_seg <- flux_fun_check(list(
+    h2o_correction = ((h2o_correction)),
+    min_seg_length = ((min_seg_length))
+  ),
+  fn = list(is.logical, is.numeric),
+  msg = c("has to be a logical", "has to be numeric"))
+
   if (!is.null(((signal_strength_col)))) {
+
+    sign_str_check <- conc_df |>
+      select(
+        all_of(((signal_strength_col)))
+      )
+
+    sign_str_ok <- flux_fun_check(sign_str_check,
+                                 fn = list(is.numeric),
+                                 msg = c("has to be numeric"),
+                                 origdf = conc_df)
+
     conc_df <- conc_df |>
-    rename(
-      f_signal_strength = all_of(((signal_strength_col)))
-    )
+      rename(
+        f_signal_strength = all_of(((signal_strength_col)))
+      )
   }
-  
 
   if (is.null(((signal_strength_col)))) {
     conc_df <- conc_df |>
       mutate(
         f_signal_strength = NA_real_
       )
+    message("f_signal_strength column added")
+    sign_str_ok <- TRUE
   }
 
   if (!is.null(((par_col)))) {
+
+    par_check <- conc_df |>
+      select(
+        all_of(((par_col)))
+      )
+
+    par_ok <- flux_fun_check(par_check,
+                                 fn = list(is.numeric),
+                                 msg = c("has to be numeric"),
+                                 origdf = conc_df)
+
     conc_df <- conc_df |>
-    rename(
-      f_par = all_of(((par_col)))
-    )
+      rename(
+        f_par = all_of(((par_col)))
+      )
   }
-  
 
   if (is.null(((par_col)))) {
     conc_df <- conc_df |>
       mutate(
         f_par = NA_real_
       )
+    message("f_par column added")
+    par_ok <- TRUE
   }
 
   if (!is.null(((h2o_col)))) {
+
+    h2o_check <- conc_df |>
+      select(
+        all_of(((h2o_col)))
+      )
+
+    h2o_ok <- flux_fun_check(h2o_check,
+                                 fn = list(is.numeric),
+                                 msg = c("has to be numeric"),
+                                 origdf = conc_df)
+
     conc_df <- conc_df |>
-    rename(
-      f_h2o = all_of(((h2o_col)))
-    )
+      rename(
+        f_h2o_conc = all_of(((h2o_col)))
+      )
   }
-  
 
   if (is.null(((h2o_col)))) {
     conc_df <- conc_df |>
       mutate(
-        f_h2o = NA_real_
+        f_h2o_conc = NA_real_
       )
+    message("f_h2o_conc column added")
+    h2o_ok <- TRUE
   }
 
-  # if (!is.na(((par_col)))) {
-  #   conc_df <- conc_df |>
-  #   rename(
-  #     par = all_of((par_col))
+  
+
+  # conc_df_check <- conc_df |>
+  #   select(
+  #     all_of(((par_col))),
+  #     all_of(((h2o_col))),
+  #     all_of(((signal_strength_col)))
   #   )
-  # }
 
-  # if (!is.na(((h2o_col)))) {
-  #   conc_df <- conc_df |>
-  #   rename(
-  #     h2o_conc = all_of((h2o_col))
-  #   )
-  # }
+  # conc_df_ok <- flux_fun_check(conc_df_check,
+  #                              fn = list(
+  #                                is.numeric,
+  #                                is.numeric,
+  #                                is.numeric
+  #                              ),
+  #                              msg = rep(
+  #                                "has to be numeric", 3
+  #                              ),
+  #                              origdf = conc_df)
 
-  # if (is.na(((h2o_col)))) {
-  #   h2o_correction <- FALSE
-  # }
 
-  
-  
-  # if(is.null(flux_df)){print("Please provide a dataframe with gas concentrations")}
-  
+  if (any(!c(args_ok_seg, sign_str_ok, par_ok, h2o_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
   segmented_fluxes <- tibble()
-  
-  # flux <- "data/rawData/LI7500/LI7500_Site 5//5_2800_west_5_day_photo.txt"
-  # Loop through each unique flux measurement file_name in the flux data frame
-  
-  ####flux <- t[3]
-  # for(flux in unique(flux_df[[flux_id_col]])){
-    
-  #   if(is.na(flux)){next}  # Skip if the flux file_name is NA
-    
-  #   # Subset the flux data frame for the current file_name and keep distinct rows
-  #   dt_sub <- flux_df[flux_df[[flux_id_col]] == {{flux}}, ] %>% unique()
-    
-  #   if(nrow(dt_sub) < min_length + skip){
-  #     print(paste0("Flux ", flux, " is too short (", nrow(dt_sub), " rows). Let's skip this one."))
-      
-  #     next
-  #   }  # Skip if n is too small 
-    # this should be a warning at the end of the process
 
-    
-    # Get the unique flux type from the subset data
-    # flux_type <- unique(dt_sub[[flux_type_col]]) #%>% pull()
-    
-    # If more than one flux type is found, get the mode to select the more common one 
-    # if(length(flux_type) > 1){
-      
-      # print(paste0("Warning: more than one flux type detected for flux with id: ", flux))
-      
-      # table(dt_sub[[flux_type_col]])  
-      
-    #   Mode <- function(x, na.rm = TRUE) {
-    #     if(na.rm){x = x[!is.na(x)]}
-    #     ux <- unique(x)  
-    #     return(ux[which.max(tabulate(match(x, ux)))])  # Return the most frequent value (mode)
-    #   }
-      
-    #   flux_type <- Mode(dt_sub[[flux_type_col]])  # Assign mode to flux_type
-    #   # this should usually not be necessary 
-    # }
-    
-    # # Skip if the flux type is ambient measurements
-    # if(flux_type == "a"){next} 
-    
-    # # Define ambient measurement for comparison
-    
-    # # Check if the measurement is a night measurement or respiration
-    # check_night_resp <- FALSE
-    
-    # if(grepl("resp", flux, fixed = TRUE)){ 
-    #   check_night_resp <- TRUE 
-    # }
-    
-    # if(grepl("resp", unique(dt_sub[[flux_type_col]]))){ 
-    #   check_night_resp <- TRUE 
-    # }
-    
-    
-    # ## remove first rows of the flux 
-    
-    # dt_sub <- dt_sub[!1:skip, ]
-    
-    
-    ## Define parameters for calculations
-    # R <- 8.314472  # Universal gas constant in J/(K·mol)
-    
-    # Prepare variables for calculations
-    # time <- as.numeric(dt_sub[[date_time_col]]) - min(as.numeric(dt_sub[[date_time_col]]))  # Time since the start of the measurement
-    # co2 <- as.numeric(dt_sub[[co2_col]])  # CO2 concentration
-    # h2o <- as.numeric(dt_sub[[h2o_col]])  # H2O concentration
+  message("Cutting measurements...")
 
-message("Cutting measurements...")
-
-    conc_df <- conc_df |>
+  conc_df <- conc_df |>
     group_by(.data$f_fluxID) |>
     mutate(
       f_time = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
@@ -189,7 +163,8 @@ message("Cutting measurements...")
       f_end = .data$f_end - ((end_cut)),
       n_conc = sum(!is.na(.data$f_conc)),
       f_flag_fit = case_when(
-        ((min_seg_length)) > ((.data$n_conc - ((start_cut)) - ((end_cut))) / 2) ~ "too short",
+        ((min_seg_length)) >
+          ((.data$n_conc - ((start_cut)) - ((end_cut))) / 2) ~ "too short",
       ),
       f_cut = case_when(
         .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end
@@ -198,9 +173,9 @@ message("Cutting measurements...")
       ),
       f_cut = as_factor(.data$f_cut),
       f_conc = case_when(
-              h2o_correction == TRUE ~ f_conc / (1 - (f_h2o / 1000)),
-              h2o_correction == FALSE ~ f_conc
-            ),
+        h2o_correction == TRUE ~ f_conc / (1 - (f_h2o_conc / 1000)),
+        h2o_correction == FALSE ~ f_conc
+      ),
       corrected_for_water_vapor = case_when(
               h2o_correction == TRUE ~ "yes",
               h2o_correction == FALSE ~ "no"
@@ -254,7 +229,7 @@ message("Cutting measurements...")
       n_conc_cut = sum(!is.na(.data$f_conc))
     ) |>
     ungroup() |>
-    select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "f_h2o", "f_par", "f_signal_strength")))
+    select(any_of(c("f_fluxID", "f_conc", "f_datetime", "f_time_cut", "f_h2o_conc", "f_par", "f_signal_strength")))
     
     # # Determine PAR values; if no PAR data is available or if it's a respiration measurement, set PAR to threshold + 1
     # if(check_night_resp == TRUE | sum(is.na(dt_sub[[par_col]])) == nrow(dt_sub)){ 
@@ -432,7 +407,7 @@ pb <- progress_bar$new(
         
         # use case when
         if(h2o_correction == TRUE){
-          dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)*(1 - (mean(dt_sub$f_h2o[s1:s2]) / 1000)) 
+          dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)*(1 - (mean(dt_sub$f_h2o_conc[s1:s2]) / 1000)) 
         }else if(h2o_correction == FALSE){
           dt_sub[s1:s2, ]$f_fit <- predict(linear.fit)
           }
@@ -468,7 +443,7 @@ pb <- progress_bar$new(
         f_fluxID = as.factor(.data$f_fluxID),
         f_cut = as.factor(.data$f_cut)
       ) |>
-      select(!c("f_par", "f_signal_strength", "f_h2o"))
+      select(!c("f_par", "f_signal_strength", "f_h2o_conc"))
       # select("f_fluxID", "f_datetime", "f_conc", "f_cut", "f_slope")
 
   conc_df <- conc_df |>
