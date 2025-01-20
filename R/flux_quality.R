@@ -11,9 +11,9 @@
 #' @param fluxid_col column containing unique IDs for each flux
 #' @param slope_col column containing the slope of each flux
 #' (as calculated by the flux_fitting function)
-#' @param weird_fluxes_id vector of fluxIDs that should be discarded
+#' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
-#' @param force_ok_id vector of fluxIDs for which the user wants to keep
+#' @param force_ok vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
 #' @param ratio_threshold ratio of gas concentration data points over length of
 #' measurement (in seconds) below which the measurement will be considered as
@@ -63,8 +63,8 @@ flux_quality <- function(slopes_df,
                          fluxid_col = "f_fluxID",
                          slope_col = "f_slope",
                          f_flag_fit_col = "f_flag_fit",
-                         weird_fluxes_id = c(),
-                         force_ok_id = c(),
+                         force_discard = c(),
+                         force_ok = c(),
                          ratio_threshold = 0,
                          pvalue_col = "f_pvalue",
                          rsquared_col = "f_rsquared",
@@ -169,8 +169,8 @@ flux_quality <- function(slopes_df,
   if (((fit_type)) == "exponential") {
     quality_flag <- flux_quality_exp(
       ((slopes_df)),
-      weird_fluxes_id = ((weird_fluxes_id)),
-      force_ok_id = ((force_ok_id)),
+      force_discard = ((force_discard)),
+      force_ok = ((force_ok)),
       b_col = ((b_col)),
       rmse_threshold = ((rmse_threshold)),
       cor_threshold = ((cor_threshold)),
@@ -182,8 +182,8 @@ flux_quality <- function(slopes_df,
   if (((fit_type)) %in% c("linear", "quadratic")) {
     quality_flag <- flux_quality_lm(
       ((slopes_df)),
-      weird_fluxes_id = ((weird_fluxes_id)),
-      force_ok_id = ((force_ok_id)),
+      force_discard = ((force_discard)),
+      force_ok = ((force_ok)),
       pvalue_col = ((pvalue_col)),
       rsquared_col = ((rsquared_col)),
       pvalue_threshold = ((pvalue_threshold)),
@@ -205,8 +205,8 @@ flux_quality <- function(slopes_df,
       sign_str_threshold = ((sign_str_threshold)),
       sd_threshold = ((sd_threshold)),
       cut_arg = ((cut_arg)),
-      weird_fluxes_id = ((weird_fluxes_id)),
-      force_ok_id = ((force_ok_id))
+      force_discard = ((force_discard)),
+      force_ok = ((force_ok))
     )
   }
 

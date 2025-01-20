@@ -12,8 +12,8 @@ flux_quality(
   fluxid_col = "f_fluxID",
   slope_col = "f_slope",
   f_flag_fit_col = "f_flag_fit",
-  weird_fluxes_id = c(),
-  force_ok_id = c(),
+  force_discard = c(),
+  force_ok = c(),
   ratio_threshold = 0,
   pvalue_col = "f_pvalue",
   rsquared_col = "f_rsquared",
@@ -27,9 +27,11 @@ flux_quality(
   rmse_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1,
-  par_threshold = c(),
-  sign_str_threshold = c(),
-  sd_threshold = c(),
+  par_col = "f_par_seg",
+  sign_str_col = "f_sign_str_seg",
+  par_threshold = 600,
+  sign_str_threshold = 95,
+  sd_threshold = 1,
   cut_arg = "cut"
 )
 }
@@ -50,10 +52,10 @@ the starting values indicate a polluted setup}
 \item{slope_col}{column containing the slope of each flux
 (as calculated by the flux_fitting function)}
 
-\item{weird_fluxes_id}{vector of fluxIDs that should be discarded
+\item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}
 
-\item{force_ok_id}{vector of fluxIDs for which the user wants to keep
+\item{force_ok}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
 
 \item{ratio_threshold}{ratio of gas concentration data points over length of
