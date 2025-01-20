@@ -277,9 +277,9 @@ flux_fitting_segment <- function(conc_df,
 
 
       if(h2o_correction == TRUE){
-        dt_sub[s1:s2, ]$f_fit <- predict(linear_fit)
-        *(1 - (mean(dt_sub$f_h2o_conc[s1:s2]) / 1000)
-        )
+        dt_sub[s1:s2, ]$f_fit <- predict(
+          linear_fit
+        ) * (1 - (mean(dt_sub$f_h2o_conc[s1:s2]) / 1000))
         }else if(h2o_correction == FALSE){
           dt_sub[s1:s2, ]$f_fit <- predict(linear_fit)
           }
