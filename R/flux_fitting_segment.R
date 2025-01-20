@@ -1,27 +1,32 @@
 #' Fitting function while accounting for leaks
-#' @description separate fluxes in segments of similar slopes with stable PAR
-#' @param flux_df
-#' @param signal_strength_tresh Threshold for valid signal strength
-#' @param par_thresh Photosynthetically Active Radiation (PAR) threshold
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#' @return a df with modeled gas concentration (NA outside of selected segments)
+#' @description separate measurements in linear segments segments
+#' @param conc_df dataframe of gas concentration over time
+#' @param start_cut time to discard at the start of the measurements
+#' (in seconds)
+#' @param end_cut time to discard at the end of the measurements (in seconds)
+#' @param par_col column containing PAR data (segments; optional).
+#' @param h2o_col column containing water vapour concentration
+#' (segments; optional).
+#' @param signal_strength_col column containing signal strength
+#' (segments; optional).
+#' @param h2o_correction Should the gas concentration be corrected
+#' for water vapor? (logical; segments)
+#' @param min_seg_length minimum length (in seconds) for each segments
+#' (segments). Note that the minimum segment length cannot be longer than half
+#' the length of the measurements.
+#' @return a df with modeled gas concentration in linear segments, with slope,
+#' r squared, adjusted r squared, p-value, average PAR (if provided) and
+#' signal strength (if provided) for each segments.
 #' @importFrom cpop cpop
-#' @importFrom ggplot2
-#' @importFrom dplyr any_of
-#' @importFrom lubridate
-#' @importFrom reshape2
-#' @importFrom cowplot
-#' @importFrom sarima
-#' @importFrom data.table
+#' @importFrom dplyr mutate rename select group_by case_when ungroup arrange
+#' filter distinct pull left_join
+#' @importFrom tidyselect any_of all_of
+#' @importFrom forcats as_factor
+#' @importFrom stringr str_c
+#' @importFrom tidyr drop_na
+#' @importFrom progress progress_bar
+#' @importFrom stats lm predict
+
 
 
 flux_fitting_segment <- function(conc_df,
@@ -29,7 +34,7 @@ flux_fitting_segment <- function(conc_df,
                                  end_cut,
                                  par_col,
                                  h2o_col,
-                                 signal_strength_col,
+                                 sign_str_col,
                                  h2o_correction,
                                  min_seg_length) {
 
@@ -40,11 +45,11 @@ flux_fitting_segment <- function(conc_df,
   fn = list(is.logical, is.numeric),
   msg = c("has to be a logical", "has to be numeric"))
 
-  if (!is.null(((signal_strength_col)))) {
+  if (!is.null(((sign_str_col)))) {
 
     sign_str_check <- conc_df |>
       select(
-        all_of(((signal_strength_col)))
+        all_of(((sign_str_col)))
       )
 
     sign_str_ok <- flux_fun_check(sign_str_check,
@@ -54,16 +59,15 @@ flux_fitting_segment <- function(conc_df,
 
     conc_df <- conc_df |>
       rename(
-        f_signal_strength = all_of(((signal_strength_col)))
+        f_signal_strength = all_of(((sign_str_col)))
       )
   }
 
-  if (is.null(((signal_strength_col)))) {
+  if (is.null(((sign_str_col)))) {
     conc_df <- conc_df |>
       mutate(
         f_signal_strength = NA_real_
       )
-    message("f_signal_strength column added")
     sign_str_ok <- TRUE
   }
 
@@ -90,7 +94,6 @@ flux_fitting_segment <- function(conc_df,
       mutate(
         f_par = NA_real_
       )
-    message("f_par column added")
     par_ok <- TRUE
   }
 
@@ -117,8 +120,8 @@ flux_fitting_segment <- function(conc_df,
       mutate(
         f_h2o_conc = NA_real_
       )
-    message("f_h2o_conc column added")
     h2o_ok <- TRUE
+    h2o_correction <- FALSE
   }
 
 
@@ -184,7 +187,7 @@ flux_fitting_segment <- function(conc_df,
     "\n",
     "there cannot be changepoints."
   )
-  f_warning <- stringr::str_c(short_df, explanation)
+  f_warning <- str_c(short_df, explanation)
 
   if (any(!is.na(conc_df$f_flag_fit))) warning(f_warning)
 
@@ -238,7 +241,7 @@ flux_fitting_segment <- function(conc_df,
     dt_sub <- conc_df_cut |>
       filter(.data$f_fluxID == flux)
 
-    res <- suppressMessages(cpop::cpop(
+    res <- suppressMessages(cpop(
       dt_sub$f_conc, minseglen = ((min_seg_length))
     ))
     f_conc_seg <- cpop::fitted(res)
@@ -260,7 +263,7 @@ flux_fitting_segment <- function(conc_df,
       s1 <- f_conc_seg$x0[s] + 1
       s2 <- f_conc_seg$x1[s] + 1
       time_m <- dt_sub$f_time_cut[s1:s2] - (dt_sub$f_time_cut[s1] - 1)
-      linear_fit <- stats::lm(dt_sub$f_conc[s1:s2] ~ (time_m))
+      linear_fit <- lm(dt_sub$f_conc[s1:s2] ~ (time_m))
 
       dt_sub[s1:s2, ]$f_slope <- as.numeric(linear_fit$coeff[2])
       dt_sub[s1:s2, ]$f_rsquared <- as.numeric(summary(linear_fit)$r.sq)
@@ -276,15 +279,15 @@ flux_fitting_segment <- function(conc_df,
       dt_sub[s1:s2, ]$f_segment_length <- length(time_m)
 
 
-      if(h2o_correction == TRUE){
+      if (h2o_correction == TRUE) {
         dt_sub[s1:s2, ]$f_fit <- predict(
           linear_fit
         ) * (1 - (mean(dt_sub$f_h2o_conc[s1:s2]) / 1000))
-        }else if(h2o_correction == FALSE){
-          dt_sub[s1:s2, ]$f_fit <- predict(linear_fit)
-          }
+      }else if(h2o_correction == FALSE) {
+        dt_sub[s1:s2, ]$f_fit <- predict(linear_fit)
+      }
     }
-    
+
     dt_sub <- dt_sub  |>
       mutate(
         f_cut = case_when(
@@ -292,29 +295,43 @@ flux_fitting_segment <- function(conc_df,
           is.na(f_slope) ~ "cut"
         )
       )
-    
-    
+
     segmented_fluxes <- rbind(dt_sub, segmented_fluxes)
   }
 
   segmented_fluxes_final <- segmented_fluxes |>
-      mutate(
-        f_fluxID = as.factor(.data$f_fluxID),
-        f_cut = as.factor(.data$f_cut)
-      ) |>
-      select(!c("f_par", "f_signal_strength", "f_h2o_conc"))
+    mutate(
+      f_fluxID = as_factor(.data$f_fluxID),
+      f_cut = as_factor(.data$f_cut)
+    ) |>
+    select(!c("f_par", "f_signal_strength", "f_h2o_conc"))
 
   conc_df <- conc_df |>
     mutate(
-      f_fluxID = as.factor(.data$f_fluxID)
+      f_fluxID = as_factor(.data$f_fluxID)
     )
 
   conc_fitting <- conc_df |>
-  left_join(
-    segmented_fluxes_final,
-    by = c("f_fluxID", "f_datetime", "f_conc", "f_cut")
-  ) |>
-  arrange(.data$f_datetime)
+    left_join(
+      segmented_fluxes_final,
+      by = c("f_fluxID", "f_datetime", "f_conc", "f_cut")
+    ) |>
+    arrange(.data$f_datetime)
+
+  if (is.null(((sign_str_col)))) {
+    conc_fitting <- conc_fitting |>
+      select(!c("f_signal_strength"))
+  }
+
+  if (is.null(((par_col)))) {
+    conc_fitting <- conc_fitting |>
+      select(!c("f_par"))
+  }
+
+  if (is.null(((h2o_col)))) {
+    conc_fitting <- conc_fitting |>
+      select(!c("f_h2o_conc"))
+  }
 
   conc_fitting
 }

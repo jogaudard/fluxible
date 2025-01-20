@@ -10,19 +10,39 @@ flux_fitting_segment(
   end_cut,
   par_col,
   h2o_col,
-  signal_strength_col,
+  sign_str_col,
   h2o_correction,
   min_seg_length
 )
 }
 \arguments{
-\item{signal_strength_tresh}{Threshold for valid signal strength}
+\item{conc_df}{dataframe of gas concentration over time}
 
-\item{par_thresh}{Photosynthetically Active Radiation (PAR) threshold}
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
+
+\item{end_cut}{time to discard at the end of the measurements (in seconds)}
+
+\item{par_col}{column containing PAR data (segments; optional).}
+
+\item{h2o_col}{column containing water vapour concentration
+(segments; optional).}
+
+\item{h2o_correction}{Should the gas concentration be corrected
+for water vapor? (logical; segments)}
+
+\item{min_seg_length}{minimum length (in seconds) for each segments
+(segments). Note that the minimum segment length cannot be longer than half
+the length of the measurements.}
+
+\item{signal_strength_col}{column containing signal strength
+(segments; optional).}
 }
 \value{
-a df with modeled gas concentration (NA outside of selected segments)
+a df with modeled gas concentration in linear segments, with slope,
+r squared, adjusted r squared, p-value, average PAR (if provided) and
+signal strength (if provided) for each segments.
 }
 \description{
-separate fluxes in segments of similar slopes with stable PAR
+separate measurements in linear segments segments
 }
