@@ -19,15 +19,15 @@
 #' measurement (in seconds) below which the measurement will be considered as
 #' not having enough data points to be considered for calculations
 #' @param pvalue_col column containing the p-value of each flux
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param rsquared_col column containing the r squared of each flux
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param pvalue_threshold threshold of p-value below which the change of
 #' gas concentration over time is considered not significant
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param rsquared_threshold threshold of r squared value below which
 #' the linear model is considered an unsatisfactory fit
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param conc_col column containing the measured gas concentration
 #' (exponential fit)
 #' @param b_col column containing the b parameter of the exponential expression

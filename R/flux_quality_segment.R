@@ -1,8 +1,30 @@
 #' Quality control for segmented measurements
 #' @description provides quality flags for the segments and entire measurements following the same standards as for the linear model
-#' @param
-
-#' @importFrom dplyr n n_distinct
+#' @param slopes_df dataset containing slopes
+#' @param pvalue_col column containing the p-value of each flux
+#' (linear, quadratic, segment)
+#' @param rsquared_col column containing the r squared of each flux
+#' (linear, quadratic, segment)
+#' @param f_flag_fit_col
+#' @param par_col
+#' @param sign_str_col
+#' @param par_threshold
+#' @param sign_str_threshold
+#' @param pvalue_threshold threshold of p-value below which the change of
+#' gas concentration over time is considered not significant
+#' (linear, quadratic, segment)
+#' @param rsquared_threshold threshold of r squared value below which
+#' the linear model is considered an unsatisfactory fit
+#' (linear, quadratic, segment)
+#' @param sd_threshold
+#' @param cut_arg argument defining that the data point should be cut out
+#' @param force_discard vector of fluxIDs that should be discarded
+#' by the user's decision
+#' @param force_ok vector of fluxIDs for which the user wants to keep
+#' the calculated slope despite a bad quality flag
+#' @importFrom dplyr select rename mutate distinct filter case_when group_by summarise n_distinct ungroup n left_join arrange
+#' @importFrom tidyselect all_of any_of
+#' @importFrom tidyr drop_na
 
 flux_quality_segment <- function(slopes_df,
                                  pvalue_col,
@@ -100,7 +122,7 @@ flux_quality_segment <- function(slopes_df,
       "f_slope",
       "f_segment_length"
     ))) |>
-    unique() |>
+    distinct() |>
     filter(
       .data$f_cut != ((cut_arg))
     ) |>
@@ -127,7 +149,7 @@ flux_quality_segment <- function(slopes_df,
     summarise(
       f_mean_slope = sum(.data$f_slope_corr * .data$f_segment_length) /
         sum(.data$f_segment_length),
-      nb_segments_ok = dplyr::n_distinct(.data$f_segment_id),
+      nb_segments_ok = n_distinct(.data$f_segment_id),
       f_sd_slope = case_when(
         .data$nb_segments_ok < 2 ~ NA_real_,
         .data$nb_segments_ok >= 2 ~ sqrt(sum(
@@ -146,7 +168,7 @@ flux_quality_segment <- function(slopes_df,
     distinct() |>
     group_by(.data$f_fluxID) |>
     mutate(
-      count = dplyr::n()
+      count = n()
     ) |>
     ungroup() |>
     filter(.data$count == 1) |>
