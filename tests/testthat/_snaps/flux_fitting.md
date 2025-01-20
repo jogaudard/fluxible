@@ -154,9 +154,9 @@
       dplyr::distinct(dplyr::select(flux_fitting(conc_df = pftc7_short, fit_type = "segments",
         start_col = "start_time", end_col = "f_end", start_cut = 0, end_cut = 0,
         conc_col = "co2_conc", par_col = "par", datetime_col = "date_time", h2o_col = "h2o_conc",
-        signal_strength_col = "signal_strength", fluxid_col = "file_name",
-        h2o_correction = TRUE, min_seg_length = 30), f_fluxID, f_slope, f_rsquared,
-      f_adj_rsquared, f_pvalue, f_segment_length))
+        sign_str_col = "signal_strength", fluxid_col = "file_name", h2o_correction = TRUE,
+        min_seg_length = 30), f_fluxID, f_slope, f_rsquared, f_adj_rsquared, f_pvalue,
+      f_segment_length))
     Message
       Cutting measurements...
       Starting segmentation...
@@ -210,11 +210,10 @@
       dplyr::distinct(dplyr::select(flux_fitting(conc_df = test_data, fit_type = "segments",
         start_col = "start_time", end_col = "f_end", start_cut = 0, end_cut = 0,
         conc_col = "co2_conc", datetime_col = "date_time", h2o_col = "h2o_conc",
-        signal_strength_col = "signal_strength", fluxid_col = "file_name",
-        h2o_correction = TRUE, min_seg_length = 30), f_fluxID, f_slope, f_rsquared,
-      f_adj_rsquared, f_pvalue, f_segment_length))
+        sign_str_col = "signal_strength", fluxid_col = "file_name", h2o_correction = TRUE,
+        min_seg_length = 30), f_fluxID, f_slope, f_rsquared, f_adj_rsquared, f_pvalue,
+      f_segment_length))
     Message
-      f_par column added
       Cutting measurements...
       Starting segmentation...
       
@@ -270,7 +269,6 @@
         fluxid_col = "file_name", h2o_correction = TRUE, min_seg_length = 30),
       f_fluxID, f_slope, f_rsquared, f_adj_rsquared, f_pvalue, f_segment_length))
     Message
-      f_signal_strength column added
       Cutting measurements...
       Starting segmentation...
       
@@ -323,11 +321,10 @@
       dplyr::distinct(dplyr::select(flux_fitting(conc_df = test_data, fit_type = "segments",
         start_col = "start_time", end_col = "f_end", start_cut = 0, end_cut = 0,
         conc_col = "co2_conc", par_col = "par", datetime_col = "date_time",
-        signal_strength_col = "signal_strength", fluxid_col = "file_name",
-        h2o_correction = FALSE, min_seg_length = 30), f_fluxID, f_slope, f_rsquared,
-      f_adj_rsquared, f_pvalue, f_segment_length))
+        sign_str_col = "signal_strength", fluxid_col = "file_name", h2o_correction = FALSE,
+        min_seg_length = 30), f_fluxID, f_slope, f_rsquared, f_adj_rsquared, f_pvalue,
+      f_segment_length))
     Message
-      f_h2o_conc column added
       Cutting measurements...
       Starting segmentation...
       

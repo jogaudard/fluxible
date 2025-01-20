@@ -108,7 +108,7 @@ test_that("segmentation tool", {
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
@@ -183,7 +183,7 @@ test_that("segmentation tool snapshot", {
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
@@ -218,7 +218,7 @@ test_that("fitting segment works without par", {
       # par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
@@ -253,7 +253,7 @@ test_that("fitting segment works without signal strength", {
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      # signal_strength_col = "signal_strength",
+      # sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
@@ -288,7 +288,7 @@ test_that("fitting segment works without h2o concentration", {
       par_col = "par",
       datetime_col = "date_time",
       # h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = FALSE,
       min_seg_length = 30
@@ -324,7 +324,7 @@ test_that("error on col format", {
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = FALSE,
       min_seg_length = 30

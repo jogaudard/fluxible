@@ -29,7 +29,7 @@ require(data.table)
 #' @param date_time_col Column name for date and time (default = "f_datetime").
 #' @param co2_col Column name for CO2 concentration (default = "f_conc").
 #' @param h2o_col Column name for H2O concentration (default = "ConcH2O").
-#' @param signal_strength_col Column name for signal strength measurements (default = "signal_strength").
+#' @param sign_str_col Column name for signal strength measurements (default = "signal_strength").
 #' @param temp_col Column name for air temperature (default = "AirTemperature").
 #' @param pressure_col Column name for pressure in kPa (default = "PressureKPa").
 #' @param flux_type_col Column name for flux type measurements (default = "measurement").
@@ -51,7 +51,7 @@ require(data.table)
 # date_time_col = "date_time" #default 
 # co2_col = "co2_conc" #default 
 # h2o_col = "h2o_conc" #default 
-# signal_strength_col = "signal_strength" #default 
+# sign_str_col = "signal_strength" #default 
 # temp_col = "temperature_c" #default 
 # pressure_col = "pressure_kpa" #default 
 # flux_type_col = "measurement" #default 
@@ -76,7 +76,7 @@ calc_tent_fluxes <- function(
     date_time_col = "date_time",  # Column name for datetime in flux_df
     co2_col = "co2_conc",  # Column name for CO2 concentration in flux_df
     h2o_col = "h2o_conc",  # Column name for H2O concentration in flux_df
-    signal_strength_col = "signal_strength",  # Column name for signal strength in flux_df
+    sign_str_col = "signal_strength",  # Column name for signal strength in flux_df
     temp_col = "temperature_c",  # Column name for air temperature in flux_df
     pressure_col = "pressure_kpa",  # Column name for pressure in kPa in flux_df
     flux_type_col = "measurement",  # Column name for flux type in flux_df
@@ -188,7 +188,7 @@ calc_tent_fluxes <- function(
     # Prepare other parameters for calculations
     press <- as.numeric(dt_sub[[pressure_col]])  # Pressure
     temp <- as.numeric(dt_sub[[temp_col]])  # Air temperature
-    signal_strength <- as.numeric(dt_sub[[signal_strength_col]])  # Signal strength
+    signal_strength <- as.numeric(dt_sub[[sign_str_col]])  # Signal strength
     
     if(correct_for_h2o_conc == TRUE){
       # Calculate c' and w' with respect to the H2O concentration
@@ -230,7 +230,7 @@ calc_tent_fluxes <- function(
     # Create a ggplot for visualizing CO2 concentration over time
     p2 <- ggplot(data = dt_sub, aes(y = .data[[conc_col]],  
                                    x = as.numeric(.data[[date_time_col]]) - min(as.numeric(.data[[date_time_col]])), 
-                                   color = as.numeric(.data[[signal_strength_col]]))) +  
+                                   color = as.numeric(.data[[sign_str_col]]))) +  
       geom_point() +  # Add points for CO2 data
       scale_color_gradient(high = "blue", low = "red", limits = c(79, 101)) +  # Color gradient for signal strength
       geom_line() +  # Add lines connecting the points

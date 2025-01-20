@@ -7,7 +7,7 @@
 #' @param par_col column containing PAR data (segments; optional).
 #' @param h2o_col column containing water vapour concentration
 #' (segments; optional).
-#' @param signal_strength_col column containing signal strength
+#' @param sign_str_col column containing signal strength
 #' (segments; optional).
 #' @param h2o_correction Should the gas concentration be corrected
 #' for water vapor? (logical; segments)

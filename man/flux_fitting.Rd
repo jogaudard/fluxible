@@ -15,7 +15,7 @@ flux_fitting(
   fluxid_col = "f_fluxID",
   par_col = c(),
   h2o_col = c(),
-  signal_strength_col = c(),
+  sign_str_col = c(),
   h2o_correction = FALSE,
   min_seg_length = 30,
   t_window = 20,

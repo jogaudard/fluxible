@@ -41,7 +41,7 @@ slopes_pftc7 <- flux_fitting(
   datetime_col = "date_time",
   conc_col = "co2_conc",
   fluxid_col = "file_name",
-  signal_strength_col = "signal_strength",
+  sign_str_col = "signal_strength",
   par_col = "par",
   h2o_col = "h2o_conc",
   fit_type = "segments"

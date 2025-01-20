@@ -19,7 +19,7 @@ co2_fluxes <- calc_tent_fluxes(
   date_time_col = "date_time",  # Column name for datetime in flux_df
   co2_col = "co2_conc",  # Column name for CO2 concentration in flux_df
   h2o_col = "h2o_conc",  # Column name for H2O concentration in flux_df
-  signal_strength_col = "signal_strength",  # Column name for signal strength in flux_df
+  sign_str_col = "signal_strength",  # Column name for signal strength in flux_df
   temp_col = "temperature_c",  # Column name for air temperature in flux_df
   pressure_col = "pressure_kpa",  # Column name for pressure in kPa in flux_df
   flux_type_col = "measurement",  # Column name for flux type in flux_df
@@ -48,7 +48,7 @@ dt_seg <- flux_segment(
     date_time_col = "date_time",  # Column name for datetime in flux_df
     co2_col = "co2_conc",  # Column name for CO2 concentration in flux_df
     h2o_col = "h2o_conc",  # Column name for H2O concentration in flux_df
-    signal_strength_col = "signal_strength",  # Column name for signal strength in flux_df
+    sign_str_col = "signal_strength",  # Column name for signal strength in flux_df
     flux_type_col = "measurement",  # Column name for flux type in flux_df
     day_night_col = "day_night",
     flux_id_col = "file_name",

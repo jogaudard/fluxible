@@ -54,7 +54,7 @@ slopes_pftc7 <- flux_fitting(
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
@@ -75,7 +75,7 @@ slopes_pftc7_nopar <- pftc7_short |>
       conc_col = "co2_conc",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30

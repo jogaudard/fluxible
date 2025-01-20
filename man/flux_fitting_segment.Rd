@@ -35,7 +35,7 @@ for water vapor? (logical; segments)}
 (segments). Note that the minimum segment length cannot be longer than half
 the length of the measurements.}
 
-\item{signal_strength_col}{column containing signal strength
+\item{sign_str_col}{column containing signal strength
 (segments; optional).}
 }
 \value{

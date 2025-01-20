@@ -45,7 +45,7 @@ pftc7_segmented_short_expected <- pftc7_segmented_short |>
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
@@ -87,7 +87,7 @@ test <- pftc7_short |>
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30

@@ -24,7 +24,7 @@ flux_quality_segment <- function(slopes_df,
     sign_str_threshold = ((sign_str_threshold)),
     sd_threshold = ((sd_threshold))
   ),
-  fn = list(is.logical, is.numeric),
+  fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
   if (!is.null(((sign_str_col)))) {

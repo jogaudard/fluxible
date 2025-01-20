@@ -770,7 +770,7 @@ pftc7_short <- pftc7_short |>
       par_col = "par",
       datetime_col = "date_time",
       h2o_col = "h2o_conc",
-      signal_strength_col = "signal_strength",
+      sign_str_col = "signal_strength",
       fluxid_col = "file_name",
       h2o_correction = TRUE,
       min_seg_length = 30
@@ -825,7 +825,7 @@ slopes_pftc7 <- pftc7_long |>
   datetime_col = "date_time",
   conc_col = "co2_conc",
   fluxid_col = "file_name",
-  signal_strength_col = "signal_strength",
+  sign_str_col = "signal_strength",
   par_col = "par",
   h2o_col = "h2o_conc",
   fit_type = "segments"
