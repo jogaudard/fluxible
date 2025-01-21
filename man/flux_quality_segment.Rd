@@ -54,8 +54,8 @@ the linear model is considered an unsatisfactory fit
 
 \item{sd_threshold}{standard deviation threshold under which a measurement
 should be discarded. The standard deviation is calculated as
-\link[=sqrt(sum(f_segment_length * (f_slope_corr - f_mean_slope)^2) /
-(((nb_segments_ok - 1) * sum(f_segment_length) / nb_segments_ok))]{sqrt(sum(f_segment_length * (f_slope_corr - f_mean_slope)^2) / (((nb_segments_ok - 1) * sum(f_segment_length) / nb_segments_ok))}
+sqrt(sum(f_segment_length * (f_slope_corr - f_mean_slope)^2) /
+(((nb_segments_ok - 1) * sum(f_segment_length) / nb_segments_ok))
 where 'f_segment_length' is the length of each segment;
 'f_slope_corr' the slope of each segment after quality assessment
 based on R² and p-value;

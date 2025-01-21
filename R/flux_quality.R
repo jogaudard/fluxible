@@ -45,12 +45,28 @@
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
 #' considered good enough (exponential fit)
-#' @param f_flag_fit_col
-#' @param par_col
-#' @param sign_str_col
-#' @param par_threshold
-#' @param sign_str_threshold
-#' @param sd_threshold
+#' @param f_flag_fit_col column flagging measurements that were too short to
+#' find segments (optional; provided by \link[flux_fitting]{flux_fitting}).
+#' @param par_col column containing segment average PAR data
+#' @param sign_str_col column containing segment average signal strength
+#' @param par_threshold PAR value threshold under which a segment should be
+#' discarded (if PAR data are not provided, it will just be ignored)
+#' @param sign_str_threshold signal strength threshold under which a segment
+#' should be discarded
+#' (if signal strength is not provided it will just be ignored)
+#' @param sd_threshold standard deviation threshold under which a measurement
+#' should be discarded. The standard deviation is calculated as
+#' sqrt(sum(f_segment_length * (f_slope_corr - f_mean_slope)^2) /
+#' (((nb_segments_ok - 1) * sum(f_segment_length) / nb_segments_ok))
+#' where 'f_segment_length' is the length of each segment;
+#' 'f_slope_corr' the slope of each segment after quality assessment
+#' based on R² and p-value;
+#' 'f_mean_slope' the mean of the slope for the entire measurement
+#' weighed with the length of each segment;
+#' 'nb_segments_ok' the number of segments, excluding those discarded based on
+#' R² and p-value, in each segment.
+#' The full equation is described in Smooth (1997).
+#' @references SMOOTH, Y. DATAPLOT Reference Manual, 1997 2-66
 #' @return same dataframe with added quality flags and corrected slope column
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
