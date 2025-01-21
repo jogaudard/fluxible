@@ -139,3 +139,71 @@ full_comparison <- full_join(test, expected)
 View(full_comparison)
 View(test)
 View(expected)
+
+
+expected_calc <- flux_tent_output |>
+    dplyr:: select(file_name, flux_value) |>
+    dplyr::rename(
+      f_fluxID = "file_name",
+      flux_old = "flux_value"
+    ) |>
+    dplyr::mutate(
+      f_fluxID = as.factor(f_fluxID),
+      flux_old = flux_old * 3600 #flux per hour instead of seconds
+    ) |>
+    dplyr::arrange(f_fluxID) |>
+    data.frame()
+
+  output_segment <-  pftc7_short |>
+    group_by(file_name) |>
+    dplyr::slice(8:n()) |>
+    ungroup() |>
+    flux_fitting(
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      sign_str_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    ) |>
+    flux_quality(
+      par_threshold = 650,
+      sign_str_threshold = 95,
+      pvalue_threshold = 100,
+      rsquared_threshold = 0.71,
+      sd_threshold = 1,
+      ratio_threshold = 0
+    ) |>
+    flux_calc(
+      slope_col = "f_mean_slope",
+      conc_unit = "ppm",
+      flux_unit = "micromol",
+      temp_air_col = "temperature_c",
+      atm_pressure = "pressure",
+      chamber_volume = 2197,
+      tube_volume = 0,
+      plot_area = 1.69,
+      cols_keep = c("f_quality_flag")
+    ) |>
+    dplyr::select(
+      f_fluxID, flux
+    ) |>
+    dplyr::arrange(f_fluxID) |>
+    data.frame()
+
+comparison_calc <- full_join(expected_calc, output_segment)
+
+ggplot(comparison_calc, aes(flux, flux_old)) +
+geom_point() +
+geom_smooth(method = "lm") +
+geom_abline(slope = 1, intercept = 0)
+
+model <- lm(flux ~ flux_old, comparison_calc)
+summary(model)

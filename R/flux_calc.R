@@ -26,7 +26,7 @@
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux,
 #' as distinct() is applied.
-#' @param cols_ave columns with values that should be averaged
+#' @param cols_avg columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
 #' @param fluxid_col column containing the fluxID
 #' @param temp_air_col column containing the air temperature used
@@ -41,7 +41,7 @@
 #' temperature average for each flux,
 #' slope used for each flux calculation,
 #' the model used in `flux_fitting`,
-#' and any columns specified in cols_keep and cols_ave.
+#' and any columns specified in cols_keep and cols_avg.
 #' @importFrom rlang .data
 #' @importFrom dplyr .data rename all_of select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything
@@ -67,7 +67,7 @@ flux_calc <- function(slopes_df,
                       atm_pressure = 1,
                       plot_area = 0.0625,
                       cols_keep = c(),
-                      cols_ave = c(),
+                      cols_avg = c(),
                       fluxid_col = "f_fluxID",
                       temp_air_col = "temp_air",
                       temp_air_unit = "celsius",
@@ -85,8 +85,8 @@ flux_calc <- function(slopes_df,
   if (length(setdiff(((cols_keep)), ((colnames)))) > 0) {
     stop("some names in cols_keep cannot be found in slopes_df")
   }
-  if (length(setdiff(((cols_ave)), ((colnames)))) > 0) {
-    stop("some names in cols_ave cannot be found in slopes_df")
+  if (length(setdiff(((cols_avg)), ((colnames)))) > 0) {
+    stop("some names in cols_avg cannot be found in slopes_df")
   }
 
 
@@ -212,7 +212,7 @@ flux_calc <- function(slopes_df,
     )
   }
 
-  message("Averaging air temperature for each flux...")
+  message("Averaging air temperature and pressure for each flux...")
   slope_temp <- slopes_df |>
     select(
       "f_slope_calc", "f_fluxID", "air_temp", "chamber_volume",
@@ -220,19 +220,20 @@ flux_calc <- function(slopes_df,
     ) |>
     group_by(
       .data$f_fluxID, .data$f_slope_calc, .data$chamber_volume,
-      .data$tube_volume, .data$atm_pressure, .data$plot_area
+      .data$tube_volume, .data$plot_area
     ) |>
     summarise(
-      temp_air_ave = mean(.data$air_temp, na.rm = TRUE),
+      temp_air_avg = mean(.data$air_temp, na.rm = TRUE),
+      atm_pressure_avg = mean(.data$atm_pressure, na.rm = TRUE),
       datetime = .data$f_datetime[1],
       .groups = "drop"
     ) |>
     mutate(
-      temp_air_ave = case_when(
-        ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave + 273.15,
+      temp_air_avg = case_when(
+        ((temp_air_unit)) == "celsius" ~ .data$temp_air_avg + 273.15,
         ((temp_air_unit)) == "fahrenheit"
-        ~ (.data$temp_air_ave + 459.67) * (5 / 9),
-        ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
+        ~ (.data$temp_air_avg + 459.67) * (5 / 9),
+        ((temp_air_unit)) == "kelvin" ~ .data$temp_air_avg
       )
     )
 
@@ -250,10 +251,10 @@ flux_calc <- function(slopes_df,
   }
 
   # a df with the columns that have to be averaged
-  if (length((cols_ave)) > 0) {
-    message("Creating a df with the columns from 'cols_ave' argument...")
-    slope_ave <- slopes_df |>
-      select(all_of(((cols_ave))), "f_fluxID") |>
+  if (length((cols_avg)) > 0) {
+    message("Creating a df with the columns from 'cols_avg' argument...")
+    slope_avg <- slopes_df |>
+      select(all_of(((cols_avg))), "f_fluxID") |>
       group_by(.data$f_fluxID) |>
       summarise(across(
         everything(),
@@ -261,7 +262,7 @@ flux_calc <- function(slopes_df,
       ), .groups = "drop") |>
       left_join(slope_keep, by = "f_fluxID")
   } else {
-    slope_ave <- slope_keep
+    slope_avg <- slope_keep
   }
 
   message("Calculating fluxes...")
@@ -276,26 +277,26 @@ flux_calc <- function(slopes_df,
   }
   if (((conc_unit)) == "ppb") {
     message("Concentration was measured in ppb")
-    slope_ave <- slope_ave |>
+    slope_avg <- slope_avg |>
       mutate(
         f_slope_calc = .data$f_slope_calc * 0.001 # now the slope is in ppm/s
       )
   }
 
-  fluxes <- slope_ave |>
+  fluxes <- slope_avg |>
     mutate(
       volume_setup = .data$chamber_volume + .data$tube_volume,
       flux =
-        (.data$f_slope_calc * .data$atm_pressure * .data$volume_setup)
+        (.data$f_slope_calc * .data$atm_pressure_avg * .data$volume_setup)
         / (((r_const)) *
-           .data$temp_air_ave
+           .data$temp_air_avg
            * .data$plot_area) # flux in micromol/s/m^2
         * 3600, # secs to hours, flux is now in micromol/m^2/h
-      temp_air_ave = case_when(
-        ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,
+      temp_air_avg = case_when(
+        ((temp_air_unit)) == "celsius" ~ .data$temp_air_avg - 273.15,
         ((temp_air_unit)) == "fahrenheit"
-        ~ ((.data$temp_air_ave - 273.15) * (9 / 5)) + 32,
-        ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
+        ~ ((.data$temp_air_avg - 273.15) * (9 / 5)) + 32,
+        ((temp_air_unit)) == "kelvin" ~ .data$temp_air_avg
       ),
       model = ((fit_type))
     )

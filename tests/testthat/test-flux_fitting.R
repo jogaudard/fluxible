@@ -90,7 +90,7 @@ test_that("segmentation tool", {
     ) |>
     ungroup() |>
     arrange(f_datetime) |>
-    select(f_par, f_datetime, f_fluxID, f_mean_slope) |>
+    select(f_par, f_datetime, f_fluxID, f_mean_slope, temperature_c, pressure) |>
        data.frame()
 
     pftc7_short_segmented_test <- pftc7_short |>
@@ -98,7 +98,6 @@ test_that("segmentation tool", {
     dplyr::slice(8:n()) |>
     ungroup() |>
     flux_fitting(
-      # pftc7_short,
       fit_type = "segments",
       start_col = "start_time",
       end_col = "f_end",
@@ -120,7 +119,7 @@ test_that("segmentation tool", {
   sd_threshold = 1,
   ratio_threshold = 0) |>
     arrange(f_datetime) |>
-    select(f_par, f_datetime, f_fluxID, f_mean_slope) |>
+    select(f_par, f_datetime, f_fluxID, f_mean_slope, temperature_c, pressure) |>
     data.frame()
 
   expect_equal(
@@ -146,7 +145,7 @@ test_that("segmentation tool original data", {
     mutate(
       f_fluxID = as.factor(f_fluxID)
     ) |>
-    select(f_conc, f_datetime, par, f_fluxID) |>
+    select(f_conc, f_datetime, par, f_fluxID, temperature_c, pressure) |>
     arrange(f_datetime)
 
     pftc7_short_segmented_test <- pftc7_short |>
@@ -161,7 +160,7 @@ test_that("segmentation tool original data", {
     mutate(
       f_fluxID = as.factor(f_fluxID)
     ) |>
-    select(f_conc, f_datetime, par, f_fluxID) |>
+    select(f_conc, f_datetime, par, f_fluxID, temperature_c, pressure) |>
     arrange(f_datetime)
 
   expect_equal(

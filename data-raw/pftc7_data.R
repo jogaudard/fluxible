@@ -1,5 +1,9 @@
 flux_tent_output <- readr::read_csv("data-raw/pftc7_site5_photo_flux_estimates_og_function.csv")
-flux_tent_output <- tibble::as_tibble(flux_tent_output)
+flux_tent_output <- tibble::as_tibble(flux_tent_output) |>
+  dplyr::mutate(
+    pressure = avg_pressure * 0.00987
+  ) |>
+  dplyr::select(!avg_pressure)
 str(flux_tent_output)
 
 usethis::use_data(flux_tent_output, overwrite = TRUE)
@@ -8,14 +12,15 @@ pftc7_short <- readr::read_csv("data-raw/pftc7_site5_photo.csv")
 pftc7_short <- tibble::as_tibble(pftc7_short) |>
 dplyr::group_by(file_name) |>
   dplyr::mutate(
-    f_end = max(date_time)
+    f_end = max(date_time),
+    pressure = pressure_kpa * 0.00987
   ) |>
   dplyr::ungroup() |>
   dplyr::select(
     co2_conc,
     h2o_conc,
     temperature_c,
-    pressure_kpa,
+    pressure,
     signal_strength,
     date_time,
     start_time,
@@ -32,14 +37,20 @@ pftc7_long <- tibble::as_tibble(pftc7_long)
 pftc7_long <- pftc7_long |>
   dplyr::group_by(file_name) |>
   dplyr::mutate(
-    f_end = max(date_time)
+    f_end = max(date_time),
+    pressure = pressure_kpa * 0.00987
   ) |>
-  dplyr::ungroup()
+  dplyr::ungroup() |>
+  dplyr::select(!pressure_kpa)
 str(pftc7_long)
 usethis::use_data(pftc7_long, overwrite = TRUE)
 
 pftc7_segmented_short <- readr::read_csv("data-raw/pftc7_site5_photo_flux_segment_output.csv")
-pftc7_segmented_short <- tibble::as_tibble(pftc7_segmented_short)
+pftc7_segmented_short <- tibble::as_tibble(pftc7_segmented_short) |>
+  dplyr::mutate(
+    pressure = pressure_kpa * 0.00987
+  ) |>
+  dplyr::select(!pressure_kpa)
 str(pftc7_segmented_short)
 usethis::use_data(pftc7_segmented_short, overwrite = TRUE)
 

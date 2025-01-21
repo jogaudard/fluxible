@@ -19,7 +19,7 @@ test_that("averaging works", {
     slope_col = "f_slope",
     conc_unit = "ppm",
     flux_unit = "mmol",
-    cols_ave = c("PAR", "temp_soil")
+    cols_avg = c("PAR", "temp_soil")
   )
 
 
@@ -43,7 +43,7 @@ test_that("keeping and averaging work together", {
     conc_unit = "ppm",
     flux_unit = "mmol",
     cols_keep = c("turfID", "type", "f_start"),
-    cols_ave = c("PAR", "temp_soil")
+    cols_avg = c("PAR", "temp_soil")
   ))
 })
 
@@ -147,7 +147,8 @@ test_that("calculating fluxes on dataset with cuts", {
       flux_unit = "mmol",
       cut_col = "f_cut",
       keep_arg = "keep"
-    )
+    ) |>
+    dplyr::select(f_fluxID, flux, temp_air_avg, volume_setup)
   )
 })
 
@@ -160,11 +161,12 @@ test_that("volume can be a variable instead of a constant", {
       conc_unit = "ppm",
       flux_unit = "mmol",
       chamber_volume = "volume"
-    )
+    ) |>
+      dplyr::select(f_fluxID, flux, volume_setup, temp_air_avg)
   )
 })
 
-test_that("volume can be a variable instead of a constant (volume)", {
+test_that("volume can be a variable instead of a constant (tube_volume)", {
   expect_snapshot(
     flux_calc(
       slopes0_vol_tube,
@@ -174,7 +176,7 @@ test_that("volume can be a variable instead of a constant (volume)", {
       chamber_volume = "volume",
       tube_volume = "tube_vol"
     ) |>
-      select(!c(chamber_volume, tube_volume))
+      dplyr::select(f_fluxID, flux, volume_setup, temp_air_avg)
   )
 })
 
@@ -208,12 +210,80 @@ test_that("flux_calc works with segmentation tool", {
       conc_unit = "ppm",
       flux_unit = "mmol",
       temp_air_col = "temperature_c",
-      chamber_volume = 1728,
+      atm_pressure = "pressure",
+      chamber_volume = 2197,
       tube_volume = 0,
-      plot_area = 1.44
-      ) |>
+      plot_area = 1.69
+    ) |>
       dplyr::select(
-        f_fluxID, volume_setup, temp_air_ave, plot_area, flux, model
+        f_fluxID, volume_setup, temp_air_avg, plot_area, flux, model
       )
+  )
+})
+
+test_that("flux_calc with segmentation tool gives similar results as original data", {
+  expected_calc <- flux_tent_output |>
+    dplyr:: select(file_name, avg_temp, pressure, flux_value) |>
+    dplyr::rename(
+      f_fluxID = "file_name",
+      temp_air_avg = "avg_temp",
+      atm_pressure_avg = "pressure",
+      flux = "flux_value"
+    ) |>
+    dplyr::mutate(
+      f_fluxID = as.factor(f_fluxID),
+      flux = flux * 3600 # to compare flux per hour instead of seconds
+    ) |>
+    dplyr::arrange(f_fluxID) |>
+    data.frame()
+
+  output_segment <-  pftc7_short |>
+    group_by(file_name) |>
+    dplyr::slice(8:n()) |>
+    ungroup() |>
+    flux_fitting(
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 0,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      sign_str_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    ) |>
+    flux_quality(
+      par_threshold = 650,
+      sign_str_threshold = 95,
+      pvalue_threshold = 100,
+      rsquared_threshold = 0.71,
+      sd_threshold = 0,
+      ratio_threshold = 0
+    ) |>
+    flux_calc(
+      slope_col = "f_mean_slope",
+      conc_unit = "ppm",
+      flux_unit = "micromol",
+      temp_air_col = "temperature_c",
+      atm_pressure = "pressure",
+      chamber_volume = 2197,
+      tube_volume = 0,
+      plot_area = 1.69,
+      cols_keep = c("f_quality_flag")
+    ) |>
+    dplyr::select(
+      f_fluxID, temp_air_avg, atm_pressure_avg, flux
+    ) |>
+    dplyr::arrange(f_fluxID) |>
+    data.frame()
+
+  expect_equal(
+    output_segment,
+    expected_calc,
+    tolerance = 0.02
   )
 })
