@@ -63,18 +63,18 @@ measurement (in seconds) below which the measurement will be considered as
 not having enough data points to be considered for calculations}
 
 \item{pvalue_col}{column containing the p-value of each flux
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{rsquared_col}{column containing the r squared of each flux
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{pvalue_threshold}{threshold of p-value below which the change of
 gas concentration over time is considered not significant
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{rsquared_threshold}{threshold of r squared value below which
 the linear model is considered an unsatisfactory fit
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{conc_col}{column containing the measured gas concentration
 (exponential fit)}

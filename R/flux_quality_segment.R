@@ -1,28 +1,46 @@
 #' Quality control for segmented measurements
-#' @description provides quality flags for the segments and entire measurements following the same standards as for the linear model
+#' @description provides quality flags for the segments and entire measurements
+#' following the same standards as for the linear model
 #' @param slopes_df dataset containing slopes
 #' @param pvalue_col column containing the p-value of each flux
 #' (linear, quadratic, segment)
 #' @param rsquared_col column containing the r squared of each flux
 #' (linear, quadratic, segment)
-#' @param f_flag_fit_col
-#' @param par_col
-#' @param sign_str_col
-#' @param par_threshold
-#' @param sign_str_threshold
+#' @param f_flag_fit_col column flagging measurements that were too short to
+#' find segments (optional; provided by \link[flux_fitting]{flux_fitting}).
+#' @param par_col column containing segment average PAR data
+#' @param sign_str_col column containing segment average signal strength
+#' @param par_threshold PAR value threshold under which a segment should be
+#' discarded (if PAR data are not provided, it will just be ignored)
+#' @param sign_str_threshold signal strength threshold under which a segment
+#' should be discarded
+#' (if signal strength is not provided it will just be ignored)
 #' @param pvalue_threshold threshold of p-value below which the change of
 #' gas concentration over time is considered not significant
 #' (linear, quadratic, segment)
 #' @param rsquared_threshold threshold of r squared value below which
 #' the linear model is considered an unsatisfactory fit
 #' (linear, quadratic, segment)
-#' @param sd_threshold
+#' @param sd_threshold standard deviation threshold under which a measurement
+#' should be discarded. The standard deviation is calculated as
+#' [sqrt(sum(f_segment_length * (f_slope_corr - f_mean_slope)^2) /
+#' (((nb_segments_ok - 1) * sum(f_segment_length) / nb_segments_ok))]
+#' where 'f_segment_length' is the length of each segment;
+#' 'f_slope_corr' the slope of each segment after quality assessment
+#' based on R² and p-value;
+#' 'f_mean_slope' the mean of the slope for the entire measurement
+#' weighed with the length of each segment;
+#' 'nb_segments_ok' the number of segments, excluding those discarded based on
+#' R² and p-value, in each segment.
+#' The full equation is described in Smooth (1997).
+#' @references SMOOTH, Y. DATAPLOT Reference Manual, 1997 2-66
 #' @param cut_arg argument defining that the data point should be cut out
 #' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
 #' @param force_ok vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
-#' @importFrom dplyr select rename mutate distinct filter case_when group_by summarise n_distinct ungroup n left_join arrange
+#' @importFrom dplyr select rename mutate distinct filter case_when group_by
+#' summarise n_distinct ungroup n left_join arrange
 #' @importFrom tidyselect all_of any_of
 #' @importFrom tidyr drop_na
 
@@ -223,6 +241,11 @@ flux_quality_segment <- function(slopes_df,
   if (is.null(((par_col)))) {
     slopes_df <- slopes_df |>
       select(!c("f_par_seg"))
+  }
+
+  if (is.null(((f_flag_fit_col)))) {
+    slopes_df <- slopes_df |>
+      select(!c("f_flag_fit"))
   }
 
   slopes_df

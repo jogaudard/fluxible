@@ -45,6 +45,12 @@
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
 #' considered good enough (exponential fit)
+#' @param f_flag_fit_col
+#' @param par_col
+#' @param sign_str_col
+#' @param par_threshold
+#' @param sign_str_threshold
+#' @param sd_threshold
 #' @return same dataframe with added quality flags and corrected slope column
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest

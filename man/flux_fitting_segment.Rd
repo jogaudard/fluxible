@@ -28,15 +28,15 @@ flux_fitting_segment(
 \item{h2o_col}{column containing water vapour concentration
 (segments; optional).}
 
+\item{sign_str_col}{column containing signal strength
+(segments; optional).}
+
 \item{h2o_correction}{Should the gas concentration be corrected
 for water vapor? (logical; segments)}
 
 \item{min_seg_length}{minimum length (in seconds) for each segments
 (segments). Note that the minimum segment length cannot be longer than half
 the length of the measurements.}
-
-\item{sign_str_col}{column containing signal strength
-(segments; optional).}
 }
 \value{
 a df with modeled gas concentration in linear segments, with slope,

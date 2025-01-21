@@ -36,9 +36,9 @@ test_that("segmentation tool", {
 test_that("segmentation tool without par", {
   expect_snapshot(
     flux_quality(slopes_pftc7_nopar) |>
-    select(
+      select(
       f_fluxID, f_mean_slope, f_mean_slope_corr, f_quality_flag, f_sd_slope
       ) |>
-    dplyr::distinct()
+      dplyr::distinct()
   )
 })
