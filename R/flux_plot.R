@@ -84,9 +84,17 @@ flux_plot <- function(slopes_df,
 
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
+    if (((output)) == "print_only"){
+    print_plot <- "TRUE"
+  }
+
   fit_type <- flux_fit_type(
     slopes_df
   )
+
+  if (((f_plotname)) == ""){
+    f_plotname <- deparse(substitute(slopes_df))
+  }
 
 
   if (((output)) %in% c("pdfpages", "ggsave")) {
@@ -222,7 +230,7 @@ flux_plot <- function(slopes_df,
 
   if (((output)) == "pdfpages") {
     f_plotname <- paste(f_plotname, ".pdf", sep = "")
-    pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3)
+    pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3, title = ((f_plotname)))
     pb <- progress_bar$new(
       format =
         "Printing plots in pdf document [:bar] :current/:total (:percent)",

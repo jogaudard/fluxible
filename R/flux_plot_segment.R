@@ -1,13 +1,15 @@
-#' plots the fluxes as part of flux_plot, with flags from flux_quality and modelled value from flux_segment
-#' 
-#' 
+#' plots fluxes fitted with segmentation tool
+#' @description provides plots for measurements that were fitted using
+#' the segment model in flux_fitting
+#' @importFrom dplyr select left_join mutate case_when
+#' @importFrom ggplot2 ggplot theme_bw geom_point geom_text
 
 
 flux_plot_segment <- function(slopes_df,
-                              y_text_position = 500,
-                              cut_arg = "cut"
-) {
-    param_df <- flux_param_segment(((slopes_df)), cut_arg = ((cut_arg)))
+                              y_text_position,
+                              cut_arg) {
+
+  param_df <- flux_param_segment(((slopes_df)), cut_arg = ((cut_arg)))
 
   slopes_df <- slopes_df |>
     select(!c("f_quality_flag")) |>

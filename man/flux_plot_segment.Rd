@@ -2,10 +2,11 @@
 % Please edit documentation in R/flux_plot_segment.R
 \name{flux_plot_segment}
 \alias{flux_plot_segment}
-\title{plots the fluxes as part of flux_plot, with flags from flux_quality and modelled value from flux_segment}
+\title{plots fluxes fitted with segmentation tool}
 \usage{
-flux_plot_segment(slopes_df, y_text_position = 500, cut_arg = "cut")
+flux_plot_segment(slopes_df, y_text_position, cut_arg)
 }
 \description{
-plots the fluxes as part of flux_plot, with flags from flux_quality and modelled value from flux_segment
+provides plots for measurements that were fitted using
+the segment model in flux_fitting
 }

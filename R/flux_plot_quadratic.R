@@ -7,9 +7,6 @@
 #' @importFrom dplyr rename select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
-#' @importFrom ggforce facet_wrap_paginate n_pages
-#' @importFrom purrr quietly
-#' @importFrom grDevices pdf dev.off
 #' @importFrom tidyr pivot_longer
 
 
