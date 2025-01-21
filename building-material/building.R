@@ -733,3 +733,163 @@ nee_missing_try
 
 flux_plot(slopes0_flag)
 flux_plot(slopes0lin_flag, output = "pdfpages")
+
+
+try_segment <- pftc7_short |>
+    group_by(.data$file_name) |>
+    mutate(
+      f_time = difftime(.data$date_time[seq_along(.data$date_time)],
+        .data$date_time[1],
+        units = "secs"
+      ),
+      f_time = as.double(.data$f_time),
+      ID = dplyr::cur_group_id()
+    ) |>
+    ungroup()
+
+    str(try_segment)
+
+for(fluxid in unique(try_segment$ID)){
+  dt_sub <- try_segment |>
+    filter(ID == fluxid)
+}
+
+  res <- cpop(try_segment$co2_conc, minseglen = 30)
+  seg <- fitted(res)
+
+pftc7_short <- pftc7_short |>
+    mutate(
+      f_end = start_time + 120
+    )
+
+    test_segment <- flux_fitting(
+      pftc7_short,
+      fit_type = "segments",
+      start_col = "start_time",
+      end_col = "f_end",
+      start_cut = 6,
+      end_cut = 0,
+      conc_col = "co2_conc",
+      par_col = "par",
+      datetime_col = "date_time",
+      h2o_col = "h2o_conc",
+      sign_str_col = "signal_strength",
+      fluxid_col = "file_name",
+      h2o_correction = TRUE,
+      min_seg_length = 30
+    )
+
+str(test_segment)
+View(test_segment)
+
+test_seg_quality <- flux_quality(
+  test_segment,
+  par_threshold = 650,
+  sd_threshold = 10
+)
+
+pftc7 <- pftc7_long |>
+  group_by(file_name) |>
+  mutate(
+    f_end = start_time + 120,
+    flux_ID = cur_group_id(),
+    ndata = n()
+  ) |>
+  ungroup()
+
+  str(pftc7)
+
+pftc7 |>
+group_by(file_name) |>
+count()
+
+pftc7_summary <- pftc7 |>
+  group_by(file_name) |>
+  nest() |>
+  summarise(
+    ndata = nrow(co2_conc)
+  ) |>
+  ungroup()
+
+View(pftc7_summary)
+
+# pftc7 <- pftc7 |>
+#   filter(flux_ID %in% c(1:4))
+
+slopes_pftc7 <- pftc7_long |>
+  # filter(flux_ID %in% c(2:5)) |>
+  flux_fitting(
+  # conc_df = pftc7,
+  min_seg_length = 30,
+  start_cut = 0,
+  end_cut = 0,
+  start_col = "start_time",
+  end_col = "f_end",
+  datetime_col = "date_time",
+  conc_col = "co2_conc",
+  fluxid_col = "file_name",
+  sign_str_col = "signal_strength",
+  par_col = "par",
+  h2o_col = "h2o_conc",
+  fit_type = "segments"
+)
+
+pftc7 |>
+filter(flux_ID == 4) |>
+View()
+
+flags_pftc7 <- flux_quality(
+  slopes_df = slopes_pftc7,
+  ambient_conc = 421,
+  error = 100,
+  fluxid_col = "f_fluxID",
+  slope_col = "f_slope",
+  pvalue_col = "f_pvalue",
+  rsquared_col = "f_rsquared",
+  f_flag_fit_col = "f_flag_fit",
+  par_threshold = 600,
+  sign_str_threshold = 98,
+  pvalue_threshold = 0.3,
+  rsquared_threshold = 0.7,
+  sd_threshold = 0,
+  ratio_threshold = 0,
+  conc_col = "f_conc",
+  time_col = "f_time",
+  fit_col = "f_fit",
+  cut_col = "f_cut",
+  cut_arg = "cut"
+)
+
+str(flags_pftc7)
+View(flags_pftc7)
+
+flags_pftc7 |>
+filter(f_fluxID == "5_2800_east_2_day_photo.txt") |>
+View()
+
+flags_pftc7_try <- flags_pftc7 |>
+  group_by(f_fluxID) |>
+  count(f_quality_flag_seg) |>
+  top_n(1)
+
+flags_pftc7_try
+
+segment_flag <- flags_pftc7 |>
+  filter(
+    f_cut != "cut"
+  ) |>
+  select(f_fluxID, f_quality_flag_seg) |>
+    drop_na(f_quality_flag_seg) |>
+    distinct() |>
+    group_by(f_fluxID) |>
+    mutate(
+      count = n()
+    ) |>
+    ungroup() |>
+    filter(count == 1) |>
+    rename(
+      f_quality_flag = "f_quality_flag_seg"
+    ) |>
+    select(!count)
+
+segment_flag

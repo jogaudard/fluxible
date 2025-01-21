@@ -40,3 +40,12 @@ test_that("plot can be exported as an object", {
   plot_object <- flux_plot(slopes30lin_flag)
   vdiffr::expect_doppelganger("plot as an object", plot_object)
 })
+
+test_that("plot for segments", {
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "plot for segments",
+      flux_plot(slopes_pftc7_flags)
+    )
+  )
+})

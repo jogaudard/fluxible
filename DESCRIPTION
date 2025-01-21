@@ -48,7 +48,8 @@ Imports:
     tidyr,
     zoo,
     progress,
-    purrrlyr
+    purrrlyr,
+    cpop
 Depends: 
     R (>= 4.1)
 LazyData: true

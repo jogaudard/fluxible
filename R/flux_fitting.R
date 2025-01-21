@@ -46,6 +46,11 @@ flux_fitting <- function(conc_df,
                          datetime_col = "f_datetime",
                          conc_col = "f_conc",
                          fluxid_col = "f_fluxID",
+                         par_col = c(),
+                         h2o_col = c(),
+                         sign_str_col = c(),
+                         h2o_correction = FALSE,
+                         min_seg_length = 30,
                          t_window = 20,
                          cz_window = 15,
                          b_window = 10,
@@ -149,6 +154,24 @@ flux_fitting <- function(conc_df,
       conc_col = "f_conc",
       fluxid_col = "f_fluxID",
       t_zero = ((t_zero))
+    )
+  }
+
+  if (((fit_type)) == "segments") {
+    conc_fitting <- flux_fitting_segment(
+    conc_df,
+    start_cut = ((start_cut)),
+    end_cut = ((end_cut)),
+    # start_col = "f_start",
+    # end_col = "f_end",
+    # conc_col = "f_conc",
+    par_col = ((par_col)),
+    # datetime_col = "f_datetime",
+    h2o_col = ((h2o_col)),
+    sign_str_col = ((sign_str_col)),
+    # fluxid_col = "f_fluxID",
+    h2o_correction = ((h2o_correction)),
+    min_seg_length = ((min_seg_length))
     )
   }
 

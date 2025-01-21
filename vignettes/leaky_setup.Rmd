@@ -1,0 +1,91 @@
+---
+title: "Using the segmentation tool to work with a leaky setup"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{leaky_setup}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Processing concentration from a setup where leaks cannot be assumed as negligible (typically a tent for taller vegetation) requires some adjustements in the method.
+In this example we present how the Fluxible package is processing such data.
+The data used in this example were measured using a flux tent during the Plant Functional Trait Course (REF to data paper).
+
+<!-- Figure showing a typical flux with clear segments -->
+
+## Concept
+The segmentation tool looks for segments in the measurement that can be modelled linearly.
+The slope of each of those segments is averaged (weighed with the length of the segments) and used to calculate the flux as usual.
+Quality of fit is assessed for each of the segments similarly to the linear fit.
+The difference between the segements' slope is also used as a quality check for the whole measurement.
+The segmentation tool is available in the Fluxible normal workflow, as the other fitting models.
+
+```{r setup}
+library(fluxible)
+
+str(pftc7_long)
+
+slopes_pftc7 <- flux_fitting(
+  conc_df = pftc7_long,
+  start_cut = 0,
+  end_cut = 0,
+  start_col = "start_time",
+  end_col = "f_end",
+  datetime_col = "date_time",
+  conc_col = "co2_conc",
+  fluxid_col = "file_name",
+  sign_str_col = "signal_strength",
+  par_col = "par",
+  h2o_col = "h2o_conc",
+  fit_type = "segments"
+)
+
+str(slopes_pftc7)
+
+flags_pftc7 <- flux_quality(
+  slopes_df = slopes_pftc7,
+  ambient_conc = 421,
+  error = 100,
+  fluxid_col = "f_fluxID",
+  slope_col = "f_slope",
+  pvalue_col = "f_pvalue",
+  rsquared_col = "f_rsquared",
+  f_flag_fit_col = "f_flag_fit",
+  par_threshold = 600,
+  sign_str_threshold = 98,
+  pvalue_threshold = 0.3,
+  rsquared_threshold = 0.7,
+  sd_threshold = 0.1,
+  ratio_threshold = 0,
+  conc_col = "f_conc",
+  time_col = "f_time",
+  fit_col = "f_fit",
+  cut_col = "f_cut",
+  cut_arg = "cut"
+)
+
+str(flags_pftc7)
+
+flags_pftc7 |>
+# filter(
+#   f_fluxID %in% c()
+# ) |>
+flux_plot(output = "pdfpages",
+        f_ylim_upper = 500,
+        f_ylim_lower = 400,
+        y_text_position = 450
+        )
+
+flux_pftc7 <- flux_calc(flags_pftc7,
+                        slope_col = "f_mean_slope_corr",
+                        conc_unit = "ppm",
+                        flux_unit = "mmol",
+                        )
+```

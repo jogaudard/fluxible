@@ -199,3 +199,21 @@ test_that("Fluxible workflow works from start to finish", {
     str(fluxes_test)
   )
 })
+
+test_that("flux_calc works with segmentation tool", {
+  expect_snapshot(
+    flux_calc(
+      slopes_pftc7_flags,
+      slope_col = "f_mean_slope_corr",
+      conc_unit = "ppm",
+      flux_unit = "mmol",
+      temp_air_col = "temperature_c",
+      chamber_volume = 1728,
+      tube_volume = 0,
+      plot_area = 1.44
+      ) |>
+      dplyr::select(
+        f_fluxID, volume_setup, temp_air_ave, plot_area, flux, model
+      )
+  )
+})

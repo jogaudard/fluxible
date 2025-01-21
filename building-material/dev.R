@@ -28,3 +28,5 @@ lintr::lint_package()
 # display number of downloads from CRAN
 cranlogs::cran_downloads(from = "2024-08-01", to = "2024-10-07", packages = "fluxible") |>
     dplyr::summarise(total = sum(count))
+
+# also here https://hadley.shinyapps.io/cran-downloads/

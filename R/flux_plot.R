@@ -97,6 +97,7 @@ flux_plot <- function(slopes_df,
     f_plotname <- deparse(substitute(slopes_df))
   }
 
+
   if (((output)) %in% c("pdfpages", "ggsave")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
@@ -170,6 +171,14 @@ flux_plot <- function(slopes_df,
 
   if (((fit_type)) == "quadratic") {
     f_plot <- flux_plot_quadratic(
+      ((slopes_df)),
+      cut_arg = ((cut_arg)),
+      y_text_position = ((y_text_position))
+    )
+  }
+
+  if (((fit_type)) == "segments") {
+    f_plot <- flux_plot_segment(
       ((slopes_df)),
       cut_arg = ((cut_arg)),
       y_text_position = ((y_text_position))

@@ -11,7 +11,8 @@ flux_fit_type <- function(df,
                           fit_type_list = c(
                             "exponential",
                             "linear",
-                            "quadratic"
+                            "quadratic",
+                            "segments"
                           )) {
   if (is.null(((fit_type)))) {
     fit_type <- attributes(df)$fit_type

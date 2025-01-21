@@ -856,7 +856,7 @@ justification.</p>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">flux_fitting</span>(<span class="at">fit_type =</span> <span class="st">&quot;exp&quot;</span>, <span class="at">end_cut =</span> <span class="dv">60</span>) <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">flux_quality</span>(</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="at">slope_col =</span> <span class="st">&quot;f_slope&quot;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="at">weird_fluxes_id =</span> <span class="fu">c</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="at">force_discard =</span> <span class="fu">c</span>(</span>
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>      <span class="dv">101</span>, <span class="co"># plot starts with a high peak: accumulation in the canopy?</span></span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>      <span class="dv">106</span> <span class="co"># peak at the beginning of the flux that is messing up the fit</span></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    )</span>

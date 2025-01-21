@@ -19,15 +19,15 @@
 #' measurement (in seconds) below which the measurement will be considered as
 #' not having enough data points to be considered for calculations
 #' @param pvalue_col column containing the p-value of each flux
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param rsquared_col column containing the r squared of each flux
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param pvalue_threshold threshold of p-value below which the change of
 #' gas concentration over time is considered not significant
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param rsquared_threshold threshold of r squared value below which
 #' the linear model is considered an unsatisfactory fit
-#' (linear and quadratic fit)
+#' (linear, quadratic, segment)
 #' @param conc_col column containing the measured gas concentration
 #' (exponential fit)
 #' @param b_col column containing the b parameter of the exponential expression
@@ -45,6 +45,28 @@
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
 #' considered good enough (exponential fit)
+#' @param f_flag_fit_col column flagging measurements that were too short to
+#' find segments (optional; provided by \link[flux_fitting]{flux_fitting}).
+#' @param par_col column containing segment average PAR data
+#' @param sign_str_col column containing segment average signal strength
+#' @param par_threshold PAR value threshold under which a segment should be
+#' discarded (if PAR data are not provided, it will just be ignored)
+#' @param sign_str_threshold signal strength threshold under which a segment
+#' should be discarded
+#' (if signal strength is not provided it will just be ignored)
+#' @param sd_threshold standard deviation threshold under which a measurement
+#' should be discarded. The standard deviation is calculated as
+#' sqrt(sum(f_segment_length * (f_slope_corr - f_mean_slope)^2) /
+#' (((nb_segments_ok - 1) * sum(f_segment_length) / nb_segments_ok))
+#' where 'f_segment_length' is the length of each segment;
+#' 'f_slope_corr' the slope of each segment after quality assessment
+#' based on R² and p-value;
+#' 'f_mean_slope' the mean of the slope for the entire measurement
+#' weighed with the length of each segment;
+#' 'nb_segments_ok' the number of segments, excluding those discarded based on
+#' R² and p-value, in each segment.
+#' The full equation is described in Smooth (1997).
+#' @references SMOOTH, Y. DATAPLOT Reference Manual, 1997 2-66
 #' @return same dataframe with added quality flags and corrected slope column
 #' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
@@ -62,6 +84,7 @@ flux_quality <- function(slopes_df,
                          error = 100,
                          fluxid_col = "f_fluxID",
                          slope_col = "f_slope",
+                         f_flag_fit_col = "f_flag_fit",
                          force_discard = c(),
                          force_ok = c(),
                          ratio_threshold = 0,
@@ -77,6 +100,11 @@ flux_quality <- function(slopes_df,
                          rmse_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1,
+                         par_col = "f_par_seg",
+                         sign_str_col = "f_sign_str_seg",
+                         par_threshold = 600,
+                         sign_str_threshold = 95,
+                         sd_threshold = 1,
                          cut_arg = "cut") {
   args_ok <- flux_fun_check(list(
     ambient_conc = ((ambient_conc)),
@@ -182,6 +210,25 @@ flux_quality <- function(slopes_df,
       rsquared_col = ((rsquared_col)),
       pvalue_threshold = ((pvalue_threshold)),
       rsquared_threshold = ((rsquared_threshold))
+    )
+  }
+
+  if (((fit_type)) == "segments") {
+    quality_flag <- flux_quality_segment(
+      ((slopes_df)),
+      pvalue_col = ((pvalue_col)),
+      rsquared_col = ((rsquared_col)),
+      f_flag_fit_col = ((f_flag_fit_col)),
+      par_col = ((par_col)),
+      sign_str_col = ((sign_str_col)),
+      pvalue_threshold = ((pvalue_threshold)),
+      rsquared_threshold = ((rsquared_threshold)),
+      par_threshold = ((par_threshold)),
+      sign_str_threshold = ((sign_str_threshold)),
+      sd_threshold = ((sd_threshold)),
+      cut_arg = ((cut_arg)),
+      force_discard = ((force_discard)),
+      force_ok = ((force_ok))
     )
   }
 

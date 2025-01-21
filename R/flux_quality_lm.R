@@ -72,9 +72,9 @@ flux_quality_lm <- function(slopes_df,
         .data$f_start_error == "error" ~ "start_error",
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
-          .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
+          .data$f_pvalue >= ((pvalue_threshold)) ~ "zero",
         .data$f_rsquared < ((rsquared_threshold)) &
-          .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
+          .data$f_pvalue < ((pvalue_threshold)) ~ "discard"
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA_real_,

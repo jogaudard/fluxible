@@ -1,0 +1,36 @@
+#' CO2 concentration
+#'
+#' CO2 concentration with measurements meta data, fitted with segmentation tool
+#'
+#' @format a tibble with 26 columns and 1574 rows
+#' \describe{
+#' \item{co2_conc}{}
+#' \item{h2o_conc}{}
+#' \item{temperature_c}{}
+#' \item{pressure_kpa}{}
+#' \item{signal_strength}{}
+#' \item{date_time}{}
+#' \item{start_time}{}
+#' \item{file_name}{}
+#' \item{site}{}
+#' \item{elevation}{}
+#' \item{aspect}{}
+#' \item{plot}{}
+#' \item{day_night}{}
+#' \item{measurement}{}
+#' \item{redo}{}
+#' \item{plot_id}{}
+#' \item{par}{}
+#' \item{f_fit}{}
+#' \item{f_slope}{}
+#' \item{f_time}{}
+#' \item{f_rsq}{}
+#' \item{f_rsq_adj}{}
+#' \item{f_pval}{}
+#' \item{f_segment_id}{}
+#' \item{corrected_for_water_vapor}{}
+#' \item{f_cut}{}
+#' }
+#' @examples
+#' pftc7_segmented_short
+"pftc7_segmented_short"

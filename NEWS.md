@@ -1,6 +1,7 @@
 # fluxible 0.0.5
 
 * fixed the blurriness of quality flags in flux_plot
+* Error corrected: `zero` and `discard` quality flags were inverted in `flux_quality` when using the linear model.
 
 # fluxible 0.0.4
 

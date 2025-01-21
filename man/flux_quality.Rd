@@ -11,6 +11,7 @@ flux_quality(
   error = 100,
   fluxid_col = "f_fluxID",
   slope_col = "f_slope",
+  f_flag_fit_col = "f_flag_fit",
   force_discard = c(),
   force_ok = c(),
   ratio_threshold = 0,
@@ -26,6 +27,11 @@ flux_quality(
   rmse_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1,
+  par_col = "f_par_seg",
+  sign_str_col = "f_sign_str_seg",
+  par_threshold = 600,
+  sign_str_threshold = 95,
+  sd_threshold = 1,
   cut_arg = "cut"
 )
 }
@@ -46,6 +52,9 @@ the starting values indicate a polluted setup}
 \item{slope_col}{column containing the slope of each flux
 (as calculated by the flux_fitting function)}
 
+\item{f_flag_fit_col}{column flagging measurements that were too short to
+find segments (optional; provided by \link[flux_fitting]{flux_fitting}).}
+
 \item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}
 
@@ -57,18 +66,18 @@ measurement (in seconds) below which the measurement will be considered as
 not having enough data points to be considered for calculations}
 
 \item{pvalue_col}{column containing the p-value of each flux
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{rsquared_col}{column containing the r squared of each flux
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{pvalue_threshold}{threshold of p-value below which the change of
 gas concentration over time is considered not significant
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{rsquared_threshold}{threshold of r squared value below which
 the linear model is considered an unsatisfactory fit
-(linear and quadratic fit)}
+(linear, quadratic, segment)}
 
 \item{conc_col}{column containing the measured gas concentration
 (exponential fit)}
@@ -94,6 +103,30 @@ is considered not significant (exponential fit)}
 Defines a window with its opposite inside which the fit is
 considered good enough (exponential fit)}
 
+\item{par_col}{column containing segment average PAR data}
+
+\item{sign_str_col}{column containing segment average signal strength}
+
+\item{par_threshold}{PAR value threshold under which a segment should be
+discarded (if PAR data are not provided, it will just be ignored)}
+
+\item{sign_str_threshold}{signal strength threshold under which a segment
+should be discarded
+(if signal strength is not provided it will just be ignored)}
+
+\item{sd_threshold}{standard deviation threshold under which a measurement
+should be discarded. The standard deviation is calculated as
+sqrt(sum(f_segment_length * (f_slope_corr - f_mean_slope)^2) /
+(((nb_segments_ok - 1) * sum(f_segment_length) / nb_segments_ok))
+where 'f_segment_length' is the length of each segment;
+'f_slope_corr' the slope of each segment after quality assessment
+based on R² and p-value;
+'f_mean_slope' the mean of the slope for the entire measurement
+weighed with the length of each segment;
+'nb_segments_ok' the number of segments, excluding those discarded based on
+R² and p-value, in each segment.
+The full equation is described in Smooth (1997).}
+
 \item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
@@ -108,4 +141,7 @@ data(slopes0lin)
 flux_quality(slopes0lin, fit_type = "li")
 data(slopes30)
 flux_quality(slopes30, fit_type = "expo", slope_col = "f_slope")
+}
+\references{
+SMOOTH, Y. DATAPLOT Reference Manual, 1997 2-66
 }
