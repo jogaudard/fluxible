@@ -40,6 +40,7 @@ flux_plot_quadratic <- function(slopes_df,
       na.rm = TRUE
     ) +
     geom_text(
+      data = param_df,
       aes(
         x = .data$f_start, y = ((y_text_position)),
         label = .data$print_col

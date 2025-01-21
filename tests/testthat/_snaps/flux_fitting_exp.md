@@ -1,7 +1,7 @@
 # fitting works with 0 second end cut
 
     Code
-      distinct(select(flux_fitting_exp(co2_conc), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, fit_type = "exp"), f_fluxID, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -27,7 +27,7 @@
 # fitting works with 30 second end cut
 
     Code
-      flux_fitting_exp(co2_conc, end_cut = 30)
+      flux_fitting(co2_conc, end_cut = 30, fit_type = "exp")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -58,7 +58,7 @@
 # fitting works with 60 second end cut
 
     Code
-      flux_fitting_exp(co2_conc, end_cut = 60)
+      flux_fitting(co2_conc, end_cut = 60, fit_type = "exp")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...

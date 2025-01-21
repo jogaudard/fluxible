@@ -731,6 +731,9 @@ nee_missing_try <- nee_missing |>
     )
 nee_missing_try
 
+flux_plot(slopes0_flag)
+flux_plot(slopes0lin_flag, output = "pdfpages")
+
 
 try_segment <- pftc7_short |>
     group_by(.data$file_name) |>

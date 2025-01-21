@@ -31,7 +31,7 @@ flux_param_lm <- function(slopes_df,
         sep = ""
       )
     ) |>
-    select("f_fluxID", "conc_start", "print_col", "f_quality_flag")
+    select("f_start", "f_fluxID", "conc_start", "print_col", "f_quality_flag")
 
   param_df
 }

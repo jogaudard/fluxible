@@ -8,7 +8,7 @@
 
 flux_plot_flag <- function(slopes_df,
                            param_df,
-                           cut_arg = "cut") {
+                           cut_arg) {
   slopes_df <- slopes_df |>
     select(!c("f_quality_flag")) |>
     left_join(param_df, by = "f_fluxID") |>
@@ -18,6 +18,7 @@ flux_plot_flag <- function(slopes_df,
         f_cut != ((cut_arg)) ~ f_quality_flag
       )
     )
+    # print_col needs to have only 1 row/fluxID
 
   slopes_df
 }
