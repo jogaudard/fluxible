@@ -277,9 +277,11 @@ test_that("flux_calc with segmentation tool gives similar results as original da
       flux_unit = "micromol",
       temp_air_col = "temperature_c",
       atm_pressure = "pressure",
-      chamber_volume = 2197,
+      chamber_volume = 2197, # should be 1728 but they used the wrong dimensions
+      # for the data they provided for comparison so for now I keep it like this
       tube_volume = 0,
-      plot_area = 1.69,
+      plot_area = 1.69, # should be 1.44 but they used the wrong dimensions
+      # for the data they provided for comparison so for now I keep it like this
       cols_keep = c("f_quality_flag")
     ) |>
     dplyr::select(
