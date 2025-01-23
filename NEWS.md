@@ -1,6 +1,7 @@
-# fluxible 0.0.6
+# fluxible 0.6
 
 * added segmentation pathway (argument 'fit_type = "segments"') in 'flux_fitting', 'flux_quality' and 'flux_plot'. The segmentation pathway automatically selects linear segments in the measurements and use the weighted mean of their slopes as the measurement's slope. This allows to work with a leaky setup or with bubbles.
+* simplification of version number system
 
 # fluxible 0.0.5
 
