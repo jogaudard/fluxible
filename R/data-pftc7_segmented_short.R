@@ -1,35 +1,40 @@
 #' CO2 concentration
 #'
-#' CO2 concentration with measurements meta data, fitted with segmentation tool
+#' CO2 concentration with measurements meta data,
+#' fitted with first version of segmentation tool
 #'
 #' @format a tibble with 26 columns and 1574 rows
 #' \describe{
-#' \item{co2_conc}{}
-#' \item{h2o_conc}{}
-#' \item{temperature_c}{}
-#' \item{pressure_kpa}{}
-#' \item{signal_strength}{}
-#' \item{date_time}{}
-#' \item{start_time}{}
-#' \item{file_name}{}
-#' \item{site}{}
-#' \item{elevation}{}
-#' \item{aspect}{}
-#' \item{plot}{}
-#' \item{day_night}{}
-#' \item{measurement}{}
-#' \item{redo}{}
-#' \item{plot_id}{}
-#' \item{par}{}
-#' \item{f_fit}{}
-#' \item{f_slope}{}
-#' \item{f_time}{}
-#' \item{f_rsq}{}
-#' \item{f_rsq_adj}{}
-#' \item{f_pval}{}
-#' \item{f_segment_id}{}
-#' \item{corrected_for_water_vapor}{}
-#' \item{f_cut}{}
+#' \item{co2_conc}{CO2 concentration in ppm.}
+#' \item{h2o_conc}{Water vapour concentration.}
+#' \item{temperature_c}{Air temperature inside the flux chamber in Celsius.}
+#' \item{pressure}{Pressure inside the chamber in atm.}
+#' \item{signal_strength}{Strength of the signal in the sensor.}
+#' \item{date_time}{Datetime at which CO2 concentration was recorded.}
+#' \item{start_time}{Datetime at which the measurement was started.}
+#' \item{file_name}{Name of individual flux file.}
+#' \item{site}{Experimental site where measurements took place.}
+#' \item{elevation}{Elevation of plot, in masl.}
+#' \item{aspect}{Aspect of plots (west or east facing slope of the mountain).}
+#' \item{plot}{Plot number.}
+#' \item{day_night}{Indicating if the measurement was done during day or night.}
+#' \item{measurement}{Type of flux
+#' (photo = nee; a = ambient; resp = respiration).}
+#' \item{redo}{Indicating if the measurement is a redo.}
+#' \item{plot_id}{Unique ID for each plot.}
+#' \item{par}{Photosynthetically active radiation inside the chamber
+#' in micromol/s/sqm.}
+#' \item{f_fit}{Modeled (lm) CO2 concentration as a function of time.}
+#' \item{f_slope}{Slope of model.}
+#' \item{f_time}{Time variable of the flux in seconds.}
+#' \item{f_rsq}{R² of model.}
+#' \item{f_rsq_adj}{Adjusted R² of model.}
+#' \item{f_pval}{p-value of model.}
+#' \item{f_segment_id}{ID of segment (unique inside each measurement).}
+#' \item{corrected_for_water_vapor}{Inidicating if the CO2 concentration was
+#' corrected for water vapor.}
+#' \item{f_cut}{Indicating if the concentration datatpoint
+#' should be kept (keep) or discarded (cut).}
 #' }
 #' @examples
 #' pftc7_segmented_short

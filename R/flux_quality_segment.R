@@ -211,15 +211,15 @@ flux_quality_segment <- function(slopes_df,
     group_by(.data$f_fluxID) |>
     mutate(
       f_quality_flag = case_when(
-        !is.na(.data$f_quality_flag) ~ .data$f_quality_flag,
         .data$f_flag_fit == "too short" ~ "discard",
         .data$f_sd_slope >= ((sd_threshold)) &
           !is.na(.data$f_sd_slope) ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_fluxID %in% ((force_discard)) ~ "weird_flux",
+        .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
         .data$f_fluxID %in% ((force_ok)) ~ "force_ok",
         .data$f_start_error == "error" ~ "start_error",
+        !is.na(.data$f_quality_flag) ~ .data$f_quality_flag,
         TRUE ~ "ok"
       ),
       f_mean_slope_corr = case_when(

@@ -20,8 +20,8 @@
 #' \item{ratio}{Ratio of n_conc over length of the measurement (in seconds).}
 #' \item{flag}{Data quality flags.}
 #' \item{f_time}{Time variable of the flux in seconds.}
-#' \item{f_cut}{Indicating if the measurement should be kept (keep) or
-#' discarded (cut).}
+#' \item{f_cut}{Indicating if the concentration datatpoint
+#' should be kept (keep) or discarded (cut).}
 #' \item{Cm_est}{Estimation of the Cm parameter.}
 #' \item{a_est}{Estimation of the a parameter.}
 #' \item{b_est}{Estimation of the b parameter.}

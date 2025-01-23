@@ -779,7 +779,7 @@ replace them by zero.</p>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;  discard      1   1 %</span></span>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;  ok   133     96 %</span></span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;  zero     4   3 %</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;  weird_flux   0   0 %</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;  force_discard   0   0 %</span></span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;  start_error      0   0 %</span></span>
 <span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;  no_data      0   0 %</span></span>
 <span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;  force_ok     0   0 %</span></span>
@@ -849,7 +849,7 @@ cutting the last 60 seconds of the fluxes (cutting the last third). We
 also detected two fluxes (101 and 106) that do not look correct.
 Sometimes some measurements will pass the automated quality control but
 are obviously wrong for an experience user. That is what the
-weird_fluxesID argument is for. For the sake of reproducibility, this
+force_discardesID argument is for. For the sake of reproducibility, this
 argument should be the last option and be accompanied with a
 justification.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>slopes_exp_liahovden_60 <span class="ot">&lt;-</span> conc_liahovden <span class="sc">|&gt;</span></span>
@@ -871,7 +871,7 @@ justification.</p>
 <span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt;  discard      2   1 %</span></span>
 <span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;  ok   133     96 %</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;  weird_flux   2   1 %</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;  force_discard   2   1 %</span></span>
 <span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;  zero     1   1 %</span></span>
 <span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;  start_error      0   0 %</span></span>
 <span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;  no_data      0   0 %</span></span>

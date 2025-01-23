@@ -17,7 +17,7 @@ flux_calc(
   atm_pressure = 1,
   plot_area = 0.0625,
   cols_keep = c(),
-  cols_ave = c(),
+  cols_avg = c(),
   fluxid_col = "f_fluxID",
   temp_air_col = "temp_air",
   temp_air_unit = "celsius",
@@ -62,7 +62,7 @@ can also be a column in case it is a variable}
 Those columns need to have unique values for each flux,
 as distinct() is applied.}
 
-\item{cols_ave}{columns with values that should be averaged
+\item{cols_avg}{columns with values that should be averaged
 for each flux in the output. Note that NA are removed in mean calculation.}
 
 \item{fluxid_col}{column containing the fluxID}
@@ -83,7 +83,7 @@ or micromol}m^(-2)*h^(-1), depending on the value of \code{flux_unit}),
 temperature average for each flux,
 slope used for each flux calculation,
 the model used in \code{flux_fitting},
-and any columns specified in cols_keep and cols_ave.
+and any columns specified in cols_keep and cols_avg.
 }
 \description{
 calculates a flux based on the rate of change

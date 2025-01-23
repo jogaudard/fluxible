@@ -284,7 +284,7 @@ Based on the quality flags and the plots, the user can decide to run `flux_fitti
 Here we will do it while cutting the last 60 seconds of the fluxes (cutting the last third).
 We also detected fluxes that do not look correct.
 Sometimes some measurements will pass the automated quality control but are obviously wrong for an experience user.
-That is what the `weird_fluxesID` argument is for.
+That is what the `force_discardesID` argument is for.
 For the sake of reproducibility, this argument should be the last option and be accompanied with a justification.
 
 ```{r plot_exp_cut, fig.width = 8, fig.height = 9}

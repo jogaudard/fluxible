@@ -2,9 +2,20 @@
 #'
 #' CO2 concentration with measurements meta data, measured with a tent setup
 #'
-#' @format
+#' @format a tibble with 11 columns and 1665 rows
 #' \describe{
-#' \item{}{}
+#' \item{co2_conc}{CO2 concentration in ppm.}
+#' \item{h2o_conc}{Water vapour concentration.}
+#' \item{temperature_c}{Air temperature inside the flux chamber in Celsius.}
+#' \item{pressure}{Pressure inside the chamber in atm.}
+#' \item{signal_strength}{Strength of the signal in the sensor.}
+#' \item{date_time}{Datetime at which CO2 concentration was recorded.}
+#' \item{start_time}{Datetime at which the measurement was started.}
+#' \item{file_name}{Name of individual flux file.}
+#' \item{plot_id}{Unique ID for each plot.}
+#' \item{par}{Photosynthetically active radiation inside the chamber
+#' in micromol/s/sqm.}
+#' \item{f_end}{Datetime at which the measurement ended.}
 #' }
 #' @examples
 #' pftc7_short

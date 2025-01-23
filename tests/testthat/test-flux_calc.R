@@ -223,15 +223,17 @@ test_that("flux_calc works with segmentation tool", {
 
 test_that("flux_calc with segmentation tool gives similar results as original data", {
   expected_calc <- flux_tent_output |>
-    dplyr:: select(file_name, avg_temp, pressure, flux_value) |>
+    dplyr:: select(file_name, avg_temp, pressure, flux_value, flux_flag) |>
     dplyr::rename(
       f_fluxID = "file_name",
       temp_air_avg = "avg_temp",
       atm_pressure_avg = "pressure",
-      flux = "flux_value"
+      flux = "flux_value",
+      f_quality_flag = "flux_flag"
     ) |>
     dplyr::mutate(
       f_fluxID = as.factor(f_fluxID),
+      f_quality_flag = stringr::str_replace_all(f_quality_flag, "keep", "ok"),
       flux = flux * 3600 # to compare flux per hour instead of seconds
     ) |>
     dplyr::arrange(f_fluxID) |>
@@ -262,7 +264,12 @@ test_that("flux_calc with segmentation tool gives similar results as original da
       pvalue_threshold = 100,
       rsquared_threshold = 0.71,
       sd_threshold = 0,
-      ratio_threshold = 0
+      ratio_threshold = 0,
+      force_discard = c(
+        "5_2800_east_5_day_redo_photo.txt",
+        "5_2800_west_2_day_redo_photo.txt",
+        "5_2800_west_5_day_photo.txt"
+      )
     ) |>
     flux_calc(
       slope_col = "f_mean_slope",
@@ -276,9 +283,12 @@ test_that("flux_calc with segmentation tool gives similar results as original da
       cols_keep = c("f_quality_flag")
     ) |>
     dplyr::select(
-      f_fluxID, temp_air_avg, atm_pressure_avg, flux
+      f_fluxID, temp_air_avg, atm_pressure_avg, flux, f_quality_flag
     ) |>
     dplyr::arrange(f_fluxID) |>
+    dplyr::mutate(
+      f_quality_flag = stringr::str_replace_all(f_quality_flag, "force_discard", "discard")
+    ) |>
     data.frame()
 
   expect_equal(

@@ -24,7 +24,7 @@ flux_quality(
   time_col = "f_time",
   fit_col = "f_fit",
   cut_col = "f_cut",
-  rmse_threshold = 25,
+  rmse_threshold = 10,
   cor_threshold = 0.5,
   b_threshold = 1,
   par_col = "f_par_seg",
