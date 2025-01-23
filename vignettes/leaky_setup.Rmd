@@ -73,19 +73,20 @@ flags_pftc7 <- flux_quality(
 
 str(flags_pftc7)
 
-flags_pftc7 |>
-# filter(
-#   f_fluxID %in% c()
-# ) |>
-flux_plot(output = "pdfpages",
-        f_ylim_upper = 500,
-        f_ylim_lower = 400,
-        y_text_position = 450
-        )
+# flags_pftc7 |>
+# # filter(
+# #   f_fluxID %in% c()
+# # ) |>
+# flux_plot(output = "pdfpages",
+#         f_ylim_upper = 500,
+#         f_ylim_lower = 400,
+#         y_text_position = 450
+#         )
 
 flux_pftc7 <- flux_calc(flags_pftc7,
                         slope_col = "f_mean_slope_corr",
                         conc_unit = "ppm",
                         flux_unit = "mmol",
+                        temp_air_col = "temperature_c"
                         )
 ```

@@ -6,6 +6,14 @@
 \usage{
 flux_plot_segment(slopes_df, y_text_position, cut_arg)
 }
+\arguments{
+\item{slopes_df}{dataset containing slopes,
+with flags produced by flux_quality}
+
+\item{y_text_position}{position of the text box}
+
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
+}
 \description{
 provides plots for measurements that were fitted using
 the segment model in flux_fitting

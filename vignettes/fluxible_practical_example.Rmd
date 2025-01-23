@@ -386,7 +386,7 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_flag_60 |>
     atm_pressure = 1,
     plot_area = 0.0625,
     cols_keep = c("turfID", "type", "pairID"),
-    cols_ave = c("temp_soil", "PAR"),
+    cols_avg = c("temp_soil", "PAR"),
     fluxid_col = "f_fluxID",
     temp_air_col = "temp_air",
     temp_air_unit = "celsius"
@@ -405,7 +405,7 @@ fluxes_qua_liahovden_60 <- slopes_qua_liahovden_flag_60 |>
     atm_pressure = 1,
     plot_area = 0.0625,
     cols_keep = c("turfID", "type", "pairID"),
-    cols_ave = c("temp_soil", "PAR"),
+    cols_avg = c("temp_soil", "PAR"),
     fluxid_col = "f_fluxID",
     temp_air_col = "temp_air",
     temp_air_unit = "celsius"
@@ -424,7 +424,7 @@ fluxes_lin_liahovden_120 <- slopes_lin_liahovden_flag_120 |>
     atm_pressure = 1,
     plot_area = 0.0625,
     cols_keep = c("turfID", "type", "pairID"),
-    cols_ave = c("temp_soil", "PAR"),
+    cols_avg = c("temp_soil", "PAR"),
     fluxid_col = "f_fluxID",
     temp_air_col = "temp_air",
     temp_air_unit = "celsius"

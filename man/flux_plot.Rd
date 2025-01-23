@@ -84,7 +84,7 @@ the measurements.
 }
 \examples{
 data(slopes0_flag)
-flux_plot(slopes0_flag)
+flux_plot(slopes30_flag)
 data(slopes30lin_flag)
 flux_plot(slopes30lin_flag)
 data(slopes30qua_flag)

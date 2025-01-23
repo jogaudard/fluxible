@@ -25,7 +25,7 @@ flux_quality(
   fit_col = "f_fit",
   cut_col = "f_cut",
   rmse_threshold = 10,
-  cor_threshold = 0.5,
+  cor_threshold = 0.6,
   b_threshold = 1,
   par_col = "f_par_seg",
   sign_str_col = "f_sign_str_seg",
@@ -39,7 +39,8 @@ flux_quality(
 \item{slopes_df}{dataset containing slopes}
 
 \item{fit_type}{model fitted to the data, linear, quadratic or exponential.
-Will be automatically filled if slopes_df was produced using flux_fitting()}
+Will be automatically filled if slopes_df was produced using
+\link[fluxible::flux_fitting]{flux_fitting})}
 
 \item{ambient_conc}{ambient gas concentration in ppm at the site of
 measurement (used to detect measurement that started with a polluted setup)}
@@ -53,7 +54,8 @@ the starting values indicate a polluted setup}
 (as calculated by the flux_fitting function)}
 
 \item{f_flag_fit_col}{column flagging measurements that were too short to
-find segments (optional; provided by \link[flux_fitting]{flux_fitting}).}
+find segments (optional; provided by
+\link[fluxible::flux_fitting]{flux_fitting}).}
 
 \item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}

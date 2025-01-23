@@ -47,6 +47,21 @@ the first row will be kept}
 
 \item{fluxid_col}{column with ID of each flux}
 
+\item{par_col}{column containing PAR data (segments; optional).}
+
+\item{h2o_col}{column containing water vapour concentration
+(segments; optional).}
+
+\item{sign_str_col}{column containing signal strength
+(segments; optional).}
+
+\item{h2o_correction}{Should the gas concentration be corrected
+for water vapor? (logical; segments)}
+
+\item{min_seg_length}{minimum length (in seconds) for each segments
+(segments). Note that the minimum segment length cannot be longer than half
+the length of the measurements.}
+
 \item{t_window}{enlarge focus window before and after tmin and tmax
 (exponential fit)}
 

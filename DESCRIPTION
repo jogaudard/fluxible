@@ -31,8 +31,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    vdiffr,
-    forcats
+    vdiffr
 Config/testthat/edition: 3
 Imports: 
     broom,
@@ -49,7 +48,9 @@ Imports:
     zoo,
     progress,
     purrrlyr,
-    cpop
+    cpop,
+    forcats,
+    tidyselect
 Depends: 
     R (>= 4.1)
 LazyData: true

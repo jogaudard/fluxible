@@ -1,0 +1,54 @@
+#' Slopes for PFTC7 measurements with flags
+#' 
+#' Slopes for PFTC7 data produced with segmentation tool,
+#' measured with flux tent, including quality flags from flux_quality
+#' 
+#' @format a tibble with 37 columns and 1665 rows
+#' \describe{
+#' \item{f_conc}{CO2 concentration in ppm.}
+#' \item{f_h2o_conc}{Water vapour concentration.}
+#' \item{temperature_c}{Air temperature inside the flux chamber in Celsius.}
+#' \item{pressure}{Pressure inside the chamber in atm.}
+#' \item{f_signal_strength}{Strength of the signal in the sensor.}
+#' \item{f_datetime}{Datetime at which CO2 concentration was recorded.}
+#' \item{f_start}{Datetime at which the measurement was started.}
+#' \item{f_fluxID}{Unique ID for each measurement.}
+#' \item{plot_id}{Unique ID for each plot.}
+#' \item{f_par}{Photosynthetically active radiation inside the chamber
+#' in micromol/s/sqm.}
+#' \item{f_end}{Datetime at which the measurement ended.}
+#' \item{f_time}{Time variable of the flux in seconds.}
+#' \item{n_conc}{Number of datapoints for each measurement.}
+#' \item{f_flag_fit}{Flag indicating if a measurement is too short
+#' to be segmented.}
+#' \item{f_cut}{Indicating if the concentration datatpoint
+#' should be kept (keep) or discarded (cut).}
+#' \item{corrected_for_water_vapor}{Inidicating if the CO2 concentration was
+#' corrected for water vapor.}
+#' \item{f_time_cut}{Time variable of the flux in seconds,
+#' after removal of cut datapoints.}
+#' \item{f_fit}{Modeled (lm) CO2 concentration as a function of time.}
+#' \item{f_adj_rsquared}{Adjusted R² of model.}
+#' \item{f_segment_id}{ID of segment (unique inside each measurement).}
+#' \item{f_n_conc}{Number of datapoints for each measurement.}
+#' \item{f_ratio}{Ratio of f_n_conc over length of the measurement
+#' (in seconds).}
+#' \item{f_flag_ratio}{Flag measurements with a low ratio.}
+#' \item{f_start_error}{flagging if measurement started outside of the possible
+#' ambient concentration}
+#' \item{f_par_seg}{Average PAR of each segment.}
+#' \item{f_sign_str_seg}{Average signal strength of each segment.}
+#' \item{f_quality_flag_seg}{Quality flag of each segments.}
+#' \item{f_slope_corr}{Slope of each segment corrected according
+#' to quality flag}
+#' \item{f_mean_slope}{Mean slope (after correction) for each measurement,
+#' weighted with the length of each segment.}
+#' \item{nb_segments_ok}{Number of segments in each measurement that were used
+#' for the mean slope (`ok` and `zero`, but discarded are not counted).}
+#' \item{f_sd_slope}{Weighted standard deviation of the mean slope,
+#' indicating if segment slopes differed too much.}
+#' \item{f_mean_slope_corr}{Slope corrected according to quality flag.}
+#' }
+#' @examples
+#' slopes_pftc7_flags
+"slopes_pftc7_flags"

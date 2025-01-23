@@ -163,6 +163,7 @@ flux_fitting_segment <- function(conc_df,
       )
     ) |>
     ungroup() |>
+    select(!"n_conc") |>
     arrange("f_datetime")
 
   short_df <- conc_df |>

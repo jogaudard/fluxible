@@ -1,6 +1,10 @@
 #' plots fluxes fitted with segmentation tool
 #' @description provides plots for measurements that were fitted using
 #' the segment model in flux_fitting
+#' @param slopes_df dataset containing slopes,
+#' with flags produced by flux_quality
+#' @param y_text_position position of the text box
+#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr select left_join mutate case_when
 #' @importFrom ggplot2 ggplot theme_bw geom_point geom_text
 

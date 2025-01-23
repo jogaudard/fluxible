@@ -157,7 +157,7 @@ test_that("volume can be a variable instead of a constant", {
   expect_snapshot(
     flux_calc(
       slopes0_vol,
-      slope_col = "f_slope_tz",
+      slope_col = "f_slope",
       conc_unit = "ppm",
       flux_unit = "mmol",
       chamber_volume = "volume"
@@ -170,7 +170,7 @@ test_that("volume can be a variable instead of a constant (tube_volume)", {
   expect_snapshot(
     flux_calc(
       slopes0_vol_tube,
-      slope_col = "f_slope_tz",
+      slope_col = "f_slope",
       conc_unit = "ppm",
       flux_unit = "mmol",
       chamber_volume = "volume",

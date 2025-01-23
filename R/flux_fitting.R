@@ -30,6 +30,16 @@
 #' @param fluxid_col column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
 #' (for quadratic fit)
+#' @param par_col column containing PAR data (segments; optional).
+#' @param h2o_col column containing water vapour concentration
+#' (segments; optional).
+#' @param sign_str_col column containing signal strength
+#' (segments; optional).
+#' @param h2o_correction Should the gas concentration be corrected
+#' for water vapor? (logical; segments)
+#' @param min_seg_length minimum length (in seconds) for each segments
+#' (segments). Note that the minimum segment length cannot be longer than half
+#' the length of the measurements.
 #' @return a dataframe with the slope at t zero,
 #' and parameters of a model of gas concentration over time
 #' @examples

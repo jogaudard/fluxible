@@ -137,13 +137,13 @@
       2        2  31.0         7.37         24.6
       3        3  20.7         7.45         24.6
       4        4  41.5         7.77         24.6
-      5        5  68.7         7.70         24.6
+      5        5   0           7.70         24.6
       6        6  26.1         7.74         24.6
 
 # volume can be a variable instead of a constant
 
     Code
-      dplyr::select(flux_calc(slopes0_vol, slope_col = "f_slope_tz", conc_unit = "ppm",
+      dplyr::select(flux_calc(slopes0_vol, slope_col = "f_slope", conc_unit = "ppm",
         flux_unit = "mmol", chamber_volume = "volume"), f_fluxID, flux, volume_setup,
       temp_air_avg)
     Message
@@ -166,7 +166,7 @@
 # volume can be a variable instead of a constant (tube_volume)
 
     Code
-      dplyr::select(flux_calc(slopes0_vol_tube, slope_col = "f_slope_tz", conc_unit = "ppm",
+      dplyr::select(flux_calc(slopes0_vol_tube, slope_col = "f_slope", conc_unit = "ppm",
         flux_unit = "mmol", chamber_volume = "volume", tube_volume = "tube_vol"),
       f_fluxID, flux, volume_setup, temp_air_avg)
     Message
@@ -193,7 +193,7 @@
     Output
       tibble [6 x 11] (S3: tbl_df/tbl/data.frame)
        $ f_fluxID        : Factor w/ 6 levels "1","2","3","4",..: 1 2 3 4 5 6
-       $ f_slope_calc    : num [1:6] 1.555 0.853 0.303 1.13 1.463 ...
+       $ f_slope_calc    : num [1:6] 0 0 0.303 0 0 ...
        $ chamber_volume  : num [1:6] 24.5 24.5 24.5 24.5 24.5 24.5
        $ tube_volume     : num [1:6] 0.075 0.075 0.075 0.075 0.075 0.075
        $ plot_area       : num [1:6] 0.0625 0.0625 0.0625 0.0625 0.0625 0.0625
@@ -201,7 +201,7 @@
        $ atm_pressure_avg: num [1:6] 1 1 1 1 1 1
        $ datetime        : POSIXct[1:6], format: "2022-07-28 23:43:35" "2022-07-28 23:47:22" ...
        $ volume_setup    : num [1:6] 24.6 24.6 24.6 24.6 24.6 ...
-       $ flux            : num [1:6] 95.6 52.4 18.6 69.4 89.9 ...
+       $ flux            : num [1:6] 0 0 18.6 0 0 ...
        $ model           : chr [1:6] "exponential" "exponential" "exponential" "exponential" ...
 
 # flux_calc works with segmentation tool
