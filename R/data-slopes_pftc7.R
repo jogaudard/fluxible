@@ -1,8 +1,8 @@
 #' Slopes for PFTC7 measurements
-#' 
+#'
 #' Slopes for PFTC7 data produced with segmentation tool,
 #' measured with flux tent
-#' 
+#'
 #' @format a tibble with 25 columns and 1665 rows
 #' \describe{
 #' \item{f_conc}{CO2 concentration in ppm.}

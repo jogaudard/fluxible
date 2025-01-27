@@ -4,7 +4,7 @@
 #' @param slopes_df dataset containing slopes
 #' @param fit_type model fitted to the data, linear, quadratic or exponential.
 #' Will be automatically filled if slopes_df was produced using
-#' \link[fluxible::flux_fitting]{flux_fitting})
+#' \link[fluxible:flux_fitting]{flux_fitting}
 #' @param ambient_conc ambient gas concentration in ppm at the site of
 #' measurement (used to detect measurement that started with a polluted setup)
 #' @param error error of the setup, defines a window outside of which
@@ -48,7 +48,7 @@
 #' considered good enough (exponential fit)
 #' @param f_flag_fit_col column flagging measurements that were too short to
 #' find segments (optional; provided by
-#' \link[fluxible::flux_fitting]{flux_fitting}).
+#' \link[fluxible:flux_fitting]{flux_fitting}).
 #' @param par_col column containing segment average PAR data
 #' @param sign_str_col column containing segment average signal strength
 #' @param par_threshold PAR value threshold under which a segment should be

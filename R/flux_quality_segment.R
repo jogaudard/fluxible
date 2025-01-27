@@ -7,7 +7,8 @@
 #' @param rsquared_col column containing the r squared of each flux
 #' (linear, quadratic, segment)
 #' @param f_flag_fit_col column flagging measurements that were too short to
-#' find segments (optional; provided by \link[flux_fitting]{flux_fitting}).
+#' find segments (optional; provided by
+#' \link[fluxible:flux_fitting]{flux_fitting}).
 #' @param par_col column containing segment average PAR data
 #' @param sign_str_col column containing segment average signal strength
 #' @param par_threshold PAR value threshold under which a segment should be

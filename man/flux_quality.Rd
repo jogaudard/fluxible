@@ -40,7 +40,7 @@ flux_quality(
 
 \item{fit_type}{model fitted to the data, linear, quadratic or exponential.
 Will be automatically filled if slopes_df was produced using
-\link[fluxible::flux_fitting]{flux_fitting})}
+\link[fluxible:flux_fitting]{flux_fitting}}
 
 \item{ambient_conc}{ambient gas concentration in ppm at the site of
 measurement (used to detect measurement that started with a polluted setup)}
@@ -55,7 +55,7 @@ the starting values indicate a polluted setup}
 
 \item{f_flag_fit_col}{column flagging measurements that were too short to
 find segments (optional; provided by
-\link[fluxible::flux_fitting]{flux_fitting}).}
+\link[fluxible:flux_fitting]{flux_fitting}).}
 
 \item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}

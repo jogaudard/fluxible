@@ -31,7 +31,8 @@ flux_quality_segment(
 (linear, quadratic, segment)}
 
 \item{f_flag_fit_col}{column flagging measurements that were too short to
-find segments (optional; provided by \link[flux_fitting]{flux_fitting}).}
+find segments (optional; provided by
+\link[fluxible:flux_fitting]{flux_fitting}).}
 
 \item{par_col}{column containing segment average PAR data}
 
