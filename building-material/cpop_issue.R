@@ -2,6 +2,7 @@ library(tidyverse)
 library(fluxible)
 library(cpop)
 library(broom)
+library(stats)
 
 # from cpop documentation
 # simulate data with change in gradient
@@ -79,12 +80,13 @@ conc_slope <- conc_seg |>
     mod_seg = map(.x = data, \(.x) lm(f_conc ~ time, data = .x)),
     tidy = map(mod_seg, tidy),
     # slope_lm_seg = map(mod_seg, coef),
-    fit_lm_seg = map(mod_seg, predict)
+    fit_lm_seg = map(mod_seg, predict),
+    seg_length = map(data, nrow)
          ) |>
          unnest(tidy) |>
     filter(term == "time") |>
     rename(slope_lm_seg = "estimate") |>
-  unnest(cols = c(data, fit_lm_seg)) |>
+  unnest(cols = c(data, fit_lm_seg, seg_length)) |>
   select(!c(mod_seg, term, std.error, statistic, p.value))
 
 # for comparison, we will take the weighted mean of the slopes from both ideas
@@ -109,8 +111,10 @@ conc_slope_avg <- conc_slope2 |>
     mutate(
         slope_cpop_avg = mean(slope_cpop),
         slope_lm_seg_avg = mean(slope_lm_seg),
-        fit_lm_seg_avg = intercept_lm + slope_lm_seg_avg * time,
-        fit_cpop_avg = intercept_lm + slope_cpop_avg * time
+        intercept_avg = weighted.mean(intercept_cpop, seg_length),
+        # intercept_avg = mean(intercept_cpop),
+        fit_lm_seg_avg = intercept_avg + slope_lm_seg_avg * time,
+        fit_cpop_avg = intercept_avg + slope_cpop_avg * time
     ) |>
     ungroup()
 
