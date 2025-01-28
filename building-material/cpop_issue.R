@@ -46,15 +46,15 @@ gradient <- function(cpo, segID){
 conc_df <- flux_match(co2_df_short, record_short, measurement_length = 150)
 #   filter(f_fluxID == 1) |>
 # cpop does not deal with datetime format
-test_segment <- function(conc_df){
+test_segment <- function(conc_df, minseglen){
 conc_df <- conc_df |>
-  mutate(time = row_number()) |> # for simplicity we assume no data are missing
+  mutate(time = row_number(), .by = f_fluxID) |> # for simplicity we assume no data are missing
   select(f_fluxID, f_datetime, f_conc, time)
 
 conc_seg <- conc_df |>
   group_by(f_fluxID) |>
   nest() |>
-  mutate(cpo = map(data, \(x)cpop(x$f_conc, x$time, minseglen = 10)),
+  mutate(cpo = map(data, \(x)cpop (x$f_conc, x$time, minseglen = minseglen)),
          segID = map(cpo, changepts),
          fit = map(cpo, fitted)
          ) |>
@@ -76,22 +76,63 @@ conc_slope <- conc_seg |>
   group_by(f_fluxID, segID) |>
   nest() |>
   mutate(
-    mod = map(.x = data, \(.x) lm(f_conc ~ time, data = .x)),
-        #  mod = map(mod, glance),
-    fit_lm = map(mod, predict)
+    mod_seg = map(.x = data, \(.x) lm(f_conc ~ time, data = .x)),
+    tidy = map(mod_seg, tidy),
+    # slope_lm_seg = map(mod_seg, coef),
+    fit_lm_seg = map(mod_seg, predict)
          ) |>
-  unnest(cols = c(data, fit_lm))
-  
-# let's add this to the plot
-ggplot(conc_slope, aes(f_datetime)) +
-geom_line(aes(y = fit_cpop), colour = "green") +
+         unnest(tidy) |>
+    filter(term == "time") |>
+    rename(slope_lm_seg = "estimate") |>
+  unnest(cols = c(data, fit_lm_seg)) |>
+  select(!c(mod_seg, term, std.error, statistic, p.value))
+
+# for comparison, we will take the weighted mean of the slopes from both ideas
+# and also the slope of a LM on the entire flux
+
+conc_slope2 <- conc_slope |>
+    group_by(f_fluxID) |>
+    nest() |>
+    mutate(
+        mod_lm = map(.x = data, \(.x) lm(f_conc ~ time, data = .x)),
+        fit_lm = map(mod_lm, predict),
+        tidy = map(mod_lm, tidy)
+    ) |>
+    unnest(tidy) |>
+    filter(term == "(Intercept)") |>
+    rename(intercept_lm = "estimate") |>
+    unnest(cols = c(f_fluxID, data, fit_lm)) |>
+  select(!c(mod_lm, term, std.error, statistic, p.value))
+
+conc_slope_avg <- conc_slope2 |>
+    group_by(f_fluxID) |>
+    mutate(
+        slope_cpop_avg = mean(slope_cpop),
+        slope_lm_seg_avg = mean(slope_lm_seg),
+        fit_lm_seg_avg = intercept_lm + slope_lm_seg_avg * time,
+        fit_cpop_avg = intercept_lm + slope_cpop_avg * time
+    ) |>
+    ungroup()
+
+ggplot(conc_slope_avg, aes(f_datetime)) +
+# measurement data points
 geom_point(aes(y = f_conc), size = 0.2) +
-geom_line(aes(y = fit_lm, group = segID), colour = "purple") +
+# geom_smooth(aes(y = f_conc), method = lm, formula = y ~ poly(x, 1)) +
+# the fit of segments done by cpop
+geom_line(aes(y = fit_cpop), colour = "green") +
+# the fit of segments wiht lm, using cpop changepoints
+geom_line(aes(y = fit_lm_seg, group = segID), colour = "purple") +
+# weighted mean of lm segments
+geom_line(aes(y = fit_lm_seg_avg), colour = "red") +
+# weighted mean of cpop segments
+geom_line(aes(y = fit_cpop_avg), colour = "orange") +
+# lm on entire measurement
+geom_line(aes(y = fit_lm), colour = "blue") +
 facet_wrap(vars(f_fluxID), scales = "free")
 
 }
 
-test_segment(conc_df)
+test_segment(conc_df, 20)
 test_pftc7 <- pftc7_short  |>
     rename(
         f_conc = "co2_conc",
@@ -99,4 +140,4 @@ test_pftc7 <- pftc7_short  |>
         f_fluxID = "file_name"
     )
 
-test_segment(test_pftc7)
+test_segment(test_pftc7, 30)
