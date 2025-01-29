@@ -144,7 +144,7 @@
 # volume can be a variable instead of a constant
 
     Code
-      flux_calc(slopes0_vol, slope_col = "f_slope_tz", conc_unit = "ppm", flux_unit = "mmol",
+      flux_calc(slopes0_vol, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
         chamber_volume = "volume")
     Message
       Averaging air temperature for each flux...
@@ -153,7 +153,7 @@
       Concentration was measured in ppm
       Fluxes are in mmol/m2/h
     Output
-      # A tibble: 6 x 10
+      # A tibble: 6 x 11
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure plot_area
            <dbl>        <dbl>          <dbl>       <dbl>        <dbl>     <dbl>
       1        1        1.56              18       0.075            1    0.0625
@@ -162,13 +162,13 @@
       4        4        1.13              24       0.075            1    0.0625
       5        5        1.46               4       0.075            1    0.0625
       6        6        0.426             35       0.075            1    0.0625
-      # i 4 more variables: temp_air_ave <dbl>, datetime <dttm>, volume_setup <dbl>,
-      #   flux <dbl>
+      # i 5 more variables: temp_air_ave <dbl>, datetime <dttm>, volume_setup <dbl>,
+      #   flux <dbl>, model <chr>
 
 # volume can be a variable instead of a constant (volume)
 
     Code
-      select(flux_calc(slopes0_vol_tube, slope_col = "f_slope_tz", conc_unit = "ppm",
+      select(flux_calc(slopes0_vol_tube, slope_col = "f_slope", conc_unit = "ppm",
         flux_unit = "mmol", chamber_volume = "volume", tube_volume = "tube_vol"), !c(
         chamber_volume, tube_volume))
     Message
@@ -178,7 +178,7 @@
       Concentration was measured in ppm
       Fluxes are in mmol/m2/h
     Output
-      # A tibble: 6 x 8
+      # A tibble: 6 x 9
         f_fluxID f_slope_calc atm_pressure plot_area temp_air_ave datetime           
            <dbl>        <dbl>        <dbl>     <dbl>        <dbl> <dttm>             
       1        1        1.56             1    0.0625         7.31 2022-07-28 23:43:35
@@ -187,7 +187,7 @@
       4        4        1.13             1    0.0625         7.77 2022-07-28 23:59:32
       5        5        1.46             1    0.0625         7.71 2022-07-29 00:03:10
       6        6        0.426            1    0.0625         7.75 2022-07-29 00:06:35
-      # i 2 more variables: volume_setup <dbl>, flux <dbl>
+      # i 3 more variables: volume_setup <dbl>, flux <dbl>, model <chr>
 
 # Fluxible workflow works from start to finish
 

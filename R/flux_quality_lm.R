@@ -72,7 +72,7 @@ flux_quality_lm <- function(slopes_df,
           .data$f_pvalue < ((pvalue_threshold)) ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_start_error == "error" ~ "start_error"
+        .data$f_start_error == "error" ~ "start_error",
         .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
         .data$f_fluxID %in% ((force_ok)) ~ "force_ok",
       ),
