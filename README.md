@@ -3,10 +3,6 @@
 
 # Fluxible
 
-**Note:** fluxible is still in an early phase, it is fully functional
-but can be improved in many ways. Please get in touch for any problems
-or suggestions.
-
 <!-- badges: start -->
 <!-- badges: end -->
 

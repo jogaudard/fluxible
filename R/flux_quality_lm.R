@@ -65,16 +65,16 @@ flux_quality_lm <- function(slopes_df,
     group_by(.data$f_fluxID, .data$f_cut) |>
     mutate(
       f_quality_flag = case_when(
-        .data$f_flag_ratio == "no_data" ~ "no_data",
-        .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
-        .data$f_fluxID %in% ((force_ok)) ~ "force_ok",
-        .data$f_start_error == "error" ~ "start_error",
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
           .data$f_pvalue >= ((pvalue_threshold)) ~ "zero",
         .data$f_rsquared < ((rsquared_threshold)) &
-          .data$f_pvalue < ((pvalue_threshold)) ~ "discard"
+          .data$f_pvalue < ((pvalue_threshold)) ~ "discard",
+        .data$f_flag_ratio == "no_data" ~ "no_data",
+        .data$f_flag_ratio == "too_low" ~ "discard",
+        .data$f_start_error == "error" ~ "start_error"
+        .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
+        .data$f_fluxID %in% ((force_ok)) ~ "force_ok",
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA_real_,
