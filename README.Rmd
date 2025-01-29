@@ -17,8 +17,6 @@ knitr::opts_chunk$set(
 
 # Fluxible
 
-**Note:** fluxible is still in an early phase, it is fully functional but can be improved in many ways. Please get in touch for any problems or suggestions.
-
 <!-- badges: start -->
 <!-- badges: end -->
 The Fluxible R package is made to transform any dataset of gas concentration over time into a gas flux dataset.
@@ -50,7 +48,7 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 ```
 
 ## Short example
-```{r short-exemple, fig.width = 8, fig.height = 9}
+```{r short-example, fig.width = 8, fig.height = 9}
 library(fluxible)
 
 conc <- flux_match(

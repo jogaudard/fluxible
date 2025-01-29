@@ -29,7 +29,7 @@ flux_flag_count <- function(slopes_df,
                               "ok",
                               "discard",
                               "zero",
-                              "weird_flux",
+                              "force_discard",
                               "start_error",
                               "no_data",
                               "force_ok"
