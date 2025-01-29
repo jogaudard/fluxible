@@ -127,7 +127,6 @@ flux_quality <- function(slopes_df,
   )
 
   slopes_df <- slopes_df |>
-    group_by(.data$f_fluxID, .data$f_cut) |>
     mutate(
       f_n_conc = sum(!is.na(.data$f_conc)),
       f_ratio = .data$f_n_conc / as.double((difftime(
@@ -138,9 +137,9 @@ flux_quality <- function(slopes_df,
         .data$f_ratio == 0 ~ "no_data",
         .data$f_ratio <= ratio_threshold ~ "too_low",
         TRUE ~ "ok"
-      )
-    ) |>
-    ungroup()
+      ),
+      .by = c("f_fluxID", "f_cut")
+    )
 
   quality_par_start <- slopes_df |>
     # for the start error we take the entire flux into account

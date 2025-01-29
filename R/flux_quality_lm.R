@@ -62,7 +62,6 @@ flux_quality_lm <- function(slopes_df,
 
 
   slopes_df <- slopes_df |>
-    group_by(.data$f_fluxID, .data$f_cut) |>
     mutate(
       f_quality_flag = case_when(
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
@@ -83,9 +82,9 @@ flux_quality_lm <- function(slopes_df,
         .data$f_quality_flag == "ok" ~ .data$f_slope,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "zero" ~ 0
-      )
-    ) |>
-    ungroup()
+      ),
+      .by = c("f_fluxID", "f_cut")
+    )
 
   slopes_df
 }
