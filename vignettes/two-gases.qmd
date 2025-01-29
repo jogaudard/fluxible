@@ -1,0 +1,5 @@
+vignette: >
+  %\VignetteIndexEntry{Working with two gases}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
