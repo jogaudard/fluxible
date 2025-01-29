@@ -78,7 +78,7 @@ slopes_flag <- flux_quality(
 #>  ok   6   100 %
 #>  discard      0   0 %
 #>  zero     0   0 %
-#>  force_discard   0   0 %
+#>  force_discard    0   0 %
 #>  start_error      0   0 %
 #>  no_data      0   0 %
 #>  force_ok     0   0 %
@@ -96,7 +96,7 @@ flux_plot(
 #> Plotting in progress
 ```
 
-<img src="man/figures/README-short-exemple-1.png" width="100%" />
+<img src="man/figures/README-short-example-1.png" width="100%" />
 
 ``` r
 
