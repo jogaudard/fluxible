@@ -16,11 +16,6 @@
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
-#' @param start_col column with datetime when the measurement started
-#' @param end_col column with datetime when the measurement ended
-#' @param datetime_col column with datetime of each concentration measurement
-#' @param conc_col column with gas concentration data
-#' @param fluxid_col column with ID of each flux
 #' @return a dataframe with the slope at t zero,
 #' modeled concentration over time and exponential expression parameters
 #' @importFrom rlang .data
@@ -42,12 +37,7 @@ flux_fitting_exp <- function(conc_df,
                              a_window,
                              roll_width,
                              start_cut,
-                             end_cut,
-                             start_col,
-                             end_col,
-                             datetime_col,
-                             conc_col,
-                             fluxid_col) {
+                             end_cut) {
 
   args_ok <- flux_fun_check(list(
     t_window = ((t_window)),

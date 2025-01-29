@@ -4,16 +4,7 @@
 \alias{flux_fitting_lin}
 \title{linear fit to gas concentration over time}
 \usage{
-flux_fitting_lin(
-  conc_df,
-  start_cut,
-  end_cut,
-  start_col,
-  end_col,
-  datetime_col,
-  conc_col,
-  fluxid_col
-)
+flux_fitting_lin(conc_df, start_cut, end_cut)
 }
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
@@ -22,16 +13,6 @@ flux_fitting_lin(
 (in seconds)}
 
 \item{end_cut}{time to discard at the end of the measurements (in seconds)}
-
-\item{start_col}{column with datetime when the measurement started}
-
-\item{end_col}{column with datetime when the measurement ended}
-
-\item{datetime_col}{column with datetime of each concentration measurement}
-
-\item{conc_col}{column with gas concentration data}
-
-\item{fluxid_col}{column with ID of each flux}
 }
 \value{
 a df with the modeled gas concentration, slope, intercept,

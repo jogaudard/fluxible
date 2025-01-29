@@ -4,11 +4,6 @@
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
-#' @param start_col column with datetime when the measurement started
-#' @param end_col column with datetime when the measurement ended
-#' @param datetime_col column with datetime of each concentration measurement
-#' @param conc_col column with gas concentration data
-#' @param fluxid_col column with ID of each flux
 #' @return a df with the modeled gas concentration, slope, intercept,
 #' std error, r square and p value of the linear model
 #' @importFrom rlang .data
@@ -21,12 +16,7 @@
 
 flux_fitting_lin <- function(conc_df,
                              start_cut,
-                             end_cut,
-                             start_col,
-                             end_col,
-                             datetime_col,
-                             conc_col,
-                             fluxid_col) {
+                             end_cut) {
   args_ok <- flux_fun_check(list(
     start_cut = ((start_cut)),
     end_cut = ((end_cut))

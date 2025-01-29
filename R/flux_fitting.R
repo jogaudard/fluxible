@@ -111,11 +111,6 @@ flux_fitting <- function(conc_df,
       conc_df,
       start_cut = ((start_cut)),
       end_cut = ((end_cut)),
-      start_col = "f_start",
-      end_col = "f_end",
-      datetime_col = "f_datetime",
-      conc_col = "f_conc",
-      fluxid_col = "f_fluxID",
       t_window = ((t_window)),
       cz_window = ((cz_window)),
       b_window = ((b_window)),
@@ -129,12 +124,7 @@ flux_fitting <- function(conc_df,
     conc_fitting <- flux_fitting_lin(
       conc_df,
       start_cut = ((start_cut)),
-      end_cut = ((end_cut)),
-      start_col = "f_start",
-      end_col = "f_end",
-      datetime_col = "f_datetime",
-      conc_col = "f_conc",
-      fluxid_col = "f_fluxID"
+      end_cut = ((end_cut))
     )
   }
 
@@ -143,11 +133,6 @@ flux_fitting <- function(conc_df,
       conc_df,
       start_cut = ((start_cut)),
       end_cut = ((end_cut)),
-      start_col = "f_start",
-      end_col = "f_end",
-      datetime_col = "f_datetime",
-      conc_col = "f_conc",
-      fluxid_col = "f_fluxID",
       t_zero = ((t_zero))
     )
   }
