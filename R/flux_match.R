@@ -57,11 +57,11 @@ flux_match <- function(raw_conc,
 
   raw_conc_check <- raw_conc |>
     select(
-           all_of(((datetime_col))),
-           all_of(((conc_col))))
+           all_of(datetime_col),
+           all_of(conc_col))
 
   field_record_check <- field_record |>
-    select(all_of(((start_col))))
+    select(all_of(start_col))
 
   raw_conc_ok <- flux_fun_check(raw_conc_check,
                                 fn = list(is.POSIXct, is.numeric),
@@ -82,19 +82,19 @@ flux_match <- function(raw_conc,
 
   raw_conc <- raw_conc |>
     rename(
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col))
+      f_datetime = all_of(datetime_col),
+      f_conc = all_of(conc_col)
     )
 
   field_record <- field_record |>
     rename(
-      f_start = all_of((start_col))
+      f_start = all_of(start_col)
     )
 
 
 
 
-  if (((ratio_threshold)) < 0 || ((ratio_threshold)) > 1) {
+  if (ratio_threshold < 0 || ratio_threshold > 1) {
     stop("ratio_threshold has to be a number between 0 and 1")
   }
 
@@ -102,13 +102,13 @@ flux_match <- function(raw_conc,
   field_record <- field_record |>
     arrange(.data$f_start) |>
     mutate(
-      f_end = .data$f_start + ((measurement_length)),
-      f_start = .data$f_start + ((startcrop)),
+      f_end = .data$f_start + measurement_length,
+      f_start = .data$f_start + startcrop,
       f_fluxID = row_number()
     )
   raw_conc <- raw_conc |>
     mutate(
-      f_datetime = .data$f_datetime + ((time_diff))
+      f_datetime = .data$f_datetime + time_diff
     )
 
   conc_df <- full_join(
@@ -134,10 +134,10 @@ flux_match <- function(raw_conc,
     ) |>
     mutate(
       f_n_conc = sum(!is.na(.data$f_conc)),
-      f_ratio = .data$f_n_conc / (((measurement_length)) - ((startcrop))),
+      f_ratio = .data$f_n_conc / (measurement_length - startcrop),
       f_flag_match = case_when(
         .data$f_ratio == 0 ~ "no data",
-        .data$f_ratio <= ((ratio_threshold)) ~ "nb of data too low"
+        .data$f_ratio <= ratio_threshold ~ "nb of data too low"
       )
     ) |>
     ungroup()

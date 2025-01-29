@@ -48,7 +48,6 @@ flux_fitting_quadratic <- function(conc_df,
   }
 
   conc_df <- conc_df |>
-    group_by(.data$f_fluxID) |>
     mutate(
       f_time = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
         .data$f_datetime[1],
@@ -63,16 +62,15 @@ flux_fitting_quadratic <- function(conc_df,
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
-      n_conc = sum(!is.na(.data$f_conc))
-    ) |>
-    ungroup()
+      n_conc = sum(!is.na(.data$f_conc)),
+      .by = "f_fluxID"
+    )
 
   conc_df_cut <- conc_df |>
     filter(
       .data$f_cut == "keep"
     ) |>
     drop_na("f_conc") |>
-    group_by(.data$f_fluxID) |>
     mutate(
       f_time_cut = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
         .data$f_datetime[1],
@@ -83,9 +81,9 @@ flux_fitting_quadratic <- function(conc_df,
       length_window = max(.data$f_time_cut),
       length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
       time_diff = .data$f_time - .data$f_time_cut,
-      n_conc_cut = sum(!is.na(.data$f_conc))
-    ) |>
-    ungroup()
+      n_conc_cut = sum(!is.na(.data$f_conc)),
+      .by = "f_fluxID"
+    )
 
   fitting_par <- conc_df_cut |>
     group_by(.data$f_fluxID) |>

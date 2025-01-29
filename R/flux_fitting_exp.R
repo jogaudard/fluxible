@@ -82,7 +82,6 @@ flux_fitting_exp <- function(conc_df,
   message("Cutting measurements...")
 
   conc_df <- conc_df |>
-    group_by(.data$f_fluxID) |>
     mutate(
       f_time = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
         .data$f_datetime[1],
@@ -97,16 +96,15 @@ flux_fitting_exp <- function(conc_df,
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
-      n_conc = sum(!is.na(.data$f_conc))
-    ) |>
-    ungroup()
+      n_conc = sum(!is.na(.data$f_conc)),
+      .by = "f_fluxID"
+    )
 
   conc_df_cut <- conc_df |>
     filter(
       .data$f_cut == "keep"
     ) |>
     drop_na("f_conc") |>
-    group_by(.data$f_fluxID) |>
     mutate(
       f_time_cut = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
         .data$f_datetime[1],
@@ -116,9 +114,9 @@ flux_fitting_exp <- function(conc_df,
       length_window = max(.data$f_time_cut),
       length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
       time_diff = .data$f_time - .data$f_time_cut,
-      n_conc_cut = sum(!is.na(.data$f_conc))
-    ) |>
-    ungroup()
+      n_conc_cut = sum(!is.na(.data$f_conc)),
+      .by = "f_fluxID"
+    )
 
   message("Estimating starting parameters for optimization...")
 
@@ -313,7 +311,6 @@ flux_fitting_exp <- function(conc_df,
 
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = "f_fluxID") |>
-    group_by(.data$f_fluxID) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_a *
         (.data$f_time - .data$f_tz - .data$time_diff)
@@ -321,9 +318,9 @@ flux_fitting_exp <- function(conc_df,
       * exp(-.data$f_b * (.data$f_time - .data$f_tz - .data$time_diff)),
       f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
       * (.data$f_tz + .data$time_diff),
-      f_start_z = .data$f_start + .data$f_tz
-    ) |>
-    ungroup()
+      f_start_z = .data$f_start + .data$f_tz,
+      .by = "f_fluxID"
+    )
 
 
   message("Done.")

@@ -79,19 +79,19 @@ flux_quality <- function(slopes_df,
                          b_threshold = 1,
                          cut_arg = "cut") {
   args_ok <- flux_fun_check(list(
-    ambient_conc = ((ambient_conc)),
-    error = ((error)),
-    ratio_threshold = ((ratio_threshold))
+    ambient_conc = {{ambient_conc}},
+    error = {{error}},
+    ratio_threshold = {{ratio_threshold}}
   ),
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
   slopes_df_check <- slopes_df |>
     select(
-      all_of(((slope_col))),
-      all_of(((conc_col))),
-      all_of(((fit_col))),
-      all_of(((time_col)))
+      all_of(slope_col),
+      all_of(conc_col),
+      all_of(fit_col),
+      all_of(time_col)
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
@@ -113,17 +113,17 @@ flux_quality <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     rename(
-      f_fluxID = all_of(((fluxid_col))),
-      f_slope = all_of(((slope_col))),
-      f_conc = all_of(((conc_col))),
-      f_time = all_of(((time_col))),
-      f_fit = all_of(((fit_col))),
-      f_cut = all_of(((cut_col)))
+      f_fluxID = all_of(fluxid_col),
+      f_slope = all_of(slope_col),
+      f_conc = all_of(conc_col),
+      f_time = all_of(time_col),
+      f_fit = all_of(fit_col),
+      f_cut = all_of(cut_col)
     )
 
   fit_type <- flux_fit_type(
     slopes_df,
-    fit_type = ((fit_type))
+    fit_type = {{fit_type}}
   )
 
   slopes_df <- slopes_df |>
@@ -136,7 +136,7 @@ flux_quality <- function(slopes_df,
       ))),
       f_flag_ratio = case_when(
         .data$f_ratio == 0 ~ "no_data",
-        .data$f_ratio <= ((ratio_threshold)) ~ "too_low",
+        .data$f_ratio <= ratio_threshold ~ "too_low",
         TRUE ~ "ok"
       )
     ) |>
@@ -149,8 +149,8 @@ flux_quality <- function(slopes_df,
     rowwise() |>
     summarise(
       f_start_error = case_when(
-        data$f_conc[1] < (((ambient_conc)) - ((error))) ~ "error",
-        data$f_conc[1] > (((ambient_conc)) + ((error))) ~ "error",
+        data$f_conc[1] < (ambient_conc - error) ~ "error",
+        data$f_conc[1] > (ambient_conc + error) ~ "error",
         TRUE ~ "ok"
       ),
       .groups = "drop"
@@ -160,35 +160,35 @@ flux_quality <- function(slopes_df,
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = "f_fluxID")
 
-  if (((fit_type)) == "exponential") {
+  if (fit_type == "exponential") {
     quality_flag <- flux_quality_exp(
-      ((slopes_df)),
-      force_discard = ((force_discard)),
-      force_ok = ((force_ok)),
-      b_col = ((b_col)),
-      rmse_threshold = ((rmse_threshold)),
-      cor_threshold = ((cor_threshold)),
-      b_threshold = ((b_threshold))
+      {{slopes_df}},
+      force_discard = {{force_discard}},
+      force_ok = {{force_ok}},
+      b_col = {{b_col}},
+      rmse_threshold = {{rmse_threshold}},
+      cor_threshold = {{cor_threshold}},
+      b_threshold = {{b_threshold}}
     )
   }
 
 
-  if (((fit_type)) %in% c("linear", "quadratic")) {
+  if (fit_type %in% c("linear", "quadratic")) {
     quality_flag <- flux_quality_lm(
-      ((slopes_df)),
-      force_discard = ((force_discard)),
-      force_ok = ((force_ok)),
-      pvalue_col = ((pvalue_col)),
-      rsquared_col = ((rsquared_col)),
-      pvalue_threshold = ((pvalue_threshold)),
-      rsquared_threshold = ((rsquared_threshold))
+      {{slopes_df}},
+      force_discard = {{force_discard}},
+      force_ok = {{force_ok}},
+      pvalue_col = {{pvalue_col}},
+      rsquared_col = {{rsquared_col}},
+      pvalue_threshold = {{pvalue_threshold}},
+      rsquared_threshold = {{rsquared_threshold}}
     )
   }
 
 
   flag_count <- flux_flag_count(
-    ((quality_flag)),
-    cut_arg = ((cut_arg))
+    {{quality_flag}},
+    cut_arg = {{cut_arg}}
   )
 
   flag_msg <- flag_count |>
@@ -203,7 +203,7 @@ flux_quality <- function(slopes_df,
   message(paste("\n", "Total number of measurements:", sum(flag_count$n)))
   message(flag_msg)
 
-  attr(quality_flag, "fit_type") <- ((fit_type))
+  attr(quality_flag, "fit_type") <- {{fit_type}}
 
   quality_flag
 }
