@@ -21,12 +21,12 @@
 
 
 flux_quality_lm <- function(slopes_df,
-                            force_discard = c(),
-                            force_ok = c(),
-                            pvalue_col = "f_pvalue",
-                            rsquared_col = "f_rsquared",
-                            pvalue_threshold = 0.3,
-                            rsquared_threshold = 0.7) {
+                            force_discard,
+                            force_ok,
+                            pvalue_col,
+                            rsquared_col,
+                            pvalue_threshold,
+                            rsquared_threshold) {
   args_ok <- flux_fun_check(list(
     pvalue_threshold = ((pvalue_threshold)),
     rsquared_threshold = ((rsquared_threshold))

@@ -25,12 +25,12 @@
 
 
 flux_quality_exp <- function(slopes_df,
-                             force_discard = c(),
-                             force_ok = c(),
-                             b_col = "f_b",
-                             rmse_threshold = 25,
-                             cor_threshold = 0.5,
-                             b_threshold = 1) {
+                             force_discard,
+                             force_ok,
+                             b_col,
+                             rmse_threshold,
+                             cor_threshold,
+                             b_threshold) {
   args_ok <- flux_fun_check(list(
     rmse_threshold = ((rmse_threshold)),
     cor_threshold = ((cor_threshold)),
