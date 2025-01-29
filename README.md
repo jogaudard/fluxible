@@ -78,7 +78,7 @@ slopes_flag <- flux_quality(
 #>  ok   6   100 %
 #>  discard      0   0 %
 #>  zero     0   0 %
-#>  weird_flux   0   0 %
+#>  force_discard   0   0 %
 #>  start_error      0   0 %
 #>  no_data      0   0 %
 #>  force_ok     0   0 %
