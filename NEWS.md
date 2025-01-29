@@ -1,3 +1,8 @@
+# fluxible 0.6
+
+* Correction in flux_quality: 'zero' and 'discard' flags were inverted when using the linear fit
+* simplification of version number system
+
 # fluxible 0.0.5
 
 * fixed the blurriness of quality flags in flux_plot
