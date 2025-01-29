@@ -1,3 +1,7 @@
+# fluxible 0.6
+
+* simplification of version number system
+
 # fluxible 0.0.5
 
 * fixed the blurriness of quality flags in flux_plot
