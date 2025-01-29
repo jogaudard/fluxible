@@ -50,7 +50,7 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 ```
 
 ## Short example
-```{r short-exemple, fig.width = 8, fig.height = 9}
+```{r short-example, fig.width = 8, fig.height = 9}
 library(fluxible)
 
 conc <- flux_match(
