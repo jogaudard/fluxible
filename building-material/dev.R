@@ -10,7 +10,7 @@ usethis::use_pkgdown()
 pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
 
-usethis::use_vignette("my-vignette")
+usethis::use_vignette("two-gases")
 
 usethis::use_readme_rmd()
 devtools::build_readme()

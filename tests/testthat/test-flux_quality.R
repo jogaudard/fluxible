@@ -9,7 +9,7 @@ test_that("works for exponential fitting", {
 
 test_that("works for linear fitting", {
   expect_snapshot(
-    flux_quality(slopes0lin,
+    flux_quality(slopes30lin,
       fit_type = "li"
     )
   )

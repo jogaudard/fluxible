@@ -10,7 +10,7 @@
 #' @param conc_col column containing the measured gas concentration
 #' @param slope_col column containing the slope of each flux
 #' (as calculated by the flux_fitting function)
-#' @param weird_fluxesID vector of fluxIDs that should be discarded
+#' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
 #' @param pvalue_col column containing the p-value of each flux
 #' @param rsquared_col column containing the r squared to be used for
@@ -25,7 +25,7 @@
 
 
 flux_quality_quadratic <- function(slopes_df,
-                             weird_fluxesID = c(),
+                             force_discard = c(),
                              pvalue_col = "f_pvalue",
                              rsquared_col = "f_rsquared",
                              pvalue_threshold = 0.3,
@@ -54,7 +54,7 @@ flux_quality_quadratic <- function(slopes_df,
     left_join(quality_par_start, by = "f_fluxID") |>
     mutate(
       f_quality_flag = case_when(
-        .data$f_fluxID %in% ((weird_fluxesID)) ~ "weird_flux",
+        .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
           .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
@@ -62,7 +62,7 @@ flux_quality_quadratic <- function(slopes_df,
           .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
       ),
       f_slope_corr = case_when(
-        .data$f_quality_flag == "weird_flux" ~ NA_real_,
+        .data$f_quality_flag == "force_discard" ~ NA_real_,
         .data$f_quality_flag == "ok" ~ .data$f_slope,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "zero" ~ 0

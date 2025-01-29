@@ -1,0 +1,9 @@
+---
+title: "Preparing the data for fluxible"
+vignette: >
+  %\VignetteIndexEntry{Preparing the data for fluxible}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette will describe how to prepare the data extracted from a logger in a format that works with the Fluxible workflow.
