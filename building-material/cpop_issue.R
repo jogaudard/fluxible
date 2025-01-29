@@ -18,11 +18,6 @@ plot(res)
 
 
 
-# mimicking what is done in flux_fitting_segment
-test_df <- tibble(x, y)
-
-# adding segment ID
-
 # fct to extract changepoints
 changepts <- function(x) {
     v <- x@changepoints
@@ -31,22 +26,21 @@ changepts <- function(x) {
     rep(seq_along(v[-length(v)]), times = d)
   }
 
-# fct to extract cpop gradient
-gradient <- function(cpo, segID){
-    cpo <- fitted(cpo)
-    cpo$gradient[segID]
-}
 
-# running cpop on our test_df and adding segmentID based on changepoints
+# running cpop on our data and adding segmentID based on changepoints
 # tricky because changepoints are shared between segments (look at the plot)
 # now we will do it the way it was done in flux_fitting_segment,
 # which is the next segment starts just after the end of the previous one
-# (it is not what cpop is doing)
+# (it is not what cpop is doing!)
 
+# data
+# pftc7_short is from the dev version of fluxible, let's make it available like this
+# write_csv(pftc7_short, "pftc7_short.csv")
+pftc7_short <- read_csv("pftc7_short.csv")
 
+# conc_df is from the fluxible example data, but does not have fluxID so we had them with flux_match
 conc_df <- flux_match(co2_df_short, record_short, measurement_length = 150)
-#   filter(f_fluxID == 1) |>
-# cpop does not deal with datetime format
+# cpop does not deal with datetime format, so we had time in seconds for each flux
 test_segment <- function(conc_df, minseglen){
 conc_df <- conc_df |>
   mutate(time = row_number(), .by = f_fluxID) |> # for simplicity we assume no data are missing
@@ -67,10 +61,6 @@ conc_seg <- conc_df |>
   ) |>
   select(!c(cpo, fit)) # they annoy me
 
-# ggplot(conc_seg, aes(f_datetime)) +
-# geom_line(aes(y = fit_cpop), colour = "red") +
-# geom_point(aes(y = f_conc), colour = "blue", size = 0.2) +
-# facet_wrap(vars(f_fluxID), scales = "free")
 
 # let's add the lm slope as done in flux_fitting_segment
 conc_slope <- conc_seg |>
@@ -79,7 +69,6 @@ conc_slope <- conc_seg |>
   mutate(
     mod_seg = map(.x = data, \(.x) lm(f_conc ~ time, data = .x)),
     tidy = map(mod_seg, tidy),
-    # slope_lm_seg = map(mod_seg, coef),
     fit_lm_seg = map(mod_seg, predict),
     seg_length = map(data, nrow)
          ) |>
@@ -90,7 +79,7 @@ conc_slope <- conc_seg |>
   select(!c(mod_seg, term, std.error, statistic, p.value))
 
 # for comparison, we will take the weighted mean of the slopes from both ideas
-# and also the slope of a LM on the entire flux
+# and also the slope of a lm on the entire flux
 
 conc_slope2 <- conc_slope |>
     group_by(f_fluxID) |>
@@ -111,6 +100,7 @@ conc_slope_avg <- conc_slope2 |>
     mutate(
         slope_cpop_avg = mean(slope_cpop),
         slope_lm_seg_avg = mean(slope_lm_seg),
+        #we need an intercept for visualisation of the slopes, this seems to give an ok visualization
         intercept_avg = weighted.mean(intercept_cpop, seg_length),
         # intercept_avg = mean(intercept_cpop),
         fit_lm_seg_avg = intercept_avg + slope_lm_seg_avg * time,
@@ -124,7 +114,7 @@ geom_point(aes(y = f_conc), size = 0.2) +
 # geom_smooth(aes(y = f_conc), method = lm, formula = y ~ poly(x, 1)) +
 # the fit of segments done by cpop
 geom_line(aes(y = fit_cpop), colour = "green") +
-# the fit of segments wiht lm, using cpop changepoints
+# the fit of segments with lm, using cpop changepoints
 geom_line(aes(y = fit_lm_seg, group = segID), colour = "purple") +
 # weighted mean of lm segments
 geom_line(aes(y = fit_lm_seg_avg), colour = "red") +
@@ -136,7 +126,7 @@ facet_wrap(vars(f_fluxID), scales = "free")
 
 }
 
-test_segment(conc_df, 20)
+test_segment(conc_df, 30)
 test_pftc7 <- pftc7_short  |>
     rename(
         f_conc = "co2_conc",
@@ -144,4 +134,5 @@ test_pftc7 <- pftc7_short  |>
         f_fluxID = "file_name"
     )
 
-test_segment(test_pftc7, 30)
+pftc7_seg_plot <- test_segment(test_pftc7, 30)
+ggsave("pftc7_seg_plot.pdf")
