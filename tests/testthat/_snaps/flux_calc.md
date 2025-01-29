@@ -19,7 +19,8 @@
 
     Code
       flux_calc(slopes0, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        cols_keep = c("turfID", "type", "f_start"))
+        cols_keep = c("turfID", "type", "f_start"), chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Creating a df with the columns from 'cols_keep' argument...
@@ -45,7 +46,8 @@
 
     Code
       flux_calc(slopes0, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        cols_keep = c("turfID", "type", "f_start"), cols_ave = c("PAR", "temp_soil"))
+        cols_keep = c("turfID", "type", "f_start"), cols_ave = c("PAR", "temp_soil"),
+        chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Creating a df with the columns from 'cols_keep' argument...
@@ -72,7 +74,8 @@
 
     Code
       flux_calc(slopes0_temp, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        temp_air_col = "temp_fahr", temp_air_unit = "fahrenheit")
+        temp_air_col = "temp_fahr", temp_air_unit = "fahrenheit", chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -96,7 +99,8 @@
 
     Code
       flux_calc(slopes0_temp, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        temp_air_col = "temp_kelvin", temp_air_unit = "kelvin")
+        temp_air_col = "temp_kelvin", temp_air_unit = "kelvin", chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -120,7 +124,8 @@
 
     Code
       flux_calc(slopes30_flag, slope_col = "f_slope_corr", conc_unit = "ppm",
-        flux_unit = "mmol", cut_col = "f_cut", keep_arg = "keep")
+        flux_unit = "mmol", cut_col = "f_cut", keep_arg = "keep", chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Cutting data according to 'keep_arg'...
       Averaging air temperature for each flux...
@@ -145,7 +150,7 @@
 
     Code
       flux_calc(slopes0_vol, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        chamber_volume = "volume")
+        chamber_volume = "volume", tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -169,8 +174,8 @@
 
     Code
       select(flux_calc(slopes0_vol_tube, slope_col = "f_slope", conc_unit = "ppm",
-        flux_unit = "mmol", chamber_volume = "volume", tube_volume = "tube_vol"), !c(
-        chamber_volume, tube_volume))
+        flux_unit = "mmol", chamber_volume = "volume", tube_volume = "tube_vol",
+        atm_pressure = 1, plot_area = 0.0625), !c(chamber_volume, tube_volume))
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
