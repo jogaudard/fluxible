@@ -26,7 +26,7 @@
 #' flux ID, measurements start and end, flags in case of no data or low number
 #' of data, and any variables present in one of the inputs.
 #' @importFrom dplyr rename arrange mutate row_number full_join case_when
-#' group_by filter ungroup select distinct pull
+#' group_by filter ungroup select distinct pull join_by
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct
 #' @examples
@@ -37,31 +37,29 @@
 
 flux_match <- function(raw_conc,
                        field_record,
+                       datetime_col,
+                       start_col,
+                       conc_col,
                        startcrop = 10,
                        measurement_length = 220,
                        ratio_threshold = 0.5,
-                       time_diff = 0,
-                       datetime_col = "datetime",
-                       conc_col = "conc",
-                       start_col = "start") {
+                       time_diff = 0) {
 
 
   args_ok <- flux_fun_check(list(
-    startcrop = ((startcrop)),
-    measurement_length = ((measurement_length)),
-    ratio_threshold = ((ratio_threshold)),
-    time_diff = ((time_diff))
+    startcrop = startcrop,
+    measurement_length = measurement_length,
+    ratio_threshold = ratio_threshold,
+    time_diff = time_diff
   ),
   fn = list(is.numeric, is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 4))
 
   raw_conc_check <- raw_conc |>
-    select(
-           all_of(datetime_col),
-           all_of(conc_col))
+    select({{datetime_col}} , {{conc_col}})
 
   field_record_check <- field_record |>
-    select(all_of(start_col))
+    select({{start_col}})
 
   raw_conc_ok <- flux_fun_check(raw_conc_check,
                                 fn = list(is.POSIXct, is.numeric),
@@ -80,18 +78,6 @@ flux_match <- function(raw_conc,
     stop("Please correct the arguments", call. = FALSE)
 
 
-  raw_conc <- raw_conc |>
-    rename(
-      f_datetime = all_of(datetime_col),
-      f_conc = all_of(conc_col)
-    )
-
-  field_record <- field_record |>
-    rename(
-      f_start = all_of(start_col)
-    )
-
-
 
 
   if (ratio_threshold < 0 || ratio_threshold > 1) {
@@ -100,28 +86,29 @@ flux_match <- function(raw_conc,
 
 
   field_record <- field_record |>
-    arrange(.data$f_start) |>
+    arrange({{start_col}}) |>
     mutate(
-      f_end = .data$f_start + measurement_length,
-      f_start = .data$f_start + startcrop,
+      f_end = {{start_col}} + measurement_length,
+      f_start = {{start_col}} + startcrop,
       f_fluxID = row_number()
     )
   raw_conc <- raw_conc |>
     mutate(
-      f_datetime = .data$f_datetime + time_diff
+      {{datetime_col}} := {{datetime_col}} + time_diff
     )
+
 
   conc_df <- full_join(
     raw_conc, field_record,
-    by = c("f_datetime" = "f_start"), keep = TRUE
+    by = dplyr::join_by({{datetime_col}} == "f_start"), keep = TRUE
   ) |>
     mutate(
-      f_datetime = case_when(
-        !is.na(.data$f_datetime) ~ .data$f_datetime,
-        is.na(.data$f_datetime) ~ .data$f_start
+      {{datetime_col}} := case_when(
+        !is.na({{datetime_col}}) ~ {{datetime_col}},
+        is.na({{datetime_col}}) ~ .data$f_start
       )
     ) |>
-    arrange(.data$f_datetime) |>
+    arrange({{datetime_col}}) |>
     fill("f_fluxID") |>
     drop_na("f_fluxID")
 
@@ -129,11 +116,11 @@ flux_match <- function(raw_conc,
     group_by(.data$f_fluxID) |>
     fill(names(field_record)) |>
     filter(
-      (.data$f_datetime < .data$f_end &
-         .data$f_datetime >= .data$f_start)
+      ({{datetime_col}} < .data$f_end &
+         {{datetime_col}} >= .data$f_start)
     ) |>
     mutate(
-      f_n_conc = sum(!is.na(.data$f_conc)),
+      f_n_conc = sum(!is.na({{conc_col}})),
       f_ratio = .data$f_n_conc / (measurement_length - startcrop),
       f_flag_match = case_when(
         .data$f_ratio == 0 ~ "no data",

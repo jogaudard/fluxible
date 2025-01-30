@@ -230,7 +230,10 @@ test_that("volume can be a variable instead of a constant (volume)", {
 test_that("Fluxible workflow works from start to finish", {
   conc_test <- flux_match(
     co2_df_short,
-    record_short
+    record_short,
+      datetime,
+      start,
+      conc,
   )
   slopes_test <- suppressWarnings(flux_fitting(
     conc_test,
