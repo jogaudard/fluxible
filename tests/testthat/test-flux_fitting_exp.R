@@ -1,7 +1,12 @@
 test_that("fitting works with 0 second end cut", {
   expect_snapshot(
     flux_fitting(co2_conc,
-                 fit_type = "exp") |>
+                 f_start,
+                 f_end,
+                 f_datetime,
+                 f_conc,
+                 f_fluxID,
+                 fit_type = "exponential") |>
       select(f_fluxID, f_slope) |>
       distinct()
   )
@@ -11,6 +16,11 @@ test_that("fitting works with 30 second end cut", {
   expect_snapshot(
     flux_fitting(
       co2_conc,
+      f_start,
+      f_end,
+      f_datetime,
+      f_conc,
+      f_fluxID,
       end_cut = 30,
       fit_type = "exp"
     )
@@ -21,6 +31,11 @@ test_that("fitting works with 60 second end cut", {
   expect_snapshot(
     flux_fitting(
       co2_conc,
+      f_start,
+      f_end,
+      f_datetime,
+      f_conc,
+      f_fluxID,
       end_cut = 60,
       fit_type = "exp"
     )
@@ -33,6 +48,11 @@ test_that("fitting works with 60 second end cut", {
 test_that("warnings when NAs are dropped in conc", {
   expect_warning(
     flux_fitting(co2_conc_missing,
+                 f_start,
+                 f_end,
+                 f_datetime,
+                 f_conc,
+                 f_fluxID,
                  fit_type = "exp"),
     " fluxID 1 : slope was estimated on 70 points out of 210 seconds
  fluxID 2 : slope was estimated on 121 points out of 210 seconds
@@ -47,6 +67,11 @@ test_that("warnings when NAs are dropped in conc", {
 test_that("warnings when there is no data in conc", {
   expect_warning(
     flux_fitting(co2_conc_missing,
+                 f_start,
+                 f_end,
+                 f_datetime,
+                 f_conc,
+                 f_fluxID,
                  fit_type = "exp"),
     " fluxID 6 dropped (no data in the conc column)",
     fixed = TRUE # need that because there parenthesis in the error message
@@ -57,6 +82,11 @@ test_that("warnings with cutting", {
   expect_warning(
     flux_fitting(
       co2_conc_missing,
+      f_start,
+      f_end,
+      f_datetime,
+      f_conc,
+      f_fluxID,
       start_cut = 10,
       fit_type = "exp"
     ),
@@ -72,6 +102,11 @@ test_that("error on arguments", {
   expect_error(
     flux_fitting(
       co2_conc_missing,
+      f_start,
+      f_end,
+      f_datetime,
+      f_conc,
+      f_fluxID,
       start_cut = "Voldemort",
       fit_type = "exp"
     ),
@@ -85,6 +120,11 @@ test_that("cutting too much", {
   expect_error(
     flux_fitting(
       co2_conc,
+      f_start,
+      f_end,
+      f_datetime,
+      f_conc,
+      f_fluxID,
       start_cut = 120,
       end_cut = 100,
       fit_type = "exp"
@@ -105,9 +145,11 @@ test_that("renaming works", {
   expect_snapshot(
     flux_fitting(
       co2_conc_names,
-      datetime_col = "date_time",
-      end_col = "finish",
-      conc_col = "co2",
+      f_start,
+      finish,
+      date_time,
+      co2,
+      f_fluxID,
       fit_type = "exp"
     )
   )

@@ -39,13 +39,13 @@
 #' @export
 
 flux_fitting <- function(conc_df,
+                         start_col,
+                         end_col,
+                         datetime_col,
+                         conc_col,
+                         fluxid_col,
                          start_cut = 0,
                          end_cut = 0,
-                         start_col = "f_start",
-                         end_col = "f_end",
-                         datetime_col = "f_datetime",
-                         conc_col = "f_conc",
-                         fluxid_col = "f_fluxID",
                          t_window = 20,
                          cz_window = 15,
                          b_window = 10,
@@ -54,18 +54,18 @@ flux_fitting <- function(conc_df,
                          t_zero = 0,
                          fit_type) {
   args_ok <- flux_fun_check(list(
-    start_cut = ((start_cut)),
-    end_cut = ((end_cut))
+    start_cut = start_cut,
+    end_cut = end_cut
   ),
   fn = list(is.numeric, is.numeric),
   msg = rep("has to be numeric", 2))
 
   conc_df_check <- conc_df |>
     select(
-      all_of(((conc_col))),
-      all_of(((start_col))),
-      all_of(((end_col))),
-      all_of(((datetime_col)))
+      {{conc_col}},
+      {{start_col}},
+      {{end_col}},
+      {{datetime_col}}
     )
 
   conc_df_ok <- flux_fun_check(conc_df_check,
@@ -87,57 +87,62 @@ flux_fitting <- function(conc_df,
   if (any(!c(args_ok, conc_df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-  conc_df <- conc_df |>
-    rename(
-      f_start = all_of((start_col)),
-      f_end = all_of((end_col)),
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col)),
-      f_fluxID = all_of((fluxid_col))
-    )
+  # conc_df <- conc_df |>
+  #   rename(
+  #     f_start = all_of((start_col)),
+  #     f_end = all_of((end_col)),
+  #     f_datetime = all_of((datetime_col)),
+  #     f_conc = all_of((conc_col)),
+  #     f_fluxID = all_of((fluxid_col))
+  #   )
 
   conc_df <- conc_df |>
-    group_by(.data$f_fluxID) |>
-    distinct(.data$f_datetime, .keep_all = TRUE) |>
+    group_by({{fluxid_col}}) |>
+    distinct({{datetime_col}}, .keep_all = TRUE) |>
     ungroup()
 
   fit_type <- flux_fit_type(
-    ((conc_df)),
-    fit_type = ((fit_type))
+    conc_df,
+    fit_type = fit_type
   )
 
-  if (((fit_type)) == "exponential") {
+  if (fit_type == "exponential") {
     conc_fitting <- flux_fitting_exp(
       conc_df,
-      start_cut = ((start_cut)),
-      end_cut = ((end_cut)),
-      t_window = ((t_window)),
-      cz_window = ((cz_window)),
-      b_window = ((b_window)),
-      a_window = ((a_window)),
-      roll_width = ((roll_width))
+      start_col = {{start_col}},
+      end_col = {{end_col}},
+      datetime_col = {{datetime_col}},
+      conc_col = {{conc_col}},
+      fluxid_col = {{fluxid_col}},
+      start_cut = start_cut,
+      end_cut = end_cut,
+      t_window = t_window,
+      cz_window = cz_window,
+      b_window = b_window,
+      a_window = a_window,
+      roll_width = roll_width
     )
   }
 
 
-  if (((fit_type)) == "linear") {
+  if (fit_type == "linear") {
     conc_fitting <- flux_fitting_lin(
       conc_df,
-      start_cut = ((start_cut)),
-      end_cut = ((end_cut))
+      start_cut = start_cut,
+      end_cut = end_cut
     )
   }
 
-  if (((fit_type)) == "quadratic") {
+  if (fit_type == "quadratic") {
     conc_fitting <- flux_fitting_quadratic(
       conc_df,
-      start_cut = ((start_cut)),
-      end_cut = ((end_cut)),
-      t_zero = ((t_zero))
+      start_cut = start_cut,
+      end_cut = end_cut,
+      t_zero = t_zero
     )
   }
 
-  attr(conc_fitting, "fit_type") <- ((fit_type))
+  # attr(conc_fitting, "fit_type") <- fit_type
 
   conc_fitting
 }
