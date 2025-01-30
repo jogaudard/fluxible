@@ -27,7 +27,6 @@
 #' @importFrom stats lm optim
 #' @importFrom purrr map
 #' @importFrom utils data
-#' @importFrom lubridate int_length interval ymd_hms
 
 
 
@@ -50,44 +49,26 @@ flux_fitting_exp <- function(conc_df,
     cz_window = cz_window,
     b_window = b_window,
     a_window = a_window,
-    roll_width = roll_width,
-    start_cut = start_cut,
-    end_cut = end_cut
+    roll_width = roll_width
   ),
   fn = list(
     is.numeric,
     is.numeric,
     is.numeric,
     is.numeric,
-    is.numeric,
-    is.numeric,
     is.numeric
   ),
-  msg = rep("has to be numeric", 7))
+  msg = rep("has to be numeric", 5))
 
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
 
-  length_flux_max <- conc_df |>
-    mutate(
-      length_flux = int_length(interval({{start_col}}, {{end_col}}))
-    ) |>
-    select("length_flux") |>
-    max()
-
-  if ((start_cut + end_cut) >= length_flux_max) {
-    stop(
-      "You cannot cut more than the length of the measurements!"
-    )
-  }
+ 
 
   message("Cutting measurements...")
 
   name_conc <- names(select(conc_df, {{conc_col}}))
-
-
-
 
   by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
 
@@ -164,13 +145,13 @@ cm_slope <- conc_df_cut |>
       nest() |>
       mutate(
         model_Cm = map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-        tidy = map(model_Cm, broom::tidy)
+        tidy = map(.data$model_Cm, broom::tidy)
     ) |>
     unnest(tidy) |>
-    filter(term == "f_time_cut") |>
+    filter(.data$term == "f_time_cut") |>
     rename(slope_Cm = "estimate") |>
     unnest({{fluxid_col}}) |>
-    select({{fluxid_col}}, slope_Cm)
+    select({{fluxid_col}}, "slope_Cm")
 
 
 
@@ -198,13 +179,13 @@ cm_slope <- conc_df_cut |>
       nest() |>
       mutate(
         model_Cz = map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-        tidy = map(model_Cz, broom::tidy)
+        tidy = map(.data$model_Cz, broom::tidy)
     ) |>
     unnest(tidy) |>
-    filter(term == "(Intercept)") |>
+    filter(.data$term == "(Intercept)") |>
     rename(f_Cz = "estimate") |>
     unnest({{fluxid_col}}) |>
-    select({{fluxid_col}}, f_Cz) |>
+    select({{fluxid_col}}, "f_Cz") |>
     ungroup()
 
 
@@ -348,7 +329,7 @@ cm_slope <- conc_df_cut |>
         {{fluxid_col}} == {{fluxid_col}},
         "n_conc" == "n_conc",
         {{datetime_col}} == {{datetime_col}}
-        )
+      )
     ) |> # we want n_conc after cut
     select({{fluxid_col}}, "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>

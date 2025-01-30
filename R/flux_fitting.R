@@ -30,6 +30,7 @@
 #' @param fluxid_col column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
 #' (for quadratic fit)
+#' @importFrom lubridate int_length interval
 #' @return a dataframe with the slope at t zero,
 #' and parameters of a model of gas concentration over time
 #' @examples
@@ -87,15 +88,19 @@ flux_fitting <- function(conc_df,
   if (any(!c(args_ok, conc_df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-  # conc_df <- conc_df |>
-  #   rename(
-  #     f_start = all_of((start_col)),
-  #     f_end = all_of((end_col)),
-  #     f_datetime = all_of((datetime_col)),
-  #     f_conc = all_of((conc_col)),
-  #     f_fluxID = all_of((fluxid_col))
-  #   )
+ length_flux_max <- conc_df |>
+    mutate(
+      length_flux = int_length(interval({{start_col}}, {{end_col}}))
+    ) |>
+    select("length_flux") |>
+    max()
 
+  if ((start_cut + end_cut) >= length_flux_max) {
+    stop(
+      "You cannot cut more than the length of the measurements!"
+    )
+  }
+ 
   conc_df <- conc_df |>
     group_by({{fluxid_col}}) |>
     distinct({{datetime_col}}, .keep_all = TRUE) |>
@@ -109,11 +114,11 @@ flux_fitting <- function(conc_df,
   if (fit_type == "exponential") {
     conc_fitting <- flux_fitting_exp(
       conc_df,
-      start_col = {{start_col}},
-      end_col = {{end_col}},
-      datetime_col = {{datetime_col}},
-      conc_col = {{conc_col}},
-      fluxid_col = {{fluxid_col}},
+      {{start_col}},
+      {{end_col}},
+      {{datetime_col}},
+      {{conc_col}},
+      {{fluxid_col}},
       start_cut = start_cut,
       end_cut = end_cut,
       t_window = t_window,
@@ -128,6 +133,11 @@ flux_fitting <- function(conc_df,
   if (fit_type == "linear") {
     conc_fitting <- flux_fitting_lin(
       conc_df,
+      {{start_col}},
+      {{end_col}},
+      {{datetime_col}},
+      {{conc_col}},
+      {{fluxid_col}},
       start_cut = start_cut,
       end_cut = end_cut
     )
@@ -136,13 +146,18 @@ flux_fitting <- function(conc_df,
   if (fit_type == "quadratic") {
     conc_fitting <- flux_fitting_quadratic(
       conc_df,
+      {{start_col}},
+      {{end_col}},
+      {{datetime_col}},
+      {{conc_col}},
+      {{fluxid_col}},
       start_cut = start_cut,
       end_cut = end_cut,
       t_zero = t_zero
     )
   }
 
-  # attr(conc_fitting, "fit_type") <- fit_type
+  attr(conc_fitting, "fit_type") <- fit_type
 
   conc_fitting
 }
