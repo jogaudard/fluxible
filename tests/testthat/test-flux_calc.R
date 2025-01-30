@@ -231,17 +231,26 @@ test_that("Fluxible workflow works from start to finish", {
   conc_test <- flux_match(
     co2_df_short,
     record_short,
-      datetime,
-      start,
-      conc,
+    datetime,
+    start,
+    conc,
   )
   slopes_test <- suppressWarnings(flux_fitting(
     conc_test,
+    start,
+    f_end,
+    datetime,
+    conc,
+    f_fluxID,
     fit_type = "exp"
   ))
-  slopes_flag_test <- flux_quality(slopes_test)
+  slopes_flag_test <- flux_quality(
+    slopes_test,
+    conc_col = "conc"
+  )
   fluxes_test <- flux_calc(
     slopes_flag_test,
+    datetime_col = "datetime",
     slope_col = "f_slope_corr",
     conc_unit = "ppm",
     flux_unit = "mmol",

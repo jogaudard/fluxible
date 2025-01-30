@@ -9,61 +9,53 @@
 #' std error, r square and p value of the quadratic model
 #' @importFrom rlang .data
 #' @importFrom dplyr rename all_of mutate select group_by case_when
-#' ungroup filter left_join distinct pull bind_cols
+#' ungroup filter left_join distinct pull bind_cols join_by
 #' @importFrom tidyr drop_na pivot_wider fill
 #' @importFrom haven as_factor
 #' @importFrom stringr str_c
 
 
 flux_fitting_quadratic <- function(conc_df,
+                                   start_col,
+                                   end_col,
+                                   datetime_col,
+                                   conc_col,
+                                   fluxid_col,
                                    start_cut,
                                    end_cut,
                                    t_zero) {
   args_ok <- flux_fun_check(list(
-    t_zero = ((t_zero)),
-    start_cut = ((start_cut)),
-    end_cut = ((end_cut))
+    t_zero = t_zero
   ),
-  fn = list(is.numeric, is.numeric, is.numeric),
-  msg = rep("has to be numeric", 3))
+  fn = list(is.numeric),
+  msg = c("has to be numeric"))
 
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
 
 
-  length_flux_max <- conc_df |>
-    mutate(
-      length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
-      length_flux = as.double(.data$length_flux)
-    ) |>
-    select("length_flux") |>
-    max()
+  name_conc <- names(select(conc_df, {{conc_col}}))
 
-  if ((start_cut + end_cut) >= length_flux_max) {
-    stop(
-      "You cannot cut more than the length of the measurements!
-      ((start_cut + end_cut) >= length_flux_max)"
-    )
-  }
+  by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
 
   conc_df <- conc_df |>
     mutate(
-      f_time = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
-        .data$f_datetime[1],
+      f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+        {{datetime_col}}[1],
         units = "secs"
       ),
       f_time = as.double(.data$f_time),
-      f_start = .data$f_start + ((start_cut)),
-      f_end = .data$f_end - ((end_cut)),
+      {{start_col}} := {{start_col}} + ((start_cut)),
+      {{end_col}} := {{end_col}} - ((end_cut)),
       f_cut = case_when(
-        .data$f_datetime < .data$f_start | .data$f_datetime >= .data$f_end
+        {{datetime_col}} < {{start_col}} | {{datetime_col}} >= {{end_col}}
         ~ "cut",
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
       n_conc = sum(!is.na(.data$f_conc)),
-      .by = "f_fluxID"
+      .by = {{fluxid_col}}
     )
 
   conc_df_cut <- conc_df |>
@@ -72,35 +64,32 @@ flux_fitting_quadratic <- function(conc_df,
     ) |>
     drop_na("f_conc") |>
     mutate(
-      f_time_cut = difftime(.data$f_datetime[seq_along(.data$f_datetime)],
-        .data$f_datetime[1],
+      f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+        {{datetime_col}}[1],
         units = "secs"
       ),
       f_time_cut = as.double(.data$f_time_cut),
       f_time_cut2 = (.data$f_time_cut)^2,
       length_window = max(.data$f_time_cut),
-      length_flux = difftime(.data$f_end, .data$f_start, units = "sec"),
+      length_flux = difftime({{end_col}}, {{start_col}}, units = "sec"),
       time_diff = .data$f_time - .data$f_time_cut,
       n_conc_cut = sum(!is.na(.data$f_conc)),
-      .by = "f_fluxID"
+      .by = {{fluxid_col}}
     )
 
   fitting_par <- conc_df_cut |>
-    group_by(.data$f_fluxID) |>
+    group_by({{fluxid_col}}) |>
     nest() |>
     mutate(
-      temp = map(.data$data, \(d) {
-        model <- lm(f_conc ~ f_time_cut + f_time_cut2, data = d)
-        glance <- broom::glance(((model))) |>
-          select("r.squared", "adj.r.squared", "p.value")
-        tidy <- broom::tidy(((model))) |>
-          select("term", "estimate") |>
-          pivot_wider(names_from = "term", values_from = "estimate")
-        bind_cols(((glance)), ((tidy)))
-      })
+      model = map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut + f_time_cut2, data = .x)),
+      tidy = map(.data$model, broom::tidy),
+      glance = map(.data$model, broom::glance)
     ) |>
-    select(!"data") |>
-    unnest("temp") |>
+    select(!c("data", "model")) |>
+    unnest("tidy") |>
+    select({{fluxid_col}}, "term", "estimate", "glance") |>
+    pivot_wider(names_from = "term", values_from = "estimate") |>
+    unnest("glance") |>
     rename(
       f_param1 = "f_time_cut",
       f_param2 = "f_time_cut2",
@@ -109,12 +98,34 @@ flux_fitting_quadratic <- function(conc_df,
       f_adj_rsquared = "adj.r.squared",
       f_pvalue = "p.value"
     ) |>
-    fill("f_intercept", .direction = "down") |>
-    drop_na("f_param1", "f_param2") |>
+    select({{fluxid_col}}, "f_param1", "f_param2", "f_rsquared", "f_adj_rsquared", "f_intercept", "f_pvalue") |>
     ungroup()
+    #   temp = map(.data$data, \(d) {
+    #     model <- lm(f_conc ~ f_time_cut + f_time_cut2, data = d)
+    #     glance <- broom::glance(((model))) |>
+    #       select("r.squared", "adj.r.squared", "p.value")
+    #     tidy <- broom::tidy(((model))) |>
+    #       select("term", "estimate") |>
+    #       pivot_wider(names_from = "term", values_from = "estimate")
+    #     bind_cols(((glance)), ((tidy)))
+    #   })
+    # ) |>
+    # select(!"data") |>
+    # unnest("temp") |>
+    # rename(
+    #   f_param1 = "f_time_cut",
+    #   f_param2 = "f_time_cut2",
+    #   f_intercept = "(Intercept)",
+    #   f_rsquared = "r.squared",
+    #   f_adj_rsquared = "adj.r.squared",
+    #   f_pvalue = "p.value"
+    # ) |>
+    # fill("f_intercept", .direction = "down") |>
+    # drop_na("f_param1", "f_param2") |>
+    # ungroup()
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par, by = c("f_fluxID")) |>
+    left_join(fitting_par, by = by_fluxID) |>
     mutate(
       f_slope = .data$f_param1 + 2 * .data$f_param2 * ((t_zero)),
       f_fit =
@@ -131,17 +142,23 @@ flux_fitting_quadratic <- function(conc_df,
     )
 
   warning_msg <- conc_df |>
-    left_join(conc_df_cut, by = c("f_datetime", "f_fluxID", "n_conc")) |>
-    select("f_fluxID", "n_conc", "n_conc_cut", "length_flux") |>
+    left_join(conc_df_cut,
+      by = dplyr::join_by(
+        {{datetime_col}} == {{datetime_col}},
+        {{fluxid_col}} == {{fluxid_col}},
+        "n_conc" == "n_conc"
+      )
+    ) |>
+    select({{fluxid_col}}, "n_conc", "n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
-        "\n", "fluxID", .data$f_fluxID, ": slope was estimated on",
+        "\n", "fluxID", {{fluxid_col}}, ": slope was estimated on",
         .data$n_conc_cut, "points out of", .data$length_flux,
         "seconds because data are missing"
       ),
       no_data = paste(
-        "\n", "fluxID", .data$f_fluxID,
+        "\n", "fluxID", {{fluxid_col}},
         "dropped (no data in the conc column)"
       ),
       warnings = case_when(

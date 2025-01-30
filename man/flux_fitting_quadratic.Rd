@@ -4,7 +4,17 @@
 \alias{flux_fitting_quadratic}
 \title{quadratic fit to gas concentration over time}
 \usage{
-flux_fitting_quadratic(conc_df, start_cut, end_cut, t_zero)
+flux_fitting_quadratic(
+  conc_df,
+  start_col,
+  end_col,
+  datetime_col,
+  conc_col,
+  fluxid_col,
+  start_cut,
+  end_cut,
+  t_zero
+)
 }
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
