@@ -86,7 +86,7 @@ flux_fitting_exp <- function(conc_df,
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
-      n_conc = sum(!is.na(.data[[name_conc]])),
+      f_n_conc = sum(!is.na(.data[[name_conc]])),
       .by = {{fluxid_col}}
     )
 
@@ -104,7 +104,7 @@ flux_fitting_exp <- function(conc_df,
       length_window = max(.data$f_time_cut),
       length_flux = difftime({{end_col}}, {{start_col}}, units = "sec"),
       time_diff = .data$f_time - .data$f_time_cut,
-      n_conc_cut = sum(!is.na(.data[[name_conc]])),
+      f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
       .by = {{fluxid_col}}
     )
 
@@ -325,16 +325,16 @@ cm_slope <- conc_df_cut |>
     left_join(conc_df_cut,
       by = dplyr::join_by(
         {{fluxid_col}} == {{fluxid_col}},
-        "n_conc" == "n_conc",
+        "f_n_conc" == "f_n_conc",
         {{datetime_col}} == {{datetime_col}}
       )
-    ) |> # we want n_conc after cut
-    select({{fluxid_col}}, "n_conc", "n_conc_cut", "length_flux") |>
+    ) |> # we want f_n_conc after cut
+    select({{fluxid_col}}, "f_n_conc", "f_n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
         "\n", "fluxID", {{fluxid_col}}, ": slope was estimated on",
-        .data$n_conc_cut, "points out of", .data$length_flux,
+        .data$f_n_conc_cut, "points out of", .data$length_flux,
         "seconds"
       ),
       no_data = paste(
@@ -342,8 +342,8 @@ cm_slope <- conc_df_cut |>
         "dropped (no data in the conc column)"
       ),
       warnings = case_when(
-        .data$n_conc == 0 ~ .data$no_data,
-        .data$n_conc_cut != .data$length_flux ~ .data$low_data
+        .data$f_n_conc == 0 ~ .data$no_data,
+        .data$f_n_conc_cut != .data$length_flux ~ .data$low_data
       ),
       warnings = as.character(.data$warnings)
     ) |>

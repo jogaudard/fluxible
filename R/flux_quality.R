@@ -57,23 +57,25 @@
 #' @export
 
 flux_quality <- function(slopes_df,
-                         fit_type = c(),
-                         ambient_conc = 421,
-                         error = 100,
-                         fluxid_col = "f_fluxID",
-                         slope_col = "f_slope",
+                         conc_col,
+                         fluxid_col = f_fluxID,
+                         slope_col = f_slope,
+                         time_col = f_time,
+                         start_col = f_start,
+                         end_col = f_end,
+                        #  fit_col = f_fit,
+                         cut_col = f_cut,
+                         pvalue_col = f_pvalue,
+                         rsquared_col = f_rsquared,
+                         b_col = f_b,
                          force_discard = c(),
                          force_ok = c(),
                          ratio_threshold = 0,
-                         pvalue_col = "f_pvalue",
-                         rsquared_col = "f_rsquared",
+                         fit_type = c(),
+                         ambient_conc = 421,
+                         error = 100,
                          pvalue_threshold = 0.3,
                          rsquared_threshold = 0.7,
-                         conc_col = "f_conc",
-                         b_col = "f_b",
-                         time_col = "f_time",
-                         fit_col = "f_fit",
-                         cut_col = "f_cut",
                          rmse_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1,
@@ -91,10 +93,10 @@ flux_quality <- function(slopes_df,
 
   slopes_df_check <- slopes_df |>
     select(
-      all_of(slope_col),
-      all_of(conc_col),
-      all_of(fit_col),
-      all_of(time_col)
+      {{slope_col}},
+      {{conc_col}},
+      # {{fit_col}},
+      {{time_col}}
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
@@ -114,26 +116,30 @@ flux_quality <- function(slopes_df,
   if (any(!c(args_ok, df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-  slopes_df <- slopes_df |>
-    rename(
-      f_fluxID = all_of(fluxid_col),
-      f_slope = all_of(slope_col),
-      f_conc = all_of(conc_col),
-      f_time = all_of(time_col),
-      f_fit = all_of(fit_col),
-      f_cut = all_of(cut_col)
-    )
+  # slopes_df <- slopes_df |>
+  #   rename(
+  #     f_fluxID = all_of(fluxid_col),
+  #     f_slope = all_of(slope_col),
+  #     f_conc = all_of(conc_col),
+  #     f_time = all_of(time_col),
+  #     f_fit = all_of(fit_col),
+  #     f_cut = all_of(cut_col)
+  #   )
 
   fit_type <- flux_fit_type(
     slopes_df,
-    fit_type = {{fit_type}}
+    fit_type = fit_type
   )
+
+name_conc <- names(select(slopes_df, {{conc_col}}))
+
+by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
 
   slopes_df <- slopes_df |>
     mutate(
-      f_n_conc = sum(!is.na(.data$f_conc)),
+      f_n_conc = sum(!is.na(.data[[name_conc]])),
       f_ratio = .data$f_n_conc / as.double((difftime(
-        .data$f_end, .data$f_start,
+        {{end_col}}, {{start_col}},
         units = "secs"
       ))),
       f_flag_ratio = case_when(
@@ -141,57 +147,78 @@ flux_quality <- function(slopes_df,
         .data$f_ratio <= ratio_threshold ~ "too_low",
         TRUE ~ "ok"
       ),
-      .by = c("f_fluxID", "f_cut")
+      .by = c({{fluxid_col}}, {{cut_col}})
     )
 
   quality_par_start <- slopes_df |>
     # for the start error we take the entire flux into account
-    group_by(.data$f_fluxID) |>
+    group_by({{fluxid_col}}) |>
     nest() |>
     rowwise() |>
     summarise(
       f_start_error = case_when(
-        data$f_conc[1] < (ambient_conc - error) ~ "error",
-        data$f_conc[1] > (ambient_conc + error) ~ "error",
+        data[[conc_col]][1] < (ambient_conc - error) ~ "error",
+        data[[conc_col]][1] > (ambient_conc + error) ~ "error",
         TRUE ~ "ok"
       ),
       .groups = "drop"
     ) |>
-    unnest("f_fluxID")
+    unnest({{fluxid_col}})
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start, by = "f_fluxID")
+    left_join(quality_par_start, by = by_fluxID)
 
   if (fit_type == "exponential") {
     quality_flag <- flux_quality_exp(
-      {{slopes_df}},
-      force_discard = {{force_discard}},
-      force_ok = {{force_ok}},
-      b_col = {{b_col}},
-      rmse_threshold = {{rmse_threshold}},
-      cor_threshold = {{cor_threshold}},
-      b_threshold = {{b_threshold}}
+      slopes_df,
+      {{conc_col}},
+      {{fluxid_col}},
+      {{slope_col}},
+      {{time_col}},
+      # {{fit_col}},
+      {{cut_col}},
+      {{b_col}},
+      force_discard = force_discard,
+      force_ok = force_ok,
+      ratio_threshold = ratio_threshold,
+      fit_type = fit_type,
+      ambient_conc = ambient_conc,
+      error = error,
+      rmse_threshold = rmse_threshold,
+      cor_threshold = cor_threshold,
+      b_threshold = b_threshold,
+      cut_arg = cut_arg
     )
   }
 
 
   if (fit_type %in% c("linear", "quadratic")) {
-    quality_flag <- flux_quality_lm(
-      {{slopes_df}},
-      force_discard = {{force_discard}},
-      force_ok = {{force_ok}},
-      pvalue_col = {{pvalue_col}},
-      rsquared_col = {{rsquared_col}},
-      pvalue_threshold = {{pvalue_threshold}},
-      rsquared_threshold = {{rsquared_threshold}},
+    quality_flag <- flux_quality_lm(slopes_df,
+      {{conc_col}},
+      {{fluxid_col}},
+      {{slope_col}},
+      {{time_col}},
+      # {{fit_col}},
+      {{cut_col}},
+      {{pvalue_col}},
+      {{rsquared_col}},
+      force_discard = force_discard,
+      force_ok = force_ok,
+      ratio_threshold = ratio_threshold,
+      fit_type = fit_type,
+      ambient_conc = ambient_conc,
+      error = error,
+      pvalue_threshold = pvalue_threshold,
+      rsquared_threshold = rsquared_threshold,
+      cut_arg = cut_arg,
       name_df = name_df
     )
   }
 
 
   flag_count <- flux_flag_count(
-    {{quality_flag}},
-    cut_arg = {{cut_arg}}
+    quality_flag,
+    cut_arg = cut_arg
   )
 
   flag_msg <- flag_count |>

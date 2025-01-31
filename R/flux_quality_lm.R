@@ -21,28 +21,37 @@
 
 
 flux_quality_lm <- function(slopes_df,
-                            force_discard,
-                            force_ok,
+                            conc_col,
+                            fluxid_col,
+                            slope_col,
+                            time_col,
+                            cut_col,
                             pvalue_col,
                             rsquared_col,
-                            pvalue_threshold,
-                            rsquared_threshold,
+                            force_discard = c(),
+                            force_ok = c(),
+                            ratio_threshold = 0,
+                            fit_type = c(),
+                            ambient_conc = 421,
+                            error = 100,
+                            pvalue_threshold = 0.3,
+                            rsquared_threshold = 0.7,
+                            cut_arg = "cut",
                             name_df) {
 
-# name_df <- deparse(substitute(slopes_df))
 
 
   args_ok <- flux_fun_check(list(
-    pvalue_threshold = ((pvalue_threshold)),
-    rsquared_threshold = ((rsquared_threshold))
+    pvalue_threshold = pvalue_threshold,
+    rsquared_threshold = rsquared_threshold
   ),
   fn = list(is.numeric, is.numeric),
   msg = rep("has to be numeric", 2))
 
   slopes_df_check <- slopes_df |>
     select(
-      all_of(((pvalue_col))),
-      all_of(((rsquared_col)))
+      {{pvalue_col}},
+      {{rsquared_col}}
     )
 
   slopes_df_ok <- flux_fun_check(slopes_df_check,
@@ -58,27 +67,27 @@ flux_quality_lm <- function(slopes_df,
   if (any(!c(args_ok, slopes_df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-  slopes_df <- slopes_df |>
-    rename(
-      f_pvalue = all_of(((pvalue_col))),
-      f_rsquared = all_of(((rsquared_col)))
-    )
+  # slopes_df <- slopes_df |>
+  #   rename(
+  #     f_pvalue = all_of(((pvalue_col))),
+  #     f_rsquared = all_of(((rsquared_col)))
+  #   )
 
 
 
   slopes_df <- slopes_df |>
     mutate(
       f_quality_flag = case_when(
-        .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
-        .data$f_rsquared < ((rsquared_threshold)) &
-          .data$f_pvalue >= ((pvalue_threshold)) ~ "zero",
-        .data$f_rsquared < ((rsquared_threshold)) &
-          .data$f_pvalue < ((pvalue_threshold)) ~ "discard",
+        {{rsquared_col}} >= rsquared_threshold ~ "ok",
+        {{rsquared_col}} < rsquared_threshold &
+          {{pvalue_col}} >= pvalue_threshold ~ "zero",
+        {{rsquared_col}} < rsquared_threshold &
+          {{pvalue_col}} < pvalue_threshold ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_start_error == "error" ~ "start_error",
-        .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
-        .data$f_fluxID %in% ((force_ok)) ~ "force_ok",
+        {{fluxid_col}} %in% force_discard ~ "force_discard",
+        {{fluxid_col}} %in% force_ok ~ "force_ok",
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA_real_,
@@ -88,7 +97,7 @@ flux_quality_lm <- function(slopes_df,
         .data$f_quality_flag == "discard" ~ NA_real_,
         .data$f_quality_flag == "zero" ~ 0
       ),
-      .by = c("f_fluxID", "f_cut")
+      .by = c({{fluxid_col}}, {{cut_col}})
     )
 
   slopes_df

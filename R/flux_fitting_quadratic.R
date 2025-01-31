@@ -54,7 +54,7 @@ flux_fitting_quadratic <- function(conc_df,
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
-      n_conc = sum(!is.na(.data$f_conc)),
+      f_n_conc = sum(!is.na(.data$f_conc)),
       .by = {{fluxid_col}}
     )
 
@@ -73,7 +73,7 @@ flux_fitting_quadratic <- function(conc_df,
       length_window = max(.data$f_time_cut),
       length_flux = difftime({{end_col}}, {{start_col}}, units = "sec"),
       time_diff = .data$f_time - .data$f_time_cut,
-      n_conc_cut = sum(!is.na(.data$f_conc)),
+      f_n_conc_cut = sum(!is.na(.data$f_conc)),
       .by = {{fluxid_col}}
     )
 
@@ -146,15 +146,15 @@ flux_fitting_quadratic <- function(conc_df,
       by = dplyr::join_by(
         {{datetime_col}} == {{datetime_col}},
         {{fluxid_col}} == {{fluxid_col}},
-        "n_conc" == "n_conc"
+        "f_n_conc" == "f_n_conc"
       )
     ) |>
-    select({{fluxid_col}}, "n_conc", "n_conc_cut", "length_flux") |>
+    select({{fluxid_col}}, "f_n_conc", "f_n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
         "\n", "fluxID", {{fluxid_col}}, ": slope was estimated on",
-        .data$n_conc_cut, "points out of", .data$length_flux,
+        .data$f_n_conc_cut, "points out of", .data$length_flux,
         "seconds because data are missing"
       ),
       no_data = paste(
@@ -162,8 +162,8 @@ flux_fitting_quadratic <- function(conc_df,
         "dropped (no data in the conc column)"
       ),
       warnings = case_when(
-        .data$n_conc == 0 ~ .data$no_data,
-        .data$n_conc_cut != .data$length_flux ~ .data$low_data
+        .data$f_n_conc == 0 ~ .data$no_data,
+        .data$f_n_conc_cut != .data$length_flux ~ .data$low_data
       ),
       warnings = as.character(.data$warnings)
     ) |>
