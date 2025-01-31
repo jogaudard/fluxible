@@ -76,6 +76,9 @@ flux_calc <- function(slopes_df,
                       temp_air_col = "temp_air",
                       temp_air_unit = "celsius",
                       fit_type = c()) {
+
+name_df <- deparse(substitute(slopes_df))
+
   colnames <- colnames(slopes_df)
   if (!(((slope_col)) %in% ((colnames)))) {
     stop("could not find slope_col in slopes_df")
@@ -113,7 +116,7 @@ flux_calc <- function(slopes_df,
                           ),
                           c(2, 1)
                           ),
-                          origdf = slopes_df)
+                          name_df = name_df)
 
 
   if (any(!df_ok))

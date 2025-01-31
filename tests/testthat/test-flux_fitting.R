@@ -2,7 +2,7 @@ test_that("works for exponential fitting", {
   expect_snapshot(
     flux_fitting(
       co2_conc,
-    f_start,
+    # f_start,
     f_end,
     f_datetime,
     f_conc,

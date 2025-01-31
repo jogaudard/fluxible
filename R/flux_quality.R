@@ -78,6 +78,9 @@ flux_quality <- function(slopes_df,
                          cor_threshold = 0.5,
                          b_threshold = 1,
                          cut_arg = "cut") {
+
+  name_df <- deparse(substitute(slopes_df))
+
   args_ok <- flux_fun_check(list(
     ambient_conc = {{ambient_conc}},
     error = {{error}},
@@ -105,7 +108,7 @@ flux_quality <- function(slopes_df,
                             "has to be numeric",
                             4
                           ),
-                          origdf = slopes_df)
+                          name_df = name_df)
 
 
   if (any(!c(args_ok, df_ok)))
@@ -180,7 +183,8 @@ flux_quality <- function(slopes_df,
       pvalue_col = {{pvalue_col}},
       rsquared_col = {{rsquared_col}},
       pvalue_threshold = {{pvalue_threshold}},
-      rsquared_threshold = {{rsquared_threshold}}
+      rsquared_threshold = {{rsquared_threshold}},
+      name_df = name_df
     )
   }
 

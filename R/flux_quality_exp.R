@@ -31,6 +31,10 @@ flux_quality_exp <- function(slopes_df,
                              rmse_threshold,
                              cor_threshold,
                              b_threshold) {
+
+name_df <- deparse(substitute(slopes_df))
+
+
   args_ok <- flux_fun_check(list(
     rmse_threshold = ((rmse_threshold)),
     cor_threshold = ((cor_threshold)),
@@ -45,7 +49,7 @@ flux_quality_exp <- function(slopes_df,
   slopes_df_ok <- flux_fun_check(slopes_df_check,
                                  fn = list(is.numeric),
                                  msg = "has to be numeric",
-                                 origdf = slopes_df)
+                                 name_df = name_df)
 
 
   if (any(!c(args_ok, slopes_df_ok)))

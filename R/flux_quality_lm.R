@@ -26,7 +26,12 @@ flux_quality_lm <- function(slopes_df,
                             pvalue_col,
                             rsquared_col,
                             pvalue_threshold,
-                            rsquared_threshold) {
+                            rsquared_threshold,
+                            name_df) {
+
+# name_df <- deparse(substitute(slopes_df))
+
+
   args_ok <- flux_fun_check(list(
     pvalue_threshold = ((pvalue_threshold)),
     rsquared_threshold = ((rsquared_threshold))
@@ -46,7 +51,7 @@ flux_quality_lm <- function(slopes_df,
       is.numeric
     ),
     msg = rep("has to be numeric", 2),
-    origdf = slopes_df
+    name_df = name_df
   )
 
 

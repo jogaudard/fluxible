@@ -1075,3 +1075,18 @@ cm_slope <- conc_df_cut |>
 }
 
 testing_lm2(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxID, fit_type = "exp")
+
+
+test_fct <- function(df, col = values){
+  df |>
+    mutate(
+      mean = mean({{col}})
+  )
+}
+
+test_df <- tibble(
+  ID = c(1:10),
+  values = c(11:20)
+)
+
+test_fct(test_df)

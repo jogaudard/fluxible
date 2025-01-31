@@ -31,7 +31,7 @@
 
 
 flux_fitting_exp <- function(conc_df,
-                             start_col,
+                             start_col = f_start,
                              end_col,
                              datetime_col,
                              conc_col,
@@ -63,8 +63,6 @@ flux_fitting_exp <- function(conc_df,
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
-
- 
 
   message("Cutting measurements...")
 

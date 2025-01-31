@@ -54,6 +54,9 @@ flux_fitting <- function(conc_df,
                          roll_width = 15,
                          t_zero = 0,
                          fit_type) {
+
+name_df <- deparse(substitute(conc_df))
+
   args_ok <- flux_fun_check(list(
     start_cut = start_cut,
     end_cut = end_cut
@@ -82,7 +85,7 @@ flux_fitting <- function(conc_df,
                                ),
                                c(1, 3)
                                ),
-                               origdf = conc_df)
+                               name_df = name_df)
 
 
   if (any(!c(args_ok, conc_df_ok)))

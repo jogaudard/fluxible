@@ -45,6 +45,8 @@ flux_match <- function(raw_conc,
                        ratio_threshold = 0.5,
                        time_diff = 0) {
 
+name_raw_conc <- deparse(substitute(raw_conc))
+name_field_record <- deparse(substitute(field_record))
 
   args_ok <- flux_fun_check(list(
     startcrop = startcrop,
@@ -67,12 +69,12 @@ flux_match <- function(raw_conc,
                                   "has to be POSIXct",
                                   "has to be numeric"
                                 ),
-                                origdf = raw_conc)
+                                name_df = name_raw_conc)
 
   field_record_ok <- flux_fun_check(field_record_check,
                                     fn = list(is.POSIXct),
                                     msg = "has to be POSIXct",
-                                    origdf = field_record)
+                                    name_df = name_field_record)
 
   if (any(!c(args_ok, raw_conc_ok, field_record_ok)))
     stop("Please correct the arguments", call. = FALSE)
