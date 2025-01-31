@@ -40,11 +40,11 @@
 #' @export
 
 flux_fitting <- function(conc_df,
-                         start_col,
-                         end_col,
-                         datetime_col,
                          conc_col,
-                         fluxid_col,
+                         datetime_col,
+                         start_col = f_start,
+                         end_col = f_end,
+                         fluxid_col = f_fluxID,
                          start_cut = 0,
                          end_cut = 0,
                          t_window = 20,
@@ -117,10 +117,10 @@ name_df <- deparse(substitute(conc_df))
   if (fit_type == "exponential") {
     conc_fitting <- flux_fitting_exp(
       conc_df,
+      {{conc_col}},
+      {{datetime_col}},
       {{start_col}},
       {{end_col}},
-      {{datetime_col}},
-      {{conc_col}},
       {{fluxid_col}},
       start_cut = start_cut,
       end_cut = end_cut,
@@ -136,10 +136,10 @@ name_df <- deparse(substitute(conc_df))
   if (fit_type == "linear") {
     conc_fitting <- flux_fitting_lin(
       conc_df,
+      {{conc_col}},
+      {{datetime_col}},
       {{start_col}},
       {{end_col}},
-      {{datetime_col}},
-      {{conc_col}},
       {{fluxid_col}},
       start_cut = start_cut,
       end_cut = end_cut
@@ -149,10 +149,10 @@ name_df <- deparse(substitute(conc_df))
   if (fit_type == "quadratic") {
     conc_fitting <- flux_fitting_quadratic(
       conc_df,
+      {{conc_col}},
+      {{datetime_col}},
       {{start_col}},
       {{end_col}},
-      {{datetime_col}},
-      {{conc_col}},
       {{fluxid_col}},
       start_cut = start_cut,
       end_cut = end_cut,

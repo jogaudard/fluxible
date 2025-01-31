@@ -1,7 +1,7 @@
 # quadratic fit works
 
     Code
-      flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxID, fit_type = "quadratic",
+      flux_fitting(co2_conc, f_conc, f_datetime, f_start, f_end, f_fluxID, fit_type = "quadratic",
         t_zero = 10, end_cut = 30)
     Output
       # A tibble: 1,251 x 24

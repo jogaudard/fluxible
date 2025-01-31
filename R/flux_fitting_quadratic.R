@@ -16,10 +16,10 @@
 
 
 flux_fitting_quadratic <- function(conc_df,
+                                   conc_col,
+                                   datetime_col,
                                    start_col,
                                    end_col,
-                                   datetime_col,
-                                   conc_col,
                                    fluxid_col,
                                    start_cut,
                                    end_cut,

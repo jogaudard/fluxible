@@ -1,8 +1,8 @@
 # works for exponential fitting
 
     Code
-      distinct(select(flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc,
-        f_fluxID, fit_type = "expo"), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "expo"),
+      f_fluxID, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -28,8 +28,8 @@
 # works for linear fitting
 
     Code
-      distinct(select(flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc,
-        f_fluxID, fit_type = "lin"), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "lin"),
+      f_fluxID, f_slope))
     Condition
       Warning in `flux_fitting_lin()`:
       
@@ -49,8 +49,8 @@
 # works for quadratic fitting
 
     Code
-      distinct(select(flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc,
-        f_fluxID, fit_type = "qua"), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "qua"),
+      f_fluxID, f_slope))
     Condition
       Warning in `flux_fitting_quadratic()`:
       
@@ -70,8 +70,8 @@
 # works for exponential fitting with cut
 
     Code
-      distinct(select(flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc,
-        f_fluxID, fit_type = "expo", start_cut = 20), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "expo",
+        start_cut = 20), f_fluxID, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -97,8 +97,8 @@
 # works for linear fitting with cut
 
     Code
-      distinct(select(flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc,
-        f_fluxID, fit_type = "line", start_cut = 20), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "line",
+        start_cut = 20), f_fluxID, f_slope))
     Condition
       Warning in `flux_fitting_lin()`:
       
@@ -118,7 +118,7 @@
 # removing duplicated datetime
 
     Code
-      flux_fitting(rep_data, f_start, f_end, f_datetime, f_conc, f_fluxID, fit_type = "exp")
+      flux_fitting(rep_data, f_conc, f_datetime, fit_type = "exp")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...

@@ -1,8 +1,7 @@
 # renaming works
 
     Code
-      flux_fitting(co2_conc_names, f_start, finish, date_time, co2, f_fluxID,
-        fit_type = "lin")
+      flux_fitting(co2_conc_names, co2, date_time, f_start, finish, fit_type = "lin")
     Condition
       Warning in `flux_fitting_lin()`:
       

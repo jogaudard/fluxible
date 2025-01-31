@@ -1,8 +1,8 @@
 # fitting works with 0 second end cut
 
     Code
-      distinct(select(flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc,
-        f_fluxID, fit_type = "exponential"), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "exponential"),
+      f_fluxID, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -28,8 +28,7 @@
 # fitting works with 30 second end cut
 
     Code
-      flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxID, end_cut = 30,
-        fit_type = "exp")
+      flux_fitting(co2_conc, f_conc, f_datetime, end_cut = 30, fit_type = "exp")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -60,8 +59,7 @@
 # fitting works with 60 second end cut
 
     Code
-      flux_fitting(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxID, end_cut = 60,
-        fit_type = "exp")
+      flux_fitting(co2_conc, f_conc, f_datetime, end_cut = 60, fit_type = "exp")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -92,8 +90,7 @@
 # renaming works
 
     Code
-      flux_fitting(co2_conc_names, f_start, finish, date_time, co2, f_fluxID,
-        fit_type = "exp")
+      flux_fitting(co2_conc_names, co2, date_time, f_start, finish, fit_type = "exp")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...

@@ -237,11 +237,9 @@ test_that("Fluxible workflow works from start to finish", {
   )
   slopes_test <- suppressWarnings(flux_fitting(
     conc_test,
-    start,
-    f_end,
-    datetime,
     conc,
-    f_fluxID,
+    datetime,
+    start,
     fit_type = "exp"
   ))
   slopes_flag_test <- flux_quality(
