@@ -26,7 +26,7 @@
 #' flux ID, measurements start and end, flags in case of no data or low number
 #' of data, and any variables present in one of the inputs.
 #' @importFrom dplyr rename arrange mutate row_number full_join case_when
-#' group_by filter ungroup select distinct pull join_by
+#' group_by filter ungroup select distinct pull join_by coalesce
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct
 #' @examples
@@ -105,10 +105,7 @@ name_field_record <- deparse(substitute(field_record))
     by = dplyr::join_by({{datetime_col}} == "f_start"), keep = TRUE
   ) |>
     mutate(
-      {{datetime_col}} := case_when(
-        !is.na({{datetime_col}}) ~ {{datetime_col}},
-        is.na({{datetime_col}}) ~ .data$f_start
-      )
+      {{datetime_col}} := dplyr::coalesce({{datetime_col}}, .data$f_start)
     ) |>
     arrange({{datetime_col}}) |>
     fill("f_fluxID") |>

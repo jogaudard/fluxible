@@ -32,7 +32,7 @@
 
 flux_fitting_exp <- function(conc_df,
                              start_col = f_start,
-                             end_col,
+                             end_col = f_end,
                              datetime_col,
                              conc_col,
                              fluxid_col,
