@@ -1,12 +1,14 @@
 test_that("flux calculation is correct", {
   output <- flux_calc(slopes0,
-    slope_col = "f_slope",
-    conc_unit = "ppm",
-    flux_unit = "mmol",
+    f_slope,
+    f_datetime,
+    temp_air,
     chamber_volume = 24.5,
     tube_volume = 0.075,
     atm_pressure = 1,
-    plot_area = 0.0625
+    plot_area = 0.0625,
+    conc_unit = "ppm",
+    flux_unit = "mmol"
   )
 
   expect_equal(

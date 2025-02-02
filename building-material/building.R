@@ -1091,3 +1091,32 @@ test_fct <- function(df, col1, col2 = values2){
 }
 
 test_fct(test_df, values)
+
+
+test_vol <- function(
+  df,
+  col1,
+  volume
+){
+
+  # if(is.double(volume)) {
+  #   df <- df |>
+  #     mutate(
+  #       volume = volume
+  #     )
+  # }
+name_vol <- deparse(substitute(volume))
+
+  # name <- c(as.character(volume))
+  # name
+
+  df |>
+  select({{col1}}, any_of(name_vol)) |>
+  mutate(
+    result = {{col1}} + {{volume}}
+  )
+}
+
+test_vol(test_df, values, values2)
+test_vol(test_df, values, 10)
+names(test_df)
