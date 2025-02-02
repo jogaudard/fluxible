@@ -1,8 +1,10 @@
 # works for exponential fitting
 
     Code
+
       dplyr::distinct(dplyr::select(flux_quality(slopes0, fit_type = "expo",
         slope_col = "f_slope"), f_fluxID, f_quality_flag, f_RMSE, f_cor_coef))
+
     Message
       
        Total number of measurements: 6
@@ -28,8 +30,10 @@
 # works for linear fitting
 
     Code
+
       dplyr::distinct(dplyr::select(flux_quality(slopes30lin, fit_type = "li"),
       f_fluxID, f_quality_flag, f_pvalue, f_rsquared))
+
     Message
       
        Total number of measurements: 6
@@ -55,8 +59,10 @@
 # works for quadratic fitting
 
     Code
+
       dplyr::distinct(dplyr::select(flux_quality(slopes30qua, fit_type = "quadratic"),
       f_fluxID, f_quality_flag, f_pvalue, f_rsquared))
+
     Message
       
        Total number of measurements: 6

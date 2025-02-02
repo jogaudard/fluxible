@@ -1,6 +1,10 @@
 test_that("works for exponential fitting", {
   expect_snapshot(
-    flux_fitting(co2_conc, fit_type = "expo") |>
+    flux_fitting(
+      co2_conc,
+      f_conc,
+      f_datetime,
+    fit_type = "expo") |>
       select(f_fluxID, f_slope) |>
       distinct()
   )
@@ -8,7 +12,12 @@ test_that("works for exponential fitting", {
 
 test_that("works for linear fitting", {
   expect_snapshot(
-    flux_fitting(co2_conc, fit_type = "lin") |>
+    flux_fitting(
+      co2_conc,
+      f_conc,
+      f_datetime,
+      fit_type = "lin"
+    ) |>
       select(f_fluxID, f_slope) |>
       distinct()
   )
@@ -16,7 +25,12 @@ test_that("works for linear fitting", {
 
 test_that("works for quadratic fitting", {
   expect_snapshot(
-    flux_fitting(co2_conc, fit_type = "qua") |>
+    flux_fitting(
+      co2_conc,
+      f_conc,
+      f_datetime,
+      fit_type = "qua"
+    ) |>
       select(f_fluxID, f_slope) |>
       distinct()
   )
@@ -24,7 +38,13 @@ test_that("works for quadratic fitting", {
 
 test_that("works for exponential fitting with cut", {
   expect_snapshot(
-    flux_fitting(co2_conc, fit_type = "expo", start_cut = 20) |>
+    flux_fitting(
+      co2_conc,
+      f_conc,
+      f_datetime,
+      fit_type = "expo",
+      start_cut = 20
+    ) |>
       select(f_fluxID, f_slope) |>
       distinct()
   )
@@ -32,7 +52,13 @@ test_that("works for exponential fitting with cut", {
 
 test_that("works for linear fitting with cut", {
   expect_snapshot(
-    flux_fitting(co2_conc, fit_type = "line", start_cut = 20) |>
+    flux_fitting(
+      co2_conc,
+      f_conc,
+      f_datetime,
+      fit_type = "line",
+      start_cut = 20
+    ) |>
       select(f_fluxID, f_slope) |>
       distinct()
   )
@@ -48,7 +74,12 @@ test_that("removing duplicated datetime", {
     arrange(f_datetime)
 
   expect_snapshot(
-    flux_fitting(rep_data, fit_type = "exp")
+    flux_fitting(
+      rep_data,
+      f_conc,
+      f_datetime,
+      fit_type = "exp"
+    )
   )
 })
 
@@ -63,7 +94,17 @@ test_that("correct flux with duplicated datetime", {
 
   qflux_fitting <- purrr::quietly(flux_fitting)
   expect_equal(
-    qflux_fitting(rep_data, fit_type = "exp"),
-    qflux_fitting(co2_conc, fit_type = "exp")
+    qflux_fitting(
+      rep_data,
+      f_conc,
+      f_datetime,
+      fit_type = "exp"
+    ),
+    qflux_fitting(
+      co2_conc,
+      f_conc,
+      f_datetime,
+      fit_type = "exp"
+    )
   )
 })

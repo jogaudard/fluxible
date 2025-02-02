@@ -25,87 +25,100 @@
 
 
 flux_quality_exp <- function(slopes_df,
-                             force_discard = c(),
-                             force_ok = c(),
-                             b_col = "f_b",
-                             rmse_threshold = 25,
-                             cor_threshold = 0.5,
-                             b_threshold = 1) {
+                             conc_col,
+                             fluxid_col,
+                             slope_col,
+                             time_col,
+                             fit_col,
+                             cut_col,
+                             b_col,
+                             force_discard,
+                             force_ok,
+                             rmse_threshold,
+                             cor_threshold,
+                             b_threshold) {
+
+name_df <- deparse(substitute(slopes_df))
+
+
   args_ok <- flux_fun_check(list(
-    rmse_threshold = ((rmse_threshold)),
-    cor_threshold = ((cor_threshold)),
-    b_threshold = ((b_threshold))
+    rmse_threshold = rmse_threshold,
+    cor_threshold = cor_threshold,
+    b_threshold = b_threshold
   ),
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
   slopes_df_check <- slopes_df |>
-    select(all_of(((b_col))))
+    select({{b_col}})
 
   slopes_df_ok <- flux_fun_check(slopes_df_check,
                                  fn = list(is.numeric),
                                  msg = "has to be numeric",
-                                 origdf = slopes_df)
+                                 name_df = name_df)
 
 
   if (any(!c(args_ok, slopes_df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-  slopes_df <- slopes_df |>
-    rename(
-      f_b = all_of(((b_col)))
-    )
 
 
   quality_par <- slopes_df |>
-    group_by(.data$f_fluxID, .data$f_cut) |>
-    nest() |>
-    rowwise() |>
+    group_by({{fluxid_col}}, {{cut_col}}) |>
+    # nest() |>
+    # rowwise() |>
     summarise(
-      f_cor_coef = cor(data$f_conc, data$f_time),
-      f_RMSE = sqrt((1 / length(data$f_time))
-                    * sum((data$f_fit - data$f_conc)^2)),
+      # f_cor_coef = cor(data$f_conc, data$f_time),
+      # f_cor_coef = map(.x  = data, \(.x) cor(.x$f_conc, .x$f_time)),
+      f_cor_coef = cor({{conc_col}}, {{time_col}}),
+      # f_RMSE = sqrt((1 / length({{time_col}}))
+      #               * sum(({{fit_col}} - {{conc_col}})^2)),
+      f_RMSE = sqrt((1 / length({{time_col}})) * sum(({{fit_col}} - {{conc_col}})^2)),
       .groups = "drop"
-    ) |>
-    unnest(c("f_fluxID", "f_cut"))
+    )
+    # unnest(cols = c({{fluxid_col}}, {{cut_col}}))
 
 
 
   quality_flag <- slopes_df |>
-    left_join(quality_par, by = c("f_fluxID", "f_cut")) |>
+    left_join(quality_par, by = dplyr::join_by(
+      {{fluxid_col}} == {{fluxid_col}},
+      {{cut_col}} == {{cut_col}}
+    )
+    ) |>
     mutate(
       f_fit_quality = case_when(
-        .data$f_b >= ((b_threshold)) ~ "bad_b",
-        .data$f_RMSE > ((rmse_threshold)) ~ "bad_RMSE"
+        {{b_col}} >= b_threshold ~ "bad_b",
+        .data$f_RMSE > rmse_threshold ~ "bad_RMSE"
       ),
       f_correlation = case_when(
-        abs(.data$f_cor_coef) < ((cor_threshold)) ~ "no",
+        abs(.data$f_cor_coef) < cor_threshold ~ "no",
         TRUE ~ "yes"
       ),
       f_quality_flag = case_when(
+        .data$f_fit_quality == "bad_b" &
+          .data$f_correlation == "yes" ~ "discard",
+        .data$f_fit_quality == "bad_b" &
+          .data$f_correlation == "no" ~ "zero",
+        .data$f_fit_quality == "bad_RMSE" &
+          .data$f_correlation == "yes" ~ "discard",
+        .data$f_fit_quality == "bad_RMSE" &
+          .data$f_correlation == "no" ~ "zero",
+        .data$f_RMSE <= rmse_threshold ~ "ok",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
-        .data$f_fluxID %in% ((force_ok)) ~ "force_ok",
         .data$f_start_error == "error" ~ "start_error",
-        .data$f_fit_quality == "bad_b" &
-          .data$f_correlation == "yes" ~ "discard",
-        .data$f_fit_quality == "bad_b" &
-          .data$f_correlation == "no" ~ "zero",
-        .data$f_fit_quality == "bad_RMSE" &
-          .data$f_correlation == "yes" ~ "discard",
-        .data$f_fit_quality == "bad_RMSE" &
-          .data$f_correlation == "no" ~ "zero",
-        TRUE ~ "ok"
+        {{fluxid_col}} %in% force_discard ~ "force_discard",
+        {{fluxid_col}} %in% force_ok ~ "force_ok"
       ),
       f_slope_corr = case_when(
-        .data$f_quality_flag == "no_data" ~ NA_real_,
-        .data$f_quality_flag == "force_discard" ~ NA_real_,
-        .data$f_quality_flag == "force_ok" ~ .data$f_slope,
-        .data$f_quality_flag == "start_error" ~ NA_real_,
-        .data$f_quality_flag == "discard" ~ NA_real_,
+        .data$f_quality_flag == "no_data" ~ NA,
+        .data$f_quality_flag == "force_discard" ~ NA,
+        .data$f_quality_flag == "force_ok" ~ {{slope_col}},
+        .data$f_quality_flag == "start_error" ~ NA,
+        .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0,
-        .data$f_quality_flag == "ok" ~ .data$f_slope
+        .data$f_quality_flag == "ok" ~ {{slope_col}}
       )
     )
 

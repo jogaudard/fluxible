@@ -12,10 +12,10 @@ flux_calc(
   flux_unit,
   cut_col = c(),
   keep_arg = c(),
-  chamber_volume = 24.5,
-  tube_volume = 0.075,
-  atm_pressure = 1,
-  plot_area = 0.0625,
+  chamber_volume,
+  tube_volume,
+  atm_pressure,
+  plot_area,
   cols_keep = c(),
   cols_ave = c(),
   fluxid_col = "f_fluxID",
@@ -94,5 +94,9 @@ data(slopes0)
 flux_calc(slopes0,
 slope_col = "f_slope",
 conc_unit = "ppm",
-flux_unit = "mmol")
+flux_unit = "mmol",
+chamber_volume = 24.5,
+tube_volume = 0.075,
+atm_pressure = 1,
+plot_area = 0.0625)
 }

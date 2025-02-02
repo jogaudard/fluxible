@@ -6,13 +6,13 @@
 \usage{
 flux_fitting(
   conc_df,
+  start_col,
+  end_col,
+  datetime_col,
+  conc_col,
+  fluxid_col,
   start_cut = 0,
   end_cut = 0,
-  start_col = "f_start",
-  end_col = "f_end",
-  datetime_col = "f_datetime",
-  conc_col = "f_conc",
-  fluxid_col = "f_fluxID",
   t_window = 20,
   cz_window = 15,
   b_window = 10,
@@ -25,11 +25,6 @@ flux_fitting(
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
 
-\item{start_cut}{time to discard at the start of the measurements
-(in seconds)}
-
-\item{end_cut}{time to discard at the end of the measurements (in seconds)}
-
 \item{start_col}{column with datetime when the measurement started}
 
 \item{end_col}{column with datetime when the measurement ended}
@@ -41,6 +36,11 @@ the first row will be kept}
 \item{conc_col}{column with gas concentration data}
 
 \item{fluxid_col}{column with ID of each flux}
+
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
+
+\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
 \item{t_window}{enlarge focus window before and after tmin and tmax
 (exponential fit)}

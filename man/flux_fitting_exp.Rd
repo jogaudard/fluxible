@@ -7,18 +7,18 @@ over time, using the exponential model from Zhao et al (2018)}
 \usage{
 flux_fitting_exp(
   conc_df,
+  start_col,
+  end_col,
+  datetime_col,
+  conc_col,
+  fluxid_col,
   t_window,
   cz_window,
   b_window,
   a_window,
   roll_width,
   start_cut,
-  end_cut,
-  start_col,
-  end_col,
-  datetime_col,
-  conc_col,
-  fluxid_col
+  end_cut
 )
 }
 \arguments{
@@ -40,16 +40,6 @@ ideally same as cz_window}
 (in seconds)}
 
 \item{end_cut}{time to discard at the end of the measurements (in seconds)}
-
-\item{start_col}{column with datetime when the measurement started}
-
-\item{end_col}{column with datetime when the measurement ended}
-
-\item{datetime_col}{column with datetime of each concentration measurement}
-
-\item{conc_col}{column with gas concentration data}
-
-\item{fluxid_col}{column with ID of each flux}
 }
 \value{
 a dataframe with the slope at t zero,

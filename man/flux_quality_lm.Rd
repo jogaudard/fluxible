@@ -6,12 +6,12 @@
 \usage{
 flux_quality_lm(
   slopes_df,
-  force_discard = c(),
-  force_ok = c(),
-  pvalue_col = "f_pvalue",
-  rsquared_col = "f_rsquared",
-  pvalue_threshold = 0.3,
-  rsquared_threshold = 0.7
+  force_discard,
+  force_ok,
+  pvalue_col,
+  rsquared_col,
+  pvalue_threshold,
+  rsquared_threshold
 )
 }
 \arguments{

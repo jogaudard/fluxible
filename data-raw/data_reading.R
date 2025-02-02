@@ -8,7 +8,8 @@ co2_conc <- readr::read_csv(
     f_start = "start",
     f_conc = "conc",
     f_fluxID = "fluxID",
-    f_end = "end"
+    f_end = "end",
+    f_n_conc = "n_conc"
   ) |>
   dplyr::arrange(f_datetime)
 usethis::use_data(co2_conc, overwrite = TRUE)
@@ -29,7 +30,8 @@ co2_conc_missing <- readr::read_csv(
     f_start = "start",
     f_conc = "conc",
     f_fluxID = "fluxID",
-    f_end = "end"
+    f_end = "end",
+    f_n_conc = "n_conc"
   )
 usethis::use_data(co2_conc_missing, overwrite = TRUE)
 

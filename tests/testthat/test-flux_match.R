@@ -1,7 +1,10 @@
 test_that("matching works", {
   expect_snapshot(flux_match(
     co2_df_short,
-    record_short
+    record_short,
+    datetime,
+    start,
+    conc
   ))
 })
 
@@ -16,6 +19,9 @@ test_that("time_diff works", {
   expect_snapshot(flux_match(
     co2_df_short_180,
     record_short,
+    datetime,
+    start,
+    conc,
     time_diff = 180
   ))
 })
@@ -38,9 +44,9 @@ test_that("renaming variables works", {
     flux_match(
       co2_df_short,
       record_short,
-      datetime_col = "date_time",
-      conc_col = "CO2_conc",
-      start_col = "starting"
+      date_time,
+      starting,
+      CO2_conc
     )
   )
 })
@@ -52,7 +58,10 @@ test_that("flags on nb of data", {
     suppressWarnings( # warnings are expected, they are tested in another test
       flux_match(
         co2_df_missing,
-        record_short
+        record_short,
+        datetime,
+        start,
+        conc
       )
     )
   )
@@ -63,7 +72,10 @@ test_that("warnings", {
   expect_warning(
     flux_match(
       co2_df_missing,
-      record_short
+      record_short,
+      datetime,
+      start,
+      conc
     ),
     "fluxID 1 : nb of data too low
  fluxID 3 : nb of data too low
@@ -74,7 +86,10 @@ test_that("warnings", {
 test_that("no warnings when no flags", {
   expect_no_warning(flux_match(
     co2_df_short,
-    record_short
+    record_short,
+    datetime,
+    start,
+    conc
   ))
 })
 
@@ -89,7 +104,10 @@ test_that("error on datetime", {
   expect_error(
     flux_match(
       co2_df_short,
-      record_short
+      record_short,
+      datetime,
+      start,
+      conc
     ),
     "Please correct the arguments"
   )
@@ -104,7 +122,10 @@ test_that("error on conc variable", {
   expect_error(
     flux_match(
       co2_df_short,
-      record_short
+      record_short,
+      datetime,
+      start,
+      conc
     ),
     "Please correct the arguments"
   )
@@ -119,7 +140,10 @@ test_that("error on start", {
   expect_error(
     flux_match(
       co2_df_short,
-      record_short
+      record_short,
+      datetime,
+      start,
+      conc
     ),
     "Please correct the arguments"
   )
@@ -127,8 +151,12 @@ test_that("error on start", {
 
 test_that("error on startcrop", {
   expect_error(
-    flux_match(co2_df_short,
+    flux_match(
+      co2_df_short,
       record_short,
+      datetime,
+      start,
+      conc,
       startcrop = "blip"
     ),
     "Please correct the arguments"
@@ -140,6 +168,9 @@ test_that("error on measurement_length", {
     flux_match(
       co2_df_short,
       record_short,
+      datetime,
+      start,
+      conc,
       measurement_length = "blip"
     ),
     "Please correct the arguments"
@@ -151,6 +182,9 @@ test_that("error on ratio_threshold", {
     flux_match(
       co2_df_short,
       record_short,
+      datetime,
+      start,
+      conc,
       ratio_threshold = 2
     ),
     "ratio_threshold has to be a number between 0 and 1"
@@ -162,6 +196,9 @@ test_that("error on time_diff", {
     flux_match(
       co2_df_short,
       record_short,
+      datetime,
+      start,
+      conc,
       time_diff = "comment est votre blanquette?"
     ),
     "Please correct the arguments"

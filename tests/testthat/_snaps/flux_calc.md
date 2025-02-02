@@ -19,7 +19,8 @@
 
     Code
       flux_calc(slopes0, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        cols_keep = c("turfID", "type", "f_start"))
+        cols_keep = c("turfID", "type", "f_start"), chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Creating a df with the columns from 'cols_keep' argument...
@@ -45,7 +46,8 @@
 
     Code
       flux_calc(slopes0, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        cols_keep = c("turfID", "type", "f_start"), cols_ave = c("PAR", "temp_soil"))
+        cols_keep = c("turfID", "type", "f_start"), cols_ave = c("PAR", "temp_soil"),
+        chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Creating a df with the columns from 'cols_keep' argument...
@@ -72,7 +74,8 @@
 
     Code
       flux_calc(slopes0_temp, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        temp_air_col = "temp_fahr", temp_air_unit = "fahrenheit")
+        temp_air_col = "temp_fahr", temp_air_unit = "fahrenheit", chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -96,7 +99,8 @@
 
     Code
       flux_calc(slopes0_temp, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
-        temp_air_col = "temp_kelvin", temp_air_unit = "kelvin")
+        temp_air_col = "temp_kelvin", temp_air_unit = "kelvin", chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -120,7 +124,8 @@
 
     Code
       flux_calc(slopes30_flag, slope_col = "f_slope_corr", conc_unit = "ppm",
-        flux_unit = "mmol", cut_col = "f_cut", keep_arg = "keep")
+        flux_unit = "mmol", cut_col = "f_cut", keep_arg = "keep", chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Cutting data according to 'keep_arg'...
       Averaging air temperature for each flux...
@@ -144,8 +149,8 @@
 # volume can be a variable instead of a constant
 
     Code
-      flux_calc(slopes0_vol, slope_col = "f_slope_tz", conc_unit = "ppm", flux_unit = "mmol",
-        chamber_volume = "volume")
+      flux_calc(slopes0_vol, slope_col = "f_slope", conc_unit = "ppm", flux_unit = "mmol",
+        chamber_volume = "volume", tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -153,7 +158,7 @@
       Concentration was measured in ppm
       Fluxes are in mmol/m2/h
     Output
-      # A tibble: 6 x 10
+      # A tibble: 6 x 11
         f_fluxID f_slope_calc chamber_volume tube_volume atm_pressure plot_area
            <dbl>        <dbl>          <dbl>       <dbl>        <dbl>     <dbl>
       1        1        1.56              18       0.075            1    0.0625
@@ -162,15 +167,15 @@
       4        4        1.13              24       0.075            1    0.0625
       5        5        1.46               4       0.075            1    0.0625
       6        6        0.426             35       0.075            1    0.0625
-      # i 4 more variables: temp_air_ave <dbl>, datetime <dttm>, volume_setup <dbl>,
-      #   flux <dbl>
+      # i 5 more variables: temp_air_ave <dbl>, datetime <dttm>, volume_setup <dbl>,
+      #   flux <dbl>, model <chr>
 
 # volume can be a variable instead of a constant (volume)
 
     Code
-      select(flux_calc(slopes0_vol_tube, slope_col = "f_slope_tz", conc_unit = "ppm",
-        flux_unit = "mmol", chamber_volume = "volume", tube_volume = "tube_vol"), !c(
-        chamber_volume, tube_volume))
+      select(flux_calc(slopes0_vol_tube, slope_col = "f_slope", conc_unit = "ppm",
+        flux_unit = "mmol", chamber_volume = "volume", tube_volume = "tube_vol",
+        atm_pressure = 1, plot_area = 0.0625), !c(chamber_volume, tube_volume))
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -178,7 +183,7 @@
       Concentration was measured in ppm
       Fluxes are in mmol/m2/h
     Output
-      # A tibble: 6 x 8
+      # A tibble: 6 x 9
         f_fluxID f_slope_calc atm_pressure plot_area temp_air_ave datetime           
            <dbl>        <dbl>        <dbl>     <dbl>        <dbl> <dttm>             
       1        1        1.56             1    0.0625         7.31 2022-07-28 23:43:35
@@ -187,7 +192,7 @@
       4        4        1.13             1    0.0625         7.77 2022-07-28 23:59:32
       5        5        1.46             1    0.0625         7.71 2022-07-29 00:03:10
       6        6        0.426            1    0.0625         7.75 2022-07-29 00:06:35
-      # i 2 more variables: volume_setup <dbl>, flux <dbl>
+      # i 3 more variables: volume_setup <dbl>, flux <dbl>, model <chr>
 
 # Fluxible workflow works from start to finish
 

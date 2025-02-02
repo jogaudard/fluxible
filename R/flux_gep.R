@@ -35,6 +35,7 @@ flux_gep <- function(fluxes_df,
                      er_arg = "ER",
                      cols_keep = c()) {
 
+name_df <- deparse(substitute(fluxes_df))
 
   fluxes_df_check <- fluxes_df |>
     select(
@@ -44,7 +45,7 @@ flux_gep <- function(fluxes_df,
   fluxes_df_ok <- flux_fun_check(fluxes_df_check,
                                  fn = list(is.numeric),
                                  msg = "has to be numeric",
-                                 origdf = fluxes_df)
+                                 name_df = name_df)
 
 
   if (!fluxes_df_ok)

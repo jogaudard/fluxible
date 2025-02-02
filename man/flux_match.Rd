@@ -7,13 +7,13 @@
 flux_match(
   raw_conc,
   field_record,
+  datetime_col,
+  start_col,
+  conc_col,
   startcrop = 10,
   measurement_length = 220,
   ratio_threshold = 0.5,
-  time_diff = 0,
-  datetime_col = "datetime",
-  conc_col = "conc",
-  start_col = "start"
+  time_diff = 0
 )
 }
 \arguments{
@@ -24,6 +24,12 @@ a gas concentration column as double.}
 \item{field_record}{dataframe recording which measurement happened when.
 Has to contain at least a column containing the start of each measurement,
 and any other column identifying the measurements.}
+
+\item{datetime_col}{datetime column in raw_conc (dmy_hms format)}
+
+\item{start_col}{start column in field_record (dmy_hms format)}
+
+\item{conc_col}{concentration column in raw_conc}
 
 \item{startcrop}{how many seconds should be discarded at the beginning of
 the measurement}
@@ -38,12 +44,6 @@ too little}
 \item{time_diff}{time difference (in seconds) between the two datasets.
 Will be added to the datetime column of the raw_conc dataset.
 For situations where the time was not synchronized correctly.}
-
-\item{datetime_col}{datetime column in raw_conc (dmy_hms format)}
-
-\item{conc_col}{concentration column in raw_conc}
-
-\item{start_col}{start column in field_record (dmy_hms format)}
 }
 \value{
 a dataframe with concentration measurements, corresponding datetime,
