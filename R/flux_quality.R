@@ -63,7 +63,7 @@ flux_quality <- function(slopes_df,
                          time_col = f_time,
                          start_col = f_start,
                          end_col = f_end,
-                        #  fit_col = f_fit,
+                         fit_col = f_fit,
                          cut_col = f_cut,
                          pvalue_col = f_pvalue,
                          rsquared_col = f_rsquared,
@@ -84,9 +84,9 @@ flux_quality <- function(slopes_df,
   name_df <- deparse(substitute(slopes_df))
 
   args_ok <- flux_fun_check(list(
-    ambient_conc = {{ambient_conc}},
-    error = {{error}},
-    ratio_threshold = {{ratio_threshold}}
+    ambient_conc = ambient_conc,
+    error = error,
+    ratio_threshold = ratio_threshold
   ),
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
@@ -95,7 +95,7 @@ flux_quality <- function(slopes_df,
     select(
       {{slope_col}},
       {{conc_col}},
-      # {{fit_col}},
+      {{fit_col}},
       {{time_col}}
     )
 
@@ -157,8 +157,8 @@ by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
     rowwise() |>
     summarise(
       f_start_error = case_when(
-        data[[conc_col]][1] < (ambient_conc - error) ~ "error",
-        data[[conc_col]][1] > (ambient_conc + error) ~ "error",
+        data[[name_conc]][1] < (ambient_conc - error) ~ "error",
+        data[[name_conc]][1] > (ambient_conc + error) ~ "error",
         TRUE ~ "ok"
       ),
       .groups = "drop"
@@ -175,19 +175,19 @@ by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
       {{fluxid_col}},
       {{slope_col}},
       {{time_col}},
-      # {{fit_col}},
+      {{fit_col}},
       {{cut_col}},
       {{b_col}},
       force_discard = force_discard,
       force_ok = force_ok,
-      ratio_threshold = ratio_threshold,
-      fit_type = fit_type,
-      ambient_conc = ambient_conc,
-      error = error,
+      # ratio_threshold = ratio_threshold,
+      # fit_type = fit_type,
+      # ambient_conc = ambient_conc,
+      # error = error,
       rmse_threshold = rmse_threshold,
       cor_threshold = cor_threshold,
-      b_threshold = b_threshold,
-      cut_arg = cut_arg
+      b_threshold = b_threshold
+      # cut_arg = cut_arg
     )
   }
 

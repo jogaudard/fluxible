@@ -1,7 +1,7 @@
 # works for exponential fitting
 
     Code
-      flux_quality(slopes0, fit_type = "expo", slope_col = "f_slope")
+      flux_quality(slopes0, f_conc, fit_type = "expo")
     Message
       
        Total number of measurements: 6
@@ -38,7 +38,7 @@
 # works for linear fitting
 
     Code
-      flux_quality(slopes30lin, fit_type = "li")
+      flux_quality(slopes30lin, f_conc, fit_type = "li")
     Message
       
        Total number of measurements: 6
@@ -75,7 +75,7 @@
 # works for quadratic fitting
 
     Code
-      flux_quality(slopes30qua, fit_type = "quadratic")
+      flux_quality(slopes30qua, f_conc, fit_type = "quadratic")
     Message
       
        Total number of measurements: 6

@@ -20,6 +20,7 @@ test_that("works for linear fitting", {
 test_that("works for quadratic fitting", {
   expect_snapshot(
     flux_quality(slopes30qua,
+    f_conc,
       fit_type = "quadratic"
     )
   )
