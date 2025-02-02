@@ -1,8 +1,8 @@
 # matching works
 
     Code
-      dplyr::distinct(dplyr::select(flux_match(co2_df_short, record_short), f_fluxID,
-      f_n_conc, f_ratio, f_flag_match))
+      dplyr::distinct(dplyr::select(flux_match(co2_df_short, record_short, datetime,
+        start, conc), f_fluxID, f_n_conc, f_ratio, f_flag_match))
     Output
       # A tibble: 6 x 4
         f_fluxID f_n_conc f_ratio f_flag_match
@@ -13,7 +13,6 @@
       4 4             210   1     <NA>        
       5 5             205   0.976 <NA>        
       6 6             206   0.981 <NA>        
-
 
 # time_diff works
 

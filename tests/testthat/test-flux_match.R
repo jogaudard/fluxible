@@ -5,7 +5,10 @@ test_that("matching works", {
     datetime,
     start,
     conc
-  ))
+  ) |>
+  dplyr::select(f_fluxID, f_n_conc, f_ratio, f_flag_match) |>
+  dplyr::distinct()
+  )
 })
 
 test_that("time_diff works", {
