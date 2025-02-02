@@ -23,7 +23,7 @@
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
       # i 14 more variables: f_start <dttm>, finish <dttm>, f_fluxID <fct>,
-      #   n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
       #   f_pvalue <dbl>, f_fit <dbl>
 
