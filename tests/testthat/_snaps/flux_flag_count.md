@@ -6,8 +6,8 @@
       # A tibble: 7 x 3
         f_quality_flag     n ratio
         <fct>          <int> <dbl>
-      1 discard            1 0.167
-      2 ok                 5 0.833
+      1 ok                 5 0.833
+      2 discard            1 0.167
       3 zero               0 0    
       4 force_discard      0 0    
       5 start_error        0 0    

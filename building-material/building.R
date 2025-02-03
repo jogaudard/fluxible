@@ -98,7 +98,7 @@ record_short <- record %>%
 # a dataset with too many missing data
 co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv", col_types = "Tdddd")
 # co2_df_missing <- co2_df_short
-# co2_df_missing$CO2[c(FALSE, TRUE)] <- NA_real_ # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
+# co2_df_missing$CO2[c(FALSE, TRUE)] <- NA # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
 
 # the matching dataset that we want to have after the matching function
 # we can use the matching function to build it and then manually carefully check it

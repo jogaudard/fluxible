@@ -7,18 +7,17 @@
 #' @importFrom dplyr select left_join mutate case_when
 
 flux_plot_flag <- function(slopes_df,
-                           param_df,
-                           cut_arg) {
+                           param_df) {
   slopes_df <- slopes_df |>
     select(!c("f_quality_flag")) |>
     left_join(param_df, by = "f_fluxID") |>
     mutate(
       f_quality_flag = case_when(
-        f_cut == ((cut_arg)) ~ f_cut,
-        f_cut != ((cut_arg)) ~ f_quality_flag
+        f_cut == "cut" ~ f_cut,
+        f_cut != "cut" ~ f_quality_flag
       )
     )
-    # print_col needs to have only 1 row/fluxID
+  # print_col needs to have only 1 row/fluxID
 
   slopes_df
 }

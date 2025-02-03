@@ -170,7 +170,7 @@ flux_fitting_exp <- function(conc_df,
 
   cz_df <- conc_df_cut |>
     filter(
-      .data$f_time_cut <= ((cz_window))
+      .data$f_time_cut <= cz_window
     ) |>
     group_by({{fluxid_col}}) |>
     nest() |>
@@ -196,7 +196,7 @@ flux_fitting_exp <- function(conc_df,
     ) |>
     mutate(
       conc_roll = zoo::rollmean(.data[[name_conc]],
-        k = ((roll_width)),
+        k = roll_width,
         fill = NA, align = "right"
       ),
       Cd = abs(.data$conc_roll - .data$f_Cz),
@@ -213,7 +213,7 @@ flux_fitting_exp <- function(conc_df,
     left_join(tz_df, by = dplyr::join_by({{fluxid_col}})) |>
     group_by({{fluxid_col}}) |>
     mutate(
-      diff = .data$f_time_cut - .data$tz_est + ((b_window))
+      diff = .data$f_time_cut - .data$tz_est + b_window
     ) |>
     distinct(.data$diff, .keep_all = TRUE) |>
     dplyr::slice(which.min(abs(.data$diff))) |>
@@ -246,7 +246,7 @@ flux_fitting_exp <- function(conc_df,
         TRUE ~ log(
           abs((.data$f_Cb - .data$Cm_est) / (.data$f_Cz - .data$Cm_est))
         )
-        * (1 / ((b_window))),
+        * (1 / b_window),
       ),
       a_est = case_when(
         # tz_est = ta is a special case that is undefined

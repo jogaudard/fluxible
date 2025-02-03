@@ -8,23 +8,20 @@
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_exp <- function(slopes_df,
-                           cut_arg) {
+                           conc_col,
+                           start_col) {
   param_df <- slopes_df |>
     select(
-      "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
+      {{conc_col}}, "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
       "f_quality_flag"
     ) |>
-    filter(.data$f_cut != ((cut_arg))) |>
-    mutate(
-      conc_start = .data$f_conc[1],
-      .by = "f_fluxID"
-    ) |>
-    select(!"f_conc") |>
+    filter(.data$f_cut != "cut") |>
+    select(!{{conc_col}}) |>
     distinct() |>
     mutate(
-      f_RMSE = round(.data$f_RMSE, digits = 1),
-      f_cor_coef = round(.data$f_cor_coef, digits = 2),
-      f_b = round(.data$f_b, digits = 5),
+      f_RMSE = signif(.data$f_RMSE, digits = 2),
+      f_cor_coef = signif(.data$f_cor_coef, digits = 2),
+      f_b = signif(.data$f_b, digits = 5),
       print_col = paste(
         .data$f_quality_flag, "\n",
         "RMSE = ", .data$f_RMSE, "\n", "Corr coef = ",
@@ -32,7 +29,7 @@ flux_param_exp <- function(slopes_df,
         sep = ""
       )
     ) |>
-    select("f_start", "f_fluxID", "conc_start", "print_col", "f_quality_flag")
+    select("f_start", "f_fluxID", "print_col", "f_quality_flag")
 
   param_df
 }

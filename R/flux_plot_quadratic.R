@@ -15,37 +15,32 @@
 
 
 flux_plot_quadratic <- function(slopes_df,
+                                conc_col,
+                                datetime_col,
                                 y_text_position,
                                 cut_arg) {
-  param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
+  param_df <- flux_param_lm(slopes_df, {{conc_col}})
 
-  slopes_df <- flux_plot_flag(((slopes_df)),
-    ((param_df)),
-    cut_arg = ((cut_arg))
-  )
+  slopes_df <- flux_plot_flag(slopes_df, param_df)
 
   slopes_df <- slopes_df |>
-    rename(
-      fit = "f_fit",
-      slope = "f_fit_slope"
-    ) |>
-    pivot_longer(
-      cols = c("fit", "slope"),
+      pivot_longer(
+      cols = c("f_fit", "f_fit_slope"),
       names_to = "linetype",
-      values_to = "fit"
+      values_to = "f_fit"
     )
 
   plot_quadratic <- slopes_df |>
-    ggplot(aes(.data$f_datetime)) +
+    ggplot(aes({{datetime_col}})) +
     theme_bw() +
-    geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag),
+    geom_point(aes(y = {{conc_col}}, color = .data$f_quality_flag),
       size = 0.2,
       na.rm = TRUE
     ) +
     geom_text(
       data = param_df,
       aes(
-        x = .data$f_start, y = ((y_text_position)),
+        x = .data$f_start, y = y_text_position,
         label = .data$print_col
       ),
       vjust = 0, hjust = "inward",

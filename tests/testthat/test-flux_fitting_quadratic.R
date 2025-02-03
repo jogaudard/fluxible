@@ -2,8 +2,8 @@ test_that("quadratic fit works", {
   expect_snapshot(
     flux_fitting(
       co2_conc,
-      f_conc,
-      f_datetime,
+      conc,
+      datetime,
       f_start,
       f_end,
       f_fluxID,

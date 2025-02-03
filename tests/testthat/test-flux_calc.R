@@ -1,7 +1,7 @@
 test_that("flux calculation is correct", {
   output <- flux_calc(slopes0,
     f_slope,
-    f_datetime,
+    datetime,
     temp_air,
     chamber_volume = 24.5,
     tube_volume = 0.075,
@@ -24,7 +24,7 @@ test_that("averaging works", {
   output <- flux_calc(
     slopes0,
     f_slope,
-    f_datetime,
+    datetime,
     temp_air,
     conc_unit = "ppm",
     flux_unit = "mmol",
@@ -45,7 +45,7 @@ test_that("keeping works", {
   expect_snapshot(flux_calc(
     slopes0,
     f_slope,
-    f_datetime,
+    datetime,
     temp_air,
     conc_unit = "ppm",
     flux_unit = "mmol",
@@ -63,7 +63,7 @@ test_that("keeping and averaging work together", {
   expect_snapshot(flux_calc(
     slopes0,
     f_slope,
-    f_datetime,
+    datetime,
     temp_air,
     conc_unit = "ppm",
     flux_unit = "mmol",
@@ -82,7 +82,7 @@ test_that("fahrenheit conversion works", {
   expect_snapshot(flux_calc(
     slopes0_temp,
     f_slope,
-    f_datetime,
+    datetime,
     temp_fahr,
     conc_unit = "ppm",
     flux_unit = "mmol",
@@ -100,7 +100,7 @@ test_that("kelvin conversion works", {
   expect_snapshot(flux_calc(
     slopes0_temp,
     f_slope,
-    f_datetime,
+    datetime,
     temp_kelvin,
     conc_unit = "ppm",
     flux_unit = "mmol",
@@ -123,7 +123,7 @@ test_that("error on air temp units", {
     flux_calc(
       slopes0,
       f_slope,
-      f_datetime,
+      datetime,
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
@@ -154,7 +154,7 @@ test_that("error that slope column is missing", {
   expect_error(
     suppressWarnings(flux_calc(
       slopes0,
-      f_datetime,
+      datetime,
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
@@ -173,7 +173,7 @@ test_that("error slope_col cannot be found in slopes_df", {
     flux_calc(
       slopes0,
       column_with_slope,
-      f_datetime,
+      datetime,
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
@@ -193,7 +193,7 @@ test_that("error some cols_keep do not exist", {
     flux_calc(
       slopes0,
       f_slope,
-      f_datetime,
+      datetime,
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
@@ -217,7 +217,7 @@ test_that("calculating fluxes on dataset with cuts", {
     flux_calc(
       slopes30_flag,
       f_slope_corr,
-      f_datetime,
+      datetime,
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
@@ -238,7 +238,7 @@ test_that("volume can be a variable instead of a constant", {
     flux_calc(
       slopes0_vol,
     f_slope,
-    f_datetime,
+    datetime,
     temp_air,
     volume,
       conc_unit = "ppm",

@@ -16,8 +16,8 @@ test_that("fit can be set by user", {
 test_that("fit transfer from flux_fitting", {
   slopes_test <- suppressWarnings(flux_fitting(
     co2_conc,
-    f_conc,
-    f_datetime,
+    conc,
+    datetime,
     fit_type = "exp"
   )
   )

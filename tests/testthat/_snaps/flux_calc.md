@@ -16,7 +16,7 @@
 # keeping works
 
     Code
-      dplyr::select(flux_calc(slopes0, f_slope, f_datetime, temp_air, conc_unit = "ppm",
+      dplyr::select(flux_calc(slopes0, f_slope, datetime, temp_air, conc_unit = "ppm",
         flux_unit = "mmol", cols_keep = c("turfID", "type", "f_start"),
         chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625,
         cut = FALSE), f_fluxID, flux, turfID, type, f_start, f_slope)
@@ -41,7 +41,7 @@
 # keeping and averaging work together
 
     Code
-      dplyr::select(flux_calc(slopes0, f_slope, f_datetime, temp_air, conc_unit = "ppm",
+      dplyr::select(flux_calc(slopes0, f_slope, datetime, temp_air, conc_unit = "ppm",
         flux_unit = "mmol", cols_keep = c("turfID", "type", "f_start"), cols_ave = c(
           "PAR", "temp_soil"), chamber_volume = 24.5, tube_volume = 0.075,
         atm_pressure = 1, plot_area = 0.0625, cut = FALSE), f_fluxID, flux, turfID,
@@ -68,10 +68,10 @@
 # fahrenheit conversion works
 
     Code
-      dplyr::select(flux_calc(slopes0_temp, f_slope, f_datetime, temp_fahr,
-        conc_unit = "ppm", flux_unit = "mmol", temp_air_unit = "fahrenheit",
-        chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625,
-        cut = FALSE), f_fluxID, temp_air_ave, start_datetime, flux, volume_setup)
+      dplyr::select(flux_calc(slopes0_temp, f_slope, datetime, temp_fahr, conc_unit = "ppm",
+        flux_unit = "mmol", temp_air_unit = "fahrenheit", chamber_volume = 24.5,
+        tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625, cut = FALSE),
+      f_fluxID, temp_air_ave, start_datetime, flux, volume_setup)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -92,7 +92,7 @@
 # kelvin conversion works
 
     Code
-      dplyr::select(flux_calc(slopes0_temp, f_slope, f_datetime, temp_kelvin,
+      dplyr::select(flux_calc(slopes0_temp, f_slope, datetime, temp_kelvin,
         conc_unit = "ppm", flux_unit = "mmol", temp_air_unit = "kelvin",
         chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625,
         cut = FALSE), f_fluxID, temp_air_ave, start_datetime, flux, volume_setup)
@@ -116,7 +116,7 @@
 # calculating fluxes on dataset with cuts
 
     Code
-      dplyr::select(flux_calc(slopes30_flag, f_slope_corr, f_datetime, temp_air,
+      dplyr::select(flux_calc(slopes30_flag, f_slope_corr, datetime, temp_air,
         conc_unit = "ppm", flux_unit = "mmol", cut_col = f_cut, keep_arg = "keep",
         chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625),
       f_fluxID, temp_air_ave, start_datetime, flux, volume_setup)
@@ -141,7 +141,7 @@
 # volume can be a variable instead of a constant
 
     Code
-      dplyr::select(flux_calc(slopes0_vol, f_slope, f_datetime, temp_air, volume,
+      dplyr::select(flux_calc(slopes0_vol, f_slope, datetime, temp_air, volume,
         conc_unit = "ppm", flux_unit = "mmol", tube_volume = 0.075, atm_pressure = 1,
         plot_area = 0.0625), f_fluxID, temp_air_ave, start_datetime, flux,
       volume_setup)
