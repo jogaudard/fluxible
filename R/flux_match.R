@@ -31,7 +31,7 @@
 #' @importFrom lubridate is.POSIXct
 #' @examples
 #' data(co2_df_short, record_short)
-#' flux_match(co2_df_short, record_short)
+#' flux_match(co2_df_short, record_short, datetime, start, conc)
 #' @export
 
 
@@ -45,8 +45,8 @@ flux_match <- function(raw_conc,
                        ratio_threshold = 0.5,
                        time_diff = 0) {
 
-name_raw_conc <- deparse(substitute(raw_conc))
-name_field_record <- deparse(substitute(field_record))
+  name_raw_conc <- deparse(substitute(raw_conc))
+  name_field_record <- deparse(substitute(field_record))
 
   args_ok <- flux_fun_check(list(
     startcrop = startcrop,

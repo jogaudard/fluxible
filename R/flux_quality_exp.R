@@ -38,7 +38,7 @@ flux_quality_exp <- function(slopes_df,
                              cor_threshold,
                              b_threshold) {
 
-name_df <- deparse(substitute(slopes_df))
+  name_df <- deparse(substitute(slopes_df))
 
 
   args_ok <- flux_fun_check(list(
@@ -65,18 +65,12 @@ name_df <- deparse(substitute(slopes_df))
 
   quality_par <- slopes_df |>
     group_by({{fluxid_col}}, {{cut_col}}) |>
-    # nest() |>
-    # rowwise() |>
     summarise(
-      # f_cor_coef = cor(data$f_conc, data$f_time),
-      # f_cor_coef = map(.x  = data, \(.x) cor(.x$f_conc, .x$f_time)),
       f_cor_coef = cor({{conc_col}}, {{time_col}}),
-      # f_RMSE = sqrt((1 / length({{time_col}}))
-      #               * sum(({{fit_col}} - {{conc_col}})^2)),
-      f_RMSE = sqrt((1 / length({{time_col}})) * sum(({{fit_col}} - {{conc_col}})^2)),
+      f_RMSE =
+        sqrt((1 / length({{time_col}})) * sum(({{fit_col}} - {{conc_col}})^2)),
       .groups = "drop"
     )
-    # unnest(cols = c({{fluxid_col}}, {{cut_col}}))
 
 
 

@@ -6,27 +6,38 @@
 \usage{
 flux_quality_lm(
   slopes_df,
-  force_discard,
-  force_ok,
+  conc_col,
+  fluxid_col,
+  slope_col,
+  time_col,
+  cut_col,
   pvalue_col,
   rsquared_col,
-  pvalue_threshold,
-  rsquared_threshold
+  force_discard = c(),
+  force_ok = c(),
+  ratio_threshold = 0,
+  fit_type = c(),
+  ambient_conc = 421,
+  error = 100,
+  pvalue_threshold = 0.3,
+  rsquared_threshold = 0.7,
+  cut_arg = "cut",
+  name_df
 )
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
+
+\item{pvalue_col}{column containing the p-value of each flux}
+
+\item{rsquared_col}{column containing the r squared to be used for
+the quality assessment}
 
 \item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}
 
 \item{force_ok}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
-
-\item{pvalue_col}{column containing the p-value of each flux}
-
-\item{rsquared_col}{column containing the r squared to be used for
-the quality assessment}
 
 \item{pvalue_threshold}{threshold of p-value below which the change
 of gas concentration over time is considered not significant (user decided)}

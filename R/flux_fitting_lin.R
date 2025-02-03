@@ -23,9 +23,7 @@ flux_fitting_lin <- function(conc_df,
                              start_cut,
                              end_cut) {
 
-name_conc <- names(select(conc_df, {{conc_col}}))
-
-  by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
+  name_conc <- names(select(conc_df, {{conc_col}}))
 
   conc_df <- conc_df |>
     mutate(
@@ -84,13 +82,16 @@ name_conc <- names(select(conc_df, {{conc_col}}))
       f_adj_rsquared = "adj.r.squared",
       f_pvalue = "p.value"
     ) |>
-    select({{fluxid_col}}, "f_rsquared", "f_adj_rsquared", "f_slope", "f_intercept", "f_pvalue") |>
+    select(
+      {{fluxid_col}}, "f_rsquared", "f_adj_rsquared",
+      "f_slope", "f_intercept", "f_pvalue"
+    ) |>
     ungroup()
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par, by = by_fluxID) |>
+    left_join(fitting_par, by = dplyr::join_by({{fluxid_col}})) |>
     mutate(
-      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - ((start_cut)))
+      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - start_cut)
     )
 
   warning_msg <- conc_df |>

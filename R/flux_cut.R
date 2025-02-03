@@ -11,8 +11,5 @@ flux_cut <- function(slopes_df,
   }
 
   slopes_df <- slopes_df |>
-    # rename(
-    #   f_cut = all_of(((cut_col)))
-    # ) |>
     filter({{cut_col}} == keep_arg)
 }

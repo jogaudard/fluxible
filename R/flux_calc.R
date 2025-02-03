@@ -44,7 +44,7 @@
 #' and any columns specified in cols_keep and cols_ave.
 #' @importFrom rlang .data
 #' @importFrom dplyr .data rename all_of select group_by summarise
-#' ungroup mutate case_when distinct left_join across everything
+#' ungroup mutate case_when distinct left_join across everything any_of
 #' @examples
 #' data(slopes0)
 #' flux_calc(slopes0,
@@ -78,18 +78,9 @@ flux_calc <- function(slopes_df,
                       cut = TRUE,
                       fit_type = c()) {
 
-name_df <- deparse(substitute(slopes_df))
+  name_df <- deparse(substitute(slopes_df))
 
   colnames <- colnames(slopes_df)
-  # if (!(slope_col %in% colnames)) {
-  #   stop("could not find slope_col in slopes_df")
-  # }
-  # if (!(((fluxid_col)) %in% ((colnames)))) {
-  #   stop("could not find fluxid_col in slopes_df")
-  # }
-  # if (!(((temp_air_col)) %in% ((colnames)))) {
-  #   stop("could not find temp_air_col in slopes_df")
-  # }
   if (length(setdiff(((cols_keep)), ((colnames)))) > 0) {
     stop("some names in cols_keep cannot be found in slopes_df")
   }
@@ -144,72 +135,6 @@ name_df <- deparse(substitute(slopes_df))
     c("micromol", "mmol")
   )
 
-  # if (is.double(f_chamber_volume)) {
-  #   slopes_df <- slopes_df |>
-  #     mutate(
-  #       f_chamber_volume = f_chamber_volume
-  #     )
-  # }
-
-  # if (is.character(((chamber_volume)))) {
-  #   slopes_df <- slopes_df |>
-  #     rename(
-  #       chamber_volume = all_of(((chamber_volume)))
-  #     )
-  # }
-
-  # if (is.double(f_tube_volume)) {
-  #   slopes_df <- slopes_df |>
-  #     mutate(
-  #       f_tube_volume = f_tube_volume
-  #     )
-  # }
-
-  # if (is.character(((tube_volume)))) {
-  #   slopes_df <- slopes_df |>
-  #     rename(
-  #       tube_volume = all_of(((tube_volume)))
-  #     )
-  # }
-
-  # if (is.double(f_atm_pressure)) {
-  #   slopes_df <- slopes_df |>
-  #     mutate(
-  #       f_atm_pressure = f_atm_pressure
-  #     )
-  # }
-
-  # if (is.character(((atm_pressure)))) {
-  #   slopes_df <- slopes_df |>
-  #     rename(
-  #       atm_pressure = all_of(((atm_pressure)))
-  #     )
-  # }
-
-  # if (is.double(f_plot_area)) {
-  #   slopes_df <- slopes_df |>
-  #     mutate(
-  #       f_plot_area = f_plot_area
-  #     )
-  # }
-
-  # if (is.character(((plot_area)))) {
-  #   slopes_df <- slopes_df |>
-  #     rename(
-  #       plot_area = all_of(((plot_area)))
-  #     )
-  # }
-
-
-  # slopes_df <- slopes_df |>
-  #   rename(
-  #     f_fluxID = all_of(((fluxid_col))),
-  #     f_datetime = all_of(((datetime_col))),
-  #     air_temp = all_of(((temp_air_col))),
-  #     f_slope_calc = all_of(((slope_col)))
-  #   )
-
-
 
   if (cut == TRUE) {
     message("Cutting data according to 'keep_arg'...")
@@ -220,42 +145,26 @@ name_df <- deparse(substitute(slopes_df))
     )
   }
 
-  # create a new function that takes the df created with new cols
 
-# flux_df <- flux_calc_intern(
-#   slopes_df,
-#   {{slope_col}},
-#   {{datetime_col}},
-#   {{temp_air_col}},
-#   {{chamber_volume}},
-#   {{tube_volume}},
-#   {{atm_pressure}},
-#   {{plot_area}},
-#   {{fluxid_col}},
-#   conc_unit = conc_unit,
-#   flux_unit = flux_unit,
-#   cols_keep = cols_keep,
-#   cols_ave = cols_ave,
-#   temp_air_unit = temp_air_unit,
-#   fit_type = fit_type)
+  name_vol <- deparse(substitute(chamber_volume))
+  name_atm <- deparse(substitute(atm_pressure))
+  name_plot <- deparse(substitute(plot_area))
 
-name_vol <- deparse(substitute(chamber_volume))
-name_atm <- deparse(substitute(atm_pressure))
-name_plot <- deparse(substitute(plot_area))
-
-message("Averaging air temperature for each flux...")
-slope_temp <- slopes_df |>
+  message("Averaging air temperature for each flux...")
+  slope_temp <- slopes_df |>
     select(
-      {{fluxid_col}}, {{temp_air_col}}, {{datetime_col}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
+      {{fluxid_col}},
+      {{temp_air_col}},
+      {{datetime_col}},
+      {{slope_col}},
+      dplyr::any_of(c(name_vol, name_atm, name_plot))
     ) |>
-    # group_by(
-    #   {{fluxid_col}}
-    # ) |>
     summarise(
       temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),
       start_datetime = min({{datetime_col}}),
-      .by = c({{fluxid_col}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot)))
-      # .groups = "drop"
+      .by = c(
+        {{fluxid_col}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
+      )
     ) |>
     mutate(
       temp_air_ave = case_when(
@@ -266,7 +175,7 @@ slope_temp <- slopes_df |>
       )
     )
 
-    # a df with all the columns we just want to keep and join back in the end
+  # a df with all the columns we just want to keep and join back in the end
   if (length(((cols_keep))) > 0) {
     message("Creating a df with the columns from 'cols_keep' argument...")
     slope_keep <- slopes_df |>
@@ -284,13 +193,11 @@ slope_temp <- slopes_df |>
     message("Creating a df with the columns from 'cols_ave' argument...")
     slope_ave <- slopes_df |>
       select(all_of(cols_ave), {{fluxid_col}}) |>
-      # group_by({{fluxid_col}}) |>
       summarise(across(
         everything(),
         ~ mean(.x, na.rm = TRUE)
       ),
       .by = {{fluxid_col}}
-      # .groups = "drop"
       ) |>
       left_join(slope_keep, by = dplyr::join_by(
         {{fluxid_col}} == {{fluxid_col}}
@@ -319,7 +226,6 @@ slope_temp <- slopes_df |>
 
 
   fluxes <- slope_ave |>
-  # group_by({{fluxid_col}})
     mutate(
       volume_setup = {{chamber_volume}} + tube_volume,
       flux =
@@ -349,7 +255,7 @@ slope_temp <- slopes_df |>
       )
     message("Fluxes are in mmol/m2/h")
   }
-  
+
   fluxes
 
 }

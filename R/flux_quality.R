@@ -116,24 +116,14 @@ flux_quality <- function(slopes_df,
   if (any(!c(args_ok, df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-  # slopes_df <- slopes_df |>
-  #   rename(
-  #     f_fluxID = all_of(fluxid_col),
-  #     f_slope = all_of(slope_col),
-  #     f_conc = all_of(conc_col),
-  #     f_time = all_of(time_col),
-  #     f_fit = all_of(fit_col),
-  #     f_cut = all_of(cut_col)
-  #   )
 
   fit_type <- flux_fit_type(
     slopes_df,
     fit_type = fit_type
   )
 
-name_conc <- names(select(slopes_df, {{conc_col}}))
+  name_conc <- names(select(slopes_df, {{conc_col}}))
 
-by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
 
   slopes_df <- slopes_df |>
     mutate(
@@ -166,7 +156,7 @@ by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
     unnest({{fluxid_col}})
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start, by = by_fluxID)
+    left_join(quality_par_start, by = dplyr::join_by({{fluxid_col}}))
 
   if (fit_type == "exponential") {
     quality_flag <- flux_quality_exp(
@@ -180,14 +170,9 @@ by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
       {{b_col}},
       force_discard = force_discard,
       force_ok = force_ok,
-      # ratio_threshold = ratio_threshold,
-      # fit_type = fit_type,
-      # ambient_conc = ambient_conc,
-      # error = error,
       rmse_threshold = rmse_threshold,
       cor_threshold = cor_threshold,
       b_threshold = b_threshold
-      # cut_arg = cut_arg
     )
   }
 
@@ -198,7 +183,6 @@ by_fluxID <- dplyr::join_by({{fluxid_col}} == {{fluxid_col}})
       {{fluxid_col}},
       {{slope_col}},
       {{time_col}},
-      # {{fit_col}},
       {{cut_col}},
       {{pvalue_col}},
       {{rsquared_col}},

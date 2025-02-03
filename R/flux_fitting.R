@@ -55,7 +55,7 @@ flux_fitting <- function(conc_df,
                          t_zero = 0,
                          fit_type) {
 
-name_df <- deparse(substitute(conc_df))
+  name_df <- deparse(substitute(conc_df))
 
   args_ok <- flux_fun_check(list(
     start_cut = start_cut,
@@ -91,7 +91,7 @@ name_df <- deparse(substitute(conc_df))
   if (any(!c(args_ok, conc_df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
- length_flux_max <- conc_df |>
+  length_flux_max <- conc_df |>
     mutate(
       length_flux = int_length(interval({{start_col}}, {{end_col}}))
     ) |>
@@ -103,7 +103,7 @@ name_df <- deparse(substitute(conc_df))
       "You cannot cut more than the length of the measurements!"
     )
   }
- 
+
   conc_df <- conc_df |>
     group_by({{fluxid_col}}) |>
     distinct({{datetime_col}}, .keep_all = TRUE) |>

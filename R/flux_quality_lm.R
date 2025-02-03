@@ -67,12 +67,6 @@ flux_quality_lm <- function(slopes_df,
   if (any(!c(args_ok, slopes_df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-  # slopes_df <- slopes_df |>
-  #   rename(
-  #     f_pvalue = all_of(((pvalue_col))),
-  #     f_rsquared = all_of(((rsquared_col)))
-  #   )
-
 
 
   slopes_df <- slopes_df |>

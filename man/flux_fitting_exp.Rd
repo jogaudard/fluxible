@@ -7,11 +7,11 @@ over time, using the exponential model from Zhao et al (2018)}
 \usage{
 flux_fitting_exp(
   conc_df,
-  start_col,
-  end_col,
-  datetime_col,
   conc_col,
-  fluxid_col,
+  datetime_col,
+  start_col = f_start,
+  end_col = f_end,
+  fluxid_col = f_fluxID,
   t_window,
   cz_window,
   b_window,

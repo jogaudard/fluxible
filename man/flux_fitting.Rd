@@ -6,11 +6,11 @@
 \usage{
 flux_fitting(
   conc_df,
-  start_col,
-  end_col,
-  datetime_col,
   conc_col,
-  fluxid_col,
+  datetime_col,
+  start_col = f_start,
+  end_col = f_end,
+  fluxid_col = f_fluxID,
   start_cut = 0,
   end_cut = 0,
   t_window = 20,
@@ -25,15 +25,15 @@ flux_fitting(
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
 
-\item{start_col}{column with datetime when the measurement started}
-
-\item{end_col}{column with datetime when the measurement ended}
+\item{conc_col}{column with gas concentration data}
 
 \item{datetime_col}{column with datetime of each concentration measurement
 Note that if there are duplicated datetime in the same f_fluxID only
 the first row will be kept}
 
-\item{conc_col}{column with gas concentration data}
+\item{start_col}{column with datetime when the measurement started}
+
+\item{end_col}{column with datetime when the measurement ended}
 
 \item{fluxid_col}{column with ID of each flux}
 

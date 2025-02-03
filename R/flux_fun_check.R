@@ -12,10 +12,5 @@ flux_fun_check <- function(args,
                            fn,
                            msg,
                            name_df = NA) {
-  if (is.data.frame(args)) {
-    name <- name_df
-  } else {
-    name <- NA
-  }
-  mapply(flux_check_item, args, fn, msg, names(args), df_name = name)
+  mapply(flux_check_item, args, fn, msg, names(args), df_name = name_df)
 }
