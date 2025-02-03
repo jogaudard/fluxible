@@ -1,6 +1,7 @@
 # fluxible 0.7
 
-* Functions now recycle user's column names instead of renaming them. Columns created by fluxible functions have the suffic 'f_'.
+* scale_x_datetime arguments in 'flux_plot' are now past as a list.
+* Functions now recycle user's column names instead of renaming them. Columns created by fluxible functions have the suffix 'f_'.
 
 # fluxible 0.6
 
