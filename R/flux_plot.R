@@ -4,6 +4,8 @@
 #' This function takes time to run and is optional in the workflow,
 #' but it is still highly recommended to use it to visually check
 #' the measurements.
+#' Note that 'flux_plot' is taylored for 'fluxible' functions and
+#' will work best with datasets produced following a fluxible workflow.
 #' @param slopes_df dataset containing slopes,
 #' with flags produced by flux_quality
 #' @param color_discard color for fits with a discard quality flag
@@ -56,9 +58,11 @@ flux_plot <- function(slopes_df,
                       color_cut = "#D55E00",
                       color_ok = "#009E73",
                       color_zero = "#CC79A7",
-                      f_date_breaks = "1 min",
-                      f_minor_breaks = "10 sec",
-                      f_date_labels = "%e/%m \n %H:%M",
+                      scale_x_datetime_args = list(
+                        date_breaks = "1 min",
+                        minor_breaks = "10 sec",
+                        date_labels = "%e/%m \n %H:%M"
+                      ),
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
                       f_plotname = "",
@@ -72,9 +76,9 @@ flux_plot <- function(slopes_df,
                       output = "print_only",
                       ggsave_args = list()) {
   args_ok <- flux_fun_check(list(
-    f_ylim_upper = ((f_ylim_upper)),
-    f_ylim_lower = ((f_ylim_lower)),
-    y_text_position = ((y_text_position))
+    f_ylim_upper = f_ylim_upper,
+    f_ylim_lower = f_ylim_lower,
+    y_text_position = y_text_position
   ),
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
@@ -83,9 +87,9 @@ flux_plot <- function(slopes_df,
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
-  output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
+  output <- match.arg(output, c("pdfpages", "ggsave", "print_only"))
 
-  if (((output)) == "print_only") {
+  if (output == "print_only") {
     print_plot <- "TRUE"
   }
 
@@ -93,11 +97,11 @@ flux_plot <- function(slopes_df,
     slopes_df
   )
 
-  if (((f_plotname)) == "") {
+  if (f_plotname == "") {
     f_plotname <- deparse(substitute(slopes_df))
   }
 
-  if (((output)) %in% c("pdfpages", "ggsave")) {
+  if (output %in% c("pdfpages", "ggsave")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
     folder <- "./f_quality_plots"
@@ -106,22 +110,22 @@ flux_plot <- function(slopes_df,
     }
   }
 
-  if (max(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) > ((f_ylim_upper))) {
+  if (max(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) > f_ylim_upper) {
     message("Some concentration data points will not be displayed
     because f_ylim_upper is too low.")
   }
 
-  if (max(slopes_df$f_fit, na.rm = TRUE) > ((f_ylim_upper))) {
+  if (max(slopes_df$f_fit, na.rm = TRUE) > f_ylim_upper) {
     message("Part of the fit will not be displayed
     because f_ylim_upper is too low.")
   }
 
-  if (min(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) < ((f_ylim_lower))) {
+  if (min(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) < f_ylim_lower) {
     message("Some concentration data points will not be displayed
     because f_ylim_lower is too high.")
   }
 
-  if (min(slopes_df$f_fit, na.rm = TRUE) < ((f_ylim_lower))) {
+  if (min(slopes_df$f_fit, na.rm = TRUE) < f_ylim_lower) {
     message("Part of the fit will not be displayed
     because f_ylim_lower is too high.")
   }
@@ -151,31 +155,31 @@ flux_plot <- function(slopes_df,
 
 
 
-  if (((fit_type)) == "exponential") {
+  if (fit_type == "exponential") {
     f_plot <- flux_plot_exp(
       slopes_df,
       {{conc_col}},
       {{datetime_col}},
-      y_text_position = ((y_text_position))
+      y_text_position = y_text_position
     )
   }
 
 
-  if (((fit_type)) == "linear") {
+  if (fit_type == "linear") {
     f_plot <- flux_plot_lin(
-      ((slopes_df)),
+      slopes_df,
       {{conc_col}},
       {{datetime_col}},
-      y_text_position = ((y_text_position))
+      y_text_position = y_text_position
     )
   }
 
-  if (((fit_type)) == "quadratic") {
+  if (fit_type == "quadratic") {
     f_plot <- flux_plot_quadratic(
-      ((slopes_df)),
+      slopes_df,
       {{conc_col}},
       {{datetime_col}},
-      y_text_position = ((y_text_position))
+      y_text_position = y_text_position
     )
   }
 
@@ -189,25 +193,26 @@ flux_plot <- function(slopes_df,
       show.legend = TRUE
     ) +
     scale_color_manual(values = c(
-      "cut" = ((color_cut)),
-      "ok" = ((color_ok)),
-      "discard" = ((color_discard)),
-      "zero" = ((color_zero)),
-      "start_error" = ((color_discard)),
-      "force_discard" = ((color_discard)),
-      "force_ok" = ((color_ok))
+      "cut" = color_cut,
+      "ok" = color_ok,
+      "discard" = color_discard,
+      "zero" = color_zero,
+      "start_error" = color_discard,
+      "force_discard" = color_discard,
+      "force_ok" = color_ok
     )) +
     scale_linetype_manual(values = c(
       "f_fit" = "longdash",
       "slope" = "dashed"
     )) +
-    scale_x_datetime(
-      date_breaks = ((f_date_breaks)), minor_breaks = ((f_minor_breaks)),
-      date_labels = ((f_date_labels))
-    ) +
-    ylim(((f_ylim_lower)), ((f_ylim_upper))) +
-    do.call(facet_wrap_paginate,
-      args = c(facets = ~f_fluxID, ((facet_wrap_args)))
+    do.call(scale_x_datetime, args = scale_x_datetime_args) +
+    # scale_x_datetime(
+    #   date_breaks = f_date_breaks, minor_breaks = f_minor_breaks,
+    #   date_labels = f_date_labels
+    # ) +
+    ylim(f_ylim_lower, f_ylim_upper) +
+    do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
+      args = c(facets = ~f_fluxID, facet_wrap_args)
     ) +
     labs(
       title = "Fluxes quality assessment",
@@ -219,13 +224,13 @@ flux_plot <- function(slopes_df,
     ) +
     guides(color = guide_legend(override.aes = list(linetype = 0)))
 
-  if (((output)) == "print_only") {
+  if (output == "print_only") {
     return(f_plot)
   }
 
-  if (((output)) == "pdfpages") {
+  if (output == "pdfpages") {
     f_plotname <- paste(f_plotname, ".pdf", sep = "")
-    pdf(((f_plotname)), paper = "a4r", width = 11.7, height = 8.3, title = ((f_plotname)))
+    pdf(f_plotname, paper = "a4r", width = 11.7, height = 8.3, title = f_plotname)
     pb <- progress_bar$new(
       format =
         "Printing plots in pdf document [:bar] :current/:total (:percent)",
@@ -241,26 +246,26 @@ flux_plot <- function(slopes_df,
           args = c(
             facets = ~f_fluxID,
             page = i,
-            ((facet_wrap_args))
+            facet_wrap_args
           )
         ))
     }
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
-    if (((print_plot)) == TRUE) {
+    if (print_plot == TRUE) {
       return(f_plot)
     }
   }
 
-  if (((output)) == "ggsave") {
+  if (output == "ggsave") {
     message("Saving plots with ggsave.")
     do.call(
       ggsave,
-      args = c(filename = ((f_plotname)), ((ggsave_args)))
+      args = c(filename = f_plotname, ggsave_args)
     )
 
     message("Plots saved in f_quality_plots folder.")
-    if (((print_plot)) == TRUE) {
+    if (print_plot == TRUE) {
       return(f_plot)
     }
   }

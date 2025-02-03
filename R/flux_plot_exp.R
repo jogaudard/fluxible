@@ -20,9 +20,9 @@ flux_plot_exp <- function(slopes_df,
                           start_col,
                           cut_arg,
                           y_text_position) {
-  param_df <- flux_param_exp(((slopes_df)), {{conc_col}})
+  param_df <- flux_param_exp(slopes_df, {{conc_col}})
 
-  slopes_df <- flux_plot_flag(((slopes_df)), ((param_df)))
+  slopes_df <- flux_plot_flag(slopes_df, param_df)
 
   slopes_df <- slopes_df |>
     pivot_longer(
@@ -43,7 +43,7 @@ flux_plot_exp <- function(slopes_df,
     ) +
     geom_text(
       data = param_df,
-      aes(x = .data$f_start, y = ((y_text_position)), label = .data$print_col),
+      aes(x = .data$f_start, y = y_text_position, label = .data$print_col),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
     )
