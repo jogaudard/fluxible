@@ -87,7 +87,7 @@ CO2_INCLINE_2022 %>%
 CO2_INCLINE_2022 <- CO2_INCLINE_2022 %>% 
   mutate(
     temp_soil = case_when(
-      comments %in% c("soilT logger not plugged in", "no soil T") ~ NA_real_,
+      comments %in% c("soilT logger not plugged in", "no soil T") ~ NA,
       TRUE ~ temp_soil
     )
   )

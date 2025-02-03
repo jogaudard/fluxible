@@ -62,9 +62,9 @@ flux_quality_quadratic <- function(slopes_df,
           .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
       ),
       f_slope_corr = case_when(
-        .data$f_quality_flag == "force_discard" ~ NA_real_,
+        .data$f_quality_flag == "force_discard" ~ NA,
         .data$f_quality_flag == "ok" ~ .data$f_slope,
-        .data$f_quality_flag == "discard" ~ NA_real_,
+        .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0
       )
     )

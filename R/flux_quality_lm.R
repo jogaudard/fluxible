@@ -84,11 +84,11 @@ flux_quality_lm <- function(slopes_df,
         {{fluxid_col}} %in% force_ok ~ "force_ok",
       ),
       f_slope_corr = case_when(
-        .data$f_quality_flag == "no_data" ~ NA_real_,
-        .data$f_quality_flag == "force_discard" ~ NA_real_,
+        .data$f_quality_flag == "no_data" ~ NA,
+        .data$f_quality_flag == "force_discard" ~ NA,
         .data$f_quality_flag == "force_ok" ~ .data$f_slope,
         .data$f_quality_flag == "ok" ~ .data$f_slope,
-        .data$f_quality_flag == "discard" ~ NA_real_,
+        .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0
       ),
       .by = c({{fluxid_col}}, {{cut_col}})
