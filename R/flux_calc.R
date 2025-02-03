@@ -48,7 +48,9 @@
 #' @examples
 #' data(slopes0)
 #' flux_calc(slopes0,
-#' slope_col = "f_slope",
+#' f_slope,
+#' f_datetime,
+#' temp_air,
 #' conc_unit = "ppm",
 #' flux_unit = "mmol",
 #' chamber_volume = 24.5,
