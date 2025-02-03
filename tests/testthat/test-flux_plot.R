@@ -2,6 +2,9 @@ test_that("plot for exponential fit", {
   expect_snapshot(
     suppressMessages( # because the progress bar is messing with check()
       flux_plot(slopes0_flag,
+        f_conc,
+        f_datetime,
+        f_start,
         f_plotname = "test_exp_plot",
         print_plot = FALSE,
         output = "pdfpages"

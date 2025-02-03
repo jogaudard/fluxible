@@ -50,6 +50,9 @@
 #' @export
 
 flux_plot <- function(slopes_df,
+                      conc_col,
+                      datetime_col,
+                      start_col,
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_ok = "#009E73",
@@ -68,9 +71,7 @@ flux_plot <- function(slopes_df,
                       y_text_position = 500,
                       print_plot = "FALSE",
                       output = "print_only",
-                      ggsave_args = list(),
-                      cut_arg = "cut",
-                      no_data_flag = "no_data") {
+                      ggsave_args = list()) {
   args_ok <- flux_fun_check(list(
     f_ylim_upper = ((f_ylim_upper)),
     f_ylim_lower = ((f_ylim_lower)),
@@ -85,7 +86,7 @@ flux_plot <- function(slopes_df,
 
   output <- match.arg(((output)), c("pdfpages", "ggsave", "print_only"))
 
-  if (((output)) == "print_only"){
+  if (((output)) == "print_only") {
     print_plot <- "TRUE"
   }
 
@@ -93,7 +94,7 @@ flux_plot <- function(slopes_df,
     slopes_df
   )
 
-  if (((f_plotname)) == ""){
+  if (((f_plotname)) == "") {
     f_plotname <- deparse(substitute(slopes_df))
   }
 
@@ -106,7 +107,7 @@ flux_plot <- function(slopes_df,
     }
   }
 
-  if (max(slopes_df$f_conc, na.rm = TRUE) > ((f_ylim_upper))) {
+  if (max(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) > ((f_ylim_upper))) {
     message("Some concentration data points will not be displayed
     because f_ylim_upper is too low.")
   }
@@ -116,7 +117,7 @@ flux_plot <- function(slopes_df,
     because f_ylim_upper is too low.")
   }
 
-  if (min(slopes_df$f_conc, na.rm = TRUE) < ((f_ylim_lower))) {
+  if (min(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) < ((f_ylim_lower))) {
     message("Some concentration data points will not be displayed
     because f_ylim_lower is too high.")
   }
@@ -129,7 +130,7 @@ flux_plot <- function(slopes_df,
   flags <- slopes_df |>
     select("f_fluxID", "f_quality_flag") |>
     distinct() |>
-    filter(.data$f_quality_flag == ((no_data_flag))) |>
+    filter(.data$f_quality_flag == "no data") |>
     mutate(
       f_warnings = paste(
         "\n", "fluxID", .data$f_fluxID, "dropped because there is no data"
@@ -145,7 +146,7 @@ flux_plot <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     filter(
-      .data$f_quality_flag != ((no_data_flag))
+      .data$f_quality_flag != "no data"
     )
 
 
@@ -153,8 +154,10 @@ flux_plot <- function(slopes_df,
 
   if (((fit_type)) == "exponential") {
     f_plot <- flux_plot_exp(
-      ((slopes_df)),
-      cut_arg = ((cut_arg)),
+      slopes_df,
+      {{conc_col}},
+      {{datetime_col}},
+      {{start_col}},
       y_text_position = ((y_text_position))
     )
   }
@@ -163,7 +166,9 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "linear") {
     f_plot <- flux_plot_lin(
       ((slopes_df)),
-      cut_arg = ((cut_arg)),
+      {{conc_col}},
+      {{datetime_col}},
+      {{start_col}},
       y_text_position = ((y_text_position))
     )
   }
@@ -171,7 +176,9 @@ flux_plot <- function(slopes_df,
   if (((fit_type)) == "quadratic") {
     f_plot <- flux_plot_quadratic(
       ((slopes_df)),
-      cut_arg = ((cut_arg)),
+      {{conc_col}},
+      {{datetime_col}},
+      {{start_col}},
       y_text_position = ((y_text_position))
     )
   }
@@ -180,7 +187,7 @@ flux_plot <- function(slopes_df,
 
   f_plot <- f_plot +
     geom_line(
-      aes(y = .data$fit, linetype = .data$linetype),
+      aes(y = .data$f_fit, linetype = .data$linetype),
       linewidth = 0.3,
       na.rm = TRUE,
       show.legend = TRUE
@@ -195,7 +202,7 @@ flux_plot <- function(slopes_df,
       "force_ok" = ((color_ok))
     )) +
     scale_linetype_manual(values = c(
-      "fit" = "longdash",
+      "f_fit" = "longdash",
       "slope" = "dashed"
     )) +
     scale_x_datetime(

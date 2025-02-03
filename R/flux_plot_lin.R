@@ -14,32 +14,30 @@
 
 
 flux_plot_lin <- function(slopes_df,
-                          y_text_position,
-                          cut_arg) {
-  param_df <- flux_param_lm(((slopes_df)), cut_arg = ((cut_arg)))
+                          conc_col,
+                          datetime_col,
+                          start_col,
+                          y_text_position) {
+  param_df <- flux_param_lm(slopes_df, {{conc_col}}, {{start_col}})
 
-  slopes_df <- flux_plot_flag(((slopes_df)),
-    ((param_df)),
-    cut_arg = ((cut_arg))
-  )
+  slopes_df <- flux_plot_flag(slopes_df, param_df)
 
   slopes_df <- slopes_df |>
     mutate(
-      fit = .data$f_fit,
-      linetype = "fit"
+      linetype = "f_fit"
     )
 
   plot_lin <- slopes_df |>
-    ggplot(aes(.data$f_datetime)) +
+    ggplot(aes({{datetime_col}})) +
     theme_bw() +
-    geom_point(aes(y = .data$f_conc, color = .data$f_quality_flag),
+    geom_point(aes(y = {{conc_col}}, color = .data$f_quality_flag),
       size = 0.2,
       na.rm = TRUE
     ) +
     geom_text(
       data = param_df,
       aes(
-        x = .data$f_start, y = ((y_text_position)),
+        x = {{start_col}}, y = y_text_position,
         label = .data$print_col
       ),
       vjust = 0, hjust = "inward",
