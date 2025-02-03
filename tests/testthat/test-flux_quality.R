@@ -1,7 +1,7 @@
 test_that("works for exponential fitting", {
   expect_snapshot(
     flux_quality(slopes0,
-      f_conc,
+      conc,
       fit_type = "expo"
       # slope_col = "f_slope"
     ) |>
@@ -13,7 +13,7 @@ test_that("works for exponential fitting", {
 test_that("works for linear fitting", {
   expect_snapshot(
     flux_quality(slopes30lin,
-    f_conc,
+    conc,
       fit_type = "li"
     ) |>
     dplyr::select(f_fluxID, f_quality_flag, f_pvalue, f_rsquared) |>
@@ -24,7 +24,7 @@ test_that("works for linear fitting", {
 test_that("works for quadratic fitting", {
   expect_snapshot(
     flux_quality(slopes30qua,
-    f_conc,
+    conc,
       fit_type = "quadratic"
     ) |>
     dplyr::select(f_fluxID, f_quality_flag, f_pvalue, f_rsquared) |>

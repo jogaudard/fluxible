@@ -60,7 +60,7 @@ flux_fitting_quadratic <- function(conc_df,
     filter(
       .data$f_cut == "keep"
     ) |>
-    drop_na("f_conc") |>
+    drop_na({{conc_col}}) |>
     mutate(
       f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
         {{datetime_col}}[1],

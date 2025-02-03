@@ -1,7 +1,7 @@
 # works for exponential fitting
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopes0, f_conc, fit_type = "expo"),
+      dplyr::distinct(dplyr::select(flux_quality(slopes0, conc, fit_type = "expo"),
       f_fluxID, f_quality_flag, f_RMSE, f_cor_coef))
     Message
       
@@ -28,7 +28,7 @@
 # works for linear fitting
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopes30lin, f_conc, fit_type = "li"),
+      dplyr::distinct(dplyr::select(flux_quality(slopes30lin, conc, fit_type = "li"),
       f_fluxID, f_quality_flag, f_pvalue, f_rsquared))
     Message
       
@@ -55,7 +55,7 @@
 # works for quadratic fitting
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopes30qua, f_conc, fit_type = "quadratic"),
+      dplyr::distinct(dplyr::select(flux_quality(slopes30qua, conc, fit_type = "quadratic"),
       f_fluxID, f_quality_flag, f_pvalue, f_rsquared))
     Message
       
