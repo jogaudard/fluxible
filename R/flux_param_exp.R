@@ -14,7 +14,7 @@ flux_param_exp <- function(slopes_df,
       "f_conc", "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
       "f_quality_flag"
     ) |>
-    filter(.data$f_cut != ((cut_arg))) |>
+    filter(.data$f_cut != cut_arg) |>
     mutate(
       conc_start = .data$f_conc[1],
       .by = "f_fluxID"

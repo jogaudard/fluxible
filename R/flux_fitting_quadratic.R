@@ -44,8 +44,8 @@ flux_fitting_quadratic <- function(conc_df,
         units = "secs"
       ),
       f_time = as.double(.data$f_time),
-      {{start_col}} := {{start_col}} + ((start_cut)),
-      {{end_col}} := {{end_col}} - ((end_cut)),
+      {{start_col}} := {{start_col}} + start_cut,
+      {{end_col}} := {{end_col}} - end_cut,
       f_cut = case_when(
         {{datetime_col}} < {{start_col}} | {{datetime_col}} >= {{end_col}}
         ~ "cut",

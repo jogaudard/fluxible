@@ -83,10 +83,10 @@ flux_calc <- function(slopes_df,
   name_df <- deparse(substitute(slopes_df))
 
   colnames <- colnames(slopes_df)
-  if (length(setdiff(((cols_keep)), ((colnames)))) > 0) {
+  if (length(setdiff(cols_keep, colnames)) > 0) {
     stop("some names in cols_keep cannot be found in slopes_df")
   }
-  if (length(setdiff(((cols_ave)), ((colnames)))) > 0) {
+  if (length(setdiff(cols_ave, colnames)) > 0) {
     stop("some names in cols_ave cannot be found in slopes_df")
   }
 
@@ -170,15 +170,15 @@ flux_calc <- function(slopes_df,
     ) |>
     mutate(
       temp_air_ave = case_when(
-        ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave + 273.15,
-        ((temp_air_unit)) == "fahrenheit"
+        temp_air_unit == "celsius" ~ .data$temp_air_ave + 273.15,
+        temp_air_unit == "fahrenheit"
         ~ (.data$temp_air_ave + 459.67) * (5 / 9),
-        ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
+        temp_air_unit == "kelvin" ~ .data$temp_air_ave
       )
     )
 
   # a df with all the columns we just want to keep and join back in the end
-  if (length(((cols_keep))) > 0) {
+  if (length(cols_keep) > 0) {
     message("Creating a df with the columns from 'cols_keep' argument...")
     slope_keep <- slopes_df |>
       select(all_of(cols_keep), {{fluxid_col}}) |>
@@ -191,7 +191,7 @@ flux_calc <- function(slopes_df,
   }
 
   # a df with the columns that have to be averaged
-  if (length((cols_ave)) > 0) {
+  if (length(cols_ave) > 0) {
     message("Creating a df with the columns from 'cols_ave' argument...")
     slope_ave <- slopes_df |>
       select(all_of(cols_ave), {{fluxid_col}}) |>
@@ -215,10 +215,10 @@ flux_calc <- function(slopes_df,
 
 
   # putting slope in ppm/s
-  if (((conc_unit)) == "ppm") {
+  if (conc_unit == "ppm") {
     message("Concentration was measured in ppm")
   }
-  if (((conc_unit)) == "ppb") {
+  if (conc_unit == "ppb") {
     message("Concentration was measured in ppb")
     slope_ave <- slope_ave |>
       mutate(
@@ -237,20 +237,20 @@ flux_calc <- function(slopes_df,
            * {{plot_area}}) # flux in micromol/s/m^2
         * 3600, # secs to hours, flux is now in micromol/m^2/h
       temp_air_ave = case_when(
-        ((temp_air_unit)) == "celsius" ~ .data$temp_air_ave - 273.15,
-        ((temp_air_unit)) == "fahrenheit"
-        ~ ((.data$temp_air_ave - 273.15) * (9 / 5)) + 32,
-        ((temp_air_unit)) == "kelvin" ~ .data$temp_air_ave
+        temp_air_unit == "celsius" ~ .data$temp_air_ave - 273.15,
+        temp_air_unit == "fahrenheit"
+        ~ (.data$temp_air_ave - 273.15) * (9 / 5) + 32,
+        temp_air_unit == "kelvin" ~ .data$temp_air_ave
       ),
-      model = ((fit_type)),
+      model = fit_type,
       .by = {{fluxid_col}}
     )
 
   # output unit
-  if (((flux_unit)) == "micromol") {
+  if (flux_unit == "micromol") {
     message("Fluxes are in micromol/m2/h")
   }
-  if (((flux_unit)) == "mmol") {
+  if (flux_unit == "mmol") {
     fluxes <- fluxes |>
       mutate(
         flux = .data$flux / 1000
