@@ -52,7 +52,6 @@
 flux_plot <- function(slopes_df,
                       conc_col,
                       datetime_col,
-                      start_col,
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_ok = "#009E73",
@@ -157,7 +156,6 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{conc_col}},
       {{datetime_col}},
-      {{start_col}},
       y_text_position = ((y_text_position))
     )
   }
@@ -168,7 +166,6 @@ flux_plot <- function(slopes_df,
       ((slopes_df)),
       {{conc_col}},
       {{datetime_col}},
-      {{start_col}},
       y_text_position = ((y_text_position))
     )
   }
@@ -178,7 +175,6 @@ flux_plot <- function(slopes_df,
       ((slopes_df)),
       {{conc_col}},
       {{datetime_col}},
-      {{start_col}},
       y_text_position = ((y_text_position))
     )
   }

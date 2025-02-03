@@ -12,14 +12,14 @@ flux_param_exp <- function(slopes_df,
                            start_col) {
   param_df <- slopes_df |>
     select(
-      {{conc_col}}, {{start_col}}, "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
+      {{conc_col}}, "f_start", "f_fluxID", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
       "f_quality_flag"
     ) |>
     filter(.data$f_cut != "cut") |>
     select(!{{conc_col}}) |>
     distinct() |>
     mutate(
-      f_RMSE = signif(.data$f_RMSE, digits = 1),
+      f_RMSE = signif(.data$f_RMSE, digits = 2),
       f_cor_coef = signif(.data$f_cor_coef, digits = 2),
       f_b = signif(.data$f_b, digits = 5),
       print_col = paste(
@@ -29,7 +29,7 @@ flux_param_exp <- function(slopes_df,
         sep = ""
       )
     ) |>
-    select({{start_col}}, "f_fluxID", "print_col", "f_quality_flag")
+    select("f_start", "f_fluxID", "print_col", "f_quality_flag")
 
   param_df
 }

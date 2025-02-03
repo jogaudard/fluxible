@@ -16,9 +16,8 @@
 flux_plot_lin <- function(slopes_df,
                           conc_col,
                           datetime_col,
-                          start_col,
                           y_text_position) {
-  param_df <- flux_param_lm(slopes_df, {{conc_col}}, {{start_col}})
+  param_df <- flux_param_lm(slopes_df, {{conc_col}})
 
   slopes_df <- flux_plot_flag(slopes_df, param_df)
 
@@ -37,7 +36,7 @@ flux_plot_lin <- function(slopes_df,
     geom_text(
       data = param_df,
       aes(
-        x = {{start_col}}, y = y_text_position,
+        x = .data$f_start, y = y_text_position,
         label = .data$print_col
       ),
       vjust = 0, hjust = "inward",

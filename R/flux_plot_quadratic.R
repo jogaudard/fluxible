@@ -17,10 +17,9 @@
 flux_plot_quadratic <- function(slopes_df,
                                 conc_col,
                                 datetime_col,
-                                start_col,
                                 y_text_position,
                                 cut_arg) {
-  param_df <- flux_param_lm(((slopes_df)), {{conc_col}}, {{start_col}})
+  param_df <- flux_param_lm(((slopes_df)), {{conc_col}})
 
   slopes_df <- flux_plot_flag(((slopes_df)), ((param_df)))
 
@@ -41,7 +40,7 @@ flux_plot_quadratic <- function(slopes_df,
     geom_text(
       data = param_df,
       aes(
-        x = {{start_col}}, y = ((y_text_position)),
+        x = .data$f_start, y = ((y_text_position)),
         label = .data$print_col
       ),
       vjust = 0, hjust = "inward",
