@@ -66,7 +66,7 @@ flux_calc <- function(slopes_df,
                       chamber_volume,
                       atm_pressure,
                       plot_area,
-                      fluxid_col = "f_fluxID",
+                      fluxid_col = f_fluxID,
                       conc_unit,
                       flux_unit,
                       cols_keep = c(),
@@ -75,13 +75,13 @@ flux_calc <- function(slopes_df,
                       temp_air_unit = "celsius",
                       cut_col = f_cut,
                       keep_arg = "keep",
-                      cut = "yes",
+                      cut = TRUE,
                       fit_type = c()) {
 
-# name_df <- deparse(substitute(slopes_df))
+name_df <- deparse(substitute(slopes_df))
 
-  # colnames <- colnames(slopes_df)
-  # if (!(((slope_col)) %in% ((colnames)))) {
+  colnames <- colnames(slopes_df)
+  # if (!(slope_col %in% colnames)) {
   #   stop("could not find slope_col in slopes_df")
   # }
   # if (!(((fluxid_col)) %in% ((colnames)))) {
@@ -90,38 +90,38 @@ flux_calc <- function(slopes_df,
   # if (!(((temp_air_col)) %in% ((colnames)))) {
   #   stop("could not find temp_air_col in slopes_df")
   # }
-  # if (length(setdiff(((cols_keep)), ((colnames)))) > 0) {
-  #   stop("some names in cols_keep cannot be found in slopes_df")
-  # }
-  # if (length(setdiff(((cols_ave)), ((colnames)))) > 0) {
-  #   stop("some names in cols_ave cannot be found in slopes_df")
-  # }
+  if (length(setdiff(((cols_keep)), ((colnames)))) > 0) {
+    stop("some names in cols_keep cannot be found in slopes_df")
+  }
+  if (length(setdiff(((cols_ave)), ((colnames)))) > 0) {
+    stop("some names in cols_ave cannot be found in slopes_df")
+  }
 
 
-  # slopes_df_check <- slopes_df |>
-  #   select(
-  #     all_of(((slope_col))),
-  #     all_of(((temp_air_col))),
-  #     all_of(((datetime_col)))
-  #   )
+  slopes_df_check <- slopes_df |>
+    select(
+      {{slope_col}},
+      {{temp_air_col}},
+      {{datetime_col}}
+    )
 
-  # df_ok <- flux_fun_check(slopes_df_check,
-  #                         fn = list(
-  #                           is.numeric,
-  #                           is.numeric,
-  #                           is.POSIXct
-  #                         ),
-  #                         msg = rep(c(
-  #                           "has to be numeric",
-  #                           "has to be POSIXct"
-  #                         ),
-  #                         c(2, 1)
-  #                         ),
-  #                         name_df = name_df)
+  df_ok <- flux_fun_check(slopes_df_check,
+                          fn = list(
+                            is.numeric,
+                            is.numeric,
+                            is.POSIXct
+                          ),
+                          msg = rep(c(
+                            "has to be numeric",
+                            "has to be POSIXct"
+                          ),
+                          c(2, 1)
+                          ),
+                          name_df = name_df)
 
 
-  # if (any(!df_ok))
-  #   stop("Please correct the arguments", call. = FALSE)
+  if (any(!df_ok))
+    stop("Please correct the arguments", call. = FALSE)
 
 
   fit_type <- flux_fit_type(
@@ -211,7 +211,7 @@ flux_calc <- function(slopes_df,
 
 
 
-  if (cut == "yes") {
+  if (cut == TRUE) {
     message("Cutting data according to 'keep_arg'...")
     slopes_df <- flux_cut(
       slopes_df,
