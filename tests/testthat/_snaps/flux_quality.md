@@ -34,8 +34,8 @@
       
        Total number of measurements: 6
       
-       discard 	 1 	 17 %
        ok 	 5 	 83 %
+       discard 	 1 	 17 %
        zero 	 0 	 0 %
        force_discard 	 0 	 0 %
        start_error 	 0 	 0 %

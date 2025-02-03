@@ -15,7 +15,7 @@
 #' @return a dataframe with the number of fluxes for each quality flags
 #' and their proportion to the total
 #' @importFrom dplyr .data rename all_of select group_by summarise
-#' tibble right_join filter
+#' tibble right_join filter distinct
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
 #' @examples
@@ -25,6 +25,9 @@
 
 
 flux_flag_count <- function(slopes_df,
+                            fluxid_col = f_fluxID,
+                            flags_col = f_quality_flag,
+                            cut_col = f_cut,
                             f_flags = c(
                               "ok",
                               "discard",
@@ -34,34 +37,24 @@ flux_flag_count <- function(slopes_df,
                               "no_data",
                               "force_ok"
                             ),
-                            fluxid_col = "f_fluxID",
-                            flags_col = "f_quality_flag",
-                            cut_col = "f_cut",
                             cut_arg = "cut") {
-  slopes_df <- slopes_df |>
-    rename(
-      f_fluxID = all_of(((fluxid_col))),
-      f_quality_flag = all_of(((flags_col))),
-      f_cut = all_of(((cut_col)))
-    )
-
+  
   flag_df <- slopes_df |>
-    filter(.data$f_cut != ((cut_arg))) |>
+    filter({{cut_col}} != cut_arg) |>
     mutate(
-      f_quality_flag = as.factor(.data$f_quality_flag)
+      f_quality_flag = as.factor({{flags_col}})
     ) |>
-    select("f_fluxID", "f_quality_flag") |>
-    unique()
+    select({{fluxid_col}}, {{flags_col}}) |>
+    distinct()
 
-  flags <- tibble(f_quality_flag = factor(((f_flags)), levels = ((f_flags))))
+  flags <- tibble({{flags_col}} := factor(f_flags, levels = f_flags))
 
   count_table <- flag_df |>
-    group_by(.data$f_quality_flag) |>
     summarise(
-      n = length(.data$f_quality_flag),
-      .groups = "drop"
+      n = length({{flags_col}}),
+      .by = {{flags_col}}
     ) |>
-    right_join(flags, by = "f_quality_flag") |>
+    right_join(flags, by = dplyr::join_by({{flags_col}})) |>
     mutate(
       n = replace_na(.data$n, 0),
       ratio = .data$n / sum(.data$n)
