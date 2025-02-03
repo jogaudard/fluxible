@@ -6,13 +6,13 @@
 \usage{
 flux_fitting(
   conc_df,
+  conc_col,
+  datetime_col,
+  start_col = f_start,
+  end_col = f_end,
+  fluxid_col = f_fluxID,
   start_cut = 0,
   end_cut = 0,
-  start_col = "f_start",
-  end_col = "f_end",
-  datetime_col = "f_datetime",
-  conc_col = "f_conc",
-  fluxid_col = "f_fluxID",
   t_window = 20,
   cz_window = 15,
   b_window = 10,
@@ -25,22 +25,22 @@ flux_fitting(
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
 
-\item{start_cut}{time to discard at the start of the measurements
-(in seconds)}
-
-\item{end_cut}{time to discard at the end of the measurements (in seconds)}
-
-\item{start_col}{column with datetime when the measurement started}
-
-\item{end_col}{column with datetime when the measurement ended}
+\item{conc_col}{column with gas concentration data}
 
 \item{datetime_col}{column with datetime of each concentration measurement
 Note that if there are duplicated datetime in the same f_fluxID only
 the first row will be kept}
 
-\item{conc_col}{column with gas concentration data}
+\item{start_col}{column with datetime when the measurement started}
+
+\item{end_col}{column with datetime when the measurement ended}
 
 \item{fluxid_col}{column with ID of each flux}
+
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
+
+\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
 \item{t_window}{enlarge focus window before and after tmin and tmax
 (exponential fit)}
@@ -73,8 +73,9 @@ to calculate gas fluxes with flux_calc
 }
 \examples{
 data(co2_conc)
-flux_fitting(co2_conc, fit_type = "exp")
-flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30)
+flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "exp")
+flux_fitting(co2_conc, f_conc, f_datetime,  fit_type = "quadratic",
+t_zero = 10, end_cut = 30)
 }
 \references{
 Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.

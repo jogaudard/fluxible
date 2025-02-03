@@ -6,11 +6,11 @@
 \usage{
 flux_gep(
   fluxes_df,
-  id_cols,
-  flux_col,
+  flux_col = flux,
   type_col,
   datetime_col,
   par_col,
+  id_cols,
   nee_arg = "NEE",
   er_arg = "ER",
   cols_keep = c()
@@ -19,8 +19,6 @@ flux_gep(
 \arguments{
 \item{fluxes_df}{a dataframe containing NEE and ER}
 
-\item{id_cols}{columns used to identify each pair of ER and NEE}
-
 \item{flux_col}{column containing flux values}
 
 \item{type_col}{column containing type of flux (NEE or ER)}
@@ -28,6 +26,8 @@ flux_gep(
 \item{datetime_col}{column containing start of measurement as datetime}
 
 \item{par_col}{column containing PAR values for each flux}
+
+\item{id_cols}{columns used to identify each pair of ER and NEE}
 
 \item{nee_arg}{argument designating NEE fluxes in type column}
 

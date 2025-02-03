@@ -6,25 +6,31 @@
 \usage{
 flux_quality_exp(
   slopes_df,
-  force_discard = c(),
-  force_ok = c(),
-  b_col = "f_b",
-  rmse_threshold = 25,
-  cor_threshold = 0.5,
-  b_threshold = 1
+  conc_col,
+  fluxid_col,
+  slope_col,
+  time_col,
+  fit_col,
+  cut_col,
+  b_col,
+  force_discard,
+  force_ok,
+  rmse_threshold,
+  cor_threshold,
+  b_threshold
 )
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID,
 and parameters of the exponential expression}
 
+\item{b_col}{column containing the b parameter of the exponential expression}
+
 \item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}
 
 \item{force_ok}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
-
-\item{b_col}{column containing the b parameter of the exponential expression}
 
 \item{rmse_threshold}{threshold for the RMSE of each flux above
 which the fit is considered unsatisfactory}

@@ -4,7 +4,7 @@
 \alias{flux_fun_check}
 \title{checking that arguments and columns are in the correct class}
 \usage{
-flux_fun_check(args, fn, msg, origdf = NA)
+flux_fun_check(args, fn, msg, name_df = NA)
 }
 \arguments{
 \item{args}{list of arguments or dataframe to check}

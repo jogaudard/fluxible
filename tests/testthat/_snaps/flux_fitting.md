@@ -1,7 +1,8 @@
 # works for exponential fitting
 
     Code
-      distinct(select(flux_fitting(co2_conc, fit_type = "expo"), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "expo"),
+      f_fluxID, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -27,7 +28,8 @@
 # works for linear fitting
 
     Code
-      distinct(select(flux_fitting(co2_conc, fit_type = "lin"), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "lin"),
+      f_fluxID, f_slope))
     Condition
       Warning in `flux_fitting_lin()`:
       
@@ -47,7 +49,8 @@
 # works for quadratic fitting
 
     Code
-      distinct(select(flux_fitting(co2_conc, fit_type = "qua"), f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "qua"),
+      f_fluxID, f_slope))
     Condition
       Warning in `flux_fitting_quadratic()`:
       
@@ -67,8 +70,8 @@
 # works for exponential fitting with cut
 
     Code
-      distinct(select(flux_fitting(co2_conc, fit_type = "expo", start_cut = 20),
-      f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "expo",
+        start_cut = 20), f_fluxID, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -94,8 +97,8 @@
 # works for linear fitting with cut
 
     Code
-      distinct(select(flux_fitting(co2_conc, fit_type = "line", start_cut = 20),
-      f_fluxID, f_slope))
+      distinct(select(flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "line",
+        start_cut = 20), f_fluxID, f_slope))
     Condition
       Warning in `flux_fitting_lin()`:
       
@@ -115,7 +118,7 @@
 # removing duplicated datetime
 
     Code
-      flux_fitting(rep_data, fit_type = "exp")
+      flux_fitting(rep_data, f_conc, f_datetime, fit_type = "exp")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -143,7 +146,7 @@
       10 2022-07-28 23:43:44    NA         NA     453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
       # i 22 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
-      #   n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
       #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
       #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>

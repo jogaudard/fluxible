@@ -11,7 +11,6 @@
 flux_fun_check <- function(args,
                            fn,
                            msg,
-                           origdf = NA) {
-  df_name <- if (is.data.frame(args)) deparse(substitute(origdf)) else NA
-  mapply(flux_check_item, args, fn, msg, names(args), df_name = df_name)
+                           name_df = NA) {
+  mapply(flux_check_item, args, fn, msg, names(args), df_name = name_df)
 }

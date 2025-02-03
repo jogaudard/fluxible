@@ -6,13 +6,13 @@
 \usage{
 flux_fitting_quadratic(
   conc_df,
-  start_cut,
-  end_cut,
+  conc_col,
+  datetime_col,
   start_col,
   end_col,
-  datetime_col,
-  conc_col,
   fluxid_col,
+  start_cut,
+  end_cut,
   t_zero
 )
 }
@@ -23,16 +23,6 @@ flux_fitting_quadratic(
 (in seconds)}
 
 \item{end_cut}{time to discard at the end of the measurements (in seconds)}
-
-\item{start_col}{column with datetime when the measurement started}
-
-\item{end_col}{column with datetime when the measurement ended}
-
-\item{datetime_col}{column with datetime of each concentration measurement}
-
-\item{conc_col}{column with gas concentration data}
-
-\item{fluxid_col}{column with ID of each flux}
 
 \item{t_zero}{time at which the slope should be calculated}
 }

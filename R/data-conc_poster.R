@@ -1,7 +1,7 @@
 #' CO2 concnetration
-#' 
+#'
 #' CO2 concentration used to make the plot in the poster
-#' 
+#'
 #' @format A tibble with 530 rows and 11 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
@@ -21,6 +21,6 @@
 #' \item{f_quality_flag}{quality flag advising if the slope has to be
 #' replaced by 0 or NA}
 #' }
-#' @examples 
+#' @examples
 #' conc_poster
 "conc_poster"

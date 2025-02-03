@@ -15,11 +15,10 @@ flux_param_exp <- function(slopes_df,
       "f_quality_flag"
     ) |>
     filter(.data$f_cut != ((cut_arg))) |>
-    group_by(.data$f_fluxID) |>
     mutate(
-      conc_start = .data$f_conc[1]
+      conc_start = .data$f_conc[1],
+      .by = "f_fluxID"
     ) |>
-    ungroup() |>
     select(!"f_conc") |>
     distinct() |>
     mutate(

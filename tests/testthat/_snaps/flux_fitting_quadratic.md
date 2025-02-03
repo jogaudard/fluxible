@@ -1,7 +1,8 @@
 # quadratic fit works
 
     Code
-      flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30)
+      flux_fitting(co2_conc, f_conc, f_datetime, f_start, f_end, f_fluxID, fit_type = "quadratic",
+        t_zero = 10, end_cut = 30)
     Output
       # A tibble: 1,251 x 24
          f_datetime          temp_air temp_soil f_conc   PAR turfID       type 
@@ -18,8 +19,8 @@
       10 2022-07-28 23:43:44    NA         NA     453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
       # i 17 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
-      #   n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_pvalue <dbl>, f_intercept <dbl>,
-      #   f_param1 <dbl>, f_param2 <dbl>, f_slope <dbl>, f_fit <dbl>,
+      #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_param1 <dbl>, f_param2 <dbl>, f_rsquared <dbl>, f_adj_rsquared <dbl>,
+      #   f_intercept <dbl>, f_pvalue <dbl>, f_slope <dbl>, f_fit <dbl>,
       #   f_fit_slope <dbl>
 
