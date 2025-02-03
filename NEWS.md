@@ -1,3 +1,7 @@
+# fluxible 0.7
+
+* Functions now recycle user's column names instead of renaming them. Columns created by fluxible functions have the suffic 'f_'.
+
 # fluxible 0.6
 
 * Correction in flux_quality: 'zero' and 'discard' flags were inverted when using the linear fit
