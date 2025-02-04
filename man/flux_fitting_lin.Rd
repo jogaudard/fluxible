@@ -12,8 +12,7 @@ flux_fitting_lin(
   end_col,
   fluxid_col,
   start_cut,
-  end_cut,
-  t_zero
+  end_cut
 )
 }
 \arguments{

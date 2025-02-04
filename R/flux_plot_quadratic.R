@@ -6,7 +6,7 @@
 #' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr select distinct
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
-#' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
+#' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text geom_vline
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom grDevices pdf dev.off
@@ -33,6 +33,8 @@ flux_plot_quadratic <- function(slopes_df,
   plot_quadratic <- slopes_df |>
     ggplot(aes({{datetime_col}})) +
     theme_bw() +
+    geom_vline(xintercept = slopes_df$f_start_z,
+               color = "grey", linewidth = 0.5) +
     geom_point(aes(y = {{conc_col}}, color = .data$f_quality_flag),
       size = 0.2,
       na.rm = TRUE

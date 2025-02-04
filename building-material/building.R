@@ -1120,3 +1120,7 @@ name_vol <- deparse(substitute(volume))
 test_vol(test_df, values, values2)
 test_vol(test_df, values, 10)
 names(test_df)
+
+slopes30qua_flag |>
+filter(f_fluxID == 1) |>
+flux_plot(conc, datetime)

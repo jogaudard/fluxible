@@ -10,7 +10,6 @@ usethis::use_data(slopes30qua, overwrite = TRUE)
 slopes30qua_flag <- slopes30qua |>
   flux_quality(
     conc,
-    datetime,
     fit_type = "quadratic"
   )
 

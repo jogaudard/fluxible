@@ -5,7 +5,7 @@
 #' @param y_text_position position of the text box
 #' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr select distinct mutate
-#' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
+#' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw geom_vline
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
@@ -36,6 +36,8 @@ flux_plot_exp <- function(slopes_df,
   plot_exp <- slopes_df |>
     ggplot(aes({{datetime_col}})) +
     theme_bw() +
+    geom_vline(xintercept = slopes_df$f_start_z,
+               color = "grey", linewidth = 0.5) +
     geom_point(
       aes(y = {{conc_col}}, color = .data$f_quality_flag),
       size = 0.2,
