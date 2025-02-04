@@ -4,7 +4,7 @@
       output
     Output
       # A tibble: 6 x 6
-        f_fluxID f_temp_air_ave f_start_datetime    f_flux   PAR temp_soil
+        f_fluxID f_temp_air_ave datetime            f_flux   PAR temp_soil
            <dbl>          <dbl> <dttm>               <dbl> <dbl>     <dbl>
       1        1           7.31 2022-07-28 23:43:35   95.6  1.95      10.8
       2        2           7.38 2022-07-28 23:47:22   52.4  2.11      10.7
@@ -71,7 +71,7 @@
       dplyr::select(flux_calc(slopes0_temp, f_slope, datetime, temp_fahr, conc_unit = "ppm",
         flux_unit = "mmol", temp_air_unit = "fahrenheit", chamber_volume = 24.5,
         tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625, cut = FALSE),
-      f_fluxID, f_temp_air_ave, f_start_datetime, f_flux, f_volume_setup)
+      f_fluxID, f_temp_air_ave, datetime, f_flux, f_volume_setup)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -80,7 +80,7 @@
       Fluxes are in mmol/m2/h
     Output
       # A tibble: 6 x 5
-        f_fluxID f_temp_air_ave f_start_datetime    f_flux f_volume_setup
+        f_fluxID f_temp_air_ave datetime            f_flux f_volume_setup
            <dbl>          <dbl> <dttm>               <dbl>          <dbl>
       1        1           45.2 2022-07-28 23:43:35   95.6           24.6
       2        2           45.3 2022-07-28 23:47:22   52.4           24.6
@@ -95,8 +95,7 @@
       dplyr::select(flux_calc(slopes0_temp, f_slope, datetime, temp_kelvin,
         conc_unit = "ppm", flux_unit = "mmol", temp_air_unit = "kelvin",
         chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625,
-        cut = FALSE), f_fluxID, f_temp_air_ave, f_start_datetime, f_flux,
-      f_volume_setup)
+        cut = FALSE), f_fluxID, f_temp_air_ave, datetime, f_flux, f_volume_setup)
     Message
       Averaging air temperature for each flux...
       Calculating fluxes...
@@ -105,7 +104,7 @@
       Fluxes are in mmol/m2/h
     Output
       # A tibble: 6 x 5
-        f_fluxID f_temp_air_ave f_start_datetime    f_flux f_volume_setup
+        f_fluxID f_temp_air_ave datetime            f_flux f_volume_setup
            <dbl>          <dbl> <dttm>               <dbl>          <dbl>
       1        1           280. 2022-07-28 23:43:35   95.6           24.6
       2        2           281. 2022-07-28 23:47:22   52.4           24.6
@@ -120,7 +119,7 @@
       dplyr::select(flux_calc(slopes30_flag, f_slope_corr, datetime, temp_air,
         conc_unit = "ppm", flux_unit = "mmol", cut_col = f_cut, keep_arg = "keep",
         chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1, plot_area = 0.0625),
-      f_fluxID, f_temp_air_ave, f_start_datetime, f_flux, f_volume_setup)
+      f_fluxID, f_temp_air_ave, datetime, f_flux, f_volume_setup)
     Message
       Cutting data according to 'keep_arg'...
       Averaging air temperature for each flux...
@@ -130,7 +129,7 @@
       Fluxes are in mmol/m2/h
     Output
       # A tibble: 6 x 5
-        f_fluxID f_temp_air_ave f_start_datetime    f_flux f_volume_setup
+        f_fluxID f_temp_air_ave datetime            f_flux f_volume_setup
            <dbl>          <dbl> <dttm>               <dbl>          <dbl>
       1        1           7.29 2022-07-28 23:43:35   47.7           24.6
       2        2           7.37 2022-07-28 23:47:22   31.0           24.6
@@ -144,7 +143,7 @@
     Code
       dplyr::select(flux_calc(slopes0_vol, f_slope, datetime, temp_air, volume,
         conc_unit = "ppm", flux_unit = "mmol", tube_volume = 0.075, atm_pressure = 1,
-        plot_area = 0.0625), f_fluxID, f_temp_air_ave, f_start_datetime, f_flux,
+        plot_area = 0.0625), f_fluxID, f_temp_air_ave, datetime, f_flux,
       f_volume_setup)
     Message
       Cutting data according to 'keep_arg'...
@@ -155,7 +154,7 @@
       Fluxes are in mmol/m2/h
     Output
       # A tibble: 6 x 5
-        f_fluxID f_temp_air_ave f_start_datetime    f_flux f_volume_setup
+        f_fluxID f_temp_air_ave datetime            f_flux f_volume_setup
            <dbl>          <dbl> <dttm>               <dbl>          <dbl>
       1        1           7.31 2022-07-28 23:43:35   70.4          18.1 
       2        2           7.38 2022-07-28 23:47:22   59.9          28.1 
@@ -170,11 +169,11 @@
       str(fluxes_test)
     Output
       tibble [6 x 7] (S3: tbl_df/tbl/data.frame)
-       $ f_fluxID        : Factor w/ 6 levels "1","2","3","4",..: 1 2 3 4 5 6
-       $ f_slope_corr    : num [1:6] 1.555 0.853 0.303 1.13 1.463 ...
-       $ f_temp_air_ave  : num [1:6] 7.31 7.38 7.46 7.77 7.71 ...
-       $ f_start_datetime: POSIXct[1:6], format: "2022-07-28 23:43:35" "2022-07-28 23:47:22" ...
-       $ f_volume_setup  : num [1:6] 24.6 24.6 24.6 24.6 24.6 ...
-       $ f_flux          : num [1:6] 95.6 52.4 18.6 69.4 89.9 ...
-       $ f_model         : chr [1:6] "exponential" "exponential" "exponential" "exponential" ...
+       $ f_fluxID      : Factor w/ 6 levels "1","2","3","4",..: 1 2 3 4 5 6
+       $ f_slope_corr  : num [1:6] 1.555 0.853 0.303 1.13 1.463 ...
+       $ f_temp_air_ave: num [1:6] 7.31 7.38 7.46 7.77 7.71 ...
+       $ datetime      : POSIXct[1:6], format: "2022-07-28 23:43:35" "2022-07-28 23:47:22" ...
+       $ f_volume_setup: num [1:6] 24.6 24.6 24.6 24.6 24.6 ...
+       $ f_flux        : num [1:6] 95.6 52.4 18.6 69.4 89.9 ...
+       $ f_model       : chr [1:6] "exponential" "exponential" "exponential" "exponential" ...
 

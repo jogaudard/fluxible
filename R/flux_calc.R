@@ -164,7 +164,7 @@ flux_calc <- function(slopes_df,
     ) |>
     summarise(
       f_temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),
-      f_start_datetime = min({{datetime_col}}),
+      {{datetime_col}} := min({{datetime_col}}),
       .by = c(
         {{fluxid_col}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
       )

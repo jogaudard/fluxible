@@ -35,7 +35,7 @@ test_that("averaging works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxID, f_temp_air_ave, f_start_datetime, f_flux, PAR, temp_soil)
+  dplyr::select(f_fluxID, f_temp_air_ave, datetime, f_flux, PAR, temp_soil)
 
 
   expect_snapshot(output)
@@ -93,7 +93,7 @@ test_that("fahrenheit conversion works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxID, f_temp_air_ave, f_start_datetime, f_flux, f_volume_setup))
+  dplyr::select(f_fluxID, f_temp_air_ave, datetime, f_flux, f_volume_setup))
 })
 
 test_that("kelvin conversion works", {
@@ -111,7 +111,7 @@ test_that("kelvin conversion works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxID, f_temp_air_ave, f_start_datetime, f_flux, f_volume_setup))
+  dplyr::select(f_fluxID, f_temp_air_ave, datetime, f_flux, f_volume_setup))
 })
 
 
@@ -228,7 +228,7 @@ test_that("calculating fluxes on dataset with cuts", {
       atm_pressure = 1,
       plot_area = 0.0625
     ) |>
-  dplyr::select(f_fluxID, f_temp_air_ave, f_start_datetime, f_flux, f_volume_setup)
+  dplyr::select(f_fluxID, f_temp_air_ave, datetime, f_flux, f_volume_setup)
   )
 })
 
@@ -247,7 +247,7 @@ test_that("volume can be a variable instead of a constant", {
       atm_pressure = 1,
       plot_area = 0.0625
     ) |>
-  dplyr::select(f_fluxID, f_temp_air_ave, f_start_datetime, f_flux, f_volume_setup)
+  dplyr::select(f_fluxID, f_temp_air_ave, datetime, f_flux, f_volume_setup)
   )
 })
 

@@ -206,10 +206,6 @@ flux_plot <- function(slopes_df,
       "f_fit_slope" = "dashed"
     )) +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
-    # scale_x_datetime(
-    #   date_breaks = f_date_breaks, minor_breaks = f_minor_breaks,
-    #   date_labels = f_date_labels
-    # ) +
     ylim(f_ylim_lower, f_ylim_upper) +
     do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
       args = c(facets = ~f_fluxID, facet_wrap_args)
