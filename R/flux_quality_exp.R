@@ -90,20 +90,20 @@ flux_quality_exp <- function(slopes_df,
         TRUE ~ "yes"
       ),
       f_quality_flag = case_when(
-        .data$f_fit_quality == "bad_b" &
-          .data$f_correlation == "yes" ~ "discard",
-        .data$f_fit_quality == "bad_b" &
-          .data$f_correlation == "no" ~ "zero",
-        .data$f_fit_quality == "bad_RMSE" &
-          .data$f_correlation == "yes" ~ "discard",
-        .data$f_fit_quality == "bad_RMSE" &
-          .data$f_correlation == "no" ~ "zero",
-        .data$f_RMSE <= rmse_threshold ~ "ok",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_start_error == "error" ~ "start_error",
         {{fluxid_col}} %in% force_discard ~ "force_discard",
-        {{fluxid_col}} %in% force_ok ~ "force_ok"
+        {{fluxid_col}} %in% force_ok ~ "force_ok",
+        .data$f_fit_quality == "bad_RMSE" &
+          .data$f_correlation == "yes" ~ "discard",
+        .data$f_fit_quality == "bad_RMSE" &
+          .data$f_correlation == "no" ~ "zero",
+        .data$f_fit_quality == "bad_b" &
+          .data$f_correlation == "yes" ~ "discard",
+        .data$f_fit_quality == "bad_b" &
+          .data$f_correlation == "no" ~ "zero",
+        .data$f_RMSE <= rmse_threshold ~ "ok"
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA,
