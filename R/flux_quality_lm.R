@@ -16,7 +16,7 @@
 #' @param rsquared_col column containing the r squared to be used for
 #' the quality assessment
 #' @return same dataframe with added flag and corrected slopes columns
-#' @importFrom dplyr mutate case_when rename left_join
+#' @importFrom dplyr mutate case_when left_join
 
 
 

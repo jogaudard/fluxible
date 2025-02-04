@@ -35,7 +35,7 @@
 #' @return a ggplot object if `print_plot = TRUE`,
 #' if `print_plot = FALSE` it will not return anything but will produce a file
 #' depending on `output`
-#' @importFrom dplyr rename select distinct mutate
+#' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
 #' scale_linetype_manual guides guide_legend
@@ -203,7 +203,7 @@ flux_plot <- function(slopes_df,
     )) +
     scale_linetype_manual(values = c(
       "f_fit" = "longdash",
-      "slope" = "dashed"
+      "f_fit_slope" = "dashed"
     )) +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     # scale_x_datetime(

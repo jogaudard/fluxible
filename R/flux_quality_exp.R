@@ -18,7 +18,7 @@
 #' @param b_threshold threshold for the b parameter. Defines a window
 #' with its opposite inside which the fit is considered good enough.
 #' @return same dataframe with added flag and corrected slopes columns
-#' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
+#' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
 

@@ -25,7 +25,7 @@
 #' @return a dataframe with concentration measurements, corresponding datetime,
 #' flux ID, measurements start and end, flags in case of no data or low number
 #' of data, and any variables present in one of the inputs.
-#' @importFrom dplyr rename arrange mutate row_number full_join case_when
+#' @importFrom dplyr arrange mutate row_number full_join case_when
 #' group_by filter ungroup select distinct pull join_by coalesce
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct

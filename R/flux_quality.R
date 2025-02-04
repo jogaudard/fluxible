@@ -46,7 +46,7 @@
 #' Defines a window with its opposite inside which the fit is
 #' considered good enough (exponential fit)
 #' @return same dataframe with added quality flags and corrected slope column
-#' @importFrom dplyr mutate case_when rename group_by rowwise summarise ungroup
+#' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
 #' @examples

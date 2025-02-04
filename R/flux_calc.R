@@ -43,7 +43,7 @@
 #' the model used in `flux_fitting`,
 #' and any columns specified in cols_keep and cols_ave.
 #' @importFrom rlang .data
-#' @importFrom dplyr .data rename all_of select group_by summarise
+#' @importFrom dplyr .data all_of select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything any_of
 #' @examples
 #' data(slopes0)

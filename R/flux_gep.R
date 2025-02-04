@@ -16,7 +16,7 @@
 #' @return a df with GEP as a flux type, with PAR and datetime from the NEE
 #' measurement for each pair of ER and NEE
 #' @importFrom dplyr rename select mutate case_when filter full_join
-#' cur_group_id context
+#' cur_group_id
 #' @importFrom tidyr pivot_wider fill
 #' @importFrom purrrlyr slice_rows unslice
 #' @examples

@@ -14,7 +14,7 @@
 #' @param cut_arg argument defining that the data point should be cut out
 #' @return a dataframe with the number of fluxes for each quality flags
 #' and their proportion to the total
-#' @importFrom dplyr .data rename all_of select group_by summarise
+#' @importFrom dplyr .data all_of select group_by summarise
 #' tibble right_join filter distinct
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
