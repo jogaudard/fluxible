@@ -54,8 +54,8 @@
     Condition
       Warning in `flux_fitting_quadratic()`:
       
-       fluxID 5 : slope was estimated on 205 points out of 210 seconds because data are missing
-       fluxID 6 : slope was estimated on 206 points out of 210 seconds because data are missing
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
         f_fluxID f_slope

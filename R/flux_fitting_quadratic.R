@@ -118,7 +118,8 @@ flux_fitting_quadratic <- function(conc_df,
         - .data$f_param2
         * t_zero^2
         + (.data$f_param1 + 2 * .data$f_param2 * t_zero)
-        * (.data$f_time - start_cut)
+        * (.data$f_time - start_cut),
+      f_start_z = {{start_col}} + t_zero
     )
 
   warning_msg <- conc_df |>
@@ -135,7 +136,7 @@ flux_fitting_quadratic <- function(conc_df,
       low_data = paste(
         "\n", "fluxID", {{fluxid_col}}, ": slope was estimated on",
         .data$f_n_conc_cut, "points out of", .data$length_flux,
-        "seconds because data are missing"
+        "seconds"
       ),
       no_data = paste(
         "\n", "fluxID", {{fluxid_col}},

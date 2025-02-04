@@ -143,7 +143,8 @@ flux_fitting <- function(conc_df,
       {{end_col}},
       {{fluxid_col}},
       start_cut = start_cut,
-      end_cut = end_cut
+      end_cut = end_cut,
+      t_zero = t_zero
     )
   }
 

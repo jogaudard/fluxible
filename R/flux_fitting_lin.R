@@ -21,7 +21,8 @@ flux_fitting_lin <- function(conc_df,
                              end_col,
                              fluxid_col,
                              start_cut,
-                             end_cut) {
+                             end_cut,
+                             t_zero) {
 
   name_conc <- names(select(conc_df, {{conc_col}}))
 
@@ -91,7 +92,8 @@ flux_fitting_lin <- function(conc_df,
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = dplyr::join_by({{fluxid_col}})) |>
     mutate(
-      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - start_cut)
+      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - start_cut),
+      f_start_z = {{start_col}} + t_zero
     )
 
   warning_msg <- conc_df |>
