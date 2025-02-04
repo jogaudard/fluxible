@@ -163,18 +163,18 @@ flux_calc <- function(slopes_df,
       any_of(c(name_vol, name_atm, name_plot))
     ) |>
     summarise(
-      temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),
-      start_datetime = min({{datetime_col}}),
+      f_temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),
+      f_start_datetime = min({{datetime_col}}),
       .by = c(
         {{fluxid_col}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
       )
     ) |>
     mutate(
-      temp_air_ave = case_when(
-        temp_air_unit == "celsius" ~ .data$temp_air_ave + 273.15,
+      f_temp_air_ave = case_when(
+        temp_air_unit == "celsius" ~ .data$f_temp_air_ave + 273.15,
         temp_air_unit == "fahrenheit"
-        ~ (.data$temp_air_ave + 459.67) * (5 / 9),
-        temp_air_unit == "kelvin" ~ .data$temp_air_ave
+        ~ (.data$f_temp_air_ave + 459.67) * (5 / 9),
+        temp_air_unit == "kelvin" ~ .data$f_temp_air_ave
       )
     )
 
@@ -230,20 +230,20 @@ flux_calc <- function(slopes_df,
 
   fluxes <- slope_ave |>
     mutate(
-      volume_setup = {{chamber_volume}} + tube_volume,
-      flux =
-        ({{slope_col}} * {{atm_pressure}} * .data$volume_setup)
+      f_volume_setup = {{chamber_volume}} + tube_volume,
+      f_flux =
+        ({{slope_col}} * {{atm_pressure}} * .data$f_volume_setup)
         / (r_const *
-           .data$temp_air_ave
+           .data$f_temp_air_ave
            * {{plot_area}}) # flux in micromol/s/m^2
         * 3600, # secs to hours, flux is now in micromol/m^2/h
-      temp_air_ave = case_when(
-        temp_air_unit == "celsius" ~ .data$temp_air_ave - 273.15,
+      f_temp_air_ave = case_when(
+        temp_air_unit == "celsius" ~ .data$f_temp_air_ave - 273.15,
         temp_air_unit == "fahrenheit"
-        ~ (.data$temp_air_ave - 273.15) * (9 / 5) + 32,
-        temp_air_unit == "kelvin" ~ .data$temp_air_ave
+        ~ (.data$f_temp_air_ave - 273.15) * (9 / 5) + 32,
+        temp_air_unit == "kelvin" ~ .data$f_temp_air_ave
       ),
-      model = fit_type,
+      f_model = fit_type,
       .by = {{fluxid_col}}
     )
 
@@ -254,7 +254,7 @@ flux_calc <- function(slopes_df,
   if (flux_unit == "mmol") {
     fluxes <- fluxes |>
       mutate(
-        flux = .data$flux / 1000
+        f_flux = .data$f_flux / 1000
       )
     message("Fluxes are in mmol/m2/h")
   }

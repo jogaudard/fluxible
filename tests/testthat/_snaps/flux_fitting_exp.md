@@ -52,8 +52,8 @@
       # i 1,241 more rows
       # i 22 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
-      #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
-      #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
+      #   f_Cm_est <dbl>, f_a_est <dbl>, f_b_est <dbl>, f_tz_est <dbl>, f_Cz <dbl>,
+      #   f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
       #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
 # fitting works with 60 second end cut
@@ -83,8 +83,8 @@
       # i 1,241 more rows
       # i 22 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
-      #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
-      #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
+      #   f_Cm_est <dbl>, f_a_est <dbl>, f_b_est <dbl>, f_tz_est <dbl>, f_Cz <dbl>,
+      #   f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
       #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
 # renaming works
@@ -119,7 +119,7 @@
       # i 1,241 more rows
       # i 22 more variables: f_start <dttm>, finish <dttm>, f_fluxID <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
-      #   Cm_est <dbl>, a_est <dbl>, b_est <dbl>, tz_est <dbl>, f_Cz <dbl>,
-      #   time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
+      #   f_Cm_est <dbl>, f_a_est <dbl>, f_b_est <dbl>, f_tz_est <dbl>, f_Cz <dbl>,
+      #   f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
       #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
