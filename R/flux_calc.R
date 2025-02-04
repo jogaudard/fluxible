@@ -42,9 +42,10 @@
 #' slope used for each flux calculation,
 #' the model used in `flux_fitting`,
 #' and any columns specified in cols_keep and cols_ave.
-#' @importFrom rlang .data
-#' @importFrom dplyr .data all_of select group_by summarise
-#' ungroup mutate case_when distinct left_join across everything any_of
+#' @importFrom rlang .data :=
+#' @importFrom dplyr select group_by summarise
+#' ungroup mutate case_when distinct left_join across everything
+# #' @importFrom tidyselect any_of all_of
 #' @examples
 #' data(slopes0)
 #' flux_calc(slopes0,
@@ -159,7 +160,7 @@ flux_calc <- function(slopes_df,
       {{temp_air_col}},
       {{datetime_col}},
       {{slope_col}},
-      dplyr::any_of(c(name_vol, name_atm, name_plot))
+      any_of(c(name_vol, name_atm, name_plot))
     ) |>
     summarise(
       temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),

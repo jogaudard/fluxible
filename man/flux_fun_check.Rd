@@ -13,7 +13,7 @@ flux_fun_check(args, fn, msg, name_df = NA)
 
 \item{msg}{list of messages to return in case of failed check}
 
-\item{origdf}{in case args is a df with selected columns to check origdf
+\item{name_df}{in case args is a df with selected columns to check origdf
 is the orginal df to take the name from for a more obvious error message}
 }
 \description{
