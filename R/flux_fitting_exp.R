@@ -302,7 +302,7 @@ flux_fitting_exp <- function(conc_df,
       f_slope = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz),
       .groups = "drop"
     ) |>
-    select(!"results")
+    select(!c("results", "f_Cm_est", "f_a_est", "f_b_est", "f_tz_est"))
 
   message("Calculating fits and slopes...")
 

@@ -36,7 +36,7 @@
       Calculating fits and slopes...
       Done.
     Output
-      # A tibble: 1,251 x 29
+      # A tibble: 1,251 x 25
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -50,11 +50,10 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 22 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_Cm_est <dbl>, f_a_est <dbl>, f_b_est <dbl>, f_tz_est <dbl>, f_Cz <dbl>,
-      #   f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
-      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_Cz <dbl>, f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>,
+      #   f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
 # fitting works with 60 second end cut
 
@@ -67,7 +66,7 @@
       Calculating fits and slopes...
       Done.
     Output
-      # A tibble: 1,251 x 29
+      # A tibble: 1,251 x 25
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -81,11 +80,10 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 22 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_Cm_est <dbl>, f_a_est <dbl>, f_b_est <dbl>, f_tz_est <dbl>, f_Cz <dbl>,
-      #   f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
-      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_Cz <dbl>, f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>,
+      #   f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
 # renaming works
 
@@ -103,7 +101,7 @@
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
-      # A tibble: 1,251 x 29
+      # A tibble: 1,251 x 25
          date_time           temp_air temp_soil   co2   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -117,9 +115,8 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 22 more variables: f_start <dttm>, finish <dttm>, f_fluxID <fct>,
+      # i 18 more variables: f_start <dttm>, finish <dttm>, f_fluxID <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_Cm_est <dbl>, f_a_est <dbl>, f_b_est <dbl>, f_tz_est <dbl>, f_Cz <dbl>,
-      #   f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>,
-      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_Cz <dbl>, f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>,
+      #   f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
