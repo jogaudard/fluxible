@@ -53,21 +53,29 @@ library(fluxible)
 
 conc <- flux_match(
   co2_df_short,
-  record_short
+  record_short,
+  datetime,
+  start,
+  conc
 )
 
 slopes <- flux_fitting(
   conc,
+  conc,
+  datetime,
   fit_type = "exp",
   end_cut = 30
 )
 
 slopes_flag <- flux_quality(
-  slopes
+  slopes,
+  conc
 )
 
 flux_plot(
   slopes_flag,
+  conc,
+  datetime,
   f_ylim_lower = 390,
   f_ylim_upper = 650,
   facet_wrap_args = list(
@@ -79,22 +87,26 @@ flux_plot(
 
 fluxes <- flux_calc(
   slopes_flag,
-  slope_col = "f_slope_corr",
+  f_slope_corr,
+  datetime,
+  temp_air,
   conc_unit = "ppm",
   flux_unit = "mmol",
   cols_keep = c("turfID", "type"),
   cols_ave = c("temp_soil", "PAR"),
-  cut_col = "f_cut",
-  keep_arg = "keep"
+  chamber_volume = 24.5,
+  tube_volume = 0.075,
+  atm_pressure = 1,
+  plot_area = 0.0625
 )
 
 fluxes_gep <- flux_gep(
   fluxes,
+  flux,
+  type,
+  start_datetime,
+  PAR,
   id_cols = "turfID",
-  flux_col = "flux",
-  type_col = "type",
-  datetime_col = "datetime",
-  par_col = "PAR",
   cols_keep = c("temp_soil")
 )
 
@@ -104,10 +116,9 @@ fluxes_gep
 
 ## Further developments
 
-### Flux tent
-Currently fluxible is thought for setups using a flux chamber.
-Flux chambers can be assumed to have no leak.
-As flux tents tend to leak, a different fitting function is needed to account for potential leaks.
+### Segmentation tool
+We are working on a tool to automatically select the window of the measurement on which to fit a model.
+This selection will be based on environmental variable, such as photosythetically active radiation (PAR), measured simultaneously.
 
 ### More fits
 As we want fluxible to fit the use of as many projects as possible, more fitting expressions will be included in the flux_fitting function.
