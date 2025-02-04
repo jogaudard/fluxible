@@ -5,7 +5,7 @@ test_that("works for exponential fitting", {
       conc,
       datetime,
     fit_type = "expo") |>
-      select(f_fluxID, f_slope) |>
+      select(f_fluxid, f_slope) |>
       distinct()
   )
 })
@@ -18,7 +18,7 @@ test_that("works for linear fitting", {
       datetime,
       fit_type = "lin"
     ) |>
-      select(f_fluxID, f_slope) |>
+      select(f_fluxid, f_slope) |>
       distinct()
   )
 })
@@ -31,7 +31,7 @@ test_that("works for quadratic fitting", {
       datetime,
       fit_type = "qua"
     ) |>
-      select(f_fluxID, f_slope) |>
+      select(f_fluxid, f_slope) |>
       distinct()
   )
 })
@@ -45,7 +45,7 @@ test_that("works for exponential fitting with cut", {
       fit_type = "expo",
       start_cut = 20
     ) |>
-      select(f_fluxID, f_slope) |>
+      select(f_fluxid, f_slope) |>
       distinct()
   )
 })
@@ -59,7 +59,7 @@ test_that("works for linear fitting with cut", {
       fit_type = "line",
       start_cut = 20
     ) |>
-      select(f_fluxID, f_slope) |>
+      select(f_fluxid, f_slope) |>
       distinct()
   )
 })

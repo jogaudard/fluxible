@@ -18,7 +18,7 @@ micromol/s/sqm.}
 or net ecosystem exchange (NEE).}
 \item{f_start}{Datetime at which the measurement was started.}
 \item{f_end}{Datetime at which the measurement ended.}
-\item{f_fluxID}{Unique ID for each flux.}
+\item{f_fluxid}{Unique ID for each flux.}
 \item{n_conc}{Number of data point per flux.}
 \item{ratio}{Ratio of n_conc over length of the measurement (in seconds).}
 \item{flag}{Data quality flags.}

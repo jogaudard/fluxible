@@ -31,7 +31,8 @@
 #' @importFrom lubridate is.POSIXct
 #' @examples
 #' data(co2_df_short, record_short)
-#' flux_match(co2_df_short, record_short, datetime, start, conc)
+#' flux_match(co2_df_short, record_short, datetime, start, conc, startcrop = 10,
+#' measurement_length = 220)
 #' @export
 
 
@@ -40,8 +41,8 @@ flux_match <- function(raw_conc,
                        datetime_col,
                        start_col,
                        conc_col,
-                       startcrop = 10,
-                       measurement_length = 220,
+                       startcrop,
+                       measurement_length,
                        ratio_threshold = 0.5,
                        time_diff = 0) {
 
@@ -92,7 +93,7 @@ flux_match <- function(raw_conc,
     mutate(
       f_end = {{start_col}} + measurement_length,
       f_start = {{start_col}} + startcrop,
-      f_fluxID = row_number()
+      f_fluxid = row_number()
     )
   raw_conc <- raw_conc |>
     mutate(
@@ -108,11 +109,11 @@ flux_match <- function(raw_conc,
       {{datetime_col}} := dplyr::coalesce({{datetime_col}}, .data$f_start)
     ) |>
     arrange({{datetime_col}}) |>
-    fill("f_fluxID") |>
-    drop_na("f_fluxID")
+    fill("f_fluxid") |>
+    drop_na("f_fluxid")
 
   conc_df <- conc_df |>
-    group_by(.data$f_fluxID) |>
+    group_by(.data$f_fluxid) |>
     fill(names(field_record)) |>
     filter(
       ({{datetime_col}} < .data$f_end &
@@ -130,19 +131,19 @@ flux_match <- function(raw_conc,
 
   conc_df <- conc_df |>
     mutate(
-      f_fluxID = as.factor(.data$f_fluxID),
+      f_fluxid = as.factor(.data$f_fluxid),
       f_flag_match = as.character(.data$f_flag_match)
     ) |>
-    arrange(.data$f_fluxID)
+    arrange(.data$f_fluxid)
 
 
   flags <- conc_df |>
-    select("f_fluxID", "f_flag_match") |>
+    select("f_fluxid", "f_flag_match") |>
     drop_na("f_flag_match") |>
     distinct() |>
     mutate(
       f_warnings = paste(
-        "\n", "fluxID", .data$f_fluxID, ":",
+        "\n", "fluxID", .data$f_fluxid, ":",
         .data$f_flag_match
       ),
       f_warnings = as.character(.data$f_warnings)

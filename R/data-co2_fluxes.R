@@ -4,7 +4,7 @@
 #'
 #' @format A tibble with 6 rows and 11 variables
 #' \describe{
-#' \item{f_fluxID}{Unique ID for each flux.}
+#' \item{f_fluxid}{Unique ID for each flux.}
 #' \item{f_slope_tz}{Slope of C(t) at t zero.}
 #' \item{temp_air_ave}{Air temperature inside the flux chamber in Celsius
 #' averaged over the flux measurement.}

@@ -12,8 +12,8 @@
 #' @param flux_unit unit in which the calculated flux will be
 #' `mmol` outputs fluxes in mmol*m^(-2)*h^(-1);
 #' `micromol` outputs fluxes in micromol*m^(-2)*h^(-1)
-#' @param cut_col column containing cutting information
-#' @param keep_arg name in cut_col of data to keep
+#' @param f_cut column containing cutting information
+#' @param keep_arg name in f_cut of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
 #' default for Three-D project chamber (25x24.5x40cm),
 #' can also be a column in case it is a variable
@@ -28,7 +28,7 @@
 #' as distinct() is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
-#' @param fluxid_col column containing the fluxID
+#' @param f_fluxid column containing the fluxID
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
@@ -69,14 +69,14 @@ flux_calc <- function(slopes_df,
                       chamber_volume,
                       atm_pressure,
                       plot_area,
-                      fluxid_col = f_fluxID,
+                      f_fluxid = f_fluxid,
                       conc_unit,
                       flux_unit,
                       cols_keep = c(),
                       cols_ave = c(),
                       tube_volume,
                       temp_air_unit = "celsius",
-                      cut_col = f_cut,
+                      f_cut = f_cut,
                       keep_arg = "keep",
                       cut = TRUE,
                       fit_type = c()) {
@@ -143,7 +143,7 @@ flux_calc <- function(slopes_df,
     message("Cutting data according to 'keep_arg'...")
     slopes_df <- flux_cut(
       slopes_df,
-      {{cut_col}},
+      {{f_cut}},
       keep_arg
     )
   }
@@ -156,7 +156,7 @@ flux_calc <- function(slopes_df,
   message("Averaging air temperature for each flux...")
   slope_temp <- slopes_df |>
     select(
-      {{fluxid_col}},
+      {{f_fluxid}},
       {{temp_air_col}},
       {{datetime_col}},
       {{slope_col}},
@@ -166,7 +166,7 @@ flux_calc <- function(slopes_df,
       f_temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),
       {{datetime_col}} := min({{datetime_col}}),
       .by = c(
-        {{fluxid_col}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
+        {{f_fluxid}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
       )
     ) |>
     mutate(
@@ -182,10 +182,10 @@ flux_calc <- function(slopes_df,
   if (length(cols_keep) > 0) {
     message("Creating a df with the columns from 'cols_keep' argument...")
     slope_keep <- slopes_df |>
-      select(all_of(cols_keep), {{fluxid_col}}) |>
+      select(all_of(cols_keep), {{f_fluxid}}) |>
       distinct() |>
       left_join(slope_temp, by = dplyr::join_by(
-        {{fluxid_col}} == {{fluxid_col}}
+        {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {
     slope_keep <- slope_temp
@@ -195,15 +195,15 @@ flux_calc <- function(slopes_df,
   if (length(cols_ave) > 0) {
     message("Creating a df with the columns from 'cols_ave' argument...")
     slope_ave <- slopes_df |>
-      select(all_of(cols_ave), {{fluxid_col}}) |>
+      select(all_of(cols_ave), {{f_fluxid}}) |>
       summarise(across(
         everything(),
         ~ mean(.x, na.rm = TRUE)
       ),
-      .by = {{fluxid_col}}
+      .by = {{f_fluxid}}
       ) |>
       left_join(slope_keep, by = dplyr::join_by(
-        {{fluxid_col}} == {{fluxid_col}}
+        {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {
     slope_ave <- slope_keep
@@ -244,7 +244,7 @@ flux_calc <- function(slopes_df,
         temp_air_unit == "kelvin" ~ .data$f_temp_air_ave
       ),
       f_model = fit_type,
-      .by = {{fluxid_col}}
+      .by = {{f_fluxid}}
     )
 
   # output unit

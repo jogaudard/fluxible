@@ -12,14 +12,14 @@ flux_calc(
   chamber_volume,
   atm_pressure,
   plot_area,
-  fluxid_col = f_fluxID,
+  f_fluxid = f_fluxid,
   conc_unit,
   flux_unit,
   cols_keep = c(),
   cols_ave = c(),
   tube_volume,
   temp_air_unit = "celsius",
-  cut_col = f_cut,
+  f_cut = f_cut,
   keep_arg = "keep",
   cut = TRUE,
   fit_type = c()
@@ -48,7 +48,7 @@ can be a constant (numerical) or a variable (column name)}
 \item{plot_area}{area of the plot in m^2, default for Three-D,
 can also be a column in case it is a variable}
 
-\item{fluxid_col}{column containing the fluxID}
+\item{f_fluxid}{column containing the fluxID}
 
 \item{conc_unit}{unit in which the concentration of gas was measured
 ppm or ppb}
@@ -70,9 +70,9 @@ can also be a column in case it is a variable}
 \item{temp_air_unit}{units in which air temperature was measured.
 Has to be either Celsius, Fahrenheit or Kelvin.}
 
-\item{cut_col}{column containing cutting information}
+\item{f_cut}{column containing cutting information}
 
-\item{keep_arg}{name in cut_col of data to keep}
+\item{keep_arg}{name in f_cut of data to keep}
 
 \item{fit_type}{(optional) model used in flux_fitting, exponential,
 quadratic or linear.

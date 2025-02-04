@@ -11,7 +11,7 @@ flux_param_lm <- function(slopes_df,
                           conc_col) {
   param_df <- slopes_df |>
     select(
-      {{conc_col}}, "f_start", "f_fluxID", "f_rsquared", "f_pvalue",
+      {{conc_col}}, "f_start", "f_fluxid", "f_rsquared", "f_pvalue",
       "f_quality_flag", "f_cut"
     ) |>
     filter(.data$f_cut != "cut") |>
@@ -26,7 +26,7 @@ flux_param_lm <- function(slopes_df,
         sep = ""
       )
     ) |>
-    select("f_start", "f_fluxID", "print_col", "f_quality_flag")
+    select("f_start", "f_fluxid", "print_col", "f_quality_flag")
 
   param_df
 }

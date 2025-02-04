@@ -6,7 +6,7 @@ test_that("quadratic fit works", {
       datetime,
       f_start,
       f_end,
-      f_fluxID,
+      f_fluxid,
       fit_type = "quadratic",
       t_zero = 10,
       end_cut = 30

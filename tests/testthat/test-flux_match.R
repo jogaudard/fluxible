@@ -4,9 +4,11 @@ test_that("matching works", {
     record_short,
     datetime,
     start,
-    conc
+    conc,
+    startcrop = 10,
+    measurement_length = 220
   ) |>
-  dplyr::select(f_fluxID, f_n_conc, f_ratio, f_flag_match) |>
+  dplyr::select(f_fluxid, f_n_conc, f_ratio, f_flag_match) |>
   dplyr::distinct()
   )
 })
@@ -25,6 +27,8 @@ test_that("time_diff works", {
     datetime,
     start,
     conc,
+    startcrop = 10,
+    measurement_length = 220,
     time_diff = 180
   ))
 })
@@ -49,7 +53,9 @@ test_that("renaming variables works", {
       record_short,
       date_time,
       starting,
-      CO2_conc
+      CO2_conc,
+      startcrop = 10,
+      measurement_length = 220
     )
   )
 })
@@ -64,7 +70,9 @@ test_that("flags on nb of data", {
         record_short,
         datetime,
         start,
-        conc
+        conc,
+    startcrop = 10,
+    measurement_length = 220
       )
     )
   )
@@ -78,7 +86,9 @@ test_that("warnings", {
       record_short,
       datetime,
       start,
-      conc
+      conc,
+    startcrop = 10,
+    measurement_length = 220
     ),
     "fluxID 1 : nb of data too low
  fluxID 3 : nb of data too low
@@ -92,7 +102,9 @@ test_that("no warnings when no flags", {
     record_short,
     datetime,
     start,
-    conc
+    conc,
+    startcrop = 10,
+    measurement_length = 220
   ))
 })
 
@@ -110,7 +122,9 @@ test_that("error on datetime", {
       record_short,
       datetime,
       start,
-      conc
+      conc,
+    startcrop = 10,
+    measurement_length = 220
     ),
     "Please correct the arguments"
   )
@@ -128,7 +142,9 @@ test_that("error on conc variable", {
       record_short,
       datetime,
       start,
-      conc
+      conc,
+    startcrop = 10,
+    measurement_length = 220
     ),
     "Please correct the arguments"
   )
@@ -146,7 +162,9 @@ test_that("error on start", {
       record_short,
       datetime,
       start,
-      conc
+      conc,
+    startcrop = 10,
+    measurement_length = 220
     ),
     "Please correct the arguments"
   )
@@ -160,7 +178,8 @@ test_that("error on startcrop", {
       datetime,
       start,
       conc,
-      startcrop = "blip"
+      startcrop = "blip",
+    measurement_length = 220
     ),
     "Please correct the arguments"
   )
@@ -174,7 +193,8 @@ test_that("error on measurement_length", {
       datetime,
       start,
       conc,
-      measurement_length = "blip"
+      measurement_length = "blip",
+    startcrop = 10
     ),
     "Please correct the arguments"
   )
@@ -188,7 +208,9 @@ test_that("error on ratio_threshold", {
       datetime,
       start,
       conc,
-      ratio_threshold = 2
+      ratio_threshold = 2,
+    startcrop = 10,
+    measurement_length = 220
     ),
     "ratio_threshold has to be a number between 0 and 1"
   )
@@ -202,6 +224,8 @@ test_that("error on time_diff", {
       datetime,
       start,
       conc,
+    startcrop = 10,
+    measurement_length = 220,
       time_diff = "comment est votre blanquette?"
     ),
     "Please correct the arguments"

@@ -444,7 +444,7 @@ flux_plot(slopes0qua, fit_type = "quadratic", print_plot = TRUE, f_ncol = 3)
 
 # reproducing group aesthetics error
 slopes0lin_flag |>
-filter(f_fluxID == 1) |>
+filter(f_fluxid == 1) |>
 flux_plot(fit_type = "lin",
             f_ylim_upper = 432)
 
@@ -865,7 +865,7 @@ cm_temp <- conc_df_cut |>
 
                        }
 
-testing_lm(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxID)
+testing_lm(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxid)
 
 debug(flux_fitting_exp)
 
@@ -874,7 +874,7 @@ flux_fitting_exp(co2_conc,
                  f_end,
                  f_datetime,
                  f_conc,
-                 f_fluxID,
+                 f_fluxid,
                          start_cut = 0,
                          end_cut = 0,
                          t_window = 20,
@@ -882,7 +882,7 @@ flux_fitting_exp(co2_conc,
                          b_window = 10,
                          a_window = 10,
                          roll_width = 15)  |>
-                         select(f_fluxID, f_slope, Cm_est) |>
+                         select(f_fluxid, f_slope, Cm_est) |>
                          distinct()
 
 flux_fitting(co2_conc,
@@ -890,7 +890,7 @@ flux_fitting(co2_conc,
                  f_end,
                  f_datetime,
                  f_conc,
-                 f_fluxID,
+                 f_fluxid,
                  fit_type = "exponential")
 
 
@@ -950,7 +950,7 @@ args_ok <- flux_fun_check(list(
   #     f_end = all_of((end_col)),
   #     f_datetime = all_of((datetime_col)),
   #     f_conc = all_of((conc_col)),
-  #     f_fluxID = all_of((fluxid_col))
+  #     f_fluxid = all_of((fluxid_col))
   #   )
 
   conc_df <- conc_df |>
@@ -1074,7 +1074,7 @@ cm_slope <- conc_df_cut |>
     cm_slope
 }
 
-testing_lm2(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxID, fit_type = "exp")
+testing_lm2(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxid, fit_type = "exp")
 
 test_df <- tibble(
   ID = c(1:10),
@@ -1122,5 +1122,5 @@ test_vol(test_df, values, 10)
 names(test_df)
 
 slopes30qua_flag |>
-filter(f_fluxID == 1) |>
+filter(f_fluxid == 1) |>
 flux_plot(conc, datetime)

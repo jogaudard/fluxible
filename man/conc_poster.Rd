@@ -10,7 +10,7 @@ A tibble with 530 rows and 11 variables
 \item{datetime}{Datetime at which CO2 concentration was recorded.}
 \item{f_conc}{CO2 concentration in ppm.}
 \item{f_start}{Datetime at which the measurement was started.}
-\item{f_fluxID}{Unique ID for each flux.}
+\item{f_fluxid}{Unique ID for each flux.}
 \item{f_cut}{Indicating if the measurement should be kept (keep) or
 discarded (cut).}
 \item{f_b}{b parameter of the C(t) function, calculated by optim() with

@@ -54,7 +54,9 @@ conc_df <- flux_match(
   record_short,
   datetime,
   start,
-  conc
+  conc,
+  startcrop = 10,
+  measurement_length = 220
 )
 
 slopes_df <- flux_fitting(

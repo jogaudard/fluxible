@@ -2,7 +2,7 @@
 
     Code
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "expo"),
-      f_fluxID, f_slope))
+      f_fluxid, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -16,7 +16,7 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxID f_slope
+        f_fluxid f_slope
         <fct>      <dbl>
       1 1          1.56 
       2 2          0.853
@@ -29,7 +29,7 @@
 
     Code
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "lin"),
-      f_fluxID, f_slope))
+      f_fluxid, f_slope))
     Condition
       Warning in `flux_fitting_lin()`:
       
@@ -37,7 +37,7 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxID f_slope
+        f_fluxid f_slope
         <fct>      <dbl>
       1 1         0.113 
       2 2         0.110 
@@ -50,7 +50,7 @@
 
     Code
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "qua"),
-      f_fluxID, f_slope))
+      f_fluxid, f_slope))
     Condition
       Warning in `flux_fitting_quadratic()`:
       
@@ -58,7 +58,7 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxID f_slope
+        f_fluxid f_slope
         <fct>      <dbl>
       1 1          1.60 
       2 2          0.978
@@ -71,7 +71,7 @@
 
     Code
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "expo",
-        start_cut = 20), f_fluxID, f_slope))
+        start_cut = 20), f_fluxid, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -85,7 +85,7 @@
        fluxID 6 : slope was estimated on 186 points out of 190 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxID f_slope
+        f_fluxid f_slope
         <fct>      <dbl>
       1 1          1.46 
       2 2          1.01 
@@ -98,7 +98,7 @@
 
     Code
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "line",
-        start_cut = 20), f_fluxID, f_slope))
+        start_cut = 20), f_fluxid, f_slope))
     Condition
       Warning in `flux_fitting_lin()`:
       
@@ -106,7 +106,7 @@
        fluxID 6 : slope was estimated on 186 points out of 190 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxID f_slope
+        f_fluxid f_slope
         <fct>      <dbl>
       1 1         0.0214
       2 2         0.0596
@@ -145,7 +145,7 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   f_Cz <dbl>, f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>,
       #   f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>

@@ -7,7 +7,7 @@ co2_conc <- readr::read_csv(
 #     f_datetime = "datetime",
     f_start = "start",
 #     f_conc = "conc",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_n_conc = "n_conc"
   ) |>
@@ -29,7 +29,7 @@ co2_conc_missing <- readr::read_csv(
   #   f_datetime = "datetime",
     f_start = "start",
   #   f_conc = "conc",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_n_conc = "n_conc"
   )
@@ -41,7 +41,7 @@ slopes0 <- readr::read_csv("data-raw/slopes0.csv") |>
     # f_datetime = "datetime",
     # f_conc = "conc",
     f_start = "start",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_time = "time",
     f_cut = "cut",
@@ -63,7 +63,7 @@ slopes30 <- readr::read_csv("data-raw/slopes30.csv") |>
     # f_datetime = "datetime",
     # f_conc = "conc",
     f_start = "start",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_time = "time",
     f_cut = "cut",
@@ -86,7 +86,7 @@ slopes60 <- readr::read_csv("data-raw/slopes60.csv") |>
     # f_datetime = "datetime",
     # f_conc = "conc",
     f_start = "start",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_time = "time",
     f_cut = "cut",
@@ -112,7 +112,7 @@ slopes0lin <- readr::read_csv(
     # f_datetime = "datetime",
     # f_conc = "conc",
     f_start = "start",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_time = "time",
     f_cut = "cut",
@@ -134,7 +134,7 @@ slopes30lin <- readr::read_csv(
     # f_datetime = "datetime",
     # f_conc = "conc",
     f_start = "start",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_time = "time",
     f_cut = "cut",
@@ -157,7 +157,7 @@ slopes60lin <- readr::read_csv(
     # f_datetime = "datetime",
     # f_conc = "conc",
     f_start = "start",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_end = "end",
     f_time = "time",
     f_cut = "cut",
@@ -177,7 +177,7 @@ co2_fluxes <- readr::read_csv(
 ) |>
   dplyr::rename(
     f_start = "start",
-    f_fluxID = "fluxID",
+    f_fluxid = "fluxID",
     f_slope_tz = "slope_tz"
   )
 usethis::use_data(co2_fluxes, overwrite = TRUE)

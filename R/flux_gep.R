@@ -5,7 +5,7 @@
 #' measurement. If it is missing, GEP will be dropped for that pair.
 #' @param fluxes_df a dataframe containing NEE and ER
 #' @param id_cols columns used to identify each pair of ER and NEE
-#' @param flux_col column containing flux values
+#' @param f_flux column containing flux values
 #' @param type_col column containing type of flux (NEE or ER)
 #' @param datetime_col column containing start of measurement as datetime
 #' @param par_col column containing PAR values for each flux
@@ -21,8 +21,7 @@
 #' @importFrom purrrlyr slice_rows unslice
 #' @examples
 #' data(co2_fluxes)
-#' flux_gep(co2_fluxes, id_cols = "turfID", flux_col = "flux",
-#' type_col = "type", datetime_col = "f_start", par_col = "PAR",
+#' flux_gep(co2_fluxes, type, f_start, PAR, flux, id_cols = "turfID",
 #' cols_keep = c("temp_soil"))
 #' @export
 
@@ -30,7 +29,7 @@ flux_gep <- function(fluxes_df,
                      type_col,
                      datetime_col,
                      par_col,
-                     flux_col = f_flux,
+                     f_flux = f_flux,
                      id_cols,
                      nee_arg = "NEE",
                      er_arg = "ER",
@@ -39,7 +38,7 @@ flux_gep <- function(fluxes_df,
   name <- deparse(substitute(fluxes_df))
 
   fluxes_df_check <- fluxes_df |>
-    select({{flux_col}})
+    select({{f_flux}})
 
   fluxes_df_ok <- flux_fun_check(fluxes_df_check,
                                  fn = list(is.numeric),
@@ -64,13 +63,13 @@ flux_gep <- function(fluxes_df,
       {{type_col}},
       {{par_col}},
       {{type_col}},
-      {{flux_col}},
+      {{f_flux}},
       {{datetime_col}}
     )
 
   fluxes_gep <- fluxes_df |>
     select(
-      {{flux_col}},
+      {{f_flux}},
       {{type_col}},
       {{datetime_col}},
       {{par_col}},
@@ -89,7 +88,7 @@ flux_gep <- function(fluxes_df,
 
   fluxes_gep <- fluxes_gep |>
   rename(
-    f_flux = {{flux_col}},
+    f_flux = {{f_flux}},
     f_datetime = {{datetime_col}},
     f_par = {{par_col}}
   ) |>
@@ -102,7 +101,7 @@ flux_gep <- function(fluxes_df,
       {{datetime_col}} := "f_datetime_NEE"
     ) |>
     mutate(
-      {{flux_col}} := .data$f_flux_NEE - .data$f_flux_ER,
+      {{f_flux}} := .data$f_flux_NEE - .data$f_flux_ER,
       {{type_col}} := "GEP"
     ) |>
     select(
@@ -110,7 +109,7 @@ flux_gep <- function(fluxes_df,
       "id",
       {{par_col}},
       {{type_col}},
-      {{flux_col}}
+      {{f_flux}}
     )
 
   id_cols_df <- fluxes_df |>
@@ -141,7 +140,7 @@ flux_gep <- function(fluxes_df,
     "id" == "id",
     {{par_col}} == {{par_col}},
     {{type_col}} == {{type_col}},
-    {{flux_col}} == {{flux_col}},
+    {{f_flux}} == {{f_flux}},
     {{datetime_col}} == {{datetime_col}}
   )
 

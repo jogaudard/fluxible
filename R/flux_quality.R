@@ -8,8 +8,8 @@
 #' measurement (used to detect measurement that started with a polluted setup)
 #' @param error error of the setup, defines a window outside of which
 #' the starting values indicate a polluted setup
-#' @param fluxid_col column containing unique IDs for each flux
-#' @param slope_col column containing the slope of each flux
+#' @param f_fluxid column containing unique IDs for each flux
+#' @param f_slope column containing the slope of each flux
 #' (as calculated by the flux_fitting function)
 #' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
@@ -18,9 +18,9 @@
 #' @param ratio_threshold ratio of gas concentration data points over length of
 #' measurement (in seconds) below which the measurement will be considered as
 #' not having enough data points to be considered for calculations
-#' @param pvalue_col column containing the p-value of each flux
+#' @param f_pvalue column containing the p-value of each flux
 #' (linear and quadratic fit)
-#' @param rsquared_col column containing the r squared of each flux
+#' @param f_rsquared column containing the r squared of each flux
 #' (linear and quadratic fit)
 #' @param pvalue_threshold threshold of p-value below which the change of
 #' gas concentration over time is considered not significant
@@ -30,17 +30,17 @@
 #' (linear and quadratic fit)
 #' @param conc_col column containing the measured gas concentration
 #' (exponential fit)
-#' @param b_col column containing the b parameter of the exponential expression
+#' @param f_b column containing the b parameter of the exponential expression
 #' (exponential fit)
-#' @param time_col column containing the time of each measurement in seconds
+#' @param f_time column containing the time of each measurement in seconds
 #' (exponential fit)
-#' @param fit_col column containing the modeled data (exponential fit)
+#' @param f_fit column containing the modeled data (exponential fit)
 #' @param rmse_threshold threshold for the RMSE of each flux above which
 #' the fit is considered unsatisfactory (exponential fit)
 #' @param cor_threshold threshold for the correlation coefficient of
 #' gas concentration with time below which the correlation
 #' is considered not significant (exponential fit)
-#' @param cut_col column containing the cutting information
+#' @param f_cut column containing the cutting information
 #' @param cut_arg argument defining that the data point should be cut out
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
@@ -58,16 +58,16 @@
 
 flux_quality <- function(slopes_df,
                          conc_col,
-                         fluxid_col = f_fluxID,
-                         slope_col = f_slope,
-                         time_col = f_time,
-                         start_col = f_start,
-                         end_col = f_end,
-                         fit_col = f_fit,
-                         cut_col = f_cut,
-                         pvalue_col = f_pvalue,
-                         rsquared_col = f_rsquared,
-                         b_col = f_b,
+                         f_fluxid = f_fluxid,
+                         f_slope = f_slope,
+                         f_time = f_time,
+                         f_start = f_start,
+                         f_end = f_end,
+                         f_fit = f_fit,
+                         f_cut = f_cut,
+                         f_pvalue = f_pvalue,
+                         f_rsquared = f_rsquared,
+                         f_b = f_b,
                          force_discard = c(),
                          force_ok = c(),
                          ratio_threshold = 0,
@@ -93,10 +93,10 @@ flux_quality <- function(slopes_df,
 
   slopes_df_check <- slopes_df |>
     select(
-      {{slope_col}},
+      {{f_slope}},
       {{conc_col}},
-      {{fit_col}},
-      {{time_col}}
+      {{f_fit}},
+      {{f_time}}
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
@@ -129,7 +129,7 @@ flux_quality <- function(slopes_df,
     mutate(
       f_n_conc = sum(!is.na(.data[[name_conc]])),
       f_ratio = .data$f_n_conc / as.double((difftime(
-        {{end_col}}, {{start_col}},
+        {{f_end}}, {{f_start}},
         units = "secs"
       ))),
       f_flag_ratio = case_when(
@@ -137,12 +137,12 @@ flux_quality <- function(slopes_df,
         .data$f_ratio <= ratio_threshold ~ "too_low",
         TRUE ~ "ok"
       ),
-      .by = c({{fluxid_col}}, {{cut_col}})
+      .by = c({{f_fluxid}}, {{f_cut}})
     )
 
   quality_par_start <- slopes_df |>
     # for the start error we take the entire flux into account
-    group_by({{fluxid_col}}) |>
+    group_by({{f_fluxid}}) |>
     nest() |>
     rowwise() |>
     summarise(
@@ -153,21 +153,21 @@ flux_quality <- function(slopes_df,
       ),
       .groups = "drop"
     ) |>
-    unnest({{fluxid_col}})
+    unnest({{f_fluxid}})
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start, by = dplyr::join_by({{fluxid_col}}))
+    left_join(quality_par_start, by = dplyr::join_by({{f_fluxid}}))
 
   if (fit_type == "exponential") {
     quality_flag <- flux_quality_exp(
       slopes_df,
       {{conc_col}},
-      {{fluxid_col}},
-      {{slope_col}},
-      {{time_col}},
-      {{fit_col}},
-      {{cut_col}},
-      {{b_col}},
+      {{f_fluxid}},
+      {{f_slope}},
+      {{f_time}},
+      {{f_fit}},
+      {{f_cut}},
+      {{f_b}},
       force_discard = force_discard,
       force_ok = force_ok,
       rmse_threshold = rmse_threshold,
@@ -180,12 +180,12 @@ flux_quality <- function(slopes_df,
   if (fit_type %in% c("linear", "quadratic")) {
     quality_flag <- flux_quality_lm(slopes_df,
       {{conc_col}},
-      {{fluxid_col}},
-      {{slope_col}},
-      {{time_col}},
-      {{cut_col}},
-      {{pvalue_col}},
-      {{rsquared_col}},
+      {{f_fluxid}},
+      {{f_slope}},
+      {{f_time}},
+      {{f_cut}},
+      {{f_pvalue}},
+      {{f_rsquared}},
       force_discard = force_discard,
       force_ok = force_ok,
       ratio_threshold = ratio_threshold,

@@ -10,8 +10,8 @@ flux_match(
   datetime_col,
   start_col,
   conc_col,
-  startcrop = 10,
-  measurement_length = 220,
+  startcrop,
+  measurement_length,
   ratio_threshold = 0.5,
   time_diff = 0
 )
@@ -58,5 +58,6 @@ Extra variables in both dataframes are kept in the output.
 }
 \examples{
 data(co2_df_short, record_short)
-flux_match(co2_df_short, record_short, datetime, start, conc)
+flux_match(co2_df_short, record_short, datetime, start, conc, startcrop = 10,
+measurement_length = 220)
 }

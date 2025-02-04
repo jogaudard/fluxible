@@ -2,10 +2,11 @@
 
     Code
       dplyr::distinct(dplyr::select(flux_match(co2_df_short, record_short, datetime,
-        start, conc), f_fluxID, f_n_conc, f_ratio, f_flag_match))
+        start, conc, startcrop = 10, measurement_length = 220), f_fluxid, f_n_conc,
+      f_ratio, f_flag_match))
     Output
       # A tibble: 6 x 4
-        f_fluxID f_n_conc f_ratio f_flag_match
+        f_fluxid f_n_conc f_ratio f_flag_match
         <fct>       <int>   <dbl> <chr>       
       1 1             210   1     <NA>        
       2 2             210   1     <NA>        
@@ -17,7 +18,8 @@
 # time_diff works
 
     Code
-      flux_match(co2_df_short_180, record_short, datetime, start, conc, time_diff = 180)
+      flux_match(co2_df_short_180, record_short, datetime, start, conc, startcrop = 10,
+        measurement_length = 220, time_diff = 180)
     Output
       # A tibble: 1,251 x 14
          datetime            temp_air temp_soil  conc   PAR turfID       type 
@@ -34,12 +36,13 @@
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
       # i 7 more variables: start <dttm>, f_end <dttm>, f_start <dttm>,
-      #   f_fluxID <fct>, f_n_conc <int>, f_ratio <dbl>, f_flag_match <chr>
+      #   f_fluxid <fct>, f_n_conc <int>, f_ratio <dbl>, f_flag_match <chr>
 
 # renaming variables works
 
     Code
-      flux_match(co2_df_short, record_short, date_time, starting, CO2_conc)
+      flux_match(co2_df_short, record_short, date_time, starting, CO2_conc,
+        startcrop = 10, measurement_length = 220)
     Output
       # A tibble: 1,251 x 14
          date_time           temp_air temp_soil CO2_conc   PAR turfID       type 
@@ -56,12 +59,13 @@
       10 2022-07-28 23:43:44    NA         NA       453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
       # i 7 more variables: starting <dttm>, f_end <dttm>, f_start <dttm>,
-      #   f_fluxID <fct>, f_n_conc <int>, f_ratio <dbl>, f_flag_match <chr>
+      #   f_fluxid <fct>, f_n_conc <int>, f_ratio <dbl>, f_flag_match <chr>
 
 # flags on nb of data
 
     Code
-      suppressWarnings(flux_match(co2_df_missing, record_short, datetime, start, conc))
+      suppressWarnings(flux_match(co2_df_missing, record_short, datetime, start, conc,
+        startcrop = 10, measurement_length = 220))
     Output
       # A tibble: 668 x 14
          datetime            temp_air temp_soil  conc   PAR turfID       type 
@@ -78,5 +82,5 @@
       10 2022-07-28 23:45:45       NA        NA  515.    NA 156 AN2C 156 ER   
       # i 658 more rows
       # i 7 more variables: start <dttm>, f_end <dttm>, f_start <dttm>,
-      #   f_fluxID <fct>, f_n_conc <int>, f_ratio <dbl>, f_flag_match <chr>
+      #   f_fluxid <fct>, f_n_conc <int>, f_ratio <dbl>, f_flag_match <chr>
 

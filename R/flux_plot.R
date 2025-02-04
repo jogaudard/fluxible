@@ -131,12 +131,12 @@ flux_plot <- function(slopes_df,
   }
 
   flags <- slopes_df |>
-    select("f_fluxID", "f_quality_flag") |>
+    select("f_fluxid", "f_quality_flag") |>
     distinct() |>
     filter(.data$f_quality_flag == "no data") |>
     mutate(
       f_warnings = paste(
-        "\n", "fluxID", .data$f_fluxID, "dropped because there is no data"
+        "\n", "fluxID", .data$f_fluxid, "dropped because there is no data"
       ),
       f_warnings = as.character(.data$f_warnings)
     ) |>
@@ -208,7 +208,7 @@ flux_plot <- function(slopes_df,
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
     do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
-      args = c(facets = ~f_fluxID, facet_wrap_args)
+      args = c(facets = ~f_fluxid, facet_wrap_args)
     ) +
     labs(
       title = "Fluxes quality assessment",
@@ -240,7 +240,7 @@ flux_plot <- function(slopes_df,
       print(f_plot +
         do.call(facet_wrap_paginate,
           args = c(
-            facets = ~f_fluxID,
+            facets = ~f_fluxid,
             page = i,
             facet_wrap_args
           )

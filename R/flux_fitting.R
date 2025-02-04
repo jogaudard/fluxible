@@ -21,13 +21,13 @@
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
-#' @param start_col column with datetime when the measurement started
-#' @param end_col column with datetime when the measurement ended
+#' @param f_start column with datetime when the measurement started
+#' @param f_end column with datetime when the measurement ended
 #' @param datetime_col column with datetime of each concentration measurement
-#' Note that if there are duplicated datetime in the same f_fluxID only
+#' Note that if there are duplicated datetime in the same f_fluxid only
 #' the first row will be kept
 #' @param conc_col column with gas concentration data
-#' @param fluxid_col column with ID of each flux
+#' @param f_fluxid column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
 #' (for quadratic fit)
 #' @importFrom lubridate int_length interval
@@ -43,9 +43,9 @@
 flux_fitting <- function(conc_df,
                          conc_col,
                          datetime_col,
-                         start_col = f_start,
-                         end_col = f_end,
-                         fluxid_col = f_fluxID,
+                         f_start = f_start,
+                         f_end = f_end,
+                         f_fluxid = f_fluxid,
                          start_cut = 0,
                          end_cut = 0,
                          t_window = 20,
@@ -68,8 +68,8 @@ flux_fitting <- function(conc_df,
   conc_df_check <- conc_df |>
     select(
       {{conc_col}},
-      {{start_col}},
-      {{end_col}},
+      {{f_start}},
+      {{f_end}},
       {{datetime_col}}
     )
 
@@ -94,7 +94,7 @@ flux_fitting <- function(conc_df,
 
   length_flux_max <- conc_df |>
     mutate(
-      length_flux = int_length(interval({{start_col}}, {{end_col}}))
+      length_flux = int_length(interval({{f_start}}, {{f_end}}))
     ) |>
     select("length_flux") |>
     max()
@@ -106,7 +106,7 @@ flux_fitting <- function(conc_df,
   }
 
   conc_df <- conc_df |>
-    group_by({{fluxid_col}}) |>
+    group_by({{f_fluxid}}) |>
     distinct({{datetime_col}}, .keep_all = TRUE) |>
     ungroup()
 
@@ -120,9 +120,9 @@ flux_fitting <- function(conc_df,
       conc_df,
       {{conc_col}},
       {{datetime_col}},
-      {{start_col}},
-      {{end_col}},
-      {{fluxid_col}},
+      {{f_start}},
+      {{f_end}},
+      {{f_fluxid}},
       start_cut = start_cut,
       end_cut = end_cut,
       t_window = t_window,
@@ -139,9 +139,9 @@ flux_fitting <- function(conc_df,
       conc_df,
       {{conc_col}},
       {{datetime_col}},
-      {{start_col}},
-      {{end_col}},
-      {{fluxid_col}},
+      {{f_start}},
+      {{f_end}},
+      {{f_fluxid}},
       start_cut = start_cut,
       end_cut = end_cut
     )
@@ -152,9 +152,9 @@ flux_fitting <- function(conc_df,
       conc_df,
       {{conc_col}},
       {{datetime_col}},
-      {{start_col}},
-      {{end_col}},
-      {{fluxid_col}},
+      {{f_start}},
+      {{f_end}},
+      {{f_fluxid}},
       start_cut = start_cut,
       end_cut = end_cut,
       t_zero = t_zero

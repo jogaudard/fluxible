@@ -6,9 +6,9 @@
 \usage{
 flux_flag_count(
   slopes_df,
-  fluxid_col = f_fluxID,
-  flags_col = f_quality_flag,
-  cut_col = f_cut,
+  f_fluxid = f_fluxid,
+  f_quality_flag = f_quality_flag,
+  f_cut = f_cut,
   f_flags = c("ok", "discard", "zero", "force_discard", "start_error", "no_data",
     "force_ok"),
   cut_arg = "cut"
@@ -17,11 +17,11 @@ flux_flag_count(
 \arguments{
 \item{slopes_df}{dataframe of flux slopes}
 
-\item{fluxid_col}{column containing fluxes unique ID}
+\item{f_fluxid}{column containing fluxes unique ID}
 
-\item{flags_col}{column containing the quality flags}
+\item{f_quality_flag}{column containing the quality flags}
 
-\item{cut_col}{column indicating which part of the flux is being cut}
+\item{f_cut}{column indicating which part of the flux is being cut}
 
 \item{f_flags}{list of flags used in the dataset
 (if different from default from flux_quality).

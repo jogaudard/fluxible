@@ -2,7 +2,7 @@
 
     Code
       dplyr::distinct(dplyr::select(flux_quality(slopes0, conc, fit_type = "expo"),
-      f_fluxID, f_quality_flag, f_RMSE, f_cor_coef))
+      f_fluxid, f_quality_flag, f_RMSE, f_cor_coef))
     Message
       
        Total number of measurements: 6
@@ -16,7 +16,7 @@
        force_ok 	 0 	 0 %
     Output
       # A tibble: 6 x 4
-        f_fluxID f_quality_flag f_RMSE f_cor_coef
+        f_fluxid f_quality_flag f_RMSE f_cor_coef
            <dbl> <chr>           <dbl>      <dbl>
       1        1 ok              23.5       0.211
       2        2 ok              14.0       0.336
@@ -29,7 +29,7 @@
 
     Code
       dplyr::distinct(dplyr::select(flux_quality(slopes30lin, conc, fit_type = "li"),
-      f_fluxID, f_quality_flag, f_pvalue, f_rsquared))
+      f_fluxid, f_quality_flag, f_pvalue, f_rsquared))
     Message
       
        Total number of measurements: 6
@@ -43,7 +43,7 @@
        force_ok 	 0 	 0 %
     Output
       # A tibble: 6 x 4
-        f_fluxID f_quality_flag  f_pvalue f_rsquared
+        f_fluxid f_quality_flag  f_pvalue f_rsquared
         <fct>    <chr>              <dbl>      <dbl>
       1 1        ok             1.23e-166    0.986  
       2 2        ok             1.43e-207    0.995  
@@ -56,7 +56,7 @@
 
     Code
       dplyr::distinct(dplyr::select(flux_quality(slopes30qua, conc, fit_type = "quadratic"),
-      f_fluxID, f_quality_flag, f_pvalue, f_rsquared))
+      f_fluxid, f_quality_flag, f_pvalue, f_rsquared))
     Message
       
        Total number of measurements: 6
@@ -70,7 +70,7 @@
        force_ok 	 0 	 0 %
     Output
       # A tibble: 6 x 4
-        f_fluxID f_quality_flag  f_pvalue f_rsquared
+        f_fluxid f_quality_flag  f_pvalue f_rsquared
         <fct>    <chr>              <dbl>      <dbl>
       1 1        ok             9.51e-297      1.00 
       2 2        ok             1.08e-292      0.999

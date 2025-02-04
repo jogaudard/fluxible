@@ -2,7 +2,7 @@
 
     Code
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "exponential"),
-      f_fluxID, f_slope))
+      f_fluxid, f_slope))
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -16,7 +16,7 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxID f_slope
+        f_fluxid f_slope
         <fct>      <dbl>
       1 1          1.56 
       2 2          0.853
@@ -50,7 +50,7 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   f_Cz <dbl>, f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>,
       #   f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
@@ -80,7 +80,7 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxID <fct>,
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   f_Cz <dbl>, f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>,
       #   f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
@@ -115,7 +115,7 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 18 more variables: f_start <dttm>, finish <dttm>, f_fluxID <fct>,
+      # i 18 more variables: f_start <dttm>, finish <dttm>, f_fluxid <fct>,
       #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
       #   f_Cz <dbl>, f_time_diff <dbl>, f_Cm <dbl>, f_a <dbl>, f_b <dbl>,
       #   f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>

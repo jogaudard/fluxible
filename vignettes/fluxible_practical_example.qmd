@@ -43,12 +43,12 @@ conc_liahovden <- flux_match(
 # we add pairID to pair NEE and ER for GEP calculation later
 conc_liahovden <- conc_liahovden |>
   mutate(
-    f_fluxID = as.double(f_fluxID),
+    f_fluxid = as.double(f_fluxid),
     pairID = case_when(
-      type == "NEE" ~ f_fluxID,
-      type == "ER" ~ f_fluxID - 1
+      type == "NEE" ~ f_fluxid,
+      type == "ER" ~ f_fluxid - 1
     ),
-    f_fluxID = as_factor(f_fluxID),
+    f_fluxid = as_factor(f_fluxid),
     pairID = as_factor(pairID)
   )
 
@@ -121,7 +121,7 @@ The function `flux_plot` provides plots for a visual assessment of the measureme
 
 slopes_exp_liahovden_flag |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  dplyr::filter(f_fluxid %in% c(54, 95, 100, 101)) |>
   flux_plot(
     conc,
     datetime,
@@ -132,7 +132,7 @@ slopes_exp_liahovden_flag |>
 
 slopes_qua_liahovden_flag |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  dplyr::filter(f_fluxid %in% c(54, 95, 100, 101)) |>
   flux_plot(
     conc,
     datetime,
@@ -143,7 +143,7 @@ slopes_qua_liahovden_flag |>
 
 slopes_lin_liahovden_flag |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  dplyr::filter(f_fluxid %in% c(54, 95, 100, 101)) |>
   flux_plot(
     conc,
     datetime,
@@ -183,7 +183,7 @@ slopes_exp_liahovden_flag_60 <- conc_liahovden |>
 
 slopes_exp_liahovden_flag_60 |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  dplyr::filter(f_fluxid %in% c(54, 95, 100, 101)) |>
   flux_plot(
     conc,
     datetime,
@@ -215,7 +215,7 @@ slopes_qua_liahovden_flag_60 <- conc_liahovden |>
 
 slopes_qua_liahovden_flag_60 |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  dplyr::filter(f_fluxid %in% c(54, 95, 100, 101)) |>
   flux_plot(
     conc,
     datetime,
@@ -246,7 +246,7 @@ slopes_lin_liahovden_flag_120 <- conc_liahovden |>
 
 slopes_lin_liahovden_flag_120 |>
   # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
+  dplyr::filter(f_fluxid %in% c(54, 95, 100, 101)) |>
   flux_plot(
     conc,
     datetime,

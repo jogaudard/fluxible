@@ -76,7 +76,7 @@ CO2_INCLINE_2022 <- flux_match(
 
 # CO2_INCLINE_2022  |>
 #   filter(
-#     f_fluxID %in% c(760:772) 
+#     f_fluxid %in% c(760:772) 
 #   ) |>
 #     view()
 # those measurements where done in the 60 minutes before I fell in the river with the setup. which is probably why the data are missing.
@@ -111,7 +111,7 @@ slopes_INCLINE_2022 <- slopes_INCLINE_2022 |>
 
 slopes_INCLINE_2022 |>
 filter(
-    f_fluxID %in% c(1:240)
+    f_fluxid %in% c(1:240)
 ) |>
 # view()
 flux_plot(

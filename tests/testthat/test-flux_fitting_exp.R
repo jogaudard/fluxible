@@ -4,7 +4,7 @@ test_that("fitting works with 0 second end cut", {
                  conc,
                  datetime,
                  fit_type = "exponential") |>
-      select(f_fluxID, f_slope) |>
+      select(f_fluxid, f_slope) |>
       distinct()
   )
 })

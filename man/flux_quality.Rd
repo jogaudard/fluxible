@@ -7,16 +7,16 @@
 flux_quality(
   slopes_df,
   conc_col,
-  fluxid_col = f_fluxID,
-  slope_col = f_slope,
-  time_col = f_time,
-  start_col = f_start,
-  end_col = f_end,
-  fit_col = f_fit,
-  cut_col = f_cut,
-  pvalue_col = f_pvalue,
-  rsquared_col = f_rsquared,
-  b_col = f_b,
+  f_fluxid = f_fluxid,
+  f_slope = f_slope,
+  f_time = f_time,
+  f_start = f_start,
+  f_end = f_end,
+  f_fit = f_fit,
+  f_cut = f_cut,
+  f_pvalue = f_pvalue,
+  f_rsquared = f_rsquared,
+  f_b = f_b,
   force_discard = c(),
   force_ok = c(),
   ratio_threshold = 0,
@@ -37,25 +37,25 @@ flux_quality(
 \item{conc_col}{column containing the measured gas concentration
 (exponential fit)}
 
-\item{fluxid_col}{column containing unique IDs for each flux}
+\item{f_fluxid}{column containing unique IDs for each flux}
 
-\item{slope_col}{column containing the slope of each flux
+\item{f_slope}{column containing the slope of each flux
 (as calculated by the flux_fitting function)}
 
-\item{time_col}{column containing the time of each measurement in seconds
+\item{f_time}{column containing the time of each measurement in seconds
 (exponential fit)}
 
-\item{fit_col}{column containing the modeled data (exponential fit)}
+\item{f_fit}{column containing the modeled data (exponential fit)}
 
-\item{cut_col}{column containing the cutting information}
+\item{f_cut}{column containing the cutting information}
 
-\item{pvalue_col}{column containing the p-value of each flux
+\item{f_pvalue}{column containing the p-value of each flux
 (linear and quadratic fit)}
 
-\item{rsquared_col}{column containing the r squared of each flux
+\item{f_rsquared}{column containing the r squared of each flux
 (linear and quadratic fit)}
 
-\item{b_col}{column containing the b parameter of the exponential expression
+\item{f_b}{column containing the b parameter of the exponential expression
 (exponential fit)}
 
 \item{force_discard}{vector of fluxIDs that should be discarded
