@@ -86,7 +86,7 @@ flux_plot(
 )
 
 fluxes_df <- flux_calc(
-  slopes_flag,
+  slopes_flag_df,
   f_slope_corr,
   datetime,
   temp_air,

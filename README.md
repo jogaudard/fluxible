@@ -49,7 +49,7 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 ``` r
 library(fluxible)
 
-conc <- flux_match(
+conc_df <- flux_match(
   co2_df_short,
   record_short,
   datetime,
@@ -57,8 +57,8 @@ conc <- flux_match(
   conc
 )
 
-slopes <- flux_fitting(
-  conc,
+slopes_df <- flux_fitting(
+  conc_df,
   conc,
   datetime,
   fit_type = "exp",
@@ -70,8 +70,8 @@ slopes <- flux_fitting(
 #> Calculating fits and slopes...
 #> Done.
 
-slopes_flag <- flux_quality(
-  slopes,
+slopes_flag_df <- flux_quality(
+  slopes_df,
   conc
 )
 #> 
@@ -86,7 +86,7 @@ slopes_flag <- flux_quality(
 #>  force_ok     0   0 %
 
 flux_plot(
-  slopes_flag,
+  slopes_flag_df,
   conc,
   datetime,
   f_ylim_lower = 390,
@@ -104,8 +104,8 @@ flux_plot(
 
 ``` r
 
-fluxes <- flux_calc(
-  slopes_flag,
+fluxes_df <- flux_calc(
+  slopes_flag_df,
   f_slope_corr,
   datetime,
   temp_air,
@@ -128,31 +128,29 @@ fluxes <- flux_calc(
 #> Fluxes are in mmol/m2/h
 
 fluxes_gep <- flux_gep(
-  fluxes,
-  flux,
+  fluxes_df,
   type,
-  start_datetime,
   PAR,
+  datetime,
   id_cols = "turfID",
   cols_keep = c("temp_soil")
 )
-#> Warning in flux_gep(fluxes, flux, type, start_datetime, PAR, id_cols = "turfID", : 
+#> Warning in flux_gep(fluxes_df, type, PAR, datetime, id_cols = "turfID", : 
 #>  NEE missing for measurement turfID: 156 AN2C 156
 
 fluxes_gep
-#> # A tibble: 9 × 11
-#>   start_datetime        PAR type   flux f_fluxID temp_soil turfID   f_slope_corr
-#>   <dttm>              <dbl> <chr> <dbl> <fct>        <dbl> <chr>           <dbl>
-#> 1 2022-07-28 23:47:22  2.19 GEP    10.3 <NA>          10.7 74 WN2C…       NA    
-#> 2 2022-07-28 23:59:32  1.87 GEP   -27.2 <NA>          10.8 109 AN3…       NA    
-#> 3 2022-07-29 00:06:35  1.61 GEP    NA   <NA>          12.2 29 WN3C…       NA    
-#> 4 2022-07-28 23:43:35  1.88 ER     47.7 1             10.8 156 AN2…        0.775
-#> 5 2022-07-28 23:47:22  2.19 NEE    31.0 2             10.7 74 WN2C…        0.504
-#> 6 2022-07-28 23:52:10  2.04 ER     20.7 3             10.7 74 WN2C…        0.337
-#> 7 2022-07-28 23:59:32  1.87 NEE    41.5 4             10.8 109 AN3…        0.676
-#> 8 2022-07-29 00:03:10  1.69 ER     68.7 5             10.5 109 AN3…        1.12 
-#> 9 2022-07-29 00:06:35  1.61 NEE    26.1 6             12.2 29 WN3C…        0.425
-#> # ℹ 3 more variables: temp_air_ave <dbl>, volume_setup <dbl>, model <chr>
+#> # A tibble: 9 × 6
+#>     PAR datetime            type  f_flux temp_soil turfID      
+#>   <dbl> <dttm>              <chr>  <dbl>     <dbl> <chr>       
+#> 1  2.19 2022-07-28 23:47:22 GEP     10.3      10.7 74 WN2C 155 
+#> 2  1.87 2022-07-28 23:59:32 GEP    -27.2      10.8 109 AN3C 109
+#> 3  1.61 2022-07-29 00:06:35 GEP     NA        12.2 29 WN3C 106 
+#> 4  1.88 2022-07-28 23:43:35 ER      47.7      10.8 156 AN2C 156
+#> 5  2.19 2022-07-28 23:47:22 NEE     31.0      10.7 74 WN2C 155 
+#> 6  2.04 2022-07-28 23:52:10 ER      20.7      10.7 74 WN2C 155 
+#> 7  1.87 2022-07-28 23:59:32 NEE     41.5      10.8 109 AN3C 109
+#> 8  1.69 2022-07-29 00:03:10 ER      68.7      10.5 109 AN3C 109
+#> 9  1.61 2022-07-29 00:06:35 NEE     26.1      12.2 29 WN3C 106
 ```
 
 ## Further developments
