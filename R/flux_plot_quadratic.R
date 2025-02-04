@@ -2,8 +2,9 @@
 #' @description specific part of flux_plot for
 #' quadratic fit
 #' @param slopes_df dataset containing slopes
+#' @param conc_col column with gas concentration
+#' @param datetime_col column with datetime of each data point
 #' @param y_text_position position of the text box
-#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr select distinct
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text geom_vline
@@ -17,8 +18,7 @@
 flux_plot_quadratic <- function(slopes_df,
                                 conc_col,
                                 datetime_col,
-                                y_text_position,
-                                cut_arg) {
+                                y_text_position) {
   param_df <- flux_param_lm(slopes_df, {{conc_col}})
 
   slopes_df <- flux_plot_flag(slopes_df, param_df)

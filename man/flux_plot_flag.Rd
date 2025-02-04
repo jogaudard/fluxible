@@ -10,8 +10,6 @@ flux_plot_flag(slopes_df, param_df)
 \item{slopes_df}{as provided in flux_plot}
 
 \item{param_df}{as provided by flux_param}
-
-\item{cut_arg}{argument pointing rows to be cut from the measurements}
 }
 \description{
 creates a column with quality flags (from flux_quality)

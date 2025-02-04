@@ -4,12 +4,11 @@
 #' flux_param_lm is for fit in the lm family (linear and quadratic)
 #' flux_param_exp is for the exponential fit
 #' @param slopes_df the slopes_df that is being provided to flux_plot
-#' @param cut_arg argument pointing rows to be cut from the measurements
+#' @param conc_col column with gas concentration
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_exp <- function(slopes_df,
-                           conc_col,
-                           start_col) {
+                           conc_col) {
   param_df <- slopes_df |>
     select(
       {{conc_col}}, "f_start", "f_fluxid", "f_RMSE", "f_cor_coef", "f_b", "f_cut",

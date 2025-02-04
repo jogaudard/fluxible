@@ -24,6 +24,8 @@ flux_quality_exp(
 \item{slopes_df}{dataset containing slopes, fluxID,
 and parameters of the exponential expression}
 
+\item{conc_col}{column with gas concentration}
+
 \item{b_col}{column containing the b parameter of the exponential expression}
 
 \item{force_discard}{vector of fluxIDs that should be discarded

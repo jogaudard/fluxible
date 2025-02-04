@@ -6,6 +6,13 @@
 #' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' @description Fits an exponential expression to the concentration evolution
 #' @param conc_df dataframe of gas concentration over time
+#' @param conc_col column with gas concentration
+#' @param datetime_col column with datetime of each concentration measurement
+#' Note that if there are duplicated datetime in the same f_fluxid only
+#' the first row will be kept
+#' @param f_start column with datetime when the measurement started
+#' @param f_end column with datetime when the measurement ended
+#' @param f_fluxid column with ID of each flux
 #' @param t_window enlarge focus window before and after tmin and tmax
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' @param b_window window to estimate b. It is an interval after tz
@@ -33,9 +40,9 @@
 flux_fitting_exp <- function(conc_df,
                              conc_col,
                              datetime_col,
-                             f_start = f_start,
-                             f_end = f_end,
-                             f_fluxid = f_fluxid,
+                             f_start,
+                             f_end,
+                             f_fluxid,
                              t_window,
                              cz_window,
                              b_window,

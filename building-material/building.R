@@ -1124,3 +1124,14 @@ names(test_df)
 slopes30qua_flag |>
 filter(f_fluxid == 1) |>
 flux_plot(conc, datetime)
+
+test <- co2_conc |>
+  filter(f_fluxid == 1) |>
+    slice(-c(10, 15, 20))
+
+
+flux_fitting(test,
+                 conc,
+                 datetime,
+                 fit_type = "exponential") |>
+                 View()

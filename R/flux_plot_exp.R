@@ -2,8 +2,9 @@
 #' @description plots the fluxes that were fitted with
 #' an exponential model
 #' @param slopes_df dataset containing slopes
+#' @param conc_col column with gas concentration
+#' @param datetime_col column with datetime of each data point
 #' @param y_text_position position of the text box
-#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw geom_vline
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
@@ -17,8 +18,6 @@
 flux_plot_exp <- function(slopes_df,
                           conc_col,
                           datetime_col,
-                          start_col,
-                          cut_arg,
                           y_text_position) {
   param_df <- flux_param_exp(slopes_df, {{conc_col}})
 

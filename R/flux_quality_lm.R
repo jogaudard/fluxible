@@ -4,6 +4,11 @@
 #' flux_quality_lm is for the model of the lm family.
 #' flux_quality_exp is for the exponential model.
 #' @param slopes_df dataset containing slopes, fluxID, p.value and r.squared
+#' @param conc_col column with gas concentration
+#' @param f_fluxid column of ID for each measurement
+#' @param f_slope column containing the slope of each flux
+#' (as calculated by the flux_fitting function)
+#' @param f_cut column containing the cutting information
 #' @param pvalue_threshold threshold of p-value below which the change
 #' of gas concentration over time is considered not significant (user decided)
 #' @param rsquared_threshold threshold of r squared value below which
@@ -12,9 +17,10 @@
 #' by the user's decision
 #' @param force_ok vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
-#' @param pvalue_col column containing the p-value of each flux
-#' @param rsquared_col column containing the r squared to be used for
+#' @param f_pvalue column containing the p-value of each flux
+#' @param f_rsquared column containing the r squared to be used for
 #' the quality assessment
+#' @param name_df name of slopes_df (used for error message)
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when left_join
 
@@ -22,21 +28,15 @@
 
 flux_quality_lm <- function(slopes_df,
                             conc_col,
-                            fluxid_col,
-                            slope_col,
-                            time_col,
-                            cut_col,
-                            pvalue_col,
-                            rsquared_col,
-                            force_discard = c(),
-                            force_ok = c(),
-                            ratio_threshold = 0,
-                            fit_type = c(),
-                            ambient_conc = 421,
-                            error = 100,
-                            pvalue_threshold = 0.3,
-                            rsquared_threshold = 0.7,
-                            cut_arg = "cut",
+                            f_fluxid,
+                            f_slope,
+                            f_cut,
+                            f_pvalue,
+                            f_rsquared,
+                            force_discard,
+                            force_ok,
+                            pvalue_threshold,
+                            rsquared_threshold,
                             name_df) {
 
 
@@ -50,8 +50,8 @@ flux_quality_lm <- function(slopes_df,
 
   slopes_df_check <- slopes_df |>
     select(
-      {{pvalue_col}},
-      {{rsquared_col}}
+      {{f_pvalue}},
+      {{f_rsquared}}
     )
 
   slopes_df_ok <- flux_fun_check(slopes_df_check,
@@ -75,23 +75,23 @@ flux_quality_lm <- function(slopes_df,
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_start_error == "error" ~ "start_error",
-        {{fluxid_col}} %in% force_discard ~ "force_discard",
-        {{fluxid_col}} %in% force_ok ~ "force_ok",
-        {{rsquared_col}} >= rsquared_threshold ~ "ok",
-        {{rsquared_col}} < rsquared_threshold &
-          {{pvalue_col}} >= pvalue_threshold ~ "zero",
-        {{rsquared_col}} < rsquared_threshold &
-          {{pvalue_col}} < pvalue_threshold ~ "discard",
+        {{f_fluxid}} %in% force_discard ~ "force_discard",
+        {{f_fluxid}} %in% force_ok ~ "force_ok",
+        {{f_rsquared}} >= rsquared_threshold ~ "ok",
+        {{f_rsquared}} < rsquared_threshold &
+          {{f_pvalue}} >= pvalue_threshold ~ "zero",
+        {{f_rsquared}} < rsquared_threshold &
+          {{f_pvalue}} < pvalue_threshold ~ "discard",
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA,
         .data$f_quality_flag == "force_discard" ~ NA,
-        .data$f_quality_flag == "force_ok" ~ .data$f_slope,
-        .data$f_quality_flag == "ok" ~ .data$f_slope,
+        .data$f_quality_flag == "force_ok" ~ {{f_slope}},
+        .data$f_quality_flag == "ok" ~ {{f_slope}},
         .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0
       ),
-      .by = c({{fluxid_col}}, {{cut_col}})
+      .by = c({{f_fluxid}}, {{f_cut}})
     )
 
   slopes_df

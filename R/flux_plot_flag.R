@@ -3,7 +3,6 @@
 #' for the part of the rows to be kept, and cut flag for rows to be discarded
 #' @param slopes_df as provided in flux_plot
 #' @param param_df as provided by flux_param
-#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @importFrom dplyr select left_join mutate case_when
 
 flux_plot_flag <- function(slopes_df,

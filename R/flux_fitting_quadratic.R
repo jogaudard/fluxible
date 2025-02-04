@@ -1,6 +1,13 @@
 #' quadratic fit to gas concentration over time
 #' @description fits a quadratic model to the gas concentration over time
 #' @param conc_df dataframe of gas concentration over time
+#' @param conc_col column with gas concentration
+#' @param datetime_col column with datetime of each concentration measurement
+#' Note that if there are duplicated datetime in the same f_fluxid only
+#' the first row will be kept
+#' @param f_start column with datetime when the measurement started
+#' @param f_end column with datetime when the measurement ended
+#' @param f_fluxid column with ID of each flux
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
@@ -18,9 +25,9 @@
 flux_fitting_quadratic <- function(conc_df,
                                    conc_col,
                                    datetime_col,
-                                   start_col,
-                                   end_col,
-                                   fluxid_col,
+                                   f_start,
+                                   f_end,
+                                   f_fluxid,
                                    start_cut,
                                    end_cut,
                                    t_zero) {
@@ -44,16 +51,16 @@ flux_fitting_quadratic <- function(conc_df,
         units = "secs"
       ),
       f_time = as.double(.data$f_time),
-      {{start_col}} := {{start_col}} + start_cut,
-      {{end_col}} := {{end_col}} - end_cut,
+      {{f_start}} := {{f_start}} + start_cut,
+      {{f_end}} := {{f_end}} - end_cut,
       f_cut = case_when(
-        {{datetime_col}} < {{start_col}} | {{datetime_col}} >= {{end_col}}
+        {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
         ~ "cut",
         TRUE ~ "keep"
       ),
       f_cut = as_factor(.data$f_cut),
       f_n_conc = sum(!is.na(.data[[name_conc]])),
-      .by = {{fluxid_col}}
+      .by = {{f_fluxid}}
     )
 
   conc_df_cut <- conc_df |>
@@ -69,14 +76,14 @@ flux_fitting_quadratic <- function(conc_df,
       f_time_cut = as.double(.data$f_time_cut),
       f_time_cut2 = (.data$f_time_cut)^2,
       length_window = max(.data$f_time_cut),
-      length_flux = difftime({{end_col}}, {{start_col}}, units = "sec"),
+      length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
       time_diff = .data$f_time - .data$f_time_cut,
       f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
-      .by = {{fluxid_col}}
+      .by = {{f_fluxid}}
     )
 
   fitting_par <- conc_df_cut |>
-    group_by({{fluxid_col}}) |>
+    group_by({{f_fluxid}}) |>
     nest() |>
     mutate(
       model =
@@ -87,7 +94,7 @@ flux_fitting_quadratic <- function(conc_df,
     ) |>
     select(!c("data", "model")) |>
     unnest("tidy") |>
-    select({{fluxid_col}}, "term", "estimate", "glance") |>
+    select({{f_fluxid}}, "term", "estimate", "glance") |>
     pivot_wider(names_from = "term", values_from = "estimate") |>
     unnest("glance") |>
     rename(
@@ -99,13 +106,13 @@ flux_fitting_quadratic <- function(conc_df,
       f_pvalue = "p.value"
     ) |>
     select(
-      {{fluxid_col}}, "f_param1", "f_param2", "f_rsquared",
+      {{f_fluxid}}, "f_param1", "f_param2", "f_rsquared",
       "f_adj_rsquared", "f_intercept", "f_pvalue"
     ) |>
     ungroup()
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par, by = dplyr::join_by({{fluxid_col}})) |>
+    left_join(fitting_par, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
       f_slope = .data$f_param1 + 2 * .data$f_param2 * t_zero,
       f_fit =
@@ -119,27 +126,27 @@ flux_fitting_quadratic <- function(conc_df,
         * t_zero^2
         + (.data$f_param1 + 2 * .data$f_param2 * t_zero)
         * (.data$f_time - start_cut),
-      f_start_z = {{start_col}} + t_zero
+      f_start_z = {{f_start}} + t_zero
     )
 
   warning_msg <- conc_df |>
     left_join(conc_df_cut,
       by = dplyr::join_by(
         {{datetime_col}} == {{datetime_col}},
-        {{fluxid_col}} == {{fluxid_col}},
+        {{f_fluxid}} == {{f_fluxid}},
         "f_n_conc" == "f_n_conc"
       )
     ) |>
-    select({{fluxid_col}}, "f_n_conc", "f_n_conc_cut", "length_flux") |>
+    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
-        "\n", "fluxID", {{fluxid_col}}, ": slope was estimated on",
+        "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
         .data$f_n_conc_cut, "points out of", .data$length_flux,
         "seconds"
       ),
       no_data = paste(
-        "\n", "fluxID", {{fluxid_col}},
+        "\n", "fluxID", {{f_fluxid}},
         "dropped (no data in the conc column)"
       ),
       warnings = case_when(

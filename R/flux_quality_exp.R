@@ -5,7 +5,14 @@
 #' flux_quality_exp is for the exponential model.
 #' @param slopes_df dataset containing slopes, fluxID,
 #' and parameters of the exponential expression
-#' @param b_col column containing the b parameter of the exponential expression
+#' @param conc_col column with gas concentration
+#' @param f_fluxid column of ID for each measurement
+#' @param f_slope column containing the slope of each flux
+#' (as calculated by the flux_fitting function)
+#' @param f_time column containing the time of each measurement in seconds
+#' @param f_fit column containing the modeled data
+#' @param f_cut column containing the cutting information
+#' @param f_b column containing the b parameter of the exponential expression
 #' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
 #' @param force_ok vector of fluxIDs for which the user wants to keep
@@ -26,12 +33,12 @@
 
 flux_quality_exp <- function(slopes_df,
                              conc_col,
-                             fluxid_col,
-                             slope_col,
-                             time_col,
-                             fit_col,
-                             cut_col,
-                             b_col,
+                             f_fluxid,
+                             f_slope,
+                             f_time,
+                             f_fit,
+                             f_cut,
+                             f_b,
                              force_discard,
                              force_ok,
                              rmse_threshold,
@@ -50,7 +57,7 @@ flux_quality_exp <- function(slopes_df,
   msg = rep("has to be numeric", 3))
 
   slopes_df_check <- slopes_df |>
-    select({{b_col}})
+    select({{f_b}})
 
   slopes_df_ok <- flux_fun_check(slopes_df_check,
                                  fn = list(is.numeric),
@@ -64,11 +71,11 @@ flux_quality_exp <- function(slopes_df,
 
 
   quality_par <- slopes_df |>
-    group_by({{fluxid_col}}, {{cut_col}}) |>
+    group_by({{f_fluxid}}, {{f_cut}}) |>
     summarise(
-      f_cor_coef = cor({{conc_col}}, {{time_col}}),
+      f_cor_coef = cor({{conc_col}}, {{f_time}}),
       f_RMSE =
-        sqrt((1 / length({{time_col}})) * sum(({{fit_col}} - {{conc_col}})^2)),
+        sqrt((1 / length({{f_time}})) * sum(({{f_fit}} - {{conc_col}})^2)),
       .groups = "drop"
     )
 
@@ -76,13 +83,13 @@ flux_quality_exp <- function(slopes_df,
 
   quality_flag <- slopes_df |>
     left_join(quality_par, by = dplyr::join_by(
-      {{fluxid_col}} == {{fluxid_col}},
-      {{cut_col}} == {{cut_col}}
+      {{f_fluxid}} == {{f_fluxid}},
+      {{f_cut}} == {{f_cut}}
     )
     ) |>
     mutate(
       f_fit_quality = case_when(
-        {{b_col}} >= b_threshold ~ "bad_b",
+        {{f_b}} >= b_threshold ~ "bad_b",
         .data$f_RMSE > rmse_threshold ~ "bad_RMSE"
       ),
       f_correlation = case_when(
@@ -93,8 +100,8 @@ flux_quality_exp <- function(slopes_df,
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_start_error == "error" ~ "start_error",
-        {{fluxid_col}} %in% force_discard ~ "force_discard",
-        {{fluxid_col}} %in% force_ok ~ "force_ok",
+        {{f_fluxid}} %in% force_discard ~ "force_discard",
+        {{f_fluxid}} %in% force_ok ~ "force_ok",
         .data$f_fit_quality == "bad_RMSE" &
           .data$f_correlation == "yes" ~ "discard",
         .data$f_fit_quality == "bad_RMSE" &
@@ -108,11 +115,11 @@ flux_quality_exp <- function(slopes_df,
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA,
         .data$f_quality_flag == "force_discard" ~ NA,
-        .data$f_quality_flag == "force_ok" ~ {{slope_col}},
+        .data$f_quality_flag == "force_ok" ~ {{f_slope}},
         .data$f_quality_flag == "start_error" ~ NA,
         .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0,
-        .data$f_quality_flag == "ok" ~ {{slope_col}}
+        .data$f_quality_flag == "ok" ~ {{f_slope}}
       )
     )
 

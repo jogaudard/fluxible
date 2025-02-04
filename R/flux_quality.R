@@ -34,6 +34,10 @@
 #' (exponential fit)
 #' @param f_time column containing the time of each measurement in seconds
 #' (exponential fit)
+#' @param f_start column with datetime of the start of the measurement
+#' (after cuts)
+#' @param f_end column with datetime of the end of the measurement
+#' (after cuts)
 #' @param f_fit column containing the modeled data (exponential fit)
 #' @param rmse_threshold threshold for the RMSE of each flux above which
 #' the fit is considered unsatisfactory (exponential fit)
@@ -49,6 +53,7 @@
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
+#' @importFrom lubridate int_length interval
 #' @examples
 #' data(slopes0lin)
 #' flux_quality(slopes0lin, conc, fit_type = "li")
@@ -128,10 +133,7 @@ flux_quality <- function(slopes_df,
   slopes_df <- slopes_df |>
     mutate(
       f_n_conc = sum(!is.na(.data[[name_conc]])),
-      f_ratio = .data$f_n_conc / as.double((difftime(
-        {{f_end}}, {{f_start}},
-        units = "secs"
-      ))),
+      f_ratio = .data$f_n_conc / int_length(interval({{f_start}}, {{f_end}})),
       f_flag_ratio = case_when(
         .data$f_ratio == 0 ~ "no_data",
         .data$f_ratio <= ratio_threshold ~ "too_low",
@@ -182,19 +184,13 @@ flux_quality <- function(slopes_df,
       {{conc_col}},
       {{f_fluxid}},
       {{f_slope}},
-      {{f_time}},
       {{f_cut}},
       {{f_pvalue}},
       {{f_rsquared}},
       force_discard = force_discard,
       force_ok = force_ok,
-      ratio_threshold = ratio_threshold,
-      fit_type = fit_type,
-      ambient_conc = ambient_conc,
-      error = error,
       pvalue_threshold = pvalue_threshold,
       rsquared_threshold = rsquared_threshold,
-      cut_arg = cut_arg,
       name_df = name_df
     )
   }

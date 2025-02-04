@@ -45,6 +45,12 @@ flux_quality(
 \item{f_time}{column containing the time of each measurement in seconds
 (exponential fit)}
 
+\item{f_start}{column with datetime of the start of the measurement
+(after cuts)}
+
+\item{f_end}{column with datetime of the end of the measurement
+(after cuts)}
+
 \item{f_fit}{column containing the modeled data (exponential fit)}
 
 \item{f_cut}{column containing the cutting information}

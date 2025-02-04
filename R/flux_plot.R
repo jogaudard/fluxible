@@ -8,13 +8,14 @@
 #' will work best with datasets produced following a fluxible workflow.
 #' @param slopes_df dataset containing slopes,
 #' with flags produced by flux_quality
+#' @param conc_col column with gas concentration
+#' @param datetime_col column with datetime of each data point
 #' @param color_discard color for fits with a discard quality flag
 #' @param color_cut color for the part of the flux that is cut
 #' @param color_ok color for fits with an ok quality flag
 #' @param color_zero color for fits with a zero quality flag
-#' @param f_date_breaks date_breaks argument for scale_x_datetime
-#' @param f_minor_breaks minor breaks argument for scale_x_datetime
-#' @param f_date_labels date_labels argument for scale_x_datetime
+#' @param scale_x_datetime_args list of arguments for
+#' \link[ggplot2:scale_x_datetime]{scale_x_datetime}
 #' @param f_ylim_upper y axis upper limit
 #' @param f_ylim_lower y axis lower limit
 #' @param f_plotname filename for the extracted pdf file;
@@ -30,8 +31,6 @@
 #' (independently from 'print_plot' being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
-#' @param no_data_flag flag marking fluxID without data in f_quality_flag
-#' @param cut_arg argument pointing rows to be cut from the measurements
 #' @return a ggplot object if `print_plot = TRUE`,
 #' if `print_plot = FALSE` it will not return anything but will produce a file
 #' depending on `output`

@@ -9,6 +9,7 @@
 #' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
 #' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' @param conc_df dataframe of gas concentration over time
+#' @param conc_col column with gas concentration
 #' @param t_window enlarge focus window before and after tmin and tmax
 #' (exponential fit)
 #' @param cz_window window used to calculate Cz, at the beginning of cut window

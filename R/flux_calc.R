@@ -33,6 +33,10 @@
 #' to calculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
 #' Has to be either Celsius, Fahrenheit or Kelvin.
+#' @param cut if 'TRUE' (default), the measurements will be cut according to
+#' 'f_cut' before calculating fluxes. This had no influence on the flux itself
+#' since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
+#' but it will influence the columns to average.
 #' @param fit_type (optional) model used in flux_fitting, exponential,
 #' quadratic or linear.
 #' Will be automatically filled if slopes_df was produced using flux_quality().

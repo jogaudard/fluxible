@@ -8,15 +8,27 @@ flux_fitting_lin(
   conc_df,
   conc_col,
   datetime_col,
-  start_col,
-  end_col,
-  fluxid_col,
+  f_start,
+  f_end,
+  f_fluxid,
   start_cut,
   end_cut
 )
 }
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
+
+\item{conc_col}{column with gas concentration}
+
+\item{datetime_col}{column with datetime of each concentration measurement
+Note that if there are duplicated datetime in the same f_fluxid only
+the first row will be kept}
+
+\item{f_start}{column with datetime when the measurement started}
+
+\item{f_end}{column with datetime when the measurement ended}
+
+\item{f_fluxid}{column with ID of each flux}
 
 \item{start_cut}{time to discard at the start of the measurements
 (in seconds)}

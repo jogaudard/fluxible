@@ -28,6 +28,8 @@ flux_quality_lm(
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
 
+\item{conc_col}{column with gas concentration}
+
 \item{pvalue_col}{column containing the p-value of each flux}
 
 \item{rsquared_col}{column containing the r squared to be used for

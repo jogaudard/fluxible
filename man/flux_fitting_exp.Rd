@@ -9,9 +9,9 @@ flux_fitting_exp(
   conc_df,
   conc_col,
   datetime_col,
-  f_start = f_start,
-  f_end = f_end,
-  f_fluxid = f_fluxid,
+  f_start,
+  f_end,
+  f_fluxid,
   t_window,
   cz_window,
   b_window,
@@ -23,6 +23,18 @@ flux_fitting_exp(
 }
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
+
+\item{conc_col}{column with gas concentration}
+
+\item{datetime_col}{column with datetime of each concentration measurement
+Note that if there are duplicated datetime in the same f_fluxid only
+the first row will be kept}
+
+\item{f_start}{column with datetime when the measurement started}
+
+\item{f_end}{column with datetime when the measurement ended}
+
+\item{f_fluxid}{column with ID of each flux}
 
 \item{t_window}{enlarge focus window before and after tmin and tmax}
 

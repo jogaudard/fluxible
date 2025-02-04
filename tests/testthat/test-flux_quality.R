@@ -5,7 +5,7 @@ test_that("works for exponential fitting", {
       fit_type = "expo"
       # slope_col = "f_slope"
     ) |>
-    dplyr::select(f_fluxid, f_quality_flag, f_RMSE, f_cor_coef) |>
+    dplyr::select(f_fluxid, f_quality_flag, f_RMSE, f_cor_coef, f_ratio) |>
     dplyr::distinct()
   )
 })

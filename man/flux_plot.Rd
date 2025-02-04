@@ -28,6 +28,10 @@ flux_plot(
 \item{slopes_df}{dataset containing slopes,
 with flags produced by flux_quality}
 
+\item{conc_col}{column with gas concentration}
+
+\item{datetime_col}{column with datetime of each data point}
+
 \item{color_discard}{color for fits with a discard quality flag}
 
 \item{color_cut}{color for the part of the flux that is cut}
@@ -35,6 +39,9 @@ with flags produced by flux_quality}
 \item{color_ok}{color for fits with an ok quality flag}
 
 \item{color_zero}{color for fits with a zero quality flag}
+
+\item{scale_x_datetime_args}{list of arguments for
+\link[ggplot2:scale_x_datetime]{scale_x_datetime}}
 
 \item{f_ylim_upper}{y axis upper limit}
 
@@ -58,16 +65,6 @@ but will take time depending on the size of the dataset}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}
-
-\item{f_date_breaks}{date_breaks argument for scale_x_datetime}
-
-\item{f_minor_breaks}{minor breaks argument for scale_x_datetime}
-
-\item{f_date_labels}{date_labels argument for scale_x_datetime}
-
-\item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
-
-\item{cut_arg}{argument pointing rows to be cut from the measurements}
 }
 \value{
 a ggplot object if \code{print_plot = TRUE},
