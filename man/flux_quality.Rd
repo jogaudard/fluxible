@@ -107,7 +107,7 @@ by 0 according to quality thresholds set by user
 }
 \examples{
 data(slopes0lin)
-flux_quality(slopes0lin, f_conc, fit_type = "li")
+flux_quality(slopes0lin, conc, fit_type = "li")
 data(slopes30)
-flux_quality(slopes30, f_conc, fit_type = "expo")
+flux_quality(slopes30, conc, fit_type = "expo")
 }

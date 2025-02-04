@@ -35,8 +35,8 @@
 #' and parameters of a model of gas concentration over time
 #' @examples
 #' data(co2_conc)
-#' flux_fitting(co2_conc, f_conc, f_datetime, fit_type = "exp")
-#' flux_fitting(co2_conc, f_conc, f_datetime,  fit_type = "quadratic",
+#' flux_fitting(co2_conc, conc, datetime, fit_type = "exp")
+#' flux_fitting(co2_conc, conc, datetime,  fit_type = "quadratic",
 #' t_zero = 10, end_cut = 30)
 #' @export
 

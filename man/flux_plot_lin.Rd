@@ -4,7 +4,7 @@
 \alias{flux_plot_lin}
 \title{plotting fluxes with linear fit}
 \usage{
-flux_plot_lin(slopes_df, y_text_position, cut_arg)
+flux_plot_lin(slopes_df, conc_col, datetime_col, y_text_position)
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}

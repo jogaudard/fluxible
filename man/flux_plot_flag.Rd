@@ -4,7 +4,7 @@
 \alias{flux_plot_flag}
 \title{creates the flag column to be used by flux_plot}
 \usage{
-flux_plot_flag(slopes_df, param_df, cut_arg)
+flux_plot_flag(slopes_df, param_df)
 }
 \arguments{
 \item{slopes_df}{as provided in flux_plot}

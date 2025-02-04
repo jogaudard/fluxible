@@ -4,7 +4,13 @@
 \alias{flux_plot_quadratic}
 \title{plotting fluxes with a quadratic fit}
 \usage{
-flux_plot_quadratic(slopes_df, y_text_position, cut_arg)
+flux_plot_quadratic(
+  slopes_df,
+  conc_col,
+  datetime_col,
+  y_text_position,
+  cut_arg
+)
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}

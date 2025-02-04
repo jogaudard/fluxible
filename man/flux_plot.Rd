@@ -6,13 +6,14 @@
 \usage{
 flux_plot(
   slopes_df,
+  conc_col,
+  datetime_col,
   color_discard = "#D55E00",
   color_cut = "#D55E00",
   color_ok = "#009E73",
   color_zero = "#CC79A7",
-  f_date_breaks = "1 min",
-  f_minor_breaks = "10 sec",
-  f_date_labels = "\%e/\%m \\n \%H:\%M",
+  scale_x_datetime_args = list(date_breaks = "1 min", minor_breaks = "10 sec",
+    date_labels = "\%e/\%m \\n \%H:\%M"),
   f_ylim_upper = 800,
   f_ylim_lower = 400,
   f_plotname = "",
@@ -20,9 +21,7 @@ flux_plot(
   y_text_position = 500,
   print_plot = "FALSE",
   output = "print_only",
-  ggsave_args = list(),
-  cut_arg = "cut",
-  no_data_flag = "no_data"
+  ggsave_args = list()
 )
 }
 \arguments{
@@ -36,12 +35,6 @@ with flags produced by flux_quality}
 \item{color_ok}{color for fits with an ok quality flag}
 
 \item{color_zero}{color for fits with a zero quality flag}
-
-\item{f_date_breaks}{date_breaks argument for scale_x_datetime}
-
-\item{f_minor_breaks}{minor breaks argument for scale_x_datetime}
-
-\item{f_date_labels}{date_labels argument for scale_x_datetime}
 
 \item{f_ylim_upper}{y axis upper limit}
 
@@ -66,9 +59,15 @@ but will take time depending on the size of the dataset}
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}
 
-\item{cut_arg}{argument pointing rows to be cut from the measurements}
+\item{f_date_breaks}{date_breaks argument for scale_x_datetime}
+
+\item{f_minor_breaks}{minor breaks argument for scale_x_datetime}
+
+\item{f_date_labels}{date_labels argument for scale_x_datetime}
 
 \item{no_data_flag}{flag marking fluxID without data in f_quality_flag}
+
+\item{cut_arg}{argument pointing rows to be cut from the measurements}
 }
 \value{
 a ggplot object if \code{print_plot = TRUE},
@@ -81,12 +80,14 @@ with color code indicating quality flags
 This function takes time to run and is optional in the workflow,
 but it is still highly recommended to use it to visually check
 the measurements.
+Note that 'flux_plot' is taylored for 'fluxible' functions and
+will work best with datasets produced following a fluxible workflow.
 }
 \examples{
 data(slopes0_flag)
-flux_plot(slopes0_flag)
+flux_plot(slopes0_flag, conc, datetime)
 data(slopes30lin_flag)
-flux_plot(slopes30lin_flag)
+flux_plot(slopes30lin_flag, conc, datetime)
 data(slopes30qua_flag)
-flux_plot(slopes30qua_flag)
+flux_plot(slopes30qua_flag, conc, datetime)
 }

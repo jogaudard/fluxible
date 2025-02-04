@@ -94,7 +94,7 @@ of gas concentration over time
 data(slopes0)
 flux_calc(slopes0,
 f_slope,
-f_datetime,
+datetime,
 temp_air,
 conc_unit = "ppm",
 flux_unit = "mmol",

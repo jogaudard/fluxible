@@ -4,7 +4,7 @@
 \alias{flux_param_exp}
 \title{prepares text to print for flux_plot function}
 \usage{
-flux_param_exp(slopes_df, cut_arg)
+flux_param_exp(slopes_df, conc_col, start_col)
 }
 \arguments{
 \item{slopes_df}{the slopes_df that is being provided to flux_plot}
