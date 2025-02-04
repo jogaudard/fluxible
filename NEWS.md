@@ -1,12 +1,11 @@
-# fluxible 0.7
+# fluxible 0.0.7
 
 * scale_x_datetime arguments in 'flux_plot' are now past as a list.
 * Functions now recycle user's column names instead of renaming them. Columns created by fluxible functions have the suffix 'f_'.
 
-# fluxible 0.6
+# fluxible 0.0.6
 
 * Correction in flux_quality: 'zero' and 'discard' flags were inverted when using the linear fit
-* simplification of version number system
 
 # fluxible 0.0.5
 
