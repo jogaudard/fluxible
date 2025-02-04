@@ -27,10 +27,10 @@
 #' @export
 
 flux_gep <- function(fluxes_df,
-                     flux_col = flux,
                      type_col,
                      datetime_col,
                      par_col,
+                     flux_col = f_flux,
                      id_cols,
                      nee_arg = "NEE",
                      er_arg = "ER",
@@ -50,10 +50,22 @@ flux_gep <- function(fluxes_df,
   if (!fluxes_df_ok)
     stop("Please correct the arguments", call. = FALSE)
 
+
   fluxes_df <- fluxes_df |>
     mutate(
       id = dplyr::cur_group_id(),
       .by = all_of(id_cols)
+    )
+
+  select_df <- fluxes_df |>
+    select(
+      "id",
+      all_of(c(cols_keep, id_cols)),
+      {{type_col}},
+      {{par_col}},
+      {{type_col}},
+      {{flux_col}},
+      {{datetime_col}}
     )
 
   fluxes_gep <- fluxes_df |>
@@ -135,7 +147,7 @@ flux_gep <- function(fluxes_df,
 
   fluxes_gep <- fluxes_gep |>
     full_join(
-      fluxes_df,
+      select_df,
       by = join_arg
     ) |>
     group_by(.data$id) |>
