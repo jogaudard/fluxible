@@ -21,7 +21,7 @@
 #' @importFrom purrrlyr slice_rows unslice
 #' @examples
 #' data(co2_fluxes)
-#' flux_gep(co2_fluxes, type, f_start, PAR, flux, id_cols = "turfID",
+#' flux_gep(co2_fluxes, type, f_start, PAR, f_flux, id_cols = "turfID",
 #' cols_keep = c("temp_soil"))
 #' @export
 

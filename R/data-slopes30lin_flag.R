@@ -31,6 +31,7 @@
 #' \item{f_slope}{Slope of the linear model of CO2 concentration over time.}
 #' \item{f_fit}{Output of the linear model of CO2 concentration over time.}
 #' \item{f_ratio}{Ratio of number of data points compared
+#' to length of measurement in seconds.}
 #' \item{f_quality_flag}{quality flag advising if the slope has to be replaced
 #' by 0 or NA}
 #' \item{f_slope_corr}{slope corrected according to quality flag}

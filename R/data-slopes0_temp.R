@@ -31,8 +31,8 @@
 #' tz_est as starting point.}
 #' \item{f_slope}{Slope of C(t) at tz}
 #' \item{f_fit}{C(t), modeled CO2 concentration as a function of time.}
-#' \item{f_fit_slope}{Output of linear model of CO2 concentration passing by C(tz)
-#' and a slope of slope_tz.}
+#' \item{f_fit_slope}{Output of linear model of CO2 concentration passing by
+#' C(tz) and a slope of slope_tz.}
 #' \item{f_start_z}{Datetime format of tz}
 #' \item{temp_fahr}{Air temperature inside the flux chamber in Fahrenheit
 #' averaged over the flux measurement.}
