@@ -50,9 +50,10 @@ test_that("fitting works with 60 second end cut", {
 test_that("warnings when NAs are dropped in conc", {
   expect_warning(
     flux_fitting(co2_conc_missing,
-    conc,
-    datetime,
-                 fit_type = "lin"),
+      conc,
+      datetime,
+      fit_type = "lin"
+    ),
     " fluxID 1 : slope was estimated on 70 points out of 210 seconds
  fluxID 2 : slope was estimated on 121 points out of 210 seconds
  fluxID 3 : slope was estimated on 102 points out of 210 seconds
@@ -66,9 +67,10 @@ test_that("warnings when NAs are dropped in conc", {
 test_that("warnings when there is no data in conc", {
   expect_warning(
     flux_fitting(co2_conc_missing,
-    conc,
-    datetime,
-                     fit_type = "lin"),
+      conc,
+      datetime,
+      fit_type = "lin"
+    ),
     " fluxID 6 dropped (no data in the conc column)",
     fixed = TRUE # need that because there parenthesis in the error message
   )
@@ -79,7 +81,7 @@ test_that("warnings with cutting", {
     flux_fitting(
       co2_conc_missing,
       conc,
-    datetime,
+      datetime,
       start_cut = 10,
       fit_type = "lin"
     ),
@@ -96,7 +98,7 @@ test_that("error on arguments", {
     flux_fitting(
       co2_conc_missing,
       conc,
-    datetime,
+      datetime,
       start_cut = "Voldemort",
       fit_type = "lin"
     ),
@@ -111,7 +113,7 @@ test_that("cutting too much", {
     flux_fitting(
       co2_conc,
       conc,
-    datetime,
+      datetime,
       start_cut = 120,
       end_cut = 100,
       fit_type = "lin"
@@ -135,8 +137,8 @@ test_that("renaming works", {
       co2_conc_names,
       co2,
       date_time,
-    f_start,
-    finish,
+      f_start,
+      finish,
       fit_type = "lin"
     )
   )

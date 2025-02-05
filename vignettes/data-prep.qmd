@@ -94,7 +94,7 @@ raw_conc <- raw_conc |>
   mutate(
     Date = dmy(Date), # to transform the date as a yyyy-mm-dd format
     datetime = paste(Date, Time), # we paste date and time together
-    datetime = as_datetime(datetime) # datetime format instead of character format
+    datetime = as_datetime(datetime) # datetime instead of character
   ) |>
   select(datetime, co2_conc)
 
@@ -128,25 +128,25 @@ library(fs)
 raw_conc <- dir_ls( #listing all the files
   "ex_data", # at location "ex_data"
   regexp = "*CO2*" # that contains "CO2" in their name
-  ) |>
+) |>
   map_dfr(
     read_csv, # we map read_csv on all the files
-    na = c("#N/A", "Over") # #N/A and Over should be treated as NA
-    ) |>
+    na = c("#N/A", "Over") # "#N/A" and Over should be treated as NA
+  ) |>
   rename(
     conc = "CO2 (ppm)",
     datetime = "Date/Time"
-    ) |>
+  ) |>
   mutate(
     datetime = dmy_hms(datetime)
-    ) |>
+  ) |>
   select(datetime, conc)
 
 head(raw_conc)
 ```
 
 
-# The one file per flux approach
+<!-- # The one file per flux approach -->
 
 
 # The tricky one
@@ -209,10 +209,10 @@ env_df <- read.csv(
   textConnection(listenv), # we read the list into a csv
   header = FALSE, # there is no header
   colClasses = rep("character", 14)
-  # specifying that, despite being numbers, those columns are character is important
-  # if read as integer, 06 becomes 6, and when putting columns together later on,
+  # specifying that those columns are character is important
+  # if read as integer, 06 becomes 6, and when putting columns together,
   # 400.06 will be read as 400.6, which is wrong
-  )
+)
 
 env_df <- env_df |>
   mutate(
@@ -235,7 +235,7 @@ other_df <- read.csv(
   textConnection(list_other),
   header = FALSE,
   colClasses = rep("character", 10)
-  )
+)
 
 other_df <- other_df  |>
   mutate(

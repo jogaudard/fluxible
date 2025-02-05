@@ -49,7 +49,7 @@
 #' @importFrom rlang .data :=
 #' @importFrom dplyr select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything
-# #' @importFrom tidyselect any_of all_of
+#' @importFrom tidyselect any_of all_of
 #' @examples
 #' data(slopes0)
 #' flux_calc(slopes0,

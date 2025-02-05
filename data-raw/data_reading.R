@@ -4,9 +4,7 @@ co2_conc <- readr::read_csv(
   col_types = "TddddffTTfddc"
 ) |>
   dplyr::rename(
-#     f_datetime = "datetime",
     f_start = "start",
-#     f_conc = "conc",
     f_fluxid = "fluxID",
     f_end = "end",
     f_n_conc = "n_conc"
@@ -26,9 +24,7 @@ co2_conc_missing <- readr::read_csv(
   col_types = "TddddffTTfddc"
 ) |>
   dplyr::rename(
-  #   f_datetime = "datetime",
     f_start = "start",
-  #   f_conc = "conc",
     f_fluxid = "fluxID",
     f_end = "end",
     f_n_conc = "n_conc"
@@ -38,8 +34,6 @@ usethis::use_data(co2_conc_missing, overwrite = TRUE)
 # for fitting log
 slopes0 <- readr::read_csv("data-raw/slopes0.csv") |>
   dplyr::rename(
-    # f_datetime = "datetime",
-    # f_conc = "conc",
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",
@@ -60,8 +54,6 @@ usethis::use_data(slopes0, overwrite = TRUE)
 
 slopes30 <- readr::read_csv("data-raw/slopes30.csv") |>
   dplyr::rename(
-    # f_datetime = "datetime",
-    # f_conc = "conc",
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",
@@ -83,8 +75,6 @@ usethis::use_data(slopes30, overwrite = TRUE)
 
 slopes60 <- readr::read_csv("data-raw/slopes60.csv") |>
   dplyr::rename(
-    # f_datetime = "datetime",
-    # f_conc = "conc",
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",
@@ -109,8 +99,6 @@ slopes0lin <- readr::read_csv(
 ) |>
   dplyr::select(!std.error) |>
   dplyr::rename(
-    # f_datetime = "datetime",
-    # f_conc = "conc",
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",
@@ -131,8 +119,6 @@ slopes30lin <- readr::read_csv(
 ) |>
   dplyr::select(!std.error) |>
   dplyr::rename(
-    # f_datetime = "datetime",
-    # f_conc = "conc",
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",
@@ -154,8 +140,6 @@ slopes60lin <- readr::read_csv(
 ) |>
   dplyr::select(!std.error) |>
   dplyr::rename(
-    # f_datetime = "datetime",
-    # f_conc = "conc",
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",

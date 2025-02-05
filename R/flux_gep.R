@@ -87,11 +87,11 @@ flux_gep <- function(fluxes_df,
     )
 
   fluxes_gep <- fluxes_gep |>
-  rename(
-    f_flux = {{f_flux}},
-    f_datetime = {{datetime_col}},
-    f_par = {{par_col}}
-  ) |>
+    rename(
+      f_flux = {{f_flux}},
+      f_datetime = {{datetime_col}},
+      f_par = {{par_col}}
+    ) |>
     pivot_wider(id_cols = "id",
       names_from = {{type_col}},
       values_from = c("f_flux", "f_datetime", "f_par")

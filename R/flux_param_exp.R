@@ -11,8 +11,8 @@ flux_param_exp <- function(slopes_df,
                            conc_col) {
   param_df <- slopes_df |>
     select(
-      {{conc_col}}, "f_start", "f_fluxid", "f_RMSE", "f_cor_coef", "f_b", "f_cut",
-      "f_quality_flag"
+      {{conc_col}}, "f_start", "f_fluxid", "f_RMSE", "f_cor_coef", "f_b",
+      "f_cut", "f_quality_flag"
     ) |>
     filter(.data$f_cut != "cut") |>
     select(!{{conc_col}}) |>

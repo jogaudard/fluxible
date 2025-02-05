@@ -24,7 +24,7 @@ flux_plot_quadratic <- function(slopes_df,
   slopes_df <- flux_plot_flag(slopes_df, param_df)
 
   slopes_df <- slopes_df |>
-      pivot_longer(
+    pivot_longer(
       cols = c("f_fit", "f_fit_slope"),
       names_to = "linetype",
       values_to = "f_fit"

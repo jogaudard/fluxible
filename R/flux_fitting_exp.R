@@ -34,6 +34,7 @@
 #' @importFrom stats lm optim
 #' @importFrom purrr map
 #' @importFrom utils data
+#' @importFrom broom tidy
 
 
 
@@ -152,7 +153,7 @@ flux_fitting_exp <- function(conc_df,
         map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
       tidy = map(.data$model_Cm, broom::tidy)
     ) |>
-    unnest(tidy) |>
+    unnest("tidy") |>
     filter(.data$term == "f_time_cut") |>
     rename(slope_Cm = "estimate") |>
     unnest({{f_fluxid}}) |>
@@ -186,7 +187,7 @@ flux_fitting_exp <- function(conc_df,
         map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
       tidy = map(.data$model_Cz, broom::tidy)
     ) |>
-    unnest(tidy) |>
+    unnest("tidy") |>
     filter(.data$term == "(Intercept)") |>
     rename(f_Cz = "estimate") |>
     unnest({{f_fluxid}}) |>

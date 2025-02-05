@@ -59,7 +59,7 @@ flux_match <- function(raw_conc,
   msg = rep("has to be numeric", 4))
 
   raw_conc_check <- raw_conc |>
-    select({{datetime_col}} , {{conc_col}})
+    select({{datetime_col}}, {{conc_col}})
 
   field_record_check <- field_record |>
     select({{start_col}})

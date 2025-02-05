@@ -109,7 +109,9 @@ flux_plot <- function(slopes_df,
     }
   }
 
-  if (max(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) > f_ylim_upper) {
+  if (
+    max(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) > f_ylim_upper
+  ) {
     message("Some concentration data points will not be displayed
     because f_ylim_upper is too low.")
   }
@@ -119,7 +121,9 @@ flux_plot <- function(slopes_df,
     because f_ylim_upper is too low.")
   }
 
-  if (min(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) < f_ylim_lower) {
+  if (
+    min(slopes_df[[deparse(substitute(conc_col))]], na.rm = TRUE) < f_ylim_lower
+  ) {
     message("Some concentration data points will not be displayed
     because f_ylim_lower is too high.")
   }
@@ -225,7 +229,8 @@ flux_plot <- function(slopes_df,
 
   if (output == "pdfpages") {
     f_plotname <- paste(f_plotname, ".pdf", sep = "")
-    pdf(f_plotname, paper = "a4r", width = 11.7, height = 8.3, title = f_plotname)
+    pdf(f_plotname, paper = "a4r", width = 11.7,
+        height = 8.3, title = f_plotname)
     pb <- progress_bar$new(
       format =
         "Printing plots in pdf document [:bar] :current/:total (:percent)",

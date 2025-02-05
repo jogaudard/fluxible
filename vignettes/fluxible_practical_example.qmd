@@ -171,7 +171,7 @@ slopes_exp_liahovden_flag_60 <- conc_liahovden |>
     datetime,
     fit_type = "exp",
     end_cut = 60
-    ) |>
+  ) |>
   flux_quality(
     conc,
     force_discard = c(
@@ -204,10 +204,10 @@ The function flux_quality provides a count of the quality flags that can help to
 
 slopes_qua_liahovden_flag_60 <- conc_liahovden |>
   flux_fitting(
-  conc,
-  datetime,
-  fit_type = "quadratic",
-  end_cut = 60
+    conc,
+    datetime,
+    fit_type = "quadratic",
+    end_cut = 60
   ) |>
   flux_quality(
     conc
@@ -235,10 +235,10 @@ Here we will cut 120 seconds at the end, effectively keeping only the first 90 s
 
 slopes_lin_liahovden_flag_120 <- conc_liahovden |>
   flux_fitting(
-  conc,
-  datetime,
-  fit_type = "linear",
-  end_cut = 120
+    conc,
+    datetime,
+    fit_type = "linear",
+    end_cut = 120
   ) |>
   flux_quality(
     conc

@@ -4,7 +4,8 @@ test_that("works for exponential fitting", {
       co2_conc,
       conc,
       datetime,
-    fit_type = "expo") |>
+      fit_type = "expo"
+    ) |>
       select(f_fluxid, f_slope) |>
       distinct()
   )

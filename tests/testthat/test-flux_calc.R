@@ -35,7 +35,7 @@ test_that("averaging works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, PAR, temp_soil)
+    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, PAR, temp_soil)
 
 
   expect_snapshot(output)
@@ -56,7 +56,7 @@ test_that("keeping works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxid, f_flux, turfID, type, f_start, f_slope))
+    dplyr::select(f_fluxid, f_flux, turfID, type, f_start, f_slope))
 })
 
 test_that("keeping and averaging work together", {
@@ -75,7 +75,7 @@ test_that("keeping and averaging work together", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxid, f_flux, turfID, type, f_start, PAR, temp_soil))
+    dplyr::select(f_fluxid, f_flux, turfID, type, f_start, PAR, temp_soil))
 })
 
 test_that("fahrenheit conversion works", {
@@ -93,7 +93,7 @@ test_that("fahrenheit conversion works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup))
+    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup))
 })
 
 test_that("kelvin conversion works", {
@@ -111,7 +111,7 @@ test_that("kelvin conversion works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-  dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup))
+    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup))
 })
 
 
@@ -227,7 +227,7 @@ test_that("calculating fluxes on dataset with cuts", {
       atm_pressure = 1,
       plot_area = 0.0625
     ) |>
-  dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup)
+      dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup)
   )
 })
 
@@ -236,35 +236,20 @@ test_that("volume can be a variable instead of a constant", {
   expect_snapshot(
     flux_calc(
       slopes0_vol,
-    f_slope,
-    datetime,
-    temp_air,
-    volume,
+      f_slope,
+      datetime,
+      temp_air,
+      volume,
       conc_unit = "ppm",
       flux_unit = "mmol",
       tube_volume = 0.075,
       atm_pressure = 1,
       plot_area = 0.0625
     ) |>
-  dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup)
+      dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup)
   )
 })
 
-# test_that("volume can be a variable instead of a constant (volume)", {
-#   expect_snapshot(
-#     flux_calc(
-#       slopes0_vol_tube,
-#       slope_col = "f_slope",
-#       conc_unit = "ppm",
-#       flux_unit = "mmol",
-#       chamber_volume = "volume",
-#       tube_volume = "tube_vol",
-#       atm_pressure = 1,
-#       plot_area = 0.0625
-#     ) |>
-#       select(!c(chamber_volume, tube_volume))
-#   )
-# })
 
 test_that("Fluxible workflow works from start to finish", {
   conc_test <- flux_match(

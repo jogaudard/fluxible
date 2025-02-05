@@ -38,7 +38,7 @@ flux_flag_count <- function(slopes_df,
                               "force_ok"
                             ),
                             cut_arg = "cut") {
-  
+
   flag_df <- slopes_df |>
     filter({{f_cut}} != cut_arg) |>
     mutate(
