@@ -128,7 +128,48 @@ str(raw_conc)
 # that is shifting the row reading
 
 list <- readLines("ex_data/011023001.#01") # we make a list of each line of our file
-list <- list[-1] # removing the first row with colnames
+list <- list[-1] # removing the first element with colnames
 
+# we first deal with the elements where we have those environmental data that were measured every 10 seconds
+listenv <- list[seq(1, length(list), 10)]
+env_df <- read.csv(
+  textConnection(listenv), # we read the list into a csv
+  header = FALSE, # there is no header
+  colClasses = rep("character", 14) # if read as integer, "06" becomes "6", and when putting columns together 400.06 will become 400.6
+  )
 
+env_df <- env_df |>
+  mutate(
+    datetime = dmy_hms(V1),
+    temp_air = paste(
+      V7, # V7 contains the left side of the decimal point
+      V8, # V8 the right side
+      sep = "." # this time we put it in american format
+    ),
+    temp_air = as.double(temp_air), # now we can make it a double
+    temp_soil = as.double(paste(V9, V10, sep = ".")),
+    co2_conc = as.double(paste(V11, V12, sep = ".")),
+    PAR = as.double(paste(V13, V14, sep = "."))
+  ) |>
+  select(datetime, temp_air, temp_soil, co2_conc, PAR)
+
+# now we do the same with the other elements of the list
+list_other <- list[-seq(1, length(list), 10)]
+other_df <- read.csv(
+  textConnection(list_other), # we read the list into a csv
+  header = FALSE, # there is no header
+  colClasses = rep("character", 10) # if read as integer, "06" becomes "6", and when putting columns together 400.06 will become 400.6
+  )
+
+other_df <- other_df  |>
+  mutate(
+    datetime = dmy_hms(V1),
+    co2_conc = as.double(paste(V8, V9, sep = "."))
+  ) |>
+  select(datetime, co2_conc)
+
+# and finally we do a full join with both
+conc_df <- full_join(env_df, other_df, by = c("datetime", "co2_conc")) |>
+  arrange(datetime) # does not really matter, but I like my dfs in chronological order
+head(conc_df)
 ```
