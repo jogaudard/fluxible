@@ -89,7 +89,47 @@ head(raw_conc) # Et voila! (note that we have not "lost" the decimals of co2_con
 
 Note that it is also possible to use the 'col_names' and 'col_select' argument directly in 'read_delim', but it has a higher risk of errors.
 
+```{r}
+raw_conc <- read_delim(
+  "ex_data/26124054001.#00",
+  delim = ",", # our file is comma separated
+  skip = 26, # the first 25 rows are logger informations that we do not want to keep, and we remove the header
+  col_select = c(1, 2, 6),
+  col_names = c("date", "time", rep(NA, 3), "co2_conc", NA)
+)
+head(raw_conc)
+```
+
 # Importing multiple files
+
+Quite often a field campaign will result in several files, because the logger was restarted or other events.
+In this example we will read all the files in "ex_data/" that contains "CO2" in their names.
+
+```{r}
+library(fs)
+
+raw_conc <- dir_ls( #listing all the files
+  "ex_data", # at location "ex_data"
+  regexp = "*CO2*" # that contains "CO2" in their name
+  ) |>
+  map_dfr(
+    read_csv, # we map read_csv on all the files
+    na = c("#N/A", "Over") # #N/A and Over should be treated as NA
+    ) |>
+  rename(
+    conc = "CO2 (ppm)", # rename the column to get something more practical without space
+    datetime = "Date/Time"
+    ) |>
+  mutate(
+    datetime = dmy_hms(datetime) # this time the date and time were already in the same column, but as character
+    ) |>
+  select(datetime, conc)
+
+head(raw_conc)
+```
+
+
+# The one file per flux approach
 
 
 # The tricky one
@@ -124,8 +164,16 @@ raw_conc <- read_csv(
 )
 
 str(raw_conc)
-# the problem now is that CO2 concentration was measured every second (with a comma!), while other variable were measured every 10 seconds
-# that is shifting the row reading
+```
+
+The problem now is that CO2 concentration was measured every second (with a comma!), while other variable were measured every 10 seconds.
+That means every 10th row has 14 comma separated elements, while the others have only 10.
+Uhhhhhhhhh
+
+At this point, you might want to get the field computer out again and reprocess your raw file with a european csv output, or anything that is not comma separated.
+But for the sake of it, let's solve that issue in R.
+
+```{r}
 
 list <- readLines("ex_data/011023001.#01") # we make a list of each line of our file
 list <- list[-1] # removing the first element with colnames
@@ -173,3 +221,6 @@ conc_df <- full_join(env_df, other_df, by = c("datetime", "co2_conc")) |>
   arrange(datetime) # does not really matter, but I like my dfs in chronological order
 head(conc_df)
 ```
+
+That was a weird mix of tidyverse and base R, and I would definitely try to do some plots to check if the data are making sense.
+But it worked...
