@@ -76,7 +76,7 @@ flux_plot_exp_poster <- function(slopes_df,
   f_plot <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     geom_point(
-      aes(y = .data$f_conc, color = .data$f_quality_flag),
+      aes(y = .data$conc, color = .data$f_quality_flag),
       size = ((size_point)),
       na.rm = TRUE
     ) +
@@ -330,7 +330,7 @@ CO2_INCLINE_2022 <- flux_match(
 ) |>
 filter(f_fluxid %in% c(408, 255)) |>
 # filter(f_fluxid == 408) |>
-select(f_datetime, f_conc, f_fluxid, f_start, f_end)
+select(f_datetime, conc, f_fluxid, f_start, f_end)
 
 
 # str(CO2_INCLINE_2022)
@@ -423,7 +423,7 @@ conc2020 <- flux_match(
     # )
     ) |>
   select(
-    f_datetime, f_conc, f_fluxid, f_start, f_end
+    f_datetime, conc, f_fluxid, f_start, f_end
   )
 
  str(conc2020)
@@ -439,7 +439,7 @@ slope2020_flag <- flux_quality(
 )
 
 conc_poster <- bind_rows(slope2020_flag, slopes_flag2022) |>
-  select(f_datetime, f_conc, f_fluxid, f_quality_flag, f_start, f_RMSE, f_cor_coef, f_b, f_cut, f_fit, f_fit_slope)
+  select(f_datetime, conc, f_fluxid, f_quality_flag, f_start, f_RMSE, f_cor_coef, f_b, f_cut, f_fit, f_fit_slope)
 
 conc_poster |>
   # dplyr::filter(f_fluxid %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
@@ -461,5 +461,7 @@ conc_poster |>
       )
 
 # just to keep the data
+
+
 
 usethis::use_data(conc_poster, overwrite = TRUE)

@@ -7,7 +7,9 @@ co2_conc <- readr::read_csv(
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",
-    f_n_conc = "n_conc"
+    f_n_conc = "n_conc",
+    f_ratio = "ratio",
+    f_flag_match = "flag"
   ) |>
   dplyr::arrange(datetime)
 usethis::use_data(co2_conc, overwrite = TRUE)
@@ -27,7 +29,9 @@ co2_conc_missing <- readr::read_csv(
     f_start = "start",
     f_fluxid = "fluxID",
     f_end = "end",
-    f_n_conc = "n_conc"
+    f_n_conc = "n_conc",
+    f_ratio = "ratio",
+    f_flag_match = "flag"
   )
 usethis::use_data(co2_conc_missing, overwrite = TRUE)
 
@@ -47,8 +51,11 @@ slopes0 <- readr::read_csv("data-raw/slopes0.csv") |>
     f_slope = "slope_tz",
     f_fit = "fit",
     f_fit_slope = "fit_slope",
-    f_start_z = "start_z"
-  )
+    f_start_z = "start_z",
+    f_flag_match = "flag"
+  ) |>
+  select(!c(Cm_est, a_est, b_est, tz_est, time_diff,
+            n_conc, ratio))
 attr(slopes0, "fit_type") <- "exponential"
 usethis::use_data(slopes0, overwrite = TRUE)
 
@@ -67,8 +74,11 @@ slopes30 <- readr::read_csv("data-raw/slopes30.csv") |>
     f_slope = "slope_tz",
     f_fit = "fit",
     f_fit_slope = "fit_slope",
-    f_start_z = "start_z"
-  )
+    f_start_z = "start_z",
+    f_flag_match = "flag"
+  ) |>
+  select(!c(Cm_est, a_est, b_est, tz_est, time_diff,
+            n_conc, ratio))
 attr(slopes30, "fit_type") <- "exponential"
 
 usethis::use_data(slopes30, overwrite = TRUE)
@@ -85,11 +95,14 @@ slopes60 <- readr::read_csv("data-raw/slopes60.csv") |>
     f_a = "a",
     f_b = "b",
     f_tz = "tz",
-    f_slope_tz = "slope_tz",
+    f_slope = "slope_tz",
     f_fit = "fit",
     f_fit_slope = "fit_slope",
-    f_start_z = "start_z"
-  )
+    f_start_z = "start_z",
+    f_flag_match = "flag"
+  ) |>
+  select(!c(Cm_est, a_est, b_est, tz_est, time_diff,
+            n_conc, ratio))
 usethis::use_data(slopes60, overwrite = TRUE)
 
 # for fitting lin
@@ -109,8 +122,10 @@ slopes0lin <- readr::read_csv(
     f_rsquared = "r.squared",
     f_adj_rsquared = "adj.r.squared",
     f_slope = "slope",
-    f_intercept = "intercept"
-  )
+    f_intercept = "intercept",
+    f_flag_match = "flag"
+  ) |>
+  select(!c(n_conc, ratio))
 usethis::use_data(slopes0lin, overwrite = TRUE)
 
 slopes30lin <- readr::read_csv(
@@ -129,8 +144,10 @@ slopes30lin <- readr::read_csv(
     f_rsquared = "r.squared",
     f_adj_rsquared = "adj.r.squared",
     f_slope = "slope",
-    f_intercept = "intercept"
-  )
+    f_intercept = "intercept",
+    f_flag_match = "flag"
+  ) |>
+  select(!c(n_conc, ratio))
 attr(slopes30lin, "fit_type") <- "linear"
 usethis::use_data(slopes30lin, overwrite = TRUE)
 
@@ -150,8 +167,10 @@ slopes60lin <- readr::read_csv(
     f_rsquared = "r.squared",
     f_adj_rsquared = "adj.r.squared",
     f_slope = "slope",
-    f_intercept = "intercept"
-  )
+    f_intercept = "intercept",
+    f_flag_match = "flag"
+  ) |>
+  select(!c(n_conc, ratio))
 usethis::use_data(slopes60lin, overwrite = TRUE)
 
 # for fluc calc
@@ -162,7 +181,9 @@ co2_fluxes <- readr::read_csv(
   dplyr::rename(
     f_start = "start",
     f_fluxid = "fluxID",
-    f_slope_tz = "slope_tz"
+    f_slope_tz = "slope_tz",
+    f_temp_air_ave = "temp_air_ave",
+    f_flux = "flux"
   )
 usethis::use_data(co2_fluxes, overwrite = TRUE)
 

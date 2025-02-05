@@ -4,7 +4,7 @@ test_that("GEP calculation", {
       type,
       f_start,
       PAR,
-      flux,
+      f_flux,
       id_cols = "turfID",
       cols_keep = c("temp_soil")
     )

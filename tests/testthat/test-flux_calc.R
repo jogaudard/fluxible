@@ -14,7 +14,7 @@ test_that("flux calculation is correct", {
 
   expect_equal(
     output$f_flux,
-    co2_fluxes$flux,
+    co2_fluxes$f_flux,
     tolerance = 0.001
   )
 })

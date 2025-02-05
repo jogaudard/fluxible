@@ -2,7 +2,7 @@
 #'
 #' Slopes of C(t) for each flux without cut.
 #'
-#' @format A tibble with 1251 rows and 28 variables
+#' @format A tibble with 1251 rows and 24 variables
 #' \describe{
 #' \item{datetime}{Datetime at which CO2 concentration was recorded.}
 #' \item{temp_air}{Air temperature inside the flux chamber in Celsius.}
@@ -13,9 +13,10 @@
 #' \item{turfID}{Unique ID of the turf in which the measurement took place.}
 #' \item{type}{Type of measurement: ecosystems respiration (ER)
 #' or net ecosystem exchange (NEE).}
-#' \item{start}{Datetime at which the measurement was started.}
-#' \item{end}{Datetime at which the measurement ended.}
-#' \item{fluxID}{Unique ID for each flux.}
+#' \item{f_start}{Datetime at which the measurement was started.}
+#' \item{f_end}{Datetime at which the measurement ended.}
+#' \item{f_fluxid}{Unique ID for each flux.}
+#' \item{f_flag_match}{Flags from flux_match.}
 #' \item{n_conc}{Number of data point per flux.}
 #' \item{ratio}{Ratio of n_conc over length of the measurement (in seconds).}
 #' \item{flag}{Data quality flags.}

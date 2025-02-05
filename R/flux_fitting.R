@@ -162,6 +162,9 @@ flux_fitting <- function(conc_df,
     )
   }
 
+  conc_fitting <- conc_fitting |>
+    select(!"f_n_conc")
+
   attr(conc_fitting, "fit_type") <- fit_type
 
   conc_fitting

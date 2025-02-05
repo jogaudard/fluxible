@@ -8,7 +8,7 @@
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
-      # A tibble: 1,251 x 21
+      # A tibble: 1,251 x 20
          date_time           temp_air temp_soil   co2   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -22,8 +22,8 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 14 more variables: f_start <dttm>, finish <dttm>, f_fluxid <fct>,
-      #   f_n_conc <int>, ratio <dbl>, flag <chr>, f_time <dbl>, f_cut <fct>,
+      # i 13 more variables: f_start <dttm>, finish <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
       #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
       #   f_pvalue <dbl>, f_fit <dbl>
 

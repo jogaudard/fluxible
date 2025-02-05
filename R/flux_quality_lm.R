@@ -92,7 +92,8 @@ flux_quality_lm <- function(slopes_df,
         .data$f_quality_flag == "zero" ~ 0
       ),
       .by = c({{f_fluxid}}, {{f_cut}})
-    )
+    ) |>
+    select(!c("f_n_conc", "f_flag_ratio", "f_start_error"))
 
   slopes_df
 }

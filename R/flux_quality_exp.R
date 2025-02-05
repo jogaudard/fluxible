@@ -121,7 +121,9 @@ flux_quality_exp <- function(slopes_df,
         .data$f_quality_flag == "zero" ~ 0,
         .data$f_quality_flag == "ok" ~ {{f_slope}}
       )
-    )
+    ) |>
+    select(!c("f_n_conc", "f_flag_ratio", "f_start_error",
+              "f_fit_quality", "f_correlation"))
 
   quality_flag
 }
