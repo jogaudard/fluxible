@@ -7,12 +7,12 @@
 flux_quality_exp(
   slopes_df,
   conc_col,
-  fluxid_col,
-  slope_col,
-  time_col,
-  fit_col,
-  cut_col,
-  b_col,
+  f_fluxid,
+  f_slope,
+  f_time,
+  f_fit,
+  f_cut,
+  f_b,
   force_discard,
   force_ok,
   rmse_threshold,
@@ -26,7 +26,18 @@ and parameters of the exponential expression}
 
 \item{conc_col}{column with gas concentration}
 
-\item{b_col}{column containing the b parameter of the exponential expression}
+\item{f_fluxid}{column of ID for each measurement}
+
+\item{f_slope}{column containing the slope of each flux
+(as calculated by the flux_fitting function)}
+
+\item{f_time}{column containing the time of each measurement in seconds}
+
+\item{f_fit}{column containing the modeled data}
+
+\item{f_cut}{column containing the cutting information}
+
+\item{f_b}{column containing the b parameter of the exponential expression}
 
 \item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}

@@ -7,21 +7,15 @@
 flux_quality_lm(
   slopes_df,
   conc_col,
-  fluxid_col,
-  slope_col,
-  time_col,
-  cut_col,
-  pvalue_col,
-  rsquared_col,
-  force_discard = c(),
-  force_ok = c(),
-  ratio_threshold = 0,
-  fit_type = c(),
-  ambient_conc = 421,
-  error = 100,
-  pvalue_threshold = 0.3,
-  rsquared_threshold = 0.7,
-  cut_arg = "cut",
+  f_fluxid,
+  f_slope,
+  f_cut,
+  f_pvalue,
+  f_rsquared,
+  force_discard,
+  force_ok,
+  pvalue_threshold,
+  rsquared_threshold,
   name_df
 )
 }
@@ -30,9 +24,16 @@ flux_quality_lm(
 
 \item{conc_col}{column with gas concentration}
 
-\item{pvalue_col}{column containing the p-value of each flux}
+\item{f_fluxid}{column of ID for each measurement}
 
-\item{rsquared_col}{column containing the r squared to be used for
+\item{f_slope}{column containing the slope of each flux
+(as calculated by the flux_fitting function)}
+
+\item{f_cut}{column containing the cutting information}
+
+\item{f_pvalue}{column containing the p-value of each flux}
+
+\item{f_rsquared}{column containing the r squared to be used for
 the quality assessment}
 
 \item{force_discard}{vector of fluxIDs that should be discarded
@@ -46,6 +47,8 @@ of gas concentration over time is considered not significant (user decided)}
 
 \item{rsquared_threshold}{threshold of r squared value below which
 the linear model is considered an unsatisfactory fit}
+
+\item{name_df}{name of slopes_df (used for error message)}
 }
 \value{
 same dataframe with added flag and corrected slopes columns
