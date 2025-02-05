@@ -4,7 +4,7 @@
 \alias{flux_fun_check}
 \title{checking that arguments and columns are in the correct class}
 \usage{
-flux_fun_check(args, fn, msg, origdf = NA)
+flux_fun_check(args, fn, msg, name_df = NA)
 }
 \arguments{
 \item{args}{list of arguments or dataframe to check}
@@ -13,7 +13,7 @@ flux_fun_check(args, fn, msg, origdf = NA)
 
 \item{msg}{list of messages to return in case of failed check}
 
-\item{origdf}{in case args is a df with selected columns to check origdf
+\item{name_df}{in case args is a df with selected columns to check origdf
 is the orginal df to take the name from for a more obvious error message}
 }
 \description{

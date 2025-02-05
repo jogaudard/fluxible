@@ -37,7 +37,7 @@ flux_quality_quadratic <- function(slopes_df,
     )
 
   quality_par_start <- slopes_df |>
-    group_by(.data$f_fluxID) |>
+    group_by(.data$f_fluxid) |>
     nest() |>
     rowwise() |>
     summarise(
@@ -47,14 +47,14 @@ flux_quality_quadratic <- function(slopes_df,
         TRUE ~ "ok"
       )
     ) |>
-    unnest("f_fluxID") |>
+    unnest("f_fluxid") |>
     ungroup()
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start, by = "f_fluxID") |>
+    left_join(quality_par_start, by = "f_fluxid") |>
     mutate(
       f_quality_flag = case_when(
-        .data$f_fluxID %in% ((force_discard)) ~ "force_discard",
+        .data$f_fluxid %in% ((force_discard)) ~ "force_discard",
         .data$f_rsquared >= ((rsquared_threshold)) ~ "ok",
         .data$f_rsquared < ((rsquared_threshold)) &
           .data$f_pvalue >= ((pvalue_threshold)) ~ "discard",
@@ -62,9 +62,9 @@ flux_quality_quadratic <- function(slopes_df,
           .data$f_pvalue < ((pvalue_threshold)) ~ "zero"
       ),
       f_slope_corr = case_when(
-        .data$f_quality_flag == "force_discard" ~ NA_real_,
+        .data$f_quality_flag == "force_discard" ~ NA,
         .data$f_quality_flag == "ok" ~ .data$f_slope,
-        .data$f_quality_flag == "discard" ~ NA_real_,
+        .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0
       )
     )

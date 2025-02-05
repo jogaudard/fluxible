@@ -49,13 +49,20 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 ``` r
 library(fluxible)
 
-conc <- flux_match(
+conc_df <- flux_match(
   co2_df_short,
-  record_short
+  record_short,
+  datetime,
+  start,
+  conc,
+  startcrop = 10,
+  measurement_length = 220
 )
 
-slopes <- flux_fitting(
+slopes_df <- flux_fitting(
+  conc_df,
   conc,
+  datetime,
   fit_type = "exp",
   end_cut = 30
 )
@@ -65,8 +72,9 @@ slopes <- flux_fitting(
 #> Calculating fits and slopes...
 #> Done.
 
-slopes_flag <- flux_quality(
-  slopes
+slopes_flag_df <- flux_quality(
+  slopes_df,
+  conc
 )
 #> 
 #>  Total number of measurements: 6
@@ -80,7 +88,9 @@ slopes_flag <- flux_quality(
 #>  force_ok     0   0 %
 
 flux_plot(
-  slopes_flag,
+  slopes_flag_df,
+  conc,
+  datetime,
   f_ylim_lower = 390,
   f_ylim_upper = 650,
   facet_wrap_args = list(
@@ -96,15 +106,19 @@ flux_plot(
 
 ``` r
 
-fluxes <- flux_calc(
-  slopes_flag,
-  slope_col = "f_slope_corr",
+fluxes_df <- flux_calc(
+  slopes_flag_df,
+  f_slope_corr,
+  datetime,
+  temp_air,
   conc_unit = "ppm",
   flux_unit = "mmol",
   cols_keep = c("turfID", "type"),
   cols_ave = c("temp_soil", "PAR"),
-  cut_col = "f_cut",
-  keep_arg = "keep"
+  chamber_volume = 24.5,
+  tube_volume = 0.075,
+  atm_pressure = 1,
+  plot_area = 0.0625
 )
 #> Cutting data according to 'keep_arg'...
 #> Averaging air temperature for each flux...
@@ -116,42 +130,39 @@ fluxes <- flux_calc(
 #> Fluxes are in mmol/m2/h
 
 fluxes_gep <- flux_gep(
-  fluxes,
+  fluxes_df,
+  type,
+  PAR,
+  datetime,
   id_cols = "turfID",
-  flux_col = "flux",
-  type_col = "type",
-  datetime_col = "datetime",
-  par_col = "PAR",
   cols_keep = c("temp_soil")
 )
-#> Warning in flux_gep(fluxes, id_cols = "turfID", flux_col = "flux", type_col = "type", : 
+#> Warning in flux_gep(fluxes_df, type, PAR, datetime, id_cols = "turfID", : 
 #>  NEE missing for measurement turfID: 156 AN2C 156
 
 fluxes_gep
-#> # A tibble: 9 × 15
-#>   datetime            turfID     PAR type   flux f_fluxID temp_soil f_slope_calc
-#>   <dttm>              <chr>    <dbl> <chr> <dbl> <fct>        <dbl>        <dbl>
-#> 1 2022-07-28 23:47:22 74 WN2C…  2.19 GEP    10.3 <NA>          10.7       NA    
-#> 2 2022-07-28 23:59:32 109 AN3…  1.87 GEP   -27.2 <NA>          10.8       NA    
-#> 3 2022-07-29 00:06:35 29 WN3C…  1.61 GEP    NA   <NA>          12.2       NA    
-#> 4 2022-07-28 23:43:35 156 AN2…  1.88 ER     47.7 1             10.8        0.775
-#> 5 2022-07-28 23:47:22 74 WN2C…  2.19 NEE    31.0 2             10.7        0.504
-#> 6 2022-07-28 23:52:10 74 WN2C…  2.04 ER     20.7 3             10.7        0.337
-#> 7 2022-07-28 23:59:32 109 AN3…  1.87 NEE    41.5 4             10.8        0.676
-#> 8 2022-07-29 00:03:10 109 AN3…  1.69 ER     68.7 5             10.5        1.12 
-#> 9 2022-07-29 00:06:35 29 WN3C…  1.61 NEE    26.1 6             12.2        0.425
-#> # ℹ 7 more variables: chamber_volume <dbl>, tube_volume <dbl>,
-#> #   atm_pressure <dbl>, plot_area <dbl>, temp_air_ave <dbl>,
-#> #   volume_setup <dbl>, model <chr>
+#> # A tibble: 9 × 6
+#>     PAR datetime            type  f_flux temp_soil turfID      
+#>   <dbl> <dttm>              <chr>  <dbl>     <dbl> <chr>       
+#> 1  2.19 2022-07-28 23:47:22 GEP     10.3      10.7 74 WN2C 155 
+#> 2  1.87 2022-07-28 23:59:32 GEP    -27.2      10.8 109 AN3C 109
+#> 3  1.61 2022-07-29 00:06:35 GEP     NA        12.2 29 WN3C 106 
+#> 4  1.88 2022-07-28 23:43:35 ER      47.7      10.8 156 AN2C 156
+#> 5  2.19 2022-07-28 23:47:22 NEE     31.0      10.7 74 WN2C 155 
+#> 6  2.04 2022-07-28 23:52:10 ER      20.7      10.7 74 WN2C 155 
+#> 7  1.87 2022-07-28 23:59:32 NEE     41.5      10.8 109 AN3C 109
+#> 8  1.69 2022-07-29 00:03:10 ER      68.7      10.5 109 AN3C 109
+#> 9  1.61 2022-07-29 00:06:35 NEE     26.1      12.2 29 WN3C 106
 ```
 
 ## Further developments
 
-### Flux tent
+### Segmentation tool
 
-Currently fluxible is thought for setups using a flux chamber. Flux
-chambers can be assumed to have no leak. As flux tents tend to leak, a
-different fitting function is needed to account for potential leaks.
+We are working on a tool to automatically select the window of the
+measurement on which to fit a model. This selection will be based on
+environmental variable, such as photosythetically active radiation
+(PAR), measured simultaneously.
 
 ### More fits
 

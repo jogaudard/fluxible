@@ -11,10 +11,16 @@ pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
 
 usethis::use_vignette("two-gases")
+devtools::build_vignettes()
 
 usethis::use_readme_rmd()
 devtools::build_readme()
 usethis::use_package_doc()
+
+#to detect unused arguments
+args()
+
+
 
 devtools::test()
 devtools::document()

@@ -1,15 +1,16 @@
 test_that("GEP calculation", {
   expect_snapshot(
     flux_gep(co2_fluxes,
+      type,
+      f_start,
+      PAR,
+      f_flux,
       id_cols = "turfID",
-      flux_col = "flux",
-      type_col = "type",
-      datetime_col = "f_start",
-      par_col = "PAR",
       cols_keep = c("temp_soil")
     )
   )
 })
+
 
 test_that("GEP calculation works with several id cols", {
   campaign <- c(1, 1, 2, 2, 3, 3)
@@ -37,11 +38,11 @@ test_that("GEP calculation works with several id cols", {
 
   expect_snapshot(
     flux_gep(fluxes,
-      id_cols = c("turfid", "campaign"),
-      flux_col = "flux",
-      type_col = "type",
-      datetime_col = "datetime",
-      par_col = "par"
+      type,
+      datetime,
+      par,
+      flux,
+      id_cols = c("turfid", "campaign")
     )
   )
 })
@@ -75,11 +76,11 @@ test_that("missing NEE and several id cols", {
 
   expect_snapshot(
     flux_gep(fluxes,
-      id_cols = c("turfid", "campaign"),
-      flux_col = "flux",
-      type_col = "type",
-      datetime_col = "datetime",
-      par_col = "par"
+      type,
+      datetime,
+      par,
+      flux,
+      id_cols = c("turfid", "campaign")
     )
   )
 })
@@ -110,11 +111,11 @@ test_that("GEP error message for non numeric flux", {
 
   expect_error(
     flux_gep(fluxes,
-      id_cols = c("turfid", "campaign"),
-      flux_col = "flux",
-      type_col = "type",
-      datetime_col = "datetime",
-      par_col = "par"
+      type,
+      datetime,
+      par,
+      flux,
+      id_cols = c("turfid", "campaign")
     )
   )
 })

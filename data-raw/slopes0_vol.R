@@ -2,12 +2,12 @@
 slopes0_vol <- slopes0 |>
   mutate(
     volume = case_when(
-      f_fluxID == 1 ~ 18,
-      f_fluxID == 2 ~ 28,
-      f_fluxID == 3 ~ 20,
-      f_fluxID == 4 ~ 24,
-      f_fluxID == 5 ~ 4,
-      f_fluxID == 6 ~ 35
+      f_fluxid == 1 ~ 18,
+      f_fluxid == 2 ~ 28,
+      f_fluxid == 3 ~ 20,
+      f_fluxid == 4 ~ 24,
+      f_fluxid == 5 ~ 4,
+      f_fluxid == 6 ~ 35
     )
   )
 

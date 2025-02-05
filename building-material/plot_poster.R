@@ -76,7 +76,7 @@ flux_plot_exp_poster <- function(slopes_df,
   f_plot <- slopes_df |>
     ggplot(aes(.data$f_datetime)) +
     geom_point(
-      aes(y = .data$f_conc, color = .data$f_quality_flag),
+      aes(y = .data$conc, color = .data$f_quality_flag),
       size = ((size_point)),
       na.rm = TRUE
     ) +
@@ -115,7 +115,7 @@ flux_plot_exp_poster <- function(slopes_df,
     ) +
     ylim(((f_ylim_lower)), ((f_ylim_upper))) +
     do.call(facet_wrap_paginate,
-      args = c(facets = ~f_fluxID, ((facet_wrap_args)))
+      args = c(facets = ~f_fluxid, ((facet_wrap_args)))
     ) +
     labs(
       title = "Fluxes quality assessment",
@@ -146,7 +146,7 @@ flux_plot_exp_poster <- function(slopes_df,
       print(f_plot +
         do.call(facet_wrap_paginate,
           args = c(
-            facets = ~f_fluxID,
+            facets = ~f_fluxid,
             page = i,
             ((facet_wrap_args))
           )
@@ -159,14 +159,14 @@ flux_plot_exp_poster <- function(slopes_df,
 
 
 slopes_exp_liahovden |>
-  dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
+  dplyr::filter(f_fluxid %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
   #   mutate(
-  #       f_fluxID = case_when(
-  #           f_fluxID == 28 ~ "A",
-  #           f_fluxID == 51 ~ "B",
-  #           f_fluxID == 100 ~ "C"
+  #       f_fluxid = case_when(
+  #           f_fluxid == 28 ~ "A",
+  #           f_fluxid == 51 ~ "B",
+  #           f_fluxid == 100 ~ "C"
   #       ),
-  #       f_fluxID = factor(f_fluxID, levels = c("A", "B", "C"))
+  #       f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
   #   ) |>
     # view()
     flux_plot_exp_poster(
@@ -238,14 +238,14 @@ slopes_flag <- flux_quality(
 )
 
 slopes_flag |>
-  # dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
+  # dplyr::filter(f_fluxid %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
   #   mutate(
-  #       f_fluxID = case_when(
-  #           f_fluxID == 28 ~ "A",
-  #           f_fluxID == 51 ~ "B",
-  #           f_fluxID == 100 ~ "C"
+  #       f_fluxid = case_when(
+  #           f_fluxid == 28 ~ "A",
+  #           f_fluxid == 51 ~ "B",
+  #           f_fluxid == 100 ~ "C"
   #       ),
-  #       f_fluxID = factor(f_fluxID, levels = c("A", "B", "C"))
+  #       f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
   #   ) |>
   flux_plot_exp_poster(
       linewidth = 0.8,
@@ -328,9 +328,9 @@ CO2_INCLINE_2022 <- flux_match(
   measurement_length = 180,
   conc_col = "CO2"
 ) |>
-filter(f_fluxID %in% c(408, 255)) |>
-# filter(f_fluxID == 408) |>
-select(f_datetime, f_conc, f_fluxID, f_start, f_end)
+filter(f_fluxid %in% c(408, 255)) |>
+# filter(f_fluxid == 408) |>
+select(f_datetime, conc, f_fluxid, f_start, f_end)
 
 
 # str(CO2_INCLINE_2022)
@@ -342,14 +342,14 @@ slopes_flag2022 <- flux_quality(
 )
 
 slopes_flag2022 |>
-  # dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
+  # dplyr::filter(f_fluxid %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
   #   mutate(
-  #       f_fluxID = case_when(
-  #           f_fluxID == 28 ~ "A",
-  #           f_fluxID == 51 ~ "B",
-  #           f_fluxID == 100 ~ "C"
+  #       f_fluxid = case_when(
+  #           f_fluxid == 28 ~ "A",
+  #           f_fluxid == 51 ~ "B",
+  #           f_fluxid == 100 ~ "C"
   #       ),
-  #       f_fluxID = factor(f_fluxID, levels = c("A", "B", "C"))
+  #       f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
   #   ) |>
   flux_plot_exp_poster(
       linewidth = 0.8,
@@ -406,8 +406,8 @@ conc2020 <- flux_match(
   conc_col = "CO2"
 ) |>
   filter(
-    f_fluxID == 37
-    # f_fluxID %in% c(
+    f_fluxid == 37
+    # f_fluxid %in% c(
       # 37,
       # 688,
       # 471,
@@ -423,7 +423,7 @@ conc2020 <- flux_match(
     # )
     ) |>
   select(
-    f_datetime, f_conc, f_fluxID, f_start, f_end
+    f_datetime, conc, f_fluxid, f_start, f_end
   )
 
  str(conc2020)
@@ -439,17 +439,17 @@ slope2020_flag <- flux_quality(
 )
 
 conc_poster <- bind_rows(slope2020_flag, slopes_flag2022) |>
-  select(f_datetime, f_conc, f_fluxID, f_quality_flag, f_start, f_RMSE, f_cor_coef, f_b, f_cut, f_fit, f_fit_slope)
+  select(f_datetime, conc, f_fluxid, f_quality_flag, f_start, f_RMSE, f_cor_coef, f_b, f_cut, f_fit, f_fit_slope)
 
 conc_poster |>
-  # dplyr::filter(f_fluxID %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
+  # dplyr::filter(f_fluxid %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
     mutate(
-        f_fluxID = case_when(
-            f_fluxID == 37 ~ "A",
-            f_fluxID == 255 ~ "B",
-            f_fluxID == 408 ~ "C"
+        f_fluxid = case_when(
+            f_fluxid == 37 ~ "A",
+            f_fluxid == 255 ~ "B",
+            f_fluxid == 408 ~ "C"
         ),
-        f_fluxID = factor(f_fluxID, levels = c("A", "B", "C"))
+        f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
     ) |>
   flux_plot_exp_poster(
       linewidth = 0.8,
@@ -461,5 +461,7 @@ conc_poster |>
       )
 
 # just to keep the data
+
+
 
 usethis::use_data(conc_poster, overwrite = TRUE)
