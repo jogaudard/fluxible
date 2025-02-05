@@ -4,11 +4,11 @@
 #'
 #' @format A tibble with 6 rows and 11 variables
 #' \describe{
-#' \item{f_fluxID}{Unique ID for each flux.}
+#' \item{f_fluxid}{Unique ID for each flux.}
 #' \item{f_slope_tz}{Slope of C(t) at t zero.}
-#' \item{temp_air_ave}{Air temperature inside the flux chamber in Celsius
+#' \item{f_temp_air_ave}{Air temperature inside the flux chamber in Celsius
 #' averaged over the flux measurement.}
-#' \item{flux}{CO2 flux in mmol/sqm/hour.}
+#' \item{f_flux}{CO2 flux in mmol/sqm/hour.}
 #' \item{PAR}{Photosynthetically active radiation inside the chamber in
 #' micromol/s/sqm averaged over the flux measurement.}
 #' \item{temp_soil}{Ground temperature inside the flux chamber in Celsius

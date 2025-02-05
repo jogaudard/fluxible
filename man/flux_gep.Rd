@@ -6,11 +6,11 @@
 \usage{
 flux_gep(
   fluxes_df,
-  id_cols,
-  flux_col,
   type_col,
   datetime_col,
   par_col,
+  f_flux = f_flux,
+  id_cols,
   nee_arg = "NEE",
   er_arg = "ER",
   cols_keep = c()
@@ -19,15 +19,15 @@ flux_gep(
 \arguments{
 \item{fluxes_df}{a dataframe containing NEE and ER}
 
-\item{id_cols}{columns used to identify each pair of ER and NEE}
-
-\item{flux_col}{column containing flux values}
-
 \item{type_col}{column containing type of flux (NEE or ER)}
 
 \item{datetime_col}{column containing start of measurement as datetime}
 
 \item{par_col}{column containing PAR values for each flux}
+
+\item{f_flux}{column containing flux values}
+
+\item{id_cols}{columns used to identify each pair of ER and NEE}
 
 \item{nee_arg}{argument designating NEE fluxes in type column}
 
@@ -48,7 +48,6 @@ measurement. If it is missing, GEP will be dropped for that pair.
 }
 \examples{
 data(co2_fluxes)
-flux_gep(co2_fluxes, id_cols = "turfID", flux_col = "flux",
-type_col = "type", datetime_col = "f_start", par_col = "PAR",
+flux_gep(co2_fluxes, type, f_start, PAR, f_flux, id_cols = "turfID",
 cols_keep = c("temp_soil"))
 }
