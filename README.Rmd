@@ -29,8 +29,6 @@ The package runs the calculations automatically, without prompting the user to t
 This makes it easy to use with large flux datasets and to integrate into a reproducible workflow.
 Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.
 
-For a quick overview of how the package works, you can look at [the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) that was presented at the European Geosciences Union Annual Meeting 2024.
-
 ## Installation
 
 Fluxible can be installed from CRAN.
@@ -130,12 +128,12 @@ Joseph Gaudard, University of Bergen, Norway
 
 joseph.gaudard@pm.me
 
-[CV](https://jogaudard.github.io/CV_jgaudard/)
+[GitHub profile](https://github.com/jogaudard)
 
 ## Dissemination
 Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible: an R package to calculate ecosystem gas fluxes in a reproducible and automated workflow., EGU General Assembly 2024, Vienna, Austria, 14–19 Apr 2024, EGU24-956, https://doi.org/10.5194/egusphere-egu24-956, 2024. 
 
-[Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
+<!-- [Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) -->
 
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
 
