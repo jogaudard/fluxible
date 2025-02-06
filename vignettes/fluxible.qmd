@@ -25,8 +25,6 @@ library(fluxible)
 library(dplyr)
 library(forcats)
 
-str(record_liahovden)
-str(co2_liahovden)
 
 conc_liahovden <- flux_match(
   co2_liahovden,
@@ -52,7 +50,6 @@ conc_liahovden <- conc_liahovden |>
     pairID = as_factor(pairID)
   )
 
-str(conc_liahovden)
 ```
 
 Before calculating fluxes we need to fit a model to each measurement and estimate a slope of the concentration changing rate.
@@ -69,7 +66,6 @@ slopes_exp_liahovden <- flux_fitting(
   datetime,
   fit_type = "exponential"
 )
-str(slopes_exp_liahovden)
 
 slopes_qua_liahovden <- flux_fitting(
   conc_liahovden,
@@ -77,7 +73,6 @@ slopes_qua_liahovden <- flux_fitting(
   datetime,
   fit_type = "quadratic"
 )
-str(slopes_qua_liahovden)
 
 slopes_lin_liahovden <- flux_fitting(
   conc_liahovden,
@@ -85,7 +80,6 @@ slopes_lin_liahovden <- flux_fitting(
   datetime,
   fit_type = "linear"
 )
-str(slopes_lin_liahovden)
 ```
 
 The function `flux_quality` is used to provide diagnostics about the quality of the fit, eventually advising to discard some measurements or replace them by zero.
@@ -97,19 +91,16 @@ slopes_exp_liahovden_flag <- flux_quality(
   slopes_exp_liahovden,
   conc
 )
-str(slopes_exp_liahovden_flag)
 
 slopes_qua_liahovden_flag <- flux_quality(
   slopes_qua_liahovden,
   conc
 )
-str(slopes_qua_liahovden_flag)
 
 slopes_lin_liahovden_flag <- flux_quality(
   slopes_lin_liahovden,
   conc
 )
-str(slopes_lin_liahovden_flag)
 ```
 
 The function `flux_plot` provides plots for a visual assessment of the measurements, explicitly displaying the quality flags from `flux_quality` and the cuts from `flux_fitting`.
@@ -380,7 +371,6 @@ fluxes_exp_liahovden_60_gep <- fluxes_exp_liahovden_60 |>
     cols_keep = c("temp_soil", "f_model", "turfID")
   )
 
-str(fluxes_exp_liahovden_60_gep)
 
 fluxes_qua_liahovden_60_gep <- fluxes_qua_liahovden_60 |>
   flux_gep(
@@ -391,7 +381,6 @@ fluxes_qua_liahovden_60_gep <- fluxes_qua_liahovden_60 |>
     cols_keep = c("temp_soil", "f_model", "turfID")
   )
 
-str(fluxes_qua_liahovden_60_gep)
 
 fluxes_lin_liahovden_120_gep <- fluxes_lin_liahovden_120 |>
   flux_gep(
@@ -402,7 +391,6 @@ fluxes_lin_liahovden_120_gep <- fluxes_lin_liahovden_120 |>
     cols_keep = c("temp_soil", "f_model", "turfID")
   )
 
-str(fluxes_lin_liahovden_120_gep)
 ```
 
 
