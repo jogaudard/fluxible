@@ -9,8 +9,7 @@
 The Fluxible R package is made to transform any dataset of gas
 concentration over time into a gas flux dataset. It was originally made
 to be used with a closed loop chamber system connected to a gas
-analyzer. A function for use with a tent (taking leakage into account)
-is in development (see further developments).
+analyzer.
 
 The goal of fluxible is to provide a workflow that removes individual
 evaluation of each flux, reduces risk of bias, and makes it
@@ -22,11 +21,6 @@ the end of the process for a visual check. This makes it easy to use
 with large flux datasets and to integrate into a reproducible workflow.
 Using the Fluxible R package makes the workflow reproducible, increases
 compatibility across studies, and is more time efficient.
-
-For a quick overview of how the package works, you can look at [the
-poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
-that was presented at the European Geosciences Union Annual Meeting
-2024.
 
 ## Installation
 
@@ -176,7 +170,7 @@ Joseph Gaudard, University of Bergen, Norway
 
 <joseph.gaudard@pm.me>
 
-[CV](https://jogaudard.github.io/CV_jgaudard/)
+[GitHub profile](https://github.com/jogaudard)
 
 ## Dissemination
 
@@ -186,9 +180,6 @@ automated workflow., EGU General Assembly 2024, Vienna, Austria, 14–19
 Apr 2024, EGU24-956, <https://doi.org/10.5194/egusphere-egu24-956>,
 2024.
 
-[Direct link to the
-poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
-
+<!-- [Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) -->
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
-
-#### References
+<!-- #### References -->

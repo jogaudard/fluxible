@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 The Fluxible R package is made to transform any dataset of gas concentration over time into a gas flux dataset.
 It was originally made to be used with a closed loop chamber system connected to a gas analyzer.
-A function for use with a tent (taking leakage into account) is in development (see further developments).
 
 The goal of fluxible is to provide a workflow that removes individual evaluation of each flux, reduces risk of bias, and makes it reproducible.
 Users set specific data quality standards and selection parameters as function arguments that are applied to the entire dataset.
@@ -137,4 +136,4 @@ Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible: an R pac
 
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
 
-#### References
+<!-- #### References -->
