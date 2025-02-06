@@ -1,3 +1,7 @@
+# fluxible 0.1.1
+
+* Vignettes temporarily back in Rmd until quarto_render bug is fixed (https://github.com/r-lib/pkgdown/issues/2830)
+
 # fluxible 0.1.0
 
 * Added a vignette describing how to prepare the data for `fluxible`.
