@@ -1,12 +1,21 @@
 ---
 title: "Preparing the data for fluxible"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Preparing the data for fluxible}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: biblio_phd_zot.bib
 csl: emerald-harvard.csl
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(tidyverse.quiet = TRUE)
+```
 
 Providing functions to read data files directly from loggers or instruments would be an endless tasks, as there are countless variaties of formats.
 Additionally, such a function already exists: `readr::read_delim` (@readr2024).
@@ -57,13 +66,7 @@ We will read the file with `read_delim`, and then use `rename` and `mutate` (fro
 
 [^1]: both `dplyr` and `readr` are part of the `tidyverse` [@tidyverse2019].
 
-```{r}
-#| echo: FALSE
-options(tidyverse.quiet = TRUE)
-```
-
-```{r}
-#| message: FALSE
+```{r, message = FALSE}
 library(tidyverse)
 # readr is part of tidyverse, and since we will also use dplyr
 # we might as well load tidyverse
@@ -103,8 +106,7 @@ head(raw_conc) # Et voila!
 
 Note that it is also possible to use the `col_names` and `col_select` arguments directly in `read_delim`, but it has a higher risk of errors.
 
-```{r}
-#| message: FALSE
+```{r, message = FALSE}
 
 raw_conc <- read_delim(
   "ex_data/26124054001.#00",
@@ -121,8 +123,7 @@ head(raw_conc)
 Quite often a field campaign will result in several files, because the logger was restarted or other events.
 In this example we will read all the files in "ex_data/" that contains "CO2" in their names.
 
-```{r}
-#| message: FALSE
+```{r, message = FALSE}
 library(fs)
 
 raw_conc <- dir_ls( #listing all the files
@@ -161,9 +162,7 @@ But here we are.
 
 Let's try the usual way first:
 
-```{r}
-#| message: FALSE
-#| warning: FALSE
+```{r, message = FALSE, warning = FALSE}
 
 raw_conc <- read_csv( # read_csv is the same as read_delim(delim = ",")
   "ex_data/011023001.#01",
@@ -177,9 +176,7 @@ head(raw_conc)
 It took the column names right, but then of course interpreted all comma as separators, and made a mess.
 Let's see if we can skipped the header and then assemble the columns with left and right side of the decimal point:
 
-```{r}
-#| message: FALSE
-#| warning: FALSE
+```{r, message = FALSE, warning = FALSE}
 raw_conc <- read_csv(
   "ex_data/011023001.#01",
   skip = 1, # this time we skip the row with the column names
