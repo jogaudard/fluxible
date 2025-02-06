@@ -13,6 +13,7 @@ Additionally, such a function already exists: `readr::read_delim` (@readr2024).
 
 We provide here some guidelines and examples on how to use `read_delim` to prepare your raw data files for `fluxible`.
 
+
 # Checklists for inputs
 
 The first function to use when processing ecosystem gas fluxes data with `fluxible` is `flux_match`, which require two inputs: `row_conc` and `field_record`.
@@ -46,6 +47,14 @@ The `flux_fitting` function is the step after `flux_match` and its input should 
 - A colum indicating the start of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`);
 - A colum indicating the end of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`).
 
+## Defining your dataset
+The Fluxible R package treats the entire dataset homogeneously in terms of choice of model to fit the data and quality control.
+This is because all of those steps have a risk to add a bias to the final data (for example, a linear fit tends to under estimate fluxes while an exponential one tends to over estimate fluxes).
+By treating the data homogeneously, it makes the bias consistant and it will affect further analysis less.
+Homogeneous treatement of the dataset also means that the dataset should be carefully defined, as to avoid introducing bias (fitting all treatment A with the linear fit and all treatment B with the exponential might show that B has higher fluxes than than A, because of the way those fit tend to under and over estimate fluxes).
+
+Note that the "flux after flux" approach, treating each measurement individually it terms of fit, cut and quality control, is also possible.
+It would require to loop the `flux_fitting` and `flux_quality` (optionally `flux_plot` too for visualization) functions on each measurement ID with a prompt asking for the arguments.
 
 # Importing a single file
 In this example we will import the file `26124054001.#00`, which is a text file extracted from a logger with the ad-hoc licensed software.
@@ -118,11 +127,13 @@ head(raw_conc)
 
 # Importing multiple files
 
-Quite often a field campaign will result in several files, because the logger was restarted or other events.
+Quite often a field season will result in several files.
 In this example we will read all the files in "ex_data/" that contains "CO2" in their names.
 
 ```{r}
 #| message: FALSE
+library(tidyverse)
+library(lubridate)
 library(fs)
 
 raw_conc <- dir_ls( #listing all the files
@@ -146,7 +157,41 @@ head(raw_conc)
 ```
 
 
-<!-- # The one file per flux approach -->
+# The one file per flux approach
+The Fluxible R package is designed to process data that were measured continuously (in a single or several files) and a `field_record` that records what was measured when.
+Another strategy while measuring gas fluxes on the field is to create a new file for each measurement, with the file name as the flux ID.
+The approach is similar to reading multiple files, except we add a column with the file name, and then can by-pass `flux_match`.
+
+```{r}
+#| message: FALSE
+library(tidyverse)
+library(lubridate)
+library(fs)
+
+raw_conc <- dir_ls( #listing all the files
+  "ex_data/field_campaign" # at location "ex_data/field_campaign"
+) |>
+  map_dfr( # we map read_tsv on all the files
+    read_tsv, # read_tsv is the version of read_delim for tab separated value files
+    skip = 3,
+    id = "filename" # creates a column with the filename, that we can use as flux ID
+  ) |>
+  rename( # a bit of renaming to make the columns more practical
+    co2_conc = "CO2 (umol/mol)",
+    h2o_conc = "H2O (mmol/mol)",
+    air_temp = "Temperature (C)",
+    pressure = "Pressure (kPa)"
+  ) |>
+  mutate(
+    datetime = paste(Date, Time),
+    datetime = as.POSIXct(datetime, format="%Y-%m-%d %H:%M:%OS"), # we get rid of the milliseconds
+    pressure = pressure / 101.325, # conversion from kPa to atm
+    filename = substr(filename, 24, 70) # removing folder names
+  ) |>
+  select(datetime, co2_conc, h2o_conc, air_temp, pressure, filename)
+
+head(raw_conc)
+```
 
 
 # The tricky one
@@ -164,6 +209,8 @@ Let's try the usual way first:
 ```{r}
 #| message: FALSE
 #| warning: FALSE
+library(tidyverse)
+library(lubridate)
 
 raw_conc <- read_csv( # read_csv is the same as read_delim(delim = ",")
   "ex_data/011023001.#01",
