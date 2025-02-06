@@ -1,12 +1,20 @@
 ---
 title: "Practical example: from raw gas concentration data to clean ecosystem gas fluxes."
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Practical example: from raw gas concentration data to clean ecosystem gas fluxes.}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: biblio_phd_zot.bib
 csl: emerald-harvard.csl
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 For this example we will use the data that were recorded during the Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site called Liahovden. 
 <!-- (CITE when data paper out). -->
@@ -18,9 +26,8 @@ The type of measurement describes if it was net ecosystem exchange (NEE), measur
 We use the `flux_match` function to slice the data from `co2_liahovden` into each measurement and discard what was recorded in between.
 
 
-```{r}
-#| label: match
-#| message: FALSE
+```{r match, message = FALSE}
+
 library(fluxible)
 library(dplyr)
 library(forcats)
@@ -60,8 +67,7 @@ We use the `flux_fitting` function with the model provided by @zhaoCalculationDa
 The function `flux_fitting` also provides a quadratic and a linear fit.
 
 
-```{r}
-#| label: fitting_exp_qua_lin
+```{r fitting_exp_qua_lin}
 
 slopes_exp_liahovden <- flux_fitting(
   conc_liahovden,
@@ -90,8 +96,7 @@ str(slopes_lin_liahovden)
 
 The function `flux_quality` is used to provide diagnostics about the quality of the fit, eventually advising to discard some measurements or replace them by zero.
 
-```{r}
-#| label: quality_exp_qua_lin
+```{r quality_exp_qua_lin}
 
 slopes_exp_liahovden_flag <- flux_quality(
   slopes_exp_liahovden,
@@ -114,10 +119,8 @@ str(slopes_lin_liahovden_flag)
 
 The function `flux_plot` provides plots for a visual assessment of the measurements, explicitly displaying the quality flags from `flux_quality` and the cuts from `flux_fitting`.
 
-```{r}
-#| label: plot_exp_qua_lin
-#| fig-width: 8
-#| fig-height: 9
+```{r plot_exp_qua_lin, fig.width = 8, fig.height = 9}
+
 
 slopes_exp_liahovden_flag |>
   # we just show a sample of the plots to avoid slowing down the example
@@ -127,7 +130,12 @@ slopes_exp_liahovden_flag |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 
 slopes_qua_liahovden_flag |>
@@ -138,7 +146,12 @@ slopes_qua_liahovden_flag |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 
 slopes_lin_liahovden_flag |>
@@ -149,7 +162,12 @@ slopes_lin_liahovden_flag |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
@@ -160,10 +178,8 @@ Sometimes some measurements will pass the automated quality control but are obvi
 That is what the `force_discard` argument is for.
 For the sake of reproducibility, this argument should be the last option and be accompanied with a justification.
 
-```{r}
-#| label: plot_exp_cut
-#| fig-width: 8
-#| fig-height: 9
+```{r plot_exp_cut, fig.width = 8, fig.height = 9}
+
 
 slopes_exp_liahovden_flag_60 <- conc_liahovden |>
   flux_fitting(
@@ -189,7 +205,12 @@ slopes_exp_liahovden_flag_60 |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
@@ -197,10 +218,8 @@ We also apply a cut on the dataset that was fitted with a quadratic model.
 At this point it is up to the user to decide which model works the best for the entire dataset.
 The function flux_quality provides a count of the quality flags that can help to take a decision.
 
-```{r}
-#| label: plot_qua_cut
-#| fig-width: 8
-#| fig-height: 9
+```{r plot_qua_cut, fig.width = 8, fig.height = 9}
+
 
 slopes_qua_liahovden_flag_60 <- conc_liahovden |>
   flux_fitting(
@@ -221,17 +240,20 @@ slopes_qua_liahovden_flag_60 |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
 When using a linear fit it is common to take only a short section of the measurement close to the start.
 Here we will cut 120 seconds at the end, effectively keeping only the first 90 seconds.
 
-```{r}
-#| label: plot_lin_cut
-#| fig-width: 8
-#| fig-height: 9
+```{r plot_lin_cut, fig.width = 8, fig.height = 9}
+
 
 slopes_lin_liahovden_flag_120 <- conc_liahovden |>
   flux_fitting(
@@ -252,15 +274,19 @@ slopes_lin_liahovden_flag_120 |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
 Once we are satisfied with the fit, we can calculate fluxes with `flux_calc`.
 Here the volume is defined as a constant for all the measurements but it is also possible to provide a specific volume for each plot in case that is different.
 
-```{r}
-#| label: calc
+```{r calc}
 
 fluxes_exp_liahovden_60 <- slopes_exp_liahovden_flag_60 |>
   flux_calc(
@@ -338,8 +364,7 @@ Fluxes were calculated in five steps from raw gas concentration data and the pro
 
 Next we can calculated gross ecosystem production (GEP) and plot the results:
 
-```{r}
-#| label: gep
+```{r gep}
 
 fluxes_exp_liahovden_60_gep <- fluxes_exp_liahovden_60 |>
   flux_gep(
@@ -376,12 +401,8 @@ str(fluxes_lin_liahovden_120_gep)
 ```
 
 
-```{r}
-#| label: 24h_fluxes
-#| fig-width: 8
-#| fig-height: 9
-#| warning: FALSE
-#| message: FALSE
+```{r 24h_fluxes, fig.width = 8, fig.height = 9, warning = FALSE, message = FALSE}
+
 
 library(ggplot2)
 bind_rows(
