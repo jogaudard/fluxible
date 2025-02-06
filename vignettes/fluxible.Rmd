@@ -130,7 +130,12 @@ slopes_exp_liahovden_flag |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 
 slopes_qua_liahovden_flag |>
@@ -141,7 +146,12 @@ slopes_qua_liahovden_flag |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 
 slopes_lin_liahovden_flag |>
@@ -152,7 +162,12 @@ slopes_lin_liahovden_flag |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
@@ -190,7 +205,12 @@ slopes_exp_liahovden_flag_60 |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
@@ -220,7 +240,12 @@ slopes_qua_liahovden_flag_60 |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
@@ -249,7 +274,12 @@ slopes_lin_liahovden_flag_120 |>
     datetime,
     f_ylim_upper = 600,
     f_ylim_lower = 350,
-    y_text_position = 450
+    y_text_position = 450,
+    facet_wrap_args = list(
+      nrow = 2,
+      ncol = 2,
+      scales = "free"
+    )
   )
 ```
 
