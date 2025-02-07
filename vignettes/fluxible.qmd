@@ -33,7 +33,7 @@ conc_liahovden <- flux_match(
   start,
   conc,
   startcrop = 0,
-  measurement_length = 220,
+  measurement_length = 180,
   ratio_threshold = 0.5,
   time_diff = 0
 )
