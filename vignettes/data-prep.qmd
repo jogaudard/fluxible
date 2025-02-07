@@ -172,9 +172,9 @@ raw_conc <- dir_ls( #listing all the files
   "ex_data/field_campaign" # at location "ex_data/field_campaign"
 ) |>
   map_dfr( # we map read_tsv on all the files
-    read_tsv, # read_tsv is the version of read_delim for tab separated value files
+    read_tsv, # read_tsv is for tab separated value files
     skip = 3,
-    id = "filename" # creates a column with the filename, that we can use as flux ID
+    id = "filename" # creates a column with the filename, can be used as fluxID
   ) |>
   rename( # a bit of renaming to make the columns more practical
     co2_conc = "CO2 (umol/mol)",
@@ -184,7 +184,9 @@ raw_conc <- dir_ls( #listing all the files
   ) |>
   mutate(
     datetime = paste(Date, Time),
-    datetime = as.POSIXct(datetime, format="%Y-%m-%d %H:%M:%OS"), # we get rid of the milliseconds
+    datetime = as.POSIXct(
+      datetime, format = "%Y-%m-%d %H:%M:%OS"
+    ), # we get rid of the milliseconds
     pressure = pressure / 101.325, # conversion from kPa to atm
     filename = substr(filename, 24, 70) # removing folder names
   ) |>
