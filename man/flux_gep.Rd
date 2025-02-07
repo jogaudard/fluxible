@@ -13,7 +13,7 @@ flux_gep(
   id_cols,
   nee_arg = "NEE",
   er_arg = "ER",
-  cols_keep = c()
+  cols_keep = "none"
 )
 }
 \arguments{
@@ -34,7 +34,9 @@ flux_gep(
 \item{er_arg}{argument designating ER fluxes in type column}
 
 \item{cols_keep}{columns to keep from fluxes_df. Values from NEE row will be
-filled in GEP row.}
+filled in GEP row. \code{none} (default) keeps only the columns in \code{id_cols} and
+those used by \code{flux_gep}; \code{all} keeps all the columns;
+can also be a vector of column names.}
 }
 \value{
 a df with GEP as a flux type, with PAR and datetime from the NEE

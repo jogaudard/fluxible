@@ -11,6 +11,19 @@ test_that("GEP calculation", {
   )
 })
 
+test_that("keeping more than one columns", {
+  expect_snapshot(
+    flux_gep(co2_fluxes,
+      type,
+      f_start,
+      PAR,
+      f_flux,
+      id_cols = "turfID",
+      cols_keep = c("temp_soil", "temp_fahr")
+    )
+  )
+})
+
 
 test_that("GEP calculation works with several id cols", {
   campaign <- c(1, 1, 2, 2, 3, 3)
@@ -133,7 +146,7 @@ test_that("option to keep all the cols", {
       f_start,
       PAR,
       id_cols = "turfID",
-      cols_keep = "ALL"
+      cols_keep = "all"
     ) |>
       select(!c(f_start, PAR, type, f_flux))
   )
