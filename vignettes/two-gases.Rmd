@@ -1,10 +1,18 @@
 ---
 title: "Working with two gases measured simultaneously"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Working with two gases}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
 
 In this example we will process the `raw_terra` dataset which contains both CO~2~ and CH~4~ concentrations measured simultaneoulsy.
 <!-- The measurements starting time are in `terra_record`. -->
@@ -146,6 +154,8 @@ fluxes_terra <- left_join(
       TRUE ~ flux_ch4
     )
   )
+
+head(fluxes_terra) # Et voilà!
 ```
 
 In this example we calculated the fluxes for two gases measured simultaneously by repeating the process for each gas, and in the end we joined them and applied a rule that discarded the fluxes of one gas based on the quality flags of the other.
