@@ -6,9 +6,9 @@ test_that("matching works", {
     start,
     conc,
     startcrop = 10,
-    measurement_length = 220
+    measurement_length = 180
   ) |>
-    dplyr::select(f_fluxid, f_n_conc, f_ratio, f_flag_match) |>
+    dplyr::select(datetime, f_fluxid, f_n_conc, f_ratio, f_flag_match) |>
     dplyr::distinct()
   )
 })

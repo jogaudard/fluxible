@@ -12,7 +12,9 @@
 #' @param nee_arg argument designating NEE fluxes in type column
 #' @param er_arg argument designating ER fluxes in type column
 #' @param cols_keep columns to keep from fluxes_df. Values from NEE row will be
-#' filled in GEP row.
+#' filled in GEP row. `none` (default) keeps only the columns in `id_cols` and
+#' those used by `flux_gep`; `all` keeps all the columns;
+#' can also be a vector of column names.
 #' @return a df with GEP as a flux type, with PAR and datetime from the NEE
 #' measurement for each pair of ER and NEE
 #' @importFrom dplyr rename select mutate case_when filter full_join
@@ -33,7 +35,7 @@ flux_gep <- function(fluxes_df,
                      id_cols,
                      nee_arg = "NEE",
                      er_arg = "ER",
-                     cols_keep = c()) {
+                     cols_keep = "none") {
 
   name <- deparse(substitute(fluxes_df))
 
@@ -48,6 +50,25 @@ flux_gep <- function(fluxes_df,
 
   if (!fluxes_df_ok)
     stop("Please correct the arguments", call. = FALSE)
+
+
+
+  if (length(cols_keep) == 1 && cols_keep == "all") {
+    cols_keep <- fluxes_df |>
+      select(!c(
+        all_of(id_cols),
+        {{type_col}},
+        {{par_col}},
+        {{type_col}},
+        {{f_flux}},
+        {{datetime_col}}
+      )) |>
+      names()
+  }
+
+  if (length(cols_keep) == 1 && cols_keep == "none") {
+    cols_keep <- c()
+  }
 
 
   fluxes_df <- fluxes_df |>

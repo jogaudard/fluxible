@@ -11,6 +11,19 @@ test_that("GEP calculation", {
   )
 })
 
+test_that("keeping more than one columns", {
+  expect_snapshot(
+    flux_gep(co2_fluxes,
+      type,
+      f_start,
+      PAR,
+      f_flux,
+      id_cols = "turfID",
+      cols_keep = c("temp_soil", "temp_fahr")
+    )
+  )
+})
+
 
 test_that("GEP calculation works with several id cols", {
   campaign <- c(1, 1, 2, 2, 3, 3)
@@ -117,5 +130,24 @@ test_that("GEP error message for non numeric flux", {
       flux,
       id_cols = c("turfid", "campaign")
     )
+  )
+})
+
+test_that("option to keep all the cols", {
+  test_df <- co2_fluxes |>
+    dplyr::mutate(
+      treatment = c("A", "A", "A", "B", "C", "C")
+    )
+
+  expect_snapshot(
+    flux_gep(
+      test_df,
+      type,
+      f_start,
+      PAR,
+      id_cols = "turfID",
+      cols_keep = "all"
+    ) |>
+      select(!c(f_start, PAR, type, f_flux))
   )
 })
