@@ -1,3 +1,7 @@
+# fluxible 0.1.2
+
+* Order of columns in the output of flux_match is more logical (f_start before f_end...).
+
 # fluxible 0.1.1
 
 * Vignettes temporarily back in Rmd until quarto_render bug is fixed (https://github.com/r-lib/pkgdown/issues/2830)
