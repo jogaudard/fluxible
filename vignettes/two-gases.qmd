@@ -6,3 +6,75 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+In this example we will process the `raw_terra` dataset which contains both CO~2~ and CH~4~ concentrations measured simultaneoulsy.
+<!-- The measurements starting time are in `terra_record`. -->
+The main point is that we want to discard CH~4~ fluxes when the CO~2~ flux was discarded.
+
+The concept is that we will treat the dataset twice, once for each gas.
+Because `f_fluxid` is produced in chronological order based on start datetime in `field_record`, the fluxes measured at the same time have the same `f_fluxid`.
+
+```{r}
+#| label: match
+#| message: FALSE
+library(fluxible)
+library(dplyr)
+
+# for flux_match it does not matter which concentration column we use
+conc_terra <- flux_match(
+  raw_terra,
+  terra_record,
+  datetime,
+  start,
+  co2_conc,
+  startcrop = 10,
+  measurement_length = 180,
+  ratio_threshold = 0.5,
+  time_diff = 0
+)
+```
+
+```{r}
+#| label: fitting
+slopes_terra_co2 <- flux_fitting(
+  conc_terra,
+  co2_conc,
+  datetime,
+  fit_type = "exponential"
+)
+
+slopes_terra_ch4 <- flux_fitting(
+  conc_terra,
+  ch4_conc,
+  datetime,
+  fit_type = "exponential"
+)
+```
+
+```{r}
+#| label: quality
+flag_terra_co2 <- flux_quality(
+  slopes_terra_co2,
+  co2_conc
+)
+
+flag_terra_ch4 <- flux_quality(
+  slopes_terra_ch4,
+  ch4_conc,
+  ambient_conc = 2000 # we need to change this one, because the default is for CO2
+)
+```
+
+```{r}
+#| label: plot
+#| fig-width: 8
+#| fig-height: 9
+flag_terra_co2 |>
+  flux_plot(
+    co2_conc,
+    datetime,
+    f_ylim_upper = 500,
+    f_ylim_lower = 425,
+    y_text_position = 460,
+    output = "pdfpages"
+  )
+```

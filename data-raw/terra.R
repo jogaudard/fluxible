@@ -29,7 +29,7 @@ get_file(
   path = "data-raw/TERRA"
 )
 
-terra_conc <- read_tsv(
+raw_terra <- read_tsv(
   "data-raw/TERRA/CO2_CH4_2024-06-18.data",
   skip = 5
 ) |>
@@ -43,7 +43,7 @@ terra_conc <- read_tsv(
   ) |>
   select(co2_conc, ch4_conc, datetime)
 
-str(terra_conc)
+str(raw_terra)
 
 terra_record <- read_csv(
   "data-raw/TERRA/Fieldnotes.csv"
@@ -51,7 +51,8 @@ terra_record <- read_csv(
   filter( # we take only the control so no sensitive data are released
     RAIN == "control" &
       GRUBBING == "control" &
-      WARMING == "control"
+      WARMING == "control" &
+      DATE == "2024-06-18" # we want only the data for that day
   ) |>
   mutate(
     start = as_datetime(
@@ -77,13 +78,13 @@ terra_temp <- read_csv(
 
 str(terra_temp)
 
-terra_conc <- left_join(
-  terra_conc,
+raw_terra <- left_join(
+  raw_terra,
   terra_temp,
   by = "datetime"
 )
 
-str(terra_conc)
+str(raw_terra)
 
 use_data(terra_record, overwrite = TRUE)
-use_data(terra_conc, overwrite = TRUE)
+use_data(raw_terra, overwrite = TRUE)
