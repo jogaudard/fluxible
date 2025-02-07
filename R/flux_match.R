@@ -32,7 +32,7 @@
 #' @examples
 #' data(co2_df_short, record_short)
 #' flux_match(co2_df_short, record_short, datetime, start, conc, startcrop = 10,
-#' measurement_length = 220)
+#' measurement_length = 180)
 #' @export
 
 
@@ -91,8 +91,8 @@ flux_match <- function(raw_conc,
   field_record <- field_record |>
     arrange({{start_col}}) |>
     mutate(
-      f_end = {{start_col}} + measurement_length,
       f_start = {{start_col}} + startcrop,
+      f_end = {{start_col}} + measurement_length,
       f_fluxid = row_number()
     )
   raw_conc <- raw_conc |>
