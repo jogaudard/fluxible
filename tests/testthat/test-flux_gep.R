@@ -119,3 +119,22 @@ test_that("GEP error message for non numeric flux", {
     )
   )
 })
+
+test_that("option to keep all the cols", {
+  test_df <- co2_fluxes |>
+    dplyr::mutate(
+      treatment = c("A", "A", "A", "B", "C", "C")
+    )
+
+  expect_snapshot(
+    flux_gep(
+      test_df,
+      type,
+      f_start,
+      PAR,
+      id_cols = "turfID",
+      cols_keep = "ALL"
+    ) |>
+      select(!c(f_start, PAR, type, f_flux))
+  )
+})

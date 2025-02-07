@@ -66,3 +66,27 @@
       11 2024-02-11 10:01:10     3 ER       13 D             4
       12 2024-02-11 10:01:20     4 ER        8 A             4
 
+# option to keep all the cols
+
+    Code
+      select(flux_gep(test_df, type, f_start, PAR, id_cols = "turfID", cols_keep = "ALL"),
+      !c(f_start, PAR, type, f_flux))
+    Condition
+      Warning in `flux_gep()`:
+      
+       NEE missing for measurement turfID: 156 AN2C 156
+    Output
+      # A tibble: 9 x 8
+        f_fluxid f_slope_tz f_temp_air_ave temp_soil temp_fahr temp_kelvin treatment
+        <fct>         <dbl>          <dbl>     <dbl>     <dbl>       <dbl> <chr>    
+      1 2             0.853           7.38      10.7      45.3        281. A        
+      2 4             1.13            7.77      10.8      46.0        281. B        
+      3 6             0.426           7.75      12.2      45.9        281. C        
+      4 1             1.56            7.31      10.8      45.2        280. A        
+      5 2             0.853           7.38      10.7      45.3        281. A        
+      6 3             0.303           7.46      10.7      45.4        281. A        
+      7 4             1.13            7.77      10.8      46.0        281. B        
+      8 5             1.46            7.71      10.6      45.9        281. C        
+      9 6             0.426           7.75      12.2      45.9        281. C        
+      # i 1 more variable: turfID <fct>
+
