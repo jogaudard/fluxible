@@ -259,7 +259,7 @@ test_that("Fluxible workflow works from start to finish", {
     start,
     conc,
     startcrop = 10,
-    measurement_length = 220
+    measurement_length = 180
   )
   slopes_test <- suppressWarnings(flux_fitting(
     conc_test,
