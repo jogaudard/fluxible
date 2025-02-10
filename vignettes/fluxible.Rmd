@@ -30,7 +30,6 @@ We use the `flux_match` function to slice the data from `co2_liahovden` into eac
 
 library(fluxible)
 library(dplyr)
-library(forcats)
 
 str(record_liahovden)
 str(co2_liahovden)
@@ -46,18 +45,6 @@ conc_liahovden <- flux_match(
   ratio_threshold = 0.5,
   time_diff = 0
 )
-# this exemple does not have a campaign column to pair the measurements
-# we add pairID to pair NEE and ER for GEP calculation later
-conc_liahovden <- conc_liahovden |>
-  mutate(
-    f_fluxid = as.double(f_fluxid),
-    pairID = case_when(
-      type == "NEE" ~ f_fluxid,
-      type == "ER" ~ f_fluxid - 1
-    ),
-    f_fluxid = as_factor(f_fluxid),
-    pairID = as_factor(pairID)
-  )
 
 str(conc_liahovden)
 ```
@@ -299,7 +286,7 @@ fluxes_exp_liahovden_60 <- slopes_exp_liahovden_flag_60 |>
     tube_volume = 0.075,
     atm_pressure = 1,
     plot_area = 0.0625,
-    cols_keep = c("turfID", "type", "pairID"),
+    cols_keep = c("turfID", "type", "round"),
     cols_ave = c("temp_soil", "PAR")
   )
 
@@ -314,7 +301,7 @@ fluxes_qua_liahovden_60 <- slopes_qua_liahovden_flag_60 |>
     tube_volume = 0.075,
     atm_pressure = 1,
     plot_area = 0.0625,
-    cols_keep = c("turfID", "type", "pairID"),
+    cols_keep = c("turfID", "type", "round"),
     cols_ave = c("temp_soil", "PAR")
   )
 
@@ -329,7 +316,7 @@ fluxes_lin_liahovden_120 <- slopes_lin_liahovden_flag_120 |>
     tube_volume = 0.075,
     atm_pressure = 1,
     plot_area = 0.0625,
-    cols_keep = c("turfID", "type", "pairID"),
+    cols_keep = c("turfID", "type", "round"),
     cols_ave = c("temp_soil", "PAR")
   )
 ```
@@ -371,8 +358,8 @@ fluxes_exp_liahovden_60_gep <- fluxes_exp_liahovden_60 |>
     type,
     PAR,
     datetime,
-    id_cols = "pairID",
-    cols_keep = c("temp_soil", "f_model", "turfID")
+    id_cols = c("round", "turfID"),
+    cols_keep = c("temp_soil", "f_model")
   )
 
 str(fluxes_exp_liahovden_60_gep)
@@ -382,8 +369,8 @@ fluxes_qua_liahovden_60_gep <- fluxes_qua_liahovden_60 |>
     type,
     PAR,
     datetime,
-    id_cols = "pairID",
-    cols_keep = c("temp_soil", "f_model", "turfID")
+    id_cols = c("round", "turfID"),
+    cols_keep = c("temp_soil", "f_model")
   )
 
 str(fluxes_qua_liahovden_60_gep)
@@ -393,8 +380,8 @@ fluxes_lin_liahovden_120_gep <- fluxes_lin_liahovden_120 |>
     type,
     PAR,
     datetime,
-    id_cols = "pairID",
-    cols_keep = c("temp_soil", "f_model", "turfID")
+    id_cols = c("round", "turfID"),
+    cols_keep = c("temp_soil", "f_model")
   )
 
 str(fluxes_lin_liahovden_120_gep)

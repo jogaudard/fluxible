@@ -32,7 +32,7 @@ usethis::use_data(co2_liahovden, overwrite = TRUE)
 record_liahovden <- read_csv("data-raw/PFTC6_cflux_field-record_liahovden.csv")
 
 record_liahovden <- record_liahovden %>%
-  select(turfID, type, starting_time, date) %>%
+  select(turfID, type, starting_time, date, round) %>%
   mutate(
     starting_time = formatC(
       starting_time,
