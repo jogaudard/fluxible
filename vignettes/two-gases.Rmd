@@ -2,7 +2,7 @@
 title: "Working with two gases measured simultaneously"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Working with two gases}
+  %\VignetteIndexEntry{Working with two gases measured simultaneously}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
