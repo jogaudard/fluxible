@@ -356,10 +356,9 @@ Next we can calculated gross ecosystem production (GEP) and plot the results:
 fluxes_exp_liahovden_60_gep <- fluxes_exp_liahovden_60 |>
   flux_gep(
     type,
-    PAR,
     datetime,
     id_cols = c("round", "turfID"),
-    cols_keep = c("temp_soil", "f_model")
+    cols_keep = c("temp_soil", "f_model", "PAR")
   )
 
 str(fluxes_exp_liahovden_60_gep)
@@ -367,10 +366,9 @@ str(fluxes_exp_liahovden_60_gep)
 fluxes_qua_liahovden_60_gep <- fluxes_qua_liahovden_60 |>
   flux_gep(
     type,
-    PAR,
     datetime,
     id_cols = c("round", "turfID"),
-    cols_keep = c("temp_soil", "f_model")
+    cols_keep = c("temp_soil", "f_model", "PAR")
   )
 
 str(fluxes_qua_liahovden_60_gep)
@@ -378,10 +376,9 @@ str(fluxes_qua_liahovden_60_gep)
 fluxes_lin_liahovden_120_gep <- fluxes_lin_liahovden_120 |>
   flux_gep(
     type,
-    PAR,
     datetime,
     id_cols = c("round", "turfID"),
-    cols_keep = c("temp_soil", "f_model")
+    cols_keep = c("temp_soil", "f_model", "PAR")
   )
 
 str(fluxes_lin_liahovden_120_gep)
