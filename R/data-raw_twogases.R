@@ -10,5 +10,5 @@
 #' \item{temp_air}{Air temperature inside the chamber in Celsius}
 #' }
 #' @examples
-#' raw_terra
-"raw_terra"
+#' raw_twogases
+"raw_twogases"

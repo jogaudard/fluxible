@@ -5,5 +5,5 @@
 #' \item{start}{Start datetime of each flux measurement}
 #' }
 #' @examples
-#' terra_record
-"terra_record"
+#' twogases_record
+"twogases_record"

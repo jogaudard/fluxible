@@ -29,7 +29,7 @@ get_file(
   path = "data-raw/TERRA"
 )
 
-raw_terra <- read_tsv(
+raw_twogases <- read_tsv(
   "data-raw/TERRA/CO2_CH4_2024-06-18.data",
   skip = 5
 ) |>
@@ -43,9 +43,9 @@ raw_terra <- read_tsv(
   ) |>
   select(co2_conc, ch4_conc, datetime)
 
-str(raw_terra)
+str(raw_twogases)
 
-terra_record <- read_csv(
+twogases_record <- read_csv(
   "data-raw/TERRA/Fieldnotes.csv"
 ) |>
   filter( # we take only the control so no sensitive data are released
@@ -64,9 +64,9 @@ terra_record <- read_csv(
   ) |>
   select(start)
 
-str(terra_record)
+str(twogases_record)
 
-terra_temp <- read_csv(
+twogases_temp <- read_csv(
   "data-raw/TERRA/PAR_Temp_2024-06-18.dat",
   skip = 1
 ) |>
@@ -76,15 +76,15 @@ terra_temp <- read_csv(
   ) |>
   select(datetime, temp_air)
 
-str(terra_temp)
+str(twogases_temp)
 
-raw_terra <- left_join(
-  raw_terra,
-  terra_temp,
+raw_twogases <- left_join(
+  raw_twogases,
+  twogases_temp,
   by = "datetime"
 )
 
-str(raw_terra)
+str(raw_twogases)
 
-use_data(terra_record, overwrite = TRUE)
-use_data(raw_terra, overwrite = TRUE)
+use_data(twogases_record, overwrite = TRUE)
+use_data(raw_twogases, overwrite = TRUE)

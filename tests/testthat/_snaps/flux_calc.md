@@ -180,7 +180,7 @@
 # Working with two gases
 
     Code
-      str(fluxes_terra)
+      str(fluxes_twogases)
     Output
       tibble [12 x 8] (S3: tbl_df/tbl/data.frame)
        $ f_quality_flag: chr [1:12] "ok" "ok" "ok" "ok" ...

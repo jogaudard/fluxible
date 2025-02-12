@@ -291,9 +291,9 @@ test_that("Fluxible workflow works from start to finish", {
 })
 
 test_that("Working with two gases", {
-  conc_terra <- flux_match(
-    raw_terra,
-    terra_record,
+  conc_twogases <- flux_match(
+    raw_twogases,
+    twogases_record,
     datetime,
     start,
     co2_conc,
@@ -303,34 +303,34 @@ test_that("Working with two gases", {
     time_diff = 0
   )
 
-  slopes_terra_co2 <- flux_fitting(
-    conc_terra,
+  slopes_twogases_co2 <- flux_fitting(
+    conc_twogases,
     co2_conc,
     datetime,
     fit_type = "exponential"
   )
 
-  slopes_terra_ch4 <- flux_fitting(
-    conc_terra,
+  slopes_twogases_ch4 <- flux_fitting(
+    conc_twogases,
     ch4_conc,
     datetime,
     fit_type = "exponential"
   )
 
-  flag_terra_co2 <- flux_quality(
-    slopes_terra_co2,
+  flag_twogases_co2 <- flux_quality(
+    slopes_twogases_co2,
     co2_conc,
     force_discard = "8" # there is a peak at the start that looks like an error
   )
 
-  flag_terra_ch4 <- flux_quality(
-    slopes_terra_ch4,
+  flag_twogases_ch4 <- flux_quality(
+    slopes_twogases_ch4,
     ch4_conc,
     ambient_conc = 2000 # the default is for CO2
   )
 
-  fluxes_terra_co2 <- flux_calc(
-    flag_terra_co2,
+  fluxes_twogases_co2 <- flux_calc(
+    flag_twogases_co2,
     f_slope_corr,
     datetime,
     temp_air,
@@ -347,8 +347,8 @@ test_that("Working with two gases", {
     ) |> # and we remove the slope one
     select(!f_slope_corr)
 
-  fluxes_terra_ch4 <- flux_calc(
-    flag_terra_ch4,
+  fluxes_twogases_ch4 <- flux_calc(
+    flag_twogases_ch4,
     f_slope_corr,
     datetime,
     temp_air,
@@ -364,9 +364,9 @@ test_that("Working with two gases", {
     ) |> # and we remove the slope one
     select(!f_slope_corr)
 
-  fluxes_terra <- left_join(
-    fluxes_terra_co2,
-    fluxes_terra_ch4,
+  fluxes_twogases <- left_join(
+    fluxes_twogases_co2,
+    fluxes_twogases_ch4,
     by = c(
       "f_fluxid",
       "f_temp_air_ave",
@@ -383,6 +383,6 @@ test_that("Working with two gases", {
     )
 
   expect_snapshot(
-    str(fluxes_terra)
+    str(fluxes_twogases)
   )
 })
