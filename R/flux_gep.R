@@ -8,7 +8,6 @@
 #' @param f_flux column containing flux values
 #' @param type_col column containing type of flux (NEE or ER)
 #' @param datetime_col column containing start of measurement as datetime
-#' @param par_col column containing PAR values for each flux
 #' @param nee_arg argument designating NEE fluxes in type column
 #' @param er_arg argument designating ER fluxes in type column
 #' @param cols_keep columns to keep from fluxes_df. Values from NEE row will be
@@ -30,7 +29,6 @@
 flux_gep <- function(fluxes_df,
                      type_col,
                      datetime_col,
-                    #  par_col,
                      f_flux = f_flux,
                      id_cols,
                      nee_arg = "NEE",
@@ -58,7 +56,6 @@ flux_gep <- function(fluxes_df,
       select(!c(
         all_of(id_cols),
         {{type_col}},
-        # {{par_col}},
         {{type_col}},
         {{f_flux}},
         {{datetime_col}}
@@ -77,15 +74,30 @@ flux_gep <- function(fluxes_df,
       .by = all_of(id_cols)
     )
 
-  select_df <- fluxes_df |>
+  nee_df <- fluxes_df |>
     select(
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      # {{par_col}},
       {{type_col}},
       {{f_flux}},
       {{datetime_col}}
+    ) |>
+    filter(
+      {{type_col}} == nee_arg
+    )
+
+    er_df <- fluxes_df |>
+    select(
+      "id",
+      all_of(c(cols_keep, id_cols)),
+      {{type_col}},
+      {{type_col}},
+      {{f_flux}},
+      {{datetime_col}}
+    ) |>
+    filter(
+      {{type_col}} == er_arg
     )
 
   fluxes_gep <- fluxes_df |>
@@ -93,7 +105,6 @@ flux_gep <- function(fluxes_df,
       {{f_flux}},
       {{type_col}},
       {{datetime_col}},
-      # {{par_col}},
       "id"
     ) |>
     mutate(
@@ -111,14 +122,12 @@ flux_gep <- function(fluxes_df,
     rename(
       f_flux = {{f_flux}},
       f_datetime = {{datetime_col}}
-      # f_par = {{par_col}}
     ) |>
     pivot_wider(id_cols = "id",
       names_from = {{type_col}},
       values_from = c("f_flux", "f_datetime")
     ) |>
     rename(
-      # {{par_col}} := "f_par_NEE",
       {{datetime_col}} := "f_datetime_NEE"
     ) |>
     mutate(
@@ -128,7 +137,6 @@ flux_gep <- function(fluxes_df,
     select(
       {{datetime_col}},
       "id",
-      # {{par_col}},
       {{type_col}},
       {{f_flux}}
     )
@@ -157,23 +165,14 @@ flux_gep <- function(fluxes_df,
   fluxes_gep <- fluxes_gep |>
     drop_na({{datetime_col}})
 
-  join_arg <- dplyr::join_by(
-    "id" == "id",
-    # {{par_col}} == {{par_col}},
-    {{type_col}} == {{type_col}},
-    {{f_flux}} == {{f_flux}},
-    {{datetime_col}} == {{datetime_col}}
-  )
-
   fluxes_gep <- fluxes_gep |>
-    full_join(
-      select_df,
-      by = join_arg
-    ) |>
+    dplyr::bind_rows(nee_df) |>
     group_by(.data$id) |>
     fill(all_of(c(cols_keep, id_cols)), .direction = "updown") |>
     ungroup() |>
-    select(!"id")
+    dplyr::bind_rows(er_df) |>
+    select(!"id") |>
+    arrange({{datetime_col}})
 
   f_warnings <- stringr::str_c(nee_missing)
 

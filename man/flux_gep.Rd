@@ -8,7 +8,6 @@ flux_gep(
   fluxes_df,
   type_col,
   datetime_col,
-  par_col,
   f_flux = f_flux,
   id_cols,
   nee_arg = "NEE",
@@ -22,8 +21,6 @@ flux_gep(
 \item{type_col}{column containing type of flux (NEE or ER)}
 
 \item{datetime_col}{column containing start of measurement as datetime}
-
-\item{par_col}{column containing PAR values for each flux}
 
 \item{f_flux}{column containing flux values}
 
