@@ -1,3 +1,7 @@
+# fluxible 0.1.3
+
+* Error corrected in `flux_gep`: the columns in the `cols_keep` argument are filled for GEP flux with values from NEE flux, and NA if missing, but not values from ER fluxes.
+
 # fluxible 0.1.2
 
 * Added option in `flux_gep` to keep all columns without naming them.
