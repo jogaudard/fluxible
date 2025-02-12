@@ -3,7 +3,7 @@ test_that("GEP calculation", {
     flux_gep(co2_fluxes,
       type,
       f_start,
-      PAR,
+      # PAR,
       f_flux,
       id_cols = "turfID",
       cols_keep = c("temp_soil")
@@ -16,7 +16,7 @@ test_that("keeping more than one columns", {
     flux_gep(co2_fluxes,
       type,
       f_start,
-      PAR,
+      # PAR,
       f_flux,
       id_cols = "turfID",
       cols_keep = c("temp_soil", "temp_fahr")
@@ -53,7 +53,7 @@ test_that("GEP calculation works with several id cols", {
     flux_gep(fluxes,
       type,
       datetime,
-      par,
+      # par,
       flux,
       id_cols = c("turfid", "campaign")
     )
@@ -91,7 +91,7 @@ test_that("missing NEE and several id cols", {
     flux_gep(fluxes,
       type,
       datetime,
-      par,
+      # par,
       flux,
       id_cols = c("turfid", "campaign")
     )
@@ -126,7 +126,7 @@ test_that("GEP error message for non numeric flux", {
     flux_gep(fluxes,
       type,
       datetime,
-      par,
+      # par,
       flux,
       id_cols = c("turfid", "campaign")
     )
@@ -144,10 +144,33 @@ test_that("option to keep all the cols", {
       test_df,
       type,
       f_start,
-      PAR,
+      # PAR,
       id_cols = "turfID",
       cols_keep = "all"
     ) |>
       select(!c(f_start, PAR, type, f_flux))
   )
 })
+
+# test_that("cols keep takes values from NEE", {
+#   test_df <- co2_fluxes |>
+#     dplyr::mutate(
+#       test_keep = dplyr::case_when(
+#         f_fluxid == 2 ~ NA,
+#         type == "ER" ~ "ER_val",
+#         type == "NEE" ~ "NEE_val"
+#       )
+#     )
+
+#   expect_snapshot(
+#     flux_gep(
+#       test_df,
+#       type,
+#       f_start,
+#       PAR,
+#       id_cols = "turfID",
+#       cols_keep = "all"
+#     ) |>
+#       select(turfID, type, test_keep)
+#   )
+# })
