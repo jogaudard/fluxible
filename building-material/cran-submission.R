@@ -1,5 +1,8 @@
+# for update
 
-release()
+usethis::use_release_issue()
+
+devtools::release()
 
 devtools::spell_check()
 
