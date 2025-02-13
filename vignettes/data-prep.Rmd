@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 options(tidyverse.quiet = TRUE)
 ```
 
-Providing functions to read data files directly from loggers or instruments would be an endless tasks, as there are countless variaties of formats.
+Providing functions to read data files directly from loggers or instruments would be an endless tasks, as there are countless varieties of formats.
 Additionally, such a function already exists: `readr::read_delim` (@readr2024).
 
 We provide here some guidelines and examples on how to use `read_delim` to prepare your raw data files for `fluxible`.

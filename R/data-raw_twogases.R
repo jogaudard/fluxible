@@ -1,6 +1,6 @@
 #' CO2 and CH4 concentration
 #'
-#' CO2 and CH4 measured simultaneoulsy
+#' CO2 and CH4 measured simultaneously
 #'
 #' @format A tibble with 21681 rows and 4 variables
 #' \describe{

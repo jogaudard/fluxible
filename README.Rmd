@@ -102,7 +102,6 @@ fluxes_df <- flux_calc(
 fluxes_gep <- flux_gep(
   fluxes_df,
   type,
-  PAR,
   datetime,
   id_cols = "turfID",
   cols_keep = c("temp_soil")
