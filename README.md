@@ -126,27 +126,26 @@ fluxes_df <- flux_calc(
 fluxes_gep <- flux_gep(
   fluxes_df,
   type,
-  PAR,
   datetime,
   id_cols = "turfID",
   cols_keep = c("temp_soil")
 )
-#> Warning in flux_gep(fluxes_df, type, PAR, datetime, id_cols = "turfID", : 
+#> Warning in flux_gep(fluxes_df, type, datetime, id_cols = "turfID", cols_keep = c("temp_soil")): 
 #>  NEE missing for measurement turfID: 156 AN2C 156
 
 fluxes_gep
-#> # A tibble: 9 × 6
-#>     PAR datetime            type  f_flux temp_soil turfID      
-#>   <dbl> <dttm>              <chr>  <dbl>     <dbl> <chr>       
-#> 1  2.19 2022-07-28 23:47:22 GEP     10.3      10.7 74 WN2C 155 
-#> 2  1.87 2022-07-28 23:59:32 GEP    -27.2      10.8 109 AN3C 109
-#> 3  1.61 2022-07-29 00:06:35 GEP     NA        12.2 29 WN3C 106 
-#> 4  1.88 2022-07-28 23:43:35 ER      47.7      10.8 156 AN2C 156
-#> 5  2.19 2022-07-28 23:47:22 NEE     31.0      10.7 74 WN2C 155 
-#> 6  2.04 2022-07-28 23:52:10 ER      20.7      10.7 74 WN2C 155 
-#> 7  1.87 2022-07-28 23:59:32 NEE     41.5      10.8 109 AN3C 109
-#> 8  1.69 2022-07-29 00:03:10 ER      68.7      10.5 109 AN3C 109
-#> 9  1.61 2022-07-29 00:06:35 NEE     26.1      12.2 29 WN3C 106
+#> # A tibble: 9 × 5
+#>   datetime            type  f_flux temp_soil turfID      
+#>   <dttm>              <chr>  <dbl>     <dbl> <chr>       
+#> 1 2022-07-28 23:43:35 ER      47.7      10.8 156 AN2C 156
+#> 2 2022-07-28 23:47:22 GEP     10.3      10.7 74 WN2C 155 
+#> 3 2022-07-28 23:47:22 NEE     31.0      10.7 74 WN2C 155 
+#> 4 2022-07-28 23:52:10 ER      20.7      10.7 74 WN2C 155 
+#> 5 2022-07-28 23:59:32 GEP    -27.2      10.8 109 AN3C 109
+#> 6 2022-07-28 23:59:32 NEE     41.5      10.8 109 AN3C 109
+#> 7 2022-07-29 00:03:10 ER      68.7      10.5 109 AN3C 109
+#> 8 2022-07-29 00:06:35 GEP     NA        12.2 29 WN3C 106 
+#> 9 2022-07-29 00:06:35 NEE     26.1      12.2 29 WN3C 106
 ```
 
 ## Further developments
@@ -155,7 +154,7 @@ fluxes_gep
 
 We are working on a tool to automatically select the window of the
 measurement on which to fit a model. This selection will be based on
-environmental variable, such as photosythetically active radiation
+environmental variable, such as photosynthetically active radiation
 (PAR), measured simultaneously.
 
 ### More fits

@@ -47,8 +47,11 @@ For situations where the time was not synchronized correctly.}
 }
 \value{
 a dataframe with concentration measurements, corresponding datetime,
-flux ID, measurements start and end, flags in case of no data or low number
-of data, and any variables present in one of the inputs.
+flux ID (\code{f_fluxid}), measurements start (\code{f_start}) and end (\code{f_end}),
+flags in case of no data or low number of data (\code{f_flag_match}),
+the number of datapoints per measurement (\code{f_n_conc}),
+the ratio of number of datapoints over the length of each measurement
+in seconds (\code{f_ratio}), and any variables present in one of the inputs.
 }
 \description{
 Matching a dataframe of continuously measured

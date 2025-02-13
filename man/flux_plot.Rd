@@ -55,21 +55,25 @@ if empty, the name of \code{slopes_df} will be used}
 
 \item{y_text_position}{position of the text box}
 
-\item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
+\item{print_plot}{logical, if TRUE it prints the plot as a ggplot object
 but will take time depending on the size of the dataset}
 
-\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages;
-"ggsave", the plots can be saved with the ggsave function;
-"print_only" (default) prints the plot without creating a file
+\item{output}{\code{pdfpages}, the plots are saved as A4 landscape pdf pages;
+\code{ggsave}, the plots can be saved with the ggsave function;
+\code{print_only} (default) prints the plot without creating a file
 (independently from 'print_plot' being TRUE or FALSE)}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}
 }
 \value{
-a ggplot object if \code{print_plot = TRUE},
+plots of fluxes, with raw concentration data points, fit, slope,
+and color code indicating quality flags and cuts. The plots are organized
+in facets according to flux ID, and a text box display the quality flag and
+diagnostics of each measurement.
+The plots are returned as a ggplot object if \code{print_plot = TRUE};
 if \code{print_plot = FALSE} it will not return anything but will produce a file
-depending on \code{output}
+according to the \code{output} argument.
 }
 \description{
 plots the fluxes, fit and slope in facets
@@ -77,7 +81,7 @@ with color code indicating quality flags
 This function takes time to run and is optional in the workflow,
 but it is still highly recommended to use it to visually check
 the measurements.
-Note that 'flux_plot' is taylored for 'fluxible' functions and
+Note that 'flux_plot' is specific to the 'fluxible' package and
 will work best with datasets produced following a fluxible workflow.
 }
 \examples{

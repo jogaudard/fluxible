@@ -3,49 +3,50 @@
 #' of gas concentration over time
 #' @param slopes_df dataframe of flux slopes
 #' @param slope_col column containing the slope to calculate the flux
-#' (in ppm*s^(-1))
+#' (in ppm*s^(-1) or ppb*s^(-1))
 #' @param datetime_col column containing the datetime of each gas concentration
 #' measurements in slopes_df. The first one after cutting will be kept as
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
-#' ppm or ppb
+#' `ppm` or `ppb`
 #' @param flux_unit unit in which the calculated flux will be
-#' `mmol` outputs fluxes in mmol*m^(-2)*h^(-1);
-#' `micromol` outputs fluxes in micromol*m^(-2)*h^(-1)
+#' `mmol` outputs fluxes in mmol * m^(-2)*h^(-1);
+#' `micromol` outputs fluxes in micromol * m^(-2)*h^(-1)
 #' @param f_cut column containing cutting information
-#' @param keep_arg name in f_cut of data to keep
+#' @param keep_arg name in `f_cut` of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
-#' default for Three-D project chamber (25x24.5x40cm),
 #' can also be a column in case it is a variable
-#' @param tube_volume volume of the tubing in L, default for summer 2020 setup,
+#' @param tube_volume volume of the tubing in L,
 #' can also be a column in case it is a variable
-#' @param atm_pressure atmospheric pressure, assumed 1 atm,
+#' @param atm_pressure atmospheric pressure,
 #' can be a constant (numerical) or a variable (column name)
-#' @param plot_area area of the plot in m^2, default for Three-D,
+#' @param plot_area area of the plot in m^2,
 #' can also be a column in case it is a variable
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux,
 #' as distinct() is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
-#' @param f_fluxid column containing the fluxID
+#' @param f_fluxid column containing the flux IDs
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
-#' Has to be either Celsius, Fahrenheit or Kelvin.
+#' Has to be either `celsius` (default), `fahrenheit` or `kelvin.`
 #' @param cut if 'TRUE' (default), the measurements will be cut according to
-#' 'f_cut' before calculating fluxes. This had no influence on the flux itself
+#' 'f_cut' before calculating fluxes. This has no influence on the flux itself
 #' since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
-#' but it will influence the columns to average.
+#' but it will influence the values of the columns in `cols_ave`.
 #' @param fit_type (optional) model used in flux_fitting, exponential,
 #' quadratic or linear.
-#' Will be automatically filled if slopes_df was produced using flux_quality().
-#' @return a dataframe containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)
-#' or micromol*m^(-2)*h^(-1), depending on the value of `flux_unit`),
-#' temperature average for each flux,
-#' slope used for each flux calculation,
-#' the model used in `flux_fitting`,
-#' and any columns specified in cols_keep and cols_ave.
+#' Will be automatically filled if slopes_df was produced using
+#' \link[fluxible:flux_quality]{flux_quality}.
+#' @return a dataframe containing flux IDs, datetime of measurements' starts,
+#' fluxes in mmol*m^(-2)*h^(-1) or micromol*m^(-2)*h^(-1) (`f_flux`) according
+#' to `flux_unit`, temperature average for each flux in Kelvin (`f_temp_ave`),
+#' the total volume of the setup for each measurement (`f_volume_setup`),
+#' the model used in \link[fluxible:flux_fitting]{flux_fitting},
+#' any column specified in `cols_keep`, any column specified in `cols_ave` with
+#' their value averaged over the measurement after cuts and discarding NA.
 #' @importFrom rlang .data :=
 #' @importFrom dplyr select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything

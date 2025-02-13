@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 options(tidyverse.quiet = TRUE)
 ```
 
-Providing functions to read data files directly from loggers or instruments would be an endless tasks, as there are countless variaties of formats.
+Providing functions to read data files directly from loggers or instruments would be an endless tasks, as there are countless varieties of formats.
 Additionally, such a function already exists: `readr::read_delim` (@readr2024).
 
 We provide here some guidelines and examples on how to use `read_delim` to prepare your raw data files for `fluxible`.
@@ -29,7 +29,7 @@ The first function to use when processing ecosystem gas fluxes data with `fluxib
 ## Input `raw_conc`
 The input `raw_conc` is the file with the gas concentration measured over time, typically the file exported by the logger or instrument.
 
-- Colum that will be used in `fluxible` do not contain space or special characters;
+- Column that will be used in `fluxible` do not contain space or special characters;
 - A gas concentration column as numeric;
 - A column in datetime format (`yyyy-mm-dd hh:mm:ss`) corresponding to each concentration data points.
 
@@ -37,23 +37,23 @@ The input `raw_conc` is the file with the gas concentration measured over time, 
 ## Input `field_record`
 The input `field_record` is the file that is telling which sample or plot was measured when, and eventually providing other meta data, such as campaign, site, type of measurement and so on.
 
-- Colum that will be used in `fluxible` do not contain space or special characters;
-- A colum indicating the start of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`).
+- Column that will be used in `fluxible` do not contain space or special characters;
+- A column indicating the start of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`).
 
 Note that the current version of `flux_match` does not support non fixed measurement length, indicating an end column instead of the `measurement_length` argument.
-But it is possible to mimick `flux_match` and directly start with `flux_fitting` (see below).
+But it is possible to mimic `flux_match` and directly start with `flux_fitting` (see below).
 
 ## By-passing `flux_match`
 The `flux_match` function only intends to attribute a unique `flux_id` to each measurement.
 Depending on your setup, this step might not be necessary.
 The `flux_fitting` function is the step after `flux_match` and its input should check the following points:
 
-- Colum that will be used in `fluxible` do not contain space or special characters;
+- Column that will be used in `fluxible` do not contain space or special characters;
 - A gas concentration column as numeric;
 - A column in datetime format (`yyyy-mm-dd hh:mm:ss`) corresponding to each concentration data points;
 - A column with a unique ID for each measurements;
-- A colum indicating the start of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`);
-- A colum indicating the end of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`).
+- A column indicating the start of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`);
+- A column indicating the end of each measurement in datetime format (`yyyy-mm-dd hh:mm:ss`).
 
 
 # Importing a single file

@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 options(tidyverse.quiet = TRUE)
 ```
 
-In this example we will process the `raw_twogases` dataset which contains both CO~2~ and CH~4~ concentrations measured simultaneoulsy.
+In this example we will process the `raw_twogases` dataset which contains both CO~2~ and CH~4~ concentrations measured simultaneously.
 <!-- The measurements starting time are in `twogases_record`. -->
 The aim is a single dataset of fluxes in which the CH~4~ fluxes where also discarded when the CO~2~ fluxes were discarded.
 

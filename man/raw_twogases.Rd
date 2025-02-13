@@ -17,7 +17,7 @@ A tibble with 21681 rows and 4 variables
 raw_twogases
 }
 \description{
-CO2 and CH4 measured simultaneoulsy
+CO2 and CH4 measured simultaneously
 }
 \examples{
 raw_twogases
