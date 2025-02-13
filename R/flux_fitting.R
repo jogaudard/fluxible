@@ -31,9 +31,14 @@
 #' @param f_fluxid column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
 #' (for quadratic fit)
+#' @return a dataframe with the slope at t zero (`f_slope`),
+#' a datetime column of t zero (`f_start_z`), a factor column indicating the
+#' cuts (`f_cut`), the time in seconds since the start of the measurement
+#' (`f_time`), the modelled fit (`f_fit`), the modelled slope (`f_fit_slope`),
+#' the parameters of the fit depending on the model used,
+#' and any columns present in the input.
+#' The type of fit is added as an attribute for use by the other functions.
 #' @importFrom lubridate int_length interval
-#' @return a dataframe with the slope at t zero,
-#' and parameters of a model of gas concentration over time
 #' @examples
 #' data(co2_conc)
 #' flux_fitting(co2_conc, conc, datetime, fit_type = "exp")
