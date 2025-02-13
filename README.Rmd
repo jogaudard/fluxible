@@ -116,7 +116,7 @@ fluxes_gep
 
 ### Segmentation tool
 We are working on a tool to automatically select the window of the measurement on which to fit a model.
-This selection will be based on environmental variable, such as photosythetically active radiation (PAR), measured simultaneously.
+This selection will be based on environmental variable, such as photosynthetically active radiation (PAR), measured simultaneously.
 
 ### More fits
 As we want fluxible to fit the use of as many projects as possible, more fitting expressions will be included in the flux_fitting function.

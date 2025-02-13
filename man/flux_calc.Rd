@@ -53,8 +53,8 @@ can also be a column in case it is a variable}
 \code{ppm} or \code{ppb}}
 
 \item{flux_unit}{unit in which the calculated flux will be
-\code{mmol} outputs fluxes in mmol*m^(-2)\emph{h^(-1);
-\code{micromol} outputs fluxes in micromol}m^(-2)*h^(-1)}
+\code{mmol} outputs fluxes in mmol * m^(-2)*h^(-1);
+\code{micromol} outputs fluxes in micromol * m^(-2)*h^(-1)}
 
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux,

@@ -66,7 +66,7 @@ Exponential is using the exponential model from Zhao et al (2018)}
 a dataframe with the slope at t zero (\code{f_slope}),
 a datetime column of t zero (\code{f_start_z}), a factor column indicating the
 cuts (\code{f_cut}), the time in seconds since the start of the measurement
-(\code{f_time}), the modelled fit (\code{f_fit}), the modelled slope (\code{f_fit_slope}),
+(\code{f_time}), the modeled fit (\code{f_fit}), the modeled slope (\code{f_fit_slope}),
 the parameters of the fit depending on the model used,
 and any columns present in the input.
 The type of fit is added as an attribute for use by the other functions.

@@ -10,8 +10,8 @@
 #' @param conc_unit unit in which the concentration of gas was measured
 #' `ppm` or `ppb`
 #' @param flux_unit unit in which the calculated flux will be
-#' `mmol` outputs fluxes in mmol*m^(-2)*h^(-1);
-#' `micromol` outputs fluxes in micromol*m^(-2)*h^(-1)
+#' `mmol` outputs fluxes in mmol * m^(-2)*h^(-1);
+#' `micromol` outputs fluxes in micromol * m^(-2)*h^(-1)
 #' @param f_cut column containing cutting information
 #' @param keep_arg name in `f_cut` of data to keep
 #' @param chamber_volume volume of the flux chamber in L,

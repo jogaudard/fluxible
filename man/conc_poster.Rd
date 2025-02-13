@@ -3,7 +3,7 @@
 \docType{data}
 \name{conc_poster}
 \alias{conc_poster}
-\title{CO2 concnetration}
+\title{CO2 concentration}
 \format{
 A tibble with 530 rows and 11 variables
 \describe{

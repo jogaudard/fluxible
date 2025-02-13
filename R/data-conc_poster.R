@@ -1,4 +1,4 @@
-#' CO2 concnetration
+#' CO2 concentration
 #'
 #' CO2 concentration used to make the plot in the poster
 #'

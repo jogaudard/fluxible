@@ -3,7 +3,7 @@
 #' @param fn list of functions used to check (`is.numeric`, `is.character`, ...)
 #' @param msg list of messages to return in case of failed check
 #' @param name_df in case args is a df with selected columns to check origdf
-#' is the orginal df to take the name from for a more obvious error message
+#' is the original df to take the name from for a more obvious error message
 #' @author Adam Klimes
 
 

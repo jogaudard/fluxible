@@ -4,7 +4,7 @@
 #' This function takes time to run and is optional in the workflow,
 #' but it is still highly recommended to use it to visually check
 #' the measurements.
-#' Note that 'flux_plot' is taylored for 'fluxible' functions and
+#' Note that 'flux_plot' is specific to the 'fluxible' pacakge and
 #' will work best with datasets produced following a fluxible workflow.
 #' @param slopes_df dataset containing slopes,
 #' with flags produced by flux_quality
@@ -32,7 +32,7 @@
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
-#' and colour code indicating quality flags and cuts. The plots are organised
+#' and color code indicating quality flags and cuts. The plots are organized
 #' in facets according to flux ID, and a text box display the quality flag and
 #' diagnostics of each measurement.
 #' The plots are returned as a ggplot object if `print_plot = TRUE`;
