@@ -39,7 +39,7 @@
 #' @param fit_type (optional) model used in flux_fitting, exponential,
 #' quadratic or linear.
 #' Will be automatically filled if slopes_df was produced using
-#' \link[fluxible_flux_quality]{flux_quality}.
+#' \link[fluxible:flux_quality]{flux_quality}.
 #' @return a dataframe containing flux IDs, datetime of measurements' starts,
 #' fluxes in mmol*m^(-2)*h^(-1) or micromol*m^(-2)*h^(-1) (`f_flux`) according
 #' to `flux_unit`, temperature average for each flux in Kelvin (`f_temp_ave`),

@@ -81,7 +81,7 @@ but it will influence the values of the columns in \code{cols_ave}.}
 \item{fit_type}{(optional) model used in flux_fitting, exponential,
 quadratic or linear.
 Will be automatically filled if slopes_df was produced using
-\link[fluxible_flux_quality]{flux_quality}.}
+\link[fluxible:flux_quality]{flux_quality}.}
 }
 \value{
 a dataframe containing flux IDs, datetime of measurements' starts,
