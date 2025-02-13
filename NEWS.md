@@ -1,3 +1,5 @@
+# fluxible 1.0.0
+
 # fluxible 0.1.3
 
 * Error corrected in `flux_gep`: the columns in the `cols_keep` argument are
