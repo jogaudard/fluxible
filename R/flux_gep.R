@@ -1,8 +1,7 @@
 #' Calculates GEP
 #' @description to calculate gross ecosystem production (GEP) from net ecosystem
 #' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.
-#' Datetime, PAR and other variables to keep will be taken from the NEE
-#' measurement. If it is missing, GEP will be dropped for that pair.
+#' Datetime and other variables to keep will be taken from the NEE measurement.
 #' @param fluxes_df a dataframe containing NEE and ER
 #' @param id_cols columns used to identify each pair of ER and NEE
 #' @param f_flux column containing flux values
@@ -10,14 +9,16 @@
 #' @param datetime_col column containing start of measurement as datetime
 #' @param nee_arg argument designating NEE fluxes in type column
 #' @param er_arg argument designating ER fluxes in type column
-#' @param cols_keep columns to keep from fluxes_df. Values from NEE row will be
-#' filled in GEP row. `none` (default) keeps only the columns in `id_cols` and
-#' those used by `flux_gep`; `all` keeps all the columns;
+#' @param cols_keep columns to keep from `fluxes_df`. Values from NEE row will
+#' be filled in GEP row. `none` (default) keeps only the columns in `id_cols`,
+#' flux, type and datetime columns; `all` keeps all the columns;
 #' can also be a vector of column names.
-#' @return a df with GEP as a flux type, with PAR and datetime from the NEE
-#' measurement for each pair of ER and NEE
+#' @return a dataframe with GEP as `NEE - ER` in long format with GEP, NEE, and
+#' ER as flux type, datetime, and any column specified in `cols_keep`.
+#' Values of datetime and columns in `cols_keep` for GEP row are taken from
+#' NEE measurements.
 #' @importFrom dplyr rename select mutate case_when filter full_join
-#' cur_group_id
+#' cur_group_id bind_rows
 #' @importFrom tidyr pivot_wider fill
 #' @importFrom purrrlyr slice_rows unslice
 #' @examples
@@ -87,7 +88,7 @@ flux_gep <- function(fluxes_df,
       {{type_col}} == nee_arg
     )
 
-    er_df <- fluxes_df |>
+  er_df <- fluxes_df |>
     select(
       "id",
       all_of(c(cols_keep, id_cols)),
@@ -166,11 +167,11 @@ flux_gep <- function(fluxes_df,
     drop_na({{datetime_col}})
 
   fluxes_gep <- fluxes_gep |>
-    dplyr::bind_rows(nee_df) |>
+    bind_rows(nee_df) |>
     group_by(.data$id) |>
     fill(all_of(c(cols_keep, id_cols)), .direction = "updown") |>
     ungroup() |>
-    dplyr::bind_rows(er_df) |>
+    bind_rows(er_df) |>
     select(!"id") |>
     arrange({{datetime_col}})
 
