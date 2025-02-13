@@ -49,7 +49,9 @@
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
 #' considered good enough (exponential fit)
-#' @return same dataframe with added quality flags and corrected slope column
+#' @return a dataframe with added columns of quality flags (`f_quality_flag`),
+#' the slope corrected according to the quality flags (`f_slope_corr`),
+#' some diagnostics depending on the fit, and any columns present in the input.
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
