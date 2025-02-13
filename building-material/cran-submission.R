@@ -1,4 +1,8 @@
 # for update
+usethis::use_github_links(overwrite = TRUE)
+urlchecker::url_check()
+devtools::build_readme()
+devtools::check(remote = TRUE, manual = TRUE)
 
 usethis::use_release_issue()
 
