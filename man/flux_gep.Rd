@@ -36,8 +36,10 @@ those used by \code{flux_gep}; \code{all} keeps all the columns;
 can also be a vector of column names.}
 }
 \value{
-a df with GEP as a flux type, with PAR and datetime from the NEE
-measurement for each pair of ER and NEE
+a dataframe with GEP as \code{NEE - ER} in long format with GEP, NEE, and
+ER as flux type, datetime, and any column specified in \code{cols_keep}.
+Values of datetime and columns in \code{cols_keep} for GEP row are taken from
+NEE measurements.
 }
 \description{
 to calculate gross ecosystem production (GEP) from net ecosystem

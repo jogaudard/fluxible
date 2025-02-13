@@ -67,9 +67,13 @@ but will take time depending on the size of the dataset}
 (in case \code{output = "ggsave"})}
 }
 \value{
-a ggplot object if \code{print_plot = TRUE},
+plots of fluxes, with raw concentration data points, fit, slope,
+and colour code indicating quality flags and cuts. The plots are organised
+in facets according to flux ID, and a text box display the quality flag and
+diagnostics of each measurement.
+The plots are returned as a ggplot object if \code{print_plot = TRUE};
 if \code{print_plot = FALSE} it will not return anything but will produce a file
-depending on \code{output}
+according to the \code{output} argument.
 }
 \description{
 plots the fluxes, fit and slope in facets

@@ -48,7 +48,7 @@ can be a constant (numerical) or a variable (column name)}
 \item{plot_area}{area of the plot in m^2, default for Three-D,
 can also be a column in case it is a variable}
 
-\item{f_fluxid}{column containing the fluxID}
+\item{f_fluxid}{column containing the flux IDs}
 
 \item{conc_unit}{unit in which the concentration of gas was measured
 ppm or ppb}
@@ -84,12 +84,13 @@ quadratic or linear.
 Will be automatically filled if slopes_df was produced using flux_quality().}
 }
 \value{
-a dataframe containing fluxID, fluxes (in mmol*m^(-2)\emph{h^(-1)
-or micromol}m^(-2)*h^(-1), depending on the value of \code{flux_unit}),
-temperature average for each flux,
-slope used for each flux calculation,
-the model used in \code{flux_fitting},
-and any columns specified in cols_keep and cols_ave.
+a dataframe containing flux IDs, datetime of measurements' starts,
+fluxes in mmol*m^(-2)\emph{h^(-1) or micromol}m^(-2)*h^(-1) (\code{f_flux}) according
+to \code{flux_unit}, temperature average for each flux in Kelvin (\code{f_temp_ave}),
+the total volume of the setup for each measurement (\code{f_volume_setup}),
+the model used in \link[fluxible:flux_fitting]{flux_fitting},
+any column specified in \code{cols_keep}, any column specified in \code{cols_ave} with
+their value averaged over the measurement after cuts and discarding NA.
 }
 \description{
 calculates a flux based on the rate of change
