@@ -30,9 +30,9 @@ flux_gep(
 
 \item{er_arg}{argument designating ER fluxes in type column}
 
-\item{cols_keep}{columns to keep from fluxes_df. Values from NEE row will be
-filled in GEP row. \code{none} (default) keeps only the columns in \code{id_cols} and
-those used by \code{flux_gep}; \code{all} keeps all the columns;
+\item{cols_keep}{columns to keep from \code{fluxes_df}. Values from NEE row will
+be filled in GEP row. \code{none} (default) keeps only the columns in \code{id_cols},
+flux, type and datetime columns; \code{all} keeps all the columns;
 can also be a vector of column names.}
 }
 \value{
@@ -44,8 +44,7 @@ NEE measurements.
 \description{
 to calculate gross ecosystem production (GEP) from net ecosystem
 (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.
-Datetime, PAR and other variables to keep will be taken from the NEE
-measurement. If it is missing, GEP will be dropped for that pair.
+Datetime and other variables to keep will be taken from the NEE measurement.
 }
 \examples{
 data(co2_fluxes)

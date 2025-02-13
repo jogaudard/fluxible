@@ -2,7 +2,7 @@
 #' @description fits gas concentration over time data with a model
 #' (exponential, quadratic or linear) and provides the slope later used
 #' to calculate gas fluxes with flux_calc
-#' @param fit_type exponential, quadratic or linear.
+#' @param fit_type `exponential`, `quadratic` or `linear.`
 #' Exponential is using the exponential model from Zhao et al (2018)
 #' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 #' On the calculation of daytime CO2 fluxes measured by automated closed

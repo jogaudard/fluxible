@@ -59,7 +59,7 @@ ideally same as cz_window (exponential fit)}
 \item{t_zero}{time at which the slope should be calculated
 (for quadratic fit)}
 
-\item{fit_type}{exponential, quadratic or linear.
+\item{fit_type}{\code{exponential}, \code{quadratic} or \code{linear.}
 Exponential is using the exponential model from Zhao et al (2018)}
 }
 \value{

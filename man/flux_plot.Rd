@@ -55,12 +55,12 @@ if empty, the name of \code{slopes_df} will be used}
 
 \item{y_text_position}{position of the text box}
 
-\item{print_plot}{FALSE or TRUE, if TRUE it prints the plot in R
+\item{print_plot}{logical, if TRUE it prints the plot as a ggplot object
 but will take time depending on the size of the dataset}
 
-\item{output}{"pdfpages", the plots are saved as A4 landscape pdf pages;
-"ggsave", the plots can be saved with the ggsave function;
-"print_only" (default) prints the plot without creating a file
+\item{output}{\code{pdfpages}, the plots are saved as A4 landscape pdf pages;
+\code{ggsave}, the plots can be saved with the ggsave function;
+\code{print_only} (default) prints the plot without creating a file
 (independently from 'print_plot' being TRUE or FALSE)}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
