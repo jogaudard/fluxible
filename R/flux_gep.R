@@ -88,7 +88,7 @@ flux_gep <- function(fluxes_df,
       {{type_col}} == nee_arg
     )
 
-    er_df <- fluxes_df |>
+  er_df <- fluxes_df |>
     select(
       "id",
       all_of(c(cols_keep, id_cols)),
