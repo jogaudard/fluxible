@@ -31,9 +31,13 @@
 #' (independently from 'print_plot' being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
-#' @return a ggplot object if `print_plot = TRUE`,
+#' @return plots of fluxes, with raw concentration data points, fit, slope,
+#' and colour code indicating quality flags and cuts. The plots are organised
+#' in facets according to flux ID, and a text box display the quality flag and
+#' diagnostics of each measurement.
+#' The plots are returned as a ggplot object if `print_plot = TRUE`;
 #' if `print_plot = FALSE` it will not return anything but will produce a file
-#' depending on `output`
+#' according to the `output` argument.
 #' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
