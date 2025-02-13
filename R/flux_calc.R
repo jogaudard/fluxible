@@ -28,7 +28,7 @@
 #' as distinct() is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
-#' @param f_fluxid column containing the fluxID
+#' @param f_fluxid column containing the flux IDs
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
@@ -40,12 +40,13 @@
 #' @param fit_type (optional) model used in flux_fitting, exponential,
 #' quadratic or linear.
 #' Will be automatically filled if slopes_df was produced using flux_quality().
-#' @return a dataframe containing fluxID, fluxes (in mmol*m^(-2)*h^(-1)
-#' or micromol*m^(-2)*h^(-1), depending on the value of `flux_unit`),
-#' temperature average for each flux,
-#' slope used for each flux calculation,
-#' the model used in `flux_fitting`,
-#' and any columns specified in cols_keep and cols_ave.
+#' @return a dataframe containing flux IDs, datetime of measurements' starts,
+#' fluxes in mmol*m^(-2)*h^(-1) or micromol*m^(-2)*h^(-1) (`f_flux`) according
+#' to `flux_unit`, temperature average for each flux in Kelvin (`f_temp_ave`),
+#' the total volume of the setup for each measurement (`f_volume_setup`),
+#' the model used in \link[fluxible:flux_fitting]{flux_fitting},
+#' any column specified in `cols_keep`, any column specified in `cols_ave` with
+#' their value averaged over the measurement after cuts and discarding NA.
 #' @importFrom rlang .data :=
 #' @importFrom dplyr select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything
