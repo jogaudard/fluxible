@@ -14,8 +14,10 @@
 #' filled in GEP row. `none` (default) keeps only the columns in `id_cols` and
 #' those used by `flux_gep`; `all` keeps all the columns;
 #' can also be a vector of column names.
-#' @return a df with GEP as a flux type, with PAR and datetime from the NEE
-#' measurement for each pair of ER and NEE
+#' @return a dataframe with GEP as `NEE - ER` in long format with GEP, NEE, and
+#' ER as flux type, datetime, and any column specified in `cols_keep`.
+#' Values of datetime and columns in `cols_keep` for GEP row are taken from
+#' NEE measurements.
 #' @importFrom dplyr rename select mutate case_when filter full_join
 #' cur_group_id
 #' @importFrom tidyr pivot_wider fill
