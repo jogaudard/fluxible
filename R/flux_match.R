@@ -47,6 +47,7 @@ flux_match <- function(raw_conc,
                        end_col,
                        startcrop,
                        measurement_length,
+                       matching = "fixed_length",
                        ratio_threshold = 0.5,
                        time_diff = 0) {
 
@@ -101,8 +102,9 @@ flux_match <- function(raw_conc,
     mutate(
       f_start = {{start_col}} + startcrop,
       f_end = case_when(
-        !is.na(measurement_length) ~ {{start_col}} + measurement_length,
-        is.na(measurement_length) ~ "bo"
+        matching == "fixed_length" ~ {{start_col}} + measurement_length,
+        matching == "end_col" ~ {{end_col}}
+        # is.character(measurement_length) ~ "bo"
         
       ),
       # f_end = {{start_col}} + measurement_length,
