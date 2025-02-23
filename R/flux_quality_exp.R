@@ -17,6 +17,8 @@
 #' by the user's decision
 #' @param force_ok vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
+#' @param force_zero vector of fluxIDs that should be replaced by zero by
+#' the user's decision
 #' @param rmse_threshold threshold for the RMSE of each flux above
 #' which the fit is considered unsatisfactory
 #' @param cor_threshold threshold for the correlation coefficient
@@ -41,6 +43,7 @@ flux_quality_exp <- function(slopes_df,
                              f_b,
                              force_discard,
                              force_ok,
+                             force_zero,
                              rmse_threshold,
                              cor_threshold,
                              b_threshold) {
@@ -102,6 +105,7 @@ flux_quality_exp <- function(slopes_df,
         .data$f_start_error == "error" ~ "start_error",
         {{f_fluxid}} %in% force_discard ~ "force_discard",
         {{f_fluxid}} %in% force_ok ~ "force_ok",
+        {{f_fluxid}} %in% force_zero ~ "force_zero",
         .data$f_fit_quality == "bad_RMSE" &
           .data$f_correlation == "yes" ~ "discard",
         .data$f_fit_quality == "bad_RMSE" &
@@ -116,6 +120,7 @@ flux_quality_exp <- function(slopes_df,
         .data$f_quality_flag == "no_data" ~ NA,
         .data$f_quality_flag == "force_discard" ~ NA,
         .data$f_quality_flag == "force_ok" ~ {{f_slope}},
+        .data$f_quality_flag == "force_zero" ~ 0,
         .data$f_quality_flag == "start_error" ~ NA,
         .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0,
