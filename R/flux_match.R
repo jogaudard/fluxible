@@ -44,6 +44,7 @@ flux_match <- function(raw_conc,
                        datetime_col,
                        start_col,
                        conc_col,
+                       end_col,
                        startcrop,
                        measurement_length,
                        ratio_threshold = 0.5,
@@ -90,12 +91,25 @@ flux_match <- function(raw_conc,
     stop("ratio_threshold has to be a number between 0 and 1")
   }
 
+  # if (is.numeric(measurement_length)) {
+  #   end_col <- "f_end"
+  # }
+
 
   field_record <- field_record |>
     arrange({{start_col}}) |>
     mutate(
       f_start = {{start_col}} + startcrop,
-      f_end = {{start_col}} + measurement_length,
+      f_end = case_when(
+        !is.na(measurement_length) ~ {{start_col}} + measurement_length,
+        is.na(measurement_length) ~ "bo"
+        
+      ),
+      # f_end = {{start_col}} + measurement_length,
+      # {{end_col}} := case_when(
+      #   is.numeric(measurement_length) ~ {{start_col}} + measurement_length,
+      #   is.null(measurement_length) ~ {{end_col}}
+      # ),
       f_fluxid = row_number()
     )
   raw_conc <- raw_conc |>
