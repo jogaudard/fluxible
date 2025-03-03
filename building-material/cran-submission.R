@@ -1,5 +1,12 @@
+# for update
+usethis::use_github_links(overwrite = TRUE)
+urlchecker::url_check()
+devtools::build_readme()
+devtools::check(remote = TRUE, manual = TRUE)
 
-release()
+usethis::use_release_issue()
+
+devtools::release()
 
 devtools::spell_check()
 
