@@ -1,4 +1,6 @@
-# fluxible 1.0.0
+# fluxible 1.0.1
+
+* `flux_quality`: added `force_zero` argument to force a flux to be replaced by zero.
 
 # fluxible 0.1.3
 
