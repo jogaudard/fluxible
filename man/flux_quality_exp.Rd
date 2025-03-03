@@ -15,6 +15,7 @@ flux_quality_exp(
   f_b,
   force_discard,
   force_ok,
+  force_zero,
   rmse_threshold,
   cor_threshold,
   b_threshold
@@ -44,6 +45,9 @@ by the user's decision}
 
 \item{force_ok}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
+
+\item{force_zero}{vector of fluxIDs that should be replaced by zero by
+the user's decision}
 
 \item{rmse_threshold}{threshold for the RMSE of each flux above
 which the fit is considered unsatisfactory}

@@ -10,7 +10,7 @@ flux_flag_count(
   f_quality_flag = f_quality_flag,
   f_cut = f_cut,
   f_flags = c("ok", "discard", "zero", "force_discard", "start_error", "no_data",
-    "force_ok"),
+    "force_ok", "force_zero"),
   cut_arg = "cut"
 )
 }

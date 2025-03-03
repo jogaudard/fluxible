@@ -14,6 +14,7 @@
        start_error 	 0 	 0 %
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
     Output
       # A tibble: 6 x 5
         f_fluxid f_quality_flag f_RMSE f_cor_coef f_ratio
@@ -41,6 +42,7 @@
        start_error 	 0 	 0 %
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
     Output
       # A tibble: 6 x 4
         f_fluxid f_quality_flag  f_pvalue f_rsquared
@@ -68,6 +70,7 @@
        start_error 	 0 	 0 %
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
     Output
       # A tibble: 6 x 4
         f_fluxid f_quality_flag  f_pvalue f_rsquared
