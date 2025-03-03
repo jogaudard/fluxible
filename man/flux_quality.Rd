@@ -19,6 +19,7 @@ flux_quality(
   f_b = f_b,
   force_discard = c(),
   force_ok = c(),
+  force_zero = c(),
   ratio_threshold = 0,
   fit_type = c(),
   ambient_conc = 421,
@@ -69,6 +70,9 @@ by the user's decision}
 
 \item{force_ok}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
+
+\item{force_zero}{vector of fluxIDs that should be replaced by zero by
+the user's decision}
 
 \item{ratio_threshold}{ratio of gas concentration data points over length of
 measurement (in seconds) below which the measurement will be considered as
