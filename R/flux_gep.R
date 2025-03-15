@@ -98,6 +98,18 @@ flux_gep <- function(fluxes_df,
       {{type_col}} == er_arg
     )
 
+  other_df <- fluxes_df |>
+    select(
+      "id",
+      all_of(c(cols_keep, id_cols)),
+      {{type_col}},
+      {{f_flux}},
+      {{datetime_col}}
+    ) |>
+    filter(
+      {{type_col}} != er_arg
+        & {{type_col}} != nee_arg
+    )
 
   fluxes_gep <- fluxes_df |>
     select(
@@ -170,6 +182,7 @@ flux_gep <- function(fluxes_df,
     fill(all_of(c(cols_keep, id_cols)), .direction = "updown") |>
     ungroup() |>
     bind_rows(er_df) |>
+    bind_rows(other_df) |>
     select(!"id") |>
     arrange({{datetime_col}})
 
