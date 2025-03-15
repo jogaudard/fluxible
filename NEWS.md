@@ -1,3 +1,7 @@
+# fluxible 1.0.2
+
+* `flux_gep`: fluxes presents in the dataset that are neither NEE nor ER (soilR, LRC or other) are not lost anymore.
+
 # fluxible 1.0.1
 
 * `flux_quality`: added `force_zero` argument to force a flux to be replaced by zero.
