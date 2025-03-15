@@ -57,7 +57,6 @@ flux_gep <- function(fluxes_df,
       select(!c(
         all_of(id_cols),
         {{type_col}},
-        {{type_col}},
         {{f_flux}},
         {{datetime_col}}
       )) |>
@@ -80,7 +79,6 @@ flux_gep <- function(fluxes_df,
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      {{type_col}},
       {{f_flux}},
       {{datetime_col}}
     ) |>
@@ -93,13 +91,13 @@ flux_gep <- function(fluxes_df,
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      {{type_col}},
       {{f_flux}},
       {{datetime_col}}
     ) |>
     filter(
       {{type_col}} == er_arg
     )
+
 
   fluxes_gep <- fluxes_df |>
     select(
