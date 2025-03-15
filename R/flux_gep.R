@@ -2,6 +2,8 @@
 #' @description to calculate gross ecosystem production (GEP) from net ecosystem
 #' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.
 #' Datetime and other variables to keep will be taken from the NEE measurement.
+#' Fluxes presents in the dataset that are neither NEE nor ER
+#' (soilR, LRC or other) are not lost.
 #' @param fluxes_df a dataframe containing NEE and ER
 #' @param id_cols columns used to identify each pair of ER and NEE
 #' @param f_flux column containing flux values
@@ -57,7 +59,6 @@ flux_gep <- function(fluxes_df,
       select(!c(
         all_of(id_cols),
         {{type_col}},
-        {{type_col}},
         {{f_flux}},
         {{datetime_col}}
       )) |>
@@ -80,7 +81,6 @@ flux_gep <- function(fluxes_df,
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      {{type_col}},
       {{f_flux}},
       {{datetime_col}}
     ) |>
@@ -93,12 +93,24 @@ flux_gep <- function(fluxes_df,
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      {{type_col}},
       {{f_flux}},
       {{datetime_col}}
     ) |>
     filter(
       {{type_col}} == er_arg
+    )
+
+  other_df <- fluxes_df |>
+    select(
+      "id",
+      all_of(c(cols_keep, id_cols)),
+      {{type_col}},
+      {{f_flux}},
+      {{datetime_col}}
+    ) |>
+    filter(
+      {{type_col}} != er_arg
+        & {{type_col}} != nee_arg
     )
 
   fluxes_gep <- fluxes_df |>
@@ -172,6 +184,7 @@ flux_gep <- function(fluxes_df,
     fill(all_of(c(cols_keep, id_cols)), .direction = "updown") |>
     ungroup() |>
     bind_rows(er_df) |>
+    bind_rows(other_df) |>
     select(!"id") |>
     arrange({{datetime_col}})
 
