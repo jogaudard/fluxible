@@ -45,6 +45,8 @@ NEE measurements.
 to calculate gross ecosystem production (GEP) from net ecosystem
 (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.
 Datetime and other variables to keep will be taken from the NEE measurement.
+Fluxes presents in the dataset that are neither NEE nor ER
+(soilR, LRC or other) are not lost.
 }
 \examples{
 data(co2_fluxes)
