@@ -42,7 +42,4 @@
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
       Plotting in progress
-    Condition
-      Warning:
-      Adding new file snapshot: 'tests/testthat/_snaps/plot-for-exp-tz-fit.svg'
 

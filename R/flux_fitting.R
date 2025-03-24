@@ -13,8 +13,6 @@
 #' `exponential` is equal to `exp_zhao18`, for backwards compatibility
 #' @param conc_df dataframe of gas concentration over time
 #' @param conc_col column with gas concentration
-#' @param t_window enlarge focus window before and after tmin and tmax
-#' (exponential fit)
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' (exponential fit)
 #' @param b_window window to estimate b. It is an interval after tz where
@@ -57,7 +55,6 @@ flux_fitting <- function(conc_df,
                          f_fluxid = f_fluxid,
                          start_cut = 0,
                          end_cut = 0,
-                         t_window = 20,
                          cz_window = 15,
                          b_window = 10,
                          a_window = 10,
@@ -134,7 +131,6 @@ flux_fitting <- function(conc_df,
       {{f_fluxid}},
       start_cut = start_cut,
       end_cut = end_cut,
-      t_window = t_window,
       cz_window = cz_window,
       b_window = b_window,
       a_window = a_window,

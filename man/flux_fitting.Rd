@@ -13,7 +13,6 @@ flux_fitting(
   f_fluxid = f_fluxid,
   start_cut = 0,
   end_cut = 0,
-  t_window = 20,
   cz_window = 15,
   b_window = 10,
   a_window = 10,
@@ -41,9 +40,6 @@ the first row will be kept}
 (in seconds)}
 
 \item{end_cut}{time to discard at the end of the measurements (in seconds)}
-
-\item{t_window}{enlarge focus window before and after tmin and tmax
-(exponential fit)}
 
 \item{cz_window}{window used to calculate Cz, at the beginning of cut window
 (exponential fit)}

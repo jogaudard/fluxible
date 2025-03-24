@@ -13,7 +13,6 @@
 #' @param f_start column with datetime when the measurement started
 #' @param f_end column with datetime when the measurement ended
 #' @param f_fluxid column with ID of each flux
-#' @param t_window enlarge focus window before and after tmin and tmax
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' @param b_window window to estimate b. It is an interval after tz
 #' where it is assumed that C fits the data perfectly
@@ -44,7 +43,6 @@ flux_fitting_zhao18 <- function(conc_df,
                              f_start,
                              f_end,
                              f_fluxid,
-                             t_window,
                              cz_window,
                              b_window,
                              a_window,
@@ -53,7 +51,6 @@ flux_fitting_zhao18 <- function(conc_df,
                              end_cut) {
 
   args_ok <- flux_fun_check(list(
-    t_window = t_window,
     cz_window = cz_window,
     b_window = b_window,
     a_window = a_window,
@@ -63,10 +60,9 @@ flux_fitting_zhao18 <- function(conc_df,
     is.numeric,
     is.numeric,
     is.numeric,
-    is.numeric,
     is.numeric
   ),
-  msg = rep("has to be numeric", 5))
+  msg = rep("has to be numeric", 4))
 
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
