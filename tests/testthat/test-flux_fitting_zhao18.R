@@ -16,7 +16,7 @@ test_that("fitting works with 30 second end cut", {
       conc,
       datetime,
       end_cut = 30,
-      fit_type = "exp"
+      fit_type = "exponential"
     )
   )
 })
@@ -28,7 +28,7 @@ test_that("fitting works with 60 second end cut", {
       conc,
       datetime,
       end_cut = 60,
-      fit_type = "exp"
+      fit_type = "exponential"
     )
   )
 })
@@ -41,7 +41,7 @@ test_that("warnings when NAs are dropped in conc", {
     flux_fitting(co2_conc_missing,
                  conc,
                  datetime,
-                 fit_type = "exp"),
+                 fit_type = "exponential"),
     " fluxID 1 : slope was estimated on 70 points out of 210 seconds
  fluxID 2 : slope was estimated on 121 points out of 210 seconds
  fluxID 3 : slope was estimated on 102 points out of 210 seconds
@@ -57,7 +57,7 @@ test_that("warnings when there is no data in conc", {
     flux_fitting(co2_conc_missing,
                  conc,
                  datetime,
-                 fit_type = "exp"),
+                 fit_type = "exponential"),
     " fluxID 6 dropped (no data in the conc column)",
     fixed = TRUE # need that because there parenthesis in the error message
   )
@@ -70,7 +70,7 @@ test_that("warnings with cutting", {
       conc,
       datetime,
       start_cut = 10,
-      fit_type = "exp"
+      fit_type = "exponential"
     ),
     " fluxID 1 : slope was estimated on 70 points out of 200 seconds
  fluxID 2 : slope was estimated on 121 points out of 200 seconds
@@ -87,7 +87,7 @@ test_that("error on arguments", {
       conc,
       datetime,
       start_cut = "Voldemort",
-      fit_type = "exp"
+      fit_type = "exponential"
     ),
     "Please correct the arguments"
   )
@@ -103,7 +103,7 @@ test_that("cutting too much", {
       datetime,
       start_cut = 120,
       end_cut = 100,
-      fit_type = "exp"
+      fit_type = "exponential"
     ),
     "You cannot cut more than the length of the measurements!",
     fixed = TRUE # need that because there parenthesis in the error message
@@ -125,7 +125,7 @@ test_that("renaming works", {
       date_time,
       f_start,
       finish,
-      fit_type = "exp"
+      fit_type = "exponential"
     )
   )
 })

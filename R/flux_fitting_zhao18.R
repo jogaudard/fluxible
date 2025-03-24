@@ -38,7 +38,7 @@
 
 
 
-flux_fitting_exp <- function(conc_df,
+flux_fitting_zhao18 <- function(conc_df,
                              conc_col,
                              datetime_col,
                              f_start,

@@ -165,7 +165,7 @@ flux_quality <- function(slopes_df,
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = dplyr::join_by({{f_fluxid}}))
 
-  if (fit_type == "exponential") {
+  if (fit_type == "exp_zhao18") {
     quality_flag <- flux_quality_exp(
       slopes_df,
       {{conc_col}},

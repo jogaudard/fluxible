@@ -266,7 +266,7 @@ test_that("Fluxible workflow works from start to finish", {
     conc,
     datetime,
     start,
-    fit_type = "exp"
+    fit_type = "exp_zhao18"
   ))
   slopes_flag_test <- flux_quality(
     slopes_test,
