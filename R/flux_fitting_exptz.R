@@ -42,18 +42,18 @@
 
 
 flux_fitting_exptz <- function(conc_df,
-                             conc_col,
-                             datetime_col,
-                             f_start,
-                             f_end,
-                             f_fluxid,
-                             cz_window,
-                             b_window,
-                             a_window,
-                             roll_width,
-                             start_cut,
-                             end_cut,
-                             t_zero) {
+                               conc_col,
+                               datetime_col,
+                               f_start,
+                               f_end,
+                               f_fluxid,
+                               cz_window,
+                               b_window,
+                               a_window,
+                               roll_width,
+                               start_cut,
+                               end_cut,
+                               t_zero) {
 
   args_ok <- flux_fun_check(list(
     cz_window = cz_window,
@@ -198,35 +198,10 @@ flux_fitting_exptz <- function(conc_df,
     ungroup()
 
 
-
-#   tz_df <- conc_df_cut |>
-#     left_join(cz_df, by = dplyr::join_by({{f_fluxid}})) |>
-#     group_by({{f_fluxid}}) |>
-#     filter(
-#       .data$f_time_cut < .data$f_length_window / 2
-#     ) |>
-#     mutate(
-#       conc_roll = zoo::rollmean(.data[[name_conc]],
-#         k = roll_width,
-#         fill = NA, align = "right"
-#       ),
-#       Cd = abs(.data$conc_roll - .data$f_Cz),
-#       minCd = min(.data$Cd, na.rm = TRUE),
-#       f_tz_est = min(.data$f_time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
-#     ) |>
-#     ungroup() |>
-#     select({{f_fluxid}}, "f_tz_est") |>
-#     distinct()
-
-
-
   cb_df <- conc_df_cut |>
-    # left_join(tz_df, by = dplyr::join_by({{f_fluxid}})) |>
     group_by({{f_fluxid}}) |>
     mutate(
-      diff = .data$f_time_cut 
-    #   - .data$f_tz_est 
-      + b_window
+      diff = .data$f_time_cut + b_window
     ) |>
     distinct(.data$diff, .keep_all = TRUE) |>
     dplyr::slice(which.min(abs(.data$diff))) |>
@@ -249,7 +224,6 @@ flux_fitting_exptz <- function(conc_df,
   estimates_df <- left_join(cm_df, cz_df,
     by = dplyr::join_by({{f_fluxid}})
   ) |>
-    # left_join(tz_df, by = dplyr::join_by({{f_fluxid}})) |>
     left_join(a_df, by = dplyr::join_by({{f_fluxid}})) |>
     left_join(cb_df, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
@@ -262,7 +236,6 @@ flux_fitting_exptz <- function(conc_df,
         * (1 / b_window),
       ),
       f_a_est = case_when(
-        # ta = 0 is a special case that is undefined
         .data$ta == 0 ~ 0,
         TRUE ~
           (.data$Ca - .data$f_Cm_est - (.data$f_Cz - .data$f_Cm_est)
@@ -310,8 +283,8 @@ flux_fitting_exptz <- function(conc_df,
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
       f_b = .data$results$par[3],
-    #   f_tz = exp(.data$results$par[4]), # we force tz to be positive
-      f_slope = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz) * exp(-.data$f_b * t_zero),
+      f_slope = .data$f_a +
+        .data$f_b * (.data$f_Cm - .data$f_Cz) * exp(-.data$f_b * t_zero),
       .groups = "drop"
     ) |>
     select(!c("results", "f_Cm_est", "f_a_est",
@@ -326,8 +299,9 @@ flux_fitting_exptz <- function(conc_df,
         (.data$f_time - .data$f_time_diff)
       + (.data$f_Cz - .data$f_Cm)
       * exp(-.data$f_b * (.data$f_time - .data$f_time_diff)),
-      f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
-      * (t_zero + .data$f_time_diff),
+      f_fit_slope = .data$f_Cm + .data$f_a * t_zero
+      + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b * t_zero)
+      - .data$f_slope * (t_zero - .data$f_time),
       f_start_z = {{f_start}} + t_zero,
       .by = {{f_fluxid}}
     ) |>

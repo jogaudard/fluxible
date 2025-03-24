@@ -44,3 +44,21 @@ test_that("plot can be exported as an object", {
   plot_object <- flux_plot(slopes30lin_flag, conc, datetime)
   vdiffr::expect_doppelganger("plot as an object", plot_object)
 })
+
+test_that("plot for exp_tz fit", {
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "plot for exp_tz fit",
+      flux_fitting(
+        co2_conc,
+        conc,
+        datetime,
+        fit_type = "exp_tz",
+        end_cut = 60,
+        t_zero = 20
+      ) |>
+        flux_quality(conc) |>
+        flux_plot(conc, datetime)
+    )
+  )
+})

@@ -1145,8 +1145,8 @@ flux_fitting(
       conc,
       datetime,
       fit_type = "exp_tz",
-      end_cut = 20,
-      t_zero = 60
+      end_cut = 60,
+      t_zero = 20
     ) |>
     flux_quality(conc) |>
     flux_plot(conc, datetime)
