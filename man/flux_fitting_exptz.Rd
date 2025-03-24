@@ -3,7 +3,8 @@
 \name{flux_fitting_exptz}
 \alias{flux_fitting_exptz}
 \title{Fitting a model to the gas concentration curve and estimating the slope over
-time, using a modified version of the model from Zhao et al (2018)}
+time, using a modified version of the model from Zhao et al (2018)
+that allows the user to fix \code{t_zero}.}
 \usage{
 flux_fitting_exptz(
   conc_df,

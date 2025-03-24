@@ -53,12 +53,14 @@ it is assumed that the model fits the data perfectly (exponential fit)}
 ideally same as cz_window (exponential fit)}
 
 \item{t_zero}{time at which the slope should be calculated
-(for quadratic fit)}
+(for \code{quadratic} and \code{exp_tz} fits)}
 
 \item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{quadratic} or \code{linear.}
 \code{exp_zhao18} is using the exponential model
 \verb{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}
-from Zhao et al (2018)}
+from Zhao et al (2018).
+\code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
+\verb{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}.}
 }
 \value{
 a dataframe with the slope at t zero (\code{f_slope}),

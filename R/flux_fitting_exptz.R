@@ -1,5 +1,6 @@
 #' Fitting a model to the gas concentration curve and estimating the slope over
 #' time, using a modified version of the model from Zhao et al (2018)
+#' that allows the user to fix `t_zero`.
 #' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 #' On the calculation of daytime CO2 fluxes measured by automated closed
 #' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.

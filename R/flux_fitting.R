@@ -5,7 +5,9 @@
 #' @param fit_type `exp_zhao18`, `exp_tz`, `quadratic` or `linear.`
 #' `exp_zhao18` is using the exponential model
 #' `C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))`
-#' from Zhao et al (2018)
+#' from Zhao et al (2018).
+#' `expt_tz` is a modified version which allows the user to fix `t_zero`:
+#' `C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)`.
 #' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 #' On the calculation of daytime CO2 fluxes measured by automated closed
 #' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
@@ -31,7 +33,7 @@
 #' @param conc_col column with gas concentration data
 #' @param f_fluxid column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
-#' (for quadratic fit)
+#' (for `quadratic` and `exp_tz` fits)
 #' @return a dataframe with the slope at t zero (`f_slope`),
 #' a datetime column of t zero (`f_start_z`), a factor column indicating the
 #' cuts (`f_cut`), the time in seconds since the start of the measurement
