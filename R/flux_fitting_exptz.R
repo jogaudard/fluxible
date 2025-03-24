@@ -15,7 +15,6 @@
 #' @param f_start column with datetime when the measurement started
 #' @param f_end column with datetime when the measurement ended
 #' @param f_fluxid column with ID of each flux
-#' @param t_window enlarge focus window before and after tmin and tmax
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' @param b_window window to estimate b. It is an interval after tz
 #' where it is assumed that C fits the data perfectly

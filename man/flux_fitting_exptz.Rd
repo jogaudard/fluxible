@@ -54,8 +54,6 @@ ideally same as cz_window}
 
 \item{t_zero}{time at which the slope should be calculated
 (for quadratic fit)}
-
-\item{t_window}{enlarge focus window before and after tmin and tmax}
 }
 \value{
 a dataframe with the slope at t zero,
