@@ -150,3 +150,30 @@
       #   f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit <dbl>,
       #   f_fit_slope <dbl>, f_start_z <dttm>
 
+# works for exp_tz fitting
+
+    Code
+      distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "exp_tz"),
+      f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_exptz()`:
+      
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
+    Output
+      # A tibble: 6 x 2
+        f_fluxid  f_slope
+        <fct>       <dbl>
+      1 1        2253.   
+      2 2         966.   
+      3 3           0.376
+      4 4        1613.   
+      5 5           1.18 
+      6 6           0.493
+

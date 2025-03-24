@@ -142,6 +142,24 @@ flux_fitting <- function(conc_df,
     )
   }
 
+  if (fit_type == "exp_tz") {
+    conc_fitting <- flux_fitting_exptz(
+      conc_df,
+      {{conc_col}},
+      {{datetime_col}},
+      {{f_start}},
+      {{f_end}},
+      {{f_fluxid}},
+      start_cut = start_cut,
+      end_cut = end_cut,
+      t_zero = t_zero,
+      cz_window = cz_window,
+      b_window = b_window,
+      a_window = a_window,
+      roll_width = roll_width
+    )
+  }
+
 
   if (fit_type == "linear") {
     conc_fitting <- flux_fitting_lin(

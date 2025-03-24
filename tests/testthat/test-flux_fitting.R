@@ -109,3 +109,16 @@ test_that("correct flux with duplicated datetime", {
     )
   )
 })
+
+test_that("works for exp_tz fitting", {
+  expect_snapshot(
+    flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_tz"
+    ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
+  )
+})

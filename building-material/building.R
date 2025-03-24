@@ -1135,3 +1135,18 @@ flux_fitting(test,
                  datetime,
                  fit_type = "exponential") |>
                  View()
+
+
+
+# trying new exp_tz fit
+
+flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 20,
+      t_zero = 60
+    ) |>
+    flux_quality(conc) |>
+    flux_plot(conc, datetime)

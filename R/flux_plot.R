@@ -162,7 +162,7 @@ flux_plot <- function(slopes_df,
 
 
 
-  if (fit_type == "exp_zhao18") {
+  if (fit_type %in% c("exp_zhao18", "exp_tz")) {
     f_plot <- flux_plot_exp(
       slopes_df,
       {{conc_col}},
