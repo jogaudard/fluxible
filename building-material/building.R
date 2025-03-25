@@ -1180,9 +1180,10 @@ flux_fitting(
       co2_conc_missing,
       conc,
       datetime,
-      fit_type = "exp_tz",
+      fit_type = "quadratic",
       end_cut = 60,
       t_zero = 20
     ) |>
     flux_quality(conc) |>
+    # View()
     flux_plot(conc, datetime)
