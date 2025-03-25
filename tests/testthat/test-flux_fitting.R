@@ -122,3 +122,17 @@ test_that("works for exp_tz fitting", {
       distinct()
   )
 })
+
+# test_that("works for exp_zhao18 with missing data", {
+#   expect_snapshot(
+# flux_fitting(
+#       co2_conc_missing,
+#       conc,
+#       datetime,
+#       fit_type = "exp_zhao18",
+#       end_cut = 60
+#     ) |>
+#       select(f_fluxid, f_slope) |>
+#       distinct()
+#   )
+# })

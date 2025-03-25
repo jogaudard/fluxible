@@ -1180,7 +1180,7 @@ flux_fitting(
       co2_conc_missing,
       conc,
       datetime,
-      fit_type = "quadratic",
+      fit_type = "exp_zhao18",
       end_cut = 60,
       t_zero = 20
     ) |>

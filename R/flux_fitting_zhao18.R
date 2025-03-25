@@ -205,7 +205,8 @@ flux_fitting_zhao18 <- function(conc_df,
       ),
       Cd = abs(.data$conc_roll - .data$f_Cz),
       minCd = min(.data$Cd, na.rm = TRUE),
-      f_tz_est = min(.data$f_time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
+      f_tz_est = min(.data$f_time_cut[.data$Cd == .data$minCd], na.rm = TRUE),
+      f_tz_est = replace(.data$f_tz_est, is.infinite(.data$f_tz_est), NA)
     ) |>
     ungroup() |>
     select({{f_fluxid}}, "f_tz_est") |>
@@ -294,10 +295,14 @@ flux_fitting_zhao18 <- function(conc_df,
       results = list(optim(
         par = c(
           .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
-          log(.data$f_tz_est)
+          .data$f_tz_est
+          # log(.data$f_tz_est)
         ),
         fn = fc_myfn, fc_conc = data[name_conc],
-        fc_time = data$f_time_cut, fc_cz = .data$f_Cz
+        fc_time = data$f_time_cut, fc_cz = .data$f_Cz,
+        method = "L-BFGS-B",
+        lower = c(NA, NA, -1, 0),
+        upper = (NA, NA, NA, NA)
       )),
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
