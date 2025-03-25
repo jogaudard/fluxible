@@ -1177,7 +1177,7 @@ flux_match(
 # what about missing data
 
 flux_fitting(
-      co2_conc,
+      co2_conc_missing,
       conc,
       datetime,
       fit_type = "exp_zhao18",

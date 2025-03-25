@@ -122,3 +122,18 @@ test_that("works for exp_tz fitting", {
       distinct()
   )
 })
+
+test_that("works for exp_tz fitting", {
+  expect_snapshot(
+flux_fitting(
+      co2_conc_missing,
+      conc,
+      datetime,
+      fit_type = "exp_zhao18",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
+  )
+})
