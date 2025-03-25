@@ -58,6 +58,7 @@
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
 #' @importFrom lubridate int_length interval
+#' @importFrom stringr str_detect
 #' @examples
 #' data(slopes0lin)
 #' flux_quality(slopes0lin, conc, fit_type = "li")
@@ -165,7 +166,7 @@ flux_quality <- function(slopes_df,
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = dplyr::join_by({{f_fluxid}}))
 
-  if (fit_type %in% c("exp_zhao18", "exp_tz")) {
+  if (stringr::str_detect(fit_type, "exp")) {
     quality_flag <- flux_quality_exp(
       slopes_df,
       {{conc_col}},

@@ -74,6 +74,7 @@ flux_quality_exp <- function(slopes_df,
 
 
   quality_par <- slopes_df |>
+    drop_na({{conc_col}}) |>
     group_by({{f_fluxid}}, {{f_cut}}) |>
     summarise(
       f_cor_coef = cor({{conc_col}}, {{f_time}}),

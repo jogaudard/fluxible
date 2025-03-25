@@ -1150,3 +1150,40 @@ flux_fitting(
     ) |>
     flux_quality(conc) |>
     flux_plot(conc, datetime)
+
+# testing behaviour on a larger dataset
+
+flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 220,
+  ratio_threshold = 0.5,
+  time_diff = 0
+) |>
+  flux_fitting(
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    flux_plot(conc, datetime, output = "pdfpages")
+
+# what about missing data
+
+flux_fitting(
+      co2_conc_missing,
+      conc,
+      datetime,
+      fit_type = "quadratic",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    # View()
+    flux_plot(conc, datetime)
