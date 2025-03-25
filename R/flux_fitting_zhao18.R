@@ -203,12 +203,15 @@ flux_fitting_zhao18 <- function(conc_df,
         k = roll_width,
         fill = NA, align = "right"
       ),
+      conc_roll = replace_na(.data$conc_roll, 0),
       Cd = abs(.data$conc_roll - .data$f_Cz),
       minCd = min(.data$Cd, na.rm = TRUE),
       f_tz_est = min(.data$f_time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
     ) |>
     ungroup() |>
-    select({{f_fluxid}}, "f_tz_est") |>
+    select({{f_fluxid}}, "f_tz_est"
+    # , "Cd", "minCd", "f_Cz", "conc_roll"
+    ) |>
     distinct()
 
 
