@@ -123,7 +123,7 @@ test_that("works for exp_tz fitting", {
   )
 })
 
-test_that("works for exp_tz fitting", {
+test_that("works for exp_zhao18 with missing data", {
   expect_snapshot(
 flux_fitting(
       co2_conc_missing,
