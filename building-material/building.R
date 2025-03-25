@@ -1177,10 +1177,10 @@ flux_match(
 # what about missing data
 
 flux_fitting(
-      co2_conc_missing,
+      co2_conc,
       conc,
       datetime,
-      fit_type = "quadratic",
+      fit_type = "exp_zhao18",
       end_cut = 60,
       t_zero = 20
     ) |>
