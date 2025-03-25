@@ -7,6 +7,16 @@
       Cutting measurements...
       Estimating starting parameters for optimization...
       Optimizing fitting parameters...
+    Condition
+      Warning:
+      There were 6 warnings in `summarize()`.
+      The first warning was:
+      i In argument: `results = list(...)`.
+      i In row 1.
+      Caused by warning in `minpack.lm::nls.lm()`:
+      ! lmdif: info = 0. Improper input parameters.
+      i Run `dplyr::last_dplyr_warnings()` to see the 5 remaining warnings.
+    Message
       Calculating fits and slopes...
       Done.
     Condition
@@ -16,14 +26,14 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxid f_slope
-        <fct>      <dbl>
-      1 1          0.408
-      2 2          0.462
-      3 3          0.265
-      4 4          0.255
-      5 5          0.113
-      6 6          0.343
+        f_fluxid  f_slope
+        <fct>       <dbl>
+      1 1        -0.0603 
+      2 2        -0.00852
+      3 3         0.265  
+      4 4        -0.0139 
+      5 5        -0.141  
+      6 6         0.356  
 
 # fitting works with 30 second end cut
 
@@ -33,6 +43,16 @@
       Cutting measurements...
       Estimating starting parameters for optimization...
       Optimizing fitting parameters...
+    Condition
+      Warning:
+      There were 6 warnings in `summarize()`.
+      The first warning was:
+      i In argument: `results = list(...)`.
+      i In row 1.
+      Caused by warning in `minpack.lm::nls.lm()`:
+      ! lmdif: info = 0. Improper input parameters.
+      i Run `dplyr::last_dplyr_warnings()` to see the 5 remaining warnings.
+    Message
       Calculating fits and slopes...
       Done.
     Output
@@ -63,6 +83,16 @@
       Cutting measurements...
       Estimating starting parameters for optimization...
       Optimizing fitting parameters...
+    Condition
+      Warning:
+      There were 6 warnings in `summarize()`.
+      The first warning was:
+      i In argument: `results = list(...)`.
+      i In row 1.
+      Caused by warning in `minpack.lm::nls.lm()`:
+      ! lmdif: info = 0. Improper input parameters.
+      i Run `dplyr::last_dplyr_warnings()` to see the 5 remaining warnings.
+    Message
       Calculating fits and slopes...
       Done.
     Output
@@ -93,6 +123,16 @@
       Cutting measurements...
       Estimating starting parameters for optimization...
       Optimizing fitting parameters...
+    Condition
+      Warning:
+      There were 6 warnings in `summarize()`.
+      The first warning was:
+      i In argument: `results = list(...)`.
+      i In row 1.
+      Caused by warning in `minpack.lm::nls.lm()`:
+      ! lmdif: info = 0. Improper input parameters.
+      i Run `dplyr::last_dplyr_warnings()` to see the 5 remaining warnings.
+    Message
       Calculating fits and slopes...
       Done.
     Condition

@@ -1182,6 +1182,7 @@ flux_fitting(
       datetime,
       fit_type = "exp_zhao18",
       end_cut = 60
+      # start_cut = 20
       # t_zero = 20
     ) |>
     flux_quality(conc) |>

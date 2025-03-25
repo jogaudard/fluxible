@@ -47,7 +47,8 @@ Imports:
     zoo,
     progress,
     purrrlyr,
-    tidyselect
+    tidyselect,
+    minpack.lm
 Depends: 
     R (>= 4.1)
 LazyData: true

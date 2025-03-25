@@ -312,27 +312,49 @@ flux_fitting_zhao18 <- function(conc_df,
     nest() |>
     rowwise() |>
     summarize(
-      results = list(optim(
-        par = c(
+      # results = list(optim(
+      #   par = c(
+      #     .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
+      #     .data$f_tz_est
+      #     # log(.data$f_tz_est)
+      #   ),
+      #   fn = fc_myfn, fc_conc = data[name_conc],
+      #   fc_time = data$f_time_cut, fc_cz = .data$f_Cz,
+      #   method = "L-BFGS-B",
+      #   lower = c(
+      #     .data$f_Cm_est * 0,
+      #     .data$f_a_est * 0,
+      #     -1.1,
+      #     0
+      #   ),
+      #   upper = c(
+      #     .data$f_Cm_est * 10,
+      #     .data$f_a_est * 10,
+      #     10,
+      #     .data$f_length_flux
+      #   )
+      # )),
+      results = list(
+        minpack.lm::nls.lm(
+          par = c(
           .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
           .data$f_tz_est
-          # log(.data$f_tz_est)
         ),
-        fn = fc_myfn, fc_conc = data[name_conc],
-        fc_time = data$f_time_cut, fc_cz = .data$f_Cz,
-        method = "L-BFGS-B",
         lower = c(
           .data$f_Cm_est * 0,
           .data$f_a_est * 0,
-          -1,
+          -1.1,
           0
         ),
         upper = c(
-          .data$f_Cm_est * 2,
-          .data$f_a_est * 2,
-          1,
-          .data$f_length_flux * 0.5
-        )
+          .data$f_Cm_est * 10,
+          .data$f_a_est * 10,
+          10,
+          .data$f_length_flux
+        ),
+        fn = fc_myfn,
+        fc_conc = data[name_conc],
+        fc_time = data$f_time_cut, fc_cz = .data$f_Cz
       )),
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
