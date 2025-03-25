@@ -1150,3 +1150,16 @@ flux_fitting(
     ) |>
     flux_quality(conc) |>
     flux_plot(conc, datetime)
+
+# trying new exp_hm fit
+
+flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_hm",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    flux_plot(conc, datetime)
