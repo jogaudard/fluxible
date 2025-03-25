@@ -13,7 +13,6 @@ flux_fitting(
   f_fluxid = f_fluxid,
   start_cut = 0,
   end_cut = 0,
-  t_window = 20,
   cz_window = 15,
   b_window = 10,
   a_window = 10,
@@ -42,9 +41,6 @@ the first row will be kept}
 
 \item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
-\item{t_window}{enlarge focus window before and after tmin and tmax
-(exponential fit)}
-
 \item{cz_window}{window used to calculate Cz, at the beginning of cut window
 (exponential fit)}
 
@@ -57,10 +53,14 @@ it is assumed that the model fits the data perfectly (exponential fit)}
 ideally same as cz_window (exponential fit)}
 
 \item{t_zero}{time at which the slope should be calculated
-(for quadratic fit)}
+(for \code{quadratic} and \code{exp_tz} fits)}
 
-\item{fit_type}{\code{exponential}, \code{quadratic} or \code{linear.}
-Exponential is using the exponential model from Zhao et al (2018)}
+\item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{quadratic} or \code{linear.}
+\code{exp_zhao18} is using the exponential model
+\verb{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}
+from Zhao et al (2018).
+\code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
+\verb{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}.}
 }
 \value{
 a dataframe with the slope at t zero (\code{f_slope}),
@@ -78,7 +78,7 @@ to calculate gas fluxes with flux_calc
 }
 \examples{
 data(co2_conc)
-flux_fitting(co2_conc, conc, datetime, fit_type = "exp")
+flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
 flux_fitting(co2_conc, conc, datetime,  fit_type = "quadratic",
 t_zero = 10, end_cut = 30)
 }
@@ -87,4 +87,5 @@ Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 On the calculation of daytime CO2 fluxes measured by automated closed
 transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
 https://doi.org/10.1016/j.agrformet.2018.08.022
+\code{exponential} is equal to \code{exp_zhao18}, for backwards compatibility
 }

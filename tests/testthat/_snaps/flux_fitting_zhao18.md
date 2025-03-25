@@ -10,7 +10,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_exp()`:
+      Warning in `flux_fitting_zhao18()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
@@ -28,7 +28,7 @@
 # fitting works with 30 second end cut
 
     Code
-      flux_fitting(co2_conc, conc, datetime, end_cut = 30, fit_type = "exp")
+      flux_fitting(co2_conc, conc, datetime, end_cut = 30, fit_type = "exponential")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -58,7 +58,7 @@
 # fitting works with 60 second end cut
 
     Code
-      flux_fitting(co2_conc, conc, datetime, end_cut = 60, fit_type = "exp")
+      flux_fitting(co2_conc, conc, datetime, end_cut = 60, fit_type = "exponential")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -88,7 +88,7 @@
 # renaming works
 
     Code
-      flux_fitting(co2_conc_names, co2, date_time, f_start, finish, fit_type = "exp")
+      flux_fitting(co2_conc_names, co2, date_time, f_start, finish, fit_type = "exponential")
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
@@ -96,7 +96,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_exp()`:
+      Warning in `flux_fitting_zhao18()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds

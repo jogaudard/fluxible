@@ -18,3 +18,28 @@
       suppressMessages(flux_plot(slopes30lin_flag, conc, datetime, f_plotname = "test_lin_plot",
         print_plot = FALSE, output = "ggsave", ggsave_args = list(device = "jpg")))
 
+# plot for exp_tz fit
+
+    Code
+      vdiffr::expect_doppelganger("plot for exp_tz fit", flux_plot(flux_quality(
+        flux_fitting(co2_conc, conc, datetime, fit_type = "exp_tz", end_cut = 60,
+          t_zero = 20), conc), conc, datetime))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+      
+       Total number of measurements: 6
+      
+       ok 	 5 	 83 %
+       discard 	 1 	 17 %
+       zero 	 0 	 0 %
+       force_discard 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
+      Plotting in progress
+

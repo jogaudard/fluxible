@@ -4,7 +4,7 @@ test_that("works for exponential fitting", {
       co2_conc,
       conc,
       datetime,
-      fit_type = "expo"
+      fit_type = "exp_zhao18"
     ) |>
       select(f_fluxid, f_slope) |>
       distinct()
@@ -43,7 +43,7 @@ test_that("works for exponential fitting with cut", {
       co2_conc,
       conc,
       datetime,
-      fit_type = "expo",
+      fit_type = "exp_zhao18",
       start_cut = 20
     ) |>
       select(f_fluxid, f_slope) |>
@@ -79,7 +79,7 @@ test_that("removing duplicated datetime", {
       rep_data,
       conc,
       datetime,
-      fit_type = "exp"
+      fit_type = "exponential"
     )
   )
 })
@@ -99,13 +99,26 @@ test_that("correct flux with duplicated datetime", {
       rep_data,
       conc,
       datetime,
-      fit_type = "exp"
+      fit_type = "exponential"
     ),
     qflux_fitting(
       co2_conc,
       conc,
       datetime,
-      fit_type = "exp"
+      fit_type = "exponential"
     )
+  )
+})
+
+test_that("works for exp_tz fitting", {
+  expect_snapshot(
+    flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_tz"
+    ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
   )
 })
