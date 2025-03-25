@@ -94,6 +94,7 @@ flux_quality_exp <- function(slopes_df,
     mutate(
       f_fit_quality = case_when(
         {{f_b}} >= b_threshold ~ "bad_b",
+        {{f_b}} <= -b_threshold ~ "bad_b",
         .data$f_RMSE > rmse_threshold ~ "bad_RMSE"
       ),
       f_correlation = case_when(
