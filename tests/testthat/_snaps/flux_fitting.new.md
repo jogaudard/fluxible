@@ -1,3 +1,30 @@
+# works for exponential fitting
+
+    Code
+      distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18"),
+      f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_zhao18()`:
+      
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
+    Output
+      # A tibble: 6 x 2
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          0.408
+      2 2          0.462
+      3 3          0.265
+      4 4          0.255
+      5 5          0.113
+      6 6          0.343
+
 # works for linear fitting
 
     Code
@@ -60,11 +87,11 @@
       # A tibble: 6 x 2
         f_fluxid f_slope
         <fct>      <dbl>
-      1 1         1.68  
+      1 1         0.537 
       2 2         0.226 
       3 3         0.156 
-      4 4         0.183 
-      5 5         0.0178
+      4 4        -0.207 
+      5 5         0.0199
       6 6         0.216 
 
 # works for linear fitting with cut
@@ -87,6 +114,41 @@
       4 4        -0.0327
       5 5        -0.195 
       6 6         0.0877
+
+# removing duplicated datetime
+
+    Code
+      flux_fitting(rep_data, conc, datetime, fit_type = "exponential")
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_zhao18()`:
+      
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
+    Output
+      # A tibble: 1,251 x 23
+         datetime            temp_air temp_soil  conc   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 16 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>, f_Cz <dbl>,
+      #   f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit <dbl>,
+      #   f_fit_slope <dbl>, f_start_z <dttm>
 
 # works for exp_tz fitting
 

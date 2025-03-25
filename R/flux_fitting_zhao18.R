@@ -263,15 +263,35 @@ flux_fitting_zhao18 <- function(conc_df,
       )
     )
 
+  # we need to provide bounds for variables for optim
+  # estimates_df <- estimates_df |>
+  #   mutate(
+  #     Cm_upper = .data$f_Cm_est * 1.5,
+  #     a_upper = .data$f_a_est * 1.5,
+  #     tz_upper = .data$f_length_window * 0.5,
+  #     Cm_lower = .data$f_Cm_est * 0.5,
+  #     a_lower = .data$f_a_est * 0.5
+  #   )
 
 
+
+
+  # fc_myfn <- function(fc_time, fc_conc, par, fc_cz) {
+  #   sqrt(
+  #     (1 / length(fc_time))
+  #     * sum((par[1] + par[2] * (fc_time - exp(par[4]))
+  #            + (fc_cz - par[1])
+  #            * exp(-par[3] * (fc_time - exp(par[4])))
+  #            - fc_conc)^2)
+  #   )
+  # }
 
   fc_myfn <- function(fc_time, fc_conc, par, fc_cz) {
     sqrt(
       (1 / length(fc_time))
-      * sum((par[1] + par[2] * (fc_time - exp(par[4]))
+      * sum((par[1] + par[2] * (fc_time - par[4])
              + (fc_cz - par[1])
-             * exp(-par[3] * (fc_time - exp(par[4])))
+             * exp(-par[3] * (fc_time - par[4]))
              - fc_conc)^2)
     )
   }
@@ -283,11 +303,11 @@ flux_fitting_zhao18 <- function(conc_df,
     left_join(estimates_df, by = dplyr::join_by({{f_fluxid}})) |>
     select(
       {{f_fluxid}}, "f_Cm_est", "f_a_est", "f_b_est", "f_tz_est",
-      "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff"
+      "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff", "f_length_flux"
     ) |>
     group_by(
       {{f_fluxid}}, .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
-      .data$f_tz_est, .data$f_Cz, .data$f_time_diff
+      .data$f_tz_est, .data$f_Cz, .data$f_time_diff, .data$f_length_flux
     ) |>
     nest() |>
     rowwise() |>
@@ -301,18 +321,29 @@ flux_fitting_zhao18 <- function(conc_df,
         fn = fc_myfn, fc_conc = data[name_conc],
         fc_time = data$f_time_cut, fc_cz = .data$f_Cz,
         method = "L-BFGS-B",
-        lower = c(NA, NA, -1, 0),
-        upper = (NA, NA, NA, NA)
+        lower = c(
+          .data$f_Cm_est * 0,
+          .data$f_a_est * 0,
+          -1,
+          0
+        ),
+        upper = c(
+          .data$f_Cm_est * 2,
+          .data$f_a_est * 2,
+          1,
+          .data$f_length_flux * 0.5
+        )
       )),
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
       f_b = .data$results$par[3],
-      f_tz = exp(.data$results$par[4]), # we force tz to be positive
+      f_tz = .data$results$par[4],
+      # f_tz = exp(.data$results$par[4]), # we force tz to be positive
       f_slope = .data$f_a + .data$f_b * (.data$f_Cm - .data$f_Cz),
       .groups = "drop"
     ) |>
     select(!c("results", "f_Cm_est", "f_a_est",
-              "f_b_est", "f_tz_est"))
+              "f_b_est", "f_tz_est", "f_length_flux"))
 
   message("Calculating fits and slopes...")
 
