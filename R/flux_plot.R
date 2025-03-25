@@ -45,6 +45,7 @@
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom progress progress_bar
+#' @importFrom stringr str_detect
 #' @examples
 #' data(slopes0_flag)
 #' flux_plot(slopes0_flag, conc, datetime)
@@ -162,7 +163,7 @@ flux_plot <- function(slopes_df,
 
 
 
-  if (fit_type %in% c("exp_zhao18", "exp_tz")) {
+  if (stringr::str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
       slopes_df,
       {{conc_col}},
