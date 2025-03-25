@@ -153,13 +153,13 @@ flux_fitting(
   )
 })
 
-test_that("works for exp_zt with mid missing data", {
+test_that("works for exp_tz with mid missing data", {
   expect_snapshot(
 flux_fitting(
       co2_conc_mid_missing,
       conc,
       datetime,
-      fit_type = "exp_zt",
+      fit_type = "exp_tz",
       end_cut = 60,
       t_zero = 20
     ) |>
