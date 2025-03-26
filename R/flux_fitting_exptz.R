@@ -89,6 +89,7 @@ flux_fitting_exptz <- function(conc_df,
       {{f_start}} := {{f_start}} + start_cut,
       {{f_end}} := {{f_end}} - end_cut,
       f_cut = case_when(
+        is.na({{conc_col}}) ~ "cut",
         {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
         ~ "cut",
         TRUE ~ "keep"
@@ -102,7 +103,7 @@ flux_fitting_exptz <- function(conc_df,
     filter(
       .data$f_cut == "keep"
     ) |>
-    drop_na({{conc_col}}) |>
+    # drop_na({{conc_col}}) |>
     mutate(
       f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
         {{datetime_col}}[1],
@@ -317,18 +318,21 @@ flux_fitting_exptz <- function(conc_df,
 
   warning_msg <- conc_fitting |>
     select(
-      {{f_fluxid}}, "f_n_conc", "f_slope", {{datetime_col}}
+      {{f_fluxid}}, "f_n_conc", "f_slope"
     ) |>
+    distinct() |>
     left_join(conc_df_cut,
       by = dplyr::join_by(
         {{f_fluxid}} == {{f_fluxid}},
-        "f_n_conc" == "f_n_conc",
-        {{datetime_col}} == {{datetime_col}}
+        "f_n_conc" == "f_n_conc"
       )
     ) |> # we want f_n_conc after cut
     select(
-      {{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux", "f_slope"
-    ) |>
+      {{f_fluxid}},
+       "f_n_conc", 
+       "f_n_conc_cut",
+        "f_length_flux", "f_slope"
+    ) |> 
     distinct() |>
     mutate(
       slope_na = paste(

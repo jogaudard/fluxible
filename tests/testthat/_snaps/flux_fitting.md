@@ -284,3 +284,34 @@
       5 5          0.672
       6 6          0.314
 
+# exp_tz: optim produces non-finite values
+
+    Code
+      distinct(select(flux_fitting(test_data, conc, datetime, fit_type = "exp_tz",
+        end_cut = 60, t_zero = 20), f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_exptz()`:
+      
+       fluxID 1 : slope was estimated on 28 points out of 150 seconds
+       fluxID 2 : slope was estimated on 61 points out of 150 seconds
+       fluxID 3 : slope was estimated on 42 points out of 150 seconds
+       fluxID 4 : slope is NA, most likely optim() supplied non-finite value.
+              Check your data or use a different model.
+       fluxID 6 dropped (no data in the conc column)
+    Output
+      # A tibble: 6 x 2
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1         0.367 
+      2 2         0.317 
+      3 3         0.0834
+      4 4        NA     
+      5 5         0.579 
+      6 6        NA     
+
