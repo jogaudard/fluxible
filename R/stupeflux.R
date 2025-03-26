@@ -208,7 +208,7 @@ stupeflux <- function(raw_conc,
   )
 
   if (slope_correction == TRUE) {
-    fluxes <- flux_calc(
+    fluxes <- with(quality_flag, flux_calc(
       quality_flag,
       slope_col = f_slope_corr,
       {{datetime_col}},
@@ -223,11 +223,11 @@ stupeflux <- function(raw_conc,
       tube_volume = tube_volume,
       temp_air_unit = temp_air_unit,
       cut = cut
-    )
+    ))
   }
 
   if (slope_correction == FALSE) {
-    fluxes <- flux_calc(
+    fluxes <- with(quality_flag, flux_calc(
       quality_flag,
       slope_col = f_slope,
       {{datetime_col}},
@@ -242,7 +242,7 @@ stupeflux <- function(raw_conc,
       tube_volume = tube_volume,
       temp_air_unit = temp_air_unit,
       cut = cut
-    )
+    ))
   }
 
   fluxes
