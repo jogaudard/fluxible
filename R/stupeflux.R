@@ -41,11 +41,6 @@
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
-#' @param f_start column with datetime when the measurement started
-#' @param f_end column with datetime when the measurement ended
-#' @param datetime_col column with datetime of each concentration measurement
-#' Note that if there are duplicated datetime in the same f_fluxid only
-#' the first row will be kept
 #' @param t_zero time at which the slope should be calculated
 #' (for `quadratic` and `exp_tz` fits)
 #' @param ambient_conc ambient gas concentration in ppm at the site of
@@ -132,14 +127,14 @@
 #' @export
 
 stupeflux <- function(raw_conc,
-                       field_record,
-                       datetime_col,
-                       start_col,
-                       conc_col,
-                       startcrop,
-                       measurement_length,
-                       fit_type,
-                       temp_air_col,
+                      field_record,
+                      datetime_col,
+                      start_col,
+                      conc_col,
+                      startcrop,
+                      measurement_length,
+                      fit_type,
+                      temp_air_col,
                       chamber_volume,
                       atm_pressure,
                       plot_area,
@@ -148,29 +143,29 @@ stupeflux <- function(raw_conc,
                       cols_keep = c(),
                       cols_ave = c(),
                       tube_volume,
-                       ratio_threshold = 0.5,
-                       time_diff = 0,
-                       start_cut = 0,
-                         end_cut = 0,
-                         cz_window = 15,
-                         b_window = 10,
-                         a_window = 10,
-                         roll_width = 15,
-                         t_zero = 0,
-                         force_discard = c(),
-                         force_ok = c(),
-                         force_zero = c(),
-                         ambient_conc = 421,
-                         error = 100,
-                         pvalue_threshold = 0.3,
-                         rsquared_threshold = 0.7,
-                         rmse_threshold = 25,
-                         cor_threshold = 0.5,
-                         b_threshold = 1,
+                      ratio_threshold = 0.5,
+                      time_diff = 0,
+                      start_cut = 0,
+                      end_cut = 0,
+                      cz_window = 15,
+                      b_window = 10,
+                      a_window = 10,
+                      roll_width = 15,
+                      t_zero = 0,
+                      force_discard = c(),
+                      force_ok = c(),
+                      force_zero = c(),
+                      ambient_conc = 421,
+                      error = 100,
+                      pvalue_threshold = 0.3,
+                      rsquared_threshold = 0.7,
+                      rmse_threshold = 25,
+                      cor_threshold = 0.5,
+                      b_threshold = 1,
                       temp_air_unit = "celsius",
                       cut = TRUE,
-                      slope_correction = TRUE){
- conc_df <- flux_match(
+                      slope_correction = TRUE) {
+  conc_df <- flux_match(
     raw_conc,
     field_record,
     {{datetime_col}},
@@ -180,9 +175,9 @@ stupeflux <- function(raw_conc,
     measurement_length = measurement_length,
     ratio_threshold = ratio_threshold,
     time_diff = time_diff
- )
+  )
 
-conc_fitting <- flux_fitting(
+  conc_fitting <- flux_fitting(
     conc_df,
     {{conc_col}},
     {{datetime_col}},
@@ -194,9 +189,9 @@ conc_fitting <- flux_fitting(
     roll_width = roll_width,
     t_zero = t_zero,
     fit_type = fit_type
-)
+  )
 
-quality_flag <- flux_quality(
+  quality_flag <- flux_quality(
     conc_fitting,
     {{conc_col}},
     force_discard = force_discard,
@@ -210,47 +205,46 @@ quality_flag <- flux_quality(
     rmse_threshold = rmse_threshold,
     cor_threshold = cor_threshold,
     b_threshold = b_threshold
-)
+  )
 
-if (slope_correction == TRUE) {
+  if (slope_correction == TRUE) {
     fluxes <- flux_calc(
-    quality_flag,
-    slope_col = f_slope_corr,
-    {{datetime_col}},
-    {{temp_air_col}},
-    chamber_volume = chamber_volume,
-    atm_pressure = atm_pressure,
-    plot_area = plot_area,
-    conc_unit = conc_unit,
-    flux_unit = flux_unit,
-    cols_keep = cols_keep,
-    cols_ave = cols_ave,
-    tube_volume = tube_volume,
-    temp_air_unit = temp_air_unit,
-    cut = cut
-)
-}
+      quality_flag,
+      slope_col = f_slope_corr,
+      {{datetime_col}},
+      {{temp_air_col}},
+      chamber_volume = chamber_volume,
+      atm_pressure = atm_pressure,
+      plot_area = plot_area,
+      conc_unit = conc_unit,
+      flux_unit = flux_unit,
+      cols_keep = cols_keep,
+      cols_ave = cols_ave,
+      tube_volume = tube_volume,
+      temp_air_unit = temp_air_unit,
+      cut = cut
+    )
+  }
 
-if (slope_correction == FALSE) {
+  if (slope_correction == FALSE) {
     fluxes <- flux_calc(
-    quality_flag,
-    slope_col = f_slope,
-    {{datetime_col}},
-    {{temp_air_col}},
-    chamber_volume = chamber_volume,
-    atm_pressure = atm_pressure,
-    plot_area = plot_area,
-    conc_unit = conc_unit,
-    flux_unit = flux_unit,
-    cols_keep = cols_keep,
-    cols_ave = cols_ave,
-    tube_volume = tube_volume,
-    temp_air_unit = temp_air_unit,
-    cut = cut
-)
-}
+      quality_flag,
+      slope_col = f_slope,
+      {{datetime_col}},
+      {{temp_air_col}},
+      chamber_volume = chamber_volume,
+      atm_pressure = atm_pressure,
+      plot_area = plot_area,
+      conc_unit = conc_unit,
+      flux_unit = flux_unit,
+      cols_keep = cols_keep,
+      cols_ave = cols_ave,
+      tube_volume = tube_volume,
+      temp_air_unit = temp_air_unit,
+      cut = cut
+    )
+  }
 
+  fluxes
 
-
-fluxes
 }
