@@ -1189,7 +1189,7 @@ flux_fitting(
     # View()
     flux_plot(conc, datetime)
 
-debug(flux_fitting_exp_tz)
+debug(flux_fitting_exptz)
 
 test_data <- co2_conc_missing |>
     dplyr::mutate(
