@@ -125,7 +125,7 @@ test_that("works for exp_tz fitting", {
 
 test_that("works for exp_zhao18 with missing data", {
   expect_snapshot(
-flux_fitting(
+    flux_fitting(
       co2_conc_missing,
       conc,
       datetime,
@@ -140,7 +140,7 @@ flux_fitting(
 
 test_that("works for exp_zhao18 with mid missing data", {
   expect_snapshot(
-flux_fitting(
+    flux_fitting(
       co2_conc_mid_missing,
       conc,
       datetime,
@@ -155,7 +155,7 @@ flux_fitting(
 
 test_that("works for exp_tz with mid missing data", {
   expect_snapshot(
-flux_fitting(
+    flux_fitting(
       co2_conc_mid_missing,
       conc,
       datetime,
@@ -170,7 +170,7 @@ flux_fitting(
 
 test_that("works for quadratic with mid missing data", {
   expect_snapshot(
-flux_fitting(
+    flux_fitting(
       co2_conc_mid_missing,
       conc,
       datetime,

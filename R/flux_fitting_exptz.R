@@ -103,7 +103,6 @@ flux_fitting_exptz <- function(conc_df,
     filter(
       .data$f_cut == "keep"
     ) |>
-    # drop_na({{conc_col}}) |>
     mutate(
       f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
         {{datetime_col}}[1],
@@ -327,11 +326,8 @@ flux_fitting_exptz <- function(conc_df,
       )
     ) |> # we want f_n_conc after cut
     select(
-      {{f_fluxid}},
-       "f_n_conc", 
-       "f_n_conc_cut",
-        "f_length_flux", "f_slope"
-    ) |> 
+      {{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux", "f_slope"
+    ) |>
     distinct() |>
     mutate(
       slope_na = paste(

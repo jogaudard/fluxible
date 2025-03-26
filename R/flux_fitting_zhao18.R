@@ -38,17 +38,17 @@
 
 
 flux_fitting_zhao18 <- function(conc_df,
-                             conc_col,
-                             datetime_col,
-                             f_start,
-                             f_end,
-                             f_fluxid,
-                             cz_window,
-                             b_window,
-                             a_window,
-                             roll_width,
-                             start_cut,
-                             end_cut) {
+                                conc_col,
+                                datetime_col,
+                                f_start,
+                                f_end,
+                                f_fluxid,
+                                cz_window,
+                                b_window,
+                                a_window,
+                                roll_width,
+                                start_cut,
+                                end_cut) {
 
   args_ok <- flux_fun_check(list(
     cz_window = cz_window,
@@ -82,6 +82,7 @@ flux_fitting_zhao18 <- function(conc_df,
       {{f_start}} := {{f_start}} + start_cut,
       {{f_end}} := {{f_end}} - end_cut,
       f_cut = case_when(
+        is.na({{conc_col}}) ~ "cut",
         {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
         ~ "cut",
         TRUE ~ "keep"
@@ -95,7 +96,6 @@ flux_fitting_zhao18 <- function(conc_df,
     filter(
       .data$f_cut == "keep"
     ) |>
-    drop_na({{conc_col}}) |>
     mutate(
       f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
         {{datetime_col}}[1],
@@ -213,7 +213,6 @@ flux_fitting_zhao18 <- function(conc_df,
     ) |>
     ungroup() |>
     select({{f_fluxid}}, "f_tz_est"
-    # , "Cd", "minCd", "f_Cz", "conc_roll"
     ) |>
     distinct()
 
@@ -352,11 +351,8 @@ flux_fitting_zhao18 <- function(conc_df,
       )
     ) |> # we want f_n_conc after cut
     select(
-      {{f_fluxid}},
-       "f_n_conc", 
-       "f_n_conc_cut",
-        "f_length_flux", "f_slope"
-    ) |> 
+      {{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux", "f_slope"
+    ) |>
     distinct() |>
     mutate(
       slope_na = paste(
