@@ -263,7 +263,6 @@ flux_fitting_exptz <- function(conc_df,
 
   fitting_par <- conc_df_cut |>
     left_join(estimates_df, by = dplyr::join_by({{f_fluxid}})) |>
-    # filter(f_fluxid == 4) |>
     select(
       {{f_fluxid}}, "f_Cm_est", "f_a_est", "f_b_est",
       "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff"
@@ -277,14 +276,14 @@ flux_fitting_exptz <- function(conc_df,
     summarize(
       results = list(tryCatch(
         optim(
-        par = c(
-          .data$f_Cm_est, .data$f_a_est, .data$f_b_est
+          par = c(
+            .data$f_Cm_est, .data$f_a_est, .data$f_b_est
+          ),
+          fn = fc_myfn, fc_conc = data[name_conc],
+          fc_time = data$f_time_cut, fc_cz = .data$f_Cz
         ),
-        fn = fc_myfn, fc_conc = data[name_conc],
-        fc_time = data$f_time_cut, fc_cz = .data$f_Cz
-      ),
-      error = function(err) list(par = rep(NA, 3)))),
-      # results = list(optim),
+        error = function(err) list(par = rep(NA, 3))
+      )),
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
       f_b = .data$results$par[3],
