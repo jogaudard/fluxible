@@ -221,3 +221,21 @@ slopes30_flag <- flux_quality(
   conc
 )
 usethis::use_data(slopes30_flag, overwrite = TRUE)
+
+# more missing data
+
+co2_conc_mid_missing <- co2_conc |>
+  dplyr::mutate(
+    conc = replace(
+      conc,
+      c(
+        10:20,
+        325:380,
+        655:670,
+        700:730
+      ),
+      NA
+    )
+  )
+
+usethis::use_data(co2_conc_mid_missing, overwrite = TRUE)

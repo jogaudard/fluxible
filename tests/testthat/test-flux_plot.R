@@ -62,3 +62,57 @@ test_that("plot for exp_tz fit", {
     )
   )
 })
+
+test_that("plot for exp_tz fit with mid missing data", {
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "plot for exp_tz fit with mid missing data",
+      flux_fitting(
+        co2_conc_mid_missing,
+        conc,
+        datetime,
+        fit_type = "exp_tz",
+        end_cut = 60,
+        t_zero = 20
+      ) |>
+        flux_quality(conc) |>
+        flux_plot(conc, datetime)
+    )
+  )
+})
+
+test_that("plot for exp_zhao18 fit with mid missing data", {
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "plot for exp_zhao18 fit with mid missing data",
+      flux_fitting(
+        co2_conc_mid_missing,
+        conc,
+        datetime,
+        fit_type = "exp_zhao18",
+        end_cut = 60,
+        t_zero = 20
+      ) |>
+        flux_quality(conc) |>
+        flux_plot(conc, datetime)
+    )
+  )
+})
+
+test_that("plot for quadratic fit with mid missing data", {
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "plot for quadratic fit with mid missing data",
+      flux_fitting(
+        co2_conc_mid_missing,
+        conc,
+        datetime,
+        fit_type = "quadratic",
+        end_cut = 60,
+        t_zero = 20
+      ) |>
+        flux_quality(conc) |>
+        flux_plot(conc, datetime)
+    )
+  )
+})

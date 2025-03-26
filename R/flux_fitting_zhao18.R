@@ -103,6 +103,9 @@ flux_fitting_zhao18 <- function(conc_df,
       ),
       f_time_cut = as.double(.data$f_time_cut),
       f_length_window = max(.data$f_time_cut),
+      # length of the flux after removing NAs
+      f_start_window = min({{datetime_col}}),
+      # start of the flux after removing NAs
       f_length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
       f_time_diff = .data$f_time - .data$f_time_cut,
       f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
@@ -203,12 +206,15 @@ flux_fitting_zhao18 <- function(conc_df,
         k = roll_width,
         fill = NA, align = "right"
       ),
+      conc_roll = replace_na(.data$conc_roll, 0),
       Cd = abs(.data$conc_roll - .data$f_Cz),
       minCd = min(.data$Cd, na.rm = TRUE),
       f_tz_est = min(.data$f_time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
     ) |>
     ungroup() |>
-    select({{f_fluxid}}, "f_tz_est") |>
+    select({{f_fluxid}}, "f_tz_est"
+    # , "Cd", "minCd", "f_Cz", "conc_roll"
+    ) |>
     distinct()
 
 
@@ -244,6 +250,8 @@ flux_fitting_zhao18 <- function(conc_df,
     left_join(a_df, by = dplyr::join_by({{f_fluxid}})) |>
     left_join(cb_df, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
+      f_tz_est = replace(.data$f_tz_est, .data$f_tz_est == 0, 1e-10),
+      # because we use a log to force tz to be positive
       f_b_est = case_when(
         .data$f_Cb == .data$f_Cm_est ~ 0, # special case or flat flux
         .data$f_Cz == .data$f_Cm_est ~ 0, # special case or flat flux
@@ -282,11 +290,11 @@ flux_fitting_zhao18 <- function(conc_df,
     left_join(estimates_df, by = dplyr::join_by({{f_fluxid}})) |>
     select(
       {{f_fluxid}}, "f_Cm_est", "f_a_est", "f_b_est", "f_tz_est",
-      "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff"
+      "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff", "f_start_window"
     ) |>
     group_by(
       {{f_fluxid}}, .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
-      .data$f_tz_est, .data$f_Cz, .data$f_time_diff
+      .data$f_tz_est, .data$f_Cz, .data$f_time_diff, .data$f_start_window
     ) |>
     nest() |>
     rowwise() |>
@@ -320,10 +328,10 @@ flux_fitting_zhao18 <- function(conc_df,
       * exp(-.data$f_b * (.data$f_time - .data$f_tz - .data$f_time_diff)),
       f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
       * (.data$f_tz + .data$f_time_diff),
-      f_start_z = {{f_start}} + .data$f_tz,
+      f_start_z = .data$f_start_window + .data$f_tz,
       .by = {{f_fluxid}}
     ) |>
-    select(!"f_time_diff")
+    select(!c("f_time_diff", "f_start_window"))
 
 
   message("Done.")

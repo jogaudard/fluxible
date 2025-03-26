@@ -177,3 +177,110 @@
       5 5           1.18 
       6 6           0.493
 
+# works for exp_zhao18 with missing data
+
+    Code
+      distinct(select(flux_fitting(co2_conc_missing, conc, datetime, fit_type = "exp_zhao18",
+        end_cut = 60, t_zero = 20), f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_zhao18()`:
+      
+       fluxID 1 : slope was estimated on 28 points out of 150 seconds
+       fluxID 2 : slope was estimated on 61 points out of 150 seconds
+       fluxID 3 : slope was estimated on 42 points out of 150 seconds
+       fluxID 6 dropped (no data in the conc column)
+    Output
+      # A tibble: 6 x 2
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          0.376
+      2 2          0.462
+      3 3         -6.33 
+      4 4          0.686
+      5 5          0.751
+      6 6         NA    
+
+# works for exp_zhao18 with mid missing data
+
+    Code
+      distinct(select(flux_fitting(co2_conc_mid_missing, conc, datetime, fit_type = "exp_zhao18",
+        end_cut = 60, t_zero = 20), f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_zhao18()`:
+      
+       fluxID 1 : slope was estimated on 139 points out of 150 seconds
+       fluxID 2 : slope was estimated on 114 points out of 150 seconds
+       fluxID 4 : slope was estimated on 103 points out of 150 seconds
+    Output
+      # A tibble: 6 x 2
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          0.841
+      2 2          0.579
+      3 3          0.472
+      4 4          0.620
+      5 5          0.751
+      6 6          0.475
+
+# works for exp_tz with mid missing data
+
+    Code
+      distinct(select(flux_fitting(co2_conc_mid_missing, conc, datetime, fit_type = "exp_tz",
+        end_cut = 60, t_zero = 20), f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_exptz()`:
+      
+       fluxID 1 : slope was estimated on 139 points out of 150 seconds
+       fluxID 2 : slope was estimated on 114 points out of 150 seconds
+       fluxID 4 : slope was estimated on 103 points out of 150 seconds
+    Output
+      # A tibble: 6 x 2
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          0.555
+      2 2          0.387
+      3 3          0.280
+      4 4          0.498
+      5 5          0.579
+      6 6          0.198
+
+# works for quadratic with mid missing data
+
+    Code
+      distinct(select(flux_fitting(co2_conc_mid_missing, conc, datetime, fit_type = "quadratic",
+        end_cut = 60, t_zero = 20), f_fluxid, f_slope))
+    Condition
+      Warning in `flux_fitting_quadratic()`:
+      
+       fluxID 1 : slope was estimated on 139 points out of 150 seconds
+       fluxID 2 : slope was estimated on 114 points out of 150 seconds
+       fluxID 4 : slope was estimated on 103 points out of 150 seconds
+    Output
+      # A tibble: 6 x 2
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          0.645
+      2 2          0.394
+      3 3          0.258
+      4 4          0.525
+      5 5          0.672
+      6 6          0.314
+
