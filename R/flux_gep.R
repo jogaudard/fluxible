@@ -110,7 +110,7 @@ flux_gep <- function(fluxes_df,
     ) |>
     filter(
       {{type_col}} != er_arg
-        & {{type_col}} != nee_arg
+      & {{type_col}} != nee_arg
     )
 
   fluxes_gep <- fluxes_df |>

@@ -1188,3 +1188,26 @@ flux_fitting(
     flux_quality(conc) |>
     # View()
     flux_plot(conc, datetime)
+
+debug(flux_fitting_exptz)
+
+test_data <- co2_conc_missing |>
+    dplyr::mutate(
+      conc = replace(
+        conc,
+        c(297:425, 427:490, 495:506),
+        NA
+      )
+    )
+
+    flux_fitting(
+      test_data,
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
+

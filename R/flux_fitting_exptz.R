@@ -89,6 +89,7 @@ flux_fitting_exptz <- function(conc_df,
       {{f_start}} := {{f_start}} + start_cut,
       {{f_end}} := {{f_end}} - end_cut,
       f_cut = case_when(
+        is.na({{conc_col}}) ~ "cut",
         {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
         ~ "cut",
         TRUE ~ "keep"
@@ -102,7 +103,6 @@ flux_fitting_exptz <- function(conc_df,
     filter(
       .data$f_cut == "keep"
     ) |>
-    drop_na({{conc_col}}) |>
     mutate(
       f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
         {{datetime_col}}[1],
@@ -273,12 +273,15 @@ flux_fitting_exptz <- function(conc_df,
     nest() |>
     rowwise() |>
     summarize(
-      results = list(optim(
-        par = c(
-          .data$f_Cm_est, .data$f_a_est, .data$f_b_est
+      results = list(tryCatch(
+        optim(
+          par = c(
+            .data$f_Cm_est, .data$f_a_est, .data$f_b_est
+          ),
+          fn = fc_myfn, fc_conc = data[name_conc],
+          fc_time = data$f_time_cut, fc_cz = .data$f_Cz
         ),
-        fn = fc_myfn, fc_conc = data[name_conc],
-        fc_time = data$f_time_cut, fc_cz = .data$f_Cz
+        error = function(err) list(par = rep(NA, 3))
       )),
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
@@ -311,17 +314,27 @@ flux_fitting_exptz <- function(conc_df,
   message("Done.")
 
 
-  warning_msg <- conc_df |>
+  warning_msg <- conc_fitting |>
+    select(
+      {{f_fluxid}}, "f_n_conc", "f_slope"
+    ) |>
+    distinct() |>
     left_join(conc_df_cut,
       by = dplyr::join_by(
         {{f_fluxid}} == {{f_fluxid}},
-        "f_n_conc" == "f_n_conc",
-        {{datetime_col}} == {{datetime_col}}
+        "f_n_conc" == "f_n_conc"
       )
     ) |> # we want f_n_conc after cut
-    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
+    select(
+      {{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux", "f_slope"
+    ) |>
     distinct() |>
     mutate(
+      slope_na = paste(
+        "\n", "fluxID", {{f_fluxid}},
+        ": slope is NA, most likely optim() supplied non-finite value.
+        Check your data or use a different model."
+      ),
       low_data = paste(
         "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
         .data$f_n_conc_cut, "points out of", .data$f_length_flux,
@@ -333,6 +346,7 @@ flux_fitting_exptz <- function(conc_df,
       ),
       warnings = case_when(
         .data$f_n_conc == 0 ~ .data$no_data,
+        is.na(.data$f_slope) ~ .data$slope_na,
         .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
       ),
       warnings = as.character(.data$warnings)
