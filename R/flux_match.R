@@ -12,16 +12,16 @@
 #' @param startcrop how many seconds should be discarded at the beginning of
 #' the measurement
 #' @param measurement_length length of the measurement (in seconds)
-#' from the start specified in the field_record
+#' from the start specified in the `field_record`
 #' @param ratio_threshold ratio (number of concentration measurement compared to
 #' length of measurement in seconds) below which the data should be flagged as
 #' too little
 #' @param time_diff time difference (in seconds) between the two datasets.
-#' Will be added to the datetime column of the raw_conc dataset.
+#' Will be added to the datetime column of the `raw_conc` dataset.
 #' For situations where the time was not synchronized correctly.
-#' @param datetime_col datetime column in raw_conc (dmy_hms format)
-#' @param conc_col concentration column in raw_conc
-#' @param start_col start column in field_record (dmy_hms format)
+#' @param datetime_col datetime column in raw_conc (`ymd_hms` format)
+#' @param conc_col concentration column in `raw_conc`
+#' @param start_col start column in field_record (`ymd_hms` format)
 #' @return a dataframe with concentration measurements, corresponding datetime,
 #' flux ID (`f_fluxid`), measurements start (`f_start`) and end (`f_end`),
 #' flags in case of no data or low number of data (`f_flag_match`),

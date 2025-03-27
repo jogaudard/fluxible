@@ -266,7 +266,7 @@ test_that("Fluxible workflow works from start to finish", {
     conc,
     datetime,
     start,
-    fit_type = "exp"
+    fit_type = "exp_zhao18"
   ))
   slopes_flag_test <- flux_quality(
     slopes_test,
@@ -287,6 +287,85 @@ test_that("Fluxible workflow works from start to finish", {
 
   expect_snapshot(
     str(fluxes_test)
+  )
+})
+
+test_that("Stupeflux returns the same as step by step workflow", {
+  conc_test <- flux_match(
+    co2_df_short,
+    record_short,
+    datetime,
+    start,
+    conc,
+    startcrop = 10,
+    measurement_length = 180
+  )
+  slopes_test <- suppressWarnings(flux_fitting(
+    conc_test,
+    conc,
+    datetime,
+    start,
+    fit_type = "exp_zhao18"
+  ))
+  slopes_flag_test <- flux_quality(
+    slopes_test,
+    conc
+  )
+  fluxes_test <- flux_calc(
+    slopes_flag_test,
+    f_slope_corr,
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625
+  )
+
+  expect_equal(
+    stupeflux(
+      raw_conc = co2_df_short,
+      field_record = record_short,
+      datetime_col = datetime,
+      start_col = start,
+      conc_col = conc,
+      startcrop = 10,
+      measurement_length = 180,
+      fit_type = "exp_zhao18",
+      temp_air_col = temp_air,
+      conc_unit = "ppm",
+      flux_unit = "mmol",
+      chamber_volume = 24.5,
+      tube_volume = 0.075,
+      atm_pressure = 1,
+      plot_area = 0.0625
+    ),
+    fluxes_test
+  )
+})
+
+test_that("Stupeflux works with slope_correction = FALSE", {
+  expect_snapshot(
+    stupeflux(
+      raw_conc = co2_df_short,
+      field_record = record_short,
+      datetime_col = datetime,
+      start_col = start,
+      conc_col = conc,
+      startcrop = 10,
+      measurement_length = 180,
+      fit_type = "exp_zhao18",
+      temp_air_col = temp_air,
+      conc_unit = "ppm",
+      flux_unit = "mmol",
+      chamber_volume = 24.5,
+      tube_volume = 0.075,
+      atm_pressure = 1,
+      plot_area = 0.0625,
+      slope_correction = FALSE
+    )
   )
 })
 

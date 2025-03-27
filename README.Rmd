@@ -65,7 +65,7 @@ slopes_df <- flux_fitting(
   conc_df,
   conc,
   datetime,
-  fit_type = "exp",
+  fit_type = "exp_zhao18",
   end_cut = 30
 )
 
@@ -137,5 +137,10 @@ Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible: an R pac
 <!-- [Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) -->
 
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
+
+
+## Acknowledgements
+
+Fluxible builds on the earlier effort from the Plant Functional Traits Course Community [https://github.com/PaulESantos/co2fluxtent](co2fluxtent) [@co2fluxtent].
 
 <!-- #### References -->

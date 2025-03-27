@@ -3,11 +3,11 @@
 #' with color code indicating quality flags
 #' This function takes time to run and is optional in the workflow,
 #' but it is still highly recommended to use it to visually check
-#' the measurements.
-#' Note that 'flux_plot' is specific to the 'fluxible' package and
+#' the measurements. Note that 'flux_plot' is specific to the
+#' \link[fluxible]{fluxible} package and
 #' will work best with datasets produced following a fluxible workflow.
 #' @param slopes_df dataset containing slopes,
-#' with flags produced by flux_quality
+#' with flags produced by \link[fluxible:flux_quality]{flux_quality}
 #' @param conc_col column with gas concentration
 #' @param datetime_col column with datetime of each data point
 #' @param color_discard color for fits with a discard quality flag
@@ -45,6 +45,7 @@
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom progress progress_bar
+#' @importFrom stringr str_detect
 #' @examples
 #' data(slopes0_flag)
 #' flux_plot(slopes0_flag, conc, datetime)
@@ -162,7 +163,7 @@ flux_plot <- function(slopes_df,
 
 
 
-  if (fit_type == "exponential") {
+  if (stringr::str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
       slopes_df,
       {{conc_col}},

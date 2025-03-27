@@ -60,7 +60,7 @@ slopes_df <- flux_fitting(
   conc_df,
   conc,
   datetime,
-  fit_type = "exp",
+  fit_type = "exp_zhao18",
   end_cut = 30
 )
 #> Cutting measurements...
@@ -185,4 +185,25 @@ Apr 2024, EGU24-956, <https://doi.org/10.5194/egusphere-egu24-956>,
 
 <!-- [Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) -->
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
+
+## Acknowledgements
+
+Fluxible builds on the earlier effort from the Plant Functional Traits
+Course Community
+[https://github.com/PaulESantos/co2fluxtent](co2fluxtent) (Brummer *et
+al.*, 2023).
+
 <!-- #### References -->
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+
+<div id="ref-co2fluxtent" class="csl-entry">
+
+Brummer, A.B., Enquist, B.J. and Santos-Andrade, P.E. (2023),
+*Co2fluxtent: Tools for NEE and ET Fitting from CO2 Flux*, available at:
+<https://github.com/PaulESantos/co2fluxtent>.
+
+</div>
+
+</div>

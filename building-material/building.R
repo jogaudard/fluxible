@@ -135,17 +135,17 @@ write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 # to test the fitting, we will use the function, graph the fluxes, check them carefully and then assume the output is the expected one
 co2_conc <- readr::read_csv("tests/testthat/data/co2_conc.csv") # just to save time
 
-slopes0 <- flux_fitting_exp(co2_conc)
+slopes0 <- flux_fitting_zhao18(co2_conc)
 
 
    
 slopes60 <- co2_conc %>%
-   flux_fitting_exp(
+   flux_fitting_zhao18(
       end_cut = 60
    )
 
 slopes30 <- co2_conc %>%
-   flux_fitting_exp(
+   flux_fitting_zhao18(
       end_cut = 30
    )
    
@@ -567,7 +567,7 @@ test_function <- function(df,
                         # environment(test_function)
 test_function(slopes0)
 
-# missing data issue with flux_fitting_exp
+# missing data issue with flux_fitting_zhao18
 test_df <- flux_fitting(co2_conc,
    fit_type = "expo",
    end_cut = 30)
@@ -867,9 +867,9 @@ cm_temp <- conc_df_cut |>
 
 testing_lm(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxid)
 
-debug(flux_fitting_exp)
+debug(flux_fitting_zhao18)
 
-flux_fitting_exp(co2_conc,
+flux_fitting_zhao18(co2_conc,
                  f_start,
                  f_end,
                  f_datetime,
@@ -1135,3 +1135,79 @@ flux_fitting(test,
                  datetime,
                  fit_type = "exponential") |>
                  View()
+
+
+
+# trying new exp_tz fit
+
+flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    flux_plot(conc, datetime)
+
+# testing behaviour on a larger dataset
+
+flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 220,
+  ratio_threshold = 0.5,
+  time_diff = 0
+) |>
+  flux_fitting(
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    flux_plot(conc, datetime, output = "pdfpages")
+
+# what about missing data
+
+debug(flux_fitting_zhao18)
+flux_fitting(
+      co2_conc_missing,
+      conc,
+      datetime,
+      fit_type = "exp_zhao18",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    # View()
+    flux_plot(conc, datetime)
+
+debug(flux_fitting_exptz)
+
+test_data <- co2_conc_missing |>
+    dplyr::mutate(
+      conc = replace(
+        conc,
+        c(297:425, 427:490, 495:506),
+        NA
+      )
+    )
+
+    flux_fitting(
+      test_data,
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
+

@@ -13,7 +13,6 @@
 #' @param f_start column with datetime when the measurement started
 #' @param f_end column with datetime when the measurement ended
 #' @param f_fluxid column with ID of each flux
-#' @param t_window enlarge focus window before and after tmin and tmax
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' @param b_window window to estimate b. It is an interval after tz
 #' where it is assumed that C fits the data perfectly
@@ -38,22 +37,20 @@
 
 
 
-flux_fitting_exp <- function(conc_df,
-                             conc_col,
-                             datetime_col,
-                             f_start,
-                             f_end,
-                             f_fluxid,
-                             t_window,
-                             cz_window,
-                             b_window,
-                             a_window,
-                             roll_width,
-                             start_cut,
-                             end_cut) {
+flux_fitting_zhao18 <- function(conc_df,
+                                conc_col,
+                                datetime_col,
+                                f_start,
+                                f_end,
+                                f_fluxid,
+                                cz_window,
+                                b_window,
+                                a_window,
+                                roll_width,
+                                start_cut,
+                                end_cut) {
 
   args_ok <- flux_fun_check(list(
-    t_window = t_window,
     cz_window = cz_window,
     b_window = b_window,
     a_window = a_window,
@@ -63,10 +60,9 @@ flux_fitting_exp <- function(conc_df,
     is.numeric,
     is.numeric,
     is.numeric,
-    is.numeric,
     is.numeric
   ),
-  msg = rep("has to be numeric", 5))
+  msg = rep("has to be numeric", 4))
 
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
@@ -86,6 +82,7 @@ flux_fitting_exp <- function(conc_df,
       {{f_start}} := {{f_start}} + start_cut,
       {{f_end}} := {{f_end}} - end_cut,
       f_cut = case_when(
+        is.na({{conc_col}}) ~ "cut",
         {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
         ~ "cut",
         TRUE ~ "keep"
@@ -99,7 +96,6 @@ flux_fitting_exp <- function(conc_df,
     filter(
       .data$f_cut == "keep"
     ) |>
-    drop_na({{conc_col}}) |>
     mutate(
       f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
         {{datetime_col}}[1],
@@ -107,6 +103,9 @@ flux_fitting_exp <- function(conc_df,
       ),
       f_time_cut = as.double(.data$f_time_cut),
       f_length_window = max(.data$f_time_cut),
+      # length of the flux after removing NAs
+      f_start_window = min({{datetime_col}}),
+      # start of the flux after removing NAs
       f_length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
       f_time_diff = .data$f_time - .data$f_time_cut,
       f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
@@ -207,12 +206,14 @@ flux_fitting_exp <- function(conc_df,
         k = roll_width,
         fill = NA, align = "right"
       ),
+      conc_roll = replace_na(.data$conc_roll, 0),
       Cd = abs(.data$conc_roll - .data$f_Cz),
       minCd = min(.data$Cd, na.rm = TRUE),
       f_tz_est = min(.data$f_time_cut[.data$Cd == .data$minCd], na.rm = TRUE)
     ) |>
     ungroup() |>
-    select({{f_fluxid}}, "f_tz_est") |>
+    select({{f_fluxid}}, "f_tz_est"
+    ) |>
     distinct()
 
 
@@ -248,6 +249,8 @@ flux_fitting_exp <- function(conc_df,
     left_join(a_df, by = dplyr::join_by({{f_fluxid}})) |>
     left_join(cb_df, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
+      f_tz_est = replace(.data$f_tz_est, .data$f_tz_est == 0, 1e-10),
+      # because we use a log to force tz to be positive
       f_b_est = case_when(
         .data$f_Cb == .data$f_Cm_est ~ 0, # special case or flat flux
         .data$f_Cz == .data$f_Cm_est ~ 0, # special case or flat flux
@@ -286,22 +289,25 @@ flux_fitting_exp <- function(conc_df,
     left_join(estimates_df, by = dplyr::join_by({{f_fluxid}})) |>
     select(
       {{f_fluxid}}, "f_Cm_est", "f_a_est", "f_b_est", "f_tz_est",
-      "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff"
+      "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff", "f_start_window"
     ) |>
     group_by(
       {{f_fluxid}}, .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
-      .data$f_tz_est, .data$f_Cz, .data$f_time_diff
+      .data$f_tz_est, .data$f_Cz, .data$f_time_diff, .data$f_start_window
     ) |>
     nest() |>
     rowwise() |>
     summarize(
-      results = list(optim(
-        par = c(
-          .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
-          log(.data$f_tz_est)
+      results = list(tryCatch(
+        optim(
+          par = c(
+            .data$f_Cm_est, .data$f_a_est, .data$f_b_est,
+            log(.data$f_tz_est)
+          ),
+          fn = fc_myfn, fc_conc = data[name_conc],
+          fc_time = data$f_time_cut, fc_cz = .data$f_Cz
         ),
-        fn = fc_myfn, fc_conc = data[name_conc],
-        fc_time = data$f_time_cut, fc_cz = .data$f_Cz
+        error = function(err) list(par = rep(NA, 4))
       )),
       f_Cm = .data$results$par[1],
       f_a = .data$results$par[2],
@@ -324,26 +330,36 @@ flux_fitting_exp <- function(conc_df,
       * exp(-.data$f_b * (.data$f_time - .data$f_tz - .data$f_time_diff)),
       f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
       * (.data$f_tz + .data$f_time_diff),
-      f_start_z = {{f_start}} + .data$f_tz,
+      f_start_z = .data$f_start_window + .data$f_tz,
       .by = {{f_fluxid}}
     ) |>
-    select(!"f_time_diff")
+    select(!c("f_time_diff", "f_start_window"))
 
 
   message("Done.")
 
 
-  warning_msg <- conc_df |>
+  warning_msg <- conc_fitting |>
+    select(
+      {{f_fluxid}}, "f_n_conc", "f_slope"
+    ) |>
+    distinct() |>
     left_join(conc_df_cut,
       by = dplyr::join_by(
         {{f_fluxid}} == {{f_fluxid}},
-        "f_n_conc" == "f_n_conc",
-        {{datetime_col}} == {{datetime_col}}
+        "f_n_conc" == "f_n_conc"
       )
     ) |> # we want f_n_conc after cut
-    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
+    select(
+      {{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux", "f_slope"
+    ) |>
     distinct() |>
     mutate(
+      slope_na = paste(
+        "\n", "fluxID", {{f_fluxid}},
+        ": slope is NA, most likely optim() supplied non-finite value.
+        Check your data or use a different model."
+      ),
       low_data = paste(
         "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
         .data$f_n_conc_cut, "points out of", .data$f_length_flux,
@@ -355,6 +371,7 @@ flux_fitting_exp <- function(conc_df,
       ),
       warnings = case_when(
         .data$f_n_conc == 0 ~ .data$no_data,
+        is.na(.data$f_slope) ~ .data$slope_na,
         .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
       ),
       warnings = as.character(.data$warnings)

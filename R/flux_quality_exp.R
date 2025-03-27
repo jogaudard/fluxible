@@ -74,6 +74,7 @@ flux_quality_exp <- function(slopes_df,
 
 
   quality_par <- slopes_df |>
+    drop_na({{conc_col}}) |>
     group_by({{f_fluxid}}, {{f_cut}}) |>
     summarise(
       f_cor_coef = cor({{conc_col}}, {{f_time}}),
@@ -93,6 +94,7 @@ flux_quality_exp <- function(slopes_df,
     mutate(
       f_fit_quality = case_when(
         {{f_b}} >= b_threshold ~ "bad_b",
+        {{f_b}} <= -b_threshold ~ "bad_b",
         .data$f_RMSE > rmse_threshold ~ "bad_RMSE"
       ),
       f_correlation = case_when(
@@ -120,7 +122,7 @@ flux_quality_exp <- function(slopes_df,
         .data$f_quality_flag == "no_data" ~ NA,
         .data$f_quality_flag == "force_discard" ~ NA,
         .data$f_quality_flag == "force_ok" ~ {{f_slope}},
-        # .data$f_quality_flag == "force_zero" ~ 0,
+        .data$f_quality_flag == "force_zero" ~ 0,
         .data$f_quality_flag == "start_error" ~ NA,
         .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0,

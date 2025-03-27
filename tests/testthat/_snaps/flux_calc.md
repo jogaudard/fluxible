@@ -175,7 +175,50 @@
        $ datetime      : POSIXct[1:6], format: "2022-07-28 23:43:35" "2022-07-28 23:47:22" ...
        $ f_volume_setup: num [1:6] 24.6 24.6 24.6 24.6 24.6 ...
        $ f_flux        : num [1:6] 48.3 30.9 21.1 42.5 74 ...
-       $ f_model       : chr [1:6] "exponential" "exponential" "exponential" "exponential" ...
+       $ f_model       : chr [1:6] "exp_zhao18" "exp_zhao18" "exp_zhao18" "exp_zhao18" ...
+
+# Stupeflux works with slope_correction = FALSE
+
+    Code
+      stupeflux(raw_conc = co2_df_short, field_record = record_short, datetime_col = datetime,
+        start_col = start, conc_col = conc, startcrop = 10, measurement_length = 180,
+        fit_type = "exp_zhao18", temp_air_col = temp_air, conc_unit = "ppm",
+        flux_unit = "mmol", chamber_volume = 24.5, tube_volume = 0.075, atm_pressure = 1,
+        plot_area = 0.0625, slope_correction = FALSE)
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+      
+       Total number of measurements: 6
+      
+       ok 	 6 	 100 %
+       discard 	 0 	 0 %
+       zero 	 0 	 0 %
+       force_discard 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
+      Cutting data according to 'keep_arg'...
+      Averaging air temperature for each flux...
+      Calculating fluxes...
+      R constant set to 0.082057
+      Concentration was measured in ppm
+      Fluxes are in mmol/m2/h
+    Output
+      # A tibble: 6 x 7
+        f_fluxid f_slope f_temp_air_ave datetime            f_volume_setup f_flux
+        <fct>      <dbl>          <dbl> <dttm>                       <dbl>  <dbl>
+      1 1          0.785           7.28 2022-07-28 23:43:35           24.6   48.3
+      2 2          0.503           7.37 2022-07-28 23:47:22           24.6   30.9
+      3 3          0.344           7.45 2022-07-28 23:52:10           24.6   21.1
+      4 4          0.693           7.77 2022-07-28 23:59:32           24.6   42.5
+      5 5          1.20            7.69 2022-07-29 00:03:10           24.6   74.0
+      6 6          0.433           7.74 2022-07-29 00:06:35           24.6   26.6
+      # i 1 more variable: f_model <chr>
 
 # Working with two gases
 
@@ -189,7 +232,7 @@
        $ datetime      : POSIXct[1:12], format: "2024-06-18 10:04:37" "2024-06-18 11:12:52" ...
        $ f_volume_setup: num [1:12] 6.31 6.31 6.31 6.31 6.31 6.31 6.31 6.31 6.31 6.31 ...
        $ flux_co2      : num [1:12] 0.08292 0.38505 0.43518 0.00108 0.06371 ...
-       $ f_model       : chr [1:12] "exponential" "exponential" "exponential" "exponential" ...
+       $ f_model       : chr [1:12] "exp_zhao18" "exp_zhao18" "exp_zhao18" "exp_zhao18" ...
        $ flux_ch4      : num [1:12] -0.04873 0.01165 0 -0.00649 0 ...
-       - attr(*, "fit_type")= chr "exponential"
+       - attr(*, "fit_type")= chr "exp_zhao18"
 

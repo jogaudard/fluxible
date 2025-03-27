@@ -8,18 +8,18 @@ conc_liahovden <- flux_match(
   co2_liahovden,
   record_liahovden
 )
-slopes_exp_liahovden <- flux_fitting(
+slopes_zhao18_liahovden <- flux_fitting(
   conc_liahovden,
   fit_type = "exponential"
 )
-slopes_exp_liahovden <- flux_quality(
-  slopes_exp_liahovden,
+slopes_zhao18_liahovden <- flux_quality(
+  slopes_zhao18_liahovden,
   fit_type = "expo",
   slope_col = "f_slope"
   )
 
 # special function to make the plots for the poster (bigger and co)
-flux_plot_exp_poster <- function(slopes_df,
+flux_plot_zhao18_poster <- function(slopes_df,
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_ok = "#009E73",
@@ -50,7 +50,7 @@ flux_plot_exp_poster <- function(slopes_df,
 
 
 
-  param_df <- flux_param_exp(
+  param_df <- flux_param_zhao18(
     ((slopes_df)),
     cut_arg = ((cut_arg))
   )
@@ -158,7 +158,7 @@ flux_plot_exp_poster <- function(slopes_df,
 
 
 
-slopes_exp_liahovden |>
+slopes_zhao18_liahovden |>
   dplyr::filter(f_fluxid %in% c(28, 51, 100)) |> # we just show a sample of the plots to avoid slowing down the example
   #   mutate(
   #       f_fluxid = case_when(
@@ -169,7 +169,7 @@ slopes_exp_liahovden |>
   #       f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
   #   ) |>
     # view()
-    flux_plot_exp_poster(
+    flux_plot_zhao18_poster(
       linewidth = 0.8,
       size_point = 1,
       f_plotname = "building-material/poster_plot",
@@ -247,7 +247,7 @@ slopes_flag |>
   #       ),
   #       f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
   #   ) |>
-  flux_plot_exp_poster(
+  flux_plot_zhao18_poster(
       linewidth = 0.8,
       size_point = 1,
       f_plotname = "poster_plot",
@@ -351,7 +351,7 @@ slopes_flag2022 |>
   #       ),
   #       f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
   #   ) |>
-  flux_plot_exp_poster(
+  flux_plot_zhao18_poster(
       linewidth = 0.8,
       size_point = 1,
       f_plotname = "poster_plot",
@@ -451,7 +451,7 @@ conc_poster |>
         ),
         f_fluxid = factor(f_fluxid, levels = c("A", "B", "C"))
     ) |>
-  flux_plot_exp_poster(
+  flux_plot_zhao18_poster(
       linewidth = 0.8,
       size_point = 1,
       f_plotname = "poster_plot",
