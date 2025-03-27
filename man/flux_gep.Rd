@@ -36,7 +36,7 @@ flux, type and datetime columns; \code{all} keeps all the columns;
 can also be a vector of column names.}
 }
 \value{
-a dataframe with GEP as \code{NEE - ER} in long format with GEP, NEE, and
+a dataframe with $GEP = NEE - ER$ in long format with GEP, NEE, and
 ER as flux type, datetime, and any column specified in \code{cols_keep}.
 Values of datetime and columns in \code{cols_keep} for GEP row are taken from
 NEE measurements.

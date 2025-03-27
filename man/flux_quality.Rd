@@ -2,7 +2,8 @@
 % Please edit documentation in R/flux_quality.R
 \name{flux_quality}
 \alias{flux_quality}
-\title{assessing quality of slopes calculated with flux_fitting}
+\title{assessing quality of slopes calculated with
+\link[fluxible:flux_fitting]{flux_fitting}}
 \usage{
 flux_quality(
   slopes_df,
@@ -41,7 +42,7 @@ flux_quality(
 \item{f_fluxid}{column containing unique IDs for each flux}
 
 \item{f_slope}{column containing the slope of each flux
-(as calculated by the flux_fitting function)}
+(as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)}
 
 \item{f_time}{column containing the time of each measurement in seconds
 (exponential fit)}
@@ -79,7 +80,8 @@ measurement (in seconds) below which the measurement will be considered as
 not having enough data points to be considered for calculations}
 
 \item{fit_type}{model fitted to the data, linear, quadratic or exponential.
-Will be automatically filled if slopes_df was produced using flux_fitting()}
+Will be automatically filled if \code{slopes_df} was produced using
+\link[fluxible:flux_fitting]{flux_fitting}}
 
 \item{ambient_conc}{ambient gas concentration in ppm at the site of
 measurement (used to detect measurement that started with a polluted setup)}
@@ -111,7 +113,10 @@ considered good enough (exponential fit)}
 \value{
 a dataframe with added columns of quality flags (\code{f_quality_flag}),
 the slope corrected according to the quality flags (\code{f_slope_corr}),
-some diagnostics depending on the fit, and any columns present in the input.
+and any columns present in the input.
+It will also print a summary of the quality flags. This summary can also
+be exported as a dataframe using
+\link[fluxible:flux_flag_count]{flux_flag_count}
 }
 \description{
 indicates if slopes should be discarded or replaced
