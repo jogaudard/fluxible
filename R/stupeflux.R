@@ -106,7 +106,8 @@
 #' any column specified in `cols_keep`, any column specified in `cols_ave` with
 #' their value averaged over the measurement after cuts and discarding NA.
 #' @examples
-#' data(slopes0)
+#' data(co2_df_short)
+#' data(record_short)
 #' stupeflux(
 #' raw_conc = co2_df_short,
 #' field_record = record_short,
