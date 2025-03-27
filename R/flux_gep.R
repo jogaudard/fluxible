@@ -15,7 +15,7 @@
 #' be filled in GEP row. `none` (default) keeps only the columns in `id_cols`,
 #' flux, type and datetime columns; `all` keeps all the columns;
 #' can also be a vector of column names.
-#' @return a dataframe with GEP as `NEE - ER` in long format with GEP, NEE, and
+#' @return a dataframe with $GEP = NEE - ER$ in long format with GEP, NEE, and
 #' ER as flux type, datetime, and any column specified in `cols_keep`.
 #' Values of datetime and columns in `cols_keep` for GEP row are taken from
 #' NEE measurements.

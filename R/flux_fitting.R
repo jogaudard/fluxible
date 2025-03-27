@@ -1,13 +1,13 @@
 #' Fitting a model to concentration data and estimating the slope
 #' @description fits gas concentration over time data with a model
 #' (exponential, quadratic or linear) and provides the slope later used
-#' to calculate gas fluxes with flux_calc
+#' to calculate gas fluxes with \link[fluxible:flux_calc]{flux_calc}
 #' @param fit_type `exp_zhao18`, `exp_tz`, `quadratic` or `linear.`
 #' `exp_zhao18` is using the exponential model
-#' `C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))`
+#' \eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}
 #' from Zhao et al (2018).
 #' `expt_tz` is a modified version which allows the user to fix `t_zero`:
-#' `C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)`.
+#' \eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.
 #' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 #' On the calculation of daytime CO2 fluxes measured by automated closed
 #' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
@@ -20,15 +20,15 @@
 #' @param b_window window to estimate b. It is an interval after tz where
 #' it is assumed that the model fits the data perfectly (exponential fit)
 #' @param a_window window at the end of the flux to estimate a (exponential fit)
-#' @param roll_width width of the rolling mean for CO2 when looking for tz,
-#' ideally same as cz_window (exponential fit)
+#' @param roll_width width of the rolling mean for CO2 when looking for `tz`,
+#' ideally same as `cz_window` (exponential fit)
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
-#' @param f_start column with datetime when the measurement started
-#' @param f_end column with datetime when the measurement ended
+#' @param f_start column with datetime when the measurement started (`ymd_hms`)
+#' @param f_end column with datetime when the measurement ended (`ymd_hms`)
 #' @param datetime_col column with datetime of each concentration measurement
-#' Note that if there are duplicated datetime in the same f_fluxid only
+#' Note that if there are duplicated datetime in the same `f_fluxid` only
 #' the first row will be kept
 #' @param conc_col column with gas concentration data
 #' @param f_fluxid column with ID of each flux
