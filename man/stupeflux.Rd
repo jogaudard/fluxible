@@ -189,7 +189,8 @@ Wrapper function for the Fluxible workflow. We recommand using
 the step-by-step workflow for more control over the process.
 }
 \examples{
-data(slopes0)
+data(co2_df_short)
+data(record_short)
 stupeflux(
 raw_conc = co2_df_short,
 field_record = record_short,
