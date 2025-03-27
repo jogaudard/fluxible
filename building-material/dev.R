@@ -34,6 +34,8 @@ lintr::lint_package()
 # adding check action
 usethis::use_github_action(name = "check-standard", badge = TRUE)
 
+# adding CRAN version badge
+rcompendium::add_cran_badge()
 
 # display number of downloads from CRAN
 cranlogs::cran_downloads(from = "2024-08-01", to = "2024-10-07", packages = "fluxible") |>
