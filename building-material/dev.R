@@ -34,6 +34,10 @@ lintr::lint_package()
 # adding check action
 usethis::use_github_action(name = "check-standard", badge = TRUE)
 
+# add code coverage badge
+rcompendium::add_github_actions_codecov()
+rcompendium::add_codecov_badge()
+
 # adding CRAN version badge
 rcompendium::add_cran_badge()
 
