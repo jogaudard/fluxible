@@ -60,7 +60,7 @@ slopes_df <- flux_fitting(
   conc_df,
   conc,
   datetime,
-  fit_type = "exp",
+  fit_type = "exp_zhao18",
   end_cut = 30
 )
 #> Cutting measurements...
