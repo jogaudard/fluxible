@@ -4,12 +4,15 @@
 # Fluxible
 
 <!-- badges: start -->
-<!-- badges: end -->
 
-The Fluxible R package is made to transform any dataset of gas
-concentration over time into a gas flux dataset. It was originally made
-to be used with a closed loop chamber system connected to a gas
-analyzer.
+[![R-CMD-check](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.org/package=fluxible)
+[![LifeCycle](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+<!-- badges: end --> The Fluxible R package is made to transform any
+dataset of gas concentration over time into a gas flux dataset. It was
+originally made to be used with a closed loop chamber system connected
+to a gas analyzer.
 
 The goal of fluxible is to provide a workflow that removes individual
 evaluation of each flux, reduces risk of bias, and makes it
@@ -80,6 +83,7 @@ slopes_flag_df <- flux_quality(
 #>  start_error      0   0 %
 #>  no_data      0   0 %
 #>  force_ok     0   0 %
+#>  force_zero   0   0 %
 
 flux_plot(
   slopes_flag_df,
