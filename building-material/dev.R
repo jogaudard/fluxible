@@ -42,6 +42,9 @@ usethis::use_github_action(name = "check-standard", badge = TRUE)
 # adding CRAN version badge
 rcompendium::add_cran_badge()
 
+# lifecycle badge
+rcompendium::add_lifecycle_badge(lifecycle = "stable", quiet = FALSE)
+
 # display number of downloads from CRAN
 cranlogs::cran_downloads(from = "2024-08-01", to = "2024-10-07", packages = "fluxible") |>
     dplyr::summarise(total = sum(count))
