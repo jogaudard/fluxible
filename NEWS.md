@@ -1,9 +1,3 @@
-# fluxible 1.0.3
-
-* `stupeflux`: a wrap function to directly process raw gas concentration data into ecosystem gas fluxes.
-* `flux_fitting`: if `optim` returns non-finite values, the slope is NA and the function does not crash anymore.
-* `flux_fitting`: new model `exp_tz`. Same as `exp_zhao18` except the user defines `t_zero`.
-
 # fluxible 1.0.2
 
 * `flux_gep`: fluxes presents in the dataset that are neither NEE nor ER (soilR, LRC or other) are not lost anymore.
