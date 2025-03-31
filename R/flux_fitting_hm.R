@@ -255,17 +255,18 @@ flux_fitting_hm <- function(conc_df,
     summarize(
       results = list(tryCatch(
         optim(
-        par = c(
-          .data$f_Cm_est, .data$f_b_est
-        ),
-        fn = fc_myfn, fc_conc = data[name_conc],
-        fc_time = data$f_time_cut, fc_cz = .data$f_Cz
+          par = c(
+            .data$f_Cm_est, .data$f_b_est
+          ),
+          fn = fc_myfn, fc_conc = data[name_conc],
+          fc_time = data$f_time_cut, fc_cz = .data$f_Cz
         ),
         error = function(err) list(par = rep(NA, 3))
       )),
       f_Cm = .data$results$par[1],
       f_b = .data$results$par[2],
-      f_slope = .data$f_b * (.data$f_Cm - .data$f_Cz) * exp(-.data$f_b * t_zero),
+      f_slope = .data$f_b * (.data$f_Cm - .data$f_Cz) *
+        exp(-.data$f_b * t_zero),
       .groups = "drop"
     ) |>
     select(!c("results", "f_Cm_est", "f_b_est"))
