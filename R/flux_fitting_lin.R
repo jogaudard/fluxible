@@ -21,7 +21,8 @@
 #' @importFrom stringr str_c
 
 
-flux_fitting_lin <- function(conc_df,
+flux_fitting_lin <- function(conc_df_cut,
+                             conc_df,
                              conc_col,
                              datetime_col,
                              f_start,
@@ -32,42 +33,42 @@ flux_fitting_lin <- function(conc_df,
 
   name_conc <- names(select(conc_df, {{conc_col}}))
 
-  conc_df <- conc_df |>
-    mutate(
-      f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
-        {{datetime_col}}[1],
-        units = "secs"
-      ),
-      f_time = as.double(.data$f_time),
-      {{f_start}} := {{f_start}} + start_cut,
-      {{f_end}} := {{f_end}} - end_cut,
-      f_cut = case_when(
-        {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
-        ~ "cut",
-        TRUE ~ "keep"
-      ),
-      f_cut = as_factor(.data$f_cut),
-      f_n_conc = sum(!is.na(.data[[name_conc]])),
-      .by = {{f_fluxid}}
-    )
+  # conc_df <- conc_df |>
+  #   mutate(
+  #     f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+  #       {{datetime_col}}[1],
+  #       units = "secs"
+  #     ),
+  #     f_time = as.double(.data$f_time),
+  #     {{f_start}} := {{f_start}} + start_cut,
+  #     {{f_end}} := {{f_end}} - end_cut,
+  #     f_cut = case_when(
+  #       {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
+  #       ~ "cut",
+  #       TRUE ~ "keep"
+  #     ),
+  #     f_cut = as_factor(.data$f_cut),
+  #     f_n_conc = sum(!is.na(.data[[name_conc]])),
+  #     .by = {{f_fluxid}}
+  #   )
 
-  conc_df_cut <- conc_df |>
-    filter(
-      .data$f_cut == "keep"
-    ) |>
-    drop_na({{conc_col}}) |>
-    mutate(
-      f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
-        {{datetime_col}}[1],
-        units = "secs"
-      ),
-      f_time_cut = as.double(.data$f_time_cut),
-      length_window = max(.data$f_time_cut),
-      length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
-      time_diff = .data$f_time - .data$f_time_cut,
-      f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
-      .by = {{f_fluxid}}
-    )
+  # conc_df_cut <- conc_df |>
+  #   filter(
+  #     .data$f_cut == "keep"
+  #   ) |>
+  #   drop_na({{conc_col}}) |>
+  #   mutate(
+  #     f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+  #       {{datetime_col}}[1],
+  #       units = "secs"
+  #     ),
+  #     f_time_cut = as.double(.data$f_time_cut),
+  #     length_window = max(.data$f_time_cut),
+  #     length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
+  #     time_diff = .data$f_time - .data$f_time_cut,
+  #     f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
+  #     .by = {{f_fluxid}}
+  #   )
 
   fitting_par <- conc_df_cut |>
     group_by({{f_fluxid}}) |>
@@ -109,12 +110,12 @@ flux_fitting_lin <- function(conc_df,
         "f_n_conc" == "f_n_conc"
       )
     ) |>
-    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "length_flux") |>
+    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
     distinct() |>
     mutate(
       low_data = paste(
         "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
-        .data$f_n_conc_cut, "points out of", .data$length_flux,
+        .data$f_n_conc_cut, "points out of", .data$f_length_flux,
         "seconds"
       ),
       no_data = paste(
@@ -123,7 +124,7 @@ flux_fitting_lin <- function(conc_df,
       ),
       warnings = case_when(
         .data$f_n_conc == 0 ~ .data$no_data,
-        .data$f_n_conc_cut != .data$length_flux ~ .data$low_data
+        .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
       ),
       warnings = as.character(.data$warnings)
     ) |>

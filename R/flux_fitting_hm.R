@@ -44,7 +44,8 @@
 
 
 
-flux_fitting_hm <- function(conc_df,
+flux_fitting_hm <- function(conc_df_cut,
+                            conc_df,
                             conc_col,
                             datetime_col,
                             f_start,
@@ -79,42 +80,42 @@ flux_fitting_hm <- function(conc_df,
 
   name_conc <- names(select(conc_df, {{conc_col}}))
 
-  conc_df <- conc_df |>
-    mutate(
-      f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
-        {{datetime_col}}[1],
-        units = "secs"
-      ),
-      f_time = as.double(.data$f_time),
-      {{f_start}} := {{f_start}} + start_cut,
-      {{f_end}} := {{f_end}} - end_cut,
-      f_cut = case_when(
-        {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
-        ~ "cut",
-        TRUE ~ "keep"
-      ),
-      f_cut = as_factor(.data$f_cut),
-      f_n_conc = sum(!is.na(.data[[name_conc]])),
-      .by = {{f_fluxid}}
-    )
+  # conc_df <- conc_df |>
+  #   mutate(
+  #     f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+  #       {{datetime_col}}[1],
+  #       units = "secs"
+  #     ),
+  #     f_time = as.double(.data$f_time),
+  #     {{f_start}} := {{f_start}} + start_cut,
+  #     {{f_end}} := {{f_end}} - end_cut,
+  #     f_cut = case_when(
+  #       {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
+  #       ~ "cut",
+  #       TRUE ~ "keep"
+  #     ),
+  #     f_cut = as_factor(.data$f_cut),
+  #     f_n_conc = sum(!is.na(.data[[name_conc]])),
+  #     .by = {{f_fluxid}}
+  #   )
 
-  conc_df_cut <- conc_df |>
-    filter(
-      .data$f_cut == "keep"
-    ) |>
-    drop_na({{conc_col}}) |>
-    mutate(
-      f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
-        {{datetime_col}}[1],
-        units = "secs"
-      ),
-      f_time_cut = as.double(.data$f_time_cut),
-      f_length_window = max(.data$f_time_cut),
-      f_length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
-      f_time_diff = .data$f_time - .data$f_time_cut,
-      f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
-      .by = {{f_fluxid}}
-    )
+  # conc_df_cut <- conc_df |>
+  #   filter(
+  #     .data$f_cut == "keep"
+  #   ) |>
+  #   drop_na({{conc_col}}) |>
+  #   mutate(
+  #     f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+  #       {{datetime_col}}[1],
+  #       units = "secs"
+  #     ),
+  #     f_time_cut = as.double(.data$f_time_cut),
+  #     f_length_window = max(.data$f_time_cut),
+  #     f_length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
+  #     f_time_diff = .data$f_time - .data$f_time_cut,
+  #     f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
+  #     .by = {{f_fluxid}}
+  #   )
 
   message("Estimating starting parameters for optimization...")
 
