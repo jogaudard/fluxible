@@ -272,12 +272,15 @@ flux_fitting_hm <- function(conc_df,
     nest() |>
     rowwise() |>
     summarize(
-      results = list(optim(
+      results = list(tryCatch(
+        optim(
         par = c(
           .data$f_Cm_est, .data$f_b_est
         ),
         fn = fc_myfn, fc_conc = data[name_conc],
         fc_time = data$f_time_cut, fc_cz = .data$f_Cz
+        ),
+        error = function(err) list(par = rep(NA, 3))
       )),
       f_Cm = .data$results$par[1],
       f_b = .data$results$par[2],
