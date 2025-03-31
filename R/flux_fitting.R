@@ -2,12 +2,23 @@
 #' @description fits gas concentration over time data with a model
 #' (exponential, quadratic or linear) and provides the slope later used
 #' to calculate gas fluxes with \link[fluxible:flux_calc]{flux_calc}
-#' @param fit_type `exp_zhao18`, `exp_tz`, `quadratic` or `linear.`
+#' @param fit_type `exp_zhao18`, `exp_tz`, `exp_hm`, `quadratic` or `linear.`
 #' `exp_zhao18` is using the exponential model
 #' \eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}
 #' from Zhao et al (2018).
 #' `expt_tz` is a modified version which allows the user to fix `t_zero`:
 #' \eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.
+#' `exp_hm` is using the HM model
+#' (Pedersen et al., 2010; Hutchinson and Mosier, 1981)
+#' \eqn{C(t) = C~m~ + (C~z~ - C~m~) \exp(-b * t)}
+#' @references Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
+#' A comprehensive approach to soil-atmosphere trace-gas flux estimation with
+#' static chambers. European Journal of Soil Science 61, 888–902.
+#' https://doi.org/10.1111/j.1365-2389.2010.01291.x
+#' @references Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
+#' for Field Measurement of Nitrous Oxide Fluxes.
+#' Soil Science Society of America Journal 45, 311–316.
+#' https://doi.org/10.2136/sssaj1981.03615995004500020017x
 #' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 #' On the calculation of daytime CO2 fluxes measured by automated closed
 #' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
@@ -154,6 +165,23 @@ flux_fitting <- function(conc_df,
       cz_window = cz_window,
       b_window = b_window,
       a_window = a_window,
+      roll_width = roll_width
+    )
+  }
+
+  if (fit_type == "exp_hm") {
+    conc_fitting <- flux_fitting_hm(
+      conc_df,
+      {{conc_col}},
+      {{datetime_col}},
+      {{f_start}},
+      {{f_end}},
+      {{f_fluxid}},
+      start_cut = start_cut,
+      end_cut = end_cut,
+      t_zero = t_zero,
+      cz_window = cz_window,
+      b_window = b_window,
       roll_width = roll_width
     )
   }

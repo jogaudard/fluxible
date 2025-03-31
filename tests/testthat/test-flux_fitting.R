@@ -123,6 +123,7 @@ test_that("works for exp_tz fitting", {
   )
 })
 
+
 test_that("works for exp_zhao18 with missing data", {
   expect_snapshot(
     flux_fitting(
@@ -229,6 +230,19 @@ test_that("exp_zhao18: optim produces non-finite values", {
       end_cut = 60,
       t_zero = 20
     ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
+  )
+})
+      
+test_that("works for exp_hm fitting", {
+  expect_snapshot(
+    flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_hm"
+       ) |>
       select(f_fluxid, f_slope) |>
       distinct()
   )

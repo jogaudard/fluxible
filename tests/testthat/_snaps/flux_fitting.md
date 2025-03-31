@@ -346,3 +346,30 @@
       5 5          0.751
       6 6         NA    
 
+# works for exp_hm fitting
+
+    Code
+      distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "exp_hm"),
+      f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting_hm()`:
+      
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
+    Output
+      # A tibble: 6 x 2
+        f_fluxid  f_slope
+        <fct>       <dbl>
+      1 1        3147.   
+      2 2           0.785
+      3 3         357.   
+      4 4           1.09 
+      5 5           1.37 
+      6 6         603.   
+

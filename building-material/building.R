@@ -1151,7 +1151,15 @@ flux_fitting(
     flux_quality(conc) |>
     flux_plot(conc, datetime)
 
-# testing behaviour on a larger dataset
+
+# trying new exp_hm fit
+
+flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_hm",
+
 
 flux_match(
   co2_liahovden,
@@ -1186,6 +1194,8 @@ flux_fitting(
       t_zero = 20
     ) |>
     flux_quality(conc) |>
+    flux_plot(conc, datetime)
+
     # View()
     flux_plot(conc, datetime)
 
