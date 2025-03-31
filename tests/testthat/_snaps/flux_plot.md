@@ -56,7 +56,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_exptz()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -88,7 +88,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -116,7 +116,7 @@
         flux_plot(flux_quality(flux_fitting(co2_conc_mid_missing, conc, datetime,
           fit_type = "quadratic", end_cut = 60, t_zero = 20), conc), conc, datetime))
     Condition
-      Warning in `flux_fitting_quadratic()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds

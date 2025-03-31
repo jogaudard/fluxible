@@ -4,7 +4,7 @@
       flux_fitting(co2_conc, conc, datetime, f_start, f_end, f_fluxid, fit_type = "quadratic",
         t_zero = 10, end_cut = 30)
     Output
-      # A tibble: 1,251 x 24
+      # A tibble: 1,251 x 29
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -18,9 +18,10 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 17 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      # i 22 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
       #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_param1 <dbl>, f_param2 <dbl>, f_rsquared <dbl>, f_adj_rsquared <dbl>,
-      #   f_intercept <dbl>, f_pvalue <dbl>, f_slope <dbl>, f_fit <dbl>,
-      #   f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_rsquared_lm <dbl>, f_adj_rsquared_lm <dbl>, f_slope_lm <dbl>,
+      #   f_intercept_lm <dbl>, f_pvalue_lm <dbl>, f_fit <dbl>, f_param1 <dbl>,
+      #   f_param2 <dbl>, f_rsquared_qua <dbl>, f_adj_rsquared_qua <dbl>,
+      #   f_intercept_qua <dbl>, f_pvalue_qua <dbl>, f_slope <dbl>, ...
 

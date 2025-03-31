@@ -84,56 +84,56 @@ flux_fitting_lin <- function(conc_df_cut,
     pivot_wider(names_from = "term", values_from = "estimate") |>
     unnest("glance") |>
     rename(
-      f_slope = "f_time_cut",
-      f_intercept = "(Intercept)",
-      f_rsquared = "r.squared",
-      f_adj_rsquared = "adj.r.squared",
-      f_pvalue = "p.value"
+      f_slope_lm = "f_time_cut",
+      f_intercept_lm = "(Intercept)",
+      f_rsquared_lm = "r.squared",
+      f_adj_rsquared_lm = "adj.r.squared",
+      f_pvalue_lm = "p.value"
     ) |>
     select(
-      {{f_fluxid}}, "f_rsquared", "f_adj_rsquared",
-      "f_slope", "f_intercept", "f_pvalue"
+      {{f_fluxid}}, "f_rsquared_lm", "f_adj_rsquared_lm",
+      "f_slope_lm", "f_intercept_lm", "f_pvalue_lm"
     ) |>
     ungroup()
 
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
-      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - start_cut)
+      f_fit = .data$f_intercept_lm + .data$f_slope_lm * (.data$f_time - start_cut)
     )
 
-  warning_msg <- conc_df |>
-    left_join(conc_df_cut,
-      by = dplyr::join_by(
-        {{datetime_col}} == {{datetime_col}},
-        {{f_fluxid}} == {{f_fluxid}},
-        "f_n_conc" == "f_n_conc"
-      )
-    ) |>
-    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
-    distinct() |>
-    mutate(
-      low_data = paste(
-        "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
-        .data$f_n_conc_cut, "points out of", .data$f_length_flux,
-        "seconds"
-      ),
-      no_data = paste(
-        "\n", "fluxID", {{f_fluxid}},
-        "dropped (no data in the conc column)"
-      ),
-      warnings = case_when(
-        .data$f_n_conc == 0 ~ .data$no_data,
-        .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
-      ),
-      warnings = as.character(.data$warnings)
-    ) |>
-    drop_na(warnings) |>
-    pull(.data$warnings)
+  # warning_msg <- conc_df |>
+  #   left_join(conc_df_cut,
+  #     by = dplyr::join_by(
+  #       {{datetime_col}} == {{datetime_col}},
+  #       {{f_fluxid}} == {{f_fluxid}},
+  #       "f_n_conc" == "f_n_conc"
+  #     )
+  #   ) |>
+  #   select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
+  #   distinct() |>
+  #   mutate(
+  #     low_data = paste(
+  #       "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
+  #       .data$f_n_conc_cut, "points out of", .data$f_length_flux,
+  #       "seconds"
+  #     ),
+  #     no_data = paste(
+  #       "\n", "fluxID", {{f_fluxid}},
+  #       "dropped (no data in the conc column)"
+  #     ),
+  #     warnings = case_when(
+  #       .data$f_n_conc == 0 ~ .data$no_data,
+  #       .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
+  #     ),
+  #     warnings = as.character(.data$warnings)
+  #   ) |>
+  #   drop_na(warnings) |>
+  #   pull(.data$warnings)
 
-  warnings <- str_c(warning_msg)
+  # warnings <- str_c(warning_msg)
 
-  if (any(!is.na(warnings))) warning(warnings)
+  # if (any(!is.na(warnings))) warning(warnings)
 
 
   conc_fitting

@@ -106,14 +106,14 @@ flux_fitting_quadratic <- function(conc_df_cut,
     rename(
       f_param1 = "f_time_cut",
       f_param2 = "f_time_cut2",
-      f_intercept = "(Intercept)",
-      f_rsquared = "r.squared",
-      f_adj_rsquared = "adj.r.squared",
-      f_pvalue = "p.value"
+      f_intercept_qua = "(Intercept)",
+      f_rsquared_qua = "r.squared",
+      f_adj_rsquared_qua = "adj.r.squared",
+      f_pvalue_qua = "p.value"
     ) |>
     select(
-      {{f_fluxid}}, "f_param1", "f_param2", "f_rsquared",
-      "f_adj_rsquared", "f_intercept", "f_pvalue"
+      {{f_fluxid}}, "f_param1", "f_param2", "f_rsquared_qua",
+      "f_adj_rsquared_qua", "f_intercept_qua", "f_pvalue_qua"
     ) |>
     ungroup()
 
@@ -122,12 +122,12 @@ flux_fitting_quadratic <- function(conc_df_cut,
     mutate(
       f_slope = .data$f_param1 + 2 * .data$f_param2 * t_zero,
       f_fit =
-        .data$f_intercept
+        .data$f_intercept_qua
         + .data$f_param1
         * (.data$f_time - start_cut) + .data$f_param2
         * (.data$f_time - start_cut)^2,
       f_fit_slope =
-        .data$f_intercept
+        .data$f_intercept_qua
         - .data$f_param2
         * t_zero^2
         + (.data$f_param1 + 2 * .data$f_param2 * t_zero)
@@ -135,38 +135,38 @@ flux_fitting_quadratic <- function(conc_df_cut,
       f_start_z = {{f_start}} + t_zero
     )
 
-  warning_msg <- conc_df |>
-    left_join(conc_df_cut,
-      by = dplyr::join_by(
-        {{datetime_col}} == {{datetime_col}},
-        {{f_fluxid}} == {{f_fluxid}},
-        "f_n_conc" == "f_n_conc"
-      )
-    ) |>
-    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
-    distinct() |>
-    mutate(
-      low_data = paste(
-        "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
-        .data$f_n_conc_cut, "points out of", .data$f_length_flux,
-        "seconds"
-      ),
-      no_data = paste(
-        "\n", "fluxID", {{f_fluxid}},
-        "dropped (no data in the conc column)"
-      ),
-      warnings = case_when(
-        .data$f_n_conc == 0 ~ .data$no_data,
-        .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
-      ),
-      warnings = as.character(.data$warnings)
-    ) |>
-    drop_na(warnings) |>
-    pull(.data$warnings)
+  # warning_msg <- conc_df |>
+  #   left_join(conc_df_cut,
+  #     by = dplyr::join_by(
+  #       {{datetime_col}} == {{datetime_col}},
+  #       {{f_fluxid}} == {{f_fluxid}},
+  #       "f_n_conc" == "f_n_conc"
+  #     )
+  #   ) |>
+  #   select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
+  #   distinct() |>
+  #   mutate(
+  #     low_data = paste(
+  #       "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
+  #       .data$f_n_conc_cut, "points out of", .data$f_length_flux,
+  #       "seconds"
+  #     ),
+  #     no_data = paste(
+  #       "\n", "fluxID", {{f_fluxid}},
+  #       "dropped (no data in the conc column)"
+  #     ),
+  #     warnings = case_when(
+  #       .data$f_n_conc == 0 ~ .data$no_data,
+  #       .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
+  #     ),
+  #     warnings = as.character(.data$warnings)
+  #   ) |>
+  #   drop_na(warnings) |>
+  #   pull(.data$warnings)
 
-  warnings <- str_c(warning_msg)
+  # warnings <- str_c(warning_msg)
 
-  if (any(!is.na(warnings))) warning(warnings)
+  # if (any(!is.na(warnings))) warning(warnings)
 
 
   conc_fitting

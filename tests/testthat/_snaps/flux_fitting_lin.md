@@ -3,7 +3,7 @@
     Code
       flux_fitting(co2_conc_names, co2, date_time, f_start, finish, fit_type = "lin")
     Condition
-      Warning in `flux_fitting_lin()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
@@ -24,6 +24,6 @@
       # i 1,241 more rows
       # i 13 more variables: f_start <dttm>, finish <dttm>, f_fluxid <fct>,
       #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
-      #   f_pvalue <dbl>, f_fit <dbl>
+      #   f_rsquared_lm <dbl>, f_adj_rsquared_lm <dbl>, f_slope <dbl>,
+      #   f_intercept_lm <dbl>, f_pvalue_lm <dbl>, f_fit <dbl>
 

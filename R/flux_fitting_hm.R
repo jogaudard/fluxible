@@ -291,38 +291,38 @@ flux_fitting_hm <- function(conc_df_cut,
   message("Done.")
 
 
-  warning_msg <- conc_df |>
-    left_join(conc_df_cut,
-      by = dplyr::join_by(
-        {{f_fluxid}} == {{f_fluxid}},
-        "f_n_conc" == "f_n_conc",
-        {{datetime_col}} == {{datetime_col}}
-      )
-    ) |> # we want f_n_conc after cut
-    select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
-    distinct() |>
-    mutate(
-      low_data = paste(
-        "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
-        .data$f_n_conc_cut, "points out of", .data$f_length_flux,
-        "seconds"
-      ),
-      no_data = paste(
-        "\n", "fluxID", {{f_fluxid}},
-        "dropped (no data in the conc column)"
-      ),
-      warnings = case_when(
-        .data$f_n_conc == 0 ~ .data$no_data,
-        .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
-      ),
-      warnings = as.character(.data$warnings)
-    ) |>
-    drop_na(warnings) |>
-    pull(.data$warnings)
+  # warning_msg <- conc_df |>
+  #   left_join(conc_df_cut,
+  #     by = dplyr::join_by(
+  #       {{f_fluxid}} == {{f_fluxid}},
+  #       "f_n_conc" == "f_n_conc",
+  #       {{datetime_col}} == {{datetime_col}}
+  #     )
+  #   ) |> # we want f_n_conc after cut
+  #   select({{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux") |>
+  #   distinct() |>
+  #   mutate(
+  #     low_data = paste(
+  #       "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
+  #       .data$f_n_conc_cut, "points out of", .data$f_length_flux,
+  #       "seconds"
+  #     ),
+  #     no_data = paste(
+  #       "\n", "fluxID", {{f_fluxid}},
+  #       "dropped (no data in the conc column)"
+  #     ),
+  #     warnings = case_when(
+  #       .data$f_n_conc == 0 ~ .data$no_data,
+  #       .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
+  #     ),
+  #     warnings = as.character(.data$warnings)
+  #   ) |>
+  #   drop_na(warnings) |>
+  #   pull(.data$warnings)
 
-  warnings <- str_c(warning_msg)
+  # warnings <- str_c(warning_msg)
 
-  if (any(!is.na(warnings))) warning(warnings)
+  # if (any(!is.na(warnings))) warning(warnings)
 
 
   conc_fitting

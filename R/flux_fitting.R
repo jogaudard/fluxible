@@ -175,10 +175,22 @@ flux_fitting <- function(conc_df,
       .by = {{f_fluxid}}
     )
 
+conc_df_lm <- flux_fitting_lin(
+      conc_df_cut,
+      conc_df,
+      {{conc_col}},
+      {{datetime_col}},
+      {{f_start}},
+      {{f_end}},
+      {{f_fluxid}},
+      start_cut = start_cut,
+      end_cut = end_cut
+    )
+
   if (fit_type == "exp_zhao18") {
     conc_fitting <- flux_fitting_zhao18(
       conc_df_cut,
-      conc_df,
+      conc_df_lm,
       {{conc_col}},
       {{datetime_col}},
       {{f_start}},
@@ -196,7 +208,7 @@ flux_fitting <- function(conc_df,
   if (fit_type == "exp_tz") {
     conc_fitting <- flux_fitting_exptz(
       conc_df_cut,
-      conc_df,
+      conc_df_lm,
       {{conc_col}},
       {{datetime_col}},
       {{f_start}},
@@ -215,7 +227,7 @@ flux_fitting <- function(conc_df,
   if (fit_type == "exp_hm") {
     conc_fitting <- flux_fitting_hm(
       conc_df_cut,
-      conc_df,
+      conc_df_lm,
       {{conc_col}},
       {{datetime_col}},
       {{f_start}},
@@ -232,23 +244,26 @@ flux_fitting <- function(conc_df,
 
 
   if (fit_type == "linear") {
-    conc_fitting <- flux_fitting_lin(
-      conc_df_cut,
-      conc_df,
-      {{conc_col}},
-      {{datetime_col}},
-      {{f_start}},
-      {{f_end}},
-      {{f_fluxid}},
-      start_cut = start_cut,
-      end_cut = end_cut
-    )
+    conc_fitting <- conc_df_lm |>
+      rename(f_slope = "f_slope_lm")
+
+    # conc_fitting <- flux_fitting_lin(
+    #   conc_df_cut,
+    #   conc_df,
+    #   {{conc_col}},
+    #   {{datetime_col}},
+    #   {{f_start}},
+    #   {{f_end}},
+    #   {{f_fluxid}},
+    #   start_cut = start_cut,
+    #   end_cut = end_cut
+    # )
   }
 
   if (fit_type == "quadratic") {
     conc_fitting <- flux_fitting_quadratic(
       conc_df_cut,
-      conc_df,
+      conc_df_lm,
       {{conc_col}},
       {{datetime_col}},
       {{f_start}},
@@ -259,6 +274,53 @@ flux_fitting <- function(conc_df,
       t_zero = t_zero
     )
   }
+
+  # message("Done.")
+
+
+  warning_msg <- conc_fitting |>
+    select(
+      {{f_fluxid}}, "f_n_conc", "f_slope"
+    ) |>
+    distinct() |>
+    left_join(conc_df_cut,
+      by = dplyr::join_by(
+        {{f_fluxid}} == {{f_fluxid}},
+        "f_n_conc" == "f_n_conc"
+      )
+    ) |> # we want f_n_conc after cut
+    select(
+      {{f_fluxid}}, "f_n_conc", "f_n_conc_cut", "f_length_flux", "f_slope"
+    ) |>
+    distinct() |>
+    mutate(
+      slope_na = paste(
+        "\n", "fluxID", {{f_fluxid}},
+        ": slope is NA, most likely optim() supplied non-finite value.
+        Check your data or use a different model."
+      ),
+      low_data = paste(
+        "\n", "fluxID", {{f_fluxid}}, ": slope was estimated on",
+        .data$f_n_conc_cut, "points out of", .data$f_length_flux,
+        "seconds"
+      ),
+      no_data = paste(
+        "\n", "fluxID", {{f_fluxid}},
+        "dropped (no data in the conc column)"
+      ),
+      warnings = case_when(
+        .data$f_n_conc == 0 ~ .data$no_data,
+        is.na(.data$f_slope) ~ .data$slope_na,
+        .data$f_n_conc_cut != .data$f_length_flux ~ .data$low_data
+      ),
+      warnings = as.character(.data$warnings)
+    ) |>
+    drop_na(warnings) |>
+    pull(.data$warnings)
+
+  warnings <- str_c(warning_msg)
+
+  if (any(!is.na(warnings))) warning(warnings)
 
   conc_fitting <- conc_fitting |>
     select(!"f_n_conc")
