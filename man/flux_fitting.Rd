@@ -60,7 +60,10 @@ ideally same as \code{cz_window} (exponential fit)}
 \eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}
 from Zhao et al (2018).
 \code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
-\eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.}
+\eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.
+\code{exp_hm} is using the HM model
+(Pedersen et al., 2010; Hutchinson and Mosier, 1981)
+\eqn{C(t) = C~m~ + (C~z~ - C~m~) \exp(-b * t)}}
 }
 \value{
 a dataframe with the slope at t zero (\code{f_slope}),

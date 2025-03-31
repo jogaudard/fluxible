@@ -43,12 +43,6 @@
        force_zero 	 0 	 0 %
       Plotting in progress
 
-# plot for exp_hm fit
-
-    Code
-      vdiffr::expect_doppelganger("plot for exp_hm fit", flux_plot(flux_quality(
-        flux_fitting(co2_conc, conc, datetime, fit_type = "exp_hm", end_cut = 60,
-          t_zero = 20), conc), conc, datetime))
 # plot for exp_tz fit with mid missing data
 
     Code
@@ -61,12 +55,6 @@
       Optimizing fitting parameters...
       Calculating fits and slopes...
       Done.
-      
-       Total number of measurements: 6
-      
-       discard 	 4 	 67 %
-       ok 	 2 	 33 %
-
     Condition
       Warning in `flux_fitting_exptz()`:
       
@@ -139,6 +127,31 @@
       
        ok 	 6 	 100 %
        discard 	 0 	 0 %
+       zero 	 0 	 0 %
+       force_discard 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
+      Plotting in progress
+
+# plot for exp_hm fit
+
+    Code
+      vdiffr::expect_doppelganger("plot for exp_hm fit", flux_plot(flux_quality(
+        flux_fitting(co2_conc, conc, datetime, fit_type = "exp_hm", end_cut = 60,
+          t_zero = 20), conc), conc, datetime))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+      
+       Total number of measurements: 6
+      
+       discard 	 4 	 67 %
+       ok 	 2 	 33 %
        zero 	 0 	 0 %
        force_discard 	 0 	 0 %
        start_error 	 0 	 0 %
