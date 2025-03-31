@@ -62,3 +62,20 @@ test_that("plot for exp_tz fit", {
     )
   )
 })
+test_that("plot for exp_hm fit", {
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "plot for exp_hm fit",
+      flux_fitting(
+        co2_conc,
+        conc,
+        datetime,
+        fit_type = "exp_hm",
+        end_cut = 60,
+        t_zero = 20
+      ) |>
+        flux_quality(conc) |>
+        flux_plot(conc, datetime)
+    )
+  )
+})
