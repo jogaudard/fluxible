@@ -209,22 +209,10 @@ flux_fitting_hm <- function(conc_df,
     select({{f_fluxid}}, "f_Cb") |>
     ungroup()
 
-#   a_df <- conc_df_cut |>
-#     group_by({{f_fluxid}}) |>
-#     mutate(
-#       ta = .data$f_length_window - a_window,
-#       ta_diff = .data$f_time_cut - .data$ta
-#     ) |>
-#     distinct(.data$ta_diff, .keep_all = TRUE) |>
-#     dplyr::slice(which.min(abs(.data$ta_diff))) |>
-#     rename(Ca = {{conc_col}}) |>
-#     select({{f_fluxid}}, "ta", "Ca") |>
-#     ungroup()
 
   estimates_df <- left_join(cm_df, cz_df,
     by = dplyr::join_by({{f_fluxid}})
   ) |>
-    # left_join(a_df, by = dplyr::join_by({{f_fluxid}})) |>
     left_join(cb_df, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
       f_b_est = case_when(
@@ -235,13 +223,6 @@ flux_fitting_hm <- function(conc_df,
         )
         * (1 / b_window),
       )
-    #   f_a_est = case_when(
-    #     .data$ta == 0 ~ 0,
-    #     TRUE ~
-    #       (.data$Ca - .data$f_Cm_est - (.data$f_Cz - .data$f_Cm_est)
-    #        * exp(-.data$f_b_est * .data$ta))
-    #       / .data$ta
-    #   )
     )
 
 

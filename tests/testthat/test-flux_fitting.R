@@ -234,7 +234,7 @@ test_that("exp_zhao18: optim produces non-finite values", {
       distinct()
   )
 })
-      
+
 test_that("works for exp_hm fitting", {
   expect_snapshot(
     flux_fitting(
@@ -242,7 +242,7 @@ test_that("works for exp_hm fitting", {
       conc,
       datetime,
       fit_type = "exp_hm"
-       ) |>
+    ) |>
       select(f_fluxid, f_slope) |>
       distinct()
   )
