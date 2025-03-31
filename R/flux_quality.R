@@ -1,16 +1,18 @@
-#' assessing quality of slopes calculated with flux_fitting
+#' assessing quality of slopes calculated with
+#' \link[fluxible:flux_fitting]{flux_fitting}
 #' @description indicates if slopes should be discarded or replaced
 #' by 0 according to quality thresholds set by user
 #' @param slopes_df dataset containing slopes
 #' @param fit_type model fitted to the data, linear, quadratic or exponential.
-#' Will be automatically filled if slopes_df was produced using flux_fitting()
+#' Will be automatically filled if `slopes_df` was produced using
+#' \link[fluxible:flux_fitting]{flux_fitting}
 #' @param ambient_conc ambient gas concentration in ppm at the site of
 #' measurement (used to detect measurement that started with a polluted setup)
 #' @param error error of the setup, defines a window outside of which
 #' the starting values indicate a polluted setup
 #' @param f_fluxid column containing unique IDs for each flux
 #' @param f_slope column containing the slope of each flux
-#' (as calculated by the flux_fitting function)
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
 #' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
 #' @param force_ok vector of fluxIDs for which the user wants to keep
@@ -53,7 +55,10 @@
 #' considered good enough (exponential fit)
 #' @return a dataframe with added columns of quality flags (`f_quality_flag`),
 #' the slope corrected according to the quality flags (`f_slope_corr`),
-#' some diagnostics depending on the fit, and any columns present in the input.
+#' and any columns present in the input.
+#' It will also print a summary of the quality flags. This summary can also
+#' be exported as a dataframe using
+#' \link[fluxible:flux_flag_count]{flux_flag_count}
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor

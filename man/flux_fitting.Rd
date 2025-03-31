@@ -27,12 +27,12 @@ flux_fitting(
 \item{conc_col}{column with gas concentration data}
 
 \item{datetime_col}{column with datetime of each concentration measurement
-Note that if there are duplicated datetime in the same f_fluxid only
+Note that if there are duplicated datetime in the same \code{f_fluxid} only
 the first row will be kept}
 
-\item{f_start}{column with datetime when the measurement started}
+\item{f_start}{column with datetime when the measurement started (\code{ymd_hms})}
 
-\item{f_end}{column with datetime when the measurement ended}
+\item{f_end}{column with datetime when the measurement ended (\code{ymd_hms})}
 
 \item{f_fluxid}{column with ID of each flux}
 
@@ -49,21 +49,18 @@ it is assumed that the model fits the data perfectly (exponential fit)}
 
 \item{a_window}{window at the end of the flux to estimate a (exponential fit)}
 
-\item{roll_width}{width of the rolling mean for CO2 when looking for tz,
-ideally same as cz_window (exponential fit)}
+\item{roll_width}{width of the rolling mean for CO2 when looking for \code{tz},
+ideally same as \code{cz_window} (exponential fit)}
 
 \item{t_zero}{time at which the slope should be calculated
 (for \code{quadratic} and \code{exp_tz} fits)}
 
 \item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{exp_hm}, \code{quadratic} or \code{linear.}
 \code{exp_zhao18} is using the exponential model
-\verb{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}
+\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}
 from Zhao et al (2018).
 \code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
-\verb{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}.
-\code{exp_hm} is using the HM model
-(Pedersen et al., 2010; Hutchinson and Mosier, 1981)
-$C(t) = C_m + (C_z - C_m) exp(-b * t)$}
+\eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.}
 }
 \value{
 a dataframe with the slope at t zero (\code{f_slope}),
@@ -77,7 +74,7 @@ The type of fit is added as an attribute for use by the other functions.
 \description{
 fits gas concentration over time data with a model
 (exponential, quadratic or linear) and provides the slope later used
-to calculate gas fluxes with flux_calc
+to calculate gas fluxes with \link[fluxible:flux_calc]{flux_calc}
 }
 \examples{
 data(co2_conc)

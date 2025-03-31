@@ -1151,6 +1151,7 @@ flux_fitting(
     flux_quality(conc) |>
     flux_plot(conc, datetime)
 
+
 # trying new exp_hm fit
 
 flux_fitting(
@@ -1158,9 +1159,65 @@ flux_fitting(
       conc,
       datetime,
       fit_type = "exp_hm",
+
+
+flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 220,
+  ratio_threshold = 0.5,
+  time_diff = 0
+) |>
+  flux_fitting(
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    flux_plot(conc, datetime, output = "pdfpages")
+
+# what about missing data
+
+debug(flux_fitting_zhao18)
+flux_fitting(
+      co2_conc_missing,
+      conc,
+      datetime,
+      fit_type = "exp_zhao18",
       end_cut = 60,
       t_zero = 20
     ) |>
     flux_quality(conc) |>
     flux_plot(conc, datetime)
+
+    # View()
+    flux_plot(conc, datetime)
+
+debug(flux_fitting_exptz)
+
+test_data <- co2_conc_missing |>
+    dplyr::mutate(
+      conc = replace(
+        conc,
+        c(297:425, 427:490, 495:506),
+        NA
+      )
+    )
+
+    flux_fitting(
+      test_data,
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
 

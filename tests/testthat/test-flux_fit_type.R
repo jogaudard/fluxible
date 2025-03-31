@@ -26,10 +26,3 @@ test_that("fit transfer from flux_fitting", {
     "exp_zhao18"
   )
 })
-
-# test_that("fit_type can be NULL", {
-#   expect_equal(
-#     flux_fit_type(slopes60),
-#     NULL
-#   )
-# })
