@@ -87,7 +87,7 @@ flux_quality <- function(slopes_df,
                          force_ok = c(),
                          force_zero = c(),
                          ratio_threshold = 0,
-                         gfactor_threshold = 5, # need to research recommandations for that
+                         gfactor_threshold = 10, # need to research recommandations for that
                          fit_type = c(),
                          ambient_conc = 421,
                          error = 100,
@@ -194,7 +194,7 @@ flux_quality <- function(slopes_df,
   }
 
 
-  if (fit_type %in% c("linear", "quadratic")) {
+  if (fit_type == "linear") {
     quality_flag <- flux_quality_lm(slopes_df,
       {{conc_col}},
       {{f_fluxid}},
@@ -205,6 +205,25 @@ flux_quality <- function(slopes_df,
       force_discard = force_discard,
       force_ok = force_ok,
       force_zero = force_zero,
+      pvalue_threshold = pvalue_threshold,
+      rsquared_threshold = rsquared_threshold,
+      name_df = name_df
+    )
+  }
+
+  if (fit_type == "quadratic") {
+    quality_flag <- flux_quality_qua(slopes_df,
+      {{conc_col}},
+      {{f_fluxid}},
+      {{f_slope}},
+      {{f_cut}},
+      {{f_pvalue}},
+      {{f_rsquared}},
+      {{f_slope_lm}},
+      force_discard = force_discard,
+      force_ok = force_ok,
+      force_zero = force_zero,
+      gfactor_threshold = gfactor_threshold,
       pvalue_threshold = pvalue_threshold,
       rsquared_threshold = rsquared_threshold,
       name_df = name_df

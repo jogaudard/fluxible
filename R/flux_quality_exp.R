@@ -83,7 +83,6 @@ flux_quality_exp <- function(slopes_df,
       f_cor_coef = cor({{conc_col}}, {{f_time}}),
       f_RMSE =
         sqrt((1 / length({{f_time}})) * sum(({{f_fit}} - {{conc_col}})^2)),
-      f_gfactor = f_slope / f_slope_lm,
       .groups = "drop"
     )
 
@@ -96,9 +95,10 @@ flux_quality_exp <- function(slopes_df,
     )
     ) |>
     mutate(
+      f_gfactor = {{f_slope}} / {{f_slope_lm}},
       f_fit_quality = case_when(
-        {{f_b}} >= b_threshold ~ "bad_b",
-        {{f_b}} <= -b_threshold ~ "bad_b",
+        abs({{f_b}}) >= b_threshold ~ "bad_b", #should use abs
+        # {{f_b}} <= -b_threshold ~ "bad_b",
         .data$f_RMSE > rmse_threshold ~ "bad_RMSE"
       ),
       f_correlation = case_when(
