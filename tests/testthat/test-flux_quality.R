@@ -2,7 +2,7 @@ test_that("works for exponential fitting", {
   expect_snapshot(
     flux_quality(slopes0,
       conc,
-      fit_type = "expo"
+      fit_type = "exponential"
     ) |>
       dplyr::select(f_fluxid, f_quality_flag, f_RMSE, f_cor_coef, f_ratio) |>
       dplyr::distinct()

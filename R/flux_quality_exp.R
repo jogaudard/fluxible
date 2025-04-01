@@ -40,10 +40,12 @@ flux_quality_exp <- function(slopes_df,
                              f_time,
                              f_fit,
                              f_cut,
+                             f_slope_lm,
                              f_b,
                              force_discard,
                              force_ok,
                              force_zero,
+                             gfactor_threshold,
                              rmse_threshold,
                              cor_threshold,
                              b_threshold) {
@@ -52,19 +54,20 @@ flux_quality_exp <- function(slopes_df,
 
 
   args_ok <- flux_fun_check(list(
+    gfactor_threshold = gfactor_threshold,
     rmse_threshold = rmse_threshold,
     cor_threshold = cor_threshold,
     b_threshold = b_threshold
   ),
-  fn = list(is.numeric, is.numeric, is.numeric),
-  msg = rep("has to be numeric", 3))
+  fn = list(is.numeric, is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 4))
 
   slopes_df_check <- slopes_df |>
-    select({{f_b}})
+    select({{f_b}}, {{f_slope_lm}})
 
   slopes_df_ok <- flux_fun_check(slopes_df_check,
-                                 fn = list(is.numeric),
-                                 msg = "has to be numeric",
+                                 fn = list(is.numeric, is.numeric),
+                                 msg = rep("has to be numeric", 2),
                                  name_df = name_df)
 
 
@@ -80,6 +83,7 @@ flux_quality_exp <- function(slopes_df,
       f_cor_coef = cor({{conc_col}}, {{f_time}}),
       f_RMSE =
         sqrt((1 / length({{f_time}})) * sum(({{f_fit}} - {{conc_col}})^2)),
+      f_gfactor = f_slope / f_slope_lm,
       .groups = "drop"
     )
 
@@ -102,6 +106,7 @@ flux_quality_exp <- function(slopes_df,
         TRUE ~ "yes"
       ),
       f_quality_flag = case_when(
+        abs(.data$f_gfactor) > gfactor_threshold ~ "discard",
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_start_error == "error" ~ "start_error",
