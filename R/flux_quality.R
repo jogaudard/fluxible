@@ -13,46 +13,53 @@
 #' @param f_fluxid column containing unique IDs for each flux
 #' @param f_slope column containing the slope of each flux
 #' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
+#' @param f_slope_lm column containing the linear slope of each flux
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
 #' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
 #' @param force_ok vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
 #' @param force_zero vector of fluxIDs that should be replaced by zero by
 #' the user's decision
+#' @param force_lm vector of fluxIDs for which the linear slope should be used
+#' by the user's decision
 #' @param ratio_threshold ratio of gas concentration data points over length of
 #' measurement (in seconds) below which the measurement will be considered as
 #' not having enough data points to be considered for calculations
 #' @param f_pvalue column containing the p-value of each flux
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param f_rsquared column containing the r squared of each flux
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param pvalue_threshold threshold of p-value below which the change of
 #' gas concentration over time is considered not significant
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param rsquared_threshold threshold of r squared value below which
 #' the linear model is considered an unsatisfactory fit
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param conc_col column containing the measured gas concentration
-#' (exponential fit)
+#' (exponential fits)
 #' @param f_b column containing the b parameter of the exponential expression
-#' (exponential fit)
+#' (exponential fits)
 #' @param f_time column containing the time of each measurement in seconds
-#' (exponential fit)
+#' (exponential fits)
 #' @param f_start column with datetime of the start of the measurement
 #' (after cuts)
 #' @param f_end column with datetime of the end of the measurement
 #' (after cuts)
-#' @param f_fit column containing the modeled data (exponential fit)
+#' @param f_fit column containing the modeled data (exponential fits)
 #' @param rmse_threshold threshold for the RMSE of each flux above which
-#' the fit is considered unsatisfactory (exponential fit)
+#' the fit is considered unsatisfactory (exponential fits)
 #' @param cor_threshold threshold for the correlation coefficient of
 #' gas concentration with time below which the correlation
-#' is considered not significant (exponential fit)
+#' is considered not significant (exponential fits)
 #' @param f_cut column containing the cutting information
 #' @param cut_arg argument defining that the data point should be cut out
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
-#' considered good enough (exponential fit)
+#' considered good enough (exponential fits)
+#' @param gfactor_threshold threshold for the g-factor. Defines a window
+#' with its opposite outside which the flux will be flagged `discard`
+#' (exponential quadratic fits).
 #' @return a dataframe with added columns of quality flags (`f_quality_flag`),
 #' the slope corrected according to the quality flags (`f_slope_corr`),
 #' and any columns present in the input.

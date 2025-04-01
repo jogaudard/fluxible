@@ -7,7 +7,9 @@
 #' @param conc_col column with gas concentration
 #' @param f_fluxid column of ID for each measurement
 #' @param f_slope column containing the slope of each flux
-#' (as calculated by the flux_fitting function)
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
+#' @param f_slope_lm column containing the linear slope of each flux
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
 #' @param f_cut column containing the cutting information
 #' @param pvalue_threshold threshold of p-value below which the change
 #' of gas concentration over time is considered not significant (user decided)
@@ -19,31 +21,35 @@
 #' the calculated slope despite a bad quality flag
 #' @param force_zero vector of fluxIDs that should be replaced by zero by
 #' the user's decision
+#' @param force_lm vector of fluxIDs for which the linear slope should be used
+#' by the user's decision
 #' @param f_pvalue column containing the p-value of each flux
 #' @param f_rsquared column containing the r squared to be used for
 #' the quality assessment
 #' @param name_df name of slopes_df (used for error message)
+#' @param gfactor_threshold threshold for the g-factor. Defines a window
+#' with its opposite outside which the flux will be flagged `discard`.
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when left_join
 
 
 
 flux_quality_qua <- function(slopes_df,
-                            conc_col,
-                            f_fluxid,
-                            f_slope,
-                            f_cut,
-                            f_pvalue,
-                            f_rsquared,
-                            f_slope_lm,
-                            force_discard,
-                            force_ok,
-                            force_zero,
-                            force_lm,
-                            gfactor_threshold,
-                            pvalue_threshold,
-                            rsquared_threshold,
-                            name_df) {
+                             conc_col,
+                             f_fluxid,
+                             f_slope,
+                             f_cut,
+                             f_pvalue,
+                             f_rsquared,
+                             f_slope_lm,
+                             force_discard,
+                             force_ok,
+                             force_zero,
+                             force_lm,
+                             gfactor_threshold,
+                             pvalue_threshold,
+                             rsquared_threshold,
+                             name_df) {
 
 
 

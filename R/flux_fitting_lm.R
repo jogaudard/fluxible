@@ -1,6 +1,7 @@
 #' linear fit to gas concentration over time
 #' @description fits a linear model to the gas concentration over time
 #' @param conc_df dataframe of gas concentration over time
+#' @param conc_df_cut dataframe of gas concentration over time, cut
 #' @param conc_col column with gas concentration
 #' @param datetime_col column with datetime of each concentration measurement
 #' Note that if there are duplicated datetime in the same f_fluxid only

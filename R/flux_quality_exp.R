@@ -8,7 +8,9 @@
 #' @param conc_col column with gas concentration
 #' @param f_fluxid column of ID for each measurement
 #' @param f_slope column containing the slope of each flux
-#' (as calculated by the flux_fitting function)
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
+#' @param f_slope_lm column containing the linear slope of each flux
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
 #' @param f_time column containing the time of each measurement in seconds
 #' @param f_fit column containing the modeled data
 #' @param f_cut column containing the cutting information
@@ -19,6 +21,8 @@
 #' the calculated slope despite a bad quality flag
 #' @param force_zero vector of fluxIDs that should be replaced by zero by
 #' the user's decision
+#' @param force_lm vector of fluxIDs for which the linear slope should be used
+#' by the user's decision
 #' @param rmse_threshold threshold for the RMSE of each flux above
 #' which the fit is considered unsatisfactory
 #' @param cor_threshold threshold for the correlation coefficient
@@ -26,6 +30,8 @@
 #' is considered non significant
 #' @param b_threshold threshold for the b parameter. Defines a window
 #' with its opposite inside which the fit is considered good enough.
+#' @param gfactor_threshold threshold for the g-factor. Defines a window
+#' with its opposite outside which the flux will be flagged `discard`.
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
@@ -98,8 +104,7 @@ flux_quality_exp <- function(slopes_df,
     mutate(
       f_gfactor = {{f_slope}} / {{f_slope_lm}},
       f_fit_quality = case_when(
-        abs({{f_b}}) >= b_threshold ~ "bad_b", #should use abs
-        # {{f_b}} <= -b_threshold ~ "bad_b",
+        abs({{f_b}}) >= b_threshold ~ "bad_b",
         .data$f_RMSE > rmse_threshold ~ "bad_RMSE"
       ),
       f_correlation = case_when(

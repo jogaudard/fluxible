@@ -205,6 +205,7 @@ flux_plot <- function(slopes_df,
       "zero" = color_zero,
       "start_error" = color_discard,
       "force_discard" = color_discard,
+      "force_lm" = color_ok,
       "force_ok" = color_ok
     )) +
     scale_linetype_manual(values = c(

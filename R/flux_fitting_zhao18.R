@@ -6,6 +6,7 @@
 #' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' @description Fits an exponential expression to the concentration evolution
 #' @param conc_df dataframe of gas concentration over time
+#' @param conc_df_cut dataframe of gas concentration over time, cut
 #' @param conc_col column with gas concentration
 #' @param datetime_col column with datetime of each concentration measurement
 #' Note that if there are duplicated datetime in the same f_fluxid only

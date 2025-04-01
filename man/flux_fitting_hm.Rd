@@ -7,6 +7,7 @@ time, using the HM model
 (Pedersen et al., 2010; Hutchinson and Mosier, 1981).}
 \usage{
 flux_fitting_hm(
+  conc_df_cut,
   conc_df,
   conc_col,
   datetime_col,
@@ -22,6 +23,8 @@ flux_fitting_hm(
 )
 }
 \arguments{
+\item{conc_df_cut}{dataframe of gas concentration over time, cut}
+
 \item{conc_df}{dataframe of gas concentration over time}
 
 \item{conc_col}{column with gas concentration}
