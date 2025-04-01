@@ -1,8 +1,8 @@
 # works for exponential fitting
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopes0, conc, fit_type = "expo"),
-      f_fluxid, f_quality_flag, f_RMSE, f_cor_coef, f_ratio))
+      dplyr::distinct(dplyr::select(flux_quality(slopes0, conc), f_fluxid,
+      f_quality_flag, f_RMSE, f_cor_coef, f_ratio))
     Message
       
        Total number of measurements: 6
@@ -18,19 +18,19 @@
     Output
       # A tibble: 6 x 5
         f_fluxid f_quality_flag f_RMSE f_cor_coef f_ratio
-           <dbl> <chr>           <dbl>      <dbl>   <dbl>
-      1        1 ok              23.5       0.211   1    
-      2        2 ok              14.0       0.336   1    
-      3        3 ok               2.51      0.949   1    
-      4        4 ok              15.0       0.112   1    
-      5        5 ok              12.0      -0.315   0.976
-      6        6 ok               6.19      0.640   0.981
+        <fct>    <chr>           <dbl>      <dbl>   <dbl>
+      1 1        ok              23.5       0.211   1    
+      2 2        ok              14.0       0.336   1    
+      3 3        ok               2.51      0.949   1    
+      4 4        ok              15.0       0.112   1    
+      5 5        ok              12.0      -0.315   0.976
+      6 6        ok               6.19      0.640   0.981
 
 # works for linear fitting
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopes30lin, conc, fit_type = "li"),
-      f_fluxid, f_quality_flag, f_pvalue, f_rsquared))
+      dplyr::distinct(dplyr::select(flux_quality(slopes30lin, conc), f_fluxid,
+      f_quality_flag, f_pvalue, f_rsquared))
     Message
       
        Total number of measurements: 6
@@ -57,8 +57,8 @@
 # works for quadratic fitting
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopes30qua, conc, fit_type = "quadratic"),
-      f_fluxid, f_quality_flag, f_pvalue, f_rsquared))
+      dplyr::distinct(dplyr::select(flux_quality(slopes30qua, conc), f_fluxid,
+      f_quality_flag, f_pvalue, f_rsquared))
     Message
       
        Total number of measurements: 6

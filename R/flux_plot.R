@@ -47,12 +47,10 @@
 #' @importFrom progress progress_bar
 #' @importFrom stringr str_detect
 #' @examples
-#' data(slopes0_flag)
-#' flux_plot(slopes0_flag, conc, datetime)
-#' data(slopes30lin_flag)
-#' flux_plot(slopes30lin_flag, conc, datetime)
-#' data(slopes30qua_flag)
-#' flux_plot(slopes30qua_flag, conc, datetime)
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' slopes_flag <- flux_quality(slopes, conc)
+#' flux_plot(slopes_flag, conc, datetime)
 #' @export
 
 flux_plot <- function(slopes_df,

@@ -65,10 +65,9 @@
 #' @importFrom lubridate int_length interval
 #' @importFrom stringr str_detect
 #' @examples
-#' data(slopes0lin)
-#' flux_quality(slopes0lin, conc, fit_type = "li")
-#' data(slopes30)
-#' flux_quality(slopes30, conc, fit_type = "expo")
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' flux_quality(slopes, conc)
 #' @export
 
 flux_quality <- function(slopes_df,

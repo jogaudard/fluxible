@@ -52,8 +52,9 @@
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of all_of
 #' @examples
-#' data(slopes0)
-#' flux_calc(slopes0,
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' flux_calc(slopes,
 #' f_slope,
 #' datetime,
 #' temp_air,

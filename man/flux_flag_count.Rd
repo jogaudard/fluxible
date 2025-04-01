@@ -41,8 +41,10 @@ This function is incorporated in flux_quality (output as a message)
 but can be used alone to extract a dataframe with the flag count.
 }
 \examples{
-data(slopes30qua_flag)
-flux_flag_count(slopes30qua_flag)
+data(co2_conc)
+slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+slopes_flag <- flux_quality(slopes, conc)
+flux_flag_count(slopes_flag)
 }
 \author{
 Vincent Belde
