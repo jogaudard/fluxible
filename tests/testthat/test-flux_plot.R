@@ -6,9 +6,9 @@ test_that("plot for exponential fit", {
     fit_type = "exp_zhao18"
   ))
   slopes0_flag <- suppressMessages(flux_quality(
-      slopes0,
-      conc
-    ))
+    slopes0,
+    conc
+  ))
 
   expect_snapshot(
     suppressMessages( # because the progress bar is messing with check()

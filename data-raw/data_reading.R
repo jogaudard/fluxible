@@ -51,14 +51,14 @@ usethis::use_data(co2_fluxes, overwrite = TRUE)
 
 # other temperature units
 slopes0_temp <- flux_fitting(
-    co2_conc,
-    conc,
-    datetime,
-    fit_type = "exp_zhao18"
+  co2_conc,
+  conc,
+  datetime,
+  fit_type = "exp_zhao18"
+) |>
+  flux_quality(
+    conc
   ) |>
-    flux_quality(
-      conc
-    ) |>
   mutate(
     temp_fahr = (temp_air * 1.8) + 32,
     temp_kelvin = temp_air + 273.15

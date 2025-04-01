@@ -300,8 +300,8 @@ test_that("calculating fluxes on dataset with cuts", {
     fit_type = "exp_zhao18",
     end_cut = 30
   ) |>
-  flux_quality(conc)
-  
+    flux_quality(conc)
+
   expect_snapshot(
     flux_calc(
       slopes30_flag,
@@ -322,7 +322,7 @@ test_that("calculating fluxes on dataset with cuts", {
 
 # testing having the chamber volume as a variable
 test_that("volume can be a variable instead of a constant", {
-slopes0_vol <- suppressWarnings(flux_fitting(
+  slopes0_vol <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
     datetime,
@@ -331,16 +331,16 @@ slopes0_vol <- suppressWarnings(flux_fitting(
     flux_quality(
       conc
     ) |>
-  mutate(
-    volume = case_when(
-      f_fluxid == 1 ~ 18,
-      f_fluxid == 2 ~ 28,
-      f_fluxid == 3 ~ 20,
-      f_fluxid == 4 ~ 24,
-      f_fluxid == 5 ~ 4,
-      f_fluxid == 6 ~ 35
+    mutate(
+      volume = case_when(
+        f_fluxid == 1 ~ 18,
+        f_fluxid == 2 ~ 28,
+        f_fluxid == 3 ~ 20,
+        f_fluxid == 4 ~ 24,
+        f_fluxid == 5 ~ 4,
+        f_fluxid == 6 ~ 35
+      )
     )
-  )
 
   expect_snapshot(
     flux_calc(
