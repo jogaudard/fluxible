@@ -41,6 +41,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 
 # plot for exp_tz fit with mid missing data
@@ -56,7 +57,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_exptz()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -73,6 +74,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 
 # plot for exp_zhao18 fit with mid missing data
@@ -88,7 +90,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -105,6 +107,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Part of the fit will not be displayed
           because f_ylim_lower is too high.
       Plotting in progress
@@ -116,7 +119,7 @@
         flux_plot(flux_quality(flux_fitting(co2_conc_mid_missing, conc, datetime,
           fit_type = "quadratic", end_cut = 60, t_zero = 20), conc), conc, datetime))
     Condition
-      Warning in `flux_fitting_quadratic()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -133,6 +136,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 
 # plot for exp_hm fit
@@ -158,5 +162,6 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 

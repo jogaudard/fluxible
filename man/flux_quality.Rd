@@ -17,11 +17,14 @@ flux_quality(
   f_cut = f_cut,
   f_pvalue = f_pvalue,
   f_rsquared = f_rsquared,
+  f_slope_lm = f_slope_lm,
   f_b = f_b,
   force_discard = c(),
   force_ok = c(),
   force_zero = c(),
+  force_lm = c(),
   ratio_threshold = 0,
+  gfactor_threshold = 10,
   fit_type = c(),
   ambient_conc = 421,
   error = 100,
@@ -37,7 +40,7 @@ flux_quality(
 \item{slopes_df}{dataset containing slopes}
 
 \item{conc_col}{column containing the measured gas concentration
-(exponential fit)}
+(exponential fits)}
 
 \item{f_fluxid}{column containing unique IDs for each flux}
 
@@ -45,7 +48,7 @@ flux_quality(
 (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)}
 
 \item{f_time}{column containing the time of each measurement in seconds
-(exponential fit)}
+(exponential fits)}
 
 \item{f_start}{column with datetime of the start of the measurement
 (after cuts)}
@@ -53,18 +56,21 @@ flux_quality(
 \item{f_end}{column with datetime of the end of the measurement
 (after cuts)}
 
-\item{f_fit}{column containing the modeled data (exponential fit)}
+\item{f_fit}{column containing the modeled data (exponential fits)}
 
 \item{f_cut}{column containing the cutting information}
 
 \item{f_pvalue}{column containing the p-value of each flux
-(linear and quadratic fit)}
+(linear and quadratic fits)}
 
 \item{f_rsquared}{column containing the r squared of each flux
-(linear and quadratic fit)}
+(linear and quadratic fits)}
+
+\item{f_slope_lm}{column containing the linear slope of each flux
+(as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)}
 
 \item{f_b}{column containing the b parameter of the exponential expression
-(exponential fit)}
+(exponential fits)}
 
 \item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}
@@ -75,9 +81,16 @@ the calculated slope despite a bad quality flag}
 \item{force_zero}{vector of fluxIDs that should be replaced by zero by
 the user's decision}
 
+\item{force_lm}{vector of fluxIDs for which the linear slope should be used
+by the user's decision}
+
 \item{ratio_threshold}{ratio of gas concentration data points over length of
 measurement (in seconds) below which the measurement will be considered as
 not having enough data points to be considered for calculations}
+
+\item{gfactor_threshold}{threshold for the g-factor. Defines a window
+with its opposite outside which the flux will be flagged \code{discard}
+(exponential quadratic fits).}
 
 \item{fit_type}{model fitted to the data, linear, quadratic or exponential.
 Will be automatically filled if \code{slopes_df} was produced using
@@ -91,22 +104,22 @@ the starting values indicate a polluted setup}
 
 \item{pvalue_threshold}{threshold of p-value below which the change of
 gas concentration over time is considered not significant
-(linear and quadratic fit)}
+(linear and quadratic fits)}
 
 \item{rsquared_threshold}{threshold of r squared value below which
 the linear model is considered an unsatisfactory fit
-(linear and quadratic fit)}
+(linear and quadratic fits)}
 
 \item{rmse_threshold}{threshold for the RMSE of each flux above which
-the fit is considered unsatisfactory (exponential fit)}
+the fit is considered unsatisfactory (exponential fits)}
 
 \item{cor_threshold}{threshold for the correlation coefficient of
 gas concentration with time below which the correlation
-is considered not significant (exponential fit)}
+is considered not significant (exponential fits)}
 
 \item{b_threshold}{threshold for the b parameter.
 Defines a window with its opposite inside which the fit is
-considered good enough (exponential fit)}
+considered good enough (exponential fits)}
 
 \item{cut_arg}{argument defining that the data point should be cut out}
 }
@@ -123,8 +136,7 @@ indicates if slopes should be discarded or replaced
 by 0 according to quality thresholds set by user
 }
 \examples{
-data(slopes0lin)
-flux_quality(slopes0lin, conc, fit_type = "li")
-data(slopes30)
-flux_quality(slopes30, conc, fit_type = "expo")
+data(co2_conc)
+slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+flux_quality(slopes, conc)
 }

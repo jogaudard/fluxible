@@ -6,6 +6,7 @@
 over time, using the exponential model from Zhao et al (2018)}
 \usage{
 flux_fitting_zhao18(
+  conc_df_cut,
   conc_df,
   conc_col,
   datetime_col,
@@ -21,6 +22,8 @@ flux_fitting_zhao18(
 )
 }
 \arguments{
+\item{conc_df_cut}{dataframe of gas concentration over time, cut}
+
 \item{conc_df}{dataframe of gas concentration over time}
 
 \item{conc_col}{column with gas concentration}

@@ -1,4 +1,12 @@
 test_that("extracts the fit correclty", {
+  slopes30qua <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "quadratic",
+    end_cut = 30
+  ))
+
   expect_equal(
     flux_fit_type(slopes30qua),
     "quadratic"
@@ -6,12 +14,6 @@ test_that("extracts the fit correclty", {
 })
 
 
-test_that("fit can be set by user", {
-  expect_equal(
-    flux_fit_type(slopes0, fit_type = "expo"),
-    "exp_zhao18"
-  )
-})
 
 test_that("fit transfer from flux_fitting", {
   slopes_test <- suppressWarnings(flux_fitting(

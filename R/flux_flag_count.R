@@ -19,8 +19,10 @@
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
 #' @examples
-#' data(slopes30qua_flag)
-#' flux_flag_count(slopes30qua_flag)
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' slopes_flag <- flux_quality(slopes, conc)
+#' flux_flag_count(slopes_flag)
 #' @export
 
 
@@ -36,7 +38,8 @@ flux_flag_count <- function(slopes_df,
                               "start_error",
                               "no_data",
                               "force_ok",
-                              "force_zero"
+                              "force_zero",
+                              "force_lm"
                             ),
                             cut_arg = "cut") {
 

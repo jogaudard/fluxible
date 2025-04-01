@@ -13,46 +13,53 @@
 #' @param f_fluxid column containing unique IDs for each flux
 #' @param f_slope column containing the slope of each flux
 #' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
+#' @param f_slope_lm column containing the linear slope of each flux
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
 #' @param force_discard vector of fluxIDs that should be discarded
 #' by the user's decision
 #' @param force_ok vector of fluxIDs for which the user wants to keep
 #' the calculated slope despite a bad quality flag
 #' @param force_zero vector of fluxIDs that should be replaced by zero by
 #' the user's decision
+#' @param force_lm vector of fluxIDs for which the linear slope should be used
+#' by the user's decision
 #' @param ratio_threshold ratio of gas concentration data points over length of
 #' measurement (in seconds) below which the measurement will be considered as
 #' not having enough data points to be considered for calculations
 #' @param f_pvalue column containing the p-value of each flux
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param f_rsquared column containing the r squared of each flux
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param pvalue_threshold threshold of p-value below which the change of
 #' gas concentration over time is considered not significant
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param rsquared_threshold threshold of r squared value below which
 #' the linear model is considered an unsatisfactory fit
-#' (linear and quadratic fit)
+#' (linear and quadratic fits)
 #' @param conc_col column containing the measured gas concentration
-#' (exponential fit)
+#' (exponential fits)
 #' @param f_b column containing the b parameter of the exponential expression
-#' (exponential fit)
+#' (exponential fits)
 #' @param f_time column containing the time of each measurement in seconds
-#' (exponential fit)
+#' (exponential fits)
 #' @param f_start column with datetime of the start of the measurement
 #' (after cuts)
 #' @param f_end column with datetime of the end of the measurement
 #' (after cuts)
-#' @param f_fit column containing the modeled data (exponential fit)
+#' @param f_fit column containing the modeled data (exponential fits)
 #' @param rmse_threshold threshold for the RMSE of each flux above which
-#' the fit is considered unsatisfactory (exponential fit)
+#' the fit is considered unsatisfactory (exponential fits)
 #' @param cor_threshold threshold for the correlation coefficient of
 #' gas concentration with time below which the correlation
-#' is considered not significant (exponential fit)
+#' is considered not significant (exponential fits)
 #' @param f_cut column containing the cutting information
 #' @param cut_arg argument defining that the data point should be cut out
 #' @param b_threshold threshold for the b parameter.
 #' Defines a window with its opposite inside which the fit is
-#' considered good enough (exponential fit)
+#' considered good enough (exponential fits)
+#' @param gfactor_threshold threshold for the g-factor. Defines a window
+#' with its opposite outside which the flux will be flagged `discard`
+#' (exponential quadratic fits).
 #' @return a dataframe with added columns of quality flags (`f_quality_flag`),
 #' the slope corrected according to the quality flags (`f_slope_corr`),
 #' and any columns present in the input.
@@ -65,10 +72,9 @@
 #' @importFrom lubridate int_length interval
 #' @importFrom stringr str_detect
 #' @examples
-#' data(slopes0lin)
-#' flux_quality(slopes0lin, conc, fit_type = "li")
-#' data(slopes30)
-#' flux_quality(slopes30, conc, fit_type = "expo")
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' flux_quality(slopes, conc)
 #' @export
 
 flux_quality <- function(slopes_df,
@@ -82,11 +88,14 @@ flux_quality <- function(slopes_df,
                          f_cut = f_cut,
                          f_pvalue = f_pvalue,
                          f_rsquared = f_rsquared,
+                         f_slope_lm = f_slope_lm,
                          f_b = f_b,
                          force_discard = c(),
                          force_ok = c(),
                          force_zero = c(),
+                         force_lm = c(),
                          ratio_threshold = 0,
+                         gfactor_threshold = 10,
                          fit_type = c(),
                          ambient_conc = 421,
                          error = 100,
@@ -180,10 +189,13 @@ flux_quality <- function(slopes_df,
       {{f_time}},
       {{f_fit}},
       {{f_cut}},
+      {{f_slope_lm}},
       {{f_b}},
       force_discard = force_discard,
       force_ok = force_ok,
       force_zero = force_zero,
+      force_lm = force_lm,
+      gfactor_threshold = gfactor_threshold,
       rmse_threshold = rmse_threshold,
       cor_threshold = cor_threshold,
       b_threshold = b_threshold
@@ -191,7 +203,7 @@ flux_quality <- function(slopes_df,
   }
 
 
-  if (fit_type %in% c("linear", "quadratic")) {
+  if (fit_type == "linear") {
     quality_flag <- flux_quality_lm(slopes_df,
       {{conc_col}},
       {{f_fluxid}},
@@ -202,6 +214,26 @@ flux_quality <- function(slopes_df,
       force_discard = force_discard,
       force_ok = force_ok,
       force_zero = force_zero,
+      pvalue_threshold = pvalue_threshold,
+      rsquared_threshold = rsquared_threshold,
+      name_df = name_df
+    )
+  }
+
+  if (fit_type == "quadratic") {
+    quality_flag <- flux_quality_qua(slopes_df,
+      {{conc_col}},
+      {{f_fluxid}},
+      {{f_slope}},
+      {{f_cut}},
+      {{f_pvalue}},
+      {{f_rsquared}},
+      {{f_slope_lm}},
+      force_discard = force_discard,
+      force_ok = force_ok,
+      force_zero = force_zero,
+      force_lm = force_lm,
+      gfactor_threshold = gfactor_threshold,
       pvalue_threshold = pvalue_threshold,
       rsquared_threshold = rsquared_threshold,
       name_df = name_df

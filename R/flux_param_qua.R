@@ -1,4 +1,4 @@
-#' prepares text to print for flux_plot function
+#' prepares text to print in flux_plot
 #' @description creates a df with quality flags and quality diagnostics
 #' to print on the plots produced by flux_plot.
 #' flux_param_lm is for fit in the lm family (linear and quadratic)
@@ -7,27 +7,25 @@
 #' @param conc_col column with gas concentration
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
-flux_param_exp <- function(slopes_df,
+flux_param_qua <- function(slopes_df,
                            conc_col) {
   param_df <- slopes_df |>
     select(
-      {{conc_col}}, "f_start", "f_fluxid", "f_RMSE", "f_cor_coef", "f_b",
-      "f_gfactor", "f_cut", "f_quality_flag"
+      {{conc_col}}, "f_start", "f_fluxid", "f_rsquared", "f_pvalue",
+      "f_gfactor", "f_quality_flag", "f_cut"
     ) |>
     filter(.data$f_cut != "cut") |>
     select(!{{conc_col}}) |>
     distinct() |>
     mutate(
-      f_RMSE = signif(.data$f_RMSE, digits = 2),
-      f_cor_coef = signif(.data$f_cor_coef, digits = 2),
+      f_rsquared = round(.data$f_rsquared, digits = 2),
+      f_pvalue = round(.data$f_pvalue, digits = 6),
       f_gfactor = signif(.data$f_gfactor, digits = 2),
-      f_b = signif(.data$f_b, digits = 5),
       print_col = paste(
         .data$f_quality_flag, "\n",
-        "RMSE = ", .data$f_RMSE, "\n",
-        "Corr coef = ", .data$f_cor_coef, "\n",
-        "g-factor = ", .data$f_gfactor, "\n",
-        "b = ", .data$f_b,
+        "R2 = ", .data$f_rsquared, "\n",
+        "p-value = ", .data$f_pvalue, "\n",
+        "g-factor = ", .data$f_gfactor,
         sep = ""
       )
     ) |>

@@ -10,7 +10,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
@@ -31,7 +31,7 @@
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "lin"),
       f_fluxid, f_slope))
     Condition
-      Warning in `flux_fitting_lin()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
@@ -52,7 +52,7 @@
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "qua"),
       f_fluxid, f_slope))
     Condition
-      Warning in `flux_fitting_quadratic()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
@@ -79,7 +79,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 185 points out of 190 seconds
        fluxID 6 : slope was estimated on 186 points out of 190 seconds
@@ -100,7 +100,7 @@
       distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "line",
         start_cut = 20), f_fluxid, f_slope))
     Condition
-      Warning in `flux_fitting_lin()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 185 points out of 190 seconds
        fluxID 6 : slope was estimated on 186 points out of 190 seconds
@@ -126,12 +126,12 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
-      # A tibble: 1,251 x 23
+      # A tibble: 1,251 x 25
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -145,10 +145,11 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 16 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
-      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>, f_Cz <dbl>,
-      #   f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit <dbl>,
-      #   f_fit_slope <dbl>, f_start_z <dttm>
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_slope_lm <dbl>, f_fit_lm <dbl>, f_Cz <dbl>, f_Cm <dbl>, f_a <dbl>,
+      #   f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>,
+      #   f_start_z <dttm>
 
 # works for exp_tz fitting
 
@@ -162,7 +163,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_exptz()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
@@ -189,7 +190,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 28 points out of 150 seconds
        fluxID 2 : slope was estimated on 61 points out of 150 seconds
@@ -218,7 +219,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -246,7 +247,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_exptz()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -268,7 +269,7 @@
       distinct(select(flux_fitting(co2_conc_mid_missing, conc, datetime, fit_type = "quadratic",
         end_cut = 60, t_zero = 20), f_fluxid, f_slope))
     Condition
-      Warning in `flux_fitting_quadratic()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
@@ -296,7 +297,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_exptz()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 28 points out of 150 seconds
        fluxID 2 : slope was estimated on 61 points out of 150 seconds
@@ -327,7 +328,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_zhao18()`:
+      Warning in `flux_fitting()`:
       
        fluxID 1 : slope was estimated on 28 points out of 150 seconds
        fluxID 2 : slope was estimated on 61 points out of 150 seconds
@@ -358,7 +359,7 @@
       Calculating fits and slopes...
       Done.
     Condition
-      Warning in `flux_fitting_hm()`:
+      Warning in `flux_fitting()`:
       
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
@@ -372,4 +373,256 @@
       4 4           1.09 
       5 5           1.37 
       6 6         603.   
+
+# fitting works with 0 second end cut
+
+    Code
+      test_fit
+    Output
+      # A tibble: 1,251 x 20
+         datetime            temp_air temp_soil  conc   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 13 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
+      #   f_pvalue <dbl>, f_fit <dbl>
+
+---
+
+    Code
+      distinct(select(flux_fitting(co2_conc, conc, datetime, fit_type = "exponential"),
+      f_fluxid, f_slope))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting()`:
+      
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
+    Output
+      # A tibble: 6 x 2
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          1.56 
+      2 2          0.853
+      3 3          0.303
+      4 4          1.13 
+      5 5          1.46 
+      6 6          0.426
+
+# fitting works with 30 second end cut
+
+    Code
+      flux_fitting(co2_conc, conc, datetime, end_cut = 30, fit_type = "lin")
+    Output
+      # A tibble: 1,251 x 20
+         datetime            temp_air temp_soil  conc   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 13 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
+      #   f_pvalue <dbl>, f_fit <dbl>
+
+---
+
+    Code
+      flux_fitting(co2_conc, conc, datetime, end_cut = 30, fit_type = "exponential")
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Output
+      # A tibble: 1,251 x 25
+         datetime            temp_air temp_soil  conc   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_slope_lm <dbl>, f_fit_lm <dbl>, f_Cz <dbl>, f_Cm <dbl>, f_a <dbl>,
+      #   f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>,
+      #   f_start_z <dttm>
+
+# fitting works with 60 second end cut
+
+    Code
+      flux_fitting(co2_conc, end_cut = 60, conc, datetime, fit_type = "lin")
+    Output
+      # A tibble: 1,251 x 20
+         datetime            temp_air temp_soil  conc   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 13 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
+      #   f_pvalue <dbl>, f_fit <dbl>
+
+---
+
+    Code
+      flux_fitting(co2_conc, conc, datetime, end_cut = 60, fit_type = "exponential")
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Output
+      # A tibble: 1,251 x 25
+         datetime            temp_air temp_soil  conc   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 18 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_slope_lm <dbl>, f_fit_lm <dbl>, f_Cz <dbl>, f_Cm <dbl>, f_a <dbl>,
+      #   f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>,
+      #   f_start_z <dttm>
+
+# renaming works
+
+    Code
+      flux_fitting(co2_conc_names, co2, date_time, f_start, finish, fit_type = "lin")
+    Condition
+      Warning in `flux_fitting()`:
+      
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
+    Output
+      # A tibble: 1,251 x 20
+         date_time           temp_air temp_soil   co2   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 13 more variables: f_start <dttm>, finish <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
+      #   f_pvalue <dbl>, f_fit <dbl>
+
+---
+
+    Code
+      flux_fitting(co2_conc_names, co2, date_time, f_start, finish, fit_type = "exponential")
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+    Condition
+      Warning in `flux_fitting()`:
+      
+       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 6 : slope was estimated on 206 points out of 210 seconds
+    Output
+      # A tibble: 1,251 x 25
+         date_time           temp_air temp_soil   co2   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 18 more variables: f_start <dttm>, finish <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_slope_lm <dbl>, f_fit_lm <dbl>, f_Cz <dbl>, f_Cm <dbl>, f_a <dbl>,
+      #   f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>,
+      #   f_start_z <dttm>
+
+# quadratic fit works
+
+    Code
+      flux_fitting(co2_conc, conc, datetime, f_start, f_end, f_fluxid, fit_type = "quadratic",
+        t_zero = 10, end_cut = 30)
+    Output
+      # A tibble: 1,251 x 26
+         datetime            temp_air temp_soil  conc   PAR turfID       type 
+         <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
+       1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
+       2 2022-07-28 23:43:36     7.22      10.9  447.  1.68 156 AN2C 156 ER   
+       3 2022-07-28 23:43:37    NA         NA    448. NA    156 AN2C 156 ER   
+       4 2022-07-28 23:43:38    NA         NA    449. NA    156 AN2C 156 ER   
+       5 2022-07-28 23:43:39    NA         NA    449. NA    156 AN2C 156 ER   
+       6 2022-07-28 23:43:40    NA         NA    450. NA    156 AN2C 156 ER   
+       7 2022-07-28 23:43:41    NA         NA    451. NA    156 AN2C 156 ER   
+       8 2022-07-28 23:43:42    NA         NA    451. NA    156 AN2C 156 ER   
+       9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
+      10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
+      # i 1,241 more rows
+      # i 19 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
+      #   f_slope_lm <dbl>, f_fit_lm <dbl>, f_param1 <dbl>, f_param2 <dbl>,
+      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_intercept <dbl>, f_pvalue <dbl>,
+      #   f_slope <dbl>, f_fit <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
