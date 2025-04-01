@@ -23,14 +23,14 @@
 
 
 flux_fitting_lm <- function(conc_df_cut,
-                             conc_df,
-                             conc_col,
-                             datetime_col,
-                             f_start,
-                             f_end,
-                             f_fluxid,
-                             start_cut,
-                             end_cut) {
+                            conc_df,
+                            conc_col,
+                            datetime_col,
+                            f_start,
+                            f_end,
+                            f_fluxid,
+                            start_cut,
+                            end_cut) {
 
   name_conc <- names(select(conc_df, {{conc_col}}))
 

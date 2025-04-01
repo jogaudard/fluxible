@@ -8,7 +8,7 @@
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_qua <- function(slopes_df,
-                          conc_col) {
+                           conc_col) {
   param_df <- slopes_df |>
     select(
       {{conc_col}}, "f_start", "f_fluxid", "f_rsquared", "f_pvalue",
