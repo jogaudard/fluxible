@@ -19,8 +19,10 @@
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
 #' @examples
-#' data(slopes30qua_flag)
-#' flux_flag_count(slopes30qua_flag)
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' slopes_flag <- flux_quality(slopes, conc)
+#' flux_flag_count(slopes_flag)
 #' @export
 
 

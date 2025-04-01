@@ -123,8 +123,7 @@ indicates if slopes should be discarded or replaced
 by 0 according to quality thresholds set by user
 }
 \examples{
-data(slopes0lin)
-flux_quality(slopes0lin, conc, fit_type = "li")
-data(slopes30)
-flux_quality(slopes30, conc, fit_type = "expo")
+data(co2_conc)
+slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+flux_quality(slopes, conc)
 }
