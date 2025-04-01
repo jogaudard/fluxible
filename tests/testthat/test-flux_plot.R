@@ -1,13 +1,14 @@
 test_that("plot for exponential fit", {
-  slopes0_flag <- suppressWarnings(flux_fitting(
+  slopes0 <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
     datetime,
     fit_type = "exp_zhao18"
-  )) |>
-    flux_quality(
+  ))
+  slopes0_flag <- suppressMessages(flux_quality(
+      slopes0,
       conc
-    )
+    ))
 
   expect_snapshot(
     suppressMessages( # because the progress bar is messing with check()
@@ -73,6 +74,17 @@ test_that("plot for linear fit with jpg extension works", {
 })
 
 test_that("plot can be exported as an object", {
+  slopes30lin_flag <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "linear",
+    end_cut = 30
+  )) |>
+    flux_quality(
+      conc
+    )
+
   plot_object <- flux_plot(slopes30lin_flag, conc, datetime)
   vdiffr::expect_doppelganger("plot as an object", plot_object)
 })

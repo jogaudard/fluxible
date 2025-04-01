@@ -293,6 +293,15 @@ test_that("error some cols_keep do not exist", {
 # which is wrong. I need to discard the cut data first.
 
 test_that("calculating fluxes on dataset with cuts", {
+  slopes30_flag <- flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18",
+    end_cut = 30
+  ) |>
+  flux_quality(conc)
+  
   expect_snapshot(
     flux_calc(
       slopes30_flag,

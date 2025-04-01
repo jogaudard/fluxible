@@ -19,7 +19,7 @@ co2_df_missing <- readr::read_csv(
   col_types = "Tdddd",
   na = c("#N/A", "Over", "Invalid")
 )
-usethis::use_data(co2_df_missing, overwrite = TRUE, internal = TRUE)
+usethis::use_data(co2_df_missing, overwrite = TRUE)
 
 co2_conc_missing <- readr::read_csv(
   "data-raw/co2_conc_missing.csv",
@@ -33,7 +33,7 @@ co2_conc_missing <- readr::read_csv(
     f_ratio = "ratio",
     f_flag_match = "flag"
   )
-usethis::use_data(co2_conc_missing, overwrite = TRUE, internal = TRUE)
+usethis::use_data(co2_conc_missing, overwrite = TRUE)
 
 # for fluc calc
 co2_fluxes <- readr::read_csv(
@@ -63,7 +63,7 @@ slopes0_temp <- flux_fitting(
     temp_fahr = (temp_air * 1.8) + 32,
     temp_kelvin = temp_air + 273.15
   )
-usethis::use_data(slopes0_temp, overwrite = TRUE, internal = TRUE)
+usethis::use_data(slopes0_temp, overwrite = TRUE)
 
 
 # more missing data
@@ -82,4 +82,4 @@ co2_conc_mid_missing <- co2_conc |>
     )
   )
 
-usethis::use_data(co2_conc_mid_missing, overwrite = TRUE, internal = TRUE)
+usethis::use_data(co2_conc_mid_missing, overwrite = TRUE)
