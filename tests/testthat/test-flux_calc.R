@@ -1,4 +1,14 @@
 test_that("flux calculation is correct", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   output <- flux_calc(slopes0,
     f_slope,
     datetime,
@@ -21,6 +31,16 @@ test_that("flux calculation is correct", {
 
 
 test_that("averaging works", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   output <- flux_calc(
     slopes0,
     f_slope,
@@ -42,6 +62,16 @@ test_that("averaging works", {
 })
 
 test_that("keeping works", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_snapshot(flux_calc(
     slopes0,
     f_slope,
@@ -60,6 +90,16 @@ test_that("keeping works", {
 })
 
 test_that("keeping and averaging work together", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_snapshot(flux_calc(
     slopes0,
     f_slope,
@@ -119,6 +159,16 @@ test_that("kelvin conversion works", {
 
 
 test_that("error on air temp units", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_error(
     flux_calc(
       slopes0,
@@ -151,6 +201,16 @@ test_that("error on air temp units", {
 })
 
 test_that("error that slope column is missing", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_error(
     suppressWarnings(flux_calc(
       slopes0,
@@ -169,6 +229,16 @@ test_that("error that slope column is missing", {
 })
 
 test_that("error slope_col cannot be found in slopes_df", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_error(
     flux_calc(
       slopes0,
@@ -189,6 +259,16 @@ x Column `column_with_slope` doesn't exist."
 })
 
 test_that("error some cols_keep do not exist", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_error(
     flux_calc(
       slopes0,
@@ -233,6 +313,26 @@ test_that("calculating fluxes on dataset with cuts", {
 
 # testing having the chamber volume as a variable
 test_that("volume can be a variable instead of a constant", {
+slopes0_vol <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    ) |>
+  mutate(
+    volume = case_when(
+      f_fluxid == 1 ~ 18,
+      f_fluxid == 2 ~ 28,
+      f_fluxid == 3 ~ 20,
+      f_fluxid == 4 ~ 24,
+      f_fluxid == 5 ~ 4,
+      f_fluxid == 6 ~ 35
+    )
+  )
+
   expect_snapshot(
     flux_calc(
       slopes0_vol,

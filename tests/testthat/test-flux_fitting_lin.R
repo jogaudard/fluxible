@@ -1,47 +1,32 @@
 test_that("fitting works with 0 second end cut", {
-  qflux_fitting <- purrr::quietly(flux_fitting)
-
-  fitting_call <- qflux_fitting(
+  test_fit <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
     datetime,
     fit_type = "lin"
-  )
+  ))
 
-  output <- fitting_call$result
-
-  expect_equal(
-    output$f_slope,
-    slopes0lin$f_slope
-  )
+  expect_snapshot(test_fit)
 })
 
 test_that("fitting works with 30 second end cut", {
-  output <- flux_fitting(
+  expect_snapshot(flux_fitting(
     co2_conc,
     conc,
     datetime,
     end_cut = 30,
     fit_type = "lin"
-  )
-  expect_equal(
-    output$f_slope,
-    slopes30lin$f_slope
-  )
+  ))
 })
 
 test_that("fitting works with 60 second end cut", {
-  output <- flux_fitting(
+  expect_snapshot(flux_fitting(
     co2_conc,
     end_cut = 60,
     conc,
     datetime,
     fit_type = "lin"
-  )
-  expect_equal(
-    output$f_slope,
-    slopes60lin$f_slope
-  )
+  ))
 })
 
 ### need to test when data are missing

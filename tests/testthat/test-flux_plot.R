@@ -1,4 +1,14 @@
 test_that("plot for exponential fit", {
+  slopes0_flag <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_snapshot(
     suppressMessages( # because the progress bar is messing with check()
       flux_plot(slopes0_flag,
@@ -15,6 +25,17 @@ test_that("plot for exponential fit", {
 })
 
 test_that("plot for linear fit", {
+  slopes30lin_flag <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "linear",
+    end_cut = 30
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for linear fit",
@@ -24,6 +45,17 @@ test_that("plot for linear fit", {
 })
 
 test_that("plot for linear fit with jpg extension works", {
+  slopes30lin_flag <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "linear",
+    end_cut = 30
+  )) |>
+    flux_quality(
+      conc
+    )
+
   expect_snapshot(
     suppressMessages( # because the progress bar is messing with check()
       flux_plot(slopes30lin_flag,
