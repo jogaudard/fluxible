@@ -41,6 +41,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 
 # plot for exp_tz fit with mid missing data
@@ -73,6 +74,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 
 # plot for exp_zhao18 fit with mid missing data
@@ -105,6 +107,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Part of the fit will not be displayed
           because f_ylim_lower is too high.
       Plotting in progress
@@ -133,6 +136,7 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 
 # plot for exp_hm fit
@@ -158,5 +162,6 @@
        no_data 	 0 	 0 %
        force_ok 	 0 	 0 %
        force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
       Plotting in progress
 

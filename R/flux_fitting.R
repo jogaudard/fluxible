@@ -175,41 +175,29 @@ flux_fitting <- function(conc_df,
       .by = {{f_fluxid}}
     )
 
-conc_fitting <- flux_fitting_lm(
-      conc_df_cut,
-      conc_df,
-      {{conc_col}},
-      {{datetime_col}},
-      {{f_start}},
-      {{f_end}},
-      {{f_fluxid}},
-      start_cut = start_cut,
-      end_cut = end_cut
-    )
+  conc_fitting <- flux_fitting_lm(
+    conc_df_cut,
+    conc_df,
+    {{conc_col}},
+    {{datetime_col}},
+    {{f_start}},
+    {{f_end}},
+    {{f_fluxid}},
+    start_cut = start_cut,
+    end_cut = end_cut
+  )
 
-   if (fit_type != "linear") {
+  if (fit_type != "linear") {
     conc_df_lm <- conc_fitting |>
       rename(
         f_slope_lm = "f_slope",
         f_fit_lm = "f_fit"
-        ) |>
+      ) |>
       select(!c("f_intercept", "f_rsquared", "f_adj_rsquared", "f_pvalue"))
-
-    # conc_fitting <- flux_fitting_lin(
-    #   conc_df_cut,
-    #   conc_df,
-    #   {{conc_col}},
-    #   {{datetime_col}},
-    #   {{f_start}},
-    #   {{f_end}},
-    #   {{f_fluxid}},
-    #   start_cut = start_cut,
-    #   end_cut = end_cut
-    # )
   }
 
   if (fit_type == "exp_zhao18") {
-  conc_fitting <- flux_fitting_zhao18(
+    conc_fitting <- flux_fitting_zhao18(
       conc_df_cut,
       conc_df_lm,
       {{conc_col}},
@@ -264,8 +252,6 @@ conc_fitting <- flux_fitting_lm(
   }
 
 
- 
-
   if (fit_type == "quadratic") {
     conc_fitting <- flux_fitting_quadratic(
       conc_df_cut,
@@ -281,7 +267,6 @@ conc_fitting <- flux_fitting_lm(
     )
   }
 
-  # message("Done.")
 
 
   warning_msg <- conc_fitting |>
