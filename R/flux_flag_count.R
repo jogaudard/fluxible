@@ -38,7 +38,8 @@ flux_flag_count <- function(slopes_df,
                               "start_error",
                               "no_data",
                               "force_ok",
-                              "force_zero"
+                              "force_zero",
+                              "force_lm"
                             ),
                             cut_arg = "cut") {
 

@@ -3,7 +3,7 @@
     Code
       flux_flag_count(slopes30lin_flag)
     Output
-      # A tibble: 8 x 3
+      # A tibble: 9 x 3
         f_quality_flag     n ratio
         <fct>          <int> <dbl>
       1 ok                 5 0.833
@@ -14,4 +14,5 @@
       6 no_data            0 0    
       7 force_ok           0 0    
       8 force_zero         0 0    
+      9 force_lm           0 0    
 

@@ -10,7 +10,8 @@ test_that("works for exponential fitting", {
     flux_quality(slopes0,
       conc
     ) |>
-      dplyr::select(f_fluxid, f_quality_flag, f_RMSE, f_cor_coef, f_ratio) |>
+      dplyr::select(f_fluxid, f_quality_flag, f_RMSE, f_cor_coef,
+                    f_ratio, f_gfactor) |>
       dplyr::distinct()
   )
 })
@@ -46,7 +47,8 @@ test_that("works for quadratic fitting", {
     flux_quality(slopes30qua,
       conc
     ) |>
-      dplyr::select(f_fluxid, f_quality_flag, f_pvalue, f_rsquared) |>
+      dplyr::select(f_fluxid, f_quality_flag, f_pvalue,
+                    f_rsquared, f_gfactor) |>
       dplyr::distinct()
   )
 })
