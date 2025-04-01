@@ -209,7 +209,8 @@ flux_plot <- function(slopes_df,
     )) +
     scale_linetype_manual(values = c(
       "f_fit" = "longdash",
-      "f_fit_slope" = "dashed"
+      "f_fit_slope" = "solid",
+      "f_fit_lm" = "dotted"
     )) +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +

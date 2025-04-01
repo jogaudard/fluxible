@@ -189,7 +189,10 @@ conc_fitting <- flux_fitting_lm(
 
    if (fit_type != "linear") {
     conc_df_lm <- conc_fitting |>
-      rename(f_slope_lm = "f_slope") |>
+      rename(
+        f_slope_lm = "f_slope",
+        f_fit_lm = "f_fit"
+        ) |>
       select(!c("f_intercept", "f_rsquared", "f_adj_rsquared", "f_pvalue"))
 
     # conc_fitting <- flux_fitting_lin(
