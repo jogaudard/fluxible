@@ -106,14 +106,14 @@ flux_fitting_quadratic <- function(conc_df_cut,
     rename(
       f_param1 = "f_time_cut",
       f_param2 = "f_time_cut2",
-      f_intercept_qua = "(Intercept)",
-      f_rsquared_qua = "r.squared",
-      f_adj_rsquared_qua = "adj.r.squared",
-      f_pvalue_qua = "p.value"
+      f_intercept = "(Intercept)",
+      f_rsquared = "r.squared",
+      f_adj_rsquared = "adj.r.squared",
+      f_pvalue = "p.value"
     ) |>
     select(
-      {{f_fluxid}}, "f_param1", "f_param2", "f_rsquared_qua",
-      "f_adj_rsquared_qua", "f_intercept_qua", "f_pvalue_qua"
+      {{f_fluxid}}, "f_param1", "f_param2", "f_rsquared",
+      "f_adj_rsquared", "f_intercept", "f_pvalue"
     ) |>
     ungroup()
 
@@ -122,12 +122,12 @@ flux_fitting_quadratic <- function(conc_df_cut,
     mutate(
       f_slope = .data$f_param1 + 2 * .data$f_param2 * t_zero,
       f_fit =
-        .data$f_intercept_qua
+        .data$f_intercept
         + .data$f_param1
         * (.data$f_time - start_cut) + .data$f_param2
         * (.data$f_time - start_cut)^2,
       f_fit_slope =
-        .data$f_intercept_qua
+        .data$f_intercept
         - .data$f_param2
         * t_zero^2
         + (.data$f_param1 + 2 * .data$f_param2 * t_zero)

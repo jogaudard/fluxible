@@ -131,7 +131,7 @@
        fluxID 5 : slope was estimated on 205 points out of 210 seconds
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
-      # A tibble: 1,251 x 28
+      # A tibble: 1,251 x 24
          datetime            temp_air temp_soil  conc   PAR turfID       type 
          <dttm>                 <dbl>     <dbl> <dbl> <dbl> <fct>        <fct>
        1 2022-07-28 23:43:35    NA         NA    447. NA    156 AN2C 156 ER   
@@ -145,12 +145,10 @@
        9 2022-07-28 23:43:43    NA         NA    453. NA    156 AN2C 156 ER   
       10 2022-07-28 23:43:44    NA         NA    453. NA    156 AN2C 156 ER   
       # i 1,241 more rows
-      # i 21 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
+      # i 17 more variables: f_start <dttm>, f_end <dttm>, f_fluxid <fct>,
       #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_rsquared_lm <dbl>, f_adj_rsquared_lm <dbl>, f_slope_lm <dbl>,
-      #   f_intercept_lm <dbl>, f_pvalue_lm <dbl>, f_fit <dbl>, f_Cz <dbl>,
-      #   f_Cm <dbl>, f_a <dbl>, f_b <dbl>, f_tz <dbl>, f_slope <dbl>,
-      #   f_fit_slope <dbl>, f_start_z <dttm>
+      #   f_slope_lm <dbl>, f_fit <dbl>, f_Cz <dbl>, f_Cm <dbl>, f_a <dbl>,
+      #   f_b <dbl>, f_tz <dbl>, f_slope <dbl>, f_fit_slope <dbl>, f_start_z <dttm>
 
 # works for exp_tz fitting
 

@@ -24,6 +24,6 @@
       # i 1,241 more rows
       # i 13 more variables: f_start <dttm>, finish <dttm>, f_fluxid <fct>,
       #   f_ratio <dbl>, f_flag_match <chr>, f_time <dbl>, f_cut <fct>,
-      #   f_rsquared_lm <dbl>, f_adj_rsquared_lm <dbl>, f_slope <dbl>,
-      #   f_intercept_lm <dbl>, f_pvalue_lm <dbl>, f_fit <dbl>
+      #   f_rsquared <dbl>, f_adj_rsquared <dbl>, f_slope <dbl>, f_intercept <dbl>,
+      #   f_pvalue <dbl>, f_fit <dbl>
 
