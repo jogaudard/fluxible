@@ -65,6 +65,8 @@ test_that("kappamax with HM model", {
   expect_snapshot(
     flux_quality(slopeshm,
       conc,
+      f_pvalue = f_pvalue_lm,
+      f_rsquared = f_rsquared_lm,
       kappamax = TRUE
     ) |>
       dplyr::select(f_fluxid, f_quality_flag, f_slope_corr, f_model) |>
@@ -73,7 +75,7 @@ test_that("kappamax with HM model", {
 })
 
 test_that("kappamax with zhao18 model", {
-  slopesqua <- suppressWarnings(flux_fitting(
+  slopesexp <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
     datetime,
@@ -82,8 +84,10 @@ test_that("kappamax with zhao18 model", {
   ))
 
   expect_snapshot(
-    flux_quality(slopesqua,
+    flux_quality(slopesexp,
       conc,
+      f_pvalue = f_pvalue_lm,
+      f_rsquared = f_rsquared_lm,
       kappamax = TRUE
     ) |>
       dplyr::select(f_fluxid, f_quality_flag, f_slope_corr, f_model) |>

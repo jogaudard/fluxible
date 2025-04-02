@@ -191,9 +191,12 @@ flux_fitting <- function(conc_df,
     conc_df_lm <- conc_fitting |>
       rename(
         f_slope_lm = "f_slope",
-        f_fit_lm = "f_fit"
-      ) |>
-      select(!c("f_intercept", "f_rsquared", "f_adj_rsquared", "f_pvalue"))
+        f_fit_lm = "f_fit",
+        f_intercept_lm = "f_intercept",
+        f_rsquared_lm = "f_rsquared",
+        f_adj_rsquared_lm = "f_adj_rsquared",
+        f_pvalue_lm = "f_pvalue"
+      )
   }
 
   if (fit_type == "exp_zhao18") {

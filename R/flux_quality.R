@@ -154,6 +154,10 @@ flux_quality <- function(slopes_df,
     stop("You cannot use kappamax with a linear fit.")
   }
 
+  if (fit_type == "quadratic" && kappamax == TRUE) {
+    stop("You cannot use kappamax with a quadratic fit.")
+  }
+
 
   name_conc <- names(select(slopes_df, {{conc_col}}))
 
@@ -210,7 +214,7 @@ flux_quality <- function(slopes_df,
 
 if (nrow(quality_flag_lm) > 0) {
       quality_flag_lm <- flux_quality_lm(
-        quality_flag_lm,
+        slopes_df = quality_flag_lm,
         conc_col = {{conc_col}},
         f_fluxid = {{f_fluxid}},
         f_slope = {{f_slope}},
