@@ -18,15 +18,11 @@ flux_param_kappamax <- function(slopes_df,
     select(!{{conc_col}}) |>
     distinct() |>
     mutate(
-      f_RMSE = signif(.data$f_RMSE, digits = 2),
-      f_cor_coef = signif(.data$f_cor_coef, digits = 2),
       f_gfactor = signif(.data$f_gfactor, digits = 2),
       f_b = signif(.data$f_b, digits = 5),
       f_kappamax = signif(.data$f_kappamax, digits = 5),
       print_col = paste(
         .data$f_quality_flag, "\n",
-        # "RMSE = ", .data$f_RMSE, "\n",
-        # "Corr coef = ", .data$f_cor_coef, "\n",
         "g-factor = ", .data$f_gfactor, "\n",
         "b = ", .data$f_b, "\n",
         "kappamax = ", .data$f_kappamax, "\n",
