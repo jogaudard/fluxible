@@ -212,7 +212,7 @@ flux_fitting_zhao18 <- function(conc_df_cut,
     left_join(a_df, by = dplyr::join_by({{f_fluxid}})) |>
     left_join(cb_df, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
-      f_tz_est = replace(.data$f_tz_est, .data$f_tz_est == 0, 1e-10),
+      f_tz_est = replace(.data$f_tz_est, .data$f_tz_est <= 0, 1e-10),
       # because we use a log to force tz to be positive
       f_b_est = case_when(
         .data$f_Cb == .data$f_Cm_est ~ 0, # special case or flat flux
