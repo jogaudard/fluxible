@@ -233,9 +233,9 @@ flux_quality <- function(slopes_df,
       filter(.data$f_model == "linear")
 
     quality_flag_exp <- slopes_df |>
-          filter(stringr::str_detect(.data$f_model, "exp"))
+      filter(stringr::str_detect(.data$f_model, "exp"))
 
-if (nrow(quality_flag_lm) > 0) {
+    if (nrow(quality_flag_lm) > 0) {
       quality_flag_lm <- flux_quality_lm(
         slopes_df = quality_flag_lm,
         conc_col = {{conc_col}},
@@ -251,9 +251,9 @@ if (nrow(quality_flag_lm) > 0) {
         rsquared_threshold = rsquared_threshold,
         name_df = name_df
       )
-}
+    }
 
- if (nrow(quality_flag_exp) > 0) {
+    if (nrow(quality_flag_exp) > 0) {
       quality_flag_exp <- flux_quality_exp(
         quality_flag_exp,
         {{conc_col}},
@@ -274,7 +274,7 @@ if (nrow(quality_flag_lm) > 0) {
         b_threshold = b_threshold,
         name_df = name_df
       )
- }
+    }
 
     quality_flag <- bind_rows(quality_flag_exp, quality_flag_lm) |>
       arrange({{f_fluxid}})

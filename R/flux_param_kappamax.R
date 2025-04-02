@@ -8,7 +8,7 @@
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
 flux_param_kappamax <- function(slopes_df,
-                           conc_col) {
+                                conc_col) {
   param_df <- slopes_df |>
     select(
       {{conc_col}}, "f_start", "f_fluxid", "f_RMSE", "f_cor_coef", "f_b",
