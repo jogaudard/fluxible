@@ -19,7 +19,7 @@ fluxible_fluxes <- stupeflux(
     conc_col = conc,
     startcrop = 0,
     measurement_length = 180,
-    fit_type = "exp_zhao18",
+    fit_type = "exp_hm",
     end_cut = 10,
     force_discard = c(51, 101),
     force_zero = 46,
@@ -172,7 +172,7 @@ gasfluxes_HMR <- gasfluxes_fits$result |>
 all_fluxes_HMR <- left_join(gasfluxes_HMR, fluxible_fluxes, by = c("ID" = "f_fluxid"))
 
 all_fluxes_HMR |>
-    ggplot(aes(HMR.f0, fluxible_flux, colour = type)) +
+    ggplot(aes(HMR.f0, fluxible_flux)) +
     geom_point() +
     geom_abline(slope = 1, intercept = 0) +
     geom_smooth(

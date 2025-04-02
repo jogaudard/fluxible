@@ -99,6 +99,13 @@ flux_plot <- function(slopes_df,
     slopes_df
   )
 
+  kappamax <- attributes(slopes_df)$kappamax
+
+  if (is.null(kappamax)) {
+    kappamax <- FALSE
+  }
+
+
   if (f_plotname == "") {
     f_plotname <- deparse(substitute(slopes_df))
   }
@@ -166,7 +173,8 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{conc_col}},
       {{datetime_col}},
-      y_text_position = y_text_position
+      y_text_position = y_text_position,
+      kappamax = kappamax
     )
   }
 

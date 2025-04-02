@@ -40,21 +40,21 @@ flux_quality_kappamax <- function(slopes_df,
 
 slopes_df <- slopes_df |>
     mutate(
-        kappamax = {{f_slope_lm}} / instr_error,
-            {{f_fit}} := case_when(
-                is.na({{f_b}}) ~ {{f_fit_lm}},
-                abs({{f_b}}) <= kappamax ~ {{f_fit}},
-                abs({{f_b}}) > kappamax ~ {{f_fit_lm}}
-            ),
+        f_kappamax = abs({{f_slope_lm}} / instr_error),
+            # {{f_fit}} := case_when(
+            #     is.na({{f_b}}) ~ {{f_fit_lm}},
+            #     abs({{f_b}}) <= kappamax ~ {{f_fit}},
+            #     abs({{f_b}}) > kappamax ~ {{f_fit_lm}}
+            # ),
             {{f_slope}} := case_when(
                 is.na({{f_b}}) ~ {{f_slope_lm}},
-                abs({{f_b}}) <= kappamax ~ {{f_slope}},
-                abs({{f_b}}) > kappamax ~ {{f_slope_lm}}
+                abs({{f_b}}) <= f_kappamax ~ {{f_slope}},
+                abs({{f_b}}) > f_kappamax ~ {{f_slope_lm}}
             ),
             f_model = case_when(
                 is.na({{f_b}}) ~ "linear",
-                abs({{f_b}}) <= kappamax ~ fit_type,
-                abs({{f_b}}) > kappamax ~ "linear"
+                abs({{f_b}}) <= f_kappamax ~ fit_type,
+                abs({{f_b}}) > f_kappamax ~ "linear"
             )
         )
 

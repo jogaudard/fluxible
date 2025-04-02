@@ -165,3 +165,30 @@
        force_lm 	 0 	 0 %
       Plotting in progress
 
+# plot for kappamax fit
+
+    Code
+      vdiffr::expect_doppelganger("plot for kappamax fit", flux_plot(flux_quality(
+        flux_fitting(co2_conc, conc, datetime, fit_type = "exp_hm", end_cut = 30,
+          t_zero = 10), conc, f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm,
+        kappamax = TRUE), conc, datetime))
+    Message
+      Cutting measurements...
+      Estimating starting parameters for optimization...
+      Optimizing fitting parameters...
+      Calculating fits and slopes...
+      Done.
+      
+       Total number of measurements: 6
+      
+       ok 	 5 	 83 %
+       discard 	 1 	 17 %
+       zero 	 0 	 0 %
+       force_discard 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
+      Plotting in progress
+
