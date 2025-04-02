@@ -154,21 +154,6 @@ flux_quality <- function(slopes_df,
     stop("You cannot use kappamax with a linear fit.")
   }
 
-  if (kappamax == TRUE) {
-    slopes_df <- flux_quality_kappamax(
-      slopes_df,
-      f_slope = {{f_slope}},
-      f_fit = {{f_fit}},
-      f_slope_lm = {{f_slope_lm}},
-      f_fit_lm = {{f_fit_lm}},
-      f_b = {{f_b}},
-      f_start = {{f_start}},
-      f_end = {{f_end}},
-      fit_type = fit_type,
-      instr_error = instr_error,
-      name_df = name_df
-    )
-  }
 
   name_conc <- names(select(slopes_df, {{conc_col}}))
 
@@ -204,6 +189,70 @@ flux_quality <- function(slopes_df,
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = dplyr::join_by({{f_fluxid}}))
 
+  if (kappamax == TRUE) {
+    slopes_df <- flux_quality_kappamax(
+      slopes_df,
+      f_slope = {{f_slope}},
+      f_fit = {{f_fit}},
+      f_slope_lm = {{f_slope_lm}},
+      f_fit_lm = {{f_fit_lm}},
+      f_b = {{f_b}},
+      fit_type = fit_type,
+      instr_error = instr_error,
+      name_df = name_df
+    )
+
+    quality_flag_lm <- slopes_df |>
+      filter(.data$f_model == "linear")
+
+    quality_flag_exp <- slopes_df |>
+          filter(stringr::str_detect(.data$f_model, "exp"))
+
+if (nrow(quality_flag_lm) > 0) {
+      quality_flag_lm <- flux_quality_lm(
+        quality_flag_lm,
+        conc_col = {{conc_col}},
+        f_fluxid = {{f_fluxid}},
+        f_slope = {{f_slope}},
+        f_cut = {{f_cut}},
+        f_pvalue = {{f_pvalue}},
+        f_rsquared = {{f_rsquared}},
+        force_discard = force_discard,
+        force_ok = force_ok,
+        force_zero = force_zero,
+        pvalue_threshold = pvalue_threshold,
+        rsquared_threshold = rsquared_threshold,
+        name_df = name_df
+      )
+}
+
+ if (nrow(quality_flag_exp) > 0) {
+      quality_flag_exp <- flux_quality_exp(
+        quality_flag_exp,
+        {{conc_col}},
+        {{f_fluxid}},
+        {{f_slope}},
+        {{f_time}},
+        {{f_fit}},
+        {{f_cut}},
+        {{f_slope_lm}},
+        {{f_b}},
+        force_discard = force_discard,
+        force_ok = force_ok,
+        force_zero = force_zero,
+        force_lm = force_lm,
+        gfactor_threshold = gfactor_threshold,
+        rmse_threshold = rmse_threshold,
+        cor_threshold = cor_threshold,
+        b_threshold = b_threshold,
+        name_df = name_df
+      )
+ }
+
+    quality_flag <- bind_rows(quality_flag_exp, quality_flag_lm) |>
+      arrange({{f_fluxid}})
+  }
+
   if (stringr::str_detect(fit_type, "exp") && kappamax == FALSE) {
     quality_flag <- flux_quality_exp(
       slopes_df,
@@ -222,7 +271,8 @@ flux_quality <- function(slopes_df,
       gfactor_threshold = gfactor_threshold,
       rmse_threshold = rmse_threshold,
       cor_threshold = cor_threshold,
-      b_threshold = b_threshold
+      b_threshold = b_threshold,
+      name_df = name_df
     )
   }
 
@@ -246,51 +296,6 @@ flux_quality <- function(slopes_df,
     )
   }
 
-  if (kappamax == TRUE) {
-    quality_flag_exp <- slopes_df |>
-      filter(stringr::str_detect(.data$f_model, "exp")) |>
-      flux_quality_exp(
-        {{conc_col}},
-        {{f_fluxid}},
-        {{f_slope}},
-        {{f_time}},
-        {{f_fit}},
-        {{f_cut}},
-        {{f_slope_lm}},
-        {{f_b}},
-        force_discard = force_discard,
-        force_ok = force_ok,
-        force_zero = force_zero,
-        force_lm = force_lm,
-        gfactor_threshold = gfactor_threshold,
-        rmse_threshold = rmse_threshold,
-        cor_threshold = cor_threshold,
-        b_threshold = b_threshold
-      )
-
-    quality_flag_qua <- slopes_df |>
-      filter(.data$f_model == "quadratic") |>
-      flux_quality_qua(
-        {{conc_col}},
-        {{f_fluxid}},
-        {{f_slope}},
-        {{f_cut}},
-        {{f_pvalue}},
-        {{f_rsquared}},
-        {{f_slope_lm}},
-        force_discard = force_discard,
-        force_ok = force_ok,
-        force_zero = force_zero,
-        force_lm = force_lm,
-        gfactor_threshold = gfactor_threshold,
-        pvalue_threshold = pvalue_threshold,
-        rsquared_threshold = rsquared_threshold,
-        name_df = name_df
-      )
-
-    quality_flag <- bind_rows(quality_flag_exp, quality_flag_qua) |>
-      arrange({{f_fluxid}})
-  }
 
   if (fit_type == "linear") {
     quality_flag <- flux_quality_lm(slopes_df,

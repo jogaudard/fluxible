@@ -71,3 +71,23 @@ test_that("kappamax with HM model", {
       dplyr::distinct()
   )
 })
+
+test_that("kappamax with zhao18 model", {
+  slopesqua <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    end_cut = 30,
+    fit_type = "exp_zhao18"
+  ))
+
+  expect_snapshot(
+    flux_quality(slopesqua,
+      conc,
+      kappamax = TRUE
+    ) |>
+      dplyr::select(f_fluxid, f_quality_flag, f_slope_corr, f_model) |>
+      dplyr::distinct()
+  )
+})
+

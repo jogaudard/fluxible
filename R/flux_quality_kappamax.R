@@ -6,8 +6,6 @@ flux_quality_kappamax <- function(slopes_df,
                                   f_slope_lm = f_slope_lm,
                                   f_fit_lm = f_fit_lm,
                                   f_b = f_b,
-                                  f_start = f_start,
-                                  f_end = f_end,
                                   fit_type = c(),
                                   instr_error,
                                   name_df) {
@@ -43,14 +41,13 @@ flux_quality_kappamax <- function(slopes_df,
 slopes_df <- slopes_df |>
     mutate(
         kappamax = {{f_slope_lm}} / instr_error,
-            # kappamax = instr_error / int_length(interval({{f_start}}, {{f_end}})), wrong
-            f_fit = case_when(
-                abs({{f_b}}) <= kappamax ~ f_fit,
-                abs({{f_b}}) > kappamax ~ f_fit_lm
+            {{f_fit}} := case_when(
+                abs({{f_b}}) <= kappamax ~ {{f_fit}},
+                abs({{f_b}}) > kappamax ~ {{f_fit_lm}}
             ),
-            f_slope = case_when(
-                abs({{f_b}}) <= kappamax ~ f_slope,
-                abs({{f_b}}) > kappamax ~ f_slope_lm
+            {{f_slope}} := case_when(
+                abs({{f_b}}) <= kappamax ~ {{f_slope}},
+                abs({{f_b}}) > kappamax ~ {{f_slope_lm}}
             ),
             f_model = case_when(
                 abs({{f_b}}) <= kappamax ~ fit_type,

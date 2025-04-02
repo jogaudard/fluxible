@@ -85,3 +85,28 @@
       5 5        discard        9.68e- 55      0.755    -40.5 
       6 6        ok             5.13e-191      0.993      1.86
 
+# kappamax with HM model
+
+    Code
+      dplyr::distinct(dplyr::select(flux_quality(slopeshm, conc, kappamax = TRUE),
+      f_fluxid, f_quality_flag, f_slope_corr, f_model))
+    Message
+      
+       Total number of measurements: 1
+      
+       ok 	 1 	 100 %
+       discard 	 0 	 0 %
+       zero 	 0 	 0 %
+       force_discard 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
+    Output
+      # A tibble: 2 x 4
+        f_fluxid f_quality_flag f_slope_corr f_model
+        <fct>    <chr>                 <dbl> <chr>  
+      1 2        ok                    0.409 exp_hm 
+      2 2        discard              NA     exp_hm 
+
