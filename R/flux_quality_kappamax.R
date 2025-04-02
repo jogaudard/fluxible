@@ -15,7 +15,7 @@ flux_quality_kappamax <- function(slopes_df,
   args_ok <- flux_fun_check(list(
     instr_error = instr_error
   ),
-  fn = is.numeric,
+  fn = list(is.numeric),
   msg = "has to be numeric"
   )
 
@@ -42,7 +42,8 @@ flux_quality_kappamax <- function(slopes_df,
 
 slopes_df <- slopes_df |>
     mutate(
-            kappamax = instr_error / int_length(interval({{f_start}}, {{f_end}})),
+        kappamax = {{f_slope_lm}} / instr_error,
+            # kappamax = instr_error / int_length(interval({{f_start}}, {{f_end}})), wrong
             f_fit = case_when(
                 abs({{f_b}}) <= kappamax ~ f_fit,
                 abs({{f_b}}) > kappamax ~ f_fit_lm
@@ -51,7 +52,7 @@ slopes_df <- slopes_df |>
                 abs({{f_b}}) <= kappamax ~ f_slope,
                 abs({{f_b}}) > kappamax ~ f_slope_lm
             ),
-            model = case_when(
+            f_model = case_when(
                 abs({{f_b}}) <= kappamax ~ fit_type,
                 abs({{f_b}}) > kappamax ~ "linear"
             )

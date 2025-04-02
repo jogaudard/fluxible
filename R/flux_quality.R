@@ -106,7 +106,7 @@ flux_quality <- function(slopes_df,
                          cor_threshold = 0.5,
                          b_threshold = 1,
                          cut_arg = "cut",
-                         instr_error,
+                         instr_error = 5,
                          kappamax = FALSE) {
 
   name_df <- deparse(substitute(slopes_df))
@@ -244,6 +244,52 @@ flux_quality <- function(slopes_df,
       rsquared_threshold = rsquared_threshold,
       name_df = name_df
     )
+  }
+
+  if (kappamax == TRUE) {
+    quality_flag_exp <- slopes_df |>
+      filter(stringr::str_detect(.data$f_model, "exp")) |>
+      flux_quality_exp(
+        {{conc_col}},
+        {{f_fluxid}},
+        {{f_slope}},
+        {{f_time}},
+        {{f_fit}},
+        {{f_cut}},
+        {{f_slope_lm}},
+        {{f_b}},
+        force_discard = force_discard,
+        force_ok = force_ok,
+        force_zero = force_zero,
+        force_lm = force_lm,
+        gfactor_threshold = gfactor_threshold,
+        rmse_threshold = rmse_threshold,
+        cor_threshold = cor_threshold,
+        b_threshold = b_threshold
+      )
+
+    quality_flag_qua <- slopes_df |>
+      filter(.data$f_model == "quadratic") |>
+      flux_quality_qua(
+        {{conc_col}},
+        {{f_fluxid}},
+        {{f_slope}},
+        {{f_cut}},
+        {{f_pvalue}},
+        {{f_rsquared}},
+        {{f_slope_lm}},
+        force_discard = force_discard,
+        force_ok = force_ok,
+        force_zero = force_zero,
+        force_lm = force_lm,
+        gfactor_threshold = gfactor_threshold,
+        pvalue_threshold = pvalue_threshold,
+        rsquared_threshold = rsquared_threshold,
+        name_df = name_df
+      )
+
+    quality_flag <- bind_rows(quality_flag_exp, quality_flag_qua) |>
+      arrange({{f_fluxid}})
   }
 
   if (fit_type == "linear") {

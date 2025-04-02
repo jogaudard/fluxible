@@ -52,3 +52,22 @@ test_that("works for quadratic fitting", {
       dplyr::distinct()
   )
 })
+
+test_that("kappamax with HM model", {
+  slopeshm <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    end_cut = 30,
+    fit_type = "exp_hm"
+  ))
+
+  expect_snapshot(
+    flux_quality(slopeshm,
+      conc,
+      kappamax = TRUE
+    ) |>
+      dplyr::select(f_fluxid, f_quality_flag, f_slope_corr, f_model) |>
+      dplyr::distinct()
+  )
+})
