@@ -83,6 +83,10 @@ flux_fitting_kappamax <- function(conc_df_cut,
             f_fit = case_when(
                 abs(.data$b) <= kappamax ~ f_fit,
                 abs(.data$b) > kappamax ~ f_fit_lm
+            ),
+            model = case_when(
+                abs(.data$b) <= kappamax ~ "hm",
+                abs(.data$b) > kappamax ~ "linear"
             )
         )
 
