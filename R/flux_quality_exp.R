@@ -55,9 +55,8 @@ flux_quality_exp <- function(slopes_df,
                              gfactor_threshold,
                              rmse_threshold,
                              cor_threshold,
-                             b_threshold) {
-
-  name_df <- deparse(substitute(slopes_df))
+                             b_threshold,
+                             name_df) {
 
 
   args_ok <- flux_fun_check(list(
