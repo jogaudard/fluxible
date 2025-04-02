@@ -89,6 +89,7 @@ flux_quality <- function(slopes_df,
                          f_pvalue = f_pvalue,
                          f_rsquared = f_rsquared,
                          f_slope_lm = f_slope_lm,
+                         f_fit_lm = f_fit_lm,
                          f_b = f_b,
                          force_discard = c(),
                          force_ok = c(),
@@ -104,7 +105,9 @@ flux_quality <- function(slopes_df,
                          rmse_threshold = 25,
                          cor_threshold = 0.5,
                          b_threshold = 1,
-                         cut_arg = "cut") {
+                         cut_arg = "cut",
+                         instr_error,
+                         kappamax = FALSE) {
 
   name_df <- deparse(substitute(slopes_df))
 
@@ -147,6 +150,21 @@ flux_quality <- function(slopes_df,
     fit_type = fit_type
   )
 
+  if (kappamax == TRUE) {
+    slopes_df <- flux_quality_kappamax(
+      slopes_df,
+      f_slope = {{f_slope}},
+      f_fit = {{f_fit}},
+      f_slope_lm = {{f_slope_lm}},
+      f_fit_lm = {{f_fit_lm}},
+      f_b = {{f_b}},
+      f_length_window = {{f_length_window}},
+      fit_type = fit_type,
+      instr_error = instr_error,
+      name_df = name_df
+    )
+  }
+
   name_conc <- names(select(slopes_df, {{conc_col}}))
 
 
@@ -169,8 +187,7 @@ flux_quality <- function(slopes_df,
     rowwise() |>
     summarise(
       f_start_error = case_when(
-        data[[name_conc]][1] < (ambient_conc - error) ~ "error",
-        data[[name_conc]][1] > (ambient_conc + error) ~ "error",
+        abs(data[[name_conc]][1] - ambient_conc) > error ~ "error",
         TRUE ~ "ok"
       ),
       .groups = "drop"
