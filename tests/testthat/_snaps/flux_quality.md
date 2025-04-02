@@ -88,9 +88,9 @@
 # kappamax with HM model
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopeshm, conc, f_pvalue = f_pvalue_lm,
-        f_rsquared = f_rsquared_lm, kappamax = TRUE), f_fluxid, f_quality_flag,
-      f_slope_corr, f_model))
+      dplyr::distinct(dplyr::select(dplyr::filter(flux_quality(slopeshm, conc,
+        f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm, kappamax = TRUE), f_cut ==
+        "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
     Message
       
        Total number of measurements: 6
@@ -105,23 +105,22 @@
        force_zero 	 0 	 0 %
        force_lm 	 0 	 0 %
     Output
-      # A tibble: 7 x 4
+      # A tibble: 6 x 4
         f_fluxid f_quality_flag f_slope_corr f_model
         <fct>    <chr>                 <dbl> <chr>  
-      1 1        ok                    0.470 linear 
+      1 1        ok                    0.530 exp_hm 
       2 2        ok                    0.409 exp_hm 
-      3 2        discard              NA     exp_hm 
-      4 3        ok                    0.131 linear 
-      5 4        ok                    0.322 linear 
-      6 5        discard              NA     linear 
-      7 6        ok                    0.178 linear 
+      3 3        ok                    0.175 exp_hm 
+      4 4        ok                    0.627 exp_hm 
+      5 5        discard              NA     linear 
+      6 6        ok                    0.231 exp_hm 
 
 # kappamax with zhao18 model
 
     Code
-      dplyr::distinct(dplyr::select(flux_quality(slopesexp, conc, f_pvalue = f_pvalue_lm,
-        f_rsquared = f_rsquared_lm, kappamax = TRUE), f_fluxid, f_quality_flag,
-      f_slope_corr, f_model))
+      dplyr::distinct(dplyr::select(dplyr::filter(flux_quality(slopesexp, conc,
+        f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm, kappamax = TRUE), f_cut ==
+        "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
     Message
       
        Total number of measurements: 6
@@ -136,16 +135,13 @@
        force_zero 	 0 	 0 %
        force_lm 	 0 	 0 %
     Output
-      # A tibble: 9 x 4
+      # A tibble: 6 x 4
         f_fluxid f_quality_flag f_slope_corr f_model   
         <fct>    <chr>                 <dbl> <chr>     
       1 1        ok                    0.775 exp_zhao18
-      2 1        discard              NA     exp_zhao18
-      3 2        ok                    0.504 exp_zhao18
-      4 2        discard              NA     exp_zhao18
-      5 3        ok                    0.337 exp_zhao18
-      6 4        ok                    0.676 exp_zhao18
-      7 4        discard              NA     exp_zhao18
-      8 5        discard              NA     linear    
-      9 6        ok                    0.425 exp_zhao18
+      2 2        ok                    0.504 exp_zhao18
+      3 3        ok                    0.337 exp_zhao18
+      4 4        ok                    0.676 exp_zhao18
+      5 5        discard              NA     linear    
+      6 6        ok                    0.425 exp_zhao18
 

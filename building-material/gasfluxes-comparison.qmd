@@ -1,0 +1,265 @@
+In this vignette, we will process raw data both with Fluxible and the gasfluxes package [@fussGasfluxesGreenhouseGas2024], then compare the output.
+This is also a good opportunity to compare the workflow.
+
+```{r}
+#| label: data-process-stupeflux
+#| echo: TRUE
+library(tidyverse)
+library(fluxible)
+
+# we can use the stupeflux function, which is wrapper for fluxible
+# we use the arguments that we already know from having processed
+# those data in the detailed example.
+
+fluxible_fluxes <- stupeflux(
+    raw_conc = co2_liahovden,
+    field_record = record_liahovden,
+    datetime_col = datetime,
+    start_col = start,
+    conc_col = conc,
+    startcrop = 0,
+    measurement_length = 180,
+    fit_type = "exp_zhao18",
+    end_cut = 10,
+    force_discard = c(51, 101),
+    force_zero = 46,
+    temp_air_col = temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cols_keep = "type"
+ ) |>
+ select(f_fluxid, f_flux, type) |>
+ rename(
+    fluxible_flux = "f_flux"
+ )
+```
+
+
+Now let's dive into the gasfluxes package.
+We will use the `kappa.max` method [@huppiRestrictingNonlinearityParameter2018] as this is the most recent one.
+
+```{r}
+#| label: data-process-gasfluxes
+#| echo: TRUE
+library(gasfluxes)
+# library(lubridate)
+
+# we use the same data from fluxible
+# we use fluxible::flux_match because gasfluxes does not provide such a function
+
+conc_lia <- fluxible::flux_match(
+  raw_conc = co2_liahovden,
+  field_record = record_liahovden,
+  datetime_col = datetime,
+  start_col = start,
+  conc_col = conc,
+  startcrop = 0,
+  measurement_length = 170, # gasfluxes does not provide a cutting tool, so we just do it here
+  ratio_threshold = 0.5,
+  time_diff = 0
+)
+
+# gasfluxes requires volumetric concentration and not fractional
+
+Rconst <- 8.20573660809596e-2 # gas constant in m³ * atm * K⁻¹ * mmol ⁻¹
+atmP <- 1 # atmospheric pressure assumed 1 atm
+
+conc_lia_vol <- conc_lia |>
+    group_by(f_fluxid) |>
+    fill(temp_air, .direction = "downup") |> # air temperature was measured every 10 seconds
+    mutate(
+        # temp_air = 
+        temp_air = temp_air + 273.15, # we want air temperature in Kelvin
+        C = conc * (atmP / (Rconst * temp_air)) # gas concentration in mol / m³
+    )
+
+# gasfluxes requires columns with chamber volume (V), plot area (A), and elapsed time (time)
+
+conc_lia_gasfluxes <- conc_lia_vol |>
+    rename(
+        ID = "f_fluxid"
+    ) |>
+    mutate(
+        V = 0.024575, # total of chamber and tubes, in m3
+        A = 0.0625, # in m2
+        time = difftime(datetime[seq_along(datetime)],
+            datetime[1],
+            units = "hours" # gasfluxes wants time in hours, which might be suboptimal since most modern gas analyzers measure concentration every second
+      ),
+      time = as.numeric(time)
+    ) |>
+    select(ID, V, A, time, C)
+
+# now the data are ready for gasfluxes
+
+# it prints all the flux ID with "sucessful" or "failed" and I do not like test
+qgasfluxes <- quietly(gasfluxes)
+
+
+gasfluxes_fits <- qgasfluxes(conc_lia_gasfluxes, method = c("linear","robust linear", "HMR"), plot = TRUE)
+
+# str(gasfluxes_fits)
+# the output is a list, I might have an opinion about this
+
+# now let's try to select the flux estimates with the kappa.max method
+gasfluxes_fluxes <- selectfluxes(
+                        gasfluxes_fits$result, # that is not specified in the vignette
+                        select = "kappa.max",
+                        f.detect = 0.031, # I keep the suggested value for now
+                        t.meas = 0.05 # I think this is the length of the measurement in hours
+                    ) |>
+                    select(ID, flux, method, flux.se) |>
+                    rename(
+                        gasfluxes_flux = "flux"
+                    )
+
+```
+
+Now we can compare.
+
+```{r}
+#| label: gasfluxes-comparison
+#| echo: TRUE
+#| fig-width: 8
+#| fig-height: 9
+#| fig-cap: ""
+
+library(ggplot2)
+
+all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes, by = c("ID" = "f_fluxid"))
+
+all_fluxes |>
+    ggplot(aes(gasfluxes_flux, fluxible_flux, colour = method)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    facet_grid(~type)
+
+# investigating that flux with a massive difference
+
+# slice_max(all_fluxes, fluxible_flux)
+
+# flags_lia |>
+# filter(f_fluxid == 46) |>
+# flux_plot(conc, datetime)
+
+```
+
+What we see is that the HMR model globally agrees with the `exp_zhao18` model in Fluxible.
+However, when `selectfluxes` selects the robust linear fit, there is a mismatch.
+Which makes sense, since it was demonstrated multiple times that exponential fits tends to overestimate fluxes, while linear fits tends to underestimate fluxes.
+Let's see what happens if we are consistant.
+
+```{r}
+#| label: gasfluxes-comparison-hmr
+#| echo: TRUE
+#| fig-width: 8
+#| fig-height: 9
+#| fig-cap: ""
+
+library(ggplot2)
+
+gasfluxes_HMR <- gasfluxes_fits$result |>
+    select(ID, "HMR.f0")
+
+all_fluxes_HMR <- left_join(gasfluxes_HMR, fluxible_fluxes, by = c("ID" = "f_fluxid"))
+
+all_fluxes_HMR |>
+    ggplot(aes(HMR.f0, fluxible_flux, colour = type)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) 
+    # geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se))
+
+```
+
+Let's compare with the kappamax method in fluxible:
+```{r}
+#| label: gasfluxes-comparison-kappamax
+#| echo: TRUE
+#| fig-width: 8
+#| fig-height: 9
+#| fig-cap: ""
+library(tidyverse)
+library(fluxible)
+library(ggplot2)
+
+
+conc_liahovden <- flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 180,
+  ratio_threshold = 0.5,
+  time_diff = 0
+)
+
+slopes_exp_liahovden <- flux_fitting(
+  conc_liahovden,
+  conc,
+  datetime,
+  end_cut = 10,
+  fit_type = "exp_hm"
+)
+
+slopes_exp_liahovden_flag <- flux_quality(
+  slopes_exp_liahovden,
+  conc,
+  f_rsquared = f_rsquared_lm,
+  f_pvalue = f_pvalue_lm,
+  instr_error = 5,
+  kappamax = TRUE
+)
+
+fluxible_fluxes_kappamax <- flux_calc(
+    slopes_exp_liahovden_flag,
+    f_slope_corr, # we use the slopes provided by flux_quality
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cols_keep = "type"
+  ) |>
+ select(f_fluxid, f_flux, type) |>
+ rename(
+    fluxible_flux = "f_flux"
+ )
+
+
+all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid"))
+
+all_fluxes |>
+    ggplot(aes(gasfluxes_flux, fluxible_flux)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) 
+    # facet_grid(~type)
+
+# investigating that flux with a massive difference
+
+# slice_max(all_fluxes, fluxible_flux)
+
+# flags_lia |>
+# filter(f_fluxid == 46) |>
+# flux_plot(conc, datetime)
+
+```

@@ -366,14 +366,14 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxid  f_slope
-        <fct>       <dbl>
-      1 1        3147.   
-      2 2           0.785
-      3 3         357.   
-      4 4           1.09 
-      5 5           1.37 
-      6 6         603.   
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          0.330
+      2 2          0.785
+      3 3          0.160
+      4 4          1.09 
+      5 5          1.35 
+      6 6          0.192
 
 # fitting works with 0 second end cut
 

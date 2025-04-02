@@ -140,6 +140,7 @@ flux_fitting_hm <- function(conc_df_cut,
         .data$slope_Cm < 0 ~ .data$tmin,
         .data$slope_Cm > 0 ~ .data$tmax
       ),
+      f_Cm_est = replace(.data$f_Cm_est, .data$f_Cm_est <= 0, 1e-10),
       .by = {{f_fluxid}}
     ) |>
     select({{f_fluxid}}, "f_Cm_est", "tm", "slope_Cm")
@@ -187,8 +188,9 @@ flux_fitting_hm <- function(conc_df_cut,
         TRUE ~ log(
           abs((.data$f_Cb - .data$f_Cm_est) / (.data$f_Cz - .data$f_Cm_est))
         )
-        * (1 / b_window),
-      )
+        * (1 / b_window)
+      ),
+      f_b_est = replace(.data$f_b_est, .data$f_b_est <= 0, 1e-10)
     )
 
 
@@ -197,8 +199,8 @@ flux_fitting_hm <- function(conc_df_cut,
   fc_myfn <- function(fc_time, fc_conc, par, fc_cz) {
     sqrt(
       (1 / length(fc_time))
-      * sum((par[1] + (fc_cz - par[1])
-             * exp(-par[2] * fc_time)
+      * sum((exp(par[1]) + (fc_cz - exp(par[1]))
+             * exp(-exp(par[2]) * fc_time)
              - fc_conc)^2)
     )
   }
@@ -222,15 +224,15 @@ flux_fitting_hm <- function(conc_df_cut,
       results = list(tryCatch(
         optim(
           par = c(
-            .data$f_Cm_est, .data$f_b_est
+            log(.data$f_Cm_est), log(.data$f_b_est)
           ),
           fn = fc_myfn, fc_conc = data[name_conc],
           fc_time = data$f_time_cut, fc_cz = .data$f_Cz
         ),
         error = function(err) list(par = rep(NA, 3))
       )),
-      f_Cm = .data$results$par[1],
-      f_b = .data$results$par[2],
+      f_Cm = exp(.data$results$par[1]),
+      f_b = exp(.data$results$par[2]),
       f_slope = .data$f_b * (.data$f_Cm - .data$f_Cz) *
         exp(-.data$f_b * t_zero),
       .groups = "drop"

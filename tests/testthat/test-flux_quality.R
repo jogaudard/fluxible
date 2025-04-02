@@ -69,6 +69,7 @@ test_that("kappamax with HM model", {
       f_rsquared = f_rsquared_lm,
       kappamax = TRUE
     ) |>
+    dplyr::filter(f_cut == "keep") |>
       dplyr::select(f_fluxid, f_quality_flag, f_slope_corr, f_model) |>
       dplyr::distinct()
   )
@@ -90,6 +91,7 @@ test_that("kappamax with zhao18 model", {
       f_rsquared = f_rsquared_lm,
       kappamax = TRUE
     ) |>
+    dplyr::filter(f_cut == "keep") |>
       dplyr::select(f_fluxid, f_quality_flag, f_slope_corr, f_model) |>
       dplyr::distinct()
   )

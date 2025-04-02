@@ -332,7 +332,12 @@ if (nrow(quality_flag_lm) > 0) {
     ) |>
     pull(message)
 
-  message(paste("\n", "Total number of measurements:", sum(flag_count$n)))
+  total_nb <- slopes_df |>
+    select({{f_fluxid}}) |>
+    distinct() |>
+    nrow()
+
+  message(paste("\n", "Total number of measurements:", total_nb))
   message(flag_msg)
 
   attr(quality_flag, "fit_type") <- {{fit_type}}
