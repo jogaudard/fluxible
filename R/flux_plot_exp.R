@@ -18,8 +18,14 @@
 flux_plot_exp <- function(slopes_df,
                           conc_col,
                           datetime_col,
-                          y_text_position,
-                          kappamax) {
+                          y_text_position) {
+
+  kappamax <- attributes(slopes_df)$kappamax
+
+  if (is.null(kappamax)) {
+    kappamax <- FALSE
+  }
+
   if (kappamax == TRUE) {
     param_df <- flux_param_kappamax(slopes_df, {{conc_col}})
   }

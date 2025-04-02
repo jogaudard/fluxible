@@ -179,6 +179,8 @@
       Calculating fits and slopes...
       Done.
       
+       fluxID 5: slope replaced with linear slope
+      
        Total number of measurements: 6
       
        ok 	 5 	 83 %

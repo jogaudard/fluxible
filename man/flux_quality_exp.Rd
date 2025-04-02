@@ -21,7 +21,8 @@ flux_quality_exp(
   gfactor_threshold,
   rmse_threshold,
   cor_threshold,
-  b_threshold
+  b_threshold,
+  name_df
 )
 }
 \arguments{
@@ -70,6 +71,8 @@ is considered non significant}
 
 \item{b_threshold}{threshold for the b parameter. Defines a window
 with its opposite inside which the fit is considered good enough.}
+
+\item{name_df}{name of \code{slopes_df}}
 }
 \value{
 same dataframe with added flag and corrected slopes columns

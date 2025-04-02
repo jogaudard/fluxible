@@ -1,12 +1,28 @@
-
+#' selecting linear slope with kappamax method
+#' @description selecting linear slope with kappamax method
+#' @param slopes_df dataset containing slopes
+#' @param f_slope column containing the slope of each flux
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
+#' @param f_fit column containing the modeled data (exponential fits)
+#' @param f_slope_lm column containing the linear slope of each flux
+#' @param f_fit_lm column with the fit of the linear model.
+#' @param f_b column containing the b parameter of the exponential expression
+#' @param fit_type model fitted to the data, linear, quadratic or exponential.
+#' Will be automatically filled if `slopes_df` was produced using
+#' \link[fluxible:flux_fitting]{flux_fitting}
+#' @param instr_error error of the instrument, in the same unit as the
+#' gas concentration
+#' @param name_df name of `slopes_df`
+#' @param f_fluxid column of ID for each measurement
 
 flux_quality_kappamax <- function(slopes_df,
-                                  f_slope = f_slope,
-                                  f_fit = f_fit,
-                                  f_slope_lm = f_slope_lm,
-                                  f_fit_lm = f_fit_lm,
-                                  f_b = f_b,
-                                  fit_type = c(),
+                                  f_slope,
+                                  f_fit,
+                                  f_fluxid,
+                                  f_slope_lm,
+                                  f_fit_lm,
+                                  f_b,
+                                  fit_type,
                                   instr_error,
                                   name_df) {
 
@@ -38,30 +54,42 @@ flux_quality_kappamax <- function(slopes_df,
   if (any(!c(args_ok, df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
-slopes_df <- slopes_df |>
+  slopes_df <- slopes_df |>
     mutate(
-        f_kappamax = abs({{f_slope_lm}} / instr_error),
-            # {{f_fit}} := case_when(
-            #     is.na({{f_b}}) ~ {{f_fit_lm}},
-            #     abs({{f_b}}) <= kappamax ~ {{f_fit}},
-            #     abs({{f_b}}) > kappamax ~ {{f_fit_lm}}
-            # ),
-            {{f_slope}} := case_when(
-                is.na({{f_b}}) ~ {{f_slope_lm}},
-                abs({{f_b}}) <= f_kappamax ~ {{f_slope}},
-                abs({{f_b}}) > f_kappamax ~ {{f_slope_lm}}
-            ),
-            f_model = case_when(
-                is.na({{f_b}}) ~ "linear",
-                abs({{f_b}}) <= f_kappamax ~ fit_type,
-                abs({{f_b}}) > f_kappamax ~ "linear"
-            )
-        )
+      f_kappamax = abs({{f_slope_lm}} / instr_error),
+      {{f_slope}} := case_when(
+        is.na({{f_b}}) ~ {{f_slope_lm}},
+        abs({{f_b}}) <= f_kappamax ~ {{f_slope}},
+        abs({{f_b}}) > f_kappamax ~ {{f_slope_lm}}
+      ),
+      f_model = case_when(
+        is.na({{f_b}}) ~ "linear",
+        abs({{f_b}}) <= f_kappamax ~ fit_type,
+        abs({{f_b}}) > f_kappamax ~ "linear"
+      )
+    )
 
-attr(slopes_df, "kappamax") <- TRUE
+  attr(slopes_df, "kappamax") <- TRUE
 
-# add a message summary of how many got replaced with lm
+  message_df <- slopes_df  |>
+    select({{f_fluxid}}, "f_model") |>
+    distinct() |>
+    filter(.data$f_model == "linear") |>
+    mutate(
+      message = paste(
+        "\n", " fluxID ", {{f_fluxid}}, ": slope replaced with linear slope",
+        sep = ""
+      ),
+      message = as.character(message)
+    ) |>
+    drop_na(message) |>
+    pull(.data$message)
 
-slopes_df
+  message <- str_c(message_df)
+
+  if (any(!is.na(message))) message(message)
+
+
+  slopes_df
 
 }

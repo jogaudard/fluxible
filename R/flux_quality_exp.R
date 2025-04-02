@@ -32,6 +32,7 @@
 #' with its opposite inside which the fit is considered good enough.
 #' @param gfactor_threshold threshold for the g-factor. Defines a window
 #' with its opposite outside which the flux will be flagged `discard`.
+#' @param name_df name of `slopes_df`
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest

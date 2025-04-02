@@ -93,6 +93,8 @@
         "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
     Message
       
+       fluxID 5: slope replaced with linear slope
+      
        Total number of measurements: 6
       
        ok 	 5 	 83 %
@@ -122,6 +124,8 @@
         f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm, kappamax = TRUE), f_cut ==
         "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
     Message
+      
+       fluxID 5: slope replaced with linear slope
       
        Total number of measurements: 6
       

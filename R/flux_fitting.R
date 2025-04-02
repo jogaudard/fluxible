@@ -52,6 +52,7 @@
 #' the parameters of the fit depending on the model used,
 #' and any columns present in the input.
 #' The type of fit is added as an attribute for use by the other functions.
+#' @seealso \link[gasfluxes:selectfluxes]{selectfluxes} \link[HMR:HMR]{HMR}
 #' @importFrom lubridate int_length interval
 #' @examples
 #' data(co2_conc)

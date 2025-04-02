@@ -60,12 +60,34 @@
 #' @param gfactor_threshold threshold for the g-factor. Defines a window
 #' with its opposite outside which the flux will be flagged `discard`
 #' (exponential quadratic fits).
+#' @param kappamax logical. If `TRUE` the kappamax method will be applied.
+#' @param instr_error error of the instrument, in the same unit as the
+#' gas concentration (only for kappamax method)
+#' @param f_fit_lm column with the fit of the linear model.
+#' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
+#' @details the kappamax method (Hüppi et al., 2018) selects the linear slope
+#' if \eqn{|b| > kappamax}, with \eqn{kappamax = |f_slope_lm / instr_error|}.
+#' The original kappamax method was applied to the HMR model
+#' (Pedersen et al., 2010; Hutchinson and Mosier, 1981), but here it can be
+#' applied to any exponential fit.
+#' @references Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
+#' A comprehensive approach to soil-atmosphere trace-gas flux estimation with
+#' static chambers. European Journal of Soil Science 61, 888–902.
+#' https://doi.org/10.1111/j.1365-2389.2010.01291.x
+#' @references Hüppi, R., Felber, R., Krauss, M., Six, J., Leifeld, J., Fuß,
+#' R., 2018. Restricting the nonlinearity parameter in soil greenhouse gas
+#' flux calculation for more reliable flux estimates.
+#' PLOS ONE 13, e0200876. https://doi.org/10.1371/journal.pone.0200876
+#' @references Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
+#' for Field Measurement of Nitrous Oxide Fluxes.
+#' Soil Science Society of America Journal 45, 311–316.
 #' @return a dataframe with added columns of quality flags (`f_quality_flag`),
 #' the slope corrected according to the quality flags (`f_slope_corr`),
 #' and any columns present in the input.
 #' It will also print a summary of the quality flags. This summary can also
 #' be exported as a dataframe using
 #' \link[fluxible:flux_flag_count]{flux_flag_count}
+#' @seealso \link[gasfluxes:selectfluxes]{selectfluxes}
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
@@ -197,6 +219,7 @@ flux_quality <- function(slopes_df,
     slopes_df <- flux_quality_kappamax(
       slopes_df,
       f_slope = {{f_slope}},
+      f_fluxid = {{f_fluxid}},
       f_fit = {{f_fit}},
       f_slope_lm = {{f_slope_lm}},
       f_fit_lm = {{f_fit_lm}},
