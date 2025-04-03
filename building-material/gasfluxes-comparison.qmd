@@ -223,13 +223,13 @@ slopes_exp_liahovden_flag <- flux_quality(
   kappamax = TRUE
 )
 
-flux_plot(
-    slopes_exp_liahovden_flag,
-    conc,
-    datetime,
-    output = "pdfpages",
-    f_plotname = "hm_kappamax2"
-    )
+# flux_plot(
+#     slopes_exp_liahovden_flag,
+#     conc,
+#     datetime,
+#     output = "pdfpages",
+#     f_plotname = "hm_kappamax2"
+#     )
 
 fluxible_fluxes_kappamax <- flux_calc(
     slopes_exp_liahovden_flag,

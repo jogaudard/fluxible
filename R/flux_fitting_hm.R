@@ -240,6 +240,16 @@ flux_fitting_hm <- function(conc_df_cut,
   #   ) |>
   #   select(!c("results", "f_Cm_est", "f_b_est"))
 
+  tibble_error <- tibble(
+    term = c("logb", ".lin1", ".lin2"),
+    estimate = NA_real_,
+    std.error = NA_real_,
+    statistic = NA_real_,
+    p.value = NA_real_
+  )
+
+
+
    fitting_par <- conc_df_cut |>
     select(
       {{f_fluxid}}, "f_time_cut", {{conc_col}}, "f_time_diff"
@@ -250,12 +260,12 @@ flux_fitting_hm <- function(conc_df_cut,
     nest() |>
     # rowwise() |>
     mutate(
-      model = tryCatch(map(.x = data, \(.x) nls(.x[[name_conc]] ~ cbind(1, exp(-exp(logb) * f_time_cut)/(-exp(logb))), 
+      model = map(.x = data, \(.x) tryCatch(nls(.x[[name_conc]] ~ cbind(1, exp(-exp(logb) * f_time_cut)/(-exp(logb))), 
                start = c(logb = log(1.5)), algorithm = "plinear",
-               control=nls.control(maxiter=100, minFactor=1e-10, scaleOffset = 1), data = .x)),
-               error = function(err) list(par = rep(NA, 3))),
+               control=nls.control(maxiter=100, minFactor=1e-10, scaleOffset = 1), data = .x),
+               error = function(err) "model_error")),
       # glance = map(.data$model, broom::glance),
-      tidy = map(.data$model, broom::tidy)
+      tidy = map(.data$model, possibly(broom::tidy, otherwise = tibble_error))
      ) |>
      select(!c("data", "model")) |>
     unnest("tidy") |>
