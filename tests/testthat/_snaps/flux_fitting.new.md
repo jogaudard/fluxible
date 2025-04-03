@@ -356,7 +356,6 @@
     Message
       Cutting measurements...
       Estimating starting parameters for optimization...
-      Optimizing fitting parameters...
       Calculating fits and slopes...
       Done.
     Condition
@@ -366,14 +365,14 @@
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
-        f_fluxid   f_slope
-        <fct>        <dbl>
-      1 1         1.20e-13
-      2 2         1.12e+ 0
-      3 3        -1.31e- 9
-      4 4         1.57e+ 0
-      5 5         1.00e+ 6
-      6 6        -8.92e-10
+        f_fluxid f_slope
+        <fct>      <dbl>
+      1 1          1.93 
+      2 2          1.12 
+      3 3          0.356
+      4 4          1.57 
+      5 5          1.92 
+      6 6          0.641
 
 # fitting works with 0 second end cut
 

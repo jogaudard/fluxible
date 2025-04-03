@@ -93,9 +93,6 @@
         "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
     Message
       
-       fluxID 2: slope replaced with linear slope
-       fluxID 3: slope replaced with linear slope
-       fluxID 4: slope replaced with linear slope
        fluxID 5: slope replaced with linear slope
       
        Total number of measurements: 6
@@ -113,12 +110,12 @@
       # A tibble: 6 x 4
         f_fluxid f_quality_flag f_slope_corr f_model
         <fct>    <chr>                 <dbl> <chr>  
-      1 1        ok                  6.64e-1 exp_hm 
-      2 2        ok                  3.26e-1 linear 
-      3 3        ok                  1.31e-1 linear 
-      4 4        ok                  3.22e-1 linear 
-      5 5        discard            NA       linear 
-      6 6        ok                 -3.36e-9 exp_hm 
+      1 1        ok                    0.727 exp_hm 
+      2 2        ok                    0.418 exp_hm 
+      3 3        ok                    0.374 exp_hm 
+      4 4        ok                    0.725 exp_hm 
+      5 5        discard              NA     linear 
+      6 6        ok                    0.404 exp_hm 
 
 # kappamax with zhao18 model
 

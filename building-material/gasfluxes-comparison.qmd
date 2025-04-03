@@ -220,7 +220,7 @@ slopes_exp_liahovden_flag <- flux_quality(
   f_rsquared = f_rsquared_lm,
   f_pvalue = f_pvalue_lm,
   instr_error = 5,
-  kappamax = FALSE
+  kappamax = TRUE
 )
 
 flux_plot(
@@ -228,7 +228,7 @@ flux_plot(
     conc,
     datetime,
     output = "pdfpages",
-    f_plotname = "hm_intercept"
+    f_plotname = "hm_kappamax2"
     )
 
 fluxible_fluxes_kappamax <- flux_calc(
@@ -244,7 +244,7 @@ fluxible_fluxes_kappamax <- flux_calc(
     plot_area = 0.0625,
     cols_keep = "type"
   ) |>
- select(f_fluxid, f_flux, type) |>
+ select(f_fluxid, f_flux, type, f_model) |>
  rename(
     fluxible_flux = "f_flux"
  )
@@ -253,14 +253,15 @@ fluxible_fluxes_kappamax <- flux_calc(
 all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid"))
 
 all_fluxes |>
-    ggplot(aes(gasfluxes_flux, fluxible_flux)) +
+    ggplot(aes(gasfluxes_flux, fluxible_flux, color = f_model, label = ID)) +
     geom_point() +
     geom_abline(slope = 1, intercept = 0) +
     geom_smooth(
         method = "lm"
         ) +
-    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) 
-    # facet_grid(~type)
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    facet_grid(~method)
 
 # investigating that flux with a massive difference
 
