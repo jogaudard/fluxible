@@ -220,8 +220,16 @@ slopes_exp_liahovden_flag <- flux_quality(
   f_rsquared = f_rsquared_lm,
   f_pvalue = f_pvalue_lm,
   instr_error = 5,
-  kappamax = TRUE
+  kappamax = FALSE
 )
+
+flux_plot(
+    slopes_exp_liahovden_flag,
+    conc,
+    datetime,
+    output = "pdfpages",
+    f_plotname = "hm_intercept"
+    )
 
 fluxible_fluxes_kappamax <- flux_calc(
     slopes_exp_liahovden_flag,

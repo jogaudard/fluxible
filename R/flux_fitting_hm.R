@@ -159,9 +159,9 @@ flux_fitting_hm <- function(conc_df_cut,
     ) |>
     unnest("tidy") |>
     filter(.data$term == "(Intercept)") |>
-    rename(f_Cz = "estimate") |>
+    rename(f_Cz_est = "estimate") |>
     unnest({{f_fluxid}}) |>
-    select({{f_fluxid}}, "f_Cz") |>
+    select({{f_fluxid}}, "f_Cz_est") |>
     ungroup()
 
 
@@ -184,9 +184,9 @@ flux_fitting_hm <- function(conc_df_cut,
     mutate(
       f_b_est = case_when(
         .data$f_Cb == .data$f_Cm_est ~ 0, # special case or flat flux
-        .data$f_Cz == .data$f_Cm_est ~ 0, # special case or flat flux
+        .data$f_Cz_est == .data$f_Cm_est ~ 0, # special case or flat flux
         TRUE ~ log(
-          abs((.data$f_Cb - .data$f_Cm_est) / (.data$f_Cz - .data$f_Cm_est))
+          abs((.data$f_Cb - .data$f_Cm_est) / (.data$f_Cz_est - .data$f_Cm_est))
         )
         * (1 / b_window)
       ),
@@ -196,10 +196,10 @@ flux_fitting_hm <- function(conc_df_cut,
 
 
 
-  fc_myfn <- function(fc_time, fc_conc, par, fc_cz) {
+  fc_myfn <- function(fc_time, fc_conc, par) {
     sqrt(
       (1 / length(fc_time))
-      * sum((exp(par[1]) + (fc_cz - exp(par[1]))
+      * sum((exp(par[1]) + (par[3] - exp(par[1]))
              * exp(-exp(par[2]) * fc_time)
              - fc_conc)^2)
     )
@@ -212,11 +212,11 @@ flux_fitting_hm <- function(conc_df_cut,
     left_join(estimates_df, by = dplyr::join_by({{f_fluxid}})) |>
     select(
       {{f_fluxid}}, "f_Cm_est", "f_b_est",
-      "f_Cz", "f_time_cut", {{conc_col}}, "f_time_diff"
+      "f_Cz_est", "f_time_cut", {{conc_col}}, "f_time_diff"
     ) |>
     group_by(
       {{f_fluxid}}, .data$f_Cm_est, .data$f_b_est,
-      .data$f_Cz, .data$f_time_diff
+      .data$f_Cz_est, .data$f_time_diff
     ) |>
     nest() |>
     rowwise() |>
@@ -224,15 +224,16 @@ flux_fitting_hm <- function(conc_df_cut,
       results = list(tryCatch(
         optim(
           par = c(
-            log(.data$f_Cm_est), log(.data$f_b_est)
+            log(.data$f_Cm_est), log(.data$f_b_est), .data$f_Cz_est
           ),
           fn = fc_myfn, fc_conc = data[name_conc],
-          fc_time = data$f_time_cut, fc_cz = .data$f_Cz
+          fc_time = data$f_time_cut#, fc_cz = .data$f_Cz
         ),
         error = function(err) list(par = rep(NA, 3))
       )),
       f_Cm = exp(.data$results$par[1]),
       f_b = exp(.data$results$par[2]),
+      f_Cz = .data$results$par[3],
       f_slope = .data$f_b * (.data$f_Cm - .data$f_Cz) *
         exp(-.data$f_b * t_zero),
       .groups = "drop"
