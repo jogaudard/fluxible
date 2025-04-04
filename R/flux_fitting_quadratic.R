@@ -16,6 +16,7 @@
 #' @importFrom tidyr drop_na pivot_wider fill
 #' @importFrom haven as_factor
 #' @importFrom stringr str_c
+#' @importFrom broom glance
 
 
 flux_fitting_quadratic <- function(conc_df_cut,
@@ -51,8 +52,8 @@ flux_fitting_quadratic <- function(conc_df_cut,
       model =
         map(.x = data,
             \(.x) lm(.x[[name_conc]] ~ f_time_cut + f_time_cut2, data = .x)),
-      tidy = map(.data$model, broom::tidy),
-      glance = map(.data$model, broom::glance)
+      tidy = map(.data$model, tidy),
+      glance = map(.data$model, glance)
     ) |>
     select(!c("data", "model")) |>
     unnest("tidy") |>
@@ -74,7 +75,7 @@ flux_fitting_quadratic <- function(conc_df_cut,
     ungroup()
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par, by = dplyr::join_by({{f_fluxid}})) |>
+    left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
       f_slope = .data$f_param1 + 2 * .data$f_param2 * t_zero,
       f_fit =

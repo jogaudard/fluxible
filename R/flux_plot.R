@@ -149,7 +149,7 @@ flux_plot <- function(slopes_df,
     ) |>
     pull(.data$f_warnings)
 
-  f_warnings <- stringr::str_c(flags)
+  f_warnings <- str_c(flags)
 
 
   if (any(!is.na(f_warnings))) message(f_warnings)
@@ -162,7 +162,7 @@ flux_plot <- function(slopes_df,
 
 
 
-  if (stringr::str_detect(fit_type, "exp")) {
+  if (str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
       slopes_df,
       {{conc_col}},

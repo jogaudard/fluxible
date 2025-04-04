@@ -263,7 +263,7 @@ flux_fitting <- function(conc_df,
     ) |>
     distinct() |>
     left_join(conc_df_cut,
-      by = dplyr::join_by(
+      by = join_by(
         {{f_fluxid}} == {{f_fluxid}},
         "f_n_conc" == "f_n_conc"
       )

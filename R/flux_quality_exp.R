@@ -96,7 +96,7 @@ flux_quality_exp <- function(slopes_df,
 
 
   quality_flag <- slopes_df |>
-    left_join(quality_par, by = dplyr::join_by(
+    left_join(quality_par, by = join_by(
       {{f_fluxid}} == {{f_fluxid}},
       {{f_cut}} == {{f_cut}}
     )

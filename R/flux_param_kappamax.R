@@ -43,7 +43,7 @@ flux_param_kappamax <- function(slopes_df,
       ),
       print_col = case_when(
         .data$f_model == "linear" ~ print_col_lm,
-        stringr::str_detect(.data$f_model, "exp") ~ print_col_exp
+        str_detect(.data$f_model, "exp") ~ print_col_exp
       )
     ) |>
     select("f_start", "f_fluxid", "print_col", "f_quality_flag")

@@ -81,7 +81,7 @@ flux_fitting_exptz <- function(conc_df_cut,
     group_by({{f_fluxid}}) |>
     select({{f_fluxid}}, {{conc_col}}, "f_time_cut") |>
     distinct(.data[[name_conc]], .keep_all = TRUE) |>
-    dplyr::slice(which.min(.data[[name_conc]])) |>
+    slice(which.min(.data[[name_conc]])) |>
     rename(
       Cmin = {{conc_col}},
       tmin = "f_time_cut"
@@ -92,7 +92,7 @@ flux_fitting_exptz <- function(conc_df_cut,
     group_by({{f_fluxid}}) |>
     select({{f_fluxid}}, {{conc_col}}, "f_time_cut") |>
     distinct(.data[[name_conc]], .keep_all = TRUE) |>
-    dplyr::slice(which.max(.data[[name_conc]])) |>
+    slice(which.max(.data[[name_conc]])) |>
     rename(
       Cmax = {{conc_col}},
       tmax = "f_time_cut"
@@ -100,7 +100,7 @@ flux_fitting_exptz <- function(conc_df_cut,
     ungroup()
 
   cm_temp <- left_join(cm_temp_max, cm_temp_min,
-    by = dplyr::join_by({{f_fluxid}})
+    by = join_by({{f_fluxid}})
   )
 
 
@@ -111,7 +111,7 @@ flux_fitting_exptz <- function(conc_df_cut,
     mutate(
       model_Cm =
         map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-      tidy = map(.data$model_Cm, broom::tidy)
+      tidy = map(.data$model_Cm, tidy)
     ) |>
     unnest("tidy") |>
     filter(.data$term == "f_time_cut") |>
@@ -121,7 +121,7 @@ flux_fitting_exptz <- function(conc_df_cut,
 
 
 
-  cm_df <- left_join(cm_temp, cm_slope, by = dplyr::join_by({{f_fluxid}})) |>
+  cm_df <- left_join(cm_temp, cm_slope, by = join_by({{f_fluxid}})) |>
     mutate(
       f_Cm_est = case_when(
         .data$slope_Cm < 0 ~ .data$Cmin,
@@ -145,7 +145,7 @@ flux_fitting_exptz <- function(conc_df_cut,
     mutate(
       model_Cz =
         map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-      tidy = map(.data$model_Cz, broom::tidy)
+      tidy = map(.data$model_Cz, tidy)
     ) |>
     unnest("tidy") |>
     filter(.data$term == "(Intercept)") |>
@@ -161,7 +161,7 @@ flux_fitting_exptz <- function(conc_df_cut,
       diff = .data$f_time_cut + b_window
     ) |>
     distinct(.data$diff, .keep_all = TRUE) |>
-    dplyr::slice(which.min(abs(.data$diff))) |>
+    slice(which.min(abs(.data$diff))) |>
     rename(f_Cb = {{conc_col}}) |>
     select({{f_fluxid}}, "f_Cb") |>
     ungroup()
@@ -173,16 +173,16 @@ flux_fitting_exptz <- function(conc_df_cut,
       ta_diff = .data$f_time_cut - .data$ta
     ) |>
     distinct(.data$ta_diff, .keep_all = TRUE) |>
-    dplyr::slice(which.min(abs(.data$ta_diff))) |>
+    slice(which.min(abs(.data$ta_diff))) |>
     rename(Ca = {{conc_col}}) |>
     select({{f_fluxid}}, "ta", "Ca") |>
     ungroup()
 
   estimates_df <- left_join(cm_df, cz_df,
-    by = dplyr::join_by({{f_fluxid}})
+    by = join_by({{f_fluxid}})
   ) |>
-    left_join(a_df, by = dplyr::join_by({{f_fluxid}})) |>
-    left_join(cb_df, by = dplyr::join_by({{f_fluxid}})) |>
+    left_join(a_df, by = join_by({{f_fluxid}})) |>
+    left_join(cb_df, by = join_by({{f_fluxid}})) |>
     mutate(
       f_b_est = case_when(
         .data$f_Cb == .data$f_Cm_est ~ 0, # special case or flat flux
@@ -218,7 +218,7 @@ flux_fitting_exptz <- function(conc_df_cut,
   message("Optimizing fitting parameters...")
 
   fitting_par <- conc_df_cut |>
-    left_join(estimates_df, by = dplyr::join_by({{f_fluxid}})) |>
+    left_join(estimates_df, by = join_by({{f_fluxid}})) |>
     select(
       {{f_fluxid}}, "f_Cm_est", "f_a_est", "f_b_est",
       "f_Cz", "f_time_cut", {{conc_col}}
@@ -253,7 +253,7 @@ flux_fitting_exptz <- function(conc_df_cut,
   message("Calculating fits and slopes...")
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par, by = dplyr::join_by({{f_fluxid}})) |>
+    left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_a *
         (.data$f_time - start_cut)

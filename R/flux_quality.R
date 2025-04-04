@@ -216,7 +216,7 @@ flux_quality <- function(slopes_df,
     unnest({{f_fluxid}})
 
   slopes_df <- slopes_df |>
-    left_join(quality_par_start, by = dplyr::join_by({{f_fluxid}}))
+    left_join(quality_par_start, by = join_by({{f_fluxid}}))
 
   if (kappamax == TRUE) {
     slopes_df <- flux_quality_kappamax(
@@ -237,7 +237,7 @@ flux_quality <- function(slopes_df,
       filter(.data$f_model == "linear")
 
     quality_flag_exp <- slopes_df |>
-      filter(stringr::str_detect(.data$f_model, "exp"))
+      filter(str_detect(.data$f_model, "exp"))
 
     if (nrow(quality_flag_lm) > 0) {
       quality_flag_lm <- flux_quality_lm(
@@ -284,7 +284,7 @@ flux_quality <- function(slopes_df,
       arrange({{f_fluxid}})
   }
 
-  if (stringr::str_detect(fit_type, "exp") && kappamax == FALSE) {
+  if (str_detect(fit_type, "exp") && kappamax == FALSE) {
     quality_flag <- flux_quality_exp(
       slopes_df,
       {{conc_col}},

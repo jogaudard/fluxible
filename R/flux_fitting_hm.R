@@ -112,7 +112,7 @@ flux_fitting_hm <- function(conc_df_cut,
       ),
       tidy = map(
         .data$model,
-        purrr::possibly(broom::tidy, otherwise = tibble_error)
+        possibly(tidy, otherwise = tibble_error)
       )
     ) |>
     select(!c("data", "model")) |>
@@ -133,7 +133,7 @@ flux_fitting_hm <- function(conc_df_cut,
   message("Calculating fits and slopes...")
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par, by = dplyr::join_by({{f_fluxid}})) |>
+    left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_slope_z *
         (exp(-.data$f_b * (.data$f_time - start_cut)) / (-.data$f_b)),
