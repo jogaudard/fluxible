@@ -22,6 +22,8 @@ args()
 
 devtools::load_all()
 
+autoimport::autoimport()
+
 devtools::document()
 devtools::test()
 devtools::run_examples()
