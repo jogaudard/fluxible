@@ -28,7 +28,6 @@
 #' @importFrom stringr str_c
 #' @importFrom stats lm optim
 #' @importFrom purrr map
-# #' @importFrom utils data
 #' @importFrom broom tidy
 #' @importFrom zoo rollmean
 

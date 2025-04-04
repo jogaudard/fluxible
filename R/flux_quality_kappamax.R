@@ -7,6 +7,8 @@
 #' @param f_slope_lm column containing the linear slope of each flux
 #' @param f_fit_lm column with the fit of the linear model.
 #' @param f_b column containing the b parameter of the exponential expression
+#' @param force_exp vector of fluxIDs for which the exponential slope should be
+#' used by the user's decision (kappamax method)
 #' @param fit_type model fitted to the data, linear, quadratic or exponential.
 #' Will be automatically filled if `slopes_df` was produced using
 #' \link[fluxible:flux_fitting]{flux_fitting}
@@ -74,7 +76,7 @@ flux_quality_kappamax <- function(slopes_df,
 
   attr(slopes_df, "kappamax") <- TRUE
 
-  
+ 
   total_lm <- slopes_df |>
     select({{f_fluxid}}, "f_model") |>
     distinct() |>

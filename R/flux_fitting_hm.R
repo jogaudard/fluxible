@@ -37,6 +37,7 @@
 #' @importFrom purrr map possibly
 #' @importFrom utils data
 #' @importFrom broom tidy
+#' @importFrom stats nls nls.control
 
 
 
@@ -84,7 +85,7 @@ flux_fitting_hm <- function(conc_df_cut,
     p.value = NA_real_
   )
 
-   fitting_par <- conc_df_cut |>
+  fitting_par <- conc_df_cut |>
     select(
       {{f_fluxid}}, "f_time_cut", {{conc_col}}
     ) |>
@@ -96,11 +97,11 @@ flux_fitting_hm <- function(conc_df_cut,
       model = map(
         .x = data, \(.x) {
           tryCatch(
-            nls(
+            nls( # the arguments here are as advised in gasfluxes
               .x[[name_conc]] ~ cbind(
                 1, exp(-exp(logb) * f_time_cut) / (-exp(logb))
               ),
-              start = c(logb = log(1.5/3600)), algorithm = "plinear",
+              start = c(logb = log(1.5 / 3600)), algorithm = "plinear",
               control = nls.control(
                 maxiter = 100, minFactor = 1e-10, scaleOffset = 1
               ),

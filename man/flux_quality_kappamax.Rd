@@ -34,6 +34,9 @@ flux_quality_kappamax(
 
 \item{f_b}{column containing the b parameter of the exponential expression}
 
+\item{force_exp}{vector of fluxIDs for which the exponential slope should be
+used by the user's decision (kappamax method)}
+
 \item{fit_type}{model fitted to the data, linear, quadratic or exponential.
 Will be automatically filled if \code{slopes_df} was produced using
 \link[fluxible:flux_fitting]{flux_fitting}}
