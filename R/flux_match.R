@@ -106,10 +106,10 @@ flux_match <- function(raw_conc,
 
   conc_df <- full_join(
     raw_conc, field_record,
-    by = dplyr::join_by({{datetime_col}} == "f_start"), keep = TRUE
+    by = join_by({{datetime_col}} == "f_start"), keep = TRUE
   ) |>
     mutate(
-      {{datetime_col}} := dplyr::coalesce({{datetime_col}}, .data$f_start)
+      {{datetime_col}} := coalesce({{datetime_col}}, .data$f_start)
     ) |>
     arrange({{datetime_col}}) |>
     fill("f_fluxid") |>
@@ -153,7 +153,7 @@ flux_match <- function(raw_conc,
     ) |>
     pull(.data$f_warnings)
 
-  f_warnings <- stringr::str_c(flags)
+  f_warnings <- str_c(flags)
 
 
   if (any(!is.na(conc_df$f_flag_match))) warning(f_warnings)

@@ -3,15 +3,9 @@
 #' @param conc_df dataframe of gas concentration over time
 #' @param conc_df_cut dataframe of gas concentration over time, cut
 #' @param conc_col column with gas concentration
-#' @param datetime_col column with datetime of each concentration measurement
-#' Note that if there are duplicated datetime in the same f_fluxid only
-#' the first row will be kept
-#' @param f_start column with datetime when the measurement started
-#' @param f_end column with datetime when the measurement ended
 #' @param f_fluxid column with ID of each flux
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
-#' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @return a df with the modeled gas concentration, slope, intercept,
 #' std error, r square and p value of the linear model
 #' @importFrom rlang .data
@@ -20,17 +14,14 @@
 #' @importFrom tidyr drop_na pivot_wider fill
 #' @importFrom haven as_factor
 #' @importFrom stringr str_c
+#' @importFrom broom glance
 
 
 flux_fitting_lm <- function(conc_df_cut,
                             conc_df,
                             conc_col,
-                            datetime_col,
-                            f_start,
-                            f_end,
                             f_fluxid,
-                            start_cut,
-                            end_cut) {
+                            start_cut) {
 
   name_conc <- names(select(conc_df, {{conc_col}}))
 
@@ -40,8 +31,8 @@ flux_fitting_lm <- function(conc_df_cut,
     nest() |>
     mutate(
       model = map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-      tidy = map(.data$model, broom::tidy),
-      glance = map(.data$model, broom::glance)
+      tidy = map(.data$model, tidy),
+      glance = map(.data$model, glance)
     ) |>
     select(!c("data", "model")) |>
     unnest("tidy") |>
@@ -62,7 +53,7 @@ flux_fitting_lm <- function(conc_df_cut,
     ungroup()
 
   conc_fitting <- conc_df |>
-    left_join(fitting_par, by = dplyr::join_by({{f_fluxid}})) |>
+    left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
       f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - start_cut)
     )

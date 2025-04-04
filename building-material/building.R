@@ -1153,12 +1153,13 @@ flux_fitting(
 
 
 # trying new exp_hm fit
+debug(flux_fitting_hm)
 
 flux_fitting(
       co2_conc,
       conc,
       datetime,
-      fit_type = "exp_hm",
+      fit_type = "exp_hm")
 
 
 flux_match(

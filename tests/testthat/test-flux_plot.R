@@ -179,3 +179,26 @@ test_that("plot for exp_hm fit", {
     )
   )
 })
+
+test_that("plot for kappamax fit", {
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "plot for kappamax fit",
+      flux_fitting(
+        co2_conc,
+        conc,
+        datetime,
+        fit_type = "exp_hm",
+        end_cut = 30,
+        t_zero = 10
+      ) |>
+        flux_quality(
+          conc,
+          f_pvalue = f_pvalue_lm,
+          f_rsquared = f_rsquared_lm,
+          kappamax = TRUE
+        ) |>
+        flux_plot(conc, datetime)
+    )
+  )
+})

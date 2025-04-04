@@ -102,3 +102,6 @@ transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
 https://doi.org/10.1016/j.agrformet.2018.08.022
 \code{exponential} is equal to \code{exp_zhao18}, for backwards compatibility
 }
+\seealso{
+\link[gasfluxes:selectfluxes]{selectfluxes} \link[HMR:HMR]{HMR}
+}

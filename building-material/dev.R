@@ -20,10 +20,10 @@ usethis::use_package_doc()
 #to detect unused arguments
 args()
 
+devtools::load_all()
 
-
-devtools::test()
 devtools::document()
+devtools::test()
 devtools::run_examples()
 devtools::check()
 

@@ -413,7 +413,7 @@ test_that("Stupeflux returns the same as step by step workflow", {
     conc_test,
     conc,
     datetime,
-    start,
+    f_start,
     fit_type = "exp_zhao18"
   ))
   slopes_flag_test <- flux_quality(
@@ -475,6 +475,50 @@ test_that("Stupeflux works with slope_correction = FALSE", {
       plot_area = 0.0625,
       slope_correction = FALSE
     )
+  )
+})
+
+test_that("Fluxible workflow works with kappamax", {
+  conc_test <- flux_match(
+    co2_df_short,
+    record_short,
+    datetime,
+    start,
+    conc,
+    startcrop = 10,
+    measurement_length = 220
+  )
+  slopes_test <- suppressWarnings(flux_fitting(
+    conc_test,
+    conc,
+    datetime,
+    start,
+    end_cut = 30,
+    fit_type = "exp_hm"
+  ))
+  slopes_flag_test <- flux_quality(
+    slopes_test,
+    conc,
+    f_pvalue = f_pvalue_lm,
+    f_rsquared = f_rsquared_lm,
+    kappamax = TRUE
+  )
+  fluxes_test <- flux_calc(
+    slopes_flag_test,
+    f_slope_corr,
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625
+  ) |>
+    dplyr::select(!c(f_fluxid, f_slope_corr))
+
+  expect_snapshot(
+    fluxes_test
   )
 })
 

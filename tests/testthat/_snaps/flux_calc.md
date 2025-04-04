@@ -221,6 +221,21 @@
       6 6          0.433           7.74 2022-07-29 00:06:35           24.6   26.6
       # i 1 more variable: f_model <chr>
 
+# Fluxible workflow works with kappamax
+
+    Code
+      fluxes_test
+    Output
+      # A tibble: 6 x 5
+        f_model f_temp_air_ave datetime            f_volume_setup f_flux
+        <chr>            <dbl> <dttm>                       <dbl>  <dbl>
+      1 exp_hm            7.29 2022-07-28 23:43:35           24.6   44.7
+      2 exp_hm            7.37 2022-07-28 23:47:22           24.6   25.7
+      3 exp_hm            7.45 2022-07-28 23:52:10           24.6   23.0
+      4 exp_hm            7.77 2022-07-28 23:59:32           24.6   44.5
+      5 linear            7.70 2022-07-29 00:03:10           24.6   NA  
+      6 exp_hm            7.74 2022-07-29 00:06:35           24.6   24.8
+
 # Working with two gases
 
     Code

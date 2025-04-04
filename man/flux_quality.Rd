@@ -18,11 +18,13 @@ flux_quality(
   f_pvalue = f_pvalue,
   f_rsquared = f_rsquared,
   f_slope_lm = f_slope_lm,
+  f_fit_lm = f_fit_lm,
   f_b = f_b,
   force_discard = c(),
   force_ok = c(),
   force_zero = c(),
   force_lm = c(),
+  force_exp = c(),
   ratio_threshold = 0,
   gfactor_threshold = 10,
   fit_type = c(),
@@ -33,7 +35,9 @@ flux_quality(
   rmse_threshold = 25,
   cor_threshold = 0.5,
   b_threshold = 1,
-  cut_arg = "cut"
+  cut_arg = "cut",
+  instr_error = 5,
+  kappamax = FALSE
 )
 }
 \arguments{
@@ -69,6 +73,9 @@ flux_quality(
 \item{f_slope_lm}{column containing the linear slope of each flux
 (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)}
 
+\item{f_fit_lm}{column with the fit of the linear model.
+(as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)}
+
 \item{f_b}{column containing the b parameter of the exponential expression
 (exponential fits)}
 
@@ -83,6 +90,9 @@ the user's decision}
 
 \item{force_lm}{vector of fluxIDs for which the linear slope should be used
 by the user's decision}
+
+\item{force_exp}{vector of fluxIDs for which the exponential slope should be
+used by the user's decision (kappamax method)}
 
 \item{ratio_threshold}{ratio of gas concentration data points over length of
 measurement (in seconds) below which the measurement will be considered as
@@ -122,6 +132,11 @@ Defines a window with its opposite inside which the fit is
 considered good enough (exponential fits)}
 
 \item{cut_arg}{argument defining that the data point should be cut out}
+
+\item{instr_error}{error of the instrument, in the same unit as the
+gas concentration (only for kappamax method)}
+
+\item{kappamax}{logical. If \code{TRUE} the kappamax method will be applied.}
 }
 \value{
 a dataframe with added columns of quality flags (\code{f_quality_flag}),
@@ -135,8 +150,33 @@ be exported as a dataframe using
 indicates if slopes should be discarded or replaced
 by 0 according to quality thresholds set by user
 }
+\details{
+the kappamax method (Hüppi et al., 2018) selects the linear slope
+if \eqn{|b| > kappamax}, with \eqn{kappamax = |f_slope_lm / instr_error|}.
+The original kappamax method was applied to the HMR model
+(Pedersen et al., 2010; Hutchinson and Mosier, 1981), but here it can be
+applied to any exponential fit.
+}
 \examples{
 data(co2_conc)
 slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
 flux_quality(slopes, conc)
+}
+\references{
+Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
+A comprehensive approach to soil-atmosphere trace-gas flux estimation with
+static chambers. European Journal of Soil Science 61, 888–902.
+https://doi.org/10.1111/j.1365-2389.2010.01291.x
+
+Hüppi, R., Felber, R., Krauss, M., Six, J., Leifeld, J., Fuß,
+R., 2018. Restricting the nonlinearity parameter in soil greenhouse gas
+flux calculation for more reliable flux estimates.
+PLOS ONE 13, e0200876. https://doi.org/10.1371/journal.pone.0200876
+
+Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
+for Field Measurement of Nitrous Oxide Fluxes.
+Soil Science Society of America Journal 45, 311–316.
+}
+\seealso{
+\link[gasfluxes:selectfluxes]{selectfluxes}
 }

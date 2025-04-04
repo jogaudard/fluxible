@@ -32,6 +32,7 @@
 #' with its opposite inside which the fit is considered good enough.
 #' @param gfactor_threshold threshold for the g-factor. Defines a window
 #' with its opposite outside which the flux will be flagged `discard`.
+#' @param name_df name of `slopes_df`
 #' @return same dataframe with added flag and corrected slopes columns
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
@@ -55,9 +56,8 @@ flux_quality_exp <- function(slopes_df,
                              gfactor_threshold,
                              rmse_threshold,
                              cor_threshold,
-                             b_threshold) {
-
-  name_df <- deparse(substitute(slopes_df))
+                             b_threshold,
+                             name_df) {
 
 
   args_ok <- flux_fun_check(list(
@@ -96,7 +96,7 @@ flux_quality_exp <- function(slopes_df,
 
 
   quality_flag <- slopes_df |>
-    left_join(quality_par, by = dplyr::join_by(
+    left_join(quality_par, by = join_by(
       {{f_fluxid}} == {{f_fluxid}},
       {{f_cut}} == {{f_cut}}
     )

@@ -58,7 +58,7 @@ flux_flag_count <- function(slopes_df,
       n = length({{f_quality_flag}}),
       .by = {{f_quality_flag}}
     ) |>
-    right_join(flags, by = dplyr::join_by({{f_quality_flag}})) |>
+    right_join(flags, by = join_by({{f_quality_flag}})) |>
     mutate(
       n = replace_na(.data$n, 0),
       ratio = .data$n / sum(.data$n)

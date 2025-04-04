@@ -52,6 +52,7 @@
 #' the parameters of the fit depending on the model used,
 #' and any columns present in the input.
 #' The type of fit is added as an attribute for use by the other functions.
+#' @seealso \link[gasfluxes:selectfluxes]{selectfluxes} \link[HMR:HMR]{HMR}
 #' @importFrom lubridate int_length interval
 #' @examples
 #' data(co2_conc)
@@ -179,21 +180,20 @@ flux_fitting <- function(conc_df,
     conc_df_cut,
     conc_df,
     {{conc_col}},
-    {{datetime_col}},
-    {{f_start}},
-    {{f_end}},
     {{f_fluxid}},
-    start_cut = start_cut,
-    end_cut = end_cut
+    start_cut = start_cut
   )
 
   if (fit_type != "linear") {
     conc_df_lm <- conc_fitting |>
       rename(
         f_slope_lm = "f_slope",
-        f_fit_lm = "f_fit"
-      ) |>
-      select(!c("f_intercept", "f_rsquared", "f_adj_rsquared", "f_pvalue"))
+        f_fit_lm = "f_fit",
+        f_intercept_lm = "f_intercept",
+        f_rsquared_lm = "f_rsquared",
+        f_adj_rsquared_lm = "f_adj_rsquared",
+        f_pvalue_lm = "f_pvalue"
+      )
   }
 
   if (fit_type == "exp_zhao18") {
@@ -201,12 +201,9 @@ flux_fitting <- function(conc_df,
       conc_df_cut,
       conc_df_lm,
       {{conc_col}},
-      {{datetime_col}},
       {{f_start}},
-      {{f_end}},
       {{f_fluxid}},
       start_cut = start_cut,
-      end_cut = end_cut,
       cz_window = cz_window,
       b_window = b_window,
       a_window = a_window,
@@ -219,12 +216,9 @@ flux_fitting <- function(conc_df,
       conc_df_cut,
       conc_df_lm,
       {{conc_col}},
-      {{datetime_col}},
       {{f_start}},
-      {{f_end}},
       {{f_fluxid}},
       start_cut = start_cut,
-      end_cut = end_cut,
       t_zero = t_zero,
       cz_window = cz_window,
       b_window = b_window,
@@ -238,12 +232,9 @@ flux_fitting <- function(conc_df,
       conc_df_cut,
       conc_df_lm,
       {{conc_col}},
-      {{datetime_col}},
       {{f_start}},
-      {{f_end}},
       {{f_fluxid}},
       start_cut = start_cut,
-      end_cut = end_cut,
       t_zero = t_zero,
       cz_window = cz_window,
       b_window = b_window,
@@ -257,12 +248,9 @@ flux_fitting <- function(conc_df,
       conc_df_cut,
       conc_df_lm,
       {{conc_col}},
-      {{datetime_col}},
       {{f_start}},
-      {{f_end}},
       {{f_fluxid}},
       start_cut = start_cut,
-      end_cut = end_cut,
       t_zero = t_zero
     )
   }
@@ -275,7 +263,7 @@ flux_fitting <- function(conc_df,
     ) |>
     distinct() |>
     left_join(conc_df_cut,
-      by = dplyr::join_by(
+      by = join_by(
         {{f_fluxid}} == {{f_fluxid}},
         "f_n_conc" == "f_n_conc"
       )
@@ -287,7 +275,7 @@ flux_fitting <- function(conc_df,
     mutate(
       slope_na = paste(
         "\n", "fluxID", {{f_fluxid}},
-        ": slope is NA, most likely optim() supplied non-finite value.
+        ": slope is NA, most likely an issue with the model optimization.
         Check your data or use a different model."
       ),
       low_data = paste(

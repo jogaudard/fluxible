@@ -85,3 +85,67 @@
       5 5        discard        9.68e- 55      0.755    -40.5 
       6 6        ok             5.13e-191      0.993      1.86
 
+# kappamax with HM model
+
+    Code
+      dplyr::distinct(dplyr::select(dplyr::filter(flux_quality(slopeshm, conc,
+        f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm, kappamax = TRUE), f_cut ==
+        "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
+    Message
+      
+       Number of measurements with linear fit: 1
+      
+       Total number of measurements: 6
+      
+       ok 	 5 	 83 %
+       discard 	 1 	 17 %
+       zero 	 0 	 0 %
+       force_discard 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
+    Output
+      # A tibble: 6 x 4
+        f_fluxid f_quality_flag f_slope_corr f_model
+        <fct>    <chr>                 <dbl> <chr>  
+      1 1        ok                    0.727 exp_hm 
+      2 2        ok                    0.418 exp_hm 
+      3 3        ok                    0.374 exp_hm 
+      4 4        ok                    0.725 exp_hm 
+      5 5        discard              NA     linear 
+      6 6        ok                    0.404 exp_hm 
+
+# kappamax with zhao18 model
+
+    Code
+      dplyr::distinct(dplyr::select(dplyr::filter(flux_quality(slopesexp, conc,
+        f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm, kappamax = TRUE), f_cut ==
+        "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
+    Message
+      
+       Number of measurements with linear fit: 1
+      
+       Total number of measurements: 6
+      
+       ok 	 5 	 83 %
+       discard 	 1 	 17 %
+       zero 	 0 	 0 %
+       force_discard 	 0 	 0 %
+       start_error 	 0 	 0 %
+       no_data 	 0 	 0 %
+       force_ok 	 0 	 0 %
+       force_zero 	 0 	 0 %
+       force_lm 	 0 	 0 %
+    Output
+      # A tibble: 6 x 4
+        f_fluxid f_quality_flag f_slope_corr f_model   
+        <fct>    <chr>                 <dbl> <chr>     
+      1 1        ok                    0.775 exp_zhao18
+      2 2        ok                    0.504 exp_zhao18
+      3 3        ok                    0.337 exp_zhao18
+      4 4        ok                    0.676 exp_zhao18
+      5 5        discard              NA     linear    
+      6 6        ok                    0.425 exp_zhao18
+

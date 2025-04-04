@@ -129,6 +129,16 @@ flux_calc <- function(slopes_df,
     fit_type = fit_type
   )
 
+  kappamax <- attributes(slopes_df)$kappamax
+
+  if (is.null(kappamax)) {
+    kappamax <- FALSE
+  }
+
+  if (kappamax == TRUE) {
+    cols_keep <- c(cols_keep, "f_model")
+  }
+
   temp_air_unit <- match.arg(
     temp_air_unit,
     c("celsius", "fahrenheit", "kelvin")
@@ -190,7 +200,7 @@ flux_calc <- function(slopes_df,
     slope_keep <- slopes_df |>
       select(all_of(cols_keep), {{f_fluxid}}) |>
       distinct() |>
-      left_join(slope_temp, by = dplyr::join_by(
+      left_join(slope_temp, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {
@@ -208,7 +218,7 @@ flux_calc <- function(slopes_df,
       ),
       .by = {{f_fluxid}}
       ) |>
-      left_join(slope_keep, by = dplyr::join_by(
+      left_join(slope_keep, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {
@@ -249,9 +259,21 @@ flux_calc <- function(slopes_df,
         ~ (.data$f_temp_air_ave - 273.15) * (9 / 5) + 32,
         temp_air_unit == "kelvin" ~ .data$f_temp_air_ave
       ),
-      f_model = fit_type,
       .by = {{f_fluxid}}
     )
+  if (isTRUE(kappamax)) {
+    fluxes <- fluxes |>
+      mutate(
+        f_model = .data$f_model
+      )
+  }
+
+  if (isFALSE(kappamax)) {
+    fluxes <- fluxes |>
+      mutate(
+        f_model = fit_type
+      )
+  }
 
   # output unit
   if (flux_unit == "micromol") {
