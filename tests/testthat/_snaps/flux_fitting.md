@@ -303,7 +303,7 @@
        fluxID 1 : slope was estimated on 28 points out of 150 seconds
        fluxID 2 : slope was estimated on 61 points out of 150 seconds
        fluxID 3 : slope was estimated on 42 points out of 150 seconds
-       fluxID 4 : slope is NA, most likely optim() supplied non-finite value.
+       fluxID 4 : slope is NA, most likely an issue with the model optimization.
               Check your data or use a different model.
        fluxID 6 dropped (no data in the conc column)
     Output
@@ -334,7 +334,7 @@
        fluxID 1 : slope was estimated on 28 points out of 150 seconds
        fluxID 2 : slope was estimated on 61 points out of 150 seconds
        fluxID 3 : slope was estimated on 42 points out of 150 seconds
-       fluxID 4 : slope is NA, most likely optim() supplied non-finite value.
+       fluxID 4 : slope is NA, most likely an issue with the model optimization.
               Check your data or use a different model.
        fluxID 6 dropped (no data in the conc column)
     Output
@@ -361,7 +361,8 @@
     Condition
       Warning in `flux_fitting()`:
       
-       fluxID 5 : slope was estimated on 205 points out of 210 seconds
+       fluxID 5 : slope is NA, most likely an issue with the model optimization.
+              Check your data or use a different model.
        fluxID 6 : slope was estimated on 206 points out of 210 seconds
     Output
       # A tibble: 6 x 2
@@ -371,7 +372,7 @@
       2 2          1.12 
       3 3          0.356
       4 4          1.57 
-      5 5          1.92 
+      5 5         NA    
       6 6          0.641
 
 # fitting works with 0 second end cut

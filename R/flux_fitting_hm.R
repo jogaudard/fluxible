@@ -100,7 +100,7 @@ flux_fitting_hm <- function(conc_df_cut,
               .x[[name_conc]] ~ cbind(
                 1, exp(-exp(logb) * f_time_cut) / (-exp(logb))
               ),
-              start = c(logb = log(1.5)), algorithm = "plinear",
+              start = c(logb = log(1.5/3600)), algorithm = "plinear",
               control = nls.control(
                 maxiter = 100, minFactor = 1e-10, scaleOffset = 1
               ),

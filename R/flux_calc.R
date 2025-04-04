@@ -200,7 +200,7 @@ flux_calc <- function(slopes_df,
     slope_keep <- slopes_df |>
       select(all_of(cols_keep), {{f_fluxid}}) |>
       distinct() |>
-      left_join(slope_temp, by = dplyr::join_by(
+      left_join(slope_temp, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {
@@ -218,7 +218,7 @@ flux_calc <- function(slopes_df,
       ),
       .by = {{f_fluxid}}
       ) |>
-      left_join(slope_keep, by = dplyr::join_by(
+      left_join(slope_keep, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {

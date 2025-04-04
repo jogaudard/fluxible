@@ -176,6 +176,12 @@
       Optimizing fitting parameters...
       Calculating fits and slopes...
       Done.
+    Condition
+      Warning in `flux_fitting()`:
+      
+       fluxID 5 : slope is NA, most likely an issue with the model optimization.
+              Check your data or use a different model.
+    Message
       
        Number of measurements with linear fit: 1
       

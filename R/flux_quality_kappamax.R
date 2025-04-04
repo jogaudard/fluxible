@@ -22,6 +22,7 @@ flux_quality_kappamax <- function(slopes_df,
                                   f_slope_lm,
                                   f_fit_lm,
                                   f_b,
+                                  force_exp,
                                   fit_type,
                                   instr_error,
                                   name_df) {
@@ -58,11 +59,13 @@ flux_quality_kappamax <- function(slopes_df,
     mutate(
       f_kappamax = abs({{f_slope_lm}} / instr_error),
       {{f_slope}} := case_when(
+        {{f_fluxid}} %in% force_exp ~ {{f_slope}},
         is.na({{f_b}}) ~ {{f_slope_lm}},
         abs({{f_b}}) <= f_kappamax ~ {{f_slope}},
         abs({{f_b}}) > f_kappamax ~ {{f_slope_lm}}
       ),
       f_model = case_when(
+        {{f_fluxid}} %in% force_exp ~ fit_type,
         is.na({{f_b}}) ~ "linear",
         abs({{f_b}}) <= f_kappamax ~ fit_type,
         abs({{f_b}}) > f_kappamax ~ "linear"

@@ -275,7 +275,7 @@ flux_fitting <- function(conc_df,
     mutate(
       slope_na = paste(
         "\n", "fluxID", {{f_fluxid}},
-        ": slope is NA, most likely optim() supplied non-finite value.
+        ": slope is NA, most likely an issue with the model optimization.
         Check your data or use a different model."
       ),
       low_data = paste(

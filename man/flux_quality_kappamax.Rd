@@ -12,6 +12,7 @@ flux_quality_kappamax(
   f_slope_lm,
   f_fit_lm,
   f_b,
+  force_exp,
   fit_type,
   instr_error,
   name_df

@@ -23,6 +23,8 @@
 #' the user's decision
 #' @param force_lm vector of fluxIDs for which the linear slope should be used
 #' by the user's decision
+#' @param force_exp vector of fluxIDs for which the exponential slope should be
+#' used by the user's decision (kappamax method)
 #' @param ratio_threshold ratio of gas concentration data points over length of
 #' measurement (in seconds) below which the measurement will be considered as
 #' not having enough data points to be considered for calculations
@@ -117,6 +119,7 @@ flux_quality <- function(slopes_df,
                          force_ok = c(),
                          force_zero = c(),
                          force_lm = c(),
+                         force_exp = c(),
                          ratio_threshold = 0,
                          gfactor_threshold = 10,
                          fit_type = c(),
@@ -224,6 +227,7 @@ flux_quality <- function(slopes_df,
       f_slope_lm = {{f_slope_lm}},
       f_fit_lm = {{f_fit_lm}},
       f_b = {{f_b}},
+      force_exp = force_exp,
       fit_type = fit_type,
       instr_error = instr_error,
       name_df = name_df

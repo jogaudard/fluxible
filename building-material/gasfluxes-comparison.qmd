@@ -100,7 +100,7 @@ conc_lia_gasfluxes <- conc_lia_vol |>
 qgasfluxes <- quietly(gasfluxes)
 
 
-gasfluxes_fits <- qgasfluxes(conc_lia_gasfluxes, method = c("linear","robust linear", "HMR"), plot = TRUE)
+gasfluxes_fits <- qgasfluxes(conc_lia_gasfluxes, method = c("linear","robust linear", "HMR"), plot = FALSE)
 
 # str(gasfluxes_fits)
 # the output is a list, I might have an opinion about this
@@ -115,7 +115,8 @@ gasfluxes_fluxes <- selectfluxes(
                     select(ID, flux, method, flux.se) |>
                     rename(
                         gasfluxes_flux = "flux"
-                    )
+                    ) |>
+                    as_tibble()
 
 ```
 
@@ -194,6 +195,8 @@ library(tidyverse)
 library(fluxible)
 library(ggplot2)
 
+# this is what we want to use to compare the packages, rest is intermediate investigation
+
 
 conc_liahovden <- flux_match(
   co2_liahovden,
@@ -222,7 +225,7 @@ slopes_exp_liahovden_flag <- flux_quality(
   f_pvalue = f_pvalue_lm,
   instr_error = 1.5,
   kappamax = TRUE,
-  error = 20
+  error = 50
 )
 
 # flux_plot(
@@ -253,8 +256,8 @@ fluxible_fluxes_kappamax <- flux_calc(
  )
 
 
-all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid"))
-    filter(gasfluxes_fluxes >= 0) # gasfluxes kappamax cannot deal with negative fluxes
+all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid")) |>
+    filter(gasfluxes_flux >= 0) # gasfluxes kappamax cannot deal with negative fluxes
 
 all_fluxes |>
     ggplot(aes(gasfluxes_flux, fluxible_flux,
@@ -288,13 +291,7 @@ all_fluxes |>
       colour = "fluxible method"
     )
 
-# investigating that flux with a massive difference
 
-# slice_max(all_fluxes, fluxible_flux)
-
-# flags_lia |>
-# filter(f_fluxid == 46) |>
-# flux_plot(conc, datetime)
 
 ```
 Need to compare lm model

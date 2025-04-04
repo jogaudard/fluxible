@@ -24,6 +24,7 @@ flux_quality(
   force_ok = c(),
   force_zero = c(),
   force_lm = c(),
+  force_exp = c(),
   ratio_threshold = 0,
   gfactor_threshold = 10,
   fit_type = c(),
@@ -89,6 +90,9 @@ the user's decision}
 
 \item{force_lm}{vector of fluxIDs for which the linear slope should be used
 by the user's decision}
+
+\item{force_exp}{vector of fluxIDs for which the exponential slope should be
+used by the user's decision (kappamax method)}
 
 \item{ratio_threshold}{ratio of gas concentration data points over length of
 measurement (in seconds) below which the measurement will be considered as
