@@ -50,7 +50,7 @@
 #' @importFrom rlang .data :=
 #' @importFrom dplyr select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything
-#' @importFrom tidyselect any_of all_of
+#' @importFrom tidyselect any_of
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
