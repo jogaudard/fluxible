@@ -3,15 +3,9 @@
 #' @param conc_df dataframe of gas concentration over time
 #' @param conc_df_cut dataframe of gas concentration over time, cut
 #' @param conc_col column with gas concentration
-#' @param datetime_col column with datetime of each concentration measurement
-#' Note that if there are duplicated datetime in the same f_fluxid only
-#' the first row will be kept
-#' @param f_start column with datetime when the measurement started
-#' @param f_end column with datetime when the measurement ended
 #' @param f_fluxid column with ID of each flux
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
-#' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @return a df with the modeled gas concentration, slope, intercept,
 #' std error, r square and p value of the linear model
 #' @importFrom rlang .data
@@ -25,12 +19,8 @@
 flux_fitting_lm <- function(conc_df_cut,
                             conc_df,
                             conc_col,
-                            datetime_col,
-                            f_start,
-                            f_end,
                             f_fluxid,
-                            start_cut,
-                            end_cut) {
+                            start_cut) {
 
   name_conc <- names(select(conc_df, {{conc_col}}))
 

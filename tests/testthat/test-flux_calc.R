@@ -413,7 +413,7 @@ test_that("Stupeflux returns the same as step by step workflow", {
     conc_test,
     conc,
     datetime,
-    start,
+    f_start,
     fit_type = "exp_zhao18"
   ))
   slopes_flag_test <- flux_quality(
