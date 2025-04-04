@@ -4,17 +4,7 @@
 \alias{flux_fitting_lm}
 \title{linear fit to gas concentration over time}
 \usage{
-flux_fitting_lm(
-  conc_df_cut,
-  conc_df,
-  conc_col,
-  datetime_col,
-  f_start,
-  f_end,
-  f_fluxid,
-  start_cut,
-  end_cut
-)
+flux_fitting_lm(conc_df_cut, conc_df, conc_col, f_fluxid, start_cut)
 }
 \arguments{
 \item{conc_df_cut}{dataframe of gas concentration over time, cut}
@@ -23,20 +13,10 @@ flux_fitting_lm(
 
 \item{conc_col}{column with gas concentration}
 
-\item{datetime_col}{column with datetime of each concentration measurement
-Note that if there are duplicated datetime in the same f_fluxid only
-the first row will be kept}
-
-\item{f_start}{column with datetime when the measurement started}
-
-\item{f_end}{column with datetime when the measurement ended}
-
 \item{f_fluxid}{column with ID of each flux}
 
 \item{start_cut}{time to discard at the start of the measurements
 (in seconds)}
-
-\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 }
 \value{
 a df with the modeled gas concentration, slope, intercept,

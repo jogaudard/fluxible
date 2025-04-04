@@ -10,6 +10,8 @@
 #' @param conc_col column with gas concentration
 #' @param f_start column with datetime when the measurement started
 #' @param f_fluxid column with ID of each flux
+#' @param start_cut time to discard at the start of the measurements
+#' (in seconds)
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' @param b_window window to estimate b. It is an interval after tz
 #' where it is assumed that C fits the data perfectly
@@ -28,7 +30,6 @@
 #' @importFrom purrr map
 #' @importFrom utils data
 #' @importFrom broom tidy
-#' @importFrom lubridate period
 
 
 
