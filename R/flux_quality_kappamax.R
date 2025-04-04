@@ -76,7 +76,7 @@ flux_quality_kappamax <- function(slopes_df,
 
   attr(slopes_df, "kappamax") <- TRUE
 
- 
+
   total_lm <- slopes_df |>
     select({{f_fluxid}}, "f_model") |>
     distinct() |>
