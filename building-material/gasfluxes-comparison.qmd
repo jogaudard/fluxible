@@ -11,7 +11,7 @@ library(fluxible)
 # we use the arguments that we already know from having processed
 # those data in the detailed example.
 
-fluxible_fluxes <- stupeflux(
+fluxible_fluxes_hm <- stupeflux(
     raw_conc = co2_liahovden,
     field_record = record_liahovden,
     datetime_col = datetime,
@@ -169,7 +169,7 @@ library(ggplot2)
 gasfluxes_HMR <- gasfluxes_fits$result |>
     select(ID, "HMR.f0")
 
-all_fluxes_HMR <- left_join(gasfluxes_HMR, fluxible_fluxes, by = c("ID" = "f_fluxid"))
+all_fluxes_HMR <- left_join(gasfluxes_HMR, fluxible_fluxes_hm, by = c("ID" = "f_fluxid"))
 
 all_fluxes_HMR |>
     ggplot(aes(HMR.f0, fluxible_flux)) +
@@ -177,7 +177,8 @@ all_fluxes_HMR |>
     geom_abline(slope = 1, intercept = 0) +
     geom_smooth(
         method = "lm"
-        ) 
+        ) +
+    ggtitle("Fluxible exp_hm vs gasfluxes HMR")
     # geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se))
 
 ```
@@ -219,9 +220,19 @@ slopes_exp_liahovden_flag <- flux_quality(
   conc,
   f_rsquared = f_rsquared_lm,
   f_pvalue = f_pvalue_lm,
-  instr_error = 5,
-  kappamax = TRUE
+  instr_error = 1.5,
+  kappamax = TRUE,
+  error = 20
 )
+
+# flux_plot(
+#     slopes_exp_liahovden_flag,
+#     conc,
+#     datetime,
+#     output = "pdfpages",
+#     f_plotname = "hm_kappamax3",
+#     f_ylim_lower = 300,
+#     )
 
 fluxible_fluxes_kappamax <- flux_calc(
     slopes_exp_liahovden_flag,
@@ -236,23 +247,46 @@ fluxible_fluxes_kappamax <- flux_calc(
     plot_area = 0.0625,
     cols_keep = "type"
   ) |>
- select(f_fluxid, f_flux, type) |>
+ select(f_fluxid, f_flux, type, f_model) |>
  rename(
     fluxible_flux = "f_flux"
  )
 
 
 all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid"))
+    filter(gasfluxes_fluxes >= 0) # gasfluxes kappamax cannot deal with negative fluxes
 
 all_fluxes |>
-    ggplot(aes(gasfluxes_flux, fluxible_flux)) +
+    ggplot(aes(gasfluxes_flux, fluxible_flux,
+      label = ID)) +
     geom_point() +
     geom_abline(slope = 1, intercept = 0) +
     geom_smooth(
         method = "lm"
         ) +
-    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) 
-    # facet_grid(~type)
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    labs(
+      title = "fluxible exp_hm kappamax vs gasfluxes kappamax",
+      colour = "fluxible method"
+    )
+
+all_fluxes |>
+    ggplot(aes(gasfluxes_flux, fluxible_flux,
+     color = f_model,
+      label = ID)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    facet_grid(~method) +
+    labs(
+      title = "fluxible exp_hm kappamax vs gasfluxes kappamax",
+      colour = "fluxible method"
+    )
 
 # investigating that flux with a massive difference
 
@@ -261,5 +295,478 @@ all_fluxes |>
 # flags_lia |>
 # filter(f_fluxid == 46) |>
 # flux_plot(conc, datetime)
+
+```
+Need to compare lm model
+```{r}
+#| label: data-process-stupeflux-lm
+#| echo: TRUE
+library(tidyverse)
+library(fluxible)
+library(ggplot2)
+
+# we can use the stupeflux function, which is wrapper for fluxible
+# we use the arguments that we already know from having processed
+# those data in the detailed example.
+
+fluxible_fluxes_lm <- stupeflux(
+    raw_conc = co2_liahovden,
+    field_record = record_liahovden,
+    datetime_col = datetime,
+    start_col = start,
+    conc_col = conc,
+    startcrop = 0,
+    measurement_length = 180,
+    fit_type = "linear",
+    end_cut = 10,
+    force_discard = c(51, 101),
+    force_zero = 46,
+    temp_air_col = temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cols_keep = "type"
+ ) |>
+ select(f_fluxid, f_flux, type) |>
+ rename(
+    fluxible_flux = "f_flux"
+ )
+
+ gasfluxes_rlm <- gasfluxes_fits$result |>
+    select(ID, "robust.linear.f0")
+
+all_fluxes_HMR <- left_join(gasfluxes_rlm, fluxible_fluxes_lm, by = c("ID" = "f_fluxid"))
+
+all_fluxes_HMR |>
+    ggplot(aes(robust.linear.f0, fluxible_flux)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    ggtitle("Fluxible linear vs gasfluxes robust linear")
+```
+
+So since both the hmr and linear fit agree, the problem is in finding kappamax.
+```{r}
+#| label: comparison-kappamax
+#| echo: TRUE
+#| fig-width: 8
+#| fig-height: 9
+#| fig-cap: ""
+library(tidyverse)
+library(fluxible)
+library(ggplot2)
+
+
+conc_liahovden <- flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 180,
+  ratio_threshold = 0.5,
+  time_diff = 0
+)
+
+slopes_exp_liahovden <- flux_fitting(
+  conc_liahovden,
+  conc,
+  datetime,
+  end_cut = 10,
+  fit_type = "exp_hm"
+)
+
+slopes_exp_liahovden_flag <- flux_quality(
+  slopes_exp_liahovden,
+  conc,
+  f_rsquared = f_rsquared_lm,
+  f_pvalue = f_pvalue_lm,
+  instr_error = 5,
+  kappamax = TRUE,
+  error = 20
+)
+
+fluxible_kappamax <- slopes_exp_liahovden_flag |>
+    select(f_fluxid, f_kappamax, f_model) |>
+    distinct()
+
+gasfluxes_kappamax <- selectfluxes(
+                        gasfluxes_fits$result, # that is not specified in the vignette
+                        select = "kappa.max",
+                        f.detect = 0.031, # I keep the suggested value for now
+                        t.meas = 0.05 # I think this is the length of the measurement in hours
+                    ) |>
+                    select(ID, kappa.max, method) |>
+                    rename(g_kappamax = "kappa.max") |>
+                    mutate(g_kappamax_abs = abs(g_kappamax))
+
+all_kappamax <- left_join(gasfluxes_kappamax, fluxible_kappamax, by = c("ID" = "f_fluxid"))
+
+all_kappamax |>
+    ggplot(aes(g_kappamax, f_kappamax, label = ID, color = f_model)) +
+    geom_point() +
+    # geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_text(hjust = 0, vjust = -1) +
+facet_grid(~method) +
+    labs(
+      title = "Fluxible kappamax vs gasfluxes kappamax",
+      colour = "fluxible method"
+    )
+```
+Now we see that the fluxes for which gasfluxes chose a linear fit while fluxible chose the exponential are those with a negative kappamax in gasfluxes.
+Which makes sense, since kappa is force positive, so it will always be greater than a negative kappamax.
+In the documentation of the `selectfluxes` function: "Note that the algorithm was developed for predominantly positive fluxes (such as N2O fluxes). If data with considerable gas uptake is analyzed, the algorithm needs to be modified, which currently means the user needs to implement it themselves."
+
+What happens now if we take the absolute value of kappamax (like in fluxible)?
+```{r}
+#| label: gasfluxes-comparison-kappamax-absolute
+#| echo: TRUE
+#| fig-width: 8
+#| fig-height: 9
+#| fig-cap: ""
+library(tidyverse)
+library(fluxible)
+library(ggplot2)
+
+
+conc_liahovden <- flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 180,
+  ratio_threshold = 0.5,
+  time_diff = 0
+)
+
+slopes_exp_liahovden <- flux_fitting(
+  conc_liahovden,
+  conc,
+  datetime,
+  end_cut = 10,
+  fit_type = "exp_hm"
+)
+
+slopes_exp_liahovden_flag <- flux_quality(
+  slopes_exp_liahovden,
+  conc,
+  f_rsquared = f_rsquared_lm,
+  f_pvalue = f_pvalue_lm,
+  instr_error = 5,
+  kappamax = TRUE,
+  error = 20
+)
+
+# flux_plot(
+#     slopes_exp_liahovden_flag,
+#     conc,
+#     datetime,
+#     output = "pdfpages",
+#     f_plotname = "hm_kappamax3",
+#     f_ylim_lower = 300,
+#     )
+
+fluxible_fluxes_kappamax <- flux_calc(
+    slopes_exp_liahovden_flag,
+    f_slope_corr, # we use the slopes provided by flux_quality
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cols_keep = "type"
+  ) |>
+ select(f_fluxid, f_flux, type, f_model) |>
+ rename(
+    fluxible_flux = "f_flux"
+ )
+
+gasfluxes_fluxes_abs <- gasfluxes_fits$result |>
+    mutate(kappa.max = abs(kappa.max)) |>
+    selectfluxes(select = "kappa.max",
+                        f.detect = 0.031, # I keep the suggested value for now
+                        t.meas = 0.05 # I think this is the length of the measurement in hours
+                    ) |>
+                    select(ID, flux, method, flux.se) |>
+                    rename(
+                        gasfluxes_flux = "flux"
+                    )
+
+
+all_fluxes <- left_join(gasfluxes_fluxes_abs, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid"))
+
+all_fluxes |>
+    ggplot(aes(gasfluxes_flux, fluxible_flux,
+     color = f_model,
+      label = ID)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    facet_grid(~method) +
+    labs(
+      title = "fluxible exp_hm kappamax vs gasfluxes abs(kappamax)",
+      colour = "fluxible method"
+    )
+
+```
+That did not show anything.
+Let's compare b and kappa
+```{r}
+#| label: comparison-kappa-b
+#| echo: TRUE
+#| fig-width: 8
+#| fig-height: 9
+#| fig-cap: ""
+library(tidyverse)
+library(fluxible)
+library(ggplot2)
+
+
+conc_liahovden <- flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 180,
+  ratio_threshold = 0.5,
+  time_diff = 0
+)
+
+slopes_exp_liahovden <- flux_fitting(
+  conc_liahovden,
+  conc,
+  datetime,
+  end_cut = 10,
+  fit_type = "exp_hm"
+)
+
+slopes_exp_liahovden_flag <- flux_quality(
+  slopes_exp_liahovden,
+  conc,
+  f_rsquared = f_rsquared_lm,
+  f_pvalue = f_pvalue_lm,
+  instr_error = 5,
+  kappamax = TRUE,
+  error = 20
+)
+
+fluxible_b <- slopes_exp_liahovden_flag |>
+    select(f_fluxid, f_b, f_model) |>
+    distinct()
+
+gasfluxes_kappa <- selectfluxes(
+                        gasfluxes_fits$result, # that is not specified in the vignette
+                        select = "kappa.max",
+                        f.detect = 0.031, # I keep the suggested value for now
+                        t.meas = 0.05 # I think this is the length of the measurement in hours
+                    ) |>
+                    select(ID, HMR.kappa, method)
+
+all_kappa <- left_join(gasfluxes_kappa, fluxible_b, by = c("ID" = "f_fluxid"))
+
+all_kappa |>
+    ggplot(aes(HMR.kappa, f_b, label = ID
+    # , color = f_model
+    )) +
+    geom_point() +
+    # geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_text(hjust = 0, vjust = -1) +
+# facet_grid(~method) +
+    labs(
+      title = "Fluxible b (kappa) vs gasfluxes kappa"
+    #   colour = "fluxible method"
+    )
+```
+
+Ok, we need to redo all of this with only the fluxes that disagreed.
+```{r}
+#| label: comparison-different-model-only
+#| echo: TRUE
+#| fig-width: 8
+#| fig-height: 9
+#| fig-cap: ""
+library(tidyverse)
+library(fluxible)
+library(ggplot2)
+
+conc_liahovden <- flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 180,
+  ratio_threshold = 0.5,
+  time_diff = 0
+)
+
+slopes_exp_liahovden <- flux_fitting(
+  conc_liahovden,
+  conc,
+  datetime,
+  end_cut = 10,
+  fit_type = "exp_hm"
+)
+
+slopes_exp_liahovden_flag <- flux_quality(
+  slopes_exp_liahovden,
+  conc,
+  f_rsquared = f_rsquared_lm,
+  f_pvalue = f_pvalue_lm,
+  instr_error = 5,
+  kappamax = TRUE,
+  error = 20
+)
+
+# flux_plot(
+#     slopes_exp_liahovden_flag,
+#     conc,
+#     datetime,
+#     output = "pdfpages",
+#     f_plotname = "hm_kappamax3",
+#     f_ylim_lower = 300,
+#     )
+
+fluxible_fluxes_kappamax <- flux_calc(
+    slopes_exp_liahovden_flag,
+    f_slope_corr, # we use the slopes provided by flux_quality
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cols_keep = c("type", "f_b", "f_kappamax", "f_slope_lm")
+  ) |>
+ select(f_fluxid, f_flux, f_b, f_kappamax, type, f_model, f_slope_lm) |>
+ rename(
+    fluxible_flux = "f_flux"
+ ) |>
+ filter(fluxible_flux >= 0)
+
+gasfluxes_fluxes <- selectfluxes(
+                        gasfluxes_fits$result, # that is not specified in the vignette
+                        select = "kappa.max",
+                        f.detect = 0.031, # I keep the suggested value for now
+                        t.meas = 0.05 # I think this is the length of the measurement in hours
+                    ) |>
+                    select(ID, flux, HMR.kappa, kappa.max, method, flux.se, robust.linear.f0) |>
+                    rename(
+                        gasfluxes_flux = "flux",
+                        gasfluxes_kappa = "HMR.kappa",
+                        gasfluxes_kappamax = "kappa.max",
+                        gasfluxes_lm = "robust.linear.f0"
+                    ) |>
+                    filter(gasfluxes_flux >= 0)
+
+all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid")) |>
+    mutate(
+    f_model = str_replace_all(f_model, "exp_hm", "exp"),
+    method = str_replace_all(method, c("HMR" = "exp", "robust linear" = "linear"))
+    )
+
+prob_fluxes <- all_fluxes |>
+    filter(f_model != method)
+
+# same plot as before
+prob_fluxes |>
+    ggplot(aes(gasfluxes_flux, fluxible_flux,
+     color = f_model,
+      label = ID)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    # facet_grid(~method) +
+    labs(
+      title = "fluxible exp_hm kappamax vs gasfluxes kappamax",
+      subtitle = "different models only",
+      colour = "fluxible method"
+    )
+
+# now let's look at kappa
+prob_fluxes |>
+    ggplot(aes(gasfluxes_kappa, f_b,
+     color = f_model,
+      label = ID)) +
+    geom_point() +
+    # geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    # geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    # facet_grid(~method) +
+    labs(
+      title = "fluxible b (kappa) vs gasfluxes kappa",
+      subtitle = "different models only",
+      colour = "fluxible method"
+    )
+# and kappamax
+prob_fluxes |>
+    ggplot(aes(gasfluxes_kappamax, f_kappamax,
+     color = f_model,
+      label = ID)) +
+    geom_point() +
+    # geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    # geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    # facet_grid(~method) +
+    labs(
+      title = "fluxible kappamax vs gasfluxes kappamax",
+      subtitle = "different models only",
+      colour = "fluxible method"
+    )
+
+# and lm slope
+prob_fluxes |>
+    ggplot(aes(gasfluxes_lm, f_slope_lm,
+     color = f_model,
+      label = ID)) +
+    geom_point() +
+    # geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    # geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    # facet_grid(~method) +
+    labs(
+      title = "fluxible lm vs gasfluxes robust linear",
+      subtitle = "different models only",
+      colour = "fluxible method"
+    )
 
 ```

@@ -71,21 +71,14 @@ flux_quality_kappamax <- function(slopes_df,
 
   attr(slopes_df, "kappamax") <- TRUE
 
-  message_df <- slopes_df  |>
+  
+  total_lm <- slopes_df |>
     select({{f_fluxid}}, "f_model") |>
     distinct() |>
     filter(.data$f_model == "linear") |>
-    mutate(
-      message = paste(
-        "\n", " fluxID ", {{f_fluxid}}, ": slope replaced with linear slope",
-        sep = ""
-      ),
-      message = as.character(message)
-    ) |>
-    drop_na(message) |>
-    pull(.data$message)
+    nrow()
 
-  message <- str_c(message_df)
+  message <- paste("\n", "Number of measurements with linear fit:", total_lm)
 
   if (any(!is.na(message))) message(message)
 

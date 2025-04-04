@@ -93,7 +93,7 @@
         "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
     Message
       
-       fluxID 5: slope replaced with linear slope
+       Number of measurements with linear fit: 1
       
        Total number of measurements: 6
       
@@ -110,12 +110,12 @@
       # A tibble: 6 x 4
         f_fluxid f_quality_flag f_slope_corr f_model
         <fct>    <chr>                 <dbl> <chr>  
-      1 1        ok                    0.530 exp_hm 
-      2 2        ok                    0.409 exp_hm 
-      3 3        ok                    0.175 exp_hm 
-      4 4        ok                    0.627 exp_hm 
+      1 1        ok                    0.727 exp_hm 
+      2 2        ok                    0.418 exp_hm 
+      3 3        ok                    0.374 exp_hm 
+      4 4        ok                    0.725 exp_hm 
       5 5        discard              NA     linear 
-      6 6        ok                    0.231 exp_hm 
+      6 6        ok                    0.404 exp_hm 
 
 # kappamax with zhao18 model
 
@@ -125,7 +125,7 @@
         "keep"), f_fluxid, f_quality_flag, f_slope_corr, f_model))
     Message
       
-       fluxID 5: slope replaced with linear slope
+       Number of measurements with linear fit: 1
       
        Total number of measurements: 6
       
