@@ -39,7 +39,7 @@
 #' @importFrom haven as_factor
 #' @importFrom stringr str_c
 #' @importFrom stats lm optim
-#' @importFrom purrr map
+#' @importFrom purrr map possibly
 #' @importFrom utils data
 #' @importFrom broom tidy
 
@@ -82,163 +82,7 @@ flux_fitting_hm <- function(conc_df_cut,
   name_conc <- names(select(conc_df, {{conc_col}}))
 
 
-  message("Estimating starting parameters for optimization...")
-
-
-
-  # cm_temp_min <- conc_df_cut |>
-  #   group_by({{f_fluxid}}) |>
-  #   select({{f_fluxid}}, {{conc_col}}, "f_time_cut") |>
-  #   distinct(.data[[name_conc]], .keep_all = TRUE) |>
-  #   dplyr::slice(which.min(.data[[name_conc]])) |>
-  #   rename(
-  #     Cmin = {{conc_col}},
-  #     tmin = "f_time_cut"
-  #   ) |>
-  #   ungroup()
-
-  # cm_temp_max <- conc_df_cut |>
-  #   group_by({{f_fluxid}}) |>
-  #   select({{f_fluxid}}, {{conc_col}}, "f_time_cut") |>
-  #   distinct(.data[[name_conc]], .keep_all = TRUE) |>
-  #   dplyr::slice(which.max(.data[[name_conc]])) |>
-  #   rename(
-  #     Cmax = {{conc_col}},
-  #     tmax = "f_time_cut"
-  #   ) |>
-  #   ungroup()
-
-  # cm_temp <- left_join(cm_temp_max, cm_temp_min,
-  #   by = dplyr::join_by({{f_fluxid}})
-  # )
-
-
-
-  # cm_slope <- conc_df_cut |>
-  #   group_by({{f_fluxid}}) |>
-  #   nest() |>
-  #   mutate(
-  #     model_Cm =
-  #       map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-  #     tidy = map(.data$model_Cm, broom::tidy)
-  #   ) |>
-  #   unnest("tidy") |>
-  #   filter(.data$term == "f_time_cut") |>
-  #   rename(slope_Cm = "estimate") |>
-  #   unnest({{f_fluxid}}) |>
-  #   select({{f_fluxid}}, "slope_Cm")
-
-
-
-  # cm_df <- left_join(cm_temp, cm_slope, by = dplyr::join_by({{f_fluxid}})) |>
-  #   mutate(
-  #     f_Cm_est = case_when(
-  #       .data$slope_Cm < 0 ~ .data$Cmin,
-  #       .data$slope_Cm > 0 ~ .data$Cmax
-  #     ),
-  #     tm = case_when(
-  #       .data$slope_Cm < 0 ~ .data$tmin,
-  #       .data$slope_Cm > 0 ~ .data$tmax
-  #     ),
-  #     f_Cm_est = replace(.data$f_Cm_est, .data$f_Cm_est <= 0, 1e-10),
-  #     .by = {{f_fluxid}}
-  #   ) |>
-  #   select({{f_fluxid}}, "f_Cm_est", "tm", "slope_Cm")
-
-
-  # cz_df <- conc_df_cut |>
-  #   filter(
-  #     .data$f_time_cut <= cz_window
-  #   ) |>
-  #   group_by({{f_fluxid}}) |>
-  #   nest() |>
-  #   mutate(
-  #     model_Cz =
-  #       map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-  #     tidy = map(.data$model_Cz, broom::tidy)
-  #   ) |>
-  #   unnest("tidy") |>
-  #   filter(.data$term == "(Intercept)") |>
-  #   rename(f_Cz_est = "estimate") |>
-  #   unnest({{f_fluxid}}) |>
-  #   select({{f_fluxid}}, "f_Cz_est") |>
-  #   ungroup()
-
-
-  # cb_df <- conc_df_cut |>
-  #   group_by({{f_fluxid}}) |>
-  #   mutate(
-  #     diff = .data$f_time_cut + b_window
-  #   ) |>
-  #   distinct(.data$diff, .keep_all = TRUE) |>
-  #   dplyr::slice(which.min(abs(.data$diff))) |>
-  #   rename(f_Cb = {{conc_col}}) |>
-  #   select({{f_fluxid}}, "f_Cb") |>
-  #   ungroup()
-
-
-  # estimates_df <- left_join(cm_df, cz_df,
-  #   by = dplyr::join_by({{f_fluxid}})
-  # ) |>
-  #   left_join(cb_df, by = dplyr::join_by({{f_fluxid}})) |>
-  #   mutate(
-  #     f_b_est = case_when(
-  #       .data$f_Cb == .data$f_Cm_est ~ 0, # special case or flat flux
-  #       .data$f_Cz_est == .data$f_Cm_est ~ 0, # special case or flat flux
-  #       TRUE ~ log(
-  #         abs((.data$f_Cb - .data$f_Cm_est) / (.data$f_Cz_est - .data$f_Cm_est))
-  #       )
-  #       * (1 / b_window)
-  #     ),
-  #     f_b_est = replace(.data$f_b_est, .data$f_b_est <= 0, 1e-10)
-  #   )
-
-
-
-
-  # fc_myfn <- function(fc_time, fc_conc, par) {
-  #   sqrt(
-  #     (1 / length(fc_time))
-  #     * sum((exp(par[1]) + (par[3] - exp(par[1]))
-  #            * exp(-exp(par[2]) * fc_time)
-  #            - fc_conc)^2)
-  #   )
-  # }
-
-
-  # message("Optimizing fitting parameters...")
-
-  # fitting_par <- conc_df_cut |>
-  #   left_join(estimates_df, by = dplyr::join_by({{f_fluxid}})) |>
-  #   select(
-  #     {{f_fluxid}}, "f_Cm_est", "f_b_est",
-  #     "f_Cz_est", "f_time_cut", {{conc_col}}, "f_time_diff"
-  #   ) |>
-  #   group_by(
-  #     {{f_fluxid}}, .data$f_Cm_est, .data$f_b_est,
-  #     .data$f_Cz_est, .data$f_time_diff
-  #   ) |>
-  #   nest() |>
-  #   rowwise() |>
-  #   summarize(
-  #     results = list(tryCatch(
-  #       optim(
-  #         par = c(
-  #           log(.data$f_Cm_est), log(.data$f_b_est), .data$f_Cz_est
-  #         ),
-  #         fn = fc_myfn, fc_conc = data[name_conc],
-  #         fc_time = data$f_time_cut#, fc_cz = .data$f_Cz
-  #       ),
-  #       error = function(err) list(par = rep(NA, 3))
-  #     )),
-  #     f_Cm = exp(.data$results$par[1]),
-  #     f_b = exp(.data$results$par[2]),
-  #     f_Cz = .data$results$par[3],
-  #     f_slope = .data$f_b * (.data$f_Cm - .data$f_Cz) *
-  #       exp(-.data$f_b * t_zero),
-  #     .groups = "drop"
-  #   ) |>
-  #   select(!c("results", "f_Cm_est", "f_b_est"))
+  message("Optimizing fitting parameters...")
 
   tibble_error <- tibble(
     term = c("logb", ".lin1", ".lin2"),
@@ -248,8 +92,6 @@ flux_fitting_hm <- function(conc_df_cut,
     p.value = NA_real_
   )
 
-
-
    fitting_par <- conc_df_cut |>
     select(
       {{f_fluxid}}, "f_time_cut", {{conc_col}}, "f_time_diff"
@@ -258,16 +100,30 @@ flux_fitting_hm <- function(conc_df_cut,
       {{f_fluxid}}, .data$f_time_diff
     ) |>
     nest() |>
-    # rowwise() |>
     mutate(
-      model = map(.x = data, \(.x) tryCatch(nls(.x[[name_conc]] ~ cbind(1, exp(-exp(logb) * f_time_cut)/(-exp(logb))), 
-               start = c(logb = log(1.5)), algorithm = "plinear",
-               control=nls.control(maxiter=100, minFactor=1e-10, scaleOffset = 1), data = .x),
-               error = function(err) "model_error")),
-      # glance = map(.data$model, broom::glance),
-      tidy = map(.data$model, possibly(broom::tidy, otherwise = tibble_error))
-     ) |>
-     select(!c("data", "model")) |>
+      model = map(
+        .x = data, \(.x) {
+          tryCatch(
+            nls(
+              .x[[name_conc]] ~ cbind(
+                1, exp(-exp(logb) * f_time_cut) / (-exp(logb))
+              ),
+              start = c(logb = log(1.5)), algorithm = "plinear",
+              control = nls.control(
+                maxiter = 100, minFactor = 1e-10, scaleOffset = 1
+              ),
+              data = .x
+            ),
+            error = function(err) "model_error"
+          )
+        }
+      ),
+      tidy = map(
+        .data$model,
+        purrr::possibly(broom::tidy, otherwise = tibble_error)
+      )
+    ) |>
+    select(!c("data", "model")) |>
     unnest("tidy") |>
     select({{f_fluxid}}, "term", "estimate", "f_time_diff") |>
     pivot_wider(names_from = "term", values_from = "estimate") |>
@@ -281,36 +137,18 @@ flux_fitting_hm <- function(conc_df_cut,
       f_slope = .data$f_slope_z * exp(-.data$f_b * t_zero)
     ) |>
     select(!"logb")
-        
-# fitting_par
-
-    
-
-    # mutate(
-  #     model_Cm =
-  #       map(.x = data, \(.x) lm(.x[[name_conc]] ~ f_time_cut, data = .x)),
-  #     tidy = map(.data$model_Cm, broom::tidy)
-  #   ) |>
-  #   unnest("tidy") |>
-  #   filter(.data$term == "f_time_cut") |>
-  #   rename(slope_Cm = "estimate") |>
-  #   unnest({{f_fluxid}}) |>
-  #   select({{f_fluxid}}, "slope_Cm")
 
   message("Calculating fits and slopes...")
 
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = dplyr::join_by({{f_fluxid}})) |>
     mutate(
-      f_fit = .data$f_Cm + .data$f_slope_z * (exp(-.data$f_b * (.data$f_time - .data$f_time_diff)) / (-.data$f_b)),
-      # f_fit = .data$f_Cm + (.data$f_Cz - .data$f_Cm)
-      # * exp(-.data$f_b * (.data$f_time - .data$f_time_diff)),
-      # f_fit_slope = 
+      f_fit = .data$f_Cm + .data$f_slope_z *
+        (exp(-.data$f_b * (.data$f_time - .data$f_time_diff)) / (-.data$f_b)),
       f_fit_slope = .data$f_Cm
       + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b * t_zero)
       - .data$f_slope * (t_zero - .data$f_time),
       f_start_z = {{f_start}} + t_zero
-      # .by = {{f_fluxid}}
     ) |>
     select(!c("f_time_diff", "f_slope_z"))
 

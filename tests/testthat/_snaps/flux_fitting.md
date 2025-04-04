@@ -355,7 +355,6 @@
       f_fluxid, f_slope))
     Message
       Cutting measurements...
-      Estimating starting parameters for optimization...
       Optimizing fitting parameters...
       Calculating fits and slopes...
       Done.
@@ -368,12 +367,12 @@
       # A tibble: 6 x 2
         f_fluxid f_slope
         <fct>      <dbl>
-      1 1          0.330
-      2 2          0.785
-      3 3          0.160
-      4 4          1.09 
-      5 5          1.35 
-      6 6          0.192
+      1 1          1.93 
+      2 2          1.12 
+      3 3          0.356
+      4 4          1.57 
+      5 5          1.92 
+      6 6          0.641
 
 # fitting works with 0 second end cut
 

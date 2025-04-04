@@ -220,19 +220,19 @@ slopes_exp_liahovden_flag <- flux_quality(
   conc,
   f_rsquared = f_rsquared_lm,
   f_pvalue = f_pvalue_lm,
-  instr_error = 5,
+  instr_error = 1.5,
   kappamax = TRUE,
   error = 20
 )
 
-flux_plot(
-    slopes_exp_liahovden_flag,
-    conc,
-    datetime,
-    output = "pdfpages",
-    f_plotname = "hm_kappamax3",
-    f_ylim_lower = 300,
-    )
+# flux_plot(
+#     slopes_exp_liahovden_flag,
+#     conc,
+#     datetime,
+#     output = "pdfpages",
+#     f_plotname = "hm_kappamax3",
+#     f_ylim_lower = 300,
+#     )
 
 fluxible_fluxes_kappamax <- flux_calc(
     slopes_exp_liahovden_flag,
@@ -254,6 +254,22 @@ fluxible_fluxes_kappamax <- flux_calc(
 
 
 all_fluxes <- left_join(gasfluxes_fluxes, fluxible_fluxes_kappamax, by = c("ID" = "f_fluxid"))
+    filter(gasfluxes_fluxes >= 0) # gasfluxes kappamax cannot deal with negative fluxes
+
+all_fluxes |>
+    ggplot(aes(gasfluxes_flux, fluxible_flux,
+      label = ID)) +
+    geom_point() +
+    geom_abline(slope = 1, intercept = 0) +
+    geom_smooth(
+        method = "lm"
+        ) +
+    geom_errorbar(aes(xmin = gasfluxes_flux - flux.se, xmax = gasfluxes_flux + flux.se)) +
+    geom_text(hjust = 0, vjust = -1) +
+    labs(
+      title = "fluxible exp_hm kappamax vs gasfluxes kappamax",
+      colour = "fluxible method"
+    )
 
 all_fluxes |>
     ggplot(aes(gasfluxes_flux, fluxible_flux,
