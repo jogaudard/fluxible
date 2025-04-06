@@ -80,6 +80,8 @@ flux_calc <- function(slopes_df,
                       flux_unit,
                       cols_keep = c(),
                       cols_ave = c(),
+                      cols_sum = c(),
+                      cols_med = c(),
                       tube_volume,
                       temp_air_unit = "celsius",
                       f_cut = f_cut,
@@ -225,6 +227,40 @@ flux_calc <- function(slopes_df,
     slope_ave <- slope_keep
   }
 
+  if (length(cols_sum) > 0) {
+    message("Creating a df with the columns from 'cols_sum' argument...")
+    slope_sum <- slopes_df |>
+      select(all_of(cols_sum), {{f_fluxid}}) |>
+      summarise(across(
+        everything(),
+        ~ sum(.x, na.rm = TRUE)
+      ),
+      .by = {{f_fluxid}}
+      ) |>
+      left_join(slope_ave, by = join_by(
+        {{f_fluxid}} == {{f_fluxid}}
+      ))
+  } else {
+    slope_sum <- slope_ave
+  }
+
+  if (length(cols_med) > 0) {
+    message("Creating a df with the columns from 'cols_med' argument...")
+    slope_med <- slopes_df |>
+      select(all_of(cols_med), {{f_fluxid}}) |>
+      summarise(across(
+        everything(),
+        ~ median(.x, na.rm = TRUE)
+      ),
+      .by = {{f_fluxid}}
+      ) |>
+      left_join(slope_sum, by = join_by(
+        {{f_fluxid}} == {{f_fluxid}}
+      ))
+  } else {
+    slope_med <- slope_sum
+  }
+
   message("Calculating fluxes...")
 
   r_const <- 0.082057
@@ -237,14 +273,14 @@ flux_calc <- function(slopes_df,
   }
   if (conc_unit == "ppb") {
     message("Concentration was measured in ppb")
-    slope_ave <- slope_ave |>
+    slope_med <- slope_med |>
       mutate(
         {{slope_col}} := {{slope_col}} * 0.001 # now the slope is in ppm/s
       )
   }
 
 
-  fluxes <- slope_ave |>
+  fluxes <- slope_med |>
     mutate(
       f_volume_setup = {{chamber_volume}} + tube_volume,
       f_flux =
