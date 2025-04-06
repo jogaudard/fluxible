@@ -9,11 +9,11 @@
 #' @importFrom dplyr mutate
 
 flux_match_fixed <- function(
-    field_record,
-    start_col,
-    measurement_length
+  field_record,
+  start_col,
+  measurement_length
 ) {
-    args_ok2 <- flux_fun_check(list(
+  args_ok2 <- flux_fun_check(list(
     measurement_length = measurement_length
   ),
   fn = list(is.numeric),
@@ -22,10 +22,10 @@ flux_match_fixed <- function(
   if (!args_ok2)
     stop("Please correct the arguments", call. = FALSE)
 
-    field_record <- field_record |>
-      mutate(
-        f_end = {{start_col}} + measurement_length
-      )
+  field_record <- field_record |>
+    mutate(
+      f_end = {{start_col}} + measurement_length
+    )
 
-    field_record
+  field_record
 }

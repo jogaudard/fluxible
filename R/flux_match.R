@@ -59,7 +59,6 @@ flux_match <- function(raw_conc,
 
   args_ok <- flux_fun_check(list(
     startcrop = startcrop,
-    # measurement_length = measurement_length,
     ratio_threshold = ratio_threshold,
     time_diff = time_diff
   ),
@@ -95,55 +94,34 @@ flux_match <- function(raw_conc,
     stop("ratio_threshold has to be a number between 0 and 1")
   }
 
-  # if (is.numeric(measurement_length)) {
-  #   end_col <- "f_end"
-  # }
 
-   field_record <- field_record |>
+  field_record <- field_record |>
     arrange({{start_col}}) |>
     mutate(
       f_start = {{start_col}} + startcrop,
-      # f_end = {{start_col}} + measurement_length,
       f_fluxid = row_number()
     )
 
-if (fixed_length) {
+  if (fixed_length) {
 
-  field_record <- flux_match_fixed(
-    field_record,
-    {{start_col}},
-    measurement_length = measurement_length
-  )
-}
+    field_record <- flux_match_fixed(
+      field_record,
+      {{start_col}},
+      measurement_length = measurement_length
+    )
+  }
 
 
-if (!fixed_length) {
+  if (!fixed_length) {
 
-  field_record <- flux_match_col(
-    field_record,
-    {{start_col}},
-    {{end_col}},
-    name_field_record = name_field_record
-  )
-}
+    field_record <- flux_match_col(
+      field_record,
+      {{start_col}},
+      {{end_col}},
+      name_field_record = name_field_record
+    )
+  }
 
-  # field_record <- field_record |>
-  #   arrange({{start_col}}) |>
-  #   mutate(
-  #     f_start = {{start_col}} + startcrop,
-  #     f_end = case_when(
-  #       matching == "fixed_length" ~ {{start_col}} + measurement_length,
-  #       matching == "end_col" ~ {{end_col}}
-  #       # is.character(measurement_length) ~ "bo"
-        
-  #     ),
-  #     # f_end = {{start_col}} + measurement_length,
-  #     # {{end_col}} := case_when(
-  #     #   is.numeric(measurement_length) ~ {{start_col}} + measurement_length,
-  #     #   is.null(measurement_length) ~ {{end_col}}
-  #     # ),
-  #     f_fluxid = row_number()
-  #   )
 
   raw_conc <- raw_conc |>
     mutate(
@@ -174,7 +152,6 @@ if (!fixed_length) {
       f_length = difftime(.data$f_end, .data$f_start, units = "secs"),
       f_length = as.numeric(.data$f_length),
       f_ratio = .data$f_n_conc / .data$f_length,
-      # f_ratio = .data$f_n_conc / (measurement_length - startcrop),
       f_flag_match = case_when(
         .data$f_ratio == 0 ~ "no data",
         .data$f_ratio <= ratio_threshold ~ "nb of data too low"

@@ -9,26 +9,26 @@
 #' @importFrom dplyr mutate
 
 flux_match_col <- function(
-    field_record,
-    start_col,
-    end_col,
-    name_field_record
+  field_record,
+  start_col,
+  end_col,
+  name_field_record
 ) {
-    field_record_check2 <- field_record |>
+  field_record_check2 <- field_record |>
     select({{end_col}})
 
   field_record_ok2 <- flux_fun_check(field_record_check2,
-                                    fn = list(is.POSIXct),
-                                    msg = "has to be POSIXct",
-                                    name_df = name_field_record)
+                                     fn = list(is.POSIXct),
+                                     msg = "has to be POSIXct",
+                                     name_df = name_field_record)
 
   if (!field_record_ok2)
     stop("Please correct the arguments", call. = FALSE)
 
-    field_record <- field_record |>
-      mutate(
-        f_end = {{end_col}}
-      )
-    
-    field_record
+  field_record <- field_record |>
+    mutate(
+      f_end = {{end_col}}
+    )
+
+  field_record
 }
