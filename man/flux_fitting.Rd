@@ -55,12 +55,15 @@ ideally same as \code{cz_window} (exponential fit)}
 \item{t_zero}{time at which the slope should be calculated
 (for \code{quadratic} and \code{exp_tz} fits)}
 
-\item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{quadratic} or \code{linear.}
+\item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{exp_hm}, \code{quadratic} or \code{linear.}
 \code{exp_zhao18} is using the exponential model
 \eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}
 from Zhao et al (2018).
 \code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
-\eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.}
+\eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.
+\code{exp_hm} is using the HM model
+(Pedersen et al., 2010; Hutchinson and Mosier, 1981)
+\eqn{C(t) = C~m~ + (C~z~ - C~m~) \exp(-b * t)}}
 }
 \value{
 a dataframe with the slope at t zero (\code{f_slope}),
@@ -83,9 +86,22 @@ flux_fitting(co2_conc, conc, datetime,  fit_type = "quadratic",
 t_zero = 10, end_cut = 30)
 }
 \references{
+Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
+A comprehensive approach to soil-atmosphere trace-gas flux estimation with
+static chambers. European Journal of Soil Science 61, 888–902.
+https://doi.org/10.1111/j.1365-2389.2010.01291.x
+
+Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
+for Field Measurement of Nitrous Oxide Fluxes.
+Soil Science Society of America Journal 45, 311–316.
+https://doi.org/10.2136/sssaj1981.03615995004500020017x
+
 Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 On the calculation of daytime CO2 fluxes measured by automated closed
 transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
 https://doi.org/10.1016/j.agrformet.2018.08.022
 \code{exponential} is equal to \code{exp_zhao18}, for backwards compatibility
+}
+\seealso{
+\link[gasfluxes:selectfluxes]{selectfluxes} \link[HMR:HMR]{HMR}
 }
