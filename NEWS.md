@@ -7,6 +7,7 @@
   - `kappamax = TRUE` to apply the kappamax method (Hüppi et al., 2018) on any of the exponential fits.
   - g-factor in the output shows the ratio of slope over the linear slope.
   - `force_linear` and `force_exp` to force the use of the linear or exponential slope (kappamax method).
+* `flux_match`: option to feed a column with the end time instead of a fixed measurement length, in case fluxes do not all have the same length
 
 # fluxible 1.0.3
 
