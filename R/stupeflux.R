@@ -20,6 +20,9 @@
 #' @param datetime_col datetime column in raw_conc (dmy_hms format)
 #' @param conc_col concentration column in raw_conc
 #' @param start_col start column in field_record (dmy_hms format)
+#' @param end_col end columne in field_record (`ymd_hms` format)
+#' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
+#' create the end column. If `FALSE`, `end_col` has to be provided.
 #' @param fit_type `exp_zhao18`, `exp_tz`, `quadratic` or `linear.`
 #' `exp_zhao18` is using the exponential model
 #' `C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))`
@@ -90,6 +93,10 @@
 #' as distinct() is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
+#' @param cols_sum columns with values for which is sum is provided
+#' for each flux in the output. Note that NA are removed in sum calculation.
+#' @param cols_med columns with values for which is median is provided
+#' for each flux in the output. Note that NA are removed in median calculation.
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
 #' @param temp_air_unit units in which air temperature was measured.
@@ -131,6 +138,7 @@ stupeflux <- function(raw_conc,
                       field_record,
                       datetime_col,
                       start_col,
+                      end_col,
                       conc_col,
                       startcrop,
                       measurement_length,
@@ -141,8 +149,11 @@ stupeflux <- function(raw_conc,
                       plot_area,
                       conc_unit,
                       flux_unit,
+                      fixed_length = TRUE,
                       cols_keep = c(),
                       cols_ave = c(),
+                      cols_sum = c(),
+                      cols_med = c(),
                       tube_volume,
                       ratio_threshold = 0.5,
                       time_diff = 0,
@@ -169,9 +180,11 @@ stupeflux <- function(raw_conc,
   conc_df <- flux_match(
     raw_conc,
     field_record,
-    {{datetime_col}},
-    {{start_col}},
-    {{conc_col}},
+    datetime_col = {{datetime_col}},
+    start_col = {{start_col}},
+    conc_col = {{conc_col}},
+    end_col = {{end_col}},
+    fixed_length = fixed_length,
     startcrop = startcrop,
     measurement_length = measurement_length,
     ratio_threshold = ratio_threshold,
@@ -221,6 +234,8 @@ stupeflux <- function(raw_conc,
       flux_unit = flux_unit,
       cols_keep = cols_keep,
       cols_ave = cols_ave,
+      cols_sum = cols_sum,
+      cols_med = cols_med,
       tube_volume = tube_volume,
       temp_air_unit = temp_air_unit,
       cut = cut
