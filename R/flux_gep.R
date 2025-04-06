@@ -72,7 +72,7 @@ flux_gep <- function(fluxes_df,
 
   fluxes_df <- fluxes_df |>
     mutate(
-      id = dplyr::cur_group_id(),
+      id = cur_group_id(),
       .by = all_of(id_cols)
     )
 
@@ -188,7 +188,7 @@ flux_gep <- function(fluxes_df,
     select(!"id") |>
     arrange({{datetime_col}})
 
-  f_warnings <- stringr::str_c(nee_missing)
+  f_warnings <- str_c(nee_missing)
 
 
   if (any(!is.na(nee_missing))) warning(f_warnings)

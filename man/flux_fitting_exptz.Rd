@@ -7,35 +7,32 @@ time, using a modified version of the model from Zhao et al (2018)
 that allows the user to fix \code{t_zero}.}
 \usage{
 flux_fitting_exptz(
+  conc_df_cut,
   conc_df,
   conc_col,
-  datetime_col,
   f_start,
-  f_end,
   f_fluxid,
+  start_cut,
   cz_window,
   b_window,
   a_window,
   roll_width,
-  start_cut,
-  end_cut,
   t_zero
 )
 }
 \arguments{
+\item{conc_df_cut}{dataframe of gas concentration over time, cut}
+
 \item{conc_df}{dataframe of gas concentration over time}
 
 \item{conc_col}{column with gas concentration}
 
-\item{datetime_col}{column with datetime of each concentration measurement
-Note that if there are duplicated datetime in the same f_fluxid only
-the first row will be kept}
-
 \item{f_start}{column with datetime when the measurement started}
 
-\item{f_end}{column with datetime when the measurement ended}
-
 \item{f_fluxid}{column with ID of each flux}
+
+\item{start_cut}{time to discard at the start of the measurements
+(in seconds)}
 
 \item{cz_window}{window used to calculate Cz, at the beginning of cut window}
 
@@ -46,11 +43,6 @@ where it is assumed that C fits the data perfectly}
 
 \item{roll_width}{width of the rolling mean for CO2 when looking for tz,
 ideally same as cz_window}
-
-\item{start_cut}{time to discard at the start of the measurements
-(in seconds)}
-
-\item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
 \item{t_zero}{time at which the slope should be calculated
 (for quadratic fit)}

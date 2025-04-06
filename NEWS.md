@@ -1,3 +1,13 @@
+# fluxible 1.0.4
+
+* `flux_fitting`:
+  - `exp_hm` to use the HM model (Pedersen et al., 2010; Hutchinson and Mosier, 1981).
+  - returns the linear slope besides the chosen method.
+* `flux_quality`: 
+  - `kappamax = TRUE` to apply the kappamax method (Hüppi et al., 2018) on any of the exponential fits.
+  - g-factor in the output shows the ratio of slope over the linear slope.
+  - `force_linear` and `force_exp` to force the use of the linear or exponential slope (kappamax method).
+
 # fluxible 1.0.3
 
 * `stupeflux`: a wrap function to directly process raw gas concentration data into ecosystem gas fluxes.
