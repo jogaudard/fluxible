@@ -8,6 +8,9 @@
   - g-factor in the output shows the ratio of slope over the linear slope.
   - `force_linear` and `force_exp` to force the use of the linear or exponential slope (kappamax method).
 * `flux_match`: option to feed a column with the end time instead of a fixed measurement length, in case fluxes do not all have the same length
+* `flux_calc`:
+  - `cols_sum` columns for which the values will be summed for each flux.
+  - `cols_med` columns for which the median will be provided for each flux.
 
 # fluxible 1.0.3
 
