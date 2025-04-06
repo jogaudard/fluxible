@@ -22,6 +22,9 @@
 #' @param datetime_col datetime column in raw_conc (`ymd_hms` format)
 #' @param conc_col concentration column in `raw_conc`
 #' @param start_col start column in field_record (`ymd_hms` format)
+#' @param end_col end columne in field_record (`ymd_hms` format)
+#' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
+#' create the end column. If `FALSE`, `end_col` has to be provided.
 #' @return a dataframe with concentration measurements, corresponding datetime,
 #' flux ID (`f_fluxid`), measurements start (`f_start`) and end (`f_end`),
 #' flags in case of no data or low number of data (`f_flag_match`),
@@ -44,8 +47,10 @@ flux_match <- function(raw_conc,
                        datetime_col,
                        start_col,
                        conc_col,
+                       end_col,
                        startcrop,
                        measurement_length,
+                       fixed_length = TRUE,
                        ratio_threshold = 0.5,
                        time_diff = 0) {
 
@@ -54,12 +59,11 @@ flux_match <- function(raw_conc,
 
   args_ok <- flux_fun_check(list(
     startcrop = startcrop,
-    measurement_length = measurement_length,
     ratio_threshold = ratio_threshold,
     time_diff = time_diff
   ),
-  fn = list(is.numeric, is.numeric, is.numeric, is.numeric),
-  msg = rep("has to be numeric", 4))
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
 
   raw_conc_check <- raw_conc |>
     select({{datetime_col}}, {{conc_col}})
@@ -95,9 +99,30 @@ flux_match <- function(raw_conc,
     arrange({{start_col}}) |>
     mutate(
       f_start = {{start_col}} + startcrop,
-      f_end = {{start_col}} + measurement_length,
       f_fluxid = row_number()
     )
+
+  if (fixed_length) {
+
+    field_record <- flux_match_fixed(
+      field_record,
+      {{start_col}},
+      measurement_length = measurement_length
+    )
+  }
+
+
+  if (!fixed_length) {
+
+    field_record <- flux_match_col(
+      field_record,
+      {{start_col}},
+      {{end_col}},
+      name_field_record = name_field_record
+    )
+  }
+
+
   raw_conc <- raw_conc |>
     mutate(
       {{datetime_col}} := {{datetime_col}} + time_diff
@@ -124,7 +149,9 @@ flux_match <- function(raw_conc,
     ) |>
     mutate(
       f_n_conc = sum(!is.na({{conc_col}})),
-      f_ratio = .data$f_n_conc / (measurement_length - startcrop),
+      f_length = difftime(.data$f_end, .data$f_start, units = "secs"),
+      f_length = as.numeric(.data$f_length),
+      f_ratio = .data$f_n_conc / .data$f_length,
       f_flag_match = case_when(
         .data$f_ratio == 0 ~ "no data",
         .data$f_ratio <= ratio_threshold ~ "nb of data too low"
