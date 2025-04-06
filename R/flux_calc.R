@@ -27,6 +27,10 @@
 #' as \link[dplyr:distinct]{distinct} is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
+#' @param cols_sum columns with values for which is sum is provided
+#' for each flux in the output. Note that NA are removed in sum calculation.
+#' @param cols_med columns with values for which is median is provided
+#' for each flux in the output. Note that NA are removed in median calculation.
 #' @param f_fluxid column containing the flux IDs
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
@@ -51,6 +55,7 @@
 #' @importFrom dplyr select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of
+#' @importFrom stats median
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
