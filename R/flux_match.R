@@ -12,16 +12,16 @@
 #' @param startcrop how many seconds should be discarded at the beginning of
 #' the measurement
 #' @param measurement_length length of the measurement (in seconds)
-#' from the start specified in the field_record
+#' from the start specified in the `field_record`
 #' @param ratio_threshold ratio (number of concentration measurement compared to
 #' length of measurement in seconds) below which the data should be flagged as
 #' too little
 #' @param time_diff time difference (in seconds) between the two datasets.
-#' Will be added to the datetime column of the raw_conc dataset.
+#' Will be added to the datetime column of the `raw_conc` dataset.
 #' For situations where the time was not synchronized correctly.
-#' @param datetime_col datetime column in raw_conc (dmy_hms format)
-#' @param conc_col concentration column in raw_conc
-#' @param start_col start column in field_record (dmy_hms format)
+#' @param datetime_col datetime column in raw_conc (`ymd_hms` format)
+#' @param conc_col concentration column in `raw_conc`
+#' @param start_col start column in field_record (`ymd_hms` format)
 #' @return a dataframe with concentration measurements, corresponding datetime,
 #' flux ID (`f_fluxid`), measurements start (`f_start`) and end (`f_end`),
 #' flags in case of no data or low number of data (`f_flag_match`),
@@ -122,10 +122,10 @@ flux_match <- function(raw_conc,
 
   conc_df <- full_join(
     raw_conc, field_record,
-    by = dplyr::join_by({{datetime_col}} == "f_start"), keep = TRUE
+    by = join_by({{datetime_col}} == "f_start"), keep = TRUE
   ) |>
     mutate(
-      {{datetime_col}} := dplyr::coalesce({{datetime_col}}, .data$f_start)
+      {{datetime_col}} := coalesce({{datetime_col}}, .data$f_start)
     ) |>
     arrange({{datetime_col}}) |>
     fill("f_fluxid") |>
@@ -169,7 +169,7 @@ flux_match <- function(raw_conc,
     ) |>
     pull(.data$f_warnings)
 
-  f_warnings <- stringr::str_c(flags)
+  f_warnings <- str_c(flags)
 
 
   if (any(!is.na(conc_df$f_flag_match))) warning(f_warnings)

@@ -3,15 +3,15 @@
 #' of gas concentration over time
 #' @param slopes_df dataframe of flux slopes
 #' @param slope_col column containing the slope to calculate the flux
-#' (in ppm*s^(-1) or ppb*s^(-1))
+#' (in \eqn{ppm * s^{-1}} or \eqn{ppb * s^{-1}})
 #' @param datetime_col column containing the datetime of each gas concentration
-#' measurements in slopes_df. The first one after cutting will be kept as
+#' measurements in `slopes_df`. The first one after cutting will be kept as
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
 #' `ppm` or `ppb`
 #' @param flux_unit unit in which the calculated flux will be
-#' `mmol` outputs fluxes in mmol * m^(-2)*h^(-1);
-#' `micromol` outputs fluxes in micromol * m^(-2)*h^(-1)
+#' `mmol` outputs fluxes in \eqn{mmol * m^{-2} * h^{-1}};
+#' `micromol` outputs fluxes in \eqn{micromol * m^{-2}*h^{-1}}
 #' @param f_cut column containing cutting information
 #' @param keep_arg name in `f_cut` of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
@@ -24,7 +24,7 @@
 #' can also be a column in case it is a variable
 #' @param cols_keep columns to keep from the input to the output.
 #' Those columns need to have unique values for each flux,
-#' as distinct() is applied.
+#' as \link[dplyr:distinct]{distinct} is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
 #' @param f_fluxid column containing the flux IDs
@@ -36,24 +36,25 @@
 #' 'f_cut' before calculating fluxes. This has no influence on the flux itself
 #' since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
 #' but it will influence the values of the columns in `cols_ave`.
-#' @param fit_type (optional) model used in flux_fitting, exponential,
-#' quadratic or linear.
-#' Will be automatically filled if slopes_df was produced using
-#' \link[fluxible:flux_quality]{flux_quality}.
+#' @param fit_type (optional) model used in
+#' \link[fluxible:flux_fitting]{flux_fitting}. Will be automatically filled if
+#' `slopes_df` was produced using \link[fluxible:flux_fitting]{flux_fitting}.
 #' @return a dataframe containing flux IDs, datetime of measurements' starts,
-#' fluxes in mmol*m^(-2)*h^(-1) or micromol*m^(-2)*h^(-1) (`f_flux`) according
-#' to `flux_unit`, temperature average for each flux in Kelvin (`f_temp_ave`),
-#' the total volume of the setup for each measurement (`f_volume_setup`),
-#' the model used in \link[fluxible:flux_fitting]{flux_fitting},
-#' any column specified in `cols_keep`, any column specified in `cols_ave` with
+#' fluxes in \eqn{mmol*m^{-2}*h^{-1}} or \eqn{micromol*m^{-2}*h^{-1}}
+#' (`f_flux`) according to `flux_unit`, temperature average for each flux in
+#' Kelvin (`f_temp_ave`), the total volume of the setup for each measurement
+#' (`f_volume_setup`), the model used in
+#' \link[fluxible:flux_fitting]{flux_fitting}, any column specified in
+#' `cols_keep`, any column specified in `cols_ave` with
 #' their value averaged over the measurement after cuts and discarding NA.
 #' @importFrom rlang .data :=
 #' @importFrom dplyr select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything
-#' @importFrom tidyselect any_of all_of
+#' @importFrom tidyselect any_of
 #' @examples
-#' data(slopes0)
-#' flux_calc(slopes0,
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' flux_calc(slopes,
 #' f_slope,
 #' datetime,
 #' temp_air,
@@ -128,6 +129,16 @@ flux_calc <- function(slopes_df,
     fit_type = fit_type
   )
 
+  kappamax <- attributes(slopes_df)$kappamax
+
+  if (is.null(kappamax)) {
+    kappamax <- FALSE
+  }
+
+  if (kappamax == TRUE) {
+    cols_keep <- c(cols_keep, "f_model")
+  }
+
   temp_air_unit <- match.arg(
     temp_air_unit,
     c("celsius", "fahrenheit", "kelvin")
@@ -189,7 +200,7 @@ flux_calc <- function(slopes_df,
     slope_keep <- slopes_df |>
       select(all_of(cols_keep), {{f_fluxid}}) |>
       distinct() |>
-      left_join(slope_temp, by = dplyr::join_by(
+      left_join(slope_temp, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {
@@ -207,7 +218,7 @@ flux_calc <- function(slopes_df,
       ),
       .by = {{f_fluxid}}
       ) |>
-      left_join(slope_keep, by = dplyr::join_by(
+      left_join(slope_keep, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
       ))
   } else {
@@ -248,9 +259,21 @@ flux_calc <- function(slopes_df,
         ~ (.data$f_temp_air_ave - 273.15) * (9 / 5) + 32,
         temp_air_unit == "kelvin" ~ .data$f_temp_air_ave
       ),
-      f_model = fit_type,
       .by = {{f_fluxid}}
     )
+  if (isTRUE(kappamax)) {
+    fluxes <- fluxes |>
+      mutate(
+        f_model = .data$f_model
+      )
+  }
+
+  if (isFALSE(kappamax)) {
+    fluxes <- fluxes |>
+      mutate(
+        f_model = fit_type
+      )
+  }
 
   # output unit
   if (flux_unit == "micromol") {
