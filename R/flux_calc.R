@@ -27,6 +27,10 @@
 #' as \link[dplyr:distinct]{distinct} is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
+#' @param cols_sum columns with values for which is sum is provided
+#' for each flux in the output. Note that NA are removed in sum calculation.
+#' @param cols_med columns with values for which is median is provided
+#' for each flux in the output. Note that NA are removed in median calculation.
 #' @param f_fluxid column containing the flux IDs
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
@@ -51,6 +55,7 @@
 #' @importFrom dplyr select group_by summarise
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of
+#' @importFrom stats median
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -80,6 +85,8 @@ flux_calc <- function(slopes_df,
                       flux_unit,
                       cols_keep = c(),
                       cols_ave = c(),
+                      cols_sum = c(),
+                      cols_med = c(),
                       tube_volume,
                       temp_air_unit = "celsius",
                       f_cut = f_cut,
@@ -225,6 +232,40 @@ flux_calc <- function(slopes_df,
     slope_ave <- slope_keep
   }
 
+  if (length(cols_sum) > 0) {
+    message("Creating a df with the columns from 'cols_sum' argument...")
+    slope_sum <- slopes_df |>
+      select(all_of(cols_sum), {{f_fluxid}}) |>
+      summarise(across(
+        everything(),
+        ~ sum(.x, na.rm = TRUE)
+      ),
+      .by = {{f_fluxid}}
+      ) |>
+      left_join(slope_ave, by = join_by(
+        {{f_fluxid}} == {{f_fluxid}}
+      ))
+  } else {
+    slope_sum <- slope_ave
+  }
+
+  if (length(cols_med) > 0) {
+    message("Creating a df with the columns from 'cols_med' argument...")
+    slope_med <- slopes_df |>
+      select(all_of(cols_med), {{f_fluxid}}) |>
+      summarise(across(
+        everything(),
+        ~ median(.x, na.rm = TRUE)
+      ),
+      .by = {{f_fluxid}}
+      ) |>
+      left_join(slope_sum, by = join_by(
+        {{f_fluxid}} == {{f_fluxid}}
+      ))
+  } else {
+    slope_med <- slope_sum
+  }
+
   message("Calculating fluxes...")
 
   r_const <- 0.082057
@@ -237,14 +278,14 @@ flux_calc <- function(slopes_df,
   }
   if (conc_unit == "ppb") {
     message("Concentration was measured in ppb")
-    slope_ave <- slope_ave |>
+    slope_med <- slope_med |>
       mutate(
         {{slope_col}} := {{slope_col}} * 0.001 # now the slope is in ppm/s
       )
   }
 
 
-  fluxes <- slope_ave |>
+  fluxes <- slope_med |>
     mutate(
       f_volume_setup = {{chamber_volume}} + tube_volume,
       f_flux =

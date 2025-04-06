@@ -17,6 +17,8 @@ flux_calc(
   flux_unit,
   cols_keep = c(),
   cols_ave = c(),
+  cols_sum = c(),
+  cols_med = c(),
   tube_volume,
   temp_air_unit = "celsius",
   f_cut = f_cut,
@@ -62,6 +64,12 @@ as \link[dplyr:distinct]{distinct} is applied.}
 
 \item{cols_ave}{columns with values that should be averaged
 for each flux in the output. Note that NA are removed in mean calculation.}
+
+\item{cols_sum}{columns with values for which is sum is provided
+for each flux in the output. Note that NA are removed in sum calculation.}
+
+\item{cols_med}{columns with values for which is median is provided
+for each flux in the output. Note that NA are removed in median calculation.}
 
 \item{tube_volume}{volume of the tubing in L,
 can also be a column in case it is a variable}
