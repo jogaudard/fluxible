@@ -57,7 +57,6 @@ flux_quality_exp <- function(slopes_df,
                              rmse_threshold,
                              cor_threshold,
                              b_threshold,
-                             instr_error,
                              name_df) {
 
 
