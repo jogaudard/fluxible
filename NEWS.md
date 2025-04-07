@@ -1,3 +1,7 @@
+# fluxible 1.0.5
+
+* `flux_quality`: fluxes with bad fit are now flagged as zero if their linear slope is below the minimal detectable slope (calculated as $2 \times \text{instrument error} / \text{length of flux}$) instead of discard.
+
 # fluxible 1.0.4
 
 * `flux_fitting`:

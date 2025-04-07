@@ -188,8 +188,8 @@
        Total number of measurements: 6
       
        ok 	 5 	 83 %
-       discard 	 1 	 17 %
-       zero 	 0 	 0 %
+       zero 	 1 	 17 %
+       discard 	 0 	 0 %
        force_discard 	 0 	 0 %
        start_error 	 0 	 0 %
        no_data 	 0 	 0 %

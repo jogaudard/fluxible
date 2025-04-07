@@ -134,7 +134,7 @@ considered good enough (exponential fits)}
 \item{cut_arg}{argument defining that the data point should be cut out}
 
 \item{instr_error}{error of the instrument, in the same unit as the
-gas concentration (only for kappamax method)}
+gas concentration}
 
 \item{kappamax}{logical. If \code{TRUE} the kappamax method will be applied.}
 }
