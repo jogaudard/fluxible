@@ -113,20 +113,23 @@ flux_quality_exp <- function(slopes_df,
         TRUE ~ "yes"
       ),
       f_quality_flag = case_when(
-        abs(.data$f_gfactor) > gfactor_threshold ~ "discard",
-        .data$f_flag_ratio == "no_data" ~ "no_data",
-        .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_start_error == "error" ~ "start_error",
         {{f_fluxid}} %in% force_discard ~ "force_discard",
         {{f_fluxid}} %in% force_ok ~ "force_ok",
         {{f_fluxid}} %in% force_zero ~ "force_zero",
         {{f_fluxid}} %in% force_lm ~ "force_lm",
+        .data$f_flag_ratio == "no_data" ~ "no_data",
+        .data$f_flag_ratio == "too_low" ~ "discard",
+        .data$f_start_error == "error" ~ "start_error",
+        abs(.data$f_gfactor) > gfactor_threshold  &
+          abs({{f_slope_lm}}) > abs(.data$f_min_slope) ~ "discard",
+        abs(.data$f_gfactor) > gfactor_threshold  &
+          abs({{f_slope_lm}}) <= abs(.data$f_min_slope) ~ "zero",
         .data$f_fit_quality == "bad" &
           .data$f_correlation == "yes" &
-          {{f_slope_lm}} > .data$f_min_slope ~ "discard",
+          abs({{f_slope_lm}}) > abs(.data$f_min_slope) ~ "discard",
         .data$f_fit_quality == "bad" &
           .data$f_correlation == "yes" &
-          {{f_slope_lm}} <= .data$f_min_slope ~ "zero",
+          abs({{f_slope_lm}}) <= abs(.data$f_min_slope) ~ "zero",
         .data$f_fit_quality == "bad" &
           .data$f_correlation == "no" ~ "zero",
         .data$f_RMSE <= rmse_threshold ~ "ok"

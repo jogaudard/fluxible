@@ -85,19 +85,26 @@ flux_quality_qua <- function(slopes_df,
     mutate(
       f_gfactor = {{f_slope}} / {{f_slope_lm}},
       f_quality_flag = case_when(
-        abs(.data$f_gfactor) > gfactor_threshold ~ "discard",
-        .data$f_flag_ratio == "no_data" ~ "no_data",
-        .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_start_error == "error" ~ "start_error",
         {{f_fluxid}} %in% force_discard ~ "force_discard",
         {{f_fluxid}} %in% force_ok ~ "force_ok",
         {{f_fluxid}} %in% force_zero ~ "force_zero",
         {{f_fluxid}} %in% force_lm ~ "force_lm",
+        .data$f_flag_ratio == "no_data" ~ "no_data",
+        .data$f_flag_ratio == "too_low" ~ "discard",
+        .data$f_start_error == "error" ~ "start_error",
+        abs(.data$f_gfactor) > gfactor_threshold &
+          abs({{f_slope_lm}}) > abs(.data$f_min_slope) ~ "discard",
+        abs(.data$f_gfactor) > gfactor_threshold &
+          abs({{f_slope_lm}}) <= abs(.data$f_min_slope) ~ "zero",
         {{f_rsquared}} >= rsquared_threshold ~ "ok",
         {{f_rsquared}} < rsquared_threshold &
           {{f_pvalue}} >= pvalue_threshold ~ "zero",
         {{f_rsquared}} < rsquared_threshold &
-          {{f_pvalue}} < pvalue_threshold ~ "discard",
+          {{f_pvalue}} < pvalue_threshold &
+          abs({{f_slope_lm}}) > abs(.data$f_min_slope) ~ "discard",
+        {{f_rsquared}} < rsquared_threshold &
+          {{f_pvalue}} < pvalue_threshold &
+          abs({{f_slope_lm}}) <= abs(.data$f_min_slope) ~ "zero"
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA,
