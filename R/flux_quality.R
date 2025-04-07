@@ -64,7 +64,7 @@
 #' (exponential quadratic fits).
 #' @param kappamax logical. If `TRUE` the kappamax method will be applied.
 #' @param instr_error error of the instrument, in the same unit as the
-#' gas concentration (only for kappamax method)
+#' gas concentration
 #' @param f_fit_lm column with the fit of the linear model.
 #' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
 #' @details the kappamax method (Hüppi et al., 2018) selects the linear slope
@@ -196,8 +196,11 @@ flux_quality <- function(slopes_df,
         .data$f_ratio <= ratio_threshold ~ "too_low",
         TRUE ~ "ok"
       ),
+      f_min_slope = (2 * instr_error) / max({{f_time}}),
       .by = c({{f_fluxid}}, {{f_cut}})
     )
+
+
 
   quality_par_start <- slopes_df |>
     # for the start error we take the entire flux into account

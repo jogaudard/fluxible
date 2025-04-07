@@ -57,6 +57,7 @@ flux_quality_exp <- function(slopes_df,
                              rmse_threshold,
                              cor_threshold,
                              b_threshold,
+                             instr_error,
                              name_df) {
 
 
@@ -104,8 +105,8 @@ flux_quality_exp <- function(slopes_df,
     mutate(
       f_gfactor = {{f_slope}} / {{f_slope_lm}},
       f_fit_quality = case_when(
-        abs({{f_b}}) >= b_threshold ~ "bad_b",
-        .data$f_RMSE > rmse_threshold ~ "bad_RMSE"
+        abs({{f_b}}) >= b_threshold ~ "bad",
+        .data$f_RMSE > rmse_threshold ~ "bad"
       ),
       f_correlation = case_when(
         abs(.data$f_cor_coef) < cor_threshold ~ "no",
@@ -120,13 +121,13 @@ flux_quality_exp <- function(slopes_df,
         {{f_fluxid}} %in% force_ok ~ "force_ok",
         {{f_fluxid}} %in% force_zero ~ "force_zero",
         {{f_fluxid}} %in% force_lm ~ "force_lm",
-        .data$f_fit_quality == "bad_RMSE" &
-          .data$f_correlation == "yes" ~ "discard",
-        .data$f_fit_quality == "bad_RMSE" &
-          .data$f_correlation == "no" ~ "zero",
-        .data$f_fit_quality == "bad_b" &
-          .data$f_correlation == "yes" ~ "discard",
-        .data$f_fit_quality == "bad_b" &
+        .data$f_fit_quality == "bad" &
+          .data$f_correlation == "yes" &
+          {{f_slope_lm}} > .data$f_min_slope ~ "discard",
+        .data$f_fit_quality == "bad" &
+          .data$f_correlation == "yes" &
+          {{f_slope_lm}} <= .data$f_min_slope ~ "zero",
+        .data$f_fit_quality == "bad" &
           .data$f_correlation == "no" ~ "zero",
         .data$f_RMSE <= rmse_threshold ~ "ok"
       ),
