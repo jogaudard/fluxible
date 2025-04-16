@@ -1,0 +1,12 @@
+---
+title: "Poster"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Poster}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+header-includes:
+  - \usepackage{pdfpages}
+---
+!(dissemination/poster_fluxible.png)
+<!-- \includepdf[pages={-}]{dissemination/poster_fluxible.pdf} -->
