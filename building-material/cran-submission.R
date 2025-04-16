@@ -1,4 +1,8 @@
 # for update
+
+usethis::use_version("minor") # (or ‘patch’ or ‘major’)
+devtools::submit_cran()
+
 usethis::use_github_links(overwrite = TRUE)
 urlchecker::url_check()
 devtools::build_readme()
