@@ -8,5 +8,5 @@ vignette: >
 header-includes:
   - \usepackage{pdfpages}
 ---
-!(dissemination/poster_fluxible.png)
+![Fluxible poster](dissemination/poster_fluxible.png)
 <!-- \includepdf[pages={-}]{dissemination/poster_fluxible.pdf} -->
