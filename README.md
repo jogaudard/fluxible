@@ -76,14 +76,15 @@ slopes_flag_df <- flux_quality(
 #> 
 #>  Total number of measurements: 6
 #> 
-#>  ok   6   100 %
+#>  ok   5   83 %
+#>  zero     1   17 %
 #>  discard      0   0 %
-#>  zero     0   0 %
 #>  force_discard    0   0 %
 #>  start_error      0   0 %
 #>  no_data      0   0 %
 #>  force_ok     0   0 %
 #>  force_zero   0   0 %
+#>  force_lm     0   0 %
 
 flux_plot(
   slopes_flag_df,
@@ -145,14 +146,23 @@ fluxes_gep
 #> 2 2022-07-28 23:47:22 GEP     10.3      10.7 74 WN2C 155 
 #> 3 2022-07-28 23:47:22 NEE     31.0      10.7 74 WN2C 155 
 #> 4 2022-07-28 23:52:10 ER      20.7      10.7 74 WN2C 155 
-#> 5 2022-07-28 23:59:32 GEP    -27.2      10.8 109 AN3C 109
+#> 5 2022-07-28 23:59:32 GEP     41.5      10.8 109 AN3C 109
 #> 6 2022-07-28 23:59:32 NEE     41.5      10.8 109 AN3C 109
-#> 7 2022-07-29 00:03:10 ER      68.7      10.5 109 AN3C 109
+#> 7 2022-07-29 00:03:10 ER       0        10.5 109 AN3C 109
 #> 8 2022-07-29 00:06:35 GEP     NA        12.2 29 WN3C 106 
 #> 9 2022-07-29 00:06:35 NEE     26.1      12.2 29 WN3C 106
 ```
 
 ## Further developments
+
+### The licoread R package
+
+The
+[https://jogaudard.github.io/licoread/index.html](licoread%20R%20package),
+currently under development in collaboration with
+[https://www.licor.com/](Li-COR), will provide an easy way to import raw
+files from Li-COR gas analyzers as R objects that can be used directly
+with the Fluxible package.
 
 ### Segmentation tool
 
