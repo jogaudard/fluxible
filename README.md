@@ -155,7 +155,7 @@ fluxes_gep
 
 ## Further developments
 
-### licoread R package
+### The licoread R package
 
 The
 [https://jogaudard.github.io/licoread/index.html](licoread%20R%20package),

@@ -116,7 +116,7 @@ fluxes_gep
 
 ## Further developments
 
-### licoread R package
+### The licoread R package
 
 The [https://jogaudard.github.io/licoread/index.html](licoread R package), currently under development in collaboration with [https://www.licor.com/](Li-COR), will provide an easy way to import raw files from Li-COR gas analyzers as R objects that can be used directly with the Fluxible package.
 
