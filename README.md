@@ -30,9 +30,9 @@ end of the process for a visual check.
 
 This makes it easy to use with large flux datasets and to integrate into
 a reproducible and automated data processing pipeline such as the
-targets R package (Landau, 2021). Using the Fluxible R package makes the
-workflow reproducible, increases compatibility across studies, and is
-more time efficient.
+[targets R package (Landau, 2021)](https://books.ropensci.org/targets/).
+Using the Fluxible R package makes the workflow reproducible, increases
+compatibility across studies, and is more time efficient.
 
 For a visual overview of the package, see [the
 poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf).
@@ -172,9 +172,9 @@ fluxes_gep
 The [licoread R
 package](https://jogaudard.github.io/licoread/index.html), currently
 under development in collaboration with
-[Li-COR](https://www.licor.com/), will provide an easy way to import raw
-files from Li-COR gas analyzers as R objects that can be used directly
-with the Fluxible package.
+[Li-COR](https://www.licor.com/), aims at providing an easy way to
+import raw files from Li-COR gas analyzers as R objects that can be used
+directly with the Fluxible package.
 
 ### Segmentation tool
 
@@ -224,8 +224,7 @@ entry-spacing="0" line-spacing="2">
 <div id="ref-co2fluxtent" class="csl-entry">
 
 Brummer, A.B., Enquist, B.J. and Santos-Andrade, P.E. (2023),
-*Co2fluxtent: Tools for NEE and ET Fitting from CO2 Flux*, available at:
-<https://github.com/PaulESantos/co2fluxtent>.
+*Co2fluxtent: Tools for NEE and ET Fitting from CO2 Flux*, Manual,.
 
 </div>
 
@@ -251,9 +250,10 @@ Science Society of America Journal*, Vol. 45 No. 2, pp. 311–316.
 
 <div id="ref-targetsRpackage2021" class="csl-entry">
 
-Landau, W.M. (2021), “The targets R package: A dynamic
+Landau, W.M. (2021), “[The targets R package: A dynamic
 <span class="nocase">Make-like</span> function-oriented pipeline toolkit
-for reproducibility and high-performance computing”, *Journal of Open
+for reproducibility and high-performance
+computing](https://doi.org/10.21105/joss.02959)”, *Journal of Open
 Source Software*, Vol. 6 No. 57, p. 2959.
 
 </div>

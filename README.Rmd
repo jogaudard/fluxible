@@ -32,7 +32,7 @@ Fluxible offers different methods to estimate fluxes: linear, quadratic, exponen
 The kappamax method [@huppiRestrictingNonlinearityParameter2018] is also included, at the quality control step.
 The package runs the calculations automatically, without prompting the user to take decisions mid-way, and provides quality flags and plots at the end of the process for a visual check.
 
-This makes it easy to use with large flux datasets and to integrate into a reproducible and automated data processing pipeline such as the targets R package [@targetsRpackage2021].
+This makes it easy to use with large flux datasets and to integrate into a reproducible and automated data processing pipeline such as the [targets R package [@targetsRpackage2021]](https://books.ropensci.org/targets/).
 Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.
 
 For a visual overview of the package, see [the poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf).
@@ -124,7 +124,7 @@ fluxes_gep
 
 ### The licoread R package
 
-The [licoread R package](https://jogaudard.github.io/licoread/index.html), currently under development in collaboration with [Li-COR](https://www.licor.com/), will provide an easy way to import raw files from Li-COR gas analyzers as R objects that can be used directly with the Fluxible package.
+The [licoread R package](https://jogaudard.github.io/licoread/index.html), currently under development in collaboration with [Li-COR](https://www.licor.com/), aims at providing an easy way to import raw files from Li-COR gas analyzers as R objects that can be used directly with the Fluxible package.
 
 ### Segmentation tool
 We are working on a tool to automatically select the window of the measurement on which to fit a model.
