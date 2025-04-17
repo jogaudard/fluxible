@@ -1,7 +1,8 @@
 ## R CMD check results
 
-Duration: 2m 34.6s
+Duration: 2m 21.5s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
-* Update with new functions and optimized code.
+* Fixed broken links
+* Size reduced below 5 MB
