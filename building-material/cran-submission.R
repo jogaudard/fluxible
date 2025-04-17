@@ -1,6 +1,6 @@
 # for update
 
-usethis::use_version("minor") # (or ‘patch’ or ‘major’)
+usethis::use_version("patch") # (or ‘patch’ or ‘major’)
 devtools::submit_cran()
 
 usethis::use_github_links(overwrite = TRUE)

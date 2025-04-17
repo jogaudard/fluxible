@@ -9,21 +9,33 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.org/package=fluxible)
 [![LifeCycle](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-<!-- badges: end --> The Fluxible R package is made to transform any
-dataset of gas concentration over time into a gas flux dataset. It was
-originally made to be used with a closed loop chamber system connected
-to a gas analyzer.
+<!-- badges: end -->
+
+The Fluxible R package is made to transform any dataset of gas
+concentration over time into a gas flux dataset. It was originally made
+to be used with a closed loop chamber system connected to a gas
+analyzer.
 
 The goal of fluxible is to provide a workflow that removes individual
 evaluation of each flux, reduces risk of bias, and makes it
 reproducible. Users set specific data quality standards and selection
 parameters as function arguments that are applied to the entire dataset.
-The package runs the calculations automatically, without prompting the
-user to take decisions mid-way, and provides quality flags and plots at
-the end of the process for a visual check. This makes it easy to use
-with large flux datasets and to integrate into a reproducible workflow.
+Fluxible offers different methods to estimate fluxes: linear, quadratic,
+exponential (Zhao *et al.*, 2018), and the original HM model (Hutchinson
+and Mosier, 1981; Pedersen *et al.*, 2010). The kappamax method (Hüppi
+*et al.*, 2018) is also included, at the quality control step. The
+package runs the calculations automatically, without prompting the user
+to take decisions mid-way, and provides quality flags and plots at the
+end of the process for a visual check.
+
+This makes it easy to use with large flux datasets and to integrate into
+a reproducible and automated data processing pipeline such as the
+[targets R package (Landau, 2021)](https://books.ropensci.org/targets/).
 Using the Fluxible R package makes the workflow reproducible, increases
 compatibility across studies, and is more time efficient.
+
+For a visual overview of the package, see [the
+poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf).
 
 ## Installation
 
@@ -160,9 +172,9 @@ fluxes_gep
 The [licoread R
 package](https://jogaudard.github.io/licoread/index.html), currently
 under development in collaboration with
-[Li-COR](https://www.licor.com/), will provide an easy way to import raw
-files from Li-COR gas analyzers as R objects that can be used directly
-with the Fluxible package.
+[Li-COR](https://www.licor.com/), aims at providing an easy way to
+import raw files from Li-COR gas analyzers as R objects that can be used
+directly with the Fluxible package.
 
 ### Segmentation tool
 
@@ -179,11 +191,12 @@ welcome to get in touch if you wish to include yours in fluxible.
 
 ## Contact
 
-Joseph Gaudard, University of Bergen, Norway
+[Joseph Gaudard](https://jogaudard.github.io/CV_jgaudard/), University
+of Bergen, Norway
 
 <joseph.gaudard@pm.me>
 
-[GitHub profile](https://github.com/jogaudard)
+[GitHub page](https://github.com/jogaudard)
 
 ## Dissemination
 
@@ -203,7 +216,7 @@ Course Community
 [https://github.com/PaulESantos/co2fluxtent](co2fluxtent) (Brummer *et
 al.*, 2023).
 
-<!-- #### References -->
+#### References
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0" line-spacing="2">
@@ -211,8 +224,56 @@ entry-spacing="0" line-spacing="2">
 <div id="ref-co2fluxtent" class="csl-entry">
 
 Brummer, A.B., Enquist, B.J. and Santos-Andrade, P.E. (2023),
-*Co2fluxtent: Tools for NEE and ET Fitting from CO2 Flux*, available at:
-<https://github.com/PaulESantos/co2fluxtent>.
+*Co2fluxtent: Tools for NEE and ET Fitting from CO2 Flux*, Manual,.
+
+</div>
+
+<div id="ref-huppiRestrictingNonlinearityParameter2018"
+class="csl-entry">
+
+Hüppi, R., Felber, R., Krauss, M., Six, J., Leifeld, J. and Fuß, R.
+(2018), “[Restricting the nonlinearity parameter in soil greenhouse gas
+flux calculation for more reliable flux
+estimates](https://doi.org/10.1371/journal.pone.0200876)”, *PLOS ONE*,
+Public Library of Science, Vol. 13 No. 7, p. e0200876.
+
+</div>
+
+<div id="ref-hutchinsonImprovedSoilCover1981" class="csl-entry">
+
+Hutchinson, G.L. and Mosier, A.R. (1981), “[Improved Soil Cover Method
+for Field Measurement of Nitrous Oxide
+Fluxes](https://doi.org/10.2136/sssaj1981.03615995004500020017x)”, *Soil
+Science Society of America Journal*, Vol. 45 No. 2, pp. 311–316.
+
+</div>
+
+<div id="ref-targetsRpackage2021" class="csl-entry">
+
+Landau, W.M. (2021), “[The targets R package: A dynamic
+<span class="nocase">Make-like</span> function-oriented pipeline toolkit
+for reproducibility and high-performance
+computing](https://doi.org/10.21105/joss.02959)”, *Journal of Open
+Source Software*, Vol. 6 No. 57, p. 2959.
+
+</div>
+
+<div id="ref-pedersenComprehensiveApproachSoilatmosphere2010a"
+class="csl-entry">
+
+Pedersen, A.R., Petersen, S.O. and Schelde, K. (2010), “[A comprehensive
+approach to soil-atmosphere trace-gas flux estimation with static
+chambers](https://doi.org/10.1111/j.1365-2389.2010.01291.x)”, *European
+Journal of Soil Science*, Vol. 61 No. 6, pp. 888–902.
+
+</div>
+
+<div id="ref-zhaoCalculationDaytimeCO22018" class="csl-entry">
+
+Zhao, P., Hammerle, A., Zeeman, M. and Wohlfahrt, G. (2018), “[On the
+calculation of daytime CO2 fluxes measured by automated closed
+transparent chambers](https://doi.org/10.1016/j.agrformet.2018.08.022)”,
+*Agricultural and Forest Meteorology*, Vol. 263, pp. 267–275.
 
 </div>
 
