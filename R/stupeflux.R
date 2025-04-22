@@ -17,8 +17,8 @@
 #' @param time_diff time difference (in seconds) between the two datasets.
 #' Will be added to the datetime column of the raw_conc dataset.
 #' For situations where the time was not synchronized correctly.
-#' @param datetime_col datetime column in raw_conc (dmy_hms format)
-#' @param conc_col concentration column in raw_conc
+#' @param f_datetime datetime column in raw_conc (dmy_hms format)
+#' @param f_conc concentration column in raw_conc
 #' @param start_col start column in field_record (dmy_hms format)
 #' @param end_col end columne in field_record (`ymd_hms` format)
 #' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
@@ -118,9 +118,9 @@
 #' stupeflux(
 #' raw_conc = co2_df_short,
 #' field_record = record_short,
-#' datetime_col = datetime,
+#' f_datetime = datetime,
 #' start_col = start,
-#' conc_col = conc,
+#' f_conc = conc,
 #' startcrop = 10,
 #' measurement_length = 180,
 #' fit_type = "exp_zhao18",
@@ -136,10 +136,10 @@
 
 stupeflux <- function(raw_conc,
                       field_record,
-                      datetime_col,
+                      f_datetime,
                       start_col,
                       end_col,
-                      conc_col,
+                      f_conc,
                       startcrop,
                       measurement_length,
                       fit_type,
@@ -180,9 +180,9 @@ stupeflux <- function(raw_conc,
   conc_df <- flux_match(
     raw_conc,
     field_record,
-    datetime_col = {{datetime_col}},
+    f_datetime = {{f_datetime}},
     start_col = {{start_col}},
-    conc_col = {{conc_col}},
+    f_conc = {{f_conc}},
     end_col = {{end_col}},
     fixed_length = fixed_length,
     startcrop = startcrop,
@@ -193,8 +193,8 @@ stupeflux <- function(raw_conc,
 
   conc_fitting <- flux_fitting(
     conc_df,
-    {{conc_col}},
-    {{datetime_col}},
+    {{f_conc}},
+    {{f_datetime}},
     start_cut = start_cut,
     end_cut = end_cut,
     cz_window = cz_window,
@@ -207,7 +207,7 @@ stupeflux <- function(raw_conc,
 
   quality_flag <- flux_quality(
     conc_fitting,
-    {{conc_col}},
+    {{f_conc}},
     force_discard = force_discard,
     force_ok = force_ok,
     force_zero = force_zero,
@@ -225,7 +225,7 @@ stupeflux <- function(raw_conc,
     fluxes <- with(quality_flag, flux_calc(
       quality_flag,
       slope_col = f_slope_corr,
-      {{datetime_col}},
+      {{f_datetime}},
       {{temp_air_col}},
       chamber_volume = chamber_volume,
       atm_pressure = atm_pressure,
@@ -246,7 +246,7 @@ stupeflux <- function(raw_conc,
     fluxes <- with(quality_flag, flux_calc(
       quality_flag,
       slope_col = f_slope,
-      {{datetime_col}},
+      {{f_datetime}},
       {{temp_air_col}},
       chamber_volume = chamber_volume,
       atm_pressure = atm_pressure,

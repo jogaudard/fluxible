@@ -71,7 +71,7 @@ CO2_INCLINE_2022 <- flux_match(
   record,
   startcrop = 0,
   measurement_length = 180,
-  conc_col = "CO2"
+  f_conc = "CO2"
 )
 
 # CO2_INCLINE_2022  |>

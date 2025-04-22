@@ -25,7 +25,7 @@
 #' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' `exponential` is equal to `exp_zhao18`, for backwards compatibility
 #' @param conc_df dataframe of gas concentration over time
-#' @param conc_col column with gas concentration
+#' @param f_conc column with gas concentration
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' (exponential fit)
 #' @param b_window window to estimate b. It is an interval after tz where
@@ -38,10 +38,10 @@
 #' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @param f_start column with datetime when the measurement started (`ymd_hms`)
 #' @param f_end column with datetime when the measurement ended (`ymd_hms`)
-#' @param datetime_col column with datetime of each concentration measurement
+#' @param f_datetime column with datetime of each concentration measurement
 #' Note that if there are duplicated datetime in the same `f_fluxid` only
 #' the first row will be kept
-#' @param conc_col column with gas concentration data
+#' @param f_conc column with gas concentration data
 #' @param f_fluxid column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
 #' (for `quadratic` and `exp_tz` fits)
@@ -62,8 +62,8 @@
 #' @export
 
 flux_fitting <- function(conc_df,
-                         conc_col,
-                         datetime_col,
+                         f_conc = f_conc,
+                         f_datetime = f_datetime,
                          f_start = f_start,
                          f_end = f_end,
                          f_fluxid = f_fluxid,
@@ -87,10 +87,10 @@ flux_fitting <- function(conc_df,
 
   conc_df_check <- conc_df |>
     select(
-      {{conc_col}},
+      {{f_conc}},
       {{f_start}},
       {{f_end}},
-      {{datetime_col}}
+      {{f_datetime}}
     )
 
   conc_df_ok <- flux_fun_check(conc_df_check,
@@ -127,7 +127,7 @@ flux_fitting <- function(conc_df,
 
   conc_df <- conc_df |>
     group_by({{f_fluxid}}) |>
-    distinct({{datetime_col}}, .keep_all = TRUE) |>
+    distinct({{f_datetime}}, .keep_all = TRUE) |>
     ungroup()
 
   fit_type <- flux_fit_type(
@@ -135,20 +135,20 @@ flux_fitting <- function(conc_df,
     fit_type = fit_type
   )
 
-  name_conc <- names(select(conc_df, {{conc_col}}))
+  name_conc <- names(select(conc_df, {{f_conc}}))
 
 
   conc_df <- conc_df |>
     mutate(
-      f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
-        {{datetime_col}}[1],
+      f_time = difftime({{f_datetime}}[seq_along({{f_datetime}})],
+        {{f_datetime}}[1],
         units = "secs"
       ),
       f_time = as.double(.data$f_time),
       {{f_start}} := {{f_start}} + start_cut,
       {{f_end}} := {{f_end}} - end_cut,
       f_cut = case_when(
-        {{datetime_col}} < {{f_start}} | {{datetime_col}} >= {{f_end}}
+        {{f_datetime}} < {{f_start}} | {{f_datetime}} >= {{f_end}}
         ~ "cut",
         TRUE ~ "keep"
       ),
@@ -161,16 +161,16 @@ flux_fitting <- function(conc_df,
     filter(
       .data$f_cut == "keep"
     ) |>
-    drop_na({{conc_col}}) |>
+    drop_na({{f_conc}}) |>
     mutate(
-      f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
-        {{datetime_col}}[1],
+      f_time_cut = difftime({{f_datetime}}[seq_along({{f_datetime}})],
+        {{f_datetime}}[1],
         units = "secs"
       ),
       f_time_cut = as.double(.data$f_time_cut),
       f_length_window = max(.data$f_time_cut),
       f_length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
-      f_start_window = min({{datetime_col}}),
+      f_start_window = min({{f_datetime}}),
       f_time_diff = .data$f_time - .data$f_time_cut,
       f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
       .by = {{f_fluxid}}
@@ -179,7 +179,7 @@ flux_fitting <- function(conc_df,
   conc_fitting <- flux_fitting_lm(
     conc_df_cut,
     conc_df,
-    {{conc_col}},
+    {{f_conc}},
     {{f_fluxid}},
     start_cut = start_cut
   )
@@ -200,7 +200,7 @@ flux_fitting <- function(conc_df,
     conc_fitting <- flux_fitting_zhao18(
       conc_df_cut,
       conc_df_lm,
-      {{conc_col}},
+      {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
       start_cut = start_cut,
@@ -215,7 +215,7 @@ flux_fitting <- function(conc_df,
     conc_fitting <- flux_fitting_exptz(
       conc_df_cut,
       conc_df_lm,
-      {{conc_col}},
+      {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
       start_cut = start_cut,
@@ -231,7 +231,7 @@ flux_fitting <- function(conc_df,
     conc_fitting <- flux_fitting_hm(
       conc_df_cut,
       conc_df_lm,
-      {{conc_col}},
+      {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
       start_cut = start_cut,
@@ -247,7 +247,7 @@ flux_fitting <- function(conc_df,
     conc_fitting <- flux_fitting_quadratic(
       conc_df_cut,
       conc_df_lm,
-      {{conc_col}},
+      {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
       start_cut = start_cut,

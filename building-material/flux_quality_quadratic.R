@@ -7,7 +7,7 @@
 #' @param rsquared_threshold threshold of r squared value below which
 #' the linear model is considered an unsatisfactory fit
 #' @param fluxID_col column containing unique IDs for each flux
-#' @param conc_col column containing the measured gas concentration
+#' @param f_conc column containing the measured gas concentration
 #' @param slope_col column containing the slope of each flux
 #' (as calculated by the flux_fitting function)
 #' @param force_discard vector of fluxIDs that should be discarded

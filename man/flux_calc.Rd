@@ -7,7 +7,7 @@
 flux_calc(
   slopes_df,
   slope_col,
-  datetime_col,
+  f_datetime,
   temp_air_col,
   chamber_volume,
   atm_pressure,
@@ -33,7 +33,7 @@ flux_calc(
 \item{slope_col}{column containing the slope to calculate the flux
 (in \eqn{ppm * s^{-1}} or \eqn{ppb * s^{-1}})}
 
-\item{datetime_col}{column containing the datetime of each gas concentration
+\item{f_datetime}{column containing the datetime of each gas concentration
 measurements in \code{slopes_df}. The first one after cutting will be kept as
 datetime of each flux in the output.}
 

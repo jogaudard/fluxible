@@ -7,10 +7,10 @@
 stupeflux(
   raw_conc,
   field_record,
-  datetime_col,
+  f_datetime,
   start_col,
   end_col,
-  conc_col,
+  f_conc,
   startcrop,
   measurement_length,
   fit_type,
@@ -59,13 +59,13 @@ a gas concentration column as double.}
 Has to contain at least a column containing the start of each measurement,
 and any other column identifying the measurements.}
 
-\item{datetime_col}{datetime column in raw_conc (dmy_hms format)}
+\item{f_datetime}{datetime column in raw_conc (dmy_hms format)}
 
 \item{start_col}{start column in field_record (dmy_hms format)}
 
 \item{end_col}{end columne in field_record (\code{ymd_hms} format)}
 
-\item{conc_col}{concentration column in raw_conc}
+\item{f_conc}{concentration column in raw_conc}
 
 \item{startcrop}{how many seconds should be discarded at the beginning of
 the measurement}
@@ -209,9 +209,9 @@ data(record_short)
 stupeflux(
 raw_conc = co2_df_short,
 field_record = record_short,
-datetime_col = datetime,
+f_datetime = datetime,
 start_col = start,
-conc_col = conc,
+f_conc = conc,
 startcrop = 10,
 measurement_length = 180,
 fit_type = "exp_zhao18",
