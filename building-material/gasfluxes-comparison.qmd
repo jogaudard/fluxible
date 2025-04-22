@@ -14,9 +14,9 @@ library(fluxible)
 fluxible_fluxes_hm <- stupeflux(
     raw_conc = co2_liahovden,
     field_record = record_liahovden,
-    datetime_col = datetime,
+    f_datetime = datetime,
     start_col = start,
-    conc_col = conc,
+    f_conc = conc,
     startcrop = 0,
     measurement_length = 180,
     fit_type = "exp_hm",
@@ -54,9 +54,9 @@ library(gasfluxes)
 conc_lia <- fluxible::flux_match(
   raw_conc = co2_liahovden,
   field_record = record_liahovden,
-  datetime_col = datetime,
+  f_datetime = datetime,
   start_col = start,
-  conc_col = conc,
+  f_conc = conc,
   startcrop = 0,
   measurement_length = 170, # gasfluxes does not provide a cutting tool, so we just do it here
   ratio_threshold = 0.5,
@@ -310,9 +310,9 @@ library(ggplot2)
 fluxible_fluxes_lm <- stupeflux(
     raw_conc = co2_liahovden,
     field_record = record_liahovden,
-    datetime_col = datetime,
+    f_datetime = datetime,
     start_col = start,
-    conc_col = conc,
+    f_conc = conc,
     startcrop = 0,
     measurement_length = 180,
     fit_type = "linear",

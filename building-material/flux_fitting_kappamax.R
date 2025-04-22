@@ -13,8 +13,8 @@
 #' `C(t) = C_m + (C_z - C_m) exp(-b * t)`
 #' @param conc_df dataframe of gas concentration over time
 #' @param conc_df_cut dataframe of gas concentration over time, cut
-#' @param conc_col column with gas concentration
-#' @param datetime_col column with datetime of each concentration measurement
+#' @param f_conc column with gas concentration
+#' @param f_datetime column with datetime of each concentration measurement
 #' Note that if there are duplicated datetime in the same f_fluxid only
 #' the first row will be kept
 #' @param f_start column with datetime when the measurement started
@@ -47,8 +47,8 @@
 
 flux_fitting_kappamax <- function(conc_df_cut,
                             conc_df,
-                            conc_col,
-                            datetime_col,
+                            f_conc,
+                            f_datetime,
                             f_start,
                             f_end,
                             f_fluxid,
@@ -62,8 +62,8 @@ flux_fitting_kappamax <- function(conc_df_cut,
   conc_fitting_hm <- flux_fitting_hm(
       conc_df_cut,
       conc_df,
-      {{conc_col}},
-      {{datetime_col}},
+      {{f_conc}},
+      {{f_datetime}},
       {{f_start}},
       {{f_end}},
       {{f_fluxid}},

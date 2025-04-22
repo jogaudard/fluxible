@@ -6,8 +6,8 @@
 \usage{
 flux_plot(
   slopes_df,
-  conc_col,
-  datetime_col,
+  f_conc,
+  f_datetime,
   color_discard = "#D55E00",
   color_cut = "#D55E00",
   color_ok = "#009E73",
@@ -28,9 +28,9 @@ flux_plot(
 \item{slopes_df}{dataset containing slopes,
 with flags produced by \link[fluxible:flux_quality]{flux_quality}}
 
-\item{conc_col}{column with gas concentration}
+\item{f_conc}{column with gas concentration}
 
-\item{datetime_col}{column with datetime of each data point}
+\item{f_datetime}{column with datetime of each data point}
 
 \item{color_discard}{color for fits with a discard quality flag}
 

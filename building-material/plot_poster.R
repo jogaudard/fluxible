@@ -326,7 +326,7 @@ CO2_INCLINE_2022 <- flux_match(
   record,
   startcrop = 0,
   measurement_length = 180,
-  conc_col = "CO2"
+  f_conc = "CO2"
 ) |>
 filter(f_fluxid %in% c(408, 255)) |>
 # filter(f_fluxid == 408) |>
@@ -403,7 +403,7 @@ conc2020 <- flux_match(
   fluxes,
   incline,
   measurement_length = 180,
-  conc_col = "CO2"
+  f_conc = "CO2"
 ) |>
   filter(
     f_fluxid == 37
