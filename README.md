@@ -213,7 +213,7 @@ Apr 2024, EGU24-956, <https://doi.org/10.5194/egusphere-egu24-956>,
 
 Fluxible builds on the earlier effort from the Plant Functional Traits
 Course Community
-[https://github.com/PaulESantos/co2fluxtent](co2fluxtent) (Brummer *et
+[co2fluxtent](https://github.com/PaulESantos/co2fluxtent) (Brummer *et
 al.*, 2023).
 
 #### References
