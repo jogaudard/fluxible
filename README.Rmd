@@ -151,6 +151,6 @@ Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible: an R pac
 
 ## Acknowledgements
 
-Fluxible builds on the earlier effort from the Plant Functional Traits Course Community [https://github.com/PaulESantos/co2fluxtent](co2fluxtent) [@co2fluxtent].
+Fluxible builds on the earlier effort from the Plant Functional Traits Course Community [co2fluxtent](https://github.com/PaulESantos/co2fluxtent) [@co2fluxtent].
 
 #### References
