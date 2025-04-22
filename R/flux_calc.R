@@ -4,7 +4,7 @@
 #' @param slopes_df dataframe of flux slopes
 #' @param slope_col column containing the slope to calculate the flux
 #' (in \eqn{ppm * s^{-1}} or \eqn{ppb * s^{-1}})
-#' @param datetime_col column containing the datetime of each gas concentration
+#' @param f_datetime column containing the datetime of each gas concentration
 #' measurements in `slopes_df`. The first one after cutting will be kept as
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
@@ -75,7 +75,7 @@
 
 flux_calc <- function(slopes_df,
                       slope_col,
-                      datetime_col,
+                      f_datetime,
                       temp_air_col,
                       chamber_volume,
                       atm_pressure,
@@ -109,7 +109,7 @@ flux_calc <- function(slopes_df,
     select(
       {{slope_col}},
       {{temp_air_col}},
-      {{datetime_col}}
+      {{f_datetime}}
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
@@ -181,13 +181,13 @@ flux_calc <- function(slopes_df,
     select(
       {{f_fluxid}},
       {{temp_air_col}},
-      {{datetime_col}},
+      {{f_datetime}},
       {{slope_col}},
       any_of(c(name_vol, name_atm, name_plot))
     ) |>
     summarise(
       f_temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),
-      {{datetime_col}} := min({{datetime_col}}),
+      {{f_datetime}} := min({{f_datetime}}),
       .by = c(
         {{f_fluxid}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
       )

@@ -7,7 +7,7 @@
 \usage{
 flux_quality(
   slopes_df,
-  conc_col,
+  f_conc,
   f_fluxid = f_fluxid,
   f_slope = f_slope,
   f_time = f_time,
@@ -43,7 +43,7 @@ flux_quality(
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{conc_col}{column containing the measured gas concentration
+\item{f_conc}{column containing the measured gas concentration
 (exponential fits)}
 
 \item{f_fluxid}{column containing unique IDs for each flux}
