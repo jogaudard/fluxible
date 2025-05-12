@@ -7,7 +7,7 @@
 \usage{
 flux_quality(
   slopes_df,
-  f_conc,
+  f_conc = f_conc,
   f_fluxid = f_fluxid,
   f_slope = f_slope,
   f_time = f_time,

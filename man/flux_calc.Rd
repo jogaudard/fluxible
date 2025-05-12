@@ -7,7 +7,7 @@
 flux_calc(
   slopes_df,
   slope_col,
-  f_datetime,
+  f_datetime = f_datetime,
   temp_air_col,
   chamber_volume,
   atm_pressure,

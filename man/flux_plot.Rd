@@ -6,8 +6,8 @@
 \usage{
 flux_plot(
   slopes_df,
-  f_conc,
-  f_datetime,
+  f_conc = f_conc,
+  f_datetime = f_datetime,
   color_discard = "#D55E00",
   color_cut = "#D55E00",
   color_ok = "#009E73",

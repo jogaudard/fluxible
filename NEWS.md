@@ -1,3 +1,7 @@
+# fluxible 1.1.1
+
+*`flux_gep`: deprecated, renamed into `flux_gpp` (does exactly the same).
+
 # fluxible 1.1.0
 
 # fluxible 1.0.5
