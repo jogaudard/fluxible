@@ -57,13 +57,14 @@ ideally same as \code{cz_window} (exponential fit)}
 
 \item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{exp_hm}, \code{quadratic} or \code{linear.}
 \code{exp_zhao18} is using the exponential model
-\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}
+\ifelse{html}{\out{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}}{\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}{ASCII}}
 from Zhao et al (2018).
 \code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
-\eqn{C(t) = C~m~ + a * t + (C_z - C_m) \exp(-b * t)}.
+\ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
 \code{exp_hm} is using the HM model
 (Pedersen et al., 2010; Hutchinson and Mosier, 1981)
-\eqn{C(t) = C~m~ + (C~z~ - C~m~) \exp(-b * t)}}
+\ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}
+\code{exponential} is equal to \code{exp_zhao18}, for backwards compatibility}
 }
 \value{
 a dataframe with the slope at t zero (\code{f_slope}),
@@ -75,7 +76,7 @@ and any columns present in the input.
 The type of fit is added as an attribute for use by the other functions.
 }
 \description{
-fits gas concentration over time data with a model
+Fits gas concentration over time data with a model
 (exponential, quadratic or linear) and provides the slope later used
 to calculate gas fluxes with \link[fluxible:flux_calc]{flux_calc}
 }
@@ -100,8 +101,7 @@ Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 On the calculation of daytime CO2 fluxes measured by automated closed
 transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
 https://doi.org/10.1016/j.agrformet.2018.08.022
-\code{exponential} is equal to \code{exp_zhao18}, for backwards compatibility
 }
 \seealso{
-\link[gasfluxes:selectfluxes]{selectfluxes} \link[HMR:HMR]{HMR}
+\link[gasfluxes]{selectfluxes} \link[HMR]{HMR}
 }
