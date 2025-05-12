@@ -1,5 +1,5 @@
-#' plotting fluxes for visual evaluation
-#' @description plots the fluxes, fit and slope in facets
+#' Plotting fluxes for visual evaluation
+#' @description Plots the fluxes, fit and slope in facets
 #' with color code indicating quality flags
 #' This function takes time to run and is optional in the workflow,
 #' but it is still highly recommended to use it to visually check
@@ -28,7 +28,7 @@
 #' @param output `pdfpages`, the plots are saved as A4 landscape pdf pages;
 #' `ggsave`, the plots can be saved with the ggsave function;
 #' `print_only` (default) prints the plot without creating a file
-#' (independently from 'print_plot' being TRUE or FALSE)
+#' (independently from `print_plot` being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
@@ -54,8 +54,8 @@
 #' @export
 
 flux_plot <- function(slopes_df,
-                      f_conc,
-                      f_datetime,
+                      f_conc = f_conc,
+                      f_datetime = f_datetime,
                       color_discard = "#D55E00",
                       color_cut = "#D55E00",
                       color_ok = "#009E73",
