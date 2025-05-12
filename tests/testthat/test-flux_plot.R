@@ -193,7 +193,7 @@ test_that("plot for kappamax fit", {
         t_zero = 10
       ) |>
         flux_quality(
-          conc,
+          f_conc = conc,
           f_pvalue = f_pvalue_lm,
           f_rsquared = f_rsquared_lm,
           kappamax = TRUE
