@@ -11,18 +11,6 @@
 #' `exp_hm` is using the HM model
 #' (Pedersen et al., 2010; Hutchinson and Mosier, 1981)
 #' \eqn{C(t) = C~m~ + (C~z~ - C~m~) \exp(-b * t)}
-#' @references Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
-#' A comprehensive approach to soil-atmosphere trace-gas flux estimation with
-#' static chambers. European Journal of Soil Science 61, 888–902.
-#' https://doi.org/10.1111/j.1365-2389.2010.01291.x
-#' @references Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
-#' for Field Measurement of Nitrous Oxide Fluxes.
-#' Soil Science Society of America Journal 45, 311–316.
-#' https://doi.org/10.2136/sssaj1981.03615995004500020017x
-#' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
-#' On the calculation of daytime CO2 fluxes measured by automated closed
-#' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
-#' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' `exponential` is equal to `exp_zhao18`, for backwards compatibility
 #' @param conc_df dataframe of gas concentration over time
 #' @param f_conc column with gas concentration
@@ -53,6 +41,18 @@
 #' and any columns present in the input.
 #' The type of fit is added as an attribute for use by the other functions.
 #' @seealso \link[gasfluxes:selectfluxes]{selectfluxes} \link[HMR:HMR]{HMR}
+#' @references Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
+#' A comprehensive approach to soil-atmosphere trace-gas flux estimation with
+#' static chambers. European Journal of Soil Science 61, 888–902.
+#' https://doi.org/10.1111/j.1365-2389.2010.01291.x
+#' @references Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
+#' for Field Measurement of Nitrous Oxide Fluxes.
+#' Soil Science Society of America Journal 45, 311–316.
+#' https://doi.org/10.2136/sssaj1981.03615995004500020017x
+#' @references Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
+#' On the calculation of daytime CO2 fluxes measured by automated closed
+#' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
+#' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' @importFrom lubridate int_length interval
 #' @examples
 #' data(co2_conc)
