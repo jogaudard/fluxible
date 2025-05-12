@@ -151,18 +151,20 @@ flux_quality <- function(slopes_df,
     select(
       {{f_slope}},
       {{f_fit}},
-      {{f_time}}
+      {{f_time}},
+      {{f_conc}}
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
                           fn = list(
                             is.numeric,
                             is.numeric,
+                            is.numeric,
                             is.numeric
                           ),
                           msg = rep(
                             "has to be numeric",
-                            3
+                            4
                           ),
                           name_df = name_df)
 

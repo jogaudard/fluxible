@@ -169,7 +169,7 @@
     Code
       vdiffr::expect_doppelganger("plot for kappamax fit", flux_plot(flux_quality(
         flux_fitting(co2_conc, conc, datetime, fit_type = "exp_hm", end_cut = 30,
-          t_zero = 10), conc, f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm,
+          t_zero = 10), f_conc = conc, f_pvalue = f_pvalue_lm, f_rsquared = f_rsquared_lm,
         kappamax = TRUE), conc, datetime))
     Message
       Cutting measurements...

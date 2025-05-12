@@ -72,13 +72,12 @@ flux_quality_exp <- function(slopes_df,
   slopes_df_check <- slopes_df |>
     select(
       {{f_b}},
-      {{f_slope_lm}},
-      {{f_conc}}
+      {{f_slope_lm}}
     )
 
   slopes_df_ok <- flux_fun_check(slopes_df_check,
-                                 fn = list(is.numeric, is.numeric, is.numeric),
-                                 msg = rep("has to be numeric", 3),
+                                 fn = list(is.numeric, is.numeric),
+                                 msg = rep("has to be numeric", 2),
                                  name_df = name_df)
 
 
