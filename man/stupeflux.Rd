@@ -73,17 +73,15 @@ the measurement}
 \item{measurement_length}{length of the measurement (in seconds)
 from the start specified in the field_record}
 
-\item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{quadratic} or \code{linear.}
+\item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{exp_hm}, \code{quadratic} or \code{linear.}
 \code{exp_zhao18} is using the exponential model
-\verb{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}
+\ifelse{html}{\out{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}}{\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}{ASCII}}
 from Zhao et al (2018).
 \code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
-\ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}
-{\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
+\ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
 \code{exp_hm} is using the HM model
 (Pedersen et al., 2010; Hutchinson and Mosier, 1981)
-\ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}
-{\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}}
+\ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}}
 
 \item{temp_air_col}{column containing the air temperature used
 to calculate fluxes. Will be averaged with NA removed.}
@@ -102,11 +100,9 @@ can also be a column in case it is a variable}
 
 \item{flux_unit}{unit in which the calculated flux will be
 \code{mmol} outputs fluxes in
-\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}
-{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}};
+\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}};
 \code{micromol} outputs fluxes in
-\ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}
-{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}}
+\ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}}
 
 \item{fixed_length}{if \code{TRUE} (default), the \code{measurement_length} is used to
 create the end column. If \code{FALSE}, \code{end_col} has to be provided.}
@@ -201,11 +197,15 @@ the slope corrected according to the recommandations of the quality flags.}
 }
 \value{
 a dataframe containing flux IDs, datetime of measurements' starts,
-fluxes in mmol*m^(-2)\emph{h^(-1) or micromol}m^(-2)*h^(-1) (\code{f_flux}) according
-to \code{flux_unit}, temperature average for each flux in Kelvin (\code{f_temp_ave}),
-the total volume of the setup for each measurement (\code{f_volume_setup}),
-the model used in \link[fluxible:flux_fitting]{flux_fitting},
-any column specified in \code{cols_keep}, any column specified in \code{cols_ave} with
+fluxes in
+\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
+or
+\ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
+(\code{f_flux}) according to \code{flux_unit}, temperature average for each flux in
+Kelvin (\code{f_temp_ave}), the total volume of the setup for each measurement
+(\code{f_volume_setup}), the model used in
+\link[fluxible:flux_fitting]{flux_fitting}, any column specified in
+\code{cols_keep}, any column specified in \code{cols_ave} with
 their value averaged over the measurement after cuts and discarding NA.
 }
 \description{

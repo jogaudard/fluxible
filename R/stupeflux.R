@@ -23,17 +23,15 @@
 #' @param end_col end columne in field_record (`ymd_hms` format)
 #' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
 #' create the end column. If `FALSE`, `end_col` has to be provided.
-#' @param fit_type `exp_zhao18`, `exp_tz`, `quadratic` or `linear.`
+#' @param fit_type `exp_zhao18`, `exp_tz`, `exp_hm`, `quadratic` or `linear.`
 #' `exp_zhao18` is using the exponential model
-#' `C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))`
+#' \ifelse{html}{\out{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}}{\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}{ASCII}}
 #' from Zhao et al (2018).
 #' `expt_tz` is a modified version which allows the user to fix `t_zero`:
-#' \ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}
-#' {\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
+#' \ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
 #' `exp_hm` is using the HM model
 #' (Pedersen et al., 2010; Hutchinson and Mosier, 1981)
-#' \ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}
-#' {\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}
+#' \ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' (exponential fit)
 #' @param b_window window to estimate b. It is an interval after tz where
@@ -79,11 +77,9 @@
 #' `ppm` or `ppb`
 #' @param flux_unit unit in which the calculated flux will be
 #' `mmol` outputs fluxes in
-#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}
-#' {\eqn{mmol*m^{-2}*h^{-1}}{ASCII}};
+#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}};
 #' `micromol` outputs fluxes in
-#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}
-#' {\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
+#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
 #' @param chamber_volume volume of the flux chamber in L,
 #' can also be a column in case it is a variable
 #' @param tube_volume volume of the tubing in L,
@@ -110,11 +106,15 @@
 #' since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
 #' but it will influence the values of the columns in `cols_ave`.
 #' @return a dataframe containing flux IDs, datetime of measurements' starts,
-#' fluxes in mmol*m^(-2)*h^(-1) or micromol*m^(-2)*h^(-1) (`f_flux`) according
-#' to `flux_unit`, temperature average for each flux in Kelvin (`f_temp_ave`),
-#' the total volume of the setup for each measurement (`f_volume_setup`),
-#' the model used in \link[fluxible:flux_fitting]{flux_fitting},
-#' any column specified in `cols_keep`, any column specified in `cols_ave` with
+#' fluxes in
+#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
+#' or
+#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
+#' (`f_flux`) according to `flux_unit`, temperature average for each flux in
+#' Kelvin (`f_temp_ave`), the total volume of the setup for each measurement
+#' (`f_volume_setup`), the model used in
+#' \link[fluxible:flux_fitting]{flux_fitting}, any column specified in
+#' `cols_keep`, any column specified in `cols_ave` with
 #' their value averaged over the measurement after cuts and discarding NA.
 #' @references Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
 #' A comprehensive approach to soil-atmosphere trace-gas flux estimation with

@@ -57,16 +57,13 @@ ideally same as \code{cz_window} (exponential fit)}
 
 \item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{exp_hm}, \code{quadratic} or \code{linear.}
 \code{exp_zhao18} is using the exponential model
-\ifelse{html}{\out{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}}
-{\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}{ASCII}}
+\ifelse{html}{\out{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}}{\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}{ASCII}}
 from Zhao et al (2018).
 \code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
-\ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}
-{\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
+\ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
 \code{exp_hm} is using the HM model
 (Pedersen et al., 2010; Hutchinson and Mosier, 1981)
-\ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}
-{\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}
+\ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}
 \code{exponential} is equal to \code{exp_zhao18}, for backwards compatibility}
 }
 \value{
@@ -106,5 +103,5 @@ transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
 https://doi.org/10.1016/j.agrformet.2018.08.022
 }
 \seealso{
-\link\href{selectfluxes}{gasfluxes:selectfluxes} \link[HMR]{HMR}
+\link[gasfluxes]{selectfluxes} \link[HMR]{HMR}
 }

@@ -8,13 +8,11 @@
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
 #' `ppm` or `ppb`
-#' @param flux_unit unit in which the calculated flux will be
+#' @param flux_unit unit in which the calculated flux will be:
 #' `mmol` outputs fluxes in
-#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}
-#' {\eqn{mmol*m^{-2}*h^{-1}}{ASCII}};
-#' `micromol` outputs fluxes in
-#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}
-#' {\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
+#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
+#' ; `micromol` outputs fluxes in
+#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
 #' @param f_cut column containing cutting information
 #' @param keep_arg name in `f_cut` of data to keep
 #' @param chamber_volume volume of the flux chamber in L,
@@ -48,10 +46,9 @@
 #' `slopes_df` was produced using \link[fluxible:flux_fitting]{flux_fitting}.
 #' @return a dataframe containing flux IDs, datetime of measurements' starts,
 #' fluxes in
-#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}
-#' {\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
-#' or \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}
-#' {\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
+#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
+#' or
+#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
 #' (`f_flux`) according to `flux_unit`, temperature average for each flux in
 #' Kelvin (`f_temp_ave`), the total volume of the setup for each measurement
 #' (`f_volume_setup`), the model used in

@@ -53,13 +53,11 @@ can also be a column in case it is a variable}
 \item{conc_unit}{unit in which the concentration of gas was measured
 \code{ppm} or \code{ppb}}
 
-\item{flux_unit}{unit in which the calculated flux will be
+\item{flux_unit}{unit in which the calculated flux will be:
 \code{mmol} outputs fluxes in
-\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}
-{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}};
-\code{micromol} outputs fluxes in
-\ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}
-{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}}
+\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
+; \code{micromol} outputs fluxes in
+\ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}}
 
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux,
@@ -96,10 +94,9 @@ but it will influence the values of the columns in \code{cols_ave}.}
 \value{
 a dataframe containing flux IDs, datetime of measurements' starts,
 fluxes in
-\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}
-{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
-or \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}
-{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
+\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
+or
+\ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
 (\code{f_flux}) according to \code{flux_unit}, temperature average for each flux in
 Kelvin (\code{f_temp_ave}), the total volume of the setup for each measurement
 (\code{f_volume_setup}), the model used in

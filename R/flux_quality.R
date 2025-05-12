@@ -68,10 +68,8 @@
 #' @param f_fit_lm column with the fit of the linear model.
 #' (as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)
 #' @details the kappamax method (Hüppi et al., 2018) selects the linear slope if
-#' \ifelse{html}{\out{|b| > kappamax}}
-#' {\eqn{|b| > kappamax}{ASCII}}, with
-#' \ifelse{html}{\out{kappamax = |f_slope_lm / instr_error|}}
-#' {\eqn{kappamax = |f_slope_lm / instr_error|}{ASCII}}.
+#' \ifelse{html}{\out{|b| > kappamax}}{\eqn{|b| > kappamax}{ASCII}}, with
+#' \ifelse{html}{\out{kappamax = |f_slope_lm / instr_error|}}{\eqn{kappamax = |f_slope_lm / instr_error|}{ASCII}}.
 #' The original kappamax method was applied to the HMR model
 #' (Pedersen et al., 2010; Hutchinson and Mosier, 1981), but here it can be
 #' applied to any exponential fit.
