@@ -2,8 +2,7 @@
 % Please edit documentation in R/flux_quality.R
 \name{flux_quality}
 \alias{flux_quality}
-\title{assessing quality of slopes calculated with
-\link[fluxible:flux_fitting]{flux_fitting}}
+\title{Assessing the quality of the fits}
 \usage{
 flux_quality(
   slopes_df,
@@ -147,12 +146,16 @@ be exported as a dataframe using
 \link[fluxible:flux_flag_count]{flux_flag_count}
 }
 \description{
-indicates if slopes should be discarded or replaced
+Indicates if the slopes provided by
+\link[fluxible:flux_fitting]{flux_fitting} should be discarded or replaced
 by 0 according to quality thresholds set by user
 }
 \details{
-the kappamax method (Hüppi et al., 2018) selects the linear slope
-if \eqn{|b| > kappamax}, with \eqn{kappamax = |f_slope_lm / instr_error|}.
+the kappamax method (Hüppi et al., 2018) selects the linear slope if
+\ifelse{html}{\out{|b| > kappamax}}
+{\eqn{|b| > kappamax}{ASCII}}, with
+\ifelse{html}{\out{kappamax = |f_slope_lm / instr_error|}}
+{\eqn{kappamax = |f_slope_lm / instr_error|}{ASCII}}.
 The original kappamax method was applied to the HMR model
 (Pedersen et al., 2010; Hutchinson and Mosier, 1981), but here it can be
 applied to any exponential fit.
@@ -178,5 +181,5 @@ for Field Measurement of Nitrous Oxide Fluxes.
 Soil Science Society of America Journal 45, 311–316.
 }
 \seealso{
-\link[gasfluxes:selectfluxes]{selectfluxes}
+\link[gasfluxes]{selectfluxes}
 }

@@ -6,7 +6,6 @@
 \usage{
 flux_quality_qua(
   slopes_df,
-  f_conc,
   f_fluxid,
   f_slope,
   f_cut,
@@ -25,8 +24,6 @@ flux_quality_qua(
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID, p.value and r.squared}
-
-\item{f_conc}{column with gas concentration}
 
 \item{f_fluxid}{column of ID for each measurement}
 

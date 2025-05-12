@@ -113,6 +113,7 @@ test_that("works in a pipeline", {
         f_rsquared = f_rsquared_lm,
         kappamax = TRUE
       ) |>
+
       dplyr::select(f_fluxid, f_quality_flag, f_RMSE, f_cor_coef,
                     f_ratio, f_gfactor) |>
       dplyr::distinct()

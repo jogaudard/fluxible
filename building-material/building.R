@@ -1222,4 +1222,18 @@ test_data <- co2_conc_missing |>
       select(f_fluxid, f_slope) |>
       distinct()
 
-
+test <- flux_fitting(
+        co2_conc,
+        conc,
+        datetime,
+        fit_type = "exp_hm",
+        end_cut = 30,
+        t_zero = 10
+      )
+        flux_quality(
+          test,
+          f_conc = conc,
+          # f_pvalue = f_pvalue_lm,
+          # f_rsquared = f_rsquared_lm,
+          kappamax = TRUE
+        )

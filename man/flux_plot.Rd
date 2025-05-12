@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_plot.R
 \name{flux_plot}
 \alias{flux_plot}
-\title{plotting fluxes for visual evaluation}
+\title{Plotting fluxes for visual evaluation}
 \usage{
 flux_plot(
   slopes_df,
@@ -61,7 +61,7 @@ but will take time depending on the size of the dataset}
 \item{output}{\code{pdfpages}, the plots are saved as A4 landscape pdf pages;
 \code{ggsave}, the plots can be saved with the ggsave function;
 \code{print_only} (default) prints the plot without creating a file
-(independently from 'print_plot' being TRUE or FALSE)}
+(independently from \code{print_plot} being TRUE or FALSE)}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}
@@ -76,7 +76,7 @@ if \code{print_plot = FALSE} it will not return anything but will produce a file
 according to the \code{output} argument.
 }
 \description{
-plots the fluxes, fit and slope in facets
+Plots the fluxes, fit and slope in facets
 with color code indicating quality flags
 This function takes time to run and is optional in the workflow,
 but it is still highly recommended to use it to visually check

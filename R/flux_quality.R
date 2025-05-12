@@ -150,9 +150,9 @@ flux_quality <- function(slopes_df,
   slopes_df_check <- slopes_df |>
     select(
       {{f_slope}},
-      {{f_conc}},
       {{f_fit}},
-      {{f_time}}
+      {{f_time}},
+      {{f_slope}}
     )
 
   df_ok <- flux_fun_check(slopes_df_check,
@@ -247,9 +247,8 @@ flux_quality <- function(slopes_df,
 
     if (nrow(quality_flag_lm) > 0) {
       quality_flag_lm <- flux_quality_lm(
-        slopes_df = quality_flag_lm,
-        f_conc = {{f_conc}},
-        f_fluxid = {{f_fluxid}},
+        quality_flag_lm,
+        {{f_fluxid}},
         f_slope = {{f_slope}},
         f_cut = {{f_cut}},
         f_pvalue = {{f_pvalue}},
@@ -315,7 +314,6 @@ flux_quality <- function(slopes_df,
 
   if (fit_type == "quadratic" && kappamax == FALSE) {
     quality_flag <- flux_quality_qua(slopes_df,
-      {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
       {{f_cut}},
@@ -336,7 +334,6 @@ flux_quality <- function(slopes_df,
 
   if (fit_type == "linear") {
     quality_flag <- flux_quality_lm(slopes_df,
-      {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
       {{f_cut}},
