@@ -33,6 +33,8 @@
     Condition
       Warning in `mapply()`:
       longer argument not a multiple of length of shorter
+      Warning in `mapply()`:
+      longer argument not a multiple of length of shorter
     Message
       
        Total number of measurements: 6
@@ -66,6 +68,8 @@
        fluxID 1 : slope was estimated on 139 points out of 150 seconds
        fluxID 2 : slope was estimated on 114 points out of 150 seconds
        fluxID 4 : slope was estimated on 103 points out of 150 seconds
+      Warning in `mapply()`:
+      longer argument not a multiple of length of shorter
       Warning in `mapply()`:
       longer argument not a multiple of length of shorter
     Message
@@ -103,6 +107,8 @@
        fluxID 4 : slope was estimated on 103 points out of 150 seconds
       Warning in `mapply()`:
       longer argument not a multiple of length of shorter
+      Warning in `mapply()`:
+      longer argument not a multiple of length of shorter
     Message
       
        Total number of measurements: 6
@@ -134,6 +140,8 @@
        fluxID 4 : slope was estimated on 103 points out of 150 seconds
       Warning in `mapply()`:
       longer argument not a multiple of length of shorter
+      Warning in `mapply()`:
+      longer argument not a multiple of length of shorter
     Message
       
        Total number of measurements: 6
@@ -161,6 +169,8 @@
       Calculating fits and slopes...
       Done.
     Condition
+      Warning in `mapply()`:
+      longer argument not a multiple of length of shorter
       Warning in `mapply()`:
       longer argument not a multiple of length of shorter
     Message
@@ -195,6 +205,8 @@
       
        fluxID 5 : slope is NA, most likely an issue with the model optimization.
               Check your data or use a different model.
+      Warning in `mapply()`:
+      longer argument not a multiple of length of shorter
       Warning in `mapply()`:
       longer argument not a multiple of length of shorter
     Message
