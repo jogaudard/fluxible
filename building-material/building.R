@@ -1233,7 +1233,7 @@ test <- flux_fitting(
         flux_quality(
           test,
           f_conc = conc,
-          f_pvalue = f_pvalue_lm,
-          f_rsquared = f_rsquared_lm,
+          # f_pvalue = f_pvalue_lm,
+          # f_rsquared = f_rsquared_lm,
           kappamax = TRUE
         )
