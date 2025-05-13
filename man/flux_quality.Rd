@@ -178,6 +178,3 @@ Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
 for Field Measurement of Nitrous Oxide Fluxes.
 Soil Science Society of America Journal 45, 311–316.
 }
-\seealso{
-\link[gasfluxes]{selectfluxes}
-}

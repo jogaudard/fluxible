@@ -90,7 +90,6 @@
 #' It will also print a summary of the quality flags. This summary can also
 #' be exported as a dataframe using
 #' \link[fluxible:flux_flag_count]{flux_flag_count}
-#' @seealso \link[gasfluxes]{selectfluxes}
 #' @importFrom dplyr mutate case_when group_by rowwise summarise ungroup
 #' @importFrom tidyr nest unnest
 #' @importFrom stats cor
