@@ -40,7 +40,6 @@
 #' the parameters of the fit depending on the model used,
 #' and any columns present in the input.
 #' The type of fit is added as an attribute for use by the other functions.
-#' @seealso \link[gasfluxes]{selectfluxes} \link[HMR]{HMR}
 #' @references Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
 #' A comprehensive approach to soil-atmosphere trace-gas flux estimation with
 #' static chambers. European Journal of Soil Science 61, 888–902.
