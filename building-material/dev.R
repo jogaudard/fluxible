@@ -22,7 +22,8 @@ args()
 
 devtools::load_all()
 
-autoimport::autoimport()
+# do not use, it is a mess
+# autoimport::autoimport()
 
 devtools::document()
 devtools::test()
