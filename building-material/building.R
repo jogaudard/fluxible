@@ -98,7 +98,7 @@ record_short <- record %>%
 # a dataset with too many missing data
 co2_df_missing <- read_csv("tests/testthat/data/co2_df_missing.csv", col_types = "Tdddd")
 # co2_df_missing <- co2_df_short
-# co2_df_missing$CO2[c(FALSE, TRUE)] <- NA_real_ # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
+# co2_df_missing$CO2[c(FALSE, TRUE)] <- NA # we replace every second row with NA in CO2 to make it incomplete (less than 50% of data not NA)
 
 # the matching dataset that we want to have after the matching function
 # we can use the matching function to build it and then manually carefully check it
@@ -135,17 +135,17 @@ write_csv(co2_conc_missing, "tests/testthat/data/co2_conc_missing.csv")
 # to test the fitting, we will use the function, graph the fluxes, check them carefully and then assume the output is the expected one
 co2_conc <- readr::read_csv("tests/testthat/data/co2_conc.csv") # just to save time
 
-slopes0 <- flux_fitting_exp(co2_conc)
+slopes0 <- flux_fitting_zhao18(co2_conc)
 
 
    
 slopes60 <- co2_conc %>%
-   flux_fitting_exp(
+   flux_fitting_zhao18(
       end_cut = 60
    )
 
 slopes30 <- co2_conc %>%
-   flux_fitting_exp(
+   flux_fitting_zhao18(
       end_cut = 30
    )
    
@@ -444,7 +444,7 @@ flux_plot(slopes0qua, fit_type = "quadratic", print_plot = TRUE, f_ncol = 3)
 
 # reproducing group aesthetics error
 slopes0lin_flag |>
-filter(f_fluxID == 1) |>
+filter(f_fluxid == 1) |>
 flux_plot(fit_type = "lin",
             f_ylim_upper = 432)
 
@@ -567,7 +567,7 @@ test_function <- function(df,
                         # environment(test_function)
 test_function(slopes0)
 
-# missing data issue with flux_fitting_exp
+# missing data issue with flux_fitting_zhao18
 test_df <- flux_fitting(co2_conc,
    fit_type = "expo",
    end_cut = 30)
@@ -735,163 +735,490 @@ flux_plot(slopes0_flag)
 flux_plot(slopes0lin_flag, output = "pdfpages")
 
 
-try_segment <- pftc7_short |>
-    group_by(.data$file_name) |>
+testing <- function(conc_df,
+                    start_col,
+                    end_col
+) {
+  df <- conc_df |>
+        dplyr::mutate(
+          test = int_length(interval({{start_col}}, {{end_col}}))
+        ) |>
+        dplyr::select(test) |>
+        max()
+
+        df
+}
+
+testing(co2_conc, f_start, f_end)
+
+testing_lm <- function(conc_df,
+                       start_col,
+                       end_col,
+                       datetime_col,
+                       conc_col,
+                       fluxid_col,
+                       start_cut = 0,
+                       end_cut = 0,
+                       fit_type = "exp"
+                       ) {
+  # conc_df <- conc_df |>
+  #   mutate(
+  #     time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+  #       {{datetime_col}}[1],
+  #       units = "secs"
+  #     ),
+  #     time = as.double(.data$time),
+  #     .by = {{fluxid_col}}
+  #   )
+
+conc_df <- conc_df |>
+    group_by({{fluxid_col}}) |>
+    distinct({{datetime_col}}, .keep_all = TRUE) |>
+    ungroup()
+
+    fit_type <- flux_fit_type(
+    conc_df,
+    fit_type = fit_type
+  )
+
+length_flux_max <- conc_df |>
     mutate(
-      f_time = difftime(.data$date_time[seq_along(.data$date_time)],
-        .data$date_time[1],
+      length_flux = int_length(interval({{start_col}}, {{end_col}}))
+      # length_flux = interval({{end_col}}, {{start_col}})
+      # length_flux = as.double(.data$length_flux)
+    ) |>
+    select("length_flux") |>
+    max()
+
+  if ((start_cut + end_cut) >= length_flux_max) {
+    stop(
+      "You cannot cut more than the length of the measurements!"
+    )
+  }
+
+  conc_df <- conc_df |>
+    mutate(
+      f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+        {{datetime_col}}[1],
         units = "secs"
       ),
       f_time = as.double(.data$f_time),
-      ID = dplyr::cur_group_id()
+      {{start_col}} := {{start_col}} + start_cut,
+      {{end_col}} := {{end_col}} - end_cut,
+      f_cut = case_when(
+        {{datetime_col}} < {{start_col}} | {{datetime_col}} >= {{end_col}}
+        ~ "cut",
+        TRUE ~ "keep"
+      ),
+      f_cut = as_factor(.data$f_cut),
+      n_conc = sum(!is.na({{conc_col}})),
+      .by = {{fluxid_col}}
+    )
+
+  conc_df_cut <- conc_df |>
+    filter(
+      .data$f_cut == "keep"
     ) |>
+    drop_na({{conc_col}}) |>
+    mutate(
+      f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+        {{datetime_col}}[1],
+        units = "secs"
+      ),
+      f_time_cut = as.double(.data$f_time_cut),
+      length_window = max(.data$f_time_cut),
+      length_flux = difftime({{end_col}}, {{start_col}}, units = "sec"),
+      time_diff = .data$f_time - .data$f_time_cut,
+      n_conc_cut = sum(!is.na({{conc_col}})),
+      .by = {{fluxid_col}}
+    )
+
+cm_temp <- conc_df_cut |>
+    group_by({{fluxid_col}}) |>
+    distinct({{conc_col}}, .keep_all = TRUE) |>
+    mutate(
+      Cmax = max({{conc_col}}),
+      Cmin = min({{conc_col}}),
+      tmax = .data$f_time_cut[{{conc_col}} == .data$Cmax],
+      tmin = .data$f_time_cut[{{conc_col}} == .data$Cmin]
+    ) |>
+    select({{fluxid_col}}, "Cmax", "Cmin", "tmax", "tmin") |>
+    ungroup() |>
+    distinct(.data$Cmax, .data$Cmin, .keep_all = TRUE)
+
+    cm_slope <- conc_df_cut |>
+      group_by({{fluxid_col}}) |>
+      nest() |>
+      mutate(
+        mod_lm = map(.x = data, \(.x) lm(rlang::expr(!! rlang::enexpr(conc_col) ~ f_time_cut), data = .x)),
+        tidy = map(mod_lm, broom::tidy)
+    ) |>
+    unnest(tidy) |>
+    filter(term == "f_time_cut") |>
+    rename(slope = "estimate") |>
+    unnest(cols = c({{fluxid_col}}, data)) |>
+    select({{fluxid_col}}, slope) |>
+    distinct()
+
+    cm_slope
+    # conc_df_cut
+
+                       }
+
+testing_lm(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxid)
+
+debug(flux_fitting_zhao18)
+
+flux_fitting_zhao18(co2_conc,
+                 f_start,
+                 f_end,
+                 f_datetime,
+                 f_conc,
+                 f_fluxid,
+                         start_cut = 0,
+                         end_cut = 0,
+                         t_window = 20,
+                         cz_window = 15,
+                         b_window = 10,
+                         a_window = 10,
+                         roll_width = 15)  |>
+                         select(f_fluxid, f_slope, Cm_est) |>
+                         distinct()
+
+flux_fitting(co2_conc,
+                 f_start,
+                 f_end,
+                 f_datetime,
+                 f_conc,
+                 f_fluxid,
+                 fit_type = "exponential")
+
+
+testing_lm2 <- function(conc_df,
+                         start_col,
+                         end_col,
+                         datetime_col,
+                         conc_col,
+                         fluxid_col,
+                         start_cut = 0,
+                         end_cut = 0,
+                         t_window = 20,
+                         cz_window = 15,
+                         b_window = 10,
+                         a_window = 10,
+                         roll_width = 15,
+                         fit_type
+                         ) {
+
+args_ok <- flux_fun_check(list(
+    start_cut = start_cut,
+    end_cut = end_cut
+  ),
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
+
+  conc_df_check <- conc_df |>
+    select(
+      {{conc_col}},
+      {{start_col}},
+      {{end_col}},
+      {{datetime_col}}
+    )
+
+  conc_df_ok <- flux_fun_check(conc_df_check,
+                               fn = list(
+                                 is.numeric,
+                                 is.POSIXct,
+                                 is.POSIXct,
+                                 is.POSIXct
+                               ),
+                               msg = rep(c(
+                                 "has to be numeric",
+                                 "has to be POSIXct"
+                               ),
+                               c(1, 3)
+                               ),
+                               origdf = conc_df)
+
+
+  if (any(!c(args_ok, conc_df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
+  # conc_df <- conc_df |>
+  #   rename(
+  #     f_start = all_of((start_col)),
+  #     f_end = all_of((end_col)),
+  #     f_datetime = all_of((datetime_col)),
+  #     f_conc = all_of((conc_col)),
+  #     f_fluxid = all_of((fluxid_col))
+  #   )
+
+  conc_df <- conc_df |>
+    group_by({{fluxid_col}}) |>
+    distinct({{datetime_col}}, .keep_all = TRUE) |>
     ungroup()
 
-    str(try_segment)
+  fit_type <- flux_fit_type(
+    conc_df,
+    fit_type = fit_type
+  )
 
-for(fluxid in unique(try_segment$ID)){
-  dt_sub <- try_segment |>
-    filter(ID == fluxid)
+  args_ok <- flux_fun_check(list(
+    t_window = t_window,
+    cz_window = cz_window,
+    b_window = b_window,
+    a_window = a_window,
+    roll_width = roll_width,
+    start_cut = start_cut,
+    end_cut = end_cut
+  ),
+  fn = list(
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric,
+    is.numeric
+  ),
+  msg = rep("has to be numeric", 7))
+
+  if (any(!args_ok))
+    stop("Please correct the arguments", call. = FALSE)
+
+
+
+
+  length_flux_max <- conc_df |>
+    mutate(
+      length_flux = int_length(interval({{start_col}}, {{end_col}}))
+      # length_flux = interval({{end_col}}, {{start_col}})
+      # length_flux = as.double(.data$length_flux)
+    ) |>
+    select("length_flux") |>
+    max()
+
+  if ((start_cut + end_cut) >= length_flux_max) {
+    stop(
+      "You cannot cut more than the length of the measurements!"
+    )
+  }
+
+  message("Cutting measurements...")
+
+  conc_df <- conc_df |>
+    mutate(
+      f_time = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+        {{datetime_col}}[1],
+        units = "secs"
+      ),
+      f_time = as.double(.data$f_time),
+      {{start_col}} := {{start_col}} + start_cut,
+      {{end_col}} := {{end_col}} - end_cut,
+      f_cut = case_when(
+        {{datetime_col}} < {{start_col}} | {{datetime_col}} >= {{end_col}}
+        ~ "cut",
+        TRUE ~ "keep"
+      ),
+      f_cut = as_factor(.data$f_cut),
+      n_conc = sum(!is.na({{conc_col}})),
+      .by = {{fluxid_col}}
+    )
+
+  conc_df_cut <- conc_df |>
+    filter(
+      .data$f_cut == "keep"
+    ) |>
+    drop_na({{conc_col}}) |>
+    mutate(
+      f_time_cut = difftime({{datetime_col}}[seq_along({{datetime_col}})],
+        {{datetime_col}}[1],
+        units = "secs"
+      ),
+      f_time_cut = as.double(.data$f_time_cut),
+      length_window = max(.data$f_time_cut),
+      length_flux = difftime({{end_col}}, {{start_col}}, units = "sec"),
+      time_diff = .data$f_time - .data$f_time_cut,
+      n_conc_cut = sum(!is.na({{conc_col}})),
+      .by = {{fluxid_col}}
+    )
+
+  message("Estimating starting parameters for optimization...")
+
+  cm_temp <- conc_df_cut |>
+    group_by({{fluxid_col}}) |>
+    distinct({{conc_col}}, .keep_all = TRUE) |>
+    mutate(
+      Cmax = max({{conc_col}}),
+      Cmin = min({{conc_col}}),
+      tmax = .data$f_time_cut[{{conc_col}} == .data$Cmax],
+      tmin = .data$f_time_cut[{{conc_col}} == .data$Cmin]
+    ) |>
+    select({{fluxid_col}}, "Cmax", "Cmin", "tmax", "tmin") |>
+    ungroup() |>
+    distinct(.data$Cmax, .data$Cmin, .keep_all = TRUE)
+
+cm_slope <- conc_df_cut |>
+      group_by({{fluxid_col}}) |>
+      nest() |>
+      mutate(
+        mod_lm = map(.x = data, \(.x) lm(rlang::expr(!! rlang::enexpr(conc_col) ~ f_time_cut), data = .x)),
+        tidy = map(mod_lm, broom::tidy)
+    ) |>
+    unnest(tidy) |>
+    filter(term == "f_time_cut") |>
+    rename(slope = "estimate") |>
+    unnest(cols = c({{fluxid_col}}, data)) |>
+    select({{fluxid_col}}, slope)
+
+    cm_slope
 }
 
-  res <- cpop(try_segment$co2_conc, minseglen = 30)
-  seg <- fitted(res)
+testing_lm2(co2_conc, f_start, f_end, f_datetime, f_conc, f_fluxid, fit_type = "exp")
 
-pftc7_short <- pftc7_short |>
-    mutate(
-      f_end = start_time + 120
-    )
-
-    test_segment <- flux_fitting(
-      pftc7_short,
-      fit_type = "segments",
-      start_col = "start_time",
-      end_col = "f_end",
-      start_cut = 6,
-      end_cut = 0,
-      conc_col = "co2_conc",
-      par_col = "par",
-      datetime_col = "date_time",
-      h2o_col = "h2o_conc",
-      sign_str_col = "signal_strength",
-      fluxid_col = "file_name",
-      h2o_correction = TRUE,
-      min_seg_length = 30
-    )
-
-str(test_segment)
-View(test_segment)
-
-test_seg_quality <- flux_quality(
-  test_segment,
-  par_threshold = 650,
-  sd_threshold = 10
+test_df <- tibble(
+  ID = c(1:10),
+  values = c(11:20),
+  values2 = c(31:40)
 )
 
-pftc7 <- pftc7_long |>
-  group_by(file_name) |>
+test_fct <- function(df, col1, col2 = values2){
+  df |>
+    mutate(
+      mean = mean({{col1}}),
+      sum = sum({{col2}})
+  )
+}
+
+test_fct(test_df, values)
+
+
+test_vol <- function(
+  df,
+  col1,
+  volume
+){
+
+  # if(is.double(volume)) {
+  #   df <- df |>
+  #     mutate(
+  #       volume = volume
+  #     )
+  # }
+name_vol <- deparse(substitute(volume))
+
+  # name <- c(as.character(volume))
+  # name
+
+  df |>
+  select({{col1}}, any_of(name_vol)) |>
   mutate(
-    f_end = start_time + 120,
-    flux_ID = cur_group_id(),
-    ndata = n()
-  ) |>
-  ungroup()
+    result = {{col1}} + {{volume}}
+  )
+}
 
-  str(pftc7)
+test_vol(test_df, values, values2)
+test_vol(test_df, values, 10)
+names(test_df)
 
-pftc7 |>
-group_by(file_name) |>
-count()
+slopes30qua_flag |>
+filter(f_fluxid == 1) |>
+flux_plot(conc, datetime)
 
-pftc7_summary <- pftc7 |>
-  group_by(file_name) |>
-  nest() |>
-  summarise(
-    ndata = nrow(co2_conc)
-  ) |>
-  ungroup()
+test <- co2_conc |>
+  filter(f_fluxid == 1) |>
+    slice(-c(10, 15, 20))
 
-View(pftc7_summary)
 
-# pftc7 <- pftc7 |>
-#   filter(flux_ID %in% c(1:4))
+flux_fitting(test,
+                 conc,
+                 datetime,
+                 fit_type = "exponential") |>
+                 View()
 
-slopes_pftc7 <- pftc7_long |>
-  # filter(flux_ID %in% c(2:5)) |>
+
+
+# trying new exp_tz fit
+
+flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+    flux_quality(conc) |>
+    flux_plot(conc, datetime)
+
+
+# trying new exp_hm fit
+debug(flux_fitting_hm)
+
+flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      fit_type = "exp_hm")
+
+
+flux_match(
+  co2_liahovden,
+  record_liahovden,
+  datetime,
+  start,
+  conc,
+  startcrop = 0,
+  measurement_length = 220,
+  ratio_threshold = 0.5,
+  time_diff = 0
+) |>
   flux_fitting(
-  # conc_df = pftc7,
-  min_seg_length = 30,
-  start_cut = 0,
-  end_cut = 0,
-  start_col = "start_time",
-  end_col = "f_end",
-  datetime_col = "date_time",
-  conc_col = "co2_conc",
-  fluxid_col = "file_name",
-  sign_str_col = "signal_strength",
-  par_col = "par",
-  h2o_col = "h2o_conc",
-  fit_type = "segments"
-)
-
-pftc7 |>
-filter(flux_ID == 4) |>
-View()
-
-flags_pftc7 <- flux_quality(
-  slopes_df = slopes_pftc7,
-  ambient_conc = 421,
-  error = 100,
-  fluxid_col = "f_fluxID",
-  slope_col = "f_slope",
-  pvalue_col = "f_pvalue",
-  rsquared_col = "f_rsquared",
-  f_flag_fit_col = "f_flag_fit",
-  par_threshold = 600,
-  sign_str_threshold = 98,
-  pvalue_threshold = 0.3,
-  rsquared_threshold = 0.7,
-  sd_threshold = 0,
-  ratio_threshold = 0,
-  conc_col = "f_conc",
-  time_col = "f_time",
-  fit_col = "f_fit",
-  cut_col = "f_cut",
-  cut_arg = "cut"
-)
-
-str(flags_pftc7)
-View(flags_pftc7)
-
-flags_pftc7 |>
-filter(f_fluxID == "5_2800_east_2_day_photo.txt") |>
-View()
-
-flags_pftc7_try <- flags_pftc7 |>
-  group_by(f_fluxID) |>
-  count(f_quality_flag_seg) |>
-  top_n(1)
-
-flags_pftc7_try
-
-segment_flag <- flags_pftc7 |>
-  filter(
-    f_cut != "cut"
-  ) |>
-  select(f_fluxID, f_quality_flag_seg) |>
-    drop_na(f_quality_flag_seg) |>
-    distinct() |>
-    group_by(f_fluxID) |>
-    mutate(
-      count = n()
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
     ) |>
-    ungroup() |>
-    filter(count == 1) |>
-    rename(
-      f_quality_flag = "f_quality_flag_seg"
+    flux_quality(conc) |>
+    flux_plot(conc, datetime, output = "pdfpages")
+
+# what about missing data
+
+debug(flux_fitting_zhao18)
+flux_fitting(
+      co2_conc_missing,
+      conc,
+      datetime,
+      fit_type = "exp_zhao18",
+      end_cut = 60,
+      t_zero = 20
     ) |>
-    select(!count)
+    flux_quality(conc) |>
+    flux_plot(conc, datetime)
 
-segment_flag
+    # View()
+    flux_plot(conc, datetime)
 
+debug(flux_fitting_exptz)
 
+test_data <- co2_conc_missing |>
+    dplyr::mutate(
+      conc = replace(
+        conc,
+        c(297:425, 427:490, 495:506),
+        NA
+      )
+    )
+
+    flux_fitting(
+      test_data,
+      conc,
+      datetime,
+      fit_type = "exp_tz",
+      end_cut = 60,
+      t_zero = 20
+    ) |>
+      select(f_fluxid, f_slope) |>
+      distinct()
+      

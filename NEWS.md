@@ -88,3 +88,4 @@
 * `flux_calc` alows plot area as a variable.
 * `flux_fitting` with exponential model works when concentration data are
   missing in the middle of the measurement.
+  
