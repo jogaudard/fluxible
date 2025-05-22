@@ -7,7 +7,6 @@
 #' @param f_fluxid column of ID for each measurement
 #' @param f_slope column containing the slope of each flux
 #' (as calculated by the flux_fitting function)
-#' @param f_cut column containing the cutting information
 #' @param pvalue_threshold threshold of p-value below which the change
 #' of gas concentration over time is considered not significant (user decided)
 #' @param rsquared_threshold threshold of r squared value below which
@@ -30,7 +29,6 @@
 flux_quality_lm <- function(slopes_df,
                             f_fluxid,
                             f_slope,
-                            f_cut,
                             f_pvalue,
                             f_rsquared,
                             force_discard,
@@ -98,7 +96,7 @@ flux_quality_lm <- function(slopes_df,
         .data$f_quality_flag == "discard" ~ NA,
         .data$f_quality_flag == "zero" ~ 0
       ),
-      .by = c({{f_fluxid}}, {{f_cut}})
+      .by = c({{f_fluxid}})
     ) |>
     select(!c("f_n_conc", "f_flag_ratio", "f_start_error"))
 

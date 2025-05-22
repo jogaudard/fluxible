@@ -8,7 +8,6 @@ flux_quality_lm(
   slopes_df,
   f_fluxid,
   f_slope,
-  f_cut,
   f_pvalue,
   f_rsquared,
   force_discard,
@@ -26,8 +25,6 @@ flux_quality_lm(
 
 \item{f_slope}{column containing the slope of each flux
 (as calculated by the flux_fitting function)}
-
-\item{f_cut}{column containing the cutting information}
 
 \item{f_pvalue}{column containing the p-value of each flux}
 
