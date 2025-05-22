@@ -10,7 +10,6 @@
 #' present in the dataset (no showing 0).
 #' @param f_fluxid column containing fluxes unique ID
 #' @param f_quality_flag column containing the quality flags
-#' @param f_cut column indicating which part of the flux is being cut
 #' @param cut_arg argument defining that the data point should be cut out
 #' @return a dataframe with the number of fluxes for each quality flags
 #' and their proportion to the total
@@ -29,7 +28,6 @@
 flux_flag_count <- function(slopes_df,
                             f_fluxid = f_fluxid,
                             f_quality_flag = f_quality_flag,
-                            f_cut = f_cut,
                             f_flags = c(
                               "ok",
                               "discard",
@@ -40,18 +38,16 @@ flux_flag_count <- function(slopes_df,
                               "force_ok",
                               "force_zero",
                               "force_lm"
-                            ),
-                            cut_arg = "cut") {
+                            )) {
 
   flag_df <- slopes_df |>
-    filter({{f_cut}} != cut_arg) |>
     mutate(
       f_quality_flag = as.factor({{f_quality_flag}})
     ) |>
     select({{f_fluxid}}, {{f_quality_flag}}) |>
     distinct()
 
-  flags <- tibble({{f_quality_flag}} := factor(f_flags, levels = f_flags))
+  flags <- tibble({{f_quality_flag}} := factor(f_flags))
 
   count_table <- flag_df |>
     summarise(
