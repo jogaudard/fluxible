@@ -188,21 +188,7 @@ flux_quality <- function(slopes_df,
   name_conc <- names(select(slopes_df, {{f_conc}}))
 
 
-  slopes_df <- slopes_df |>
-    mutate(
-      f_n_conc = sum(!is.na(.data[[name_conc]])),
-      f_ratio = .data$f_n_conc / int_length(interval({{f_start}}, {{f_end}})),
-      f_flag_ratio = case_when(
-        .data$f_ratio == 0 ~ "no_data",
-        .data$f_ratio <= ratio_threshold ~ "too_low",
-        TRUE ~ "ok"
-      ),
-      f_min_slope = (2 * instr_error) / max({{f_time}}),
-      .by = c({{f_fluxid}}, {{f_cut}})
-    )
-
-
-
+  
   quality_par_start <- slopes_df |>
     # for the start error we take the entire flux into account
     group_by({{f_fluxid}}) |>
@@ -221,17 +207,29 @@ flux_quality <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = join_by({{f_fluxid}}))
-  
+
 
   slopes_keep <- slopes_df |>
     filter(
       {{f_cut}} != cut_arg
+    ) |>
+    mutate(
+      f_n_conc = sum(!is.na(.data[[name_conc]])),
+      f_ratio = .data$f_n_conc / int_length(interval({{f_start}}, {{f_end}})),
+      f_flag_ratio = case_when(
+        .data$f_ratio == 0 ~ "no_data",
+        .data$f_ratio <= ratio_threshold ~ "too_low",
+        TRUE ~ "ok"
+      ),
+      f_min_slope = (2 * instr_error) / max({{f_time}}),
+      .by = c({{f_fluxid}}, {{f_cut}})
     )
 
   slopes_cut <- slopes_df |>
     filter(
       {{f_cut}} == cut_arg
     )
+
 
   if (kappamax == TRUE) {
     slopes_keep <- flux_quality_kappamax(
