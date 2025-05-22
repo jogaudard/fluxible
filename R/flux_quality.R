@@ -115,7 +115,6 @@ flux_quality <- function(slopes_df,
                          f_slope_lm = f_slope_lm,
                          f_fit_lm = f_fit_lm,
                          f_b = f_b,
-                         f_datetime = f_datetime,
                          force_discard = c(),
                          force_ok = c(),
                          force_zero = c(),
@@ -188,7 +187,7 @@ flux_quality <- function(slopes_df,
   name_conc <- names(select(slopes_df, {{f_conc}}))
 
 
-  
+
   quality_par_start <- slopes_df |>
     # for the start error we take the entire flux into account
     group_by({{f_fluxid}}) |>
@@ -255,7 +254,6 @@ flux_quality <- function(slopes_df,
     if (nrow(quality_flag_lm) > 0) {
       quality_flag_lm <- flux_quality_lm(
         slopes_df = quality_flag_lm,
-        # f_conc = {{f_conc}},
         f_fluxid = {{f_fluxid}},
         f_slope = {{f_slope}},
         f_cut = {{f_cut}},
@@ -322,7 +320,6 @@ flux_quality <- function(slopes_df,
 
   if (fit_type == "quadratic" && kappamax == FALSE) {
     quality_flag <- flux_quality_qua(slopes_keep,
-      # {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
       {{f_cut}},
@@ -343,7 +340,6 @@ flux_quality <- function(slopes_df,
 
   if (fit_type == "linear") {
     quality_flag <- flux_quality_lm(slopes_keep,
-      # {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
       {{f_cut}},
