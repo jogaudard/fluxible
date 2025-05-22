@@ -23,8 +23,6 @@ flux_flag_count(
 (if different from default from flux_quality).
 If not provided, it will list only the flags that are
 present in the dataset (no showing 0).}
-
-\item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
 a dataframe with the number of fluxes for each quality flags

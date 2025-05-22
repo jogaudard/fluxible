@@ -10,7 +10,6 @@
 #' present in the dataset (no showing 0).
 #' @param f_fluxid column containing fluxes unique ID
 #' @param f_quality_flag column containing the quality flags
-#' @param cut_arg argument defining that the data point should be cut out
 #' @return a dataframe with the number of fluxes for each quality flags
 #' and their proportion to the total
 #' @importFrom dplyr all_of select group_by summarise
