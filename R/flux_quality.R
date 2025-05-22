@@ -220,15 +220,20 @@ flux_quality <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = join_by({{f_fluxid}}))
-  
-  # slopes_cut <- slopes_df |>
-  #   filter(
-  #     {{f_cut}} != cut_arg
-  #   )
+
+  slopes_keep <- slopes_df |>
+    filter(
+      {{f_cut}} != cut_arg
+    )
+
+  slopes_cut <- slopes_df |>
+    filter(
+      {{f_cut}} == cut_arg
+    )
 
   if (kappamax == TRUE) {
-    slopes_df <- flux_quality_kappamax(
-      slopes_df,
+    slopes_keep <- flux_quality_kappamax(
+      slopes_keep,
       f_slope = {{f_slope}},
       f_fluxid = {{f_fluxid}},
       f_fit = {{f_fit}},
@@ -241,10 +246,10 @@ flux_quality <- function(slopes_df,
       name_df = name_df
     )
 
-    quality_flag_lm <- slopes_df |>
+    quality_flag_lm <- slopes_keep |>
       filter(.data$f_model == "linear")
 
-    quality_flag_exp <- slopes_df |>
+    quality_flag_exp <- slopes_keep |>
       filter(str_detect(.data$f_model, "exp"))
 
     if (nrow(quality_flag_lm) > 0) {
@@ -294,7 +299,7 @@ flux_quality <- function(slopes_df,
 
   if (str_detect(fit_type, "exp") && kappamax == FALSE) {
     quality_flag <- flux_quality_exp(
-      slopes_df,
+      slopes_keep,
       {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
@@ -316,7 +321,7 @@ flux_quality <- function(slopes_df,
   }
 
   if (fit_type == "quadratic" && kappamax == FALSE) {
-    quality_flag <- flux_quality_qua(slopes_df,
+    quality_flag <- flux_quality_qua(slopes_keep,
       # {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
@@ -337,7 +342,7 @@ flux_quality <- function(slopes_df,
 
 
   if (fit_type == "linear") {
-    quality_flag <- flux_quality_lm(slopes_df,
+    quality_flag <- flux_quality_lm(slopes_keep,
       # {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
@@ -367,13 +372,16 @@ flux_quality <- function(slopes_df,
     ) |>
     pull(message)
 
-  total_nb <- slopes_df |>
+  total_nb <- slopes_keep |>
     select({{f_fluxid}}) |>
     distinct() |>
     nrow()
 
   message(paste("\n", "Total number of measurements:", total_nb))
   message(flag_msg)
+
+  quality_flag <- quality_flag |>
+    bind_rows(slopes_cut)
 
   attr(quality_flag, "fit_type") <- {{fit_type}}
 
