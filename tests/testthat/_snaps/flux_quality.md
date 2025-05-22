@@ -7,8 +7,8 @@
       
        Total number of measurements: 6
       
-       discard 	 2 	 33 %
        ok 	 3 	 50 %
+       discard 	 2 	 33 %
        zero 	 1 	 17 %
        force_discard 	 0 	 0 %
        start_error 	 0 	 0 %

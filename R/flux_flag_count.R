@@ -58,7 +58,8 @@ flux_flag_count <- function(slopes_df,
     mutate(
       n = replace_na(.data$n, 0),
       ratio = .data$n / sum(.data$n)
-    )
+    ) |>
+    arrange(desc(.data$n))
 
   count_table
 }
