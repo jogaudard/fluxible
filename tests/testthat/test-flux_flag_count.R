@@ -31,7 +31,7 @@ test_that("quality flags count works after calculating fluxes", {
       tube_volume = 0.075,
       atm_pressure = 1,
       plot_area = 0.0625,
-      cols_keep = "f_quality_flags"
+      cols_keep = "f_quality_flag"
     )
   expect_snapshot(
     flux_flag_count(fluxes)
