@@ -220,6 +220,11 @@ flux_quality <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = join_by({{f_fluxid}}))
+  
+  # slopes_cut <- slopes_df |>
+  #   filter(
+  #     {{f_cut}} != cut_arg
+  #   )
 
   if (kappamax == TRUE) {
     slopes_df <- flux_quality_kappamax(
@@ -245,7 +250,7 @@ flux_quality <- function(slopes_df,
     if (nrow(quality_flag_lm) > 0) {
       quality_flag_lm <- flux_quality_lm(
         slopes_df = quality_flag_lm,
-        f_conc = {{f_conc}},
+        # f_conc = {{f_conc}},
         f_fluxid = {{f_fluxid}},
         f_slope = {{f_slope}},
         f_cut = {{f_cut}},
@@ -312,7 +317,7 @@ flux_quality <- function(slopes_df,
 
   if (fit_type == "quadratic" && kappamax == FALSE) {
     quality_flag <- flux_quality_qua(slopes_df,
-      {{f_conc}},
+      # {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
       {{f_cut}},
@@ -333,7 +338,7 @@ flux_quality <- function(slopes_df,
 
   if (fit_type == "linear") {
     quality_flag <- flux_quality_lm(slopes_df,
-      {{f_conc}},
+      # {{f_conc}},
       {{f_fluxid}},
       {{f_slope}},
       {{f_cut}},

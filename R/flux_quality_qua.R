@@ -35,7 +35,7 @@
 
 
 flux_quality_qua <- function(slopes_df,
-                             f_conc,
+                            #  f_conc,
                              f_fluxid,
                              f_slope,
                              f_cut,
