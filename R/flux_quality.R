@@ -115,6 +115,7 @@ flux_quality <- function(slopes_df,
                          f_slope_lm = f_slope_lm,
                          f_fit_lm = f_fit_lm,
                          f_b = f_b,
+                         f_datetime = f_datetime,
                          force_discard = c(),
                          force_ok = c(),
                          force_zero = c(),
@@ -220,6 +221,7 @@ flux_quality <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     left_join(quality_par_start, by = join_by({{f_fluxid}}))
+  
 
   slopes_keep <- slopes_df |>
     filter(
@@ -372,7 +374,7 @@ flux_quality <- function(slopes_df,
     ) |>
     pull(message)
 
-  total_nb <- slopes_keep |>
+  total_nb <- quality_flag |>
     select({{f_fluxid}}) |>
     distinct() |>
     nrow()
@@ -380,8 +382,8 @@ flux_quality <- function(slopes_df,
   message(paste("\n", "Total number of measurements:", total_nb))
   message(flag_msg)
 
-  quality_flag <- quality_flag |>
-    bind_rows(slopes_cut)
+  quality_flag <- bind_rows(quality_flag, slopes_cut) |>
+    arrange({{f_fluxid}}, {{f_time}})
 
   attr(quality_flag, "fit_type") <- {{fit_type}}
 

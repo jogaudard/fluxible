@@ -156,7 +156,7 @@ flux_plot <- function(slopes_df,
 
   slopes_df <- slopes_df |>
     filter(
-      .data$f_quality_flag != "no data"
+      (.data$f_quality_flag != "no data" |> replace_na(TRUE))
     )
 
 
