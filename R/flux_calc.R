@@ -57,7 +57,7 @@
 #' `cols_keep`, any column specified in `cols_ave` with
 #' their value averaged over the measurement after cuts and discarding NA.
 #' @importFrom rlang .data :=
-#' @importFrom dplyr select group_by summarise
+#' @importFrom dplyr select group_by summarise rename_with
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of
 #' @importFrom stats median
@@ -92,6 +92,7 @@ flux_calc <- function(slopes_df,
                       cols_ave = c(),
                       cols_sum = c(),
                       cols_med = c(),
+                      # cols_nest = c(),
                       tube_volume,
                       temp_air_unit = "celsius",
                       f_cut = f_cut,
@@ -232,7 +233,8 @@ flux_calc <- function(slopes_df,
       ) |>
       left_join(slope_keep, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
-      ))
+      )) |>
+      rename_with(~paste0(.x, "_ave"), all_of(cols_ave))
   } else {
     slope_ave <- slope_keep
   }

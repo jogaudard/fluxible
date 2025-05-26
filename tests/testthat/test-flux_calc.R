@@ -55,7 +55,9 @@ test_that("averaging works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, PAR, temp_soil)
+    dplyr::select(
+      f_fluxid, f_temp_air_ave, datetime, f_flux, PAR_ave, temp_soil_ave
+    )
 
 
   expect_snapshot(output)
@@ -115,8 +117,42 @@ test_that("keeping and averaging work together", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-    dplyr::select(f_fluxid, f_flux, turfID, type, f_start, PAR, temp_soil))
+    dplyr::select(
+      f_fluxid, f_flux, turfID, type, f_start, PAR_ave, temp_soil_ave
+    ))
 })
+
+# test_that("nesting works", {
+#   slopes0 <- suppressWarnings(flux_fitting(
+#     co2_conc,
+#     conc,
+#     datetime,
+#     fit_type = "linear"
+#   )) |>
+#     flux_quality(
+#       conc
+#     )
+
+#   output <- flux_calc(
+#     slopes0,
+#     f_slope,
+#     datetime,
+#     temp_air,
+#     conc_unit = "ppm",
+#     flux_unit = "mmol",
+#     cols_ave = c("PAR", "temp_soil"),
+#     cols_nest = c("conc", "PAR"),
+#     chamber_volume = 24.5,
+#     tube_volume = 0.075,
+#     atm_pressure = 1,
+#     plot_area = 0.0625,
+#     cut = FALSE
+#   ) |>
+#     dplyr::select(f_fluxid, datetime, f_flux, PAR, temp_soil, conc)
+
+
+#   expect_snapshot(output)
+# })
 
 test_that("fahrenheit conversion works", {
   expect_snapshot(flux_calc(

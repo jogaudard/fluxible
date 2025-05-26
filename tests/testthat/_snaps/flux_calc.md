@@ -4,14 +4,14 @@
       output
     Output
       # A tibble: 6 x 6
-        f_fluxid f_temp_air_ave datetime            f_flux   PAR temp_soil
-        <fct>             <dbl> <dttm>               <dbl> <dbl>     <dbl>
-      1 1                  7.31 2022-07-28 23:43:35   95.6  1.95      10.8
-      2 2                  7.38 2022-07-28 23:47:22   52.4  2.11      10.7
-      3 3                  7.46 2022-07-28 23:52:10   18.6  2.04      10.7
-      4 4                  7.77 2022-07-28 23:59:32   69.4  1.84      10.8
-      5 5                  7.71 2022-07-29 00:03:10   89.9  1.66      10.6
-      6 6                  7.75 2022-07-29 00:06:35   26.2  1.78      12.2
+        f_fluxid f_temp_air_ave datetime            f_flux PAR_ave temp_soil_ave
+        <fct>             <dbl> <dttm>               <dbl>   <dbl>         <dbl>
+      1 1                  7.31 2022-07-28 23:43:35   95.6    1.95          10.8
+      2 2                  7.38 2022-07-28 23:47:22   52.4    2.11          10.7
+      3 3                  7.46 2022-07-28 23:52:10   18.6    2.04          10.7
+      4 4                  7.77 2022-07-28 23:59:32   69.4    1.84          10.8
+      5 5                  7.71 2022-07-29 00:03:10   89.9    1.66          10.6
+      6 6                  7.75 2022-07-29 00:06:35   26.2    1.78          12.2
 
 # keeping works
 
@@ -45,7 +45,7 @@
         flux_unit = "mmol", cols_keep = c("turfID", "type", "f_start"), cols_ave = c(
           "PAR", "temp_soil"), chamber_volume = 24.5, tube_volume = 0.075,
         atm_pressure = 1, plot_area = 0.0625, cut = FALSE), f_fluxid, f_flux, turfID,
-      type, f_start, PAR, temp_soil)
+      type, f_start, PAR_ave, temp_soil_ave)
     Message
       Averaging air temperature for each flux...
       Creating a df with the columns from 'cols_keep' argument...
@@ -56,14 +56,14 @@
       Fluxes are in mmol/m2/h
     Output
       # A tibble: 6 x 7
-        f_fluxid f_flux turfID       type  f_start               PAR temp_soil
-        <fct>     <dbl> <fct>        <fct> <dttm>              <dbl>     <dbl>
-      1 1          95.6 156 AN2C 156 ER    2022-07-28 23:43:35  1.95      10.8
-      2 2          52.4 74 WN2C 155  NEE   2022-07-28 23:47:22  2.11      10.7
-      3 3          18.6 74 WN2C 155  ER    2022-07-28 23:52:10  2.04      10.7
-      4 4          69.4 109 AN3C 109 NEE   2022-07-28 23:59:32  1.84      10.8
-      5 5          89.9 109 AN3C 109 ER    2022-07-29 00:03:10  1.66      10.6
-      6 6          26.2 29 WN3C 106  NEE   2022-07-29 00:06:35  1.78      12.2
+        f_fluxid f_flux turfID       type  f_start             PAR_ave temp_soil_ave
+        <fct>     <dbl> <fct>        <fct> <dttm>                <dbl>         <dbl>
+      1 1          95.6 156 AN2C 156 ER    2022-07-28 23:43:35    1.95          10.8
+      2 2          52.4 74 WN2C 155  NEE   2022-07-28 23:47:22    2.11          10.7
+      3 3          18.6 74 WN2C 155  ER    2022-07-28 23:52:10    2.04          10.7
+      4 4          69.4 109 AN3C 109 NEE   2022-07-28 23:59:32    1.84          10.8
+      5 5          89.9 109 AN3C 109 ER    2022-07-29 00:03:10    1.66          10.6
+      6 6          26.2 29 WN3C 106  NEE   2022-07-29 00:06:35    1.78          12.2
 
 # fahrenheit conversion works
 

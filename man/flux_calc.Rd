@@ -85,7 +85,8 @@ Has to be either \code{celsius} (default), \code{fahrenheit} or \code{kelvin.}}
 \item{cut}{if 'TRUE' (default), the measurements will be cut according to
 'f_cut' before calculating fluxes. This has no influence on the flux itself
 since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
-but it will influence the values of the columns in \code{cols_ave}.}
+but it will influence the values of the variables in \code{cols_ave}, \code{cols_cum},
+and \code{cols_med}.}
 
 \item{fit_type}{(optional) model used in
 \link[fluxible:flux_fitting]{flux_fitting}. Will be automatically filled if
