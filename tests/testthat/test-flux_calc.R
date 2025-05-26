@@ -681,7 +681,39 @@ test_that("sum and median works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, PAR, temp_soil)
+    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, PAR_sum, temp_soil_med)
+
+
+  expect_snapshot(output)
+})
+
+test_that("sum and average works on same variable", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
+  output <- flux_calc(
+    slopes0,
+    f_slope,
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    cols_sum = "PAR",
+    cols_ave = c("temp_soil", "PAR"),
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cut = FALSE
+  ) |>
+    dplyr::select(f_fluxid, datetime, f_flux, PAR_sum, temp_soil_ave, PAR_ave)
 
 
   expect_snapshot(output)

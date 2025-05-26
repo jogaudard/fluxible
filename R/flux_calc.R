@@ -251,7 +251,8 @@ flux_calc <- function(slopes_df,
       ) |>
       left_join(slope_ave, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
-      ))
+      )) |>
+      rename_with(~paste0(.x, "_sum"), all_of(cols_sum))
   } else {
     slope_sum <- slope_ave
   }
@@ -268,7 +269,8 @@ flux_calc <- function(slopes_df,
       ) |>
       left_join(slope_sum, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
-      ))
+      )) |>
+      rename_with(~paste0(.x, "_med"), all_of(cols_med))
   } else {
     slope_med <- slope_sum
   }
