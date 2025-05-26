@@ -19,7 +19,7 @@
 #' can also be a column in case it is a variable
 #' @param tube_volume volume of the tubing in L,
 #' can also be a column in case it is a variable
-#' @param atm_pressure atmospheric pressure,
+#' @param atm_pressure atmospheric pressure in atm,
 #' can be a constant (numerical) or a variable (column name)
 #' @param plot_area area of the plot in m^2,
 #' can also be a column in case it is a variable

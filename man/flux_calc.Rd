@@ -43,7 +43,7 @@ to calculate fluxes. Will be averaged with NA removed.}
 \item{chamber_volume}{volume of the flux chamber in L,
 can also be a column in case it is a variable}
 
-\item{atm_pressure}{atmospheric pressure,
+\item{atm_pressure}{atmospheric pressure in atm,
 can be a constant (numerical) or a variable (column name)}
 
 \item{plot_area}{area of the plot in m^2,
