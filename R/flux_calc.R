@@ -40,7 +40,8 @@
 #' @param cut if 'TRUE' (default), the measurements will be cut according to
 #' 'f_cut' before calculating fluxes. This has no influence on the flux itself
 #' since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
-#' but it will influence the values of the columns in `cols_ave`.
+#' but it will influence the values of the variables in `cols_ave`, `cols_cum`,
+#' and `cols_med`.
 #' @param fit_type (optional) model used in
 #' \link[fluxible:flux_fitting]{flux_fitting}. Will be automatically filled if
 #' `slopes_df` was produced using \link[fluxible:flux_fitting]{flux_fitting}.

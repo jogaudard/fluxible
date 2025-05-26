@@ -22,7 +22,8 @@
 #' @param f_datetime datetime column in raw_conc (`ymd_hms` format)
 #' @param f_conc concentration column in `raw_conc`
 #' @param start_col start column in field_record (`ymd_hms` format)
-#' @param end_col end columne in field_record (`ymd_hms` format)
+#' @param end_col end columne in field_record (`ymd_hms` format).
+#' Only needed if `fixed_length = "FALSE"`.
 #' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
 #' create the end column. If `FALSE`, `end_col` has to be provided.
 #' @return a dataframe with concentration measurements, corresponding datetime,

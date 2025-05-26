@@ -33,7 +33,8 @@ and any other column identifying the measurements.}
 
 \item{f_conc}{concentration column in \code{raw_conc}}
 
-\item{end_col}{end columne in field_record (\code{ymd_hms} format)}
+\item{end_col}{end columne in field_record (\code{ymd_hms} format).
+Only needed if \code{fixed_length = "FALSE"}.}
 
 \item{startcrop}{how many seconds should be discarded at the beginning of
 the measurement}
