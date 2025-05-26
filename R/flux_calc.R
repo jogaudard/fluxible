@@ -28,10 +28,13 @@
 #' as \link[dplyr:distinct]{distinct} is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
+#' Those columns will get the `_ave` suffix in the output.
 #' @param cols_sum columns with values for which is sum is provided
-#' for each flux in the output. Note that NA are removed in sum calculation.
+#' for each flux in the output. Those columns will get the `_sum` suffix in the
+#' output.
 #' @param cols_med columns with values for which is median is provided
 #' for each flux in the output. Note that NA are removed in median calculation.
+#' Those columns will get the `_med` suffix in the output.
 #' @param cols_nest columns to nest in `nested_variables` for each flux in the
 #' output.
 #' @param f_fluxid column containing the flux IDs

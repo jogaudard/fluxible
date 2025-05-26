@@ -65,13 +65,16 @@ Those columns need to have unique values for each flux,
 as \link[dplyr:distinct]{distinct} is applied.}
 
 \item{cols_ave}{columns with values that should be averaged
-for each flux in the output. Note that NA are removed in mean calculation.}
+for each flux in the output. Note that NA are removed in mean calculation.
+Those columns will get the \verb{_ave} suffix in the output.}
 
 \item{cols_sum}{columns with values for which is sum is provided
-for each flux in the output. Note that NA are removed in sum calculation.}
+for each flux in the output. Those columns will get the \verb{_sum} suffix in the
+output.}
 
 \item{cols_med}{columns with values for which is median is provided
-for each flux in the output. Note that NA are removed in median calculation.}
+for each flux in the output. Note that NA are removed in median calculation.
+Those columns will get the \verb{_med} suffix in the output.}
 
 \item{cols_nest}{columns to nest in \code{nested_variables} for each flux in the
 output.}
