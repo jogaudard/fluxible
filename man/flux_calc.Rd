@@ -19,6 +19,7 @@ flux_calc(
   cols_ave = c(),
   cols_sum = c(),
   cols_med = c(),
+  cols_nest = c(),
   tube_volume,
   temp_air_unit = "celsius",
   f_cut = f_cut,
@@ -71,6 +72,9 @@ for each flux in the output. Note that NA are removed in sum calculation.}
 
 \item{cols_med}{columns with values for which is median is provided
 for each flux in the output. Note that NA are removed in median calculation.}
+
+\item{cols_nest}{columns to nest in \code{nested_variables} for each flux in the
+output.}
 
 \item{tube_volume}{volume of the tubing in L,
 can also be a column in case it is a variable}

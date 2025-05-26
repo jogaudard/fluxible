@@ -32,6 +32,8 @@
 #' for each flux in the output. Note that NA are removed in sum calculation.
 #' @param cols_med columns with values for which is median is provided
 #' for each flux in the output. Note that NA are removed in median calculation.
+#' @param cols_nest columns to nest in `nested_variables` for each flux in the
+#' output.
 #' @param f_fluxid column containing the flux IDs
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
@@ -57,7 +59,7 @@
 #' `cols_keep`, any column specified in `cols_ave` with
 #' their value averaged over the measurement after cuts and discarding NA.
 #' @importFrom rlang .data :=
-#' @importFrom dplyr select group_by summarise rename_with
+#' @importFrom dplyr select group_by summarise rename_with nest_by
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of
 #' @importFrom stats median
@@ -92,7 +94,7 @@ flux_calc <- function(slopes_df,
                       cols_ave = c(),
                       cols_sum = c(),
                       cols_med = c(),
-                      # cols_nest = c(),
+                      cols_nest = c(),
                       tube_volume,
                       temp_air_unit = "celsius",
                       f_cut = f_cut,
@@ -275,6 +277,20 @@ flux_calc <- function(slopes_df,
     slope_med <- slope_sum
   }
 
+  # if (length(cols_nest) > 0) {
+  #   message("Creating a df with the columns from 'cols_nest' argument...")
+  #   slope_nest <- slopes_df |>
+  #     select(all_of(cols_nest), {{f_fluxid}}) |>
+  #     nest_by(
+  #       {{f_fluxid}}, .key = "nested_variables"
+  #     ) |>
+  #     left_join(slope_med, by = join_by(
+  #       {{f_fluxid}} == {{f_fluxid}}
+  #     ))
+  # } else {
+  #   slope_nest <- slope_med
+  # }
+
   message("Calculating fluxes...")
 
   r_const <- 0.082057
@@ -311,6 +327,20 @@ flux_calc <- function(slopes_df,
       ),
       .by = {{f_fluxid}}
     )
+
+  if (length(cols_nest) > 0) {
+    message("Creating a df with the columns from 'cols_nest' argument...")
+    slope_nest <- slopes_df |>
+      select(all_of(cols_nest), {{f_fluxid}}) |>
+      nest_by(
+        {{f_fluxid}}, .key = "nested_variables"
+      ) |>
+      left_join(fluxes, by = join_by(
+        {{f_fluxid}} == {{f_fluxid}}
+      ))
+    fluxes <- slope_nest
+  }
+
   if (isTRUE(kappamax)) {
     fluxes <- fluxes |>
       mutate(

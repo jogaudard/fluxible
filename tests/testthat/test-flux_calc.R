@@ -122,37 +122,40 @@ test_that("keeping and averaging work together", {
     ))
 })
 
-# test_that("nesting works", {
-#   slopes0 <- suppressWarnings(flux_fitting(
-#     co2_conc,
-#     conc,
-#     datetime,
-#     fit_type = "linear"
-#   )) |>
-#     flux_quality(
-#       conc
-#     )
+test_that("nesting works", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "linear"
+  )) |>
+    flux_quality(
+      conc
+    )
 
-#   output <- flux_calc(
-#     slopes0,
-#     f_slope,
-#     datetime,
-#     temp_air,
-#     conc_unit = "ppm",
-#     flux_unit = "mmol",
-#     cols_ave = c("PAR", "temp_soil"),
-#     cols_nest = c("conc", "PAR"),
-#     chamber_volume = 24.5,
-#     tube_volume = 0.075,
-#     atm_pressure = 1,
-#     plot_area = 0.0625,
-#     cut = FALSE
-#   ) |>
-#     dplyr::select(f_fluxid, datetime, f_flux, PAR, temp_soil, conc)
+  output <- flux_calc(
+    slopes0,
+    f_slope,
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    cols_ave = c("PAR", "temp_soil"),
+    cols_nest = c("conc", "PAR"),
+    chamber_volume = 24.5,
+    tube_volume = 0.075,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cut = FALSE
+  ) |>
+    dplyr::select(
+      f_fluxid, datetime, f_flux, PAR_ave, temp_soil_ave, nested_variables
+    ) |>
+    tidyr:: unnest(cols = nested_variables)
 
 
-#   expect_snapshot(output)
-# })
+  expect_snapshot(output)
+})
 
 test_that("fahrenheit conversion works", {
   expect_snapshot(flux_calc(
