@@ -358,7 +358,7 @@ fluxes_exp_liahovden_60_gep <- fluxes_exp_liahovden_60 |>
     type,
     datetime,
     id_cols = c("round", "turfID"),
-    cols_keep = c("temp_soil", "f_model", "PAR")
+    cols_keep = c("temp_soil_ave", "f_model", "PAR_ave")
   )
 
 str(fluxes_exp_liahovden_60_gep)
@@ -368,7 +368,7 @@ fluxes_qua_liahovden_60_gep <- fluxes_qua_liahovden_60 |>
     type,
     datetime,
     id_cols = c("round", "turfID"),
-    cols_keep = c("temp_soil", "f_model", "PAR")
+    cols_keep = c("temp_soil_ave", "f_model", "PAR_ave")
   )
 
 str(fluxes_qua_liahovden_60_gep)
@@ -378,7 +378,7 @@ fluxes_lin_liahovden_120_gep <- fluxes_lin_liahovden_120 |>
     type,
     datetime,
     id_cols = c("round", "turfID"),
-    cols_keep = c("temp_soil", "f_model", "PAR")
+    cols_keep = c("temp_soil_ave", "f_model", "PAR_ave")
   )
 
 str(fluxes_lin_liahovden_120_gep)
