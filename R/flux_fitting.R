@@ -32,7 +32,7 @@
 #' @param f_conc column with gas concentration data
 #' @param f_fluxid column with ID of each flux
 #' @param t_zero time at which the slope should be calculated
-#' (for `quadratic` and `exp_tz` fits)
+#' (for `quadratic`, `exp_tz` and `exp_hm` fits)
 #' @return a dataframe with the slope at t zero (`f_slope`),
 #' a datetime column of t zero (`f_start_z`), a factor column indicating the
 #' cuts (`f_cut`), the time in seconds since the start of the measurement

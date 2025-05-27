@@ -1,3 +1,9 @@
+# fluxible 1.2.0
+
+* `flux_calc`
+  * variables in `cols_ave`, `cols_med` and and `cols_cum` gets suffix added so it is possible to provide a variable to several of those arguments.
+  * `cols_nest`: new argument for variable to keep in a nested tibble after flux calculation.
+
 # fluxible 1.1.2
 
 * `flux_flag_count`: does not need the cut argument anymore, so it can also be used after calculating fluxes to provide a table with the number of measurements for each quality flag.

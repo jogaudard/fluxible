@@ -53,7 +53,7 @@ it is assumed that the model fits the data perfectly (exponential fit)}
 ideally same as \code{cz_window} (exponential fit)}
 
 \item{t_zero}{time at which the slope should be calculated
-(for \code{quadratic} and \code{exp_tz} fits)}
+(for \code{quadratic}, \code{exp_tz} and \code{exp_hm} fits)}
 
 \item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{exp_hm}, \code{quadratic} or \code{linear.}
 \code{exp_zhao18} is using the exponential model
