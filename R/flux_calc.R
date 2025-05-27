@@ -19,7 +19,7 @@
 #' can also be a column in case it is a variable
 #' @param tube_volume volume of the tubing in L,
 #' can also be a column in case it is a variable
-#' @param atm_pressure atmospheric pressure,
+#' @param atm_pressure atmospheric pressure in atm,
 #' can be a constant (numerical) or a variable (column name)
 #' @param plot_area area of the plot in m^2,
 #' can also be a column in case it is a variable
@@ -28,10 +28,15 @@
 #' as \link[dplyr:distinct]{distinct} is applied.
 #' @param cols_ave columns with values that should be averaged
 #' for each flux in the output. Note that NA are removed in mean calculation.
+#' Those columns will get the `_ave` suffix in the output.
 #' @param cols_sum columns with values for which is sum is provided
-#' for each flux in the output. Note that NA are removed in sum calculation.
+#' for each flux in the output. Those columns will get the `_sum` suffix in the
+#' output.
 #' @param cols_med columns with values for which is median is provided
 #' for each flux in the output. Note that NA are removed in median calculation.
+#' Those columns will get the `_med` suffix in the output.
+#' @param cols_nest columns to nest in `nested_variables` for each flux in the
+#' output.
 #' @param f_fluxid column containing the flux IDs
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
@@ -40,7 +45,8 @@
 #' @param cut if 'TRUE' (default), the measurements will be cut according to
 #' 'f_cut' before calculating fluxes. This has no influence on the flux itself
 #' since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
-#' but it will influence the values of the columns in `cols_ave`.
+#' but it will influence the values of the variables in `cols_ave`, `cols_cum`,
+#' and `cols_med`.
 #' @param fit_type (optional) model used in
 #' \link[fluxible:flux_fitting]{flux_fitting}. Will be automatically filled if
 #' `slopes_df` was produced using \link[fluxible:flux_fitting]{flux_fitting}.
@@ -56,7 +62,7 @@
 #' `cols_keep`, any column specified in `cols_ave` with
 #' their value averaged over the measurement after cuts and discarding NA.
 #' @importFrom rlang .data :=
-#' @importFrom dplyr select group_by summarise
+#' @importFrom dplyr select group_by summarise rename_with nest_by
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of
 #' @importFrom stats median
@@ -91,6 +97,7 @@ flux_calc <- function(slopes_df,
                       cols_ave = c(),
                       cols_sum = c(),
                       cols_med = c(),
+                      cols_nest = c(),
                       tube_volume,
                       temp_air_unit = "celsius",
                       f_cut = f_cut,
@@ -231,7 +238,8 @@ flux_calc <- function(slopes_df,
       ) |>
       left_join(slope_keep, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
-      ))
+      )) |>
+      rename_with(~paste0(.x, "_ave"), all_of(cols_ave))
   } else {
     slope_ave <- slope_keep
   }
@@ -248,7 +256,8 @@ flux_calc <- function(slopes_df,
       ) |>
       left_join(slope_ave, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
-      ))
+      )) |>
+      rename_with(~paste0(.x, "_sum"), all_of(cols_sum))
   } else {
     slope_sum <- slope_ave
   }
@@ -265,10 +274,25 @@ flux_calc <- function(slopes_df,
       ) |>
       left_join(slope_sum, by = join_by(
         {{f_fluxid}} == {{f_fluxid}}
-      ))
+      )) |>
+      rename_with(~paste0(.x, "_med"), all_of(cols_med))
   } else {
     slope_med <- slope_sum
   }
+
+  # if (length(cols_nest) > 0) {
+  #   message("Creating a df with the columns from 'cols_nest' argument...")
+  #   slope_nest <- slopes_df |>
+  #     select(all_of(cols_nest), {{f_fluxid}}) |>
+  #     nest_by(
+  #       {{f_fluxid}}, .key = "nested_variables"
+  #     ) |>
+  #     left_join(slope_med, by = join_by(
+  #       {{f_fluxid}} == {{f_fluxid}}
+  #     ))
+  # } else {
+  #   slope_nest <- slope_med
+  # }
 
   message("Calculating fluxes...")
 
@@ -306,6 +330,20 @@ flux_calc <- function(slopes_df,
       ),
       .by = {{f_fluxid}}
     )
+
+  if (length(cols_nest) > 0) {
+    message("Creating a df with the columns from 'cols_nest' argument...")
+    slope_nest <- slopes_df |>
+      select(all_of(cols_nest), {{f_fluxid}}) |>
+      nest_by(
+        {{f_fluxid}}, .key = "nested_variables"
+      ) |>
+      left_join(fluxes, by = join_by(
+        {{f_fluxid}} == {{f_fluxid}}
+      ))
+    fluxes <- slope_nest
+  }
+
   if (isTRUE(kappamax)) {
     fluxes <- fluxes |>
       mutate(

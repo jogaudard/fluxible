@@ -71,12 +71,12 @@ flux_quality_lm <- function(slopes_df,
   slopes_df <- slopes_df |>
     mutate(
       f_quality_flag = case_when(
-        .data$f_flag_ratio == "no_data" ~ "no_data",
-        .data$f_flag_ratio == "too_low" ~ "discard",
-        .data$f_start_error == "error" ~ "start_error",
         {{f_fluxid}} %in% force_discard ~ "force_discard",
         {{f_fluxid}} %in% force_ok ~ "force_ok",
         {{f_fluxid}} %in% force_zero ~ "force_zero",
+        .data$f_flag_ratio == "no_data" ~ "no_data",
+        .data$f_flag_ratio == "too_low" ~ "discard",
+        .data$f_start_error == "error" ~ "start_error",
         {{f_rsquared}} >= rsquared_threshold ~ "ok",
         {{f_rsquared}} < rsquared_threshold &
           {{f_pvalue}} >= pvalue_threshold ~ "zero",

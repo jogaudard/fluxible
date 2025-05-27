@@ -4,14 +4,14 @@
       output
     Output
       # A tibble: 6 x 6
-        f_fluxid f_temp_air_ave datetime            f_flux   PAR temp_soil
-        <fct>             <dbl> <dttm>               <dbl> <dbl>     <dbl>
-      1 1                  7.31 2022-07-28 23:43:35   95.6  1.95      10.8
-      2 2                  7.38 2022-07-28 23:47:22   52.4  2.11      10.7
-      3 3                  7.46 2022-07-28 23:52:10   18.6  2.04      10.7
-      4 4                  7.77 2022-07-28 23:59:32   69.4  1.84      10.8
-      5 5                  7.71 2022-07-29 00:03:10   89.9  1.66      10.6
-      6 6                  7.75 2022-07-29 00:06:35   26.2  1.78      12.2
+        f_fluxid f_temp_air_ave datetime            f_flux PAR_ave temp_soil_ave
+        <fct>             <dbl> <dttm>               <dbl>   <dbl>         <dbl>
+      1 1                  7.31 2022-07-28 23:43:35   95.6    1.95          10.8
+      2 2                  7.38 2022-07-28 23:47:22   52.4    2.11          10.7
+      3 3                  7.46 2022-07-28 23:52:10   18.6    2.04          10.7
+      4 4                  7.77 2022-07-28 23:59:32   69.4    1.84          10.8
+      5 5                  7.71 2022-07-29 00:03:10   89.9    1.66          10.6
+      6 6                  7.75 2022-07-29 00:06:35   26.2    1.78          12.2
 
 # keeping works
 
@@ -45,7 +45,7 @@
         flux_unit = "mmol", cols_keep = c("turfID", "type", "f_start"), cols_ave = c(
           "PAR", "temp_soil"), chamber_volume = 24.5, tube_volume = 0.075,
         atm_pressure = 1, plot_area = 0.0625, cut = FALSE), f_fluxid, f_flux, turfID,
-      type, f_start, PAR, temp_soil)
+      type, f_start, PAR_ave, temp_soil_ave)
     Message
       Averaging air temperature for each flux...
       Creating a df with the columns from 'cols_keep' argument...
@@ -56,14 +56,35 @@
       Fluxes are in mmol/m2/h
     Output
       # A tibble: 6 x 7
-        f_fluxid f_flux turfID       type  f_start               PAR temp_soil
-        <fct>     <dbl> <fct>        <fct> <dttm>              <dbl>     <dbl>
-      1 1          95.6 156 AN2C 156 ER    2022-07-28 23:43:35  1.95      10.8
-      2 2          52.4 74 WN2C 155  NEE   2022-07-28 23:47:22  2.11      10.7
-      3 3          18.6 74 WN2C 155  ER    2022-07-28 23:52:10  2.04      10.7
-      4 4          69.4 109 AN3C 109 NEE   2022-07-28 23:59:32  1.84      10.8
-      5 5          89.9 109 AN3C 109 ER    2022-07-29 00:03:10  1.66      10.6
-      6 6          26.2 29 WN3C 106  NEE   2022-07-29 00:06:35  1.78      12.2
+        f_fluxid f_flux turfID       type  f_start             PAR_ave temp_soil_ave
+        <fct>     <dbl> <fct>        <fct> <dttm>                <dbl>         <dbl>
+      1 1          95.6 156 AN2C 156 ER    2022-07-28 23:43:35    1.95          10.8
+      2 2          52.4 74 WN2C 155  NEE   2022-07-28 23:47:22    2.11          10.7
+      3 3          18.6 74 WN2C 155  ER    2022-07-28 23:52:10    2.04          10.7
+      4 4          69.4 109 AN3C 109 NEE   2022-07-28 23:59:32    1.84          10.8
+      5 5          89.9 109 AN3C 109 ER    2022-07-29 00:03:10    1.66          10.6
+      6 6          26.2 29 WN3C 106  NEE   2022-07-29 00:06:35    1.78          12.2
+
+# nesting works
+
+    Code
+      output
+    Output
+      # A tibble: 1,251 x 7
+      # Groups:   f_fluxid [6]
+         f_fluxid datetime            f_flux PAR_ave temp_soil_ave  conc   PAR
+         <fct>    <dttm>               <dbl>   <dbl>         <dbl> <dbl> <dbl>
+       1 1        2022-07-28 23:43:35   6.94    1.95          10.8  447. NA   
+       2 1        2022-07-28 23:43:35   6.94    1.95          10.8  447.  1.68
+       3 1        2022-07-28 23:43:35   6.94    1.95          10.8  448. NA   
+       4 1        2022-07-28 23:43:35   6.94    1.95          10.8  449. NA   
+       5 1        2022-07-28 23:43:35   6.94    1.95          10.8  449. NA   
+       6 1        2022-07-28 23:43:35   6.94    1.95          10.8  450. NA   
+       7 1        2022-07-28 23:43:35   6.94    1.95          10.8  451. NA   
+       8 1        2022-07-28 23:43:35   6.94    1.95          10.8  451. NA   
+       9 1        2022-07-28 23:43:35   6.94    1.95          10.8  453. NA   
+      10 1        2022-07-28 23:43:35   6.94    1.95          10.8  453. NA   
+      # i 1,241 more rows
 
 # fahrenheit conversion works
 
@@ -258,12 +279,27 @@
       output
     Output
       # A tibble: 6 x 6
-        f_fluxid f_temp_air_ave datetime            f_flux   PAR temp_soil
-        <fct>             <dbl> <dttm>               <dbl> <dbl>     <dbl>
-      1 1                  7.31 2022-07-28 23:43:35   95.6  40.9      10.8
-      2 2                  7.38 2022-07-28 23:47:22   52.4  44.2      10.7
-      3 3                  7.46 2022-07-28 23:52:10   18.6  42.7      10.7
-      4 4                  7.77 2022-07-28 23:59:32   69.4  38.6      10.8
-      5 5                  7.71 2022-07-29 00:03:10   89.9  33.3      10.6
-      6 6                  7.75 2022-07-29 00:06:35   26.2  37.4      12.2
+        f_fluxid f_temp_air_ave datetime            f_flux PAR_sum temp_soil_med
+        <fct>             <dbl> <dttm>               <dbl>   <dbl>         <dbl>
+      1 1                  7.31 2022-07-28 23:43:35   95.6    40.9          10.8
+      2 2                  7.38 2022-07-28 23:47:22   52.4    44.2          10.7
+      3 3                  7.46 2022-07-28 23:52:10   18.6    42.7          10.7
+      4 4                  7.77 2022-07-28 23:59:32   69.4    38.6          10.8
+      5 5                  7.71 2022-07-29 00:03:10   89.9    33.3          10.6
+      6 6                  7.75 2022-07-29 00:06:35   26.2    37.4          12.2
+
+# sum and average works on same variable
+
+    Code
+      output
+    Output
+      # A tibble: 6 x 6
+        f_fluxid datetime            f_flux PAR_sum temp_soil_ave PAR_ave
+        <fct>    <dttm>               <dbl>   <dbl>         <dbl>   <dbl>
+      1 1        2022-07-28 23:43:35   95.6    40.9          10.8    1.95
+      2 2        2022-07-28 23:47:22   52.4    44.2          10.7    2.11
+      3 3        2022-07-28 23:52:10   18.6    42.7          10.7    2.04
+      4 4        2022-07-28 23:59:32   69.4    38.6          10.8    1.84
+      5 5        2022-07-29 00:03:10   89.9    33.3          10.6    1.66
+      6 6        2022-07-29 00:06:35   26.2    37.4          12.2    1.78
 
