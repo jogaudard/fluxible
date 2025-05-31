@@ -77,6 +77,7 @@ flux_quality_lm <- function(slopes_df,
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_start_error == "error" ~ "start_error",
+        is.na({{f_slope}}) ~ "no_slope",
         {{f_rsquared}} >= rsquared_threshold ~ "ok",
         {{f_rsquared}} < rsquared_threshold &
           {{f_pvalue}} >= pvalue_threshold ~ "zero",

@@ -88,6 +88,7 @@ flux_quality_qua <- function(slopes_df,
         .data$f_flag_ratio == "no_data" ~ "no_data",
         .data$f_flag_ratio == "too_low" ~ "discard",
         .data$f_start_error == "error" ~ "start_error",
+        is.na({{f_slope}}) ~ "no_slope",
         abs(.data$f_gfactor) > gfactor_threshold &
           abs({{f_slope_lm}}) > abs(.data$f_min_slope) ~ "discard",
         abs(.data$f_gfactor) > gfactor_threshold &
