@@ -585,7 +585,8 @@ test_that("Working with two gases", {
     conc_twogases,
     ch4_conc,
     datetime,
-    fit_type = "exponential"
+    fit_type = "exponential",
+    start_cut = 10
   )
 
   flag_twogases_co2 <- flux_quality(
