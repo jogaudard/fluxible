@@ -133,6 +133,7 @@ flux_quality_exp <- function(slopes_df,
       ),
       f_slope_corr = case_when(
         .data$f_quality_flag == "no_data" ~ NA,
+        .data$f_quality_flag == "no_slope" ~ NA,
         .data$f_quality_flag == "force_discard" ~ NA,
         .data$f_quality_flag == "force_ok" ~ {{f_slope}},
         .data$f_quality_flag == "force_zero" ~ 0,
