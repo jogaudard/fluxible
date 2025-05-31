@@ -21,7 +21,7 @@ test_that("quality flags count works after calculating fluxes", {
       f_datetime = datetime,
       start_col = start,
       f_conc = conc,
-      startcrop = 10,
+      start_cut = 10,
       measurement_length = 180,
       fit_type = "exp_zhao18",
       temp_air_col = temp_air,

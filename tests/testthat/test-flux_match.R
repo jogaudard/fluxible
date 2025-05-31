@@ -5,7 +5,6 @@ test_that("matching works", {
     datetime,
     start,
     conc,
-    startcrop = 10,
     measurement_length = 180
   ) |>
     dplyr::select(f_fluxid, f_n_conc, f_ratio, f_flag_match, f_length) |>
@@ -27,7 +26,6 @@ test_that("time_diff works", {
     datetime,
     start,
     conc,
-    startcrop = 10,
     measurement_length = 220,
     time_diff = 180
   ))
@@ -54,7 +52,6 @@ test_that("renaming variables works", {
       date_time,
       starting,
       CO2_conc,
-      startcrop = 10,
       measurement_length = 220
     )
   )
@@ -71,7 +68,6 @@ test_that("flags on nb of data", {
         datetime,
         start,
         conc,
-        startcrop = 10,
         measurement_length = 220
       )
     )
@@ -87,7 +83,6 @@ test_that("warnings", {
       datetime,
       start,
       conc,
-      startcrop = 10,
       measurement_length = 220
     ),
     "fluxID 1 : nb of data too low
@@ -103,7 +98,6 @@ test_that("no warnings when no flags", {
     datetime,
     start,
     conc,
-    startcrop = 10,
     measurement_length = 220
   ))
 })
@@ -123,7 +117,6 @@ test_that("error on datetime", {
       datetime,
       start,
       conc,
-      startcrop = 10,
       measurement_length = 220
     ),
     "Please correct the arguments"
@@ -143,7 +136,6 @@ test_that("error on conc variable", {
       datetime,
       start,
       conc,
-      startcrop = 10,
       measurement_length = 220
     ),
     "Please correct the arguments"
@@ -163,22 +155,6 @@ test_that("error on start", {
       datetime,
       start,
       conc,
-      startcrop = 10,
-      measurement_length = 220
-    ),
-    "Please correct the arguments"
-  )
-})
-
-test_that("error on startcrop", {
-  expect_error(
-    flux_match(
-      co2_df_short,
-      record_short,
-      datetime,
-      start,
-      conc,
-      startcrop = "blip",
       measurement_length = 220
     ),
     "Please correct the arguments"
@@ -193,8 +169,7 @@ test_that("error on measurement_length", {
       datetime,
       start,
       conc,
-      measurement_length = "blip",
-      startcrop = 10
+      measurement_length = "blip"
     ),
     "Please correct the arguments"
   )
@@ -209,7 +184,6 @@ test_that("error on ratio_threshold", {
       start,
       conc,
       ratio_threshold = 2,
-      startcrop = 10,
       measurement_length = 220
     ),
     "ratio_threshold has to be a number between 0 and 1"
@@ -224,7 +198,6 @@ test_that("error on time_diff", {
       datetime,
       start,
       conc,
-      startcrop = 10,
       measurement_length = 220,
       time_diff = "comment est votre blanquette?"
     ),
@@ -249,7 +222,6 @@ test_that("matching works with end col", {
     start,
     conc,
     end,
-    startcrop = 10,
     fixed_length = FALSE
   ) |>
     dplyr::select(f_fluxid, f_ratio, f_flag_match, f_length) |>
