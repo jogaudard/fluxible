@@ -36,7 +36,8 @@ flux_flag_count <- function(slopes_df,
                               "no_data",
                               "force_ok",
                               "force_zero",
-                              "force_lm"
+                              "force_lm",
+                              "no_slope"
                             )) {
 
   flag_df <- slopes_df |>
