@@ -11,7 +11,7 @@ flux_match(
   start_col,
   f_conc,
   end_col,
-  startcrop,
+  startcrop = 0,
   measurement_length,
   fixed_length = TRUE,
   ratio_threshold = 0.5,
@@ -36,8 +36,8 @@ and any other column identifying the measurements.}
 \item{end_col}{end columne in field_record (\code{ymd_hms} format).
 Only needed if \code{fixed_length = "FALSE"}.}
 
-\item{startcrop}{how many seconds should be discarded at the beginning of
-the measurement}
+\item{startcrop}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{startcrop} is no longer
+supported. Please use \code{start_cut} in \code{flux_fitting} instead.}
 
 \item{measurement_length}{length of the measurement (in seconds)
 from the start specified in the \code{field_record}}
@@ -69,6 +69,6 @@ Extra variables in both dataframes are kept in the output.
 }
 \examples{
 data(co2_df_short, record_short)
-flux_match(co2_df_short, record_short, datetime, start, conc, startcrop = 10,
+flux_match(co2_df_short, record_short, datetime, start, conc,
 measurement_length = 180)
 }

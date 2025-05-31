@@ -11,7 +11,7 @@ stupeflux(
   start_col,
   end_col,
   f_conc,
-  startcrop,
+  startcrop = 0,
   measurement_length,
   fit_type,
   temp_air_col,
@@ -67,8 +67,8 @@ and any other column identifying the measurements.}
 
 \item{f_conc}{concentration column in raw_conc}
 
-\item{startcrop}{how many seconds should be discarded at the beginning of
-the measurement}
+\item{startcrop}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{startcrop} is no longer
+supported. Please use \code{start_cut} in \code{flux_fitting} instead.}
 
 \item{measurement_length}{length of the measurement (in seconds)
 from the start specified in the field_record}
@@ -221,7 +221,6 @@ field_record = record_short,
 f_datetime = datetime,
 start_col = start,
 f_conc = conc,
-startcrop = 10,
 measurement_length = 180,
 fit_type = "exp_zhao18",
 temp_air_col = temp_air,

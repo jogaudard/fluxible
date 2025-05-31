@@ -7,8 +7,8 @@
 #' @param field_record dataframe recording which measurement happened when.
 #' Has to contain at least a column containing the start of each measurement,
 #' and any other column identifying the measurements.
-#' @param startcrop how many seconds should be discarded at the beginning of
-#' the measurement
+#' @param startcrop `r lifecycle::badge("deprecated")` `startcrop` is no longer
+#' supported. Please use `start_cut` in `flux_fitting` instead.
 #' @param measurement_length length of the measurement (in seconds)
 #' from the start specified in the field_record
 #' @param ratio_threshold ratio (number of concentration measurement compared to
@@ -137,7 +137,6 @@
 #' f_datetime = datetime,
 #' start_col = start,
 #' f_conc = conc,
-#' startcrop = 10,
 #' measurement_length = 180,
 #' fit_type = "exp_zhao18",
 #' temp_air_col = temp_air,
@@ -156,7 +155,7 @@ stupeflux <- function(raw_conc,
                       start_col,
                       end_col,
                       f_conc,
-                      startcrop,
+                      startcrop = 0,
                       measurement_length,
                       fit_type,
                       temp_air_col,
