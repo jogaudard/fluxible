@@ -35,7 +35,6 @@ conc_twogases <- flux_match(
   datetime,
   start,
   co2_conc,
-  startcrop = 10,
   measurement_length = 180,
   ratio_threshold = 0.5,
   time_diff = 0
@@ -48,14 +47,16 @@ slopes_twogases_co2 <- flux_fitting(
   conc_twogases,
   co2_conc,
   datetime,
-  fit_type = "exponential"
+  fit_type = "exp_zhao18",
+  start_cut = 10
 )
 
 slopes_twogases_ch4 <- flux_fitting(
   conc_twogases,
   ch4_conc,
   datetime,
-  fit_type = "exponential"
+  fit_type = "exp_zhao18",
+  start_cut = 10
 )
 ```
 
