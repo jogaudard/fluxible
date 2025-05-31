@@ -406,7 +406,6 @@ test_that("Fluxible workflow works from start to finish", {
     datetime,
     start,
     conc,
-    startcrop = 10,
     measurement_length = 180
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -414,6 +413,7 @@ test_that("Fluxible workflow works from start to finish", {
     conc,
     datetime,
     start,
+    start_cut = 10,
     fit_type = "exp_zhao18"
   ))
   slopes_flag_test <- flux_quality(
@@ -445,7 +445,6 @@ test_that("Stupeflux returns the same as step by step workflow", {
     datetime,
     start,
     conc,
-    startcrop = 10,
     measurement_length = 180
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -453,6 +452,7 @@ test_that("Stupeflux returns the same as step by step workflow", {
     conc,
     datetime,
     f_start,
+    start_cut = 10,
     fit_type = "exp_zhao18"
   ))
   slopes_flag_test <- flux_quality(
@@ -479,7 +479,7 @@ test_that("Stupeflux returns the same as step by step workflow", {
       f_datetime = datetime,
       start_col = start,
       f_conc = conc,
-      startcrop = 10,
+      start_cut = 10,
       measurement_length = 180,
       fit_type = "exp_zhao18",
       temp_air_col = temp_air,
@@ -502,7 +502,7 @@ test_that("Stupeflux works with slope_correction = FALSE", {
       f_datetime = datetime,
       start_col = start,
       f_conc = conc,
-      startcrop = 10,
+      start_cut = 10,
       measurement_length = 180,
       fit_type = "exp_zhao18",
       temp_air_col = temp_air,
@@ -524,7 +524,6 @@ test_that("Fluxible workflow works with kappamax", {
     datetime,
     start,
     conc,
-    startcrop = 10,
     measurement_length = 220
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -532,6 +531,7 @@ test_that("Fluxible workflow works with kappamax", {
     conc,
     datetime,
     start,
+    start_cut = 10,
     end_cut = 30,
     fit_type = "exp_hm"
   ))
@@ -568,7 +568,6 @@ test_that("Working with two gases", {
     datetime,
     start,
     co2_conc,
-    startcrop = 10,
     measurement_length = 180,
     ratio_threshold = 0.5,
     time_diff = 0
@@ -578,14 +577,16 @@ test_that("Working with two gases", {
     conc_twogases,
     co2_conc,
     datetime,
-    fit_type = "exponential"
+    fit_type = "exponential",
+    start_cut = 10
   )
 
   slopes_twogases_ch4 <- flux_fitting(
     conc_twogases,
     ch4_conc,
     datetime,
-    fit_type = "exponential"
+    fit_type = "exponential",
+    start_cut = 10
   )
 
   flag_twogases_co2 <- flux_quality(

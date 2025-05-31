@@ -9,8 +9,8 @@
 #' @param field_record dataframe recording which measurement happened when.
 #' Has to contain at least a column containing the start of each measurement,
 #' and any other column identifying the measurements.
-#' @param startcrop how many seconds should be discarded at the beginning of
-#' the measurement
+#' @param startcrop `r lifecycle::badge("deprecated")` `startcrop` is no longer
+#' supported. Please use `start_cut` in `flux_fitting` instead.
 #' @param measurement_length length of the measurement (in seconds)
 #' from the start specified in the `field_record`
 #' @param ratio_threshold ratio (number of concentration measurement compared to
@@ -36,9 +36,10 @@
 #' group_by filter ungroup select distinct pull join_by coalesce
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct
+#' @importFrom lifecycle deprecate_stop
 #' @examples
 #' data(co2_df_short, record_short)
-#' flux_match(co2_df_short, record_short, datetime, start, conc, startcrop = 10,
+#' flux_match(co2_df_short, record_short, datetime, start, conc,
 #' measurement_length = 180)
 #' @export
 
@@ -49,22 +50,29 @@ flux_match <- function(raw_conc,
                        start_col,
                        f_conc,
                        end_col,
-                       startcrop,
+                       startcrop = 0,
                        measurement_length,
                        fixed_length = TRUE,
                        ratio_threshold = 0.5,
                        time_diff = 0) {
 
+  if (startcrop != 0) {
+    deprecate_stop(
+      when = "1.2.1",
+      what = "flux_match(startcrop)",
+      with = "flux_fitting(start_cut)"
+    )
+  }
+
   name_raw_conc <- deparse(substitute(raw_conc))
   name_field_record <- deparse(substitute(field_record))
 
   args_ok <- flux_fun_check(list(
-    startcrop = startcrop,
     ratio_threshold = ratio_threshold,
     time_diff = time_diff
   ),
-  fn = list(is.numeric, is.numeric, is.numeric),
-  msg = rep("has to be numeric", 3))
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
 
   raw_conc_check <- raw_conc |>
     select({{f_datetime}}, {{f_conc}})
@@ -99,7 +107,7 @@ flux_match <- function(raw_conc,
   field_record <- field_record |>
     arrange({{start_col}}) |>
     mutate(
-      f_start = {{start_col}} + startcrop,
+      f_start = {{start_col}},
       f_fluxid = row_number()
     )
 

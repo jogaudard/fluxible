@@ -1,6 +1,7 @@
 # fluxible 1.2.1
 
 * `flux_quality`: new `no_slope` quality flag for when the model could not be fitted to the data.
+* `flux_match`: `startcrop` argument is deprecated as `flux_fitting(start_cut)` has a similar function.
 
 # fluxible 1.2.0
 
