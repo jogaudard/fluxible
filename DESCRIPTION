@@ -46,7 +46,8 @@ Imports:
     zoo,
     progress,
     purrrlyr,
-    tidyselect
+    tidyselect,
+    lifecycle
 Depends: 
     R (>= 4.1)
 LazyData: true
