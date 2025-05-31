@@ -9,7 +9,7 @@ flux_flag_count(
   f_fluxid = f_fluxid,
   f_quality_flag = f_quality_flag,
   f_flags = c("ok", "discard", "zero", "force_discard", "start_error", "no_data",
-    "force_ok", "force_zero", "force_lm")
+    "force_ok", "force_zero", "force_lm", "no_slope")
 )
 }
 \arguments{
