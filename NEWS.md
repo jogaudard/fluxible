@@ -1,3 +1,7 @@
+# fluxible 1.2.1
+
+* `flux_quality`: new `no_slope` quality flag for when the model could not be fitted to the data.
+
 # fluxible 1.2.0
 
 * `flux_calc`
