@@ -15,12 +15,14 @@
 #' @param conc_df dataframe of gas concentration over time
 #' @param f_conc column with gas concentration
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
-#' (exponential fit)
+#' (`exp_zhao18` and `exp_tz` fits)
 #' @param b_window window to estimate b. It is an interval after tz where
-#' it is assumed that the model fits the data perfectly (exponential fit)
-#' @param a_window window at the end of the flux to estimate a (exponential fit)
+#' it is assumed that the model fits the data perfectly
+#' (`exp_zhao18` and `exp_tz` fits)
+#' @param a_window window at the end of the flux to estimate a
+#' (`exp_zhao18` and `exp_tz` fits)
 #' @param roll_width width of the rolling mean for CO2 when looking for `tz`,
-#' ideally same as `cz_window` (exponential fit)
+#' ideally same as `cz_window` (`exp_zhao18` and `exp_tz` fits)
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
