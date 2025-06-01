@@ -11,9 +11,6 @@
 #' supported. Please use `start_cut` in `flux_fitting` instead.
 #' @param measurement_length length of the measurement (in seconds)
 #' from the start specified in the field_record
-#' @param ratio_threshold ratio (number of concentration measurement compared to
-#' length of measurement in seconds) below which the data should be flagged as
-#' too little
 #' @param time_diff time difference (in seconds) between the two datasets.
 #' Will be added to the datetime column of the raw_conc dataset.
 #' For situations where the time was not synchronized correctly.
@@ -197,12 +194,10 @@ stupeflux <- function(raw_conc,
     field_record,
     f_datetime = {{f_datetime}},
     start_col = {{start_col}},
-    f_conc = {{f_conc}},
     end_col = {{end_col}},
-    fixed_length = fixed_length,
     startcrop = startcrop,
+    fixed_length = fixed_length,
     measurement_length = measurement_length,
-    ratio_threshold = ratio_threshold,
     time_diff = time_diff
   )
 

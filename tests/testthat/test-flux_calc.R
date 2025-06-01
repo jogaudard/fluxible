@@ -405,7 +405,6 @@ test_that("Fluxible workflow works from start to finish", {
     record_short,
     datetime,
     start,
-    conc,
     measurement_length = 180
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -444,7 +443,6 @@ test_that("Stupeflux returns the same as step by step workflow", {
     record_short,
     datetime,
     start,
-    conc,
     measurement_length = 180
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -523,7 +521,6 @@ test_that("Fluxible workflow works with kappamax", {
     record_short,
     datetime,
     start,
-    conc,
     measurement_length = 220
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -567,9 +564,7 @@ test_that("Working with two gases", {
     twogases_record,
     datetime,
     start,
-    co2_conc,
     measurement_length = 180,
-    ratio_threshold = 0.5,
     time_diff = 0
   )
 
