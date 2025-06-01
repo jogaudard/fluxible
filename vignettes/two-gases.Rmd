@@ -107,8 +107,7 @@ fluxes_twogases_co2 <- flux_calc(
   temp_air,
   conc_unit = "ppm",
   flux_unit = "mmol",
-  chamber_volume = 6.3,
-  tube_volume = 0.01,
+  setup_volume = 6.31,
   atm_pressure = 1,
   plot_area = 0.31,
   cols_keep = "f_quality_flag" # to use the flags of CO2 to discard CH4 fluxes
@@ -125,8 +124,7 @@ fluxes_twogases_ch4 <- flux_calc(
   temp_air,
   conc_unit = "ppb", # ch4 is measured in ppb
   flux_unit = "micromol", # we want a flux in umol/m2/h
-  chamber_volume = 6.3,
-  tube_volume = 0.01,
+  setup_volume = 6.31,
   atm_pressure = 1,
   plot_area = 0.31
 ) |>
@@ -149,8 +147,7 @@ fluxes_twogases <- left_join(
     "f_fluxid",
     "f_temp_air_ave",
     "datetime",
-    "f_model",
-    "f_volume_setup"
+    "f_model"
   )
 ) |>
   mutate( # we discard the CH4 fluxes based on CO2 fluxes quality flags

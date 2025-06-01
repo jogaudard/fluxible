@@ -69,6 +69,6 @@ Extra variables in both dataframes are kept in the output.
 }
 \examples{
 data(co2_df_short, record_short)
-flux_match(co2_df_short, record_short, datetime, start, conc,
+flux_match(co2_df_short, record_short, datetime, start,
 measurement_length = 180)
 }

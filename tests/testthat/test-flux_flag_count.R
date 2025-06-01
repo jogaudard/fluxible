@@ -27,8 +27,7 @@ test_that("quality flags count works after calculating fluxes", {
       temp_air_col = temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625,
       cols_keep = "f_quality_flag"

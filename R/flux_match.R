@@ -39,7 +39,7 @@
 #' @importFrom lifecycle deprecate_stop deprecated deprecate_warn is_present
 #' @examples
 #' data(co2_df_short, record_short)
-#' flux_match(co2_df_short, record_short, datetime, start, conc,
+#' flux_match(co2_df_short, record_short, datetime, start,
 #' measurement_length = 180)
 #' @export
 
