@@ -13,8 +13,7 @@ test_that("flux calculation is correct", {
     f_slope,
     datetime,
     temp_air,
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     conc_unit = "ppm",
@@ -49,8 +48,7 @@ test_that("averaging works", {
     conc_unit = "ppm",
     flux_unit = "mmol",
     cols_ave = c("PAR", "temp_soil"),
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
@@ -82,8 +80,7 @@ test_that("keeping works", {
     conc_unit = "ppm",
     flux_unit = "mmol",
     cols_keep = c("turfID", "type", "f_start"),
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
@@ -111,8 +108,7 @@ test_that("keeping and averaging work together", {
     flux_unit = "mmol",
     cols_keep = c("turfID", "type", "f_start"),
     cols_ave = c("PAR", "temp_soil"),
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
@@ -142,8 +138,7 @@ test_that("nesting works", {
     flux_unit = "mmol",
     cols_ave = c("PAR", "temp_soil"),
     cols_nest = c("conc", "PAR"),
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
@@ -152,6 +147,40 @@ test_that("nesting works", {
       f_fluxid, datetime, f_flux, PAR_ave, temp_soil_ave, nested_variables
     ) |>
     tidyr:: unnest(cols = nested_variables)
+
+
+  expect_snapshot(output)
+})
+
+test_that("nesting all works", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "linear"
+  )) |>
+    flux_quality(
+      conc
+    )
+
+  output <- flux_calc(
+    slopes0,
+    f_slope,
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    cols_ave = c("PAR", "temp_soil"),
+    cols_nest = "all",
+    setup_volume = 24.575,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cut = FALSE
+  ) |>
+    dplyr::select(
+      f_fluxid, datetime, f_flux, PAR_ave, temp_soil_ave, nested_variables
+    ) |>
+    tidyr:: unnest(cols = nested_variables, names_sep = "_")
 
 
   expect_snapshot(output)
@@ -166,13 +195,12 @@ test_that("fahrenheit conversion works", {
     conc_unit = "ppm",
     flux_unit = "mmol",
     temp_air_unit = "fahrenheit",
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup))
+    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux))
 })
 
 test_that("kelvin conversion works", {
@@ -184,13 +212,12 @@ test_that("kelvin conversion works", {
     conc_unit = "ppm",
     flux_unit = "mmol",
     temp_air_unit = "kelvin",
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup))
+    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux))
 })
 
 
@@ -217,8 +244,7 @@ test_that("error on air temp units", {
       conc_unit = "ppm",
       flux_unit = "mmol",
       temp_air_unit = "melvin",
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625,
       cut = FALSE
@@ -257,8 +283,7 @@ test_that("error that slope column is missing", {
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625,
       cut = FALSE
@@ -286,8 +311,7 @@ test_that("error slope_col cannot be found in slopes_df", {
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625,
       cut = FALSE
@@ -317,8 +341,7 @@ test_that("error some cols_keep do not exist", {
       conc_unit = "ppm",
       flux_unit = "mmol",
       cols_keep = c("PAR", "site"),
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625,
       cut = FALSE
@@ -350,12 +373,11 @@ test_that("calculating fluxes on dataset with cuts", {
       conc_unit = "ppm",
       flux_unit = "mmol",
       keep_arg = "keep",
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625
     ) |>
-      dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup)
+      dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux)
   )
 })
 
@@ -378,7 +400,8 @@ test_that("volume can be a variable instead of a constant", {
         f_fluxid == 4 ~ 24,
         f_fluxid == 5 ~ 4,
         f_fluxid == 6 ~ 35
-      )
+      ),
+      volume = volume + 0.075 # adding the tube volume since v1.2.2
     )
 
   expect_snapshot(
@@ -387,14 +410,13 @@ test_that("volume can be a variable instead of a constant", {
       f_slope,
       datetime,
       temp_air,
-      volume,
+      setup_volume = volume,
       conc_unit = "ppm",
       flux_unit = "mmol",
-      tube_volume = 0.075,
       atm_pressure = 1,
       plot_area = 0.0625
     ) |>
-      dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, f_volume_setup)
+      dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux)
   )
 })
 
@@ -405,7 +427,6 @@ test_that("Fluxible workflow works from start to finish", {
     record_short,
     datetime,
     start,
-    conc,
     measurement_length = 180
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -427,8 +448,7 @@ test_that("Fluxible workflow works from start to finish", {
     temp_air,
     conc_unit = "ppm",
     flux_unit = "mmol",
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625
   )
@@ -444,7 +464,6 @@ test_that("Stupeflux returns the same as step by step workflow", {
     record_short,
     datetime,
     start,
-    conc,
     measurement_length = 180
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -466,8 +485,7 @@ test_that("Stupeflux returns the same as step by step workflow", {
     temp_air,
     conc_unit = "ppm",
     flux_unit = "mmol",
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625
   )
@@ -485,8 +503,7 @@ test_that("Stupeflux returns the same as step by step workflow", {
       temp_air_col = temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625
     ),
@@ -508,8 +525,7 @@ test_that("Stupeflux works with slope_correction = FALSE", {
       temp_air_col = temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
-      chamber_volume = 24.5,
-      tube_volume = 0.075,
+      setup_volume = 24.575,
       atm_pressure = 1,
       plot_area = 0.0625,
       slope_correction = FALSE
@@ -523,7 +539,6 @@ test_that("Fluxible workflow works with kappamax", {
     record_short,
     datetime,
     start,
-    conc,
     measurement_length = 220
   )
   slopes_test <- suppressWarnings(flux_fitting(
@@ -549,8 +564,7 @@ test_that("Fluxible workflow works with kappamax", {
     temp_air,
     conc_unit = "ppm",
     flux_unit = "mmol",
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625
   ) |>
@@ -567,9 +581,7 @@ test_that("Working with two gases", {
     twogases_record,
     datetime,
     start,
-    co2_conc,
     measurement_length = 180,
-    ratio_threshold = 0.5,
     time_diff = 0
   )
 
@@ -608,8 +620,7 @@ test_that("Working with two gases", {
     temp_air,
     conc_unit = "ppm",
     flux_unit = "mmol",
-    chamber_volume = 6.3,
-    tube_volume = 0.01,
+    setup_volume = 6.31,
     atm_pressure = 1,
     plot_area = 0.31,
     cols_keep = "f_quality_flag" # to use the flags of CO2 to discard CH4 fluxes
@@ -626,8 +637,7 @@ test_that("Working with two gases", {
     temp_air,
     conc_unit = "ppb", # ch4 is measured in ppb
     flux_unit = "micromol", # we want a flux in umol/m2/h
-    chamber_volume = 6.3,
-    tube_volume = 0.01,
+    setup_volume = 6.31,
     atm_pressure = 1,
     plot_area = 0.31
   ) |>
@@ -643,8 +653,7 @@ test_that("Working with two gases", {
       "f_fluxid",
       "f_temp_air_ave",
       "datetime",
-      "f_model",
-      "f_volume_setup"
+      "f_model"
     )
   ) |>
     mutate( # we discard the CH4 fluxes based on CO2 fluxes quality flags
@@ -679,8 +688,7 @@ test_that("sum and median works", {
     flux_unit = "mmol",
     cols_sum = "PAR",
     cols_med = "temp_soil",
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
@@ -711,8 +719,7 @@ test_that("sum and average works on same variable", {
     flux_unit = "mmol",
     cols_sum = "PAR",
     cols_ave = c("temp_soil", "PAR"),
-    chamber_volume = 24.5,
-    tube_volume = 0.075,
+    setup_volume = 24.575,
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
