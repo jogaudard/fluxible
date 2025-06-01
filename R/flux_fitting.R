@@ -21,8 +21,9 @@
 #' (`exp_zhao18` and `exp_tz` fits)
 #' @param a_window window at the end of the flux to estimate a
 #' (`exp_zhao18` and `exp_tz` fits)
-#' @param roll_width width of the rolling mean for CO2 when looking for `tz`,
-#' ideally same as `cz_window` (`exp_zhao18` and `exp_tz` fits)
+#' @param roll_width width of the rolling mean for gas concentration when
+#' looking for `tz`, ideally same as `cz_window`
+#' (`exp_zhao18` and `exp_tz` fits)
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
 #' @param end_cut time to discard at the end of the measurements (in seconds)
@@ -68,14 +69,14 @@ flux_fitting <- function(conc_df,
                          f_start = f_start,
                          f_end = f_end,
                          f_fluxid = f_fluxid,
+                         fit_type,
                          start_cut = 0,
                          end_cut = 0,
+                         t_zero = 0,
                          cz_window = 15,
                          b_window = 10,
                          a_window = 10,
-                         roll_width = 15,
-                         t_zero = 0,
-                         fit_type) {
+                         roll_width = 15) {
 
   name_df <- deparse(substitute(conc_df))
 
