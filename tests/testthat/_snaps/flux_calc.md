@@ -85,6 +85,33 @@
       10 1        2022-07-28 23:43:35   6.94    1.95          10.8  453. NA   
       # i 1,241 more rows
 
+# nesting all works
+
+    Code
+      output
+    Output
+      # A tibble: 1,251 x 28
+      # Groups:   f_fluxid [6]
+         f_fluxid datetime            f_flux PAR_ave temp_soil_ave
+         <fct>    <dttm>               <dbl>   <dbl>         <dbl>
+       1 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       2 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       3 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       4 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       5 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       6 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       7 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       8 1        2022-07-28 23:43:35   6.94    1.95          10.8
+       9 1        2022-07-28 23:43:35   6.94    1.95          10.8
+      10 1        2022-07-28 23:43:35   6.94    1.95          10.8
+      # i 1,241 more rows
+      # i 23 more variables: nested_variables_datetime <dttm>,
+      #   nested_variables_temp_air <dbl>, nested_variables_temp_soil <dbl>,
+      #   nested_variables_conc <dbl>, nested_variables_PAR <dbl>,
+      #   nested_variables_turfID <fct>, nested_variables_type <fct>,
+      #   nested_variables_f_start <dttm>, nested_variables_f_end <dttm>,
+      #   nested_variables_f_ratio <dbl>, nested_variables_f_flag_match <chr>, ...
+
 # fahrenheit conversion works
 
     Code

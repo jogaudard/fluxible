@@ -36,7 +36,8 @@
 #' for each flux in the output. Note that NA are removed in median calculation.
 #' Those columns will get the `_med` suffix in the output.
 #' @param cols_nest columns to nest in `nested_variables` for each flux in the
-#' output.
+#' output. Can be character vector of column names, `"none"` (default) selects
+#' none, or `"all"` selects all the column except those in `cols_keep`.
 #' @param f_fluxid column containing the flux IDs
 #' @param temp_air_col column containing the air temperature used
 #' to calculate fluxes. Will be averaged with NA removed.
@@ -98,7 +99,7 @@ flux_calc <- function(slopes_df,
                       cols_ave = c(),
                       cols_sum = c(),
                       cols_med = c(),
-                      cols_nest = c(),
+                      cols_nest = "none",
                       tube_volume = deprecated(),
                       temp_air_unit = "celsius",
                       f_cut = f_cut,
@@ -157,6 +158,18 @@ flux_calc <- function(slopes_df,
 
   if (any(!df_ok))
     stop("Please correct the arguments", call. = FALSE)
+  
+  if (length(cols_nest) == 1 && cols_nest == "all") {
+    cols_nest <- slopes_df |>
+      select(!c(
+        {{cols_keep}}
+      )) |>
+      names()
+  }
+
+  if (length(cols_nest) == 1 && cols_nest == "none") {
+    cols_nest <- c()
+  }
 
 
   fit_type <- flux_fit_type(

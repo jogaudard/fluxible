@@ -20,7 +20,7 @@ flux_calc(
   cols_ave = c(),
   cols_sum = c(),
   cols_med = c(),
-  cols_nest = c(),
+  cols_nest = "none",
   tube_volume = deprecated(),
   temp_air_unit = "celsius",
   f_cut = f_cut,
@@ -80,7 +80,8 @@ for each flux in the output. Note that NA are removed in median calculation.
 Those columns will get the \verb{_med} suffix in the output.}
 
 \item{cols_nest}{columns to nest in \code{nested_variables} for each flux in the
-output.}
+output. Can be character vector of column names, \code{"none"} (default) selects
+none, or \code{"all"} selects all the column except those in \code{cols_keep}.}
 
 \item{tube_volume}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} see \code{setup_volume}}
 

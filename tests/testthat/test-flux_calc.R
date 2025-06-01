@@ -152,6 +152,40 @@ test_that("nesting works", {
   expect_snapshot(output)
 })
 
+test_that("nesting all works", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "linear"
+  )) |>
+    flux_quality(
+      conc
+    )
+
+  output <- flux_calc(
+    slopes0,
+    f_slope,
+    datetime,
+    temp_air,
+    conc_unit = "ppm",
+    flux_unit = "mmol",
+    cols_ave = c("PAR", "temp_soil"),
+    cols_nest = "all",
+    setup_volume = 24.575,
+    atm_pressure = 1,
+    plot_area = 0.0625,
+    cut = FALSE
+  ) |>
+    dplyr::select(
+      f_fluxid, datetime, f_flux, PAR_ave, temp_soil_ave, nested_variables
+    ) |>
+    tidyr:: unnest(cols = nested_variables, names_sep = "_")
+
+
+  expect_snapshot(output)
+})
+
 test_that("fahrenheit conversion works", {
   expect_snapshot(flux_calc(
     slopes0_temp,
