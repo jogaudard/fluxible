@@ -34,9 +34,7 @@ conc_twogases <- flux_match(
   twogases_record,
   datetime,
   start,
-  co2_conc,
   measurement_length = 180,
-  ratio_threshold = 0.5,
   time_diff = 0
 )
 ```
