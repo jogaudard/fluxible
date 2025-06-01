@@ -1,3 +1,13 @@
+# fluxible 1.2.2
+
+* `flux_calc`:
+  * `chamber_volume` and `tube_volume` are deprecated, use `setup_volume` instead
+  * `cols_nest = "all"` allows to nest all the columns, to keep raw data
+* `flux_match`:
+  * `ratio_threshold` is deprecated, use `ratio_threshold` in  `flux_quality()` instead
+  * `f_conc` is no longer needed, deprecated
+* `flux_quality`: `ratio_threshold` default value is now 0.5, was 0 previously, which does not make sense
+
 # fluxible 1.2.1
 
 * `flux_quality`: new `no_slope` quality flag for when the model could not be fitted to the data.
