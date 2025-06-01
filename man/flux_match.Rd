@@ -47,8 +47,9 @@ For situations where the time was not synchronized correctly.}
 \item{startcrop}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{startcrop} is no longer
 supported. Please use \code{start_cut} in \code{flux_fitting} instead.}
 
-\item{ratio_threshold}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{ratio_threshold} is no longer
-supported. Please use \code{ratio_threshold} in \code{flux_quality} instead.}
+\item{ratio_threshold}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{ratio_threshold}
+is no longer supported. Please use \code{ratio_threshold} in \code{flux_quality}
+instead.}
 
 \item{f_conc}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{f_conc} is no longer
 required}
