@@ -693,7 +693,9 @@ test_that("sum and median works", {
     plot_area = 0.0625,
     cut = FALSE
   ) |>
-    dplyr::select(f_fluxid, f_temp_air_ave, datetime, f_flux, PAR_sum, temp_soil_med)
+    dplyr::select(
+      f_fluxid, f_temp_air_ave, datetime, f_flux, PAR_sum, temp_soil_med
+    )
 
 
   expect_snapshot(output)

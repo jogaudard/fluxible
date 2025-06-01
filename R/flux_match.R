@@ -13,8 +13,9 @@
 #' supported. Please use `start_cut` in `flux_fitting` instead.
 #' @param measurement_length length of the measurement (in seconds)
 #' from the start specified in the `field_record`
-#' @param ratio_threshold `r lifecycle::badge("deprecated")` `ratio_threshold` is no longer
-#' supported. Please use `ratio_threshold` in `flux_quality` instead.
+#' @param ratio_threshold `r lifecycle::badge("deprecated")` `ratio_threshold`
+#' is no longer supported. Please use `ratio_threshold` in `flux_quality`
+#' instead.
 #' @param time_diff time difference (in seconds) between the two datasets.
 #' Will be added to the datetime column of the `raw_conc` dataset.
 #' For situations where the time was not synchronized correctly.
