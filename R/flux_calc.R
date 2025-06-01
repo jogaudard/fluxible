@@ -107,7 +107,7 @@ flux_calc <- function(slopes_df,
                       cut = TRUE,
                       fit_type = c()) {
 
-    if (is_present(chamber_volume)) {
+  if (is_present(chamber_volume)) {
     deprecate_stop(
       when = "1.2.2",
       what = "flux_calc(chamber_volume)",
@@ -158,7 +158,7 @@ flux_calc <- function(slopes_df,
 
   if (any(!df_ok))
     stop("Please correct the arguments", call. = FALSE)
-  
+
   if (length(cols_nest) == 1 && cols_nest == "all") {
     cols_nest <- slopes_df |>
       select(!c(
