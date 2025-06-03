@@ -54,7 +54,7 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 ```
 
 ## Short example
-```{r short-example, fig.width = 8, fig.height = 9}
+```{r short-example, fig.width = 8, fig.height = 9, fig.cap="Output of flux_plot, showing fluxes plotted individually with diagnostics and quality flags."}
 library(fluxible)
 
 conc_df <- flux_match(
