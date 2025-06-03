@@ -5,7 +5,7 @@
 \title{Counts quality flags}
 \usage{
 flux_flag_count(
-  slopes_df,
+  flags_df,
   f_fluxid = f_fluxid,
   f_quality_flag = f_quality_flag,
   f_flags = c("ok", "discard", "zero", "force_discard", "start_error", "no_data",
@@ -13,7 +13,7 @@ flux_flag_count(
 )
 }
 \arguments{
-\item{slopes_df}{dataframe of flux slopes}
+\item{flags_df}{dataframe of flux slopes}
 
 \item{f_fluxid}{column containing fluxes unique ID}
 
