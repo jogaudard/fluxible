@@ -45,6 +45,9 @@ usethis::use_lifecycle()
 # rcompendium::add_codecov_badge()
 # this is actually a paid service
 
+usethis::use_coverage(type = c("codecov"))
+usethis::use_github_action("test-coverage")
+
 # adding CRAN version badge
 rcompendium::add_cran_badge()
 
