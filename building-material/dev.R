@@ -41,8 +41,8 @@ usethis::use_github_action(name = "check-standard", badge = TRUE)
 usethis::use_lifecycle()
 
 # add code coverage badge
-# rcompendium::add_github_actions_codecov()
-# rcompendium::add_codecov_badge()
+rcompendium::add_github_actions_codecov()
+rcompendium::add_codecov_badge()
 # this is actually a paid service
 
 # adding CRAN version badge
