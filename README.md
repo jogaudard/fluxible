@@ -112,7 +112,15 @@ flux_plot(
 #> Plotting in progress
 ```
 
-<img src="man/figures/README-short-example-1.png" width="100%" />
+<div class="figure">
+
+<img src="man/figures/README-short-example-1.png" alt="Output of flux_plot, showing fluxes plotted individually with diagnostics and quality flags." width="100%" />
+<p class="caption">
+Output of flux_plot, showing fluxes plotted individually with
+diagnostics and quality flags.
+</p>
+
+</div>
 
 ``` r
 
