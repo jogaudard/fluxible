@@ -9,6 +9,8 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.org/package=fluxible)
 [![LifeCycle](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Codecov test
+coverage](https://codecov.io/gh/jogaudard/fluxible/graph/badge.svg)](https://app.codecov.io/gh/jogaudard/fluxible)
 <!-- badges: end -->
 
 The Fluxible R package is made to transform any dataset of gas
