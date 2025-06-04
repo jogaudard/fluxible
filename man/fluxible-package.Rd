@@ -22,7 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item XXXX James XXXX \email{XXXX.XXXX@uib.no} (\href{https://orcid.org/0000-0001-9826-3076}{ORCID})
+  \item XXXX XXXX XXXX \email{XXXX.XXXX@uib.no} (\href{https://orcid.org/0000-0001-9826-3076}{ORCID})
 }
 
 }
