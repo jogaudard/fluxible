@@ -18,11 +18,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Joseph Gaudard \email{joseph.gaudard@pm.me} (\href{https://orcid.org/0000-0002-6989-7624}{ORCID})
+\strong{Maintainer}: XXXX XXXX \email{XXXX.XXXX@pm.me} (\href{https://orcid.org/0000-0002-6989-7624}{ORCID})
 
 Authors:
 \itemize{
-  \item Richard James Telford \email{richard.telford@uib.no} (\href{https://orcid.org/0000-0001-9826-3076}{ORCID})
+  \item XXXX James XXXX \email{XXXX.XXXX@uib.no} (\href{https://orcid.org/0000-0001-9826-3076}{ORCID})
 }
 
 }
