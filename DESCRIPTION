@@ -1,7 +1,7 @@
 Package: fluxible
 Title: Ecosystem Gas Fluxes Calculations for Closed Loop Chamber Setup
 Version: 1.2.2
-Date: 2025-06-02
+Date: 2025-06-04
 Authors@R: 
     c(person(given = "XXXX", family = "XXXX", , "XXXX.XXXX@pm.me", role = c("aut", "cre")),
     person(given = c("XXXX", "XXXX"), family = "XXXX", , "XXXX.XXXX@uib.no", role = "aut")
