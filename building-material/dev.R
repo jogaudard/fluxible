@@ -34,6 +34,7 @@ devtools::check()
 # styler::style_pkg()
 lintr::lint_package()
 
+
 # adding check action
 usethis::use_github_action(name = "check-standard", badge = TRUE)
 
