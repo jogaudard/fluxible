@@ -264,15 +264,15 @@ $$
 
 where
 
-flux: the flux of gas at the surface of the plot (mmol/m^2^/h)
+flux: the flux of gas at the surface of the plot (mmol m^-2^ h^-1^)
 
-slope: slope estimate (ppm\*s^-1^)
+slope: slope estimate (ppm s^-1^)
 
 P: pressure (atm)
 
 V: volume of the chamber and tubing (L)
 
-R: gas constant (0.082057 L\*atm\*K^-1^\*mol^-1^)
+R: gas constant (0.082057 L atm K^-1^ mol^-1^)
 
 T: chamber air temperature (K)
 
