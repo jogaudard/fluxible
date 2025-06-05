@@ -155,7 +155,7 @@ raw_conc <- list.files( # list the files
 ```
 
 
-## The one file per flux approach {#sec-onefileflux}
+## The one file per flux approach
 Fluxible is designed to process data that were measured continuously (in a single or several files) and a `field_record` that records what was measured when.
 Another strategy while measuring gas fluxes on the field is to create a new file for each measurement, with the file name as the flux ID.
 The approach is similar to reading multiple files, except we add a column with the file name, and can then by-pass `flux_match`.
