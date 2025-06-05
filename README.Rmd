@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.org/package=fluxible)
 [![LifeCycle](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Codecov test coverage](https://codecov.io/gh/Plant-Functional-Trait-Course/fluxible/graph/badge.svg)](https://app.codecov.io/gh/Plant-Functional-Trait-Course/fluxible)
 <!-- badges: end -->
 
 The Fluxible R package is made to transform any dataset of gas concentration over time into a gas flux dataset.
@@ -54,7 +55,7 @@ devtools::install_github("plant-functional-trait-course/fluxible")
 ```
 
 ## Short example
-```{r short-example, fig.width = 8, fig.height = 9}
+```{r short-example, fig.width = 8, fig.height = 9, fig.cap="Output of flux_plot, showing fluxes plotted individually with diagnostics and quality flags."}
 library(fluxible)
 
 conc_df <- flux_match(
@@ -62,8 +63,6 @@ conc_df <- flux_match(
   record_short,
   datetime,
   start,
-  conc,
-  startcrop = 10,
   measurement_length = 220
 )
 
@@ -72,7 +71,7 @@ slopes_df <- flux_fitting(
   conc,
   datetime,
   fit_type = "exp_zhao18",
-  end_cut = 30
+  end_cut = 60
 )
 
 slopes_flag_df <- flux_quality(
@@ -102,21 +101,20 @@ fluxes_df <- flux_calc(
   flux_unit = "mmol",
   cols_keep = c("turfID", "type"),
   cols_ave = c("temp_soil", "PAR"),
-  chamber_volume = 24.5,
-  tube_volume = 0.075,
+  setup_volume = 24.575,
   atm_pressure = 1,
   plot_area = 0.0625
 )
 
-fluxes_gep <- flux_gep(
+fluxes_gpp <- flux_gpp(
   fluxes_df,
   type,
   datetime,
   id_cols = "turfID",
-  cols_keep = c("temp_soil")
+  cols_keep = c("temp_soil_ave")
 )
 
-fluxes_gep
+fluxes_gpp
 ```
 
 
@@ -124,7 +122,7 @@ fluxes_gep
 
 ### The licoread R package
 
-The [licoread R package](https://jogaudard.github.io/licoread/index.html), currently under development in collaboration with [Li-COR](https://www.licor.com/), aims at providing an easy way to import raw files from Li-COR gas analyzers as R objects that can be used directly with the Fluxible package.
+The [licoread R package](https://jogaudard.github.io/licoread/index.html), developped in collaboration with [LI-COR](https://www.licor.com/), provides an easy way to import raw files from Li-COR gas analyzers as R objects that can be used directly with the Fluxible R package.
 
 ### Segmentation tool
 We are working on a tool to automatically select the window of the measurement on which to fit a model.

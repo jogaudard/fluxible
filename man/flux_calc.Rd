@@ -9,7 +9,8 @@ flux_calc(
   slope_col,
   f_datetime = f_datetime,
   temp_air_col,
-  chamber_volume,
+  chamber_volume = deprecated(),
+  setup_volume,
   atm_pressure,
   plot_area,
   f_fluxid = f_fluxid,
@@ -19,8 +20,8 @@ flux_calc(
   cols_ave = c(),
   cols_sum = c(),
   cols_med = c(),
-  cols_nest = c(),
-  tube_volume,
+  cols_nest = "none",
+  tube_volume = deprecated(),
   temp_air_unit = "celsius",
   f_cut = f_cut,
   keep_arg = "keep",
@@ -40,7 +41,9 @@ datetime of each flux in the output.}
 \item{temp_air_col}{column containing the air temperature used
 to calculate fluxes. Will be averaged with NA removed.}
 
-\item{chamber_volume}{volume of the flux chamber in L,
+\item{chamber_volume}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} see \code{setup_volume}}
+
+\item{setup_volume}{volume of the flux chamber and instrument together in L,
 can also be a column in case it is a variable}
 
 \item{atm_pressure}{atmospheric pressure in atm,
@@ -77,10 +80,10 @@ for each flux in the output. Note that NA are removed in median calculation.
 Those columns will get the \verb{_med} suffix in the output.}
 
 \item{cols_nest}{columns to nest in \code{nested_variables} for each flux in the
-output.}
+output. Can be character vector of column names, \code{"none"} (default) selects
+none, or \code{"all"} selects all the column except those in \code{cols_keep}.}
 
-\item{tube_volume}{volume of the tubing in L,
-can also be a column in case it is a variable}
+\item{tube_volume}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} see \code{setup_volume}}
 
 \item{temp_air_unit}{units in which air temperature was measured.
 Has to be either \code{celsius} (default), \code{fahrenheit} or \code{kelvin.}}
@@ -125,8 +128,7 @@ datetime,
 temp_air,
 conc_unit = "ppm",
 flux_unit = "mmol",
-chamber_volume = 24.5,
-tube_volume = 0.075,
+setup_volume = 24.575,
 atm_pressure = 1,
 plot_area = 0.0625)
 }

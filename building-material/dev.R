@@ -3,7 +3,7 @@ usethis::use_testthat()
 usethis::use_test("flux_fitting_quadratic")
 
 #to add used packages in the description
-usethis::use_package("")
+usethis::use_package("lifecycle")
 
 # to make the webpage
 usethis::use_pkgdown()
@@ -34,13 +34,20 @@ devtools::check()
 # styler::style_pkg()
 lintr::lint_package()
 
+
 # adding check action
 usethis::use_github_action(name = "check-standard", badge = TRUE)
+
+# deprecating stuff
+usethis::use_lifecycle()
 
 # add code coverage badge
 # rcompendium::add_github_actions_codecov()
 # rcompendium::add_codecov_badge()
 # this is actually a paid service
+
+usethis::use_coverage(type = c("codecov"))
+usethis::use_github_action("test-coverage")
 
 # adding CRAN version badge
 rcompendium::add_cran_badge()
