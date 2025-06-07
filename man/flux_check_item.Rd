@@ -21,5 +21,5 @@ flux_check_item(arg, fn, msg, narg, df_name = NA)
 check the items inside \code{flux_fun_check}
 }
 \author{
-XXXX XXXX
+Adam Klimes
 }

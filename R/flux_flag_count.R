@@ -15,7 +15,7 @@
 #' @importFrom dplyr all_of select group_by summarise
 #' tibble right_join filter distinct arrange desc
 #' @importFrom tidyr replace_na
-#' @author XXXX XXXX
+#' @author Vincent Belde
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")

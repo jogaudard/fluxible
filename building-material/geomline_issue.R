@@ -8,7 +8,7 @@ library(fs)
 # library(broom)
 # library(zoo)
 
-# source("https://raw.githubusercontent.com/joXXXX/common/master/fun-fluxes.R")
+# source("https://raw.githubusercontent.com/jogaudard/common/master/fun-fluxes.R")
 
 # download and read data -----------------------------------------------------------
 get_file(node = "zhk3m",

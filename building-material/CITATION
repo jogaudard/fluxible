@@ -1,7 +1,7 @@
 bibentry(
   bibtype = "techreport",
   title = "fluxible: an R package to calculate ecosystem gas fluxes from closed loop chamber systems in a reproducible and automated workflow",
-  author = "XXXX, XXXX and XXXX, XXXX and XXXX, XXXX XXXX and XXXX, XXXX and XXXX, XXXX and Mustri, Michael and Niittynen, Pekka and XXXX, XXXX XXXX and XXXX, XXXX P and XXXX, XXXX and XXXX, XXXX J",
+  author = "Gaudard, Joseph and Trepel, Jonas and Dawson, Hilary Rose and Enquist, Brian and Halbritter, Aud H and Mustri, Michael and Niittynen, Pekka and Santos-Andrade, Paul Efren and Topper, Joachim P and Vandvik, Vigdis and Telford, Richard J",
   year = "2025",
   institution = "EGU General Assembly 2025",
   url = "https://cran.r-project.org/package=fluxible, https://plant-functional-trait-course.github.io/fluxible/",

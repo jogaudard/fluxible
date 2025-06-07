@@ -123,6 +123,7 @@ fluxes_gpp
 ### The licoread R package
 
 The [licoread R package](https://jogaudard.github.io/licoread/index.html), developped in collaboration with [LI-COR](https://www.licor.com/), provides an easy way to import raw files from Li-COR gas analyzers as R objects that can be used directly with the Fluxible R package.
+
 ### Segmentation tool
 We are working on a tool to automatically select the window of the measurement on which to fit a model.
 This selection will be based on environmental variable, such as photosynthetically active radiation (PAR), measured simultaneously.

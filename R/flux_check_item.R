@@ -4,7 +4,7 @@
 #' @param msg message to display in case `arg` is the wrong class
 #' @param narg name of `arg`
 #' @param df_name name of `arg` in case it is a data frame
-#' @author XXXX XXXX
+#' @author Adam Klimes
 
 
 flux_check_item <- function(arg,

@@ -20,5 +20,5 @@ is the original df to take the name from for a more obvious error message}
 checking that arguments and columns are in the correct class
 }
 \author{
-XXXX XXXX
+Adam Klimes
 }

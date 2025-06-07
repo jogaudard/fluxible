@@ -41,5 +41,5 @@ slopes_flag <- flux_quality(slopes, conc)
 flux_flag_count(slopes_flag)
 }
 \author{
-XXXX XXXX
+Vincent Belde
 }
