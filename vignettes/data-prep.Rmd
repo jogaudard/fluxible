@@ -21,8 +21,8 @@ Loggers and field equipement provide many different datasets format.
 The `readr::read_delim` [@readr2024] function works perfectly in most cases, given that the data are in a delimited file.
 
 We provide here examples on how to use `read_delim` to prepare your raw data files for the Fluxible R package.
-For users of Li-COR instruments, the [licoread R package](https://jogaudard.github.io/licoread/index.html), developped in collaboration with Li-COR, is designed to read 82z and 81x files and import them as fluxible-friendly objets.
-<!-- For users of LI-COR instruments, we present at the end of this section the Licoread R package [@gaudardLicoreadReadsRaw2025], to read specific LI-COR formats (82z and 81x). -->
+For users of Li-COR instruments, the [licoread R package](https://joXXXX.github.io/licoread/index.html), developped in collaboration with Li-COR, is designed to read 82z and 81x files and import them as fluxible-friendly objets.
+<!-- For users of LI-COR instruments, we present at the end of this section the Licoread R package [@XXXXLicoreadReadsRaw2025], to read specific LI-COR formats (82z and 81x). -->
 
 ## Checklists for inputs
 

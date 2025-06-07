@@ -25,8 +25,8 @@ available("fluxible")
 # tests to check the package ----------------------------------------------
 
 # what do I need to test?
-# should I create a fake dataset for which I know the values to test those functions? yes (Richard)
-# advice from Richard: run the function on a dataset in the beginning when I am sure of what it is doing, then use this as a test. It will test if the function behaviour ahs changed.
+# should I create a fake dataset for which I know the values to test those functions? yes (XXXX)
+# advice from XXXX: run the function on a dataset in the beginning when I am sure of what it is doing, then use this as a test. It will test if the function behaviour ahs changed.
 # what about having functions dealing ONLY with fluxes, and not dragging along PAR, temperatures and co values?
 
 usethis::use_testthat()

@@ -6,7 +6,7 @@ library(usethis)
 # IMPORTANT NOTICE
 # The original files from TERRA cannot be published yet,
 # so they will not be uploaded to github, meaning that
-# this script can run only on Joseph's computer.
+# this script can run only on XXXX's computer.
 
 get_file(
   node = "rba87",
