@@ -3,8 +3,10 @@ Title: Ecosystem Gas Fluxes Calculations for Closed Loop Chamber Setup
 Version: 1.2.2
 Date: 2025-06-04
 Authors@R: 
-    c(person(given = "XXXX", family = "XXXX", , "XXXX.XXXX@pm.me", role = c("aut", "cre")),
-    person(given = c("XXXX", "XXXX"), family = "XXXX", , "XXXX.XXXX@uib.no", role = "aut")
+    c(person(given = "Joseph", family = "Gaudard", , "joseph.gaudard@pm.me", role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-6989-7624")),
+    person(given = c("Richard", "James"), family = "Telford", , "richard.telford@uib.no", role = "aut",
+            comment = c(ORCID = "0000-0001-9826-3076"))
     )
 Description: Processes the raw data from closed loop flux chamber (or tent)
     setups into ecosystem gas fluxes usable for analysis. It goes from a
