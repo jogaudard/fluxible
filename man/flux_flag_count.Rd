@@ -2,45 +2,43 @@
 % Please edit documentation in R/flux_flag_count.R
 \name{flux_flag_count}
 \alias{flux_flag_count}
-\title{counts quality flags}
+\title{Counts quality flags}
 \usage{
 flux_flag_count(
-  slopes_df,
-  f_flags = c("ok", "discard", "zero", "weird_flux", "start_error", "no_data",
-    "force_ok"),
-  fluxid_col = "f_fluxID",
-  flags_col = "f_quality_flag",
-  cut_col = "f_cut",
-  cut_arg = "cut"
+  flags_df,
+  f_fluxid = f_fluxid,
+  f_quality_flag = f_quality_flag,
+  f_flags = c("ok", "discard", "zero", "force_discard", "start_error", "no_data",
+    "force_ok", "force_zero", "force_lm", "no_slope")
 )
 }
 \arguments{
-\item{slopes_df}{dataframe of flux slopes}
+\item{flags_df}{dataframe of flux slopes}
+
+\item{f_fluxid}{column containing fluxes unique ID}
+
+\item{f_quality_flag}{column containing the quality flags}
 
 \item{f_flags}{list of flags used in the dataset
 (if different from default from flux_quality).
 If not provided, it will list only the flags that are
 present in the dataset (no showing 0).}
-
-\item{fluxid_col}{column containing fluxes unique ID}
-
-\item{flags_col}{column containing the quality flags}
-
-\item{cut_col}{column indicating which part of the flux is being cut}
-
-\item{cut_arg}{argument defining that the data point should be cut out}
 }
 \value{
-a dataframe with the number of fluxes for each flags
+a dataframe with the number of fluxes for each quality flags
 and their proportion to the total
 }
 \description{
-provides a table of how many fluxes were attributed
-which quality flag
+Provides a table of how many fluxes were attributed
+which quality flag. This function is incorporated in
+\link[fluxible]{flux_quality} as a message, but can be used alone to extract
+a dataframe with the flag count.
 }
 \examples{
-data(slopes30qua_flag)
-flux_flag_count(slopes30qua_flag)
+data(co2_conc)
+slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+slopes_flag <- flux_quality(slopes, conc)
+flux_flag_count(slopes_flag)
 }
 \author{
 Vincent Belde

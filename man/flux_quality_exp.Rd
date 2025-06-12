@@ -6,25 +6,58 @@
 \usage{
 flux_quality_exp(
   slopes_df,
-  weird_fluxes_id = c(),
-  force_ok_id = c(),
-  b_col = "f_b",
-  rmse_threshold = 25,
-  cor_threshold = 0.5,
-  b_threshold = 1
+  f_conc,
+  f_fluxid,
+  f_slope,
+  f_time,
+  f_fit,
+  f_slope_lm,
+  f_b,
+  force_discard,
+  force_ok,
+  force_zero,
+  force_lm,
+  gfactor_threshold,
+  rmse_threshold,
+  cor_threshold,
+  b_threshold,
+  name_df
 )
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes, fluxID,
 and parameters of the exponential expression}
 
-\item{weird_fluxes_id}{vector of fluxIDs that should be discarded
+\item{f_conc}{column with gas concentration}
+
+\item{f_fluxid}{column of ID for each measurement}
+
+\item{f_slope}{column containing the slope of each flux
+(as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)}
+
+\item{f_time}{column containing the time of each measurement in seconds}
+
+\item{f_fit}{column containing the modeled data}
+
+\item{f_slope_lm}{column containing the linear slope of each flux
+(as calculated by the \link[fluxible:flux_fitting]{flux_fitting} function)}
+
+\item{f_b}{column containing the b parameter of the exponential expression}
+
+\item{force_discard}{vector of fluxIDs that should be discarded
 by the user's decision}
 
-\item{force_ok_id}{vector of fluxIDs for which the user wants to keep
+\item{force_ok}{vector of fluxIDs for which the user wants to keep
 the calculated slope despite a bad quality flag}
 
-\item{b_col}{column containing the b parameter of the exponential expression}
+\item{force_zero}{vector of fluxIDs that should be replaced by zero by
+the user's decision}
+
+\item{force_lm}{vector of fluxIDs for which the linear slope should be used
+by the user's decision}
+
+\item{gfactor_threshold}{threshold for the g-factor. Defines a window
+with its opposite outside which the flux will be flagged \code{discard}.}
 
 \item{rmse_threshold}{threshold for the RMSE of each flux above
 which the fit is considered unsatisfactory}
@@ -35,6 +68,8 @@ is considered non significant}
 
 \item{b_threshold}{threshold for the b parameter. Defines a window
 with its opposite inside which the fit is considered good enough.}
+
+\item{name_df}{name of \code{slopes_df}}
 }
 \value{
 same dataframe with added flag and corrected slopes columns

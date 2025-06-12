@@ -9,148 +9,167 @@
 #' @param field_record dataframe recording which measurement happened when.
 #' Has to contain at least a column containing the start of each measurement,
 #' and any other column identifying the measurements.
-#' @param startcrop how many seconds should be discarded at the beginning of
-#' the measurement
+#' @param startcrop `r lifecycle::badge("deprecated")` `startcrop` is no longer
+#' supported. Please use `start_cut` in `flux_fitting` instead.
 #' @param measurement_length length of the measurement (in seconds)
-#' from the start specified in the field_record
-#' @param ratio_threshold ratio (number of concentration measurement compared to
-#' length of measurement in seconds) below which the data should be flagged as
-#' too little
+#' from the start specified in the `field_record`
+#' @param ratio_threshold `r lifecycle::badge("deprecated")` `ratio_threshold`
+#' is no longer supported. Please use `ratio_threshold` in `flux_quality`
+#' instead.
 #' @param time_diff time difference (in seconds) between the two datasets.
-#' Will be added to the datetime column of the raw_conc dataset.
+#' Will be added to the datetime column of the `raw_conc` dataset.
 #' For situations where the time was not synchronized correctly.
-#' @param datetime_col datetime column in raw_conc (dmy_hms format)
-#' @param conc_col concentration column in raw_conc
-#' @param start_col start column in field_record (dmy_hms format)
+#' @param f_datetime datetime column in raw_conc (`ymd_hms` format)
+#' @param f_conc `r lifecycle::badge("deprecated")` `f_conc` is no longer
+#' required
+#' @param start_col start column in field_record (`ymd_hms` format)
+#' @param end_col end columne in field_record (`ymd_hms` format).
+#' Only needed if `fixed_length = "FALSE"`.
+#' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
+#' create the end column. If `FALSE`, `end_col` has to be provided.
 #' @return a dataframe with concentration measurements, corresponding datetime,
-#' flux ID, measurements start and end, flags in case of no data or low number
-#' of data, and any variables present in one of the inputs.
-#' @importFrom dplyr rename arrange mutate row_number full_join case_when
-#' group_by filter ungroup select distinct pull
+#' flux ID (`f_fluxid`), measurements start (`f_start`) and end (`f_end`).
+#' @importFrom dplyr arrange mutate row_number full_join case_when
+#' group_by filter ungroup select distinct pull join_by coalesce
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct
+#' @importFrom lifecycle deprecate_stop deprecated deprecate_warn is_present
 #' @examples
 #' data(co2_df_short, record_short)
-#' flux_match(co2_df_short, record_short)
+#' flux_match(co2_df_short, record_short, datetime, start,
+#' measurement_length = 180)
 #' @export
 
 
 flux_match <- function(raw_conc,
                        field_record,
-                       startcrop = 10,
-                       measurement_length = 220,
-                       ratio_threshold = 0.5,
+                       f_datetime,
+                       start_col,
+                       end_col,
+                       measurement_length,
+                       fixed_length = TRUE,
                        time_diff = 0,
-                       datetime_col = "datetime",
-                       conc_col = "conc",
-                       start_col = "start") {
-  raw_conc <- raw_conc |>
-    rename(
-      f_datetime = all_of((datetime_col)),
-      f_conc = all_of((conc_col))
+                       startcrop = 0,
+                       ratio_threshold = deprecated(),
+                       f_conc = deprecated()) {
+
+  if (startcrop != 0) {
+    deprecate_stop(
+      when = "1.2.1",
+      what = "flux_match(startcrop)",
+      with = "flux_fitting(start_cut)"
     )
+  }
+
+  if (is_present(ratio_threshold)) {
+    deprecate_warn(
+      when = "1.2.2",
+      what = "flux_match(ratio_threshold)",
+      with = "flux_quality(ratio_threshold)"
+    )
+  }
+
+  if (is_present(f_conc)) {
+    deprecate_warn(
+      when = "1.2.2",
+      what = "flux_match(f_conc)",
+      details = "f_conc is no longer required"
+    )
+  }
+
+  name_raw_conc <- deparse(substitute(raw_conc))
+  name_field_record <- deparse(substitute(field_record))
+
+  args_ok <- flux_fun_check(
+    list(time_diff = time_diff),
+    fn = list(is.numeric),
+    msg = "has to be numeric"
+  )
+
+  raw_conc_check <- raw_conc |>
+    select({{f_datetime}})
+
+  field_record_check <- field_record |>
+    select({{start_col}})
+
+  raw_conc_ok <- flux_fun_check(raw_conc_check,
+                                fn = list(is.POSIXct),
+                                msg = "has to be POSIXct",
+                                name_df = name_raw_conc)
+
+  field_record_ok <- flux_fun_check(field_record_check,
+                                    fn = list(is.POSIXct),
+                                    msg = "has to be POSIXct",
+                                    name_df = name_field_record)
+
+  if (any(!c(args_ok, raw_conc_ok, field_record_ok)))
+    stop("Please correct the arguments", call. = FALSE)
+
+
+
+
+
+
 
   field_record <- field_record |>
-    rename(
-      f_start = all_of((start_col))
-    )
-
-
-  if (!is.POSIXct(raw_conc$f_datetime)) {
-    stop("datetime in raw_conc dataframe is not ymd_hms!")
-  }
-  if (!is.double(raw_conc$f_conc)) stop("conc is not a double")
-
-  if (!is.POSIXct(field_record$f_start)) {
-    stop("start in field_record dataframe is not ymd_hms!")
-  }
-
-  if (!is.double(((startcrop)))) {
-    stop("startcrop has to be a double")
-  }
-  if (!is.double(((time_diff)))) {
-    stop("time_diff has to be a double")
-  }
-  if (!is.double(((measurement_length)))) {
-    stop("measurement_length has to be a double")
-  }
-  if (!is.double(((ratio_threshold)))) {
-    stop("ratio_threshold has to be a number between 0 and 1")
-  }
-  if (((ratio_threshold)) < 0 || ((ratio_threshold)) > 1) {
-    stop("ratio_threshold has to be a number between 0 and 1")
-  }
-
-
-  field_record <- field_record |>
-    arrange(.data$f_start) |>
+    arrange({{start_col}}) |>
     mutate(
-      f_end = .data$f_start + ((measurement_length)),
-      f_start = .data$f_start + ((startcrop)),
-      f_fluxID = row_number()
+      f_start = {{start_col}},
+      f_fluxid = row_number()
     )
+
+  if (fixed_length) {
+
+    field_record <- flux_match_fixed(
+      field_record,
+      {{start_col}},
+      measurement_length = measurement_length
+    )
+  }
+
+
+  if (!fixed_length) {
+
+    field_record <- flux_match_col(
+      field_record,
+      {{start_col}},
+      {{end_col}},
+      name_field_record = name_field_record
+    )
+  }
+
+
   raw_conc <- raw_conc |>
     mutate(
-      f_datetime = .data$f_datetime + ((time_diff))
+      {{f_datetime}} := {{f_datetime}} + time_diff
     )
+
 
   conc_df <- full_join(
     raw_conc, field_record,
-    by = c("f_datetime" = "f_start"), keep = TRUE
+    by = join_by({{f_datetime}} == "f_start"), keep = TRUE
   ) |>
     mutate(
-      f_datetime = case_when(
-        !is.na(.data$f_datetime) ~ .data$f_datetime,
-        is.na(.data$f_datetime) ~ .data$f_start
-      )
+      {{f_datetime}} := coalesce({{f_datetime}}, .data$f_start)
     ) |>
-    arrange(.data$f_datetime) |>
-    fill("f_fluxID") |>
-    drop_na("f_fluxID")
+    arrange({{f_datetime}}) |>
+    fill("f_fluxid") |>
+    drop_na("f_fluxid")
 
   conc_df <- conc_df |>
-    group_by(.data$f_fluxID) |>
+    group_by(.data$f_fluxid) |>
     fill(names(field_record)) |>
     filter(
-      (.data$f_datetime < .data$f_end &
-         .data$f_datetime >= .data$f_start)
-    ) |>
-    mutate(
-      f_n_conc = sum(!is.na(.data$f_conc)),
-      f_ratio = .data$f_n_conc / (((measurement_length)) - ((startcrop))),
-      f_flag_match = case_when(
-        .data$f_ratio == 0 ~ "no data",
-        .data$f_ratio <= ((ratio_threshold)) ~ "nb of data too low"
-      )
+      ({{f_datetime}} < .data$f_end &
+         {{f_datetime}} >= .data$f_start)
     ) |>
     ungroup()
 
   conc_df <- conc_df |>
     mutate(
-      f_fluxID = as.factor(.data$f_fluxID),
-      f_flag_match = as.character(.data$f_flag_match)
+      f_fluxid = as.factor(.data$f_fluxid),
     ) |>
-    arrange(.data$f_fluxID)
-
-
-  flags <- conc_df |>
-    select("f_fluxID", "f_flag_match") |>
-    drop_na("f_flag_match") |>
-    distinct() |>
-    mutate(
-      f_warnings = paste(
-        "\n", "fluxID", .data$f_fluxID, ":",
-        .data$f_flag_match
-      ),
-      f_warnings = as.character(.data$f_warnings)
-    ) |>
-    pull(.data$f_warnings)
-
-  f_warnings <- stringr::str_c(flags)
-
-
-  if (any(!is.na(conc_df$f_flag_match))) warning(f_warnings)
-
+    arrange(.data$f_fluxid)
 
   conc_df
 }

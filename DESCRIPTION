@@ -1,12 +1,10 @@
 Package: fluxible
 Title: Ecosystem Gas Fluxes Calculations for Closed Loop Chamber Setup
-Version: 0.0.1
+Version: 1.2.2
+Date: 2025-06-04
 Authors@R: 
     c(person(given = "Joseph", family = "Gaudard", , "joseph.gaudard@pm.me", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-6989-7624")),
-    person(given = "Paul", family = "Efren", , "paulefrens@gmail.com", role = "aut"),
-    person(given = "Michael", family = "Mustri", , "mustrim@arizona.edu", role = "aut"),
-    person(given = c("Pekka", "O"), family = "Niittynen", , "pekka.niittynen@helsinki.fi", role = "aut"),
+            comment = c(ORCID = "0000-0002-6989-7624")),
     person(given = c("Richard", "James"), family = "Telford", , "richard.telford@uib.no", role = "aut",
             comment = c(ORCID = "0000-0001-9826-3076"))
     )
@@ -15,7 +13,8 @@ Description: Processes the raw data from closed loop flux chamber (or tent)
     data frame of gas concentration over time (which can contain several
     measurements) and a meta data file indicating which measurement was done
     when, to a data frame of ecosystem gas fluxes including quality diagnostics.
-    Functions provided include different models (exponential, quadratic and
+    Functions provided include different models (exponential as described in
+    Zhao et al (2018) <doi:10.1016/j.agrformet.2018.08.022>, quadratic and
     linear) to estimate the fluxes from the raw data, quality assessment,
     plotting for visual check and calculation of fluxes based on the setup
     specific parameters (chamber size, plot area, ...).
@@ -23,11 +22,14 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    vdiffr
+    vdiffr,
+    forcats,
+    tidyverse,
+    fs
 Config/testthat/edition: 3
 Imports: 
     broom,
@@ -42,9 +44,13 @@ Imports:
     stringr,
     tidyr,
     zoo,
-    progress
+    progress,
+    purrrlyr,
+    tidyselect,
+    lifecycle
 Depends: 
     R (>= 4.1)
 LazyData: true
-URL: https://plant-functional-trait-course.github.io/fluxible/
+URL: https://plant-functional-trait-course.github.io/fluxible/, https://github.com/Plant-Functional-Trait-Course/fluxible
 VignetteBuilder: knitr
+BugReports: https://github.com/Plant-Functional-Trait-Course/fluxible/issues

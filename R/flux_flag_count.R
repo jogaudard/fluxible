@@ -1,69 +1,65 @@
-#' counts quality flags
-#' @description provides a table of how many fluxes were attributed
-#' which quality flag
-#' @param slopes_df dataframe of flux slopes
+#' Counts quality flags
+#' @description Provides a table of how many fluxes were attributed
+#' which quality flag. This function is incorporated in
+#' \link[fluxible]{flux_quality} as a message, but can be used alone to extract
+#' a dataframe with the flag count.
+#' @param flags_df dataframe of flux slopes
 #' @param f_flags list of flags used in the dataset
 #' (if different from default from flux_quality).
 #' If not provided, it will list only the flags that are
 #' present in the dataset (no showing 0).
-#' @param fluxid_col column containing fluxes unique ID
-#' @param flags_col column containing the quality flags
-#' @param cut_col column indicating which part of the flux is being cut
-#' @param cut_arg argument defining that the data point should be cut out
-#' @return a dataframe with the number of fluxes for each flags
+#' @param f_fluxid column containing fluxes unique ID
+#' @param f_quality_flag column containing the quality flags
+#' @return a dataframe with the number of fluxes for each quality flags
 #' and their proportion to the total
-#' @importFrom dplyr .data rename all_of select group_by summarise
-#' tibble right_join filter
+#' @importFrom dplyr all_of select group_by summarise
+#' tibble right_join filter distinct arrange desc
 #' @importFrom tidyr replace_na
 #' @author Vincent Belde
 #' @examples
-#' data(slopes30qua_flag)
-#' flux_flag_count(slopes30qua_flag)
+#' data(co2_conc)
+#' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+#' slopes_flag <- flux_quality(slopes, conc)
+#' flux_flag_count(slopes_flag)
 #' @export
 
 
-flux_flag_count <- function(slopes_df,
+flux_flag_count <- function(flags_df,
+                            f_fluxid = f_fluxid,
+                            f_quality_flag = f_quality_flag,
                             f_flags = c(
                               "ok",
                               "discard",
                               "zero",
-                              "weird_flux",
+                              "force_discard",
                               "start_error",
                               "no_data",
-                              "force_ok"
-                            ),
-                            fluxid_col = "f_fluxID",
-                            flags_col = "f_quality_flag",
-                            cut_col = "f_cut",
-                            cut_arg = "cut") {
-  slopes_df <- slopes_df |>
-    rename(
-      f_fluxID = all_of(((fluxid_col))),
-      f_quality_flag = all_of(((flags_col))),
-      f_cut = all_of(((cut_col)))
-    )
+                              "force_ok",
+                              "force_zero",
+                              "force_lm",
+                              "no_slope"
+                            )) {
 
-  flag_df <- slopes_df |>
-    filter(.data$f_cut != ((cut_arg))) |>
+  flag_df <- flags_df |>
     mutate(
-      f_quality_flag = as.factor(.data$f_quality_flag)
+      f_quality_flag = as.factor({{f_quality_flag}})
     ) |>
-    select("f_fluxID", "f_quality_flag") |>
-    unique()
+    select({{f_fluxid}}, {{f_quality_flag}}) |>
+    distinct()
 
-  flags <- tibble(f_quality_flag = factor(((f_flags)), levels = ((f_flags))))
+  flags <- tibble({{f_quality_flag}} := factor(f_flags))
 
   count_table <- flag_df |>
-    group_by(.data$f_quality_flag) |>
     summarise(
-      n = length(.data$f_quality_flag),
-      .groups = "drop"
+      n = length({{f_quality_flag}}),
+      .by = {{f_quality_flag}}
     ) |>
-    right_join(flags, by = "f_quality_flag") |>
+    right_join(flags, by = join_by({{f_quality_flag}})) |>
     mutate(
       n = replace_na(.data$n, 0),
       ratio = .data$n / sum(.data$n)
-    )
+    ) |>
+    arrange(desc(.data$n))
 
   count_table
 }

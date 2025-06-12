@@ -9,14 +9,26 @@
 flux_fit_type <- function(df,
                           fit_type = c(),
                           fit_type_list = c(
+                            "exp_hm",
+                            "exp_tz",
+                            "exp_zhao18",
                             "exponential",
                             "linear",
                             "quadratic"
                           )) {
-  if (is.null(((fit_type)))) {
+  if (is.null(fit_type)) {
     fit_type <- attributes(df)$fit_type
   } else {
-    fit_type <- match.arg(((fit_type)), ((fit_type_list)))
+    fit_type <- match.arg(fit_type, fit_type_list)
   }
+
+  if (is.null(fit_type)) {
+    stop("argument fit_type is missing")
+  }
+
+  if (fit_type == "exponential") {
+    fit_type <- "exp_zhao18" # for backwards compatibility
+  }
+
   fit_type
 }

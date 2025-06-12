@@ -4,12 +4,14 @@
 \alias{flux_plot_exp}
 \title{plotting fluxes with exponential fit}
 \usage{
-flux_plot_exp(slopes_df, cut_arg = "cut", y_text_position = 500)
+flux_plot_exp(slopes_df, f_conc, f_datetime, y_text_position)
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
 
-\item{cut_arg}{argument pointing rows to be cut from the measurements}
+\item{f_conc}{column with gas concentration}
+
+\item{f_datetime}{column with datetime of each data point}
 
 \item{y_text_position}{position of the text box}
 }

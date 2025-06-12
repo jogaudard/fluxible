@@ -32,13 +32,15 @@ usethis::use_data(co2_liahovden, overwrite = TRUE)
 record_liahovden <- read_csv("data-raw/PFTC6_cflux_field-record_liahovden.csv")
 
 record_liahovden <- record_liahovden %>%
-  select(turfID, type, starting_time, date) %>%
+  select(turfID, type, starting_time, date, round) %>%
   mutate(
     starting_time = formatC(
-      starting_time, width = 6, format = "d", flag = "0"
+      starting_time,
+      width = 6, format = "d", flag = "0"
     ), # to make sure all the time is 6 digits
     starting_time = gsub(
-      "(\\d{2})(?=\\d{2})", "\\1:", starting_time, perl = TRUE
+      "(\\d{2})(?=\\d{2})", "\\1:", starting_time,
+      perl = TRUE
     ), # to add the : in the time
     date = ymd(date),
     start = ymd_hms(

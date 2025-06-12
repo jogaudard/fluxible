@@ -7,13 +7,15 @@
 flux_match(
   raw_conc,
   field_record,
-  startcrop = 10,
-  measurement_length = 220,
-  ratio_threshold = 0.5,
+  f_datetime,
+  start_col,
+  end_col,
+  measurement_length,
+  fixed_length = TRUE,
   time_diff = 0,
-  datetime_col = "datetime",
-  conc_col = "conc",
-  start_col = "start"
+  startcrop = 0,
+  ratio_threshold = deprecated(),
+  f_conc = deprecated()
 )
 }
 \arguments{
@@ -25,30 +27,36 @@ a gas concentration column as double.}
 Has to contain at least a column containing the start of each measurement,
 and any other column identifying the measurements.}
 
-\item{startcrop}{how many seconds should be discarded at the beginning of
-the measurement}
+\item{f_datetime}{datetime column in raw_conc (\code{ymd_hms} format)}
+
+\item{start_col}{start column in field_record (\code{ymd_hms} format)}
+
+\item{end_col}{end columne in field_record (\code{ymd_hms} format).
+Only needed if \code{fixed_length = "FALSE"}.}
 
 \item{measurement_length}{length of the measurement (in seconds)
-from the start specified in the field_record}
+from the start specified in the \code{field_record}}
 
-\item{ratio_threshold}{ratio (number of concentration measurement compared to
-length of measurement in seconds) below which the data should be flagged as
-too little}
+\item{fixed_length}{if \code{TRUE} (default), the \code{measurement_length} is used to
+create the end column. If \code{FALSE}, \code{end_col} has to be provided.}
 
 \item{time_diff}{time difference (in seconds) between the two datasets.
-Will be added to the datetime column of the raw_conc dataset.
+Will be added to the datetime column of the \code{raw_conc} dataset.
 For situations where the time was not synchronized correctly.}
 
-\item{datetime_col}{datetime column in raw_conc (dmy_hms format)}
+\item{startcrop}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{startcrop} is no longer
+supported. Please use \code{start_cut} in \code{flux_fitting} instead.}
 
-\item{conc_col}{concentration column in raw_conc}
+\item{ratio_threshold}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{ratio_threshold}
+is no longer supported. Please use \code{ratio_threshold} in \code{flux_quality}
+instead.}
 
-\item{start_col}{start column in field_record (dmy_hms format)}
+\item{f_conc}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{f_conc} is no longer
+required}
 }
 \value{
 a dataframe with concentration measurements, corresponding datetime,
-flux ID, measurements start and end, flags in case of no data or low number
-of data, and any variables present in one of the inputs.
+flux ID (\code{f_fluxid}), measurements start (\code{f_start}) and end (\code{f_end}).
 }
 \description{
 Matching a dataframe of continuously measured
@@ -58,5 +66,6 @@ Extra variables in both dataframes are kept in the output.
 }
 \examples{
 data(co2_df_short, record_short)
-flux_match(co2_df_short, record_short)
+flux_match(co2_df_short, record_short, datetime, start,
+measurement_length = 180)
 }

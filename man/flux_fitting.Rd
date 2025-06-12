@@ -6,75 +6,100 @@
 \usage{
 flux_fitting(
   conc_df,
+  f_conc = f_conc,
+  f_datetime = f_datetime,
+  f_start = f_start,
+  f_end = f_end,
+  f_fluxid = f_fluxid,
+  fit_type,
   start_cut = 0,
   end_cut = 0,
-  start_col = "f_start",
-  end_col = "f_end",
-  datetime_col = "f_datetime",
-  conc_col = "f_conc",
-  fluxid_col = "f_fluxID",
-  t_window = 20,
+  t_zero = 0,
   cz_window = 15,
   b_window = 10,
   a_window = 10,
-  roll_width = 15,
-  t_zero = 0,
-  fit_type
+  roll_width = 15
 )
 }
 \arguments{
 \item{conc_df}{dataframe of gas concentration over time}
+
+\item{f_conc}{column with gas concentration data}
+
+\item{f_datetime}{column with datetime of each concentration measurement
+Note that if there are duplicated datetime in the same \code{f_fluxid} only
+the first row will be kept}
+
+\item{f_start}{column with datetime when the measurement started (\code{ymd_hms})}
+
+\item{f_end}{column with datetime when the measurement ended (\code{ymd_hms})}
+
+\item{f_fluxid}{column with ID of each flux}
+
+\item{fit_type}{\code{exp_zhao18}, \code{exp_tz}, \code{exp_hm}, \code{quadratic} or \code{linear.}
+\code{exp_zhao18} is using the exponential model
+\ifelse{html}{\out{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}}{\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}{ASCII}}
+from Zhao et al (2018).
+\code{expt_tz} is a modified version which allows the user to fix \code{t_zero}:
+\ifelse{html}{\out{C(t) = C_m + a * t + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + a * t + (C_z - C_m) \exp(-b * t)}{ASCII}}
+\code{exp_hm} is using the HM model
+(Pedersen et al., 2010; Hutchinson and Mosier, 1981)
+\ifelse{html}{\out{C(t) = C_m + (C_z - C_m) exp(-b * t)}}{\eqn{C(t) = C_m + (C_z - C_m) \exp(-b * t)}{ASCII}}
+\code{exponential} is equal to \code{exp_zhao18}, for backwards compatibility}
 
 \item{start_cut}{time to discard at the start of the measurements
 (in seconds)}
 
 \item{end_cut}{time to discard at the end of the measurements (in seconds)}
 
-\item{start_col}{column with datetime when the measurement started}
-
-\item{end_col}{column with datetime when the measurement ended}
-
-\item{datetime_col}{column with datetime of each concentration measurement}
-
-\item{conc_col}{column with gas concentration data}
-
-\item{fluxid_col}{column with ID of each flux}
-
-\item{t_window}{enlarge focus window before and after tmin and tmax
-(exponential fit)}
+\item{t_zero}{time at which the slope should be calculated
+(for \code{quadratic}, \code{exp_tz} and \code{exp_hm} fits)}
 
 \item{cz_window}{window used to calculate Cz, at the beginning of cut window
-(exponential fit)}
+(\code{exp_zhao18} and \code{exp_tz} fits)}
 
 \item{b_window}{window to estimate b. It is an interval after tz where
-it is assumed that the model fits the data perfectly (exponential fit)}
+it is assumed that the model fits the data perfectly
+(\code{exp_zhao18} and \code{exp_tz} fits)}
 
-\item{a_window}{window at the end of the flux to estimate a (exponential fit)}
+\item{a_window}{window at the end of the flux to estimate a
+(\code{exp_zhao18} and \code{exp_tz} fits)}
 
-\item{roll_width}{width of the rolling mean for CO2 when looking for tz,
-ideally same as cz_window (exponential fit)}
-
-\item{t_zero}{time at which the slope should be calculated
-(for quadratic fit)}
-
-\item{fit_type}{exponential, quadratic or linear.
-Exponential is using the exponential model from Zhao et al (2018)}
+\item{roll_width}{width of the rolling mean for gas concentration when
+looking for \code{tz}, ideally same as \code{cz_window}
+(\code{exp_zhao18} and \code{exp_tz} fits)}
 }
 \value{
-a dataframe with the slope at t zero,
-and parameters of a model of gas concentration over time
+a dataframe with the slope at t zero (\code{f_slope}),
+a datetime column of t zero (\code{f_start_z}), a factor column indicating the
+cuts (\code{f_cut}), the time in seconds since the start of the measurement
+(\code{f_time}), the modeled fit (\code{f_fit}), the modeled slope (\code{f_fit_slope}),
+the parameters of the fit depending on the model used,
+and any columns present in the input.
+The type of fit is added as an attribute for use by the other functions.
 }
 \description{
-fits gas concentration over time data with a model
+Fits gas concentration over time data with a model
 (exponential, quadratic or linear) and provides the slope later used
-to calculate gas fluxes with flux_calc
+to calculate gas fluxes with \link[fluxible:flux_calc]{flux_calc}
 }
 \examples{
 data(co2_conc)
-flux_fitting(co2_conc, fit_type = "exp")
-flux_fitting(co2_conc, fit_type = "quadratic", t_zero = 10, end_cut = 30)
+flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
+flux_fitting(co2_conc, conc, datetime,  fit_type = "quadratic",
+t_zero = 10, end_cut = 30)
 }
 \references{
+Pedersen, A.R., Petersen, S.O., Schelde, K., 2010.
+A comprehensive approach to soil-atmosphere trace-gas flux estimation with
+static chambers. European Journal of Soil Science 61, 888–902.
+https://doi.org/10.1111/j.1365-2389.2010.01291.x
+
+Hutchinson, G.L., Mosier, A.R., 1981. Improved Soil Cover Method
+for Field Measurement of Nitrous Oxide Fluxes.
+Soil Science Society of America Journal 45, 311–316.
+https://doi.org/10.2136/sssaj1981.03615995004500020017x
+
 Zhao, P., Hammerle, A., Zeeman, M., Wohlfahrt, G., 2018.
 On the calculation of daytime CO2 fluxes measured by automated closed
 transparent chambers. Agricultural and Forest Meteorology 263, 267–275.

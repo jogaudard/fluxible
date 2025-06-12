@@ -71,12 +71,12 @@ CO2_INCLINE_2022 <- flux_match(
   record,
   startcrop = 0,
   measurement_length = 180,
-  conc_col = "CO2"
+  f_conc = "CO2"
 )
 
 # CO2_INCLINE_2022  |>
 #   filter(
-#     f_fluxID %in% c(760:772) 
+#     f_fluxid %in% c(760:772) 
 #   ) |>
 #     view()
 # those measurements where done in the 60 minutes before I fell in the river with the setup. which is probably why the data are missing.
@@ -93,7 +93,7 @@ CO2_INCLINE_2022 %>%
 CO2_INCLINE_2022 <- CO2_INCLINE_2022 %>% 
   mutate(
     temp_soil = case_when(
-      comments %in% c("soilT logger not plugged in", "no soil T") ~ NA_real_,
+      comments %in% c("soilT logger not plugged in", "no soil T") ~ NA,
       TRUE ~ temp_soil
     )
   )
@@ -111,7 +111,7 @@ slopes_INCLINE_2022 <- slopes_INCLINE_2022 |>
 
 slopes_INCLINE_2022 |>
 filter(
-    f_fluxID %in% c(1:240)
+    f_fluxid %in% c(1:240)
 ) |>
 # view()
 flux_plot(

@@ -19,3 +19,8 @@
 ^\.csl$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^doc$
+^Meta$
+^poster_fluxible.svg$
+^revdep$
+^codecov\.yml$

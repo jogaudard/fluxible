@@ -17,23 +17,35 @@ knitr::opts_chunk$set(
 
 # Fluxible
 
-**Note:** fluxible is still in an early phase, it is fully functional but can be improved in many ways. Please get in touch for any problems or suggestions.
-
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.org/package=fluxible)
+[![LifeCycle](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Codecov test coverage](https://codecov.io/gh/Plant-Functional-Trait-Course/fluxible/graph/badge.svg)](https://app.codecov.io/gh/Plant-Functional-Trait-Course/fluxible)
 <!-- badges: end -->
+
 The Fluxible R package is made to transform any dataset of gas concentration over time into a gas flux dataset.
 It was originally made to be used with a closed loop chamber system connected to a gas analyzer.
-A function for use with a tent (taking leakage into account) is in development (see further developments).
 
 The goal of fluxible is to provide a workflow that removes individual evaluation of each flux, reduces risk of bias, and makes it reproducible.
 Users set specific data quality standards and selection parameters as function arguments that are applied to the entire dataset.
+Fluxible offers different methods to estimate fluxes: linear, quadratic, exponential [@zhaoCalculationDaytimeCO22018], and the original HM model [@hutchinsonImprovedSoilCover1981; @pedersenComprehensiveApproachSoilatmosphere2010a].
+The kappamax method [@huppiRestrictingNonlinearityParameter2018] is also included, at the quality control step.
 The package runs the calculations automatically, without prompting the user to take decisions mid-way, and provides quality flags and plots at the end of the process for a visual check.
-This makes it easy to use with large flux datasets and to integrate into a reproducible workflow.
+
+This makes it easy to use with large flux datasets and to integrate into a reproducible and automated data processing pipeline such as the [targets R package [@targetsRpackage2021]](https://books.ropensci.org/targets/).
 Using the Fluxible R package makes the workflow reproducible, increases compatibility across studies, and is more time efficient.
 
-For a quick overview of how the package works, you can look at [the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) that was presented at the European Geosciences Union Annual Meeting 2024.
+For a visual overview of the package, see [the poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf).
 
 ## Installation
+
+Fluxible can be installed from CRAN.
+
+``` r
+install.packages("fluxible")
+```
+
 
 You can install the development version of fluxible from the [GitHub repo](https://github.com/Plant-Functional-Trait-Course/fluxible) with:
 
@@ -42,197 +54,107 @@ You can install the development version of fluxible from the [GitHub repo](https
 devtools::install_github("plant-functional-trait-course/fluxible")
 ```
 
-## Example
-
-
-For this example we will use the data that were recorded during the Plant Functional Traits Course 6 (PFTC6) in Norway in 2022 at the site called Liahovden (CITE when data paper out).
-The CO~2~ concentration data as well as air and soil temperature and photosynthetically active radiations (PAR) were recorded in a dataframe named co2_liahovden.
-The metadata for each measurements are in a dataframe called record_liahovden.
-This dataframe contains the starting time of each measurements, the type of measurement and the unique ID for each turf.
-The type of measurement describes if it was net ecosystem exchange (NEE), measured with a transparent chamber, or ecosystem respiration (ER), measured with a dark chamber.
-
-We use the flux_match function to slice the data from co2_liahovden into each measurement and discard what was recorded in between.
-
-
-```{r match}
+## Short example
+```{r short-example, fig.width = 8, fig.height = 9, fig.cap="Output of flux_plot, showing fluxes plotted individually with diagnostics and quality flags."}
 library(fluxible)
 
-str(record_liahovden)
-str(co2_liahovden)
-
-conc_liahovden <- flux_match(co2_liahovden, record_liahovden)
-str(conc_liahovden)
-```
-
-Before calculating fluxes we need to fit a model to each measurement and estimate a slope of the concentration changing rate.
-We use the flux_fitting function with the model provided by @zhaoCalculationDaytimeCO22018.
-The function flux_quality also provides a quadratic and a linear fit.
-<!-- Then a model has to be fitted to each flux. -->
-<!-- Here we use the model provided by @zhaoCalculationDaytimeCO22018 -->
-
-```{r fitting_exp}
-slopes_exp_liahovden <- flux_fitting(conc_liahovden, fit_type = "exponential")
-str(slopes_exp_liahovden)
-```
-
-The function flux_quality is used to provide diagnostics about the quality of the fit, eventually advising to discard some measurements or replace them by zero.
-<!-- We run flux_quality to assess the quality of the fits. -->
-
-```{r quality_exp}
-slopes_exp_liahovden <- flux_quality(
-  slopes_exp_liahovden,
-  slope_col = "f_slope"
+conc_df <- flux_match(
+  co2_df_short,
+  record_short,
+  datetime,
+  start,
+  measurement_length = 220
 )
-str(slopes_exp_liahovden)
-```
 
-The function flux_plot provides plots for a visual assessment of the measurements, explicitly displaying the quality flags from flux_quality and the cuts from flux_fitting.
-<!-- The plots will also show the modelled slope at t zero. -->
+slopes_df <- flux_fitting(
+  conc_df,
+  conc,
+  datetime,
+  fit_type = "exp_zhao18",
+  end_cut = 60
+)
 
-```{r plot_exp}
-slopes_exp_liahovden |>
-  # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
-  flux_plot(
-    f_ylim_lower = 300,
-    f_ylim_upper = 600,
-    f_nrow = 2,
-    f_ncol = 2,
-    y_text_position = 400,
-    output = "print_only"
+slopes_flag_df <- flux_quality(
+  slopes_df,
+  conc
+)
+
+flux_plot(
+  slopes_flag_df,
+  conc,
+  datetime,
+  f_ylim_lower = 390,
+  f_ylim_upper = 650,
+  facet_wrap_args = list(
+    ncol = 3,
+    nrow = 2,
+    scales = "free"
   )
-```
+)
 
-Based on the quality flags and the plots, the user can decide to run flux_fitting again with different arguments.
-Here we will do it while cutting the last 60 seconds of the fluxes (cutting the last third).
-We also detected two fluxes (101 and 106) that do not look correct.
-Sometimes some measurements will pass the automated quality control but are obviously wrong for an experience user.
-That is what the weird_fluxesID argument is for.
-For the sake of reproducibility, this argument should be the last option and be accompanied with a justification.
+fluxes_df <- flux_calc(
+  slopes_flag_df,
+  f_slope_corr,
+  datetime,
+  temp_air,
+  conc_unit = "ppm",
+  flux_unit = "mmol",
+  cols_keep = c("turfID", "type"),
+  cols_ave = c("temp_soil", "PAR"),
+  setup_volume = 24.575,
+  atm_pressure = 1,
+  plot_area = 0.0625
+)
 
-```{r plot_exp_cut}
-slopes_exp_liahovden_60 <- conc_liahovden |>
-  flux_fitting(fit_type = "exp", end_cut = 60) |>
-  flux_quality(
-    slope_col = "f_slope",
-    weird_fluxes_id = c(
-      101, # plot starts with a high peak: accumulation in the canopy?
-      106 # peak at the beginning of the flux that is messing up the fit
-    )
-  )
+fluxes_gpp <- flux_gpp(
+  fluxes_df,
+  type,
+  datetime,
+  id_cols = "turfID",
+  cols_keep = c("temp_soil_ave")
+)
 
-slopes_exp_liahovden_60 |>
-  # we just show a sample of the plots to avoid slowing down the example
-  dplyr::filter(f_fluxID %in% c(54, 95, 100, 101)) |>
-  flux_plot(
-    f_ylim_lower = 300,
-    f_ylim_upper = 600,
-    f_nrow = 2,
-    f_ncol = 2,
-    y_text_position = 400,
-    output = "print_only"
-  )
-```
-
-```{r plot_exp_cut_all, include = FALSE}
-# that part was to creat the plots of all the fluxes to find the intersting ones for the example, no need to re run it everytime.
-
-# slopes_exp_liahovden_60 <- conc_liahovden |>
-#   flux_fitting(fit_type = "exp", end_cut = 60) |>
-#     flux_quality(fit_type = "exp",
-#                 slope_col = "f_slope",
-#                 weird_fluxesID = c(
-#                     101, # plot has a high peak at the start. CO2 accumulation in the canopy?
-#                     106 # peak at the beginning of the flux that is messing up the fit
-#                     )
-#                 )
-
-# slopes_exp_liahovden_60 |>
-#     flux_plot(
-#       fit_type = "exp",
-#       f_plotname = "example_lia_exp",
-#       f_ylim_lower = 300,
-#       f_ylim_upper = 600,
-#       f_nrow = 2,
-#       y_text_position = 400
-#       )
-```
-
-Once we are satisfied with the fit, we can calculate fluxes with flux_calc.
-Here the volume is defined as a constant for all the measurements but it is also possible to provide a specific volume for each plot in case that is different.
-
-```{r calc}
-fluxes_exp_liahovden_60 <- slopes_exp_liahovden_60 |>
-  flux_calc(
-    slope_col = "f_slope_corr", # we use the slopes provided by flux_quality
-    cols_keep = c("f_start", "type"),
-    cut_col = "f_cut",
-    keep_arg = "keep"
-  ) # there is no need to specify the other arguments because
-# the defaults are for our experiment, other users might want to check that
-str(fluxes_exp_liahovden_60)
-```
-
-The output is in mmol/m^2^/h and the calculation used is as follow:
-
-<!-- <img src="https://render.githubusercontent.com/render/math?math=flux=slope\times \frac{P\times V}{R\times T\times A}"> -->
-
-$$
- \text{flux}=\text{slope}\times \frac{P\times V}{R\times T\times A}
-$$
-
-where
-
-flux: the flux of gas at the surface of the plot (mmol/m^2^/h)
-
-slope: slope estimate (ppm*s^-1^)
-
-P: pressure, assumed  (atm)
-
-V: volume of the chamber and tubing (L)
-
-R: gas constant (0.082057 L\*atm\*K^-1^\*mol^-1^)
-
-T: chamber air temperature (K)
-
-A: area of chamber frame base (m^2^)
-
-The conversion from micromol/m^2^/s to mmol/m^2^/h is included in the function.
-
-Fluxes were calculated in five steps from raw gas concentration data and the process is entirely reproducible.
-Here is a plot of the results.
-
-```{r 24h_fluxes}
-fluxes_exp_liahovden_60 |>
-  dplyr::filter(type == "NEE") |>
-  ggplot2::ggplot(ggplot2::aes(f_start, flux)) +
-  ggplot2::geom_point()
+fluxes_gpp
 ```
 
 
 ## Further developments
 
-### Flux tent
-Currently fluxible is thought for setups using a flux chamber.
-Flux chambers can be assumed to have no leak.
-As flux tents tend to leak, a different fitting function is needed to account for potential leaks.
+### The licoread R package
+
+The [licoread R package](https://jogaudard.github.io/licoread/index.html), developped in collaboration with [LI-COR](https://www.licor.com/), provides an easy way to import raw files from Li-COR gas analyzers as R objects that can be used directly with the Fluxible R package.
+
+### Segmentation tool
+We are working on a tool to automatically select the window of the measurement on which to fit a model.
+This selection will be based on environmental variable, such as photosynthetically active radiation (PAR), measured simultaneously.
 
 ### More fits
 As we want fluxible to fit the use of as many projects as possible, more fitting expressions will be included in the flux_fitting function.
 Feel welcome to get in touch if you wish to include yours in fluxible.
 
 ## Contact
-Joseph Gaudard, University of Bergen, Norway
+[Joseph Gaudard](https://jogaudard.github.io/CV_jgaudard/), University of Bergen, Norway
 
-joseph.gaudard@pm.me
+[joseph.gaudard@pm.me](mailto:joseph.gaudard@pm.me)
 
-[CV](https://jogaudard.github.io/CV_jgaudard/)
+[GitHub page](https://github.com/jogaudard)
 
 ## Dissemination
-Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible: an R package to calculate ecosystem gas fluxes in a reproducible and automated workflow., EGU General Assembly 2024, Vienna, Austria, 14–19 Apr 2024, EGU24-956, https://doi.org/10.5194/egusphere-egu24-956, 2024. 
 
-[Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf)
+If you are running a course and want to talk about Fluxible, feel free to use this [two-slides presentation](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/fluxible_jgaudard_short.pdf).
+Of course, you can always reach out if you wish to have more material.
+
+Gaudard, J., Trepel, J., Dawson, H. R., Enquist, B., Halbritter, A. H., Mustri, M., Niittynen, P., Santos-Andrade, P. E., Topper, J. P., Vandvik, V., and Telford, R. J.: Fluxible: an R package to calculate ecosystem gas fluxes from closed loop chamber systems in a reproducible and automated workflow ([slides](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/fluxible_jgaudard_EGU25.pdf)), EGU General Assembly 2025, Vienna, Austria, 27 Apr–2 May 2025, EGU25-12409, https://doi.org/10.5194/egusphere-egu25-12409, 2025. 
+
+Gaudard, J., Telford, R., Vandvik, V., and Halbritter, A. H.: Fluxible: an R package to calculate ecosystem gas fluxes in a reproducible and automated workflow. ([poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf)), EGU General Assembly 2024, Vienna, Austria, 14–19 Apr 2024, EGU24-956, https://doi.org/10.5194/egusphere-egu24-956, 2024. 
+
+<!-- [Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) -->
 
 <!-- [Link to the abstract](https://meetingorganizer.copernicus.org/EGU24/EGU24-956.html) -->
+
+
+## Acknowledgements
+
+Fluxible builds on the earlier effort from the Plant Functional Traits Course Community [co2fluxtent](https://github.com/PaulESantos/co2fluxtent) [@co2fluxtent].
 
 #### References

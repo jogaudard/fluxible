@@ -1,10 +1,20 @@
-library(devtools)
+# for update
 
-release()
+usethis::use_version("patch") # (or ‘patch’ or ‘major’)
+devtools::submit_cran()
 
-spell_check()
+usethis::use_github_links(overwrite = TRUE)
+urlchecker::url_check()
+devtools::build_readme()
+devtools::check(remote = TRUE, manual = TRUE)
 
-check()
+usethis::use_release_issue()
+
+devtools::release()
+
+devtools::spell_check()
+
+devtools::check()
 # check_rhub()
 # This function is deprecated and defunct since rhub v2.
 # Please see `?rhubv2` on transitioning to the new rhub functions.
@@ -32,6 +42,6 @@ rhub::rhub_doctor()
 
 rhub::rhub_check()
 
-check_win_devel()
+devtools::check_win_devel()
 usethis::use_news_md()
 usethis::use_cran_comments()
