@@ -51,6 +51,7 @@ flux_lrc(
 the same dataframe with the additional column \code{PAR_corrected_flux}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Calculates light response curves for CO2 fluxes
 }
 \details{

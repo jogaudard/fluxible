@@ -1,5 +1,7 @@
 #' Corrects CO2 fluxes at fixed PAR values
-#' @description Calculates light response curves for CO2 fluxes
+#' @description
+#' `r lifecycle::badge("experimental")`
+#' Calculates light response curves for CO2 fluxes
 #' @param fluxes_df a dataframe containing NEE, ER and LRC measurements
 #' @param type_col column containing type of flux (NEE, ER, LRC)
 #' @param par_ave column containing the PAR value for each flux
@@ -66,9 +68,8 @@ flux_lrc <- function(fluxes_df,
            
     ) |>
     unnest(table) |>
-    select(all_of(group), PARavg, `I(PARavg^2)`) |>
+    select(all_of(lrc_group), PARavg, `I(PARavg^2)`) |>
     rename(
-      origin = "(Intercept)",
       a = "I(PARavg^2)",
       b = "PARavg"
     )
