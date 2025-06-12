@@ -17,7 +17,7 @@
 #' form
 #' \ifelse{html}{\out{flux ~ PAR + PAR<sup>2</sup>}}{\eqn{flux \~ PAR + PAR^2}{ASCII}}
 #' @return the same dataframe with the additional column `PAR_corrected_flux`
-#' @importFrom dplyr group_by_at filter rename vars select mutate left_join
+#' @importFrom dplyr group_by_at filter rename vars select mutate left_join cross_join
 #' case_when
 #' @importFrom tidyr nest unnest
 #' @importFrom purrr map
@@ -65,7 +65,6 @@ flux_lrc <- function(fluxes_df,
            table = map(lm, tidy),
            table = map(table, select, "term", "estimate"),
            table = map(table, pivot_wider, names_from = "term", values_from = "estimate")
-           
     ) |>
     unnest(table) |>
     select(all_of(lrc_group), PARavg, `I(PARavg^2)`) |>
@@ -77,8 +76,19 @@ flux_lrc <- function(fluxes_df,
   flux_corrected_PAR <- fluxes_df |>
     filter(
       {{type_col}} %in% c("NEE", "ER")
-    ) |>
-    left_join(coefficients_lrc) |>
+    )
+
+  if(is.null(lrc_group)) {
+    flux_corrected_PAR <- flux_corrected_PAR |>
+      cross_join(coefficients_lrc)
+  }
+
+  if(!is.null(lrc_group)) {
+    flux_corrected_PAR <- flux_corrected_PAR |>
+      left_join(coefficients_lrc)
+  }
+
+  flux_corrected_PAR <- flux_corrected_PAR |>
     mutate(
       PAR_corrected_flux = 
         case_when( #we correct only the NEE
