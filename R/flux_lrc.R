@@ -53,7 +53,7 @@ flux_lrc <- function(fluxes_df,
 
   coefficients_lrc <- fluxes_df |>
     filter(
-        {{type_col}} == ((lrc_arg))
+      {{type_col}} == ((lrc_arg))
     ) |>
     rename(
       PARavg = {{par_ave}},
@@ -61,10 +61,13 @@ flux_lrc <- function(fluxes_df,
     ) |>
     group_by_at(vars(all_of(((lrc_group))))) |>
     nest() |>
-    mutate(lm = map(data, ~ lm(f_flux ~ PARavg + I(PARavg^2), data = .x)),
-           table = map(lm, tidy),
-           table = map(table, select, "term", "estimate"),
-           table = map(table, pivot_wider, names_from = "term", values_from = "estimate")
+    mutate(
+      lm = map(data, ~ lm(f_flux ~ PARavg + I(PARavg^2), data = .x)),
+      table = map(lm, tidy),
+      table = map(table, select, "term", "estimate"),
+      table = map(
+        table, pivot_wider, names_from = "term", values_from = "estimate"
+      )
     ) |>
     unnest(table) |>
     select(all_of(lrc_group), PARavg, `I(PARavg^2)`) |>
@@ -72,31 +75,37 @@ flux_lrc <- function(fluxes_df,
       a = "I(PARavg^2)",
       b = "PARavg"
     )
-  
-  flux_corrected_PAR <- fluxes_df |>
+
+  flux_corrected_par <- fluxes_df |>
     filter(
       {{type_col}} %in% c("NEE", "ER")
     )
 
-  if(is.null(lrc_group)) {
-    flux_corrected_PAR <- flux_corrected_PAR |>
+  if (is.null(lrc_group)) {
+    flux_corrected_par <- flux_corrected_par |>
       cross_join(coefficients_lrc)
   }
 
-  if(!is.null(lrc_group)) {
-    flux_corrected_PAR <- flux_corrected_PAR |>
+  if (!is.null(lrc_group)) {
+    flux_corrected_par <- flux_corrected_par |>
       left_join(coefficients_lrc)
   }
 
-  flux_corrected_PAR <- flux_corrected_PAR |>
+  flux_corrected_par <- flux_corrected_par |>
     mutate(
-      PAR_corrected_flux = 
+      PAR_corrected_flux =
         case_when( #we correct only the NEE
-          type == "NEE" ~ {{f_flux}} + a * (par_nee^2 - {{par_ave}}^2) + b * (par_nee - {{par_ave}}),
-          type == "ER" ~ {{f_flux}} + a * (par_er^2 - {{par_ave}}^2) + b * (par_er - {{par_ave}})
+          type == "NEE" ~
+            {{f_flux}} +
+              a * (par_nee^2 - {{par_ave}}^2) +
+              b * (par_nee - {{par_ave}}),
+          type == "ER" ~
+            {{f_flux}} +
+              a * (par_er^2 - {{par_ave}}^2) +
+              b * (par_er - {{par_ave}})
         )
     ) |>
     select(!c("a", "b"))
-  
-  flux_corrected_PAR
+
+  flux_corrected_par
 }
