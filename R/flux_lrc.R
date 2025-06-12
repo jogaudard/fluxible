@@ -20,12 +20,12 @@
 #' @importFrom tidyr nest unnest
 #' @importFrom purrr map
 #' @importFrom broom tidy
-#' @examples 
+#' @examples
 #' data(co2_fluxes_lrc)
 #' flux_lrc(
-#' fluxes_df = co2_fluxes,
+#' fluxes_df = co2_fluxes_lrc,
 #' type_col = type,
-#' par_ave = PAR,
+#' par_ave = PAR_ave,
 #' f_flux = f_flux,
 #' lrc_arg = "LRC",
 #' nee_arg = "NEE",
@@ -34,7 +34,7 @@
 #' par_nee = 300,
 #' par_er = 0
 #' )
-#' @export 
+#' @export
 
 
 flux_lrc <- function(fluxes_df,
