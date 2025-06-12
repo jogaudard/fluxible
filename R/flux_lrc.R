@@ -15,7 +15,7 @@
 #' @param par_er PAR value to correct the ER fluxes to
 #' @details The light response curves are calculated with a quadratic of the
 #' form
-#' \ifelse{html}{\out{flux ~ PAR + PAR<sup>2</sup>}}{\eqn{flux \~ PAR + PAR^2}{ASCII}}
+#' \ifelse{html}{\out{flux(PAR) = a * PAR<sup>2</sup> + b * PAR + c}}{\eqn{flux(PAR) = a * PAR^2 + b * PAR + c}{ASCII}}
 #' @return the same dataframe with the additional column `PAR_corrected_flux`
 #' @importFrom dplyr group_by_at filter rename vars select mutate left_join cross_join
 #' case_when

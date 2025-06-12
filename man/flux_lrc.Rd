@@ -57,7 +57,7 @@ Calculates light response curves for CO2 fluxes
 \details{
 The light response curves are calculated with a quadratic of the
 form
-\ifelse{html}{\out{flux ~ PAR + PAR<sup>2</sup>}}{\eqn{flux \~ PAR + PAR^2}{ASCII}}
+\ifelse{html}{\out{flux(PAR) = a * PAR<sup>2</sup> + b * PAR + c}}{\eqn{flux(PAR) = a * PAR^2 + b * PAR + c}{ASCII}}
 }
 \examples{
 data(co2_fluxes_lrc)
