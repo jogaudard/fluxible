@@ -40,15 +40,15 @@
 
 
 flux_lrc <- function(fluxes_df,
-                    type_col,
-                    par_ave = {{par_ave}},
-                    f_flux = {{f_flux}},
-                    lrc_arg = "LRC",
-                    nee_arg = "NEE",
-                    er_arg = "ER",
-                    lrc_group = c(),
-                    par_nee = 300,
-                    par_er = 0) {
+                     type_col,
+                     par_ave = {{par_ave}},
+                     f_flux = {{f_flux}},
+                     lrc_arg = "LRC",
+                     nee_arg = "NEE",
+                     er_arg = "ER",
+                     lrc_group = c(),
+                     par_nee = 300,
+                     par_er = 0) {
 
 
   coefficients_lrc <- fluxes_df |>
@@ -70,7 +70,7 @@ flux_lrc <- function(fluxes_df,
       )
     ) |>
     unnest(table) |>
-    select(all_of(lrc_group), PARavg, `I(PARavg^2)`) |>
+    select(all_of(lrc_group), "PARavg", "I(PARavg^2)") |>
     rename(
       a = "I(PARavg^2)",
       b = "PARavg"
