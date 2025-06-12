@@ -32,7 +32,7 @@
 #' lrc_arg = "LRC",
 #' nee_arg = "NEE",
 #' er_arg = "ER",
-#' lrc_group = c(),
+#' lrc_group = c("warming"),
 #' par_nee = 300,
 #' par_er = 0
 #' )
