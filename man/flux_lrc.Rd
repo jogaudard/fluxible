@@ -7,16 +7,8 @@
 flux_lrc(
   fluxes_df,
   type_col,
-  par_ave = {
-     {
-         par_ave
-     }
- },
-  f_flux = {
-     {
-         f_flux
-     }
- },
+  par_ave = par_ave,
+  f_flux = f_flux,
   lrc_arg = "LRC",
   nee_arg = "NEE",
   er_arg = "ER",
