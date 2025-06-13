@@ -83,3 +83,22 @@ co2_conc_mid_missing <- co2_conc |>
   )
 
 usethis::use_data(co2_conc_mid_missing, overwrite = TRUE)
+
+co2_fluxes_lrc <- readr::read_csv("data-raw/co2_fluxes_lrc.csv")
+co2_fluxes_lrc <- co2_fluxes_lrc |>
+  dplyr::mutate(
+    type = dplyr::case_when(
+      campaign == "LRC" ~ "LRC",
+      .default = type
+    ),
+    warming = dplyr::case_when(
+      OTC == "C" ~ "control",
+      OTC == "W" ~ "warming",
+      treatment == "C_C" ~ "control",
+      treatment == "W_C" ~ "warming"
+    )
+  ) |>
+  dplyr::select(!c(campaign, OTC, treatment))
+
+usethis::use_data(co2_fluxes_lrc, overwrite = TRUE)
+
