@@ -1,3 +1,7 @@
+# fluxible 1.2.3
+
+* `flux_lrc`: new function to standardize CO2 fluxes with PAR values
+
 # fluxible 1.2.2
 
 * `flux_calc`:
