@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_lrc.R
 \name{flux_lrc}
 \alias{flux_lrc}
-\title{Corrects CO2 fluxes at fixed PAR values}
+\title{Standardizes CO2 fluxes at fixed PAR values}
 \usage{
 flux_lrc(
   fluxes_df,
@@ -52,7 +52,8 @@ the same dataframe with the additional column \code{PAR_corrected_flux}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Calculates light response curves for CO2 fluxes
+Calculates light response curves for CO2 fluxes and
+standardizes CO2 fluxes according to the LRC
 }
 \details{
 The light response curves are calculated with a quadratic of the

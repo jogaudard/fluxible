@@ -1,7 +1,8 @@
-#' Corrects CO2 fluxes at fixed PAR values
+#' Standardizes CO2 fluxes at fixed PAR values
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' Calculates light response curves for CO2 fluxes
+#' Calculates light response curves for CO2 fluxes and
+#' standardizes CO2 fluxes according to the LRC
 #' @param fluxes_df a dataframe containing NEE, ER and LRC measurements
 #' @param type_col column containing type of flux (NEE, ER, LRC)
 #' @param par_ave column containing the PAR value for each flux
