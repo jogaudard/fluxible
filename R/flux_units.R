@@ -6,16 +6,16 @@
 flux_units <- function(
     flux_units,
     amount_units = c("mol", "mmol", "umol", "nmol", "pmol"),
-    surface_units = c("m2", "dm2", "cm2"),
-    time_units = c("day", "hour", "second")
+    time_units = c("day", "hour", "second"),
+    surface_units = c("m2", "dm2", "cm2")
 ) {
-    amount <- nth(flux_units, 1)
-    surface <- nth(flux_units, 2)
-    time <- nth(flux_units, 3)
+    amount <- str_extract(flux_units, "^\\w*")
+    time <- str_extract(flux_units, "(?<=\\/)(\\w.*)(?=\\/)")
+    surface <- str_extract(flux_units, "\\w*$")
 
     amount <- match.arg(amount, amount_units)
-    surface <- match.arg(surface, surface_units)
     time <- match.arg(time, time_units)
+    surface <- match.arg(surface, surface_units)
 
 # starting units are micromol/s/m^2
 
@@ -28,7 +28,7 @@ flux_units <- function(
     )
 
 
-    flux_coeff <- amount_coeff * surface_coeff * time_coeff
+    flux_coeff <- amount_coeff * time_coeff * surface_coeff
 
     flux_coeff
 }
