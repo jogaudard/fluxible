@@ -16,6 +16,12 @@ flux_units(
 form amount/time/surface. Amount can be \code{mol}, \code{mmol}, \code{umol}, \code{nmol} or
 \code{pmol}. Time can be \code{d} (day), \code{h} (hour), \code{mn} (minute) or \code{s} (seconds).
 Surface can be \code{m2}, \code{dm2} or \code{cm2}.}
+
+\item{amount_units}{list of possible units for amount.}
+
+\item{time_units}{list of possible units for time.}
+
+\item{surface_units}{list of possible units for surface.}
 }
 \value{
 A single numerical to multiply flux values with to convert units.

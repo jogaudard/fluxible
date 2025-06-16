@@ -4,6 +4,9 @@
 #' form amount/time/surface. Amount can be `mol`, `mmol`, `umol`, `nmol` or
 #' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
 #' Surface can be `m2`, `dm2` or `cm2`.
+#' @param amount_units list of possible units for amount.
+#' @param time_units list of possible units for time.
+#' @param surface_units list of possible units for surface.
 #' @details The conversion is done from umol/s/m2.
 #' @return A single numerical to multiply flux values with to convert units.
 #' @importFrom stringr str_extract
