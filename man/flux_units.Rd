@@ -2,7 +2,7 @@
 % Please edit documentation in R/flux_units.R
 \name{flux_units}
 \alias{flux_units}
-\title{Returns a unit conversion coefficient for flux_calc}
+\title{Unit conversion coefficient for fluxes}
 \usage{
 flux_units(
   flux_units,
@@ -12,8 +12,17 @@ flux_units(
 )
 }
 \arguments{
-\item{flux_units}{desired units for the calculated fluxes}
+\item{flux_units}{desired units for the calculated fluxes. Has to be of the
+form amount/time/surface. Amount can be \code{mol}, \code{mmol}, \code{umol}, \code{nmol} or
+\code{pmol}. Time can be \code{d} (day), \code{h} (hour), \code{mn} (minute) or \code{s} (seconds).
+Surface can be \code{m2}, \code{dm2} or \code{cm2}.}
+}
+\value{
+A single numerical to multiply flux values with to convert units.
 }
 \description{
-Returns a unit conversion coefficient for flux_calc
+calculates the conversion coefficient for flux_calc
+}
+\details{
+The conversion is done from umol/s/m2.
 }
