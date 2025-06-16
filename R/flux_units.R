@@ -1,12 +1,20 @@
-#' Returns a unit conversion coefficient for flux_calc
-#' @param flux_units desired units for the calculated fluxes
-#' 
-#' @details 
+#' Unit conversion coefficient for fluxes
+#' @description calculates the conversion coefficient for flux_calc
+#' @param flux_units desired units for the calculated fluxes. Has to be of the
+#' form amount/time/surface. Amount can be `mol`, `mmol`, `umol`, `nmol` or
+#' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
+#' Surface can be `m2`, `dm2` or `cm2`.
+#' @details The conversion is done from umol/s/m2.
+#' @return A single numerical to multiply flux values with to convert units.
+#' @importFrom stringr str_extract
+#' @importFrom dplyr case_when
+#' @example flux_units("mol/mn/m2")
+#' @export 
 
 
 flux_units <- function(flux_units,
                        amount_units = c("mol", "mmol", "umol", "nmol", "pmol"),
-                       time_units = c("d", "h", "s"),
+                       time_units = c("d", "h", "mn", "s"),
                        surface_units = c("m2", "dm2", "cm2")) {
 
   amount <- str_extract(flux_units, "^\\w*")
@@ -30,6 +38,7 @@ flux_units <- function(flux_units,
   time_coeff <- case_when(
     time == "d" ~ 86400,
     time == "h" ~ 3600,
+    time == "mn" ~ 60,
     time == "s" ~ 1
   )
 
