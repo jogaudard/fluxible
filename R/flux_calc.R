@@ -8,7 +8,7 @@
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
 #' `ppm` or `ppb`
-#' @param flux_units desired units for the calculated fluxes. Has to be of the
+#' @param flux_unit desired units for the calculated fluxes. Has to be of the
 #' form amount/surface/time. Amount can be `mol`, `mmol`, `umol`, `nmol` or
 #' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
 #' Surface can be `m2`, `dm2` or `cm2`.

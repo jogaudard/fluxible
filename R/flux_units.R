@@ -12,7 +12,7 @@
 #' @importFrom stringr str_extract
 #' @importFrom dplyr case_when
 #' @examples
-#' flux_units("mol/mn/m2")
+#' flux_units("mol/m2/mn")
 #' @export
 
 
