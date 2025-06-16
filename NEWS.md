@@ -1,3 +1,8 @@
+# fluxible 1.2.4
+
+* `flux_units`: new function returning a conversion factor to transform fluxes into the desired unit
+* `flux_calc`: `flux_unit` argument now takes units in the form amount/surface/time
+
 # fluxible 1.2.3
 
 * `flux_lrc`: new function to standardize CO2 fluxes with PAR values

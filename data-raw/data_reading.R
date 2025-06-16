@@ -101,4 +101,3 @@ co2_fluxes_lrc <- co2_fluxes_lrc |>
   dplyr::select(!c(campaign, OTC, treatment))
 
 usethis::use_data(co2_fluxes_lrc, overwrite = TRUE)
-
