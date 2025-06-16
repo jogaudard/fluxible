@@ -57,12 +57,6 @@ can also be a column in case it is a variable}
 \item{conc_unit}{unit in which the concentration of gas was measured
 \code{ppm} or \code{ppb}}
 
-\item{flux_unit}{unit in which the calculated flux will be:
-\code{mmol} outputs fluxes in
-\ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
-; \code{micromol} outputs fluxes in
-\ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}}
-
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux,
 as \link[dplyr:distinct]{distinct} is applied.}
@@ -101,6 +95,11 @@ and \code{cols_med}.}
 \item{fit_type}{(optional) model used in
 \link[fluxible:flux_fitting]{flux_fitting}. Will be automatically filled if
 \code{slopes_df} was produced using \link[fluxible:flux_fitting]{flux_fitting}.}
+
+\item{flux_units}{desired units for the calculated fluxes. Has to be of the
+form amount/surface/time. Amount can be \code{mol}, \code{mmol}, \code{umol}, \code{nmol} or
+\code{pmol}. Time can be \code{d} (day), \code{h} (hour), \code{mn} (minute) or \code{s} (seconds).
+Surface can be \code{m2}, \code{dm2} or \code{cm2}.}
 }
 \value{
 a dataframe containing flux IDs, datetime of measurements' starts,
@@ -127,7 +126,7 @@ f_slope,
 datetime,
 temp_air,
 conc_unit = "ppm",
-flux_unit = "mmol",
+flux_unit = "mmol/m2/h",
 setup_volume = 24.575,
 atm_pressure = 1,
 plot_area = 0.0625)
