@@ -32,3 +32,6 @@ calculates the conversion coefficient for flux_calc
 \details{
 The conversion is done from umol/s/m2.
 }
+\examples{
+flux_units("mol/mn/m2")
+}

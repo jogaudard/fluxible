@@ -11,23 +11,24 @@
 #' @return A single numerical to multiply flux values with to convert units.
 #' @importFrom stringr str_extract
 #' @importFrom dplyr case_when
-#' @example flux_units("mol/mn/m2")
+#' @examples
+#' flux_units("mol/mn/m2")
 #' @export 
 
 
 flux_units <- function(flux_units,
                        amount_units = c("mol", "mmol", "umol", "nmol", "pmol"),
-                       time_units = c("d", "h", "mn", "s"),
-                       surface_units = c("m2", "dm2", "cm2")) {
+                       surface_units = c("m2", "dm2", "cm2"),
+                       time_units = c("d", "h", "mn", "s")) {
 
   amount <- str_extract(flux_units, "^\\w*")
-  time <- str_extract(flux_units, "(?<=\\/)(\\w.*)(?=\\/)")
-  surface <- str_extract(flux_units, "\\w*$")
+  surface <- str_extract(flux_units, "(?<=\\/)(\\w.*)(?=\\/)")
+  time <- str_extract(flux_units, "\\w*$")
 
   amount <- match.arg(amount, amount_units)
-  time <- match.arg(time, time_units)
   surface <- match.arg(surface, surface_units)
-
+  time <- match.arg(time, time_units)
+  
   # output units in flux_calc are micromol/s/m^2
 
   amount_coeff <- case_when(
@@ -38,6 +39,12 @@ flux_units <- function(flux_units,
     amount == "pmol" ~ 1e6
   )
 
+  surface_coeff <- case_when(
+    surface == "m2" ~ 1,
+    surface == "dm2" ~ 1e-2,
+    surface == "cm2" ~ 1e-4
+  )
+
   time_coeff <- case_when(
     time == "d" ~ 86400,
     time == "h" ~ 3600,
@@ -45,13 +52,7 @@ flux_units <- function(flux_units,
     time == "s" ~ 1
   )
 
-  surface_coeff <- case_when(
-    surface == "m2" ~ 1,
-    surface == "dm2" ~ 1e-2,
-    surface == "cm2" ~ 1e-4
-  )
-
-  flux_coeff <- amount_coeff * time_coeff * surface_coeff
+  flux_coeff <- amount_coeff * surface_coeff * time_coeff
 
   flux_coeff
 }

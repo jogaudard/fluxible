@@ -123,6 +123,14 @@ flux_calc <- function(slopes_df,
     )
   }
 
+  if (flux_unit == "mmol") {
+    flux_unit <- "mmol/m2/h"
+  }
+
+  if (flux_unit == "micromol") {
+    flux_unit <- "umol/m2/h"
+  }
+
   name_df <- deparse(substitute(slopes_df))
 
   colnames <- colnames(slopes_df)
@@ -158,6 +166,8 @@ flux_calc <- function(slopes_df,
 
   if (any(!df_ok))
     stop("Please correct the arguments", call. = FALSE)
+
+  flux_coeff <- flux_units(flux_unit)
 
   if (length(cols_nest) == 1 && cols_nest == "all") {
     cols_nest <- slopes_df |>
@@ -197,10 +207,10 @@ flux_calc <- function(slopes_df,
     c("ppm", "ppb")
   )
 
-  flux_unit <- match.arg(
-    flux_unit,
-    c("micromol", "mmol")
-  )
+  # flux_unit <- match.arg(
+  #   flux_unit,
+  #   c("micromol", "mmol")
+  # )
 
 
   if (cut == TRUE) {
@@ -337,7 +347,7 @@ flux_calc <- function(slopes_df,
         / (r_const *
            .data$f_temp_air_ave
            * {{plot_area}}) # flux in micromol/s/m^2
-        * 3600, # secs to hours, flux is now in micromol/m^2/h
+        * flux_coeff, # converting to desired unit
       f_temp_air_ave = case_when(
         temp_air_unit == "celsius" ~ .data$f_temp_air_ave - 273.15,
         temp_air_unit == "fahrenheit"
@@ -375,16 +385,20 @@ flux_calc <- function(slopes_df,
   }
 
   # output unit
-  if (flux_unit == "micromol") {
-    message("Fluxes are in micromol/m2/h")
-  }
-  if (flux_unit == "mmol") {
-    fluxes <- fluxes |>
-      mutate(
-        f_flux = .data$f_flux / 1000
-      )
-    message("Fluxes are in mmol/m2/h")
-  }
+  # if (flux_unit == "micromol") {
+  #   message("Fluxes are in micromol/m2/h")
+  # }
+  # if (flux_unit == "mmol") {
+  #   fluxes <- fluxes |>
+  #     mutate(
+  #       f_flux = .data$f_flux / 1000
+  #     )
+  #   message("Fluxes are in mmol/m2/h")
+  # }
+
+  message(
+    paste0("Fluxes are in ", flux_unit)
+  )
 
   fluxes
 
