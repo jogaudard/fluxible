@@ -28,7 +28,7 @@ flux_units <- function(flux_units,
   amount <- match.arg(amount, amount_units)
   surface <- match.arg(surface, surface_units)
   time <- match.arg(time, time_units)
-  
+
   # output units in flux_calc are micromol/s/m^2
 
   amount_coeff <- case_when(

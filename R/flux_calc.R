@@ -8,11 +8,10 @@
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
 #' `ppm` or `ppb`
-#' @param flux_unit unit in which the calculated flux will be:
-#' `mmol` outputs fluxes in
-#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
-#' ; `micromol` outputs fluxes in
-#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
+#' @param flux_units desired units for the calculated fluxes. Has to be of the
+#' form amount/surface/time. Amount can be `mol`, `mmol`, `umol`, `nmol` or
+#' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
+#' Surface can be `m2`, `dm2` or `cm2`.
 #' @param f_cut column containing cutting information
 #' @param keep_arg name in `f_cut` of data to keep
 #' @param chamber_volume `r lifecycle::badge("deprecated")` see `setup_volume`
@@ -76,7 +75,7 @@
 #' datetime,
 #' temp_air,
 #' conc_unit = "ppm",
-#' flux_unit = "mmol",
+#' flux_unit = "mmol/m2/h",
 #' setup_volume = 24.575,
 #' atm_pressure = 1,
 #' plot_area = 0.0625)
@@ -218,10 +217,6 @@ flux_calc <- function(slopes_df,
     c("ppm", "ppb")
   )
 
-  # flux_unit <- match.arg(
-  #   flux_unit,
-  #   c("micromol", "mmol")
-  # )
 
 
   if (cut == TRUE) {
@@ -395,17 +390,6 @@ flux_calc <- function(slopes_df,
       )
   }
 
-  # output unit
-  # if (flux_unit == "micromol") {
-  #   message("Fluxes are in micromol/m2/h")
-  # }
-  # if (flux_unit == "mmol") {
-  #   fluxes <- fluxes |>
-  #     mutate(
-  #       f_flux = .data$f_flux / 1000
-  #     )
-  #   message("Fluxes are in mmol/m2/h")
-  # }
 
   message(
     paste0("Fluxes are in ", flux_unit)
