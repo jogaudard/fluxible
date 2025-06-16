@@ -13,7 +13,7 @@
 #' @importFrom dplyr case_when
 #' @examples
 #' flux_units("mol/mn/m2")
-#' @export 
+#' @export
 
 
 flux_units <- function(flux_units,

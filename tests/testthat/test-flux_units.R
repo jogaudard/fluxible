@@ -36,7 +36,9 @@ test_that("superseeded but still works", {
       conc
     )
 
-  output <- flux_calc(
+
+  expect_warning(
+    flux_calc(
     slopes0,
     f_slope,
     datetime,
@@ -48,11 +50,8 @@ test_that("superseeded but still works", {
     atm_pressure = 1,
     plot_area = 0.0625,
     cut = FALSE
-  ) |>
-    dplyr::select(
-      f_fluxid, f_temp_air_ave, datetime, f_flux, PAR_ave, temp_soil_ave
-    )
-
-
-  expect_snapshot(output)
+  ),
+    "The `flux_unit` argument of `flux_calc()` should be in the form amount/surface/time as of fluxible 1.2.4.",
+    fixed = TRUE # need that because there parenthesis in the error message
+  )
 })

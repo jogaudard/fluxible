@@ -7,8 +7,8 @@
 flux_units(
   flux_units,
   amount_units = c("mol", "mmol", "umol", "nmol", "pmol"),
-  time_units = c("d", "h", "mn", "s"),
-  surface_units = c("m2", "dm2", "cm2")
+  surface_units = c("m2", "dm2", "cm2"),
+  time_units = c("d", "h", "mn", "s")
 )
 }
 \arguments{
@@ -19,9 +19,9 @@ Surface can be \code{m2}, \code{dm2} or \code{cm2}.}
 
 \item{amount_units}{list of possible units for amount.}
 
-\item{time_units}{list of possible units for time.}
-
 \item{surface_units}{list of possible units for surface.}
+
+\item{time_units}{list of possible units for time.}
 }
 \value{
 A single numerical to multiply flux values with to convert units.

@@ -67,7 +67,7 @@
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of
 #' @importFrom stats median
-#' @importFrom lifecycle deprecated deprecate_stop
+#' @importFrom lifecycle deprecated deprecate_stop deprecate_warn
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -124,10 +124,21 @@ flux_calc <- function(slopes_df,
   }
 
   if (flux_unit == "mmol") {
+    deprecate_warn(
+      when = "1.2.4",
+      "flux_calc(flux_unit = 'should be in the form amount/surface/time')"
+    )
+
     flux_unit <- "mmol/m2/h"
   }
 
+
   if (flux_unit == "micromol") {
+    deprecate_warn(
+      when = "1.2.4",
+      "flux_calc(flux_unit = 'should be in the form amount/surface/time')"
+    )
+
     flux_unit <- "umol/m2/h"
   }
 
