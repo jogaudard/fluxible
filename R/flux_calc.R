@@ -364,7 +364,7 @@ flux_calc <- function(slopes_df,
       .by = {{f_fluxid}}
     )
 
-  if (is.numeric(name_atm)) {
+  if (is.numeric({{atm_pressure}})) {
     fluxes <- fluxes |>
       select(!"f_atm_pressure_ave")
   }
