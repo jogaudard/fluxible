@@ -244,9 +244,10 @@ flux_calc <- function(slopes_df,
     ) |>
     summarise(
       f_temp_air_ave = mean({{temp_air_col}}, na.rm = TRUE),
+      f_atm_pressure_ave = mean({{atm_pressure}}, na.rm = TRUE),
       {{f_datetime}} := min({{f_datetime}}),
       .by = c(
-        {{f_fluxid}}, {{slope_col}}, any_of(c(name_vol, name_atm, name_plot))
+        {{f_fluxid}}, {{slope_col}}, any_of(c(name_vol, name_plot))
       )
     ) |>
     mutate(
@@ -349,7 +350,7 @@ flux_calc <- function(slopes_df,
   fluxes <- slope_med |>
     mutate(
       f_flux =
-        ({{slope_col}} * {{atm_pressure}} * {{setup_volume}})
+        ({{slope_col}} * .data$f_atm_pressure_ave * {{setup_volume}})
         / (r_const *
            .data$f_temp_air_ave
            * {{plot_area}}) # flux in micromol/s/m^2
@@ -362,6 +363,11 @@ flux_calc <- function(slopes_df,
       ),
       .by = {{f_fluxid}}
     )
+
+  if (is.numeric(name_atm)) {
+    fluxes <- fluxes |>
+      select(!"f_atm_pressure_ave")
+  }
 
   if (length(cols_nest) > 0) {
     message("Creating a df with the columns from 'cols_nest' argument...")
