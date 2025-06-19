@@ -1,3 +1,7 @@
+# fluxible 1.2.5
+
+* `flux_calc`: `atm_pressure` is averaged like `temp_air_col` if it is a variable with more than one value per flux measurement
+
 # fluxible 1.2.4
 
 * `flux_units`: new function returning a conversion factor to transform fluxes into the desired unit
