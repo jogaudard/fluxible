@@ -1,5 +1,5 @@
 test_that("mmol conversion works", {
-  coef <- flux_units("mmol/m2/s")
+  coef <- flux_units("mmol/m2/s", "ppm")
 
   expect_equal(
     coef,
@@ -8,7 +8,7 @@ test_that("mmol conversion works", {
 })
 
 test_that("mmol and hours conversion works", {
-  coef <- flux_units("mmol/m2/d")
+  coef <- flux_units("mmol/m2/d", "ppm")
 
   expect_equal(
     coef,
@@ -17,7 +17,7 @@ test_that("mmol and hours conversion works", {
 })
 
 test_that("mol and minutes conversion works", {
-  coef <- flux_units("mol/m2/mn")
+  coef <- flux_units("mol/m2/mn", "ppm")
 
   expect_equal(
     coef,

@@ -333,6 +333,7 @@ flux_calc <- function(slopes_df,
   r_const <- 0.082057
   message("R constant set to 0.082057")
 
+  message(paste("Concentration was measured in", conc_unit))
 
   # # putting slope in ppm/s
   # if (conc_unit == "ppm") {
