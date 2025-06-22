@@ -7,7 +7,7 @@
 #' measurements in `slopes_df`. The first one after cutting will be kept as
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
-#' `ppm` or `ppb`
+#' `ppm`, `ppb`, or `ppt`
 #' @param flux_unit desired units for the calculated fluxes. Has to be of the
 #' form amount/surface/time. Amount can be `mol`, `mmol`, `umol`, `nmol` or
 #' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
@@ -177,7 +177,7 @@ flux_calc <- function(slopes_df,
   if (any(!df_ok))
     stop("Please correct the arguments", call. = FALSE)
 
-  flux_coeff <- flux_units(flux_unit)
+  flux_coeff <- flux_units(flux_unit, conc_unit)
 
   if (length(cols_nest) == 1 && cols_nest == "all") {
     cols_nest <- slopes_df |>
@@ -211,12 +211,6 @@ flux_calc <- function(slopes_df,
     temp_air_unit,
     c("celsius", "fahrenheit", "kelvin")
   )
-
-  conc_unit <- match.arg(
-    conc_unit,
-    c("ppm", "ppb")
-  )
-
 
 
   if (cut == TRUE) {
@@ -333,18 +327,7 @@ flux_calc <- function(slopes_df,
   r_const <- 0.082057
   message("R constant set to 0.082057")
 
-
-  # putting slope in ppm/s
-  if (conc_unit == "ppm") {
-    message("Concentration was measured in ppm")
-  }
-  if (conc_unit == "ppb") {
-    message("Concentration was measured in ppb")
-    slope_med <- slope_med |>
-      mutate(
-        {{slope_col}} := {{slope_col}} * 0.001 # now the slope is in ppm/s
-      )
-  }
+  message(paste("Concentration was measured in", conc_unit))
 
 
   fluxes <- slope_med |>
@@ -353,8 +336,8 @@ flux_calc <- function(slopes_df,
         ({{slope_col}} * .data$f_atm_pressure_ave * {{setup_volume}})
         / (r_const *
            .data$f_temp_air_ave
-           * {{plot_area}}) # flux in micromol/s/m^2
-        * flux_coeff, # converting to desired unit
+           * {{plot_area}}), # flux in micromol/s/m^2
+      f_flux = .data$f_flux * flux_coeff, # converting to desired unit
       f_temp_air_ave = case_when(
         temp_air_unit == "celsius" ~ .data$f_temp_air_ave - 273.15,
         temp_air_unit == "fahrenheit"
