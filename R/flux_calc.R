@@ -7,7 +7,7 @@
 #' measurements in `slopes_df`. The first one after cutting will be kept as
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
-#' `ppm` or `ppb`
+#' `ppm`, `ppb`, or `ppt`
 #' @param flux_unit desired units for the calculated fluxes. Has to be of the
 #' form amount/surface/time. Amount can be `mol`, `mmol`, `umol`, `nmol` or
 #' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
@@ -212,12 +212,6 @@ flux_calc <- function(slopes_df,
     c("celsius", "fahrenheit", "kelvin")
   )
 
-  # conc_unit <- match.arg(
-  #   conc_unit,
-  #   c("ppm", "ppb")
-  # )
-
-
 
   if (cut == TRUE) {
     message("Cutting data according to 'keep_arg'...")
@@ -334,18 +328,6 @@ flux_calc <- function(slopes_df,
   message("R constant set to 0.082057")
 
   message(paste("Concentration was measured in", conc_unit))
-
-  # # putting slope in ppm/s
-  # if (conc_unit == "ppm") {
-  #   message("Concentration was measured in ppm")
-  # }
-  # if (conc_unit == "ppb") {
-  #   message("Concentration was measured in ppb")
-  #   slope_med <- slope_med |>
-  #     mutate(
-  #       {{slope_col}} := {{slope_col}} * 0.001 # now the slope is in ppm/s
-  #     )
-  # }
 
 
   fluxes <- slope_med |>

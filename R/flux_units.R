@@ -5,15 +5,17 @@
 #' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
 #' Surface can be `m2`, `dm2` or `cm2`.
 #' @param conc_units units of gas concentration `ppm`, `ppb` or `ppt`.
+#' @param conc_units_list list of possible units for gas concentration.
 #' @param amount_units list of possible units for amount.
 #' @param time_units list of possible units for time.
 #' @param surface_units list of possible units for surface.
-#' @details The conversion is done from umol/s/m2.
+#' @details The conversion is done from umol/s/m2 and gas concentration
+#' measured in ppm.
 #' @return A single numerical to multiply flux values with to convert units.
 #' @importFrom stringr str_extract
 #' @importFrom dplyr case_when
 #' @examples
-#' flux_units("mol/m2/mn")
+#' flux_units("mol/m2/mn", "ppm")
 #' @export
 
 

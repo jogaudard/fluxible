@@ -21,6 +21,8 @@ Surface can be \code{m2}, \code{dm2} or \code{cm2}.}
 
 \item{conc_units}{units of gas concentration \code{ppm}, \code{ppb} or \code{ppt}.}
 
+\item{conc_units_list}{list of possible units for gas concentration.}
+
 \item{amount_units}{list of possible units for amount.}
 
 \item{surface_units}{list of possible units for surface.}
@@ -34,8 +36,9 @@ A single numerical to multiply flux values with to convert units.
 calculates the conversion coefficient for flux_calc
 }
 \details{
-The conversion is done from umol/s/m2.
+The conversion is done from umol/s/m2 and gas concentration
+measured in ppm.
 }
 \examples{
-flux_units("mol/m2/mn")
+flux_units("mol/m2/mn", "ppm")
 }
