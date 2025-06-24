@@ -25,7 +25,7 @@ test_that("mol and minutes conversion works", {
   )
 })
 
-test_that("superseeded but still works", {
+test_that("superseeded but still works (mmol)", {
   slopes0 <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
@@ -45,6 +45,37 @@ test_that("superseeded but still works", {
       temp_air,
       conc_unit = "ppm",
       flux_unit = "mmol",
+      cols_ave = c("PAR", "temp_soil"),
+      setup_volume = 24.575,
+      atm_pressure = 1,
+      plot_area = 0.0625,
+      cut = FALSE
+    ),
+    "The `flux_unit` argument of `flux_calc()` should be in the form amount/surface/time as of fluxible 1.2.4.",
+    fixed = TRUE # need that because there parenthesis in the error message
+  )
+})
+
+test_that("superseeded but still works (micromol)", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  )) |>
+    flux_quality(
+      conc
+    )
+
+
+  expect_warning(
+    flux_calc(
+      slopes0,
+      f_slope,
+      datetime,
+      temp_air,
+      conc_unit = "ppm",
+      flux_unit = "micromol",
       cols_ave = c("PAR", "temp_soil"),
       setup_volume = 24.575,
       atm_pressure = 1,
