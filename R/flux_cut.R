@@ -6,10 +6,6 @@
 flux_cut <- function(slopes_df,
                      cut_col,
                      keep_arg) {
-  if (is.na(keep_arg)) {
-    stop("please provide the keep_filter argument to filter the data to keep")
-  }
-
   slopes_df <- slopes_df |>
     filter({{cut_col}} == keep_arg)
 }
