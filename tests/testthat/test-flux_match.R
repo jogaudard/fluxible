@@ -191,7 +191,7 @@ test_that("ratio_threshold deprecated", {
   )
 })
 
-test_that("ratio_threshold deprecated", {
+test_that("f_conc deprecated", {
   expect_warning(flux_match(
     co2_df_short,
     record_short,
