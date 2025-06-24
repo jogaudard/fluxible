@@ -162,3 +162,45 @@ test_that("matching works with end col", {
     dplyr::distinct()
   )
 })
+
+test_that("startcrop deprecated", {
+  expect_error(flux_match(
+    co2_df_short,
+    record_short,
+    datetime,
+    start,
+    measurement_length = 180,
+    startcrop = 10
+  ),
+  "The `startcrop` argument of `flux_match()` was deprecated in fluxible 1.2.1 and is now defunct.",
+  fixed = TRUE
+  )
+})
+
+test_that("ratio_threshold deprecated", {
+  expect_warning(flux_match(
+    co2_df_short,
+    record_short,
+    datetime,
+    start,
+    measurement_length = 180,
+    ratio_threshold = 0.8
+  ),
+  "The `ratio_threshold` argument of `flux_match()` is deprecated as of fluxible 1.2.2.",
+  fixed = TRUE
+  )
+})
+
+test_that("ratio_threshold deprecated", {
+  expect_warning(flux_match(
+    co2_df_short,
+    record_short,
+    datetime,
+    start,
+    measurement_length = 180,
+    f_conc = "conc"
+  ),
+  "The `f_conc` argument of `flux_match()` is deprecated as of fluxible 1.2.2.",
+  fixed = TRUE
+  )
+})
