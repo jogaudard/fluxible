@@ -1,6 +1,6 @@
 # fluxible 1.2.6
 
-*`flux_calc`: gas concentration unit can be ppm, ppb or ppt. The conversion coefficient is integrated in `flux_units`
+* `flux_calc`: gas concentration unit can be ppm, ppb or ppt. The conversion coefficient is integrated in `flux_units`
 
 # fluxible 1.2.5
 
