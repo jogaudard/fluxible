@@ -1,5 +1,5 @@
 ## R CMD check results
 
-Duration: 3m 3.3s
+Duration: 2m 27.9s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
