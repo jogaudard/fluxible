@@ -1,3 +1,7 @@
+# fluxible 1.2.7
+
+* `flux_match`: `fixed_length` is deprecated. `flux_match` will detect whether `end_col` or `measurement_length` are provided.
+
 # fluxible 1.2.6
 
 * `flux_calc`: gas concentration unit can be ppm, ppb or ppt. The conversion coefficient is integrated in `flux_units`
