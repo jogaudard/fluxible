@@ -155,8 +155,8 @@ test_that("matching works with end col", {
     record_short_end,
     datetime,
     start,
-    end,
-    fixed_length = FALSE
+    end
+    # fixed_length = FALSE
   ) |>
     dplyr::select(f_fluxid, f_start, f_end) |>
     dplyr::distinct()
