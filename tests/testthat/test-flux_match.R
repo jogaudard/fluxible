@@ -204,3 +204,16 @@ test_that("f_conc deprecated", {
   fixed = TRUE
   )
 })
+
+test_that("error on end col", {
+  expect_error(flux_match(
+    co2_df_short,
+    record_short,
+    datetime,
+    start,
+    end_col = turfID,
+    fixed_length = FALSE
+  ),
+  "Please correct the arguments",
+  )
+})
