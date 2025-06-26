@@ -237,24 +237,3 @@ test_that("fixe length deprecated", {
   fixed = TRUE
   )
 })
-
-# test_that("error if both end_col and measurement_length are provided", {
-#   record_short_end <- record_short |>
-#     dplyr::mutate(
-#       end = dplyr::case_when(
-#         type == "ER" ~ start + 120,
-#         type == "NEE" ~ start + 180
-#       )
-#     )
-
-#   expect_error(flux_match(
-#     co2_df_short,
-#     record_short_end,
-#     datetime,
-#     start,
-#     end_col = end,
-#     measurement_length = 120
-#   ),
-#   "You cannot provide both `measurement_length` and `end_col`.",
-#   )
-# })

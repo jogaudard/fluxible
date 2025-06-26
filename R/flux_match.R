@@ -11,8 +11,10 @@
 #' and any other column identifying the measurements.
 #' @param startcrop `r lifecycle::badge("deprecated")` `startcrop` is no longer
 #' supported. Please use `start_cut` in `flux_fitting` instead.
-#' @param measurement_length length of the measurement (in seconds)
-#' from the start specified in the `field_record`
+#' @param measurement_length length of the measurements (in seconds)
+#' from the start specified in the `field_record`. Use `measurement_length` if
+#' all the measurements have the same length and no end column is present in
+#' `field_record`.
 #' @param ratio_threshold `r lifecycle::badge("deprecated")` `ratio_threshold`
 #' is no longer supported. Please use `ratio_threshold` in `flux_quality`
 #' instead.
@@ -23,15 +25,15 @@
 #' @param f_conc `r lifecycle::badge("deprecated")` `f_conc` is no longer
 #' required
 #' @param start_col start column in field_record (`ymd_hms` format)
-#' @param end_col end columne in field_record (`ymd_hms` format).
-#' Only needed if `fixed_length = "FALSE"`.
+#' @param end_col end column in field_record (`ymd_hms` format), if present
+#' (see `measurement_length`).
 #' @param fixed_length `r lifecycle::badge("deprecated")` no longer required.
 #' `flux_match` will detect if `end_col` or `measurement_length` are provided.
 #' @return a dataframe with concentration measurements, corresponding datetime,
 #' flux ID (`f_fluxid`), measurements start (`f_start`) and end (`f_end`).
-#' @details Will return an error if both `end_col` and `measurement_length` are
-#' provided. Measurements either all have the same length (provide
-#' `measurement_length`), or the length varies and `end_col` is used.
+#' @details If both `end_col` and `measurement_length` are provided, `end_col`
+#' will be ignored. Measurements either all have the same length (provide
+#' `measurement_length`), or the length varies and `end_col` has to be provided.
 #' @importFrom dplyr arrange mutate row_number full_join case_when
 #' group_by filter ungroup select distinct pull join_by coalesce
 #' @importFrom tidyr fill drop_na
@@ -87,10 +89,6 @@ flux_match <- function(raw_conc,
       details = "fixed_length is no longer required"
     )
   }
-
-  # if (is_present(measurement_length) && is_present({{end_col}})) {
-  #   stop("You cannot provide both `measurement_length` and `end_col`.")
-  # }
 
   name_raw_conc <- deparse(substitute(raw_conc))
   name_field_record <- deparse(substitute(field_record))

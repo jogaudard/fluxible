@@ -31,11 +31,13 @@ and any other column identifying the measurements.}
 
 \item{start_col}{start column in field_record (\code{ymd_hms} format)}
 
-\item{end_col}{end columne in field_record (\code{ymd_hms} format).
-Only needed if \code{fixed_length = "FALSE"}.}
+\item{end_col}{end column in field_record (\code{ymd_hms} format), if present
+(see \code{measurement_length}).}
 
-\item{measurement_length}{length of the measurement (in seconds)
-from the start specified in the \code{field_record}}
+\item{measurement_length}{length of the measurements (in seconds)
+from the start specified in the \code{field_record}. Use \code{measurement_length} if
+all the measurements have the same length and no end column is present in
+\code{field_record}.}
 
 \item{fixed_length}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} no longer required.
 \code{flux_match} will detect if \code{end_col} or \code{measurement_length} are provided.}
@@ -65,9 +67,9 @@ Measurements are paired with their metadata based on datetime.
 Extra variables in both dataframes are kept in the output.
 }
 \details{
-Will return an error if both \code{end_col} and \code{measurement_length} are
-provided. Measurements either all have the same length (provide
-\code{measurement_length}), or the length varies and \code{end_col} is used.
+If both \code{end_col} and \code{measurement_length} are provided, \code{end_col}
+will be ignored. Measurements either all have the same length (provide
+\code{measurement_length}), or the length varies and \code{end_col} has to be provided.
 }
 \examples{
 data(co2_df_short, record_short)
