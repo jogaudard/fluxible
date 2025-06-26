@@ -16,8 +16,6 @@
 #' @param f_conc concentration column in raw_conc
 #' @param start_col start column in field_record (dmy_hms format)
 #' @param end_col end columne in field_record (`ymd_hms` format)
-#' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
-#' create the end column. If `FALSE`, `end_col` has to be provided.
 #' @param fit_type `exp_zhao18`, `exp_tz`, `exp_hm`, `quadratic` or `linear.`
 #' `exp_zhao18` is using the exponential model
 #' \ifelse{html}{\out{C(t) = C_m + a (t - t_z) + (C_z - C_m) exp(-b (t - t_z))}}{\eqn{C(t) = C_m + a (t - t_z) + (C_z - C_m) \exp(-b (t - t_z))}{ASCII}}
@@ -157,7 +155,6 @@ stupeflux <- function(raw_conc,
                       plot_area,
                       conc_unit,
                       flux_unit,
-                      fixed_length = TRUE,
                       cols_keep = c(),
                       cols_ave = c(),
                       cols_sum = c(),
@@ -190,7 +187,6 @@ stupeflux <- function(raw_conc,
     f_datetime = {{f_datetime}},
     start_col = {{start_col}},
     end_col = {{end_col}},
-    fixed_length = fixed_length,
     measurement_length = measurement_length,
     time_diff = time_diff
   )

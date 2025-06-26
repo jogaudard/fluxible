@@ -155,8 +155,7 @@ test_that("matching works with end col", {
     record_short_end,
     datetime,
     start,
-    end,
-    fixed_length = FALSE
+    end
   ) |>
     dplyr::select(f_fluxid, f_start, f_end) |>
     dplyr::distinct()
@@ -201,6 +200,40 @@ test_that("f_conc deprecated", {
     f_conc = "conc"
   ),
   "The `f_conc` argument of `flux_match()` is deprecated as of fluxible 1.2.2.",
+  fixed = TRUE
+  )
+})
+
+test_that("error on end col", {
+  expect_error(flux_match(
+    co2_df_short,
+    record_short,
+    datetime,
+    start,
+    end_col = turfID
+  ),
+  "Please correct the arguments",
+  )
+})
+
+test_that("fixe length deprecated", {
+  record_short_end <- record_short |>
+    dplyr::mutate(
+      end = dplyr::case_when(
+        type == "ER" ~ start + 120,
+        type == "NEE" ~ start + 180
+      )
+    )
+
+  expect_warning(flux_match(
+    co2_df_short,
+    record_short_end,
+    datetime,
+    start,
+    end,
+    fixed_length = FALSE
+  ),
+  "The `fixed_length` argument of `flux_match()` is deprecated as of fluxible 1.2.7.",
   fixed = TRUE
   )
 })
