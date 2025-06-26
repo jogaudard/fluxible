@@ -118,7 +118,7 @@ flux_match <- function(raw_conc,
       f_fluxid = row_number()
     )
 
-  if (fixed_length) {
+  if (is_present(measurement_length)) {
 
     field_record <- flux_match_fixed(
       field_record,
@@ -128,7 +128,7 @@ flux_match <- function(raw_conc,
   }
 
 
-  if (!fixed_length) {
+  if (!is_present(measurement_length)) {
 
     field_record <- flux_match_col(
       field_record,
