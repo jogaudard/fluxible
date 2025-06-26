@@ -25,10 +25,13 @@
 #' @param start_col start column in field_record (`ymd_hms` format)
 #' @param end_col end columne in field_record (`ymd_hms` format).
 #' Only needed if `fixed_length = "FALSE"`.
-#' @param fixed_length if `TRUE` (default), the `measurement_length` is used to
-#' create the end column. If `FALSE`, `end_col` has to be provided.
+#' @param fixed_length `r lifecycle::badge("deprecated")` no longer required.
+#' `flux_match` will detect if `end_col` or `measurement_length` are provided.
 #' @return a dataframe with concentration measurements, corresponding datetime,
 #' flux ID (`f_fluxid`), measurements start (`f_start`) and end (`f_end`).
+#' @details Will return an error if both `end_col` and `measurement_length` are
+#' provided. Measurements either all have the same length (provide
+#' `measurement_length`), or the length varies and `end_col` is used.
 #' @importFrom dplyr arrange mutate row_number full_join case_when
 #' group_by filter ungroup select distinct pull join_by coalesce
 #' @importFrom tidyr fill drop_na
@@ -47,7 +50,7 @@ flux_match <- function(raw_conc,
                        start_col,
                        end_col,
                        measurement_length,
-                       fixed_length = TRUE,
+                       fixed_length = deprecated(),
                        time_diff = 0,
                        startcrop = 0,
                        ratio_threshold = deprecated(),
@@ -76,6 +79,18 @@ flux_match <- function(raw_conc,
       details = "f_conc is no longer required"
     )
   }
+
+  if (is_present(fixed_length)) {
+    deprecate_warn(
+      when = "1.2.7",
+      what = "flux_match(fixed_length)",
+      details = "fixed_length is no longer required"
+    )
+  }
+
+  # if (is_present(measurement_length) && is_present({{end_col}})) {
+  #   stop("You cannot provide both `measurement_length` and `end_col`.")
+  # }
 
   name_raw_conc <- deparse(substitute(raw_conc))
   name_field_record <- deparse(substitute(field_record))

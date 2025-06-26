@@ -19,7 +19,6 @@ stupeflux(
   plot_area,
   conc_unit,
   flux_unit,
-  fixed_length = TRUE,
   cols_keep = c(),
   cols_ave = c(),
   cols_sum = c(),
@@ -98,9 +97,6 @@ can also be a column in case it is a variable}
 \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}};
 \code{micromol} outputs fluxes in
 \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}}
-
-\item{fixed_length}{if \code{TRUE} (default), the \code{measurement_length} is used to
-create the end column. If \code{FALSE}, \code{end_col} has to be provided.}
 
 \item{cols_keep}{columns to keep from the input to the output.
 Those columns need to have unique values for each flux,
