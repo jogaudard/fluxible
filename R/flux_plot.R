@@ -68,7 +68,7 @@ flux_plot <- function(slopes_df,
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
                       f_plotname = "",
-                      f_fluxid = f_fluxid,
+                      f_facetid = f_fluxid,
                       facet_wrap_args = list(
                         ncol = 4,
                         nrow = 3,
@@ -160,12 +160,23 @@ flux_plot <- function(slopes_df,
       (.data$f_quality_flag != "no data") |> replace_na(TRUE)
     )
 
+  nb_fluxid <- slopes_df |>
+    distinct(f_fluxid) |>
+    nrow()
   # costumize facet ID
   slopes_df <- slopes_df |>
     mutate(
-      f_fluxid = str_c({{f_fluxid}})
+      f_facetid = str_c({{f_facetid}})
     )
 
+  # testing if f_facetid is unique, otherwise facet will make a mess
+  nb_fluxid_post <- slopes_df |>
+    distinct(f_facetid) |>
+    nrow()
+
+  if (nb_fluxid != nb_fluxid_post) {
+    stop("Please use unique a f_facetid for each measurement")
+  }
 
   if (str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
@@ -224,7 +235,7 @@ flux_plot <- function(slopes_df,
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
     do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
-      args = c(facets = ~f_fluxid, facet_wrap_args)
+      args = c(facets = ~f_facetid, facet_wrap_args)
     ) +
     labs(
       title = "Fluxes quality assessment",
@@ -257,7 +268,7 @@ flux_plot <- function(slopes_df,
       print(f_plot +
         do.call(facet_wrap_paginate,
           args = c(
-            facets = ~f_fluxid,
+            facets = ~f_facetid,
             page = i,
             facet_wrap_args
           )
