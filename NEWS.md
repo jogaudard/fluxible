@@ -1,3 +1,7 @@
+# fluxible 1.2.8
+
+* `flux_plot(f_facetid)` provides allows to display more information in the facet IDs when plotting
+
 # fluxible 1.2.7
 
 * `flux_match`: `fixed_length` is deprecated. `flux_match` will detect whether `end_col` or `measurement_length` are provided.
