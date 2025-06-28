@@ -1,6 +1,8 @@
 # fluxible 1.2.8
 
-* `flux_plot(f_facetid)` provides allows to display more information in the facet IDs when plotting
+* `flux_plot`:
+  * `f_facetid` allows to display more information in the facet IDs when plotting
+  * printing in `pdfpages` is now faster
 
 # fluxible 1.2.7
 
