@@ -210,6 +210,13 @@ flux_plot <- function(slopes_df,
     stop("Please use a f_facetid that is unique for each measurement")
   }
 
+  # n_pages is too slow to get the number of page
+  # instead we can use the nb of facets and nrow and ncol
+  f_ncol <- facet_wrap_args$ncol
+  f_nrow <- facet_wrap_args$nrow
+
+  plot_pages <- ceiling(nb_fluxid / (f_nrow * f_ncol))
+
   if (str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
       slopes_df,
@@ -285,27 +292,28 @@ flux_plot <- function(slopes_df,
   }
 
   if (output == "pdfpages") {
+
     f_plotname <- paste(f_plotname, ".pdf", sep = "")
     pdf(f_plotname, paper = "a4r", width = 11.7,
         height = 8.3, title = f_plotname)
     pb <- progress_bar$new(
       format =
         "Printing plots in pdf document [:bar] :current/:total (:percent)",
-      total = n_pages(f_plot)
+      total = plot_pages
     )
     pb$tick(0)
-    Sys.sleep(0.1)
-    for (i in 1:n_pages(f_plot)) {
+    Sys.sleep(0.5)
+    for (i in 1:plot_pages) {
       pb$tick()
-      Sys.sleep(0.01)
-      f_plot +
+      Sys.sleep(0.001)
+      print(f_plot +
         do.call(facet_wrap_paginate,
           args = c(
             facets = ~f_facetid,
             page = i,
             facet_wrap_args
           )
-        )
+        ))
     }
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
