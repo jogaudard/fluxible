@@ -172,7 +172,8 @@ flux_plot <- function(slopes_df,
   slopes_df <- slopes_df |>
     unite(
       col = "f_facetid",
-      all_of(f_facetid)
+      all_of(f_facetid),
+      sep = " "
     )
 
 

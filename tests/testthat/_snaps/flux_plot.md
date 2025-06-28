@@ -204,3 +204,14 @@
        no_slope 	 0 	 0 %
       Plotting in progress
 
+# plot with custom facet id
+
+    Code
+      vdiffr::expect_doppelganger("plot with custom facet id", flux_plot(
+        slopes30lin_flag, conc, datetime, f_facetid = c("f_fluxid", "turfID")))
+    Message
+      Plotting in progress
+    Condition
+      Warning:
+      Adding new file snapshot: 'tests/testthat/_snaps/plot-with-custom-facet-id.svg'
+
