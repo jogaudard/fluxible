@@ -294,11 +294,12 @@ flux_plot <- function(slopes_df,
       total = n_pages(f_plot)
     )
     pb$tick(0)
-    Sys.sleep(0.1)
-    for (i in 1:n_pages(f_plot)) {
+    Sys.sleep(0.5)
+    n <- n_pages(f_plot)
+    for (i in 1:n) {
       pb$tick()
-      Sys.sleep(0.01)
-      f_plot +
+      Sys.sleep(0.001)
+      f_plot <- f_plot +
         do.call(facet_wrap_paginate,
           args = c(
             facets = ~f_facetid,
@@ -306,6 +307,7 @@ flux_plot <- function(slopes_df,
             facet_wrap_args
           )
         )
+      print(f_plot)
     }
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
