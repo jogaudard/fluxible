@@ -51,6 +51,10 @@ with flags produced by \link[fluxible:flux_quality]{flux_quality}}
 \item{f_plotname}{filename for the extracted pdf file;
 if empty, the name of \code{slopes_df} will be used}
 
+\item{f_facetid}{character vector of columns to use as facet IDs. Note that
+they will be united, and that has to result in a unique facet ID for each
+measurement. Default is \code{f_fluxid}}
+
 \item{facet_wrap_args}{list of arguments for
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
 

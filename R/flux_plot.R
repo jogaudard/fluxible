@@ -31,6 +31,9 @@
 #' (independently from `print_plot` being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
+#' @param f_facetid character vector of columns to use as facet IDs. Note that
+#' they will be united, and that has to result in a unique facet ID for each
+#' measurement. Default is `f_fluxid`
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
 #' and color code indicating quality flags and cuts. The plots are organized
 #' in facets according to flux ID, and a text box display the quality flag and

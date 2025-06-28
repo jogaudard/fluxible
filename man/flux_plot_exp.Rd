@@ -14,6 +14,8 @@ flux_plot_exp(slopes_df, f_conc, f_datetime, y_text_position, kappamax)
 \item{f_datetime}{column with datetime of each data point}
 
 \item{y_text_position}{position of the text box}
+
+\item{kappamax}{indicating if kappamax was applied}
 }
 \description{
 plots the fluxes that were fitted with
