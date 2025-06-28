@@ -19,7 +19,7 @@ flux_plot_quadratic <- function(slopes_df,
                                 f_conc,
                                 f_datetime,
                                 y_text_position) {
-  param_df <- flux_param_qua(slopes_df, {{f_conc}})
+  param_df <- flux_param_qua(slopes_df)
 
   slopes_df <- flux_plot_flag(slopes_df, param_df)
 

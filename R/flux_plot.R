@@ -31,6 +31,9 @@
 #' (independently from `print_plot` being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
+#' @param f_facetid character vector of columns to use as facet IDs. Note that
+#' they will be united, and that has to result in a unique facet ID for each
+#' measurement. Default is `f_fluxid`
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
 #' and color code indicating quality flags and cuts. The plots are organized
 #' in facets according to flux ID, and a text box display the quality flag and
@@ -46,6 +49,8 @@
 #' @importFrom purrr quietly
 #' @importFrom progress progress_bar
 #' @importFrom stringr str_detect
+#' @importFrom tidyr unite
+#' @importFrom forcats fct_reorder
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -68,6 +73,7 @@ flux_plot <- function(slopes_df,
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
                       f_plotname = "",
+                      f_facetid = "f_fluxid",
                       facet_wrap_args = list(
                         ncol = 4,
                         nrow = 3,
@@ -85,6 +91,23 @@ flux_plot <- function(slopes_df,
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
+  # making slopes_df as light as possible
+  slopes_df <- slopes_df |>
+    select(
+      {{f_conc}},
+      {{f_datetime}},
+      all_of(f_facetid),
+      any_of(c(
+        "f_quality_flag",
+        "f_fluxid",
+        "f_fit",
+        "f_start", "f_pvalue_lm", "f_start_z",
+        "f_rsquared", "f_pvalue", "f_fit_slope",
+        "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
+        "f_cut", "f_rsquared_lm", "f_fit_lm",
+        "f_model"
+      ))
+    )
 
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
@@ -159,15 +182,41 @@ flux_plot <- function(slopes_df,
       (.data$f_quality_flag != "no data") |> replace_na(TRUE)
     )
 
+  # extracting attributes before they get stripped later on
+  kappamax <- attr(slopes_df, "kappamax")
+
+  nb_fluxid <- slopes_df |>
+    distinct(.data$f_fluxid) |>
+    nrow()
+
+  # costumize facet ID
+  slopes_df <- slopes_df |>
+    unite(
+      col = "f_facetid",
+      all_of(f_facetid),
+      sep = " "
+    ) |>
+    mutate(
+      f_facetid = fct_reorder(f_facetid, {{f_datetime}})
+    )
 
 
+  # testing if f_facetid is unique, otherwise facet will make a mess
+  nb_fluxid_post <- slopes_df |>
+    distinct(.data$f_facetid) |>
+    nrow()
+
+  if (nb_fluxid != nb_fluxid_post) {
+    stop("Please use a f_facetid that is unique for each measurement")
+  }
 
   if (str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      y_text_position = y_text_position
+      y_text_position = y_text_position,
+      kappamax = kappamax
     )
   }
 
@@ -219,7 +268,7 @@ flux_plot <- function(slopes_df,
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
     do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
-      args = c(facets = ~f_fluxid, facet_wrap_args)
+      args = c(facets = ~f_facetid, facet_wrap_args)
     ) +
     labs(
       title = "Fluxes quality assessment",
@@ -245,18 +294,18 @@ flux_plot <- function(slopes_df,
       total = n_pages(f_plot)
     )
     pb$tick(0)
-    Sys.sleep(3)
+    Sys.sleep(0.1)
     for (i in 1:n_pages(f_plot)) {
       pb$tick()
-      Sys.sleep(0.1)
-      print(f_plot +
+      Sys.sleep(0.01)
+      f_plot +
         do.call(facet_wrap_paginate,
           args = c(
-            facets = ~f_fluxid,
+            facets = ~f_facetid,
             page = i,
             facet_wrap_args
           )
-        ))
+        )
     }
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
