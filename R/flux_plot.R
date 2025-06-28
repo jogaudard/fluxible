@@ -45,7 +45,8 @@
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom progress progress_bar
-#' @importFrom stringr str_detect str_c
+#' @importFrom stringr str_detect
+#' @importFrom tidyr unite
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -68,7 +69,7 @@ flux_plot <- function(slopes_df,
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
                       f_plotname = "",
-                      f_facetid = f_fluxid,
+                      f_facetid = "f_fluxid",
                       facet_wrap_args = list(
                         ncol = 4,
                         nrow = 3,
@@ -160,14 +161,20 @@ flux_plot <- function(slopes_df,
       (.data$f_quality_flag != "no data") |> replace_na(TRUE)
     )
 
+  # extracting attributes before they get stripped later on
+  kappamax <- attr(slopes_df, "kappamax")
+
   nb_fluxid <- slopes_df |>
     distinct(f_fluxid) |>
     nrow()
   # costumize facet ID
+
   slopes_df <- slopes_df |>
-    mutate(
-      f_facetid = str_c({{f_facetid}})
+    unite(
+      col = "f_facetid",
+      all_of(f_facetid)
     )
+
 
   # testing if f_facetid is unique, otherwise facet will make a mess
   nb_fluxid_post <- slopes_df |>
@@ -183,7 +190,8 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      y_text_position = y_text_position
+      y_text_position = y_text_position,
+      kappamax = kappamax
     )
   }
 

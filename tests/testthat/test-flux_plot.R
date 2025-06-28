@@ -202,3 +202,28 @@ test_that("plot for kappamax fit", {
     )
   )
 })
+
+# test_that("plot with custom facet id", {
+#   slopes30lin_flag <- suppressWarnings(flux_fitting(
+#     co2_conc,
+#     conc,
+#     datetime,
+#     fit_type = "linear",
+#     end_cut = 30
+#   )) |>
+#     flux_quality(
+#       conc
+#     )
+
+#   expect_snapshot(
+#     vdiffr::expect_doppelganger(
+#       "plot for linear fit",
+#       flux_plot(
+#         slopes30lin_flag,
+#         conc,
+#         datetime,
+#         f_facetid = f_fluxid, turfID
+#       )
+#     )
+#   )
+# })

@@ -1223,9 +1223,12 @@ test_data <- co2_conc_missing |>
       distinct()
 
 var <- c("type", "turfID")
-var <- stringr::str_flatten_comma(var)
+var <- stringr::str_flatten_comma("{var}")
 names(var)
 record_short |>
   mutate(
-    id = stringr::str_c(var)
+    id = stringr::str_c({{var}})
   )
+
+record_short |>
+  tidyr::unite(col = "id", all_of(var))
