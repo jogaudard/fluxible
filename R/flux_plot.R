@@ -45,7 +45,7 @@
 #' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
 #' @importFrom progress progress_bar
-#' @importFrom stringr str_detect
+#' @importFrom stringr str_detect str_c
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -68,6 +68,7 @@ flux_plot <- function(slopes_df,
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
                       f_plotname = "",
+                      f_fluxid = f_fluxid,
                       facet_wrap_args = list(
                         ncol = 4,
                         nrow = 3,
@@ -159,7 +160,11 @@ flux_plot <- function(slopes_df,
       (.data$f_quality_flag != "no data") |> replace_na(TRUE)
     )
 
-
+  # costumize facet ID
+  slopes_df <- slopes_df |>
+    mutate(
+      f_fluxid = str_c({{f_fluxid}})
+    )
 
 
   if (str_detect(fit_type, "exp")) {

@@ -1222,4 +1222,10 @@ test_data <- co2_conc_missing |>
       select(f_fluxid, f_slope) |>
       distinct()
 
-
+var <- c("type", "turfID")
+var <- stringr::str_flatten_comma(var)
+names(var)
+record_short |>
+  mutate(
+    id = stringr::str_c(var)
+  )
