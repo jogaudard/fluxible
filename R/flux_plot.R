@@ -87,6 +87,23 @@ flux_plot <- function(slopes_df,
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
+  # making slopes_df as light as possible
+  slopes_df <- slopes_df |>
+    select(
+      {{f_conc}},
+      {{f_datetime}},
+      all_of(f_facetid),
+      any_of(c(
+        "f_quality_flag",
+        "f_fluxid",
+        "f_fit",
+        "f_start", "f_pvalue_lm", "f_start_z",
+        "f_rsquared", "f_pvalue", "f_fit_slope",
+        "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
+        "f_cut", "f_rsquared_lm", "f_fit_lm",
+        "f_model"
+      ))
+    )
 
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
@@ -165,10 +182,10 @@ flux_plot <- function(slopes_df,
   kappamax <- attr(slopes_df, "kappamax")
 
   nb_fluxid <- slopes_df |>
-    distinct(f_fluxid) |>
+    distinct(.data$f_fluxid) |>
     nrow()
-  # costumize facet ID
 
+  # costumize facet ID
   slopes_df <- slopes_df |>
     unite(
       col = "f_facetid",
@@ -179,7 +196,7 @@ flux_plot <- function(slopes_df,
 
   # testing if f_facetid is unique, otherwise facet will make a mess
   nb_fluxid_post <- slopes_df |>
-    distinct(f_facetid) |>
+    distinct(.data$f_facetid) |>
     nrow()
 
   if (nb_fluxid != nb_fluxid_post) {
@@ -270,10 +287,10 @@ flux_plot <- function(slopes_df,
       total = n_pages(f_plot)
     )
     pb$tick(0)
-    Sys.sleep(3)
+    Sys.sleep(0.1)
     for (i in 1:n_pages(f_plot)) {
       pb$tick()
-      Sys.sleep(0.1)
+      Sys.sleep(0.01)
       print(f_plot +
         do.call(facet_wrap_paginate,
           args = c(
