@@ -222,7 +222,7 @@ test_that("plot with custom facet id", {
         slopes30lin_flag,
         conc,
         datetime,
-        f_facetid = c("f_fluxid", "turfID")
+        f_facetid = c("type", "turfID")
       )
     )
   )
