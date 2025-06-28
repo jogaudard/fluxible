@@ -5,6 +5,7 @@
 #' @param f_conc column with gas concentration
 #' @param f_datetime column with datetime of each data point
 #' @param y_text_position position of the text box
+#' @param kappamax indicating if kappamax was applied
 #' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line theme_bw geom_vline
 #' scale_color_manual scale_x_datetime ylim facet_wrap labs geom_text
