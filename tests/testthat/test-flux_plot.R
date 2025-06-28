@@ -227,3 +227,26 @@ test_that("plot with custom facet id", {
     )
   )
 })
+
+test_that("error with custom facet id not unique", {
+  slopes30lin_flag <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "linear",
+    end_cut = 30
+  )) |>
+    flux_quality(
+      conc
+    )
+
+  expect_error(
+    flux_plot(
+      slopes30lin_flag,
+      conc,
+      datetime,
+      f_facetid = "turfID"
+    ),
+    "Please use a f_facetid that is unique for each measurement"
+  )
+})

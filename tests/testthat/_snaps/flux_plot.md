@@ -208,10 +208,7 @@
 
     Code
       vdiffr::expect_doppelganger("plot with custom facet id", flux_plot(
-        slopes30lin_flag, conc, datetime, f_facetid = c("f_fluxid", "turfID")))
+        slopes30lin_flag, conc, datetime, f_facetid = c("type", "turfID")))
     Message
       Plotting in progress
-    Condition
-      Warning:
-      Adding new file snapshot: 'tests/testthat/_snaps/plot-with-custom-facet-id.svg'
 

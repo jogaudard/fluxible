@@ -183,7 +183,7 @@ flux_plot <- function(slopes_df,
     nrow()
 
   if (nb_fluxid != nb_fluxid_post) {
-    stop("Please use unique a f_facetid for each measurement")
+    stop("Please use a f_facetid that is unique for each measurement")
   }
 
   if (str_detect(fit_type, "exp")) {
