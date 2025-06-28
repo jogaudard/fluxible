@@ -50,6 +50,7 @@
 #' @importFrom progress progress_bar
 #' @importFrom stringr str_detect
 #' @importFrom tidyr unite
+#' @importFrom forcats fct_reorder
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -194,6 +195,9 @@ flux_plot <- function(slopes_df,
       col = "f_facetid",
       all_of(f_facetid),
       sep = " "
+    ) |>
+    mutate(
+      f_facetid = fct_reorder(f_facetid, {{f_datetime}})
     )
 
 
