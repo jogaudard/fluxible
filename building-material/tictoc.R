@@ -88,22 +88,101 @@ flags_liahovden |>
     )
 })
 
-tic("flux_plot pdfpages")
+
+
+tic("flux_plot pdfpages 10")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:10)
+  ) |>
 flux_plot(
-  flags_liahovden,
   f_conc = conc,
   f_datetime = datetime,
   f_ylim_upper = 600, # upper limit of y-axis
   f_ylim_lower = 350, # lower limit of x-axis
   y_text_position = 450, # position of text with flags and diagnostics
-  facet_wrap_args = list( # facet_wrap arguments, if different than default
-    nrow = 2,
-    ncol = 2,
-    scales = "free"
-  ),
-  output = "pdfpages"
+  output = "pdfpages",
+  f_plotname = "tictoc"
 )
-toc() # 4.117 s
+toc()
+
+tic("flux_plot pdfpages 30")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:30)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "pdfpages",
+  f_plotname = "tictoc"
+)
+toc()
+
+tic("flux_plot pdfpages 50")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:50)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "pdfpages",
+  f_plotname = "tictoc"
+)
+toc()
+
+tic("flux_plot pdfpages 100")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:100)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "pdfpages",
+  f_plotname = "tictoc"
+)
+toc()
+
+tic("flux_plot pdfpages 138")
+flags_liahovden |>
+  # filter(
+  #   f_fluxid %in% c(1:100)
+  # ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "pdfpages",
+  f_plotname = "tictoc"
+)
+toc()
+
+time_flux_plot <- tibble(
+  nb_flux = c(10, 30, 50, 100, 138),
+  v128 = c(1.172, 6.39, 25.963, 182.251, 494.07),
+  v128b = c(0.668, 2.926, 6.07, 29.392, 68.483),
+  v126 = c(4.147, 9.488, 27.588, 195.456, 473.223)
+)
+
+time_flux_plot <- time_flux_plot |>
+  pivot_longer(!nb_flux, names_to = "fct", values_to = "time")
+
+time_flux_plot |>
+  ggplot(aes(nb_flux, time, color = fct)) +
+  geom_line()
 
 profvis({
   flux_plot(

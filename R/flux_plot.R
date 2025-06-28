@@ -50,6 +50,7 @@
 #' @importFrom progress progress_bar
 #' @importFrom stringr str_detect
 #' @importFrom tidyr unite
+#' @importFrom forcats fct_reorder
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -194,6 +195,9 @@ flux_plot <- function(slopes_df,
       col = "f_facetid",
       all_of(f_facetid),
       sep = " "
+    ) |>
+    mutate(
+      f_facetid = fct_reorder(f_facetid, {{f_datetime}})
     )
 
 
@@ -294,14 +298,14 @@ flux_plot <- function(slopes_df,
     for (i in 1:n_pages(f_plot)) {
       pb$tick()
       Sys.sleep(0.01)
-      print(f_plot +
+      f_plot +
         do.call(facet_wrap_paginate,
           args = c(
             facets = ~f_facetid,
             page = i,
             facet_wrap_args
           )
-        ))
+        )
     }
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
