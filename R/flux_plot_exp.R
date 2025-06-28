@@ -24,11 +24,11 @@ flux_plot_exp <- function(slopes_df,
 
 
   if (!is.null(kappamax) && kappamax == TRUE) {
-    param_df <- flux_param_kappamax(slopes_df, {{f_conc}})
+    param_df <- flux_param_kappamax(slopes_df)
   }
 
   if (is.null(kappamax)) {
-    param_df <- flux_param_exp(slopes_df, {{f_conc}})
+    param_df <- flux_param_exp(slopes_df)
   }
 
   slopes_df <- flux_plot_flag(slopes_df, param_df)
