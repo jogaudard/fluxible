@@ -102,7 +102,7 @@ flux_plot(
   f_ylim_lower = 350, # lower limit of x-axis
   y_text_position = 450, # position of text with flags and diagnostics
   output = "pdfpages",
-  f_plotname = "tictoc"
+  f_plotname = "tictoc10"
 )
 toc()
 
@@ -173,7 +173,10 @@ toc()
 time_flux_plot <- tibble(
   nb_flux = c(10, 30, 50, 100, 138),
   v128 = c(1.172, 6.39, 25.963, 182.251, 494.07),
-  v128b = c(0.668, 2.926, 6.07, 29.392, 68.483),
+  # v128b = c(0.668, 2.926, 6.07, 29.392, 68.483), # this version makes empty files (that is much faster you know)
+  v128c = c(1.611, 8.195, 31.549, 168.168, 440.379),
+  v128_wrap = c(1.082, 4.581, 17.373, 156.207, 391.477),
+  v128_paginate = c(2.099, 4.834, 17.334, 140.261, 399.859),
   v126 = c(4.147, 9.488, 27.588, 195.456, 473.223)
 )
 
