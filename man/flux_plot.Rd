@@ -17,6 +17,7 @@ flux_plot(
   f_ylim_upper = 800,
   f_ylim_lower = 400,
   f_plotname = "",
+  f_facetid = "f_fluxid",
   facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
   y_text_position = 500,
   print_plot = "FALSE",

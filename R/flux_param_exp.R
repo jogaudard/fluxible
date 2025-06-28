@@ -7,15 +7,13 @@
 #' @param f_conc column with gas concentration
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
-flux_param_exp <- function(slopes_df,
-                           f_conc) {
+flux_param_exp <- function(slopes_df) {
   param_df <- slopes_df |>
     select(
-      {{f_conc}}, "f_start", "f_fluxid", "f_RMSE", "f_cor_coef", "f_b",
+      "f_start", "f_facetid", "f_RMSE", "f_cor_coef", "f_b",
       "f_gfactor", "f_cut", "f_quality_flag"
     ) |>
     filter(.data$f_cut != "cut") |>
-    select(!{{f_conc}}) |>
     distinct() |>
     mutate(
       f_RMSE = signif(.data$f_RMSE, digits = 2),
@@ -31,7 +29,7 @@ flux_param_exp <- function(slopes_df,
         sep = ""
       )
     ) |>
-    select("f_start", "f_fluxid", "print_col", "f_quality_flag")
+    select("f_start", "f_facetid", "print_col", "f_quality_flag")
 
   param_df
 }
