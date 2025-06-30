@@ -302,7 +302,7 @@ flux_plot <- function(slopes_df,
   }
 
   if (output == "html") {
-    flux_plot_html(f_plot, f_plotname, plot_pages, facet_wrap_args)
+    flux_plot_html(f_plot, f_plotname, facet_wrap_args)
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       return(f_plot)

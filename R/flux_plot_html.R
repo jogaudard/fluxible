@@ -8,7 +8,7 @@
 #' @importFrom plotly ggplotly
 
 
-flux_plot_pdf <- function(f_plot,
+flux_plot_html <- function(f_plot,
   f_plotname,
   facet_wrap_args
 ) {

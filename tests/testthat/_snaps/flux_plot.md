@@ -212,3 +212,12 @@
     Message
       Plotting in progress
 
+# plot in html
+
+    Code
+      flux_plot(slopes0_flag, conc, datetime, f_plotname = "test_exp_plot",
+        print_plot = FALSE, output = "html")
+    Message
+      Plotting in progress
+      Plots saved in f_quality_plots folder.
+
