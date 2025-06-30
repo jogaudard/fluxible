@@ -94,24 +94,6 @@ flux_plot <- function(slopes_df,
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
-  # making slopes_df as light as possible
-  slopes_df <- slopes_df |>
-    select(
-      {{f_conc}},
-      {{f_datetime}},
-      all_of(f_facetid),
-      any_of(c(
-        "f_quality_flag",
-        "f_fluxid",
-        "f_fit",
-        "f_start", "f_pvalue_lm", "f_start_z",
-        "f_rsquared", "f_pvalue", "f_fit_slope",
-        "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
-        "f_cut", "f_rsquared_lm", "f_fit_lm",
-        "f_model"
-      ))
-    )
-
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
@@ -130,7 +112,7 @@ flux_plot <- function(slopes_df,
     f_plotname <- deparse(substitute(slopes_df))
   }
 
-  if (output %in% c("pdfpages", "ggsave")) {
+  if (output %in% c("pdfpages", "ggsave", "longpdf")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
     folder <- "./f_quality_plots"
@@ -138,6 +120,24 @@ flux_plot <- function(slopes_df,
       dir.create(folder)
     }
   }
+
+  # making slopes_df as light as possible
+  slopes_df <- slopes_df |>
+    select(
+      {{f_conc}},
+      {{f_datetime}},
+      all_of(f_facetid),
+      any_of(c(
+        "f_quality_flag",
+        "f_fluxid",
+        "f_fit",
+        "f_start", "f_pvalue_lm", "f_start_z",
+        "f_rsquared", "f_pvalue", "f_fit_slope",
+        "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
+        "f_cut", "f_rsquared_lm", "f_fit_lm",
+        "f_model"
+      ))
+    )
 
   if (
     max(slopes_df[[deparse(substitute(f_conc))]], na.rm = TRUE) > f_ylim_upper
@@ -294,6 +294,14 @@ flux_plot <- function(slopes_df,
 
   if (output == "pdfpages") {
     flux_plot_pdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
+    if (print_plot == TRUE) {
+      f_plot <- flux_print_plot(f_plot, facet_wrap_args)
+      return(f_plot)
+    }
+  }
+
+  if (output == "longpdf") {
+    flux_plot_longpdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       return(f_plot)
