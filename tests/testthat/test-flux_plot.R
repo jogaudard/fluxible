@@ -250,3 +250,29 @@ test_that("error with custom facet id not unique", {
     "Please use a f_facetid that is unique for each measurement"
   )
 })
+
+test_that("plot in html", {
+  slopes0 <- suppressWarnings(flux_fitting(
+    co2_conc,
+    conc,
+    datetime,
+    fit_type = "exp_zhao18"
+  ))
+  slopes0_flag <- suppressMessages(flux_quality(
+    slopes0,
+    conc
+  ))
+
+  expect_snapshot(
+    flux_plot(slopes0_flag,
+      conc,
+      datetime,
+      f_plotname = "test_exp_plot",
+      print_plot = FALSE,
+      output = "html"
+    )
+  )
+
+  # the plots are quite heavy so we do not keep them
+  unlink("f_quality_plots/", recursive = TRUE, force = TRUE)
+})

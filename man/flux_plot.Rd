@@ -68,7 +68,8 @@ but will take time depending on the size of the dataset}
 \item{output}{\code{pdfpages}, the plots are saved as A4 landscape pdf pages;
 \code{ggsave}, the plots can be saved with the ggsave function;
 \code{print_only} (default) prints the plot without creating a file
-(independently from \code{print_plot} being TRUE or FALSE)}
+(independently from \code{print_plot} being TRUE or FALSE);
+\code{html} prints the plots in an self contained html file}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}

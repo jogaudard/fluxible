@@ -30,7 +30,8 @@
 #' @param output `pdfpages`, the plots are saved as A4 landscape pdf pages;
 #' `ggsave`, the plots can be saved with the ggsave function;
 #' `print_only` (default) prints the plot without creating a file
-#' (independently from `print_plot` being TRUE or FALSE)
+#' (independently from `print_plot` being TRUE or FALSE);
+#' `html` prints the plots in an self contained html file
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @param f_facetid character vector of columns to use as facet IDs. Note that
@@ -115,7 +116,7 @@ flux_plot <- function(slopes_df,
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
-  output <- match.arg(output, c("pdfpages", "ggsave", "print_only"))
+  output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "html"))
 
   if (output == "print_only") {
     print_plot <- "TRUE"
@@ -294,6 +295,14 @@ flux_plot <- function(slopes_df,
 
   if (output == "pdfpages") {
     flux_plot_pdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
+    if (print_plot == TRUE) {
+      f_plot <- flux_print_plot(f_plot, facet_wrap_args)
+      return(f_plot)
+    }
+  }
+
+  if (output == "html") {
+    flux_plot_html(f_plot, f_plotname, plot_pages, facet_wrap_args)
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       return(f_plot)

@@ -47,7 +47,9 @@ Imports:
     purrrlyr,
     tidyselect,
     lifecycle,
-    forcats
+    forcats,
+    htmlwidgets,
+    plotly
 Depends: 
     R (>= 4.1)
 LazyData: true
