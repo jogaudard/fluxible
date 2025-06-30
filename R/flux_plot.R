@@ -24,8 +24,7 @@
 #' \link[ggplot2:facet_wrap]{facet_wrap}, also used by
 #' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
 #' `output = "pdfpages`
-#' @param y_text_position `r lifecycle::badge("deprecated")`. Use `x_nudge` and
-#' `y_nudge` instead.
+#' @param y_text_position position of the text box
 #' @param print_plot logical, if TRUE it prints the plot as a ggplot object
 #' but will take time depending on the size of the dataset
 #' @param output `pdfpages`, the plots are saved as A4 landscape pdf pages;
@@ -84,9 +83,7 @@ flux_plot <- function(slopes_df,
                         nrow = 3,
                         scales = "free"
                       ),
-                      y_text_position = deprecated(),
-                      x_nudge = 60,
-                      y_nudge = 50,
+                      y_text_position = 500,
                       print_plot = "FALSE",
                       output = "print_only",
                       plotly_args = list(
@@ -96,22 +93,15 @@ flux_plot <- function(slopes_df,
                       ),
                       ggsave_args = list()) {
 
-  if (is_present(y_text_position)) {
-    deprecate_warn(
-      when = "1.2.9",
-      what = "flux_plot(y_text_position)"
-      # with = "flux_plot(x_nudge, y_nudge)"
-    )
-  }
+
 
   args_ok <- flux_fun_check(list(
     f_ylim_upper = f_ylim_upper,
     f_ylim_lower = f_ylim_lower,
-    x_nudge = x_nudge,
-    y_nudge = y_nudge
+    y_text_position = y_text_position
   ),
-  fn = list(is.numeric, is.numeric, is.numeric, is.numeric),
-  msg = rep("has to be numeric", 4))
+  fn = list(is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 3))
 
   # making slopes_df as light as possible
   slopes_df <- slopes_df |>
@@ -122,7 +112,7 @@ flux_plot <- function(slopes_df,
       any_of(c(
         "f_quality_flag",
         "f_fluxid",
-        "f_fit",
+        "f_fit", "f_start",
         "f_pvalue_lm", "f_start_z",
         "f_rsquared", "f_pvalue", "f_fit_slope",
         "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
@@ -232,7 +222,7 @@ flux_plot <- function(slopes_df,
     stop("Please use a f_facetid that is unique for each measurement")
   }
 
-
+  slopes_df <- flux_plot_flag(slopes_df)
 
   if (str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
@@ -240,8 +230,7 @@ flux_plot <- function(slopes_df,
       {{f_conc}},
       {{f_datetime}},
       kappamax = kappamax,
-      x_nudge = x_nudge,
-      y_nudge = y_nudge
+      y_text_position = y_text_position
     )
   }
 
@@ -251,8 +240,7 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      x_nudge = x_nudge,
-      y_nudge = y_nudge
+      y_text_position = y_text_position
     )
   }
 
@@ -261,21 +249,13 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      x_nudge = x_nudge,
-      y_nudge = y_nudge
+      y_text_position = y_text_position
     )
   }
 
   message("Plotting in progress")
 
   f_plot <- f_plot +
-    # geom_line(
-    #   data = slopes_df |> filter(.data$linetype == "f_fit"),
-    #   # aes(y = .data$f_fit, linetype = .data$linetype),
-    #   linewidth = 0.3,
-    #   na.rm = TRUE,
-    #   show.legend = TRUE
-    # ) +
     scale_linetype_manual(values = c(
       "f_fit" = "longdash",
       "f_fit_slope" = "solid",
@@ -291,9 +271,9 @@ flux_plot <- function(slopes_df,
       "force_lm" = color_ok,
       "force_ok" = color_ok,
       "force_zero" = color_zero,
-      "no_slope" = color_discard,
-      "f_fits" = "black"
-    )) +
+      "no_slope" = color_discard
+    ),
+    na.value = "black") +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
     labs(

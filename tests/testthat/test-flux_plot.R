@@ -268,6 +268,7 @@ test_that("plot in html", {
       conc,
       datetime,
       f_plotname = "test_exp_plot",
+      y_text_position = 600,
       print_plot = FALSE,
       output = "plotly"
     )
@@ -276,3 +277,4 @@ test_that("plot in html", {
   # the plots are quite heavy so we do not keep them
   unlink("f_quality_plots/", recursive = TRUE, force = TRUE)
 })
+

@@ -1302,3 +1302,11 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
+
+devtools::load_all()
+
+flux_plot(slopes30lin_flag, conc, datetime, f_plotname = "test", output = "plotly")
+
+flux_plot(slopes30lin_flag, conc, datetime)
+
+flux_plot(slopes0_flag, conc, datetime)

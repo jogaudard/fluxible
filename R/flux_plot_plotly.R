@@ -5,7 +5,7 @@
 #' @param f_plotname name of plot
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom ggplot2 facet_wrap theme coord_fixed
-#' @importFrom plotly ggplotly
+#' @importFrom plotly ggplotly style
 
 
 flux_plot_plotly <- function(f_plot,
@@ -29,7 +29,8 @@ flux_plot_plotly <- function(f_plot,
   f_plotly <- ggplotly(
     f_plot,
     width = width, height = f_height
-  )
+  ) |>
+  style(textposition = c("right", "top"))
 
   saveWidget(f_plotly, file = f_plotname)
 

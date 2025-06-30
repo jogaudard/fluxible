@@ -4,12 +4,10 @@
 \alias{flux_plot_flag}
 \title{creates the flag column to be used by flux_plot}
 \usage{
-flux_plot_flag(slopes_df, param_df)
+flux_plot_flag(slopes_df)
 }
 \arguments{
 \item{slopes_df}{as provided in flux_plot}
-
-\item{param_df}{as provided by flux_param}
 }
 \description{
 creates a column with quality flags (from flux_quality)

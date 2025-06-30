@@ -180,7 +180,6 @@ flux_plot(
   f_datetime = datetime,
   f_ylim_upper = 600, # upper limit of y-axis
   f_ylim_lower = 350, # lower limit of x-axis
-  y_text_position = 450, # position of text with flags and diagnostics
   output = "plotly",
   f_plotname = "tictoc10"
 )

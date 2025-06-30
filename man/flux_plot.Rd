@@ -19,9 +19,7 @@ flux_plot(
   f_plotname = "",
   f_facetid = "f_fluxid",
   facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
-  y_text_position = deprecated(),
-  x_nudge = 60,
-  y_nudge = 50,
+  y_text_position = 500,
   print_plot = "FALSE",
   output = "print_only",
   plotly_args = list(ncol = 4, width = 1900, ratio = 1),
@@ -63,8 +61,7 @@ measurement. Default is \code{f_fluxid}}
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
 \verb{output = "pdfpages}}
 
-\item{y_text_position}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}. Use \code{x_nudge} and
-\code{y_nudge} instead.}
+\item{y_text_position}{position of the text box}
 
 \item{print_plot}{logical, if TRUE it prints the plot as a ggplot object
 but will take time depending on the size of the dataset}

@@ -216,7 +216,7 @@
 
     Code
       flux_plot(slopes0_flag, conc, datetime, f_plotname = "test_exp_plot",
-        print_plot = FALSE, output = "html")
+        y_text_position = 600, print_plot = FALSE, output = "plotly")
     Message
       Plotting in progress
       Plots saved in f_quality_plots folder.

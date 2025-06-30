@@ -2,23 +2,16 @@
 #' @description creates a column with quality flags (from flux_quality)
 #' for the part of the rows to be kept, and cut flag for rows to be discarded
 #' @param slopes_df as provided in flux_plot
-#' @param param_df as provided by flux_param
 #' @importFrom dplyr select left_join mutate case_when
 
-flux_plot_flag <- function(slopes_df,
-                           param_df) {
+flux_plot_flag <- function(slopes_df) {
   slopes_df <- slopes_df |>
-    select(!c("f_quality_flag")) |>
-    left_join(param_df, by = "f_facetid") |>
     mutate(
-      .by = "f_facetid",
       f_quality_flag = case_when(
-        f_cut == "cut" ~ f_cut,
+        f_cut == "cut" ~ "cut",
         f_cut != "cut" ~ f_quality_flag
-      ),
-      print_col = ifelse(duplicated(.data$print_col), NA, .data$print_col)
+      )
     )
-  # print_col needs to have only 1 row/fluxID
 
   slopes_df
 }

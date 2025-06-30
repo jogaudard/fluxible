@@ -4,12 +4,14 @@
 #' flux_param_lm is for fit in the lm family (linear and quadratic)
 #' flux_param_exp is for the exponential fit
 #' @param slopes_df the slopes_df that is being provided to flux_plot
+#' @param f_datetime column with datetime of each data point
+#' @param y_text_position position of the text box
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 
-flux_param_kappamax <- function(slopes_df) {
+flux_param_kappamax <- function(slopes_df, f_datetime, y_text_position) {
   param_df <- slopes_df |>
     select(
-      "f_facetid", "f_RMSE", "f_cor_coef", "f_b",
+      "f_start", "f_facetid", "f_RMSE", "f_cor_coef", "f_b",
       "f_gfactor", "f_cut", "f_quality_flag", "f_model",
       "f_rsquared_lm", "f_pvalue_lm"
     ) |>
@@ -41,9 +43,18 @@ flux_param_kappamax <- function(slopes_df) {
       print_col = case_when(
         .data$f_model == "linear" ~ print_col_lm,
         str_detect(.data$f_model, "exp") ~ print_col_exp
-      )
+      ),
+      f_quality_flag = "text",
+      linetype = "text",
+      f_value = y_text_position
     ) |>
-    select("f_facetid", "print_col", "f_quality_flag")
+    select(
+      "f_facetid", "f_start", "print_col", "f_quality_flag",
+      "linetype", "f_value"
+    ) |>
+    rename(
+      {{f_datetime}} := "f_start"
+    )
 
   param_df
 }
