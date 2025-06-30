@@ -269,7 +269,7 @@ test_that("plot in html", {
       datetime,
       f_plotname = "test_exp_plot",
       print_plot = FALSE,
-      output = "html"
+      output = "plotly"
     )
   )
 
