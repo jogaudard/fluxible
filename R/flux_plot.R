@@ -274,9 +274,9 @@ flux_plot <- function(slopes_df,
     )) +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
-    do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
-      args = c(facets = ~f_facetid, facet_wrap_args)
-    ) +
+    # do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
+    #   args = c(facets = ~f_facetid, facet_wrap_args)
+    # ) +
     labs(
       title = "Fluxes quality assessment",
       subtitle = paste(fit_type, "model"),
@@ -288,6 +288,7 @@ flux_plot <- function(slopes_df,
     guides(color = guide_legend(override.aes = list(linetype = 0)))
 
   if (output == "print_only") {
+    f_plot <- flux_print_plot(f_plot, facet_wrap_args)
     return(f_plot)
   }
 
@@ -318,12 +319,17 @@ flux_plot <- function(slopes_df,
     quietly(dev.off())
     message("Plots saved in f_quality_plots folder.")
     if (print_plot == TRUE) {
-      return(f_plot)
+      f_plot <- flux_print_plot(f_plot, facet_wrap_args)
+    return(f_plot)
     }
   }
 
   if (output == "ggsave") {
     message("Saving plots with ggsave.")
+    f_plot <- f_plot +
+      do.call(facet_wrap, # do.call is here to pass arguments as a list
+        args = c(facets = ~f_facetid, facet_wrap_args)
+      )
     do.call(
       ggsave,
       args = c(filename = f_plotname, ggsave_args)
