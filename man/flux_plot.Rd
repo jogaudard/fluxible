@@ -72,6 +72,9 @@ but will take time depending on the size of the dataset}
 (independently from \code{print_plot} being TRUE or FALSE);
 \code{plotly} prints the plots in a plotly html widget}
 
+\item{plotly_args}{arguments for plotly in the form
+\code{list(ncol, width, ratio)}}
+
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}
 }

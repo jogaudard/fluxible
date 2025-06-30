@@ -37,6 +37,8 @@
 #' @param f_facetid character vector of columns to use as facet IDs. Note that
 #' they will be united, and that has to result in a unique facet ID for each
 #' measurement. Default is `f_fluxid`
+#' @param plotly_args arguments for plotly in the form
+#' `list(ncol, width, ratio)`
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
 #' and color code indicating quality flags and cuts. The plots are organized
 #' in facets according to flux ID, and a text box display the quality flag and

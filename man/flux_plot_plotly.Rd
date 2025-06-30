@@ -11,8 +11,10 @@ flux_plot_plotly(f_plot, f_plotname, nb_fluxid, plotly_args)
 
 \item{f_plotname}{name of plot}
 
-\item{facet_wrap_args}{list of arguments for
-\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
+\item{nb_fluxid}{number of facets}
+
+\item{plotly_args}{arguments for plotly in the form
+\code{list(ncol, width, ratio)}}
 }
 \description{
 print plots in pdf

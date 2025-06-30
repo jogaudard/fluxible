@@ -3,15 +3,16 @@
 #' @param facet_wrap_args list of arguments for
 #' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}
 #' @param f_plotname name of plot
-#' @param plot_pages number of pages
+#' @param nb_fluxid number of facets
 #' @importFrom ggforce facet_wrap_paginate
 #' @importFrom progress progress_bar
+#' @importFrom grDevices pdf dev.off
 
 
 flux_plot_pdf <- function(f_plot,
-    f_plotname,
-    facet_wrap_args,
-    nb_fluxid
+  f_plotname,
+  facet_wrap_args,
+  nb_fluxid
 ) {
 
   # n_pages is too slow to get the number of page

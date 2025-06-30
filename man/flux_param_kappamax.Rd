@@ -4,12 +4,14 @@
 \alias{flux_param_kappamax}
 \title{prepares text to print for flux_plot function}
 \usage{
-flux_param_kappamax(slopes_df, f_datetime, f_conc)
+flux_param_kappamax(slopes_df, f_datetime, y_text_position)
 }
 \arguments{
 \item{slopes_df}{the slopes_df that is being provided to flux_plot}
 
 \item{f_datetime}{column with datetime of each data point}
+
+\item{y_text_position}{position of the text box}
 }
 \description{
 creates a df with quality flags and quality diagnostics

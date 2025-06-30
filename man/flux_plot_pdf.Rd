@@ -14,7 +14,7 @@ flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
 \item{facet_wrap_args}{list of arguments for
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
 
-\item{plot_pages}{number of pages}
+\item{nb_fluxid}{number of facets}
 }
 \description{
 print plots in pdf

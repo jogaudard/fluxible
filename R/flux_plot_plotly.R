@@ -1,8 +1,9 @@
 #' print plots in pdf
 #' @param f_plot plot from flux_plot
-#' @param facet_wrap_args list of arguments for
-#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}
+#' @param nb_fluxid number of facets
 #' @param f_plotname name of plot
+#' @param plotly_args arguments for plotly in the form
+#' `list(ncol, width, ratio)`
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom ggplot2 facet_wrap theme coord_fixed
 #' @importFrom plotly ggplotly style

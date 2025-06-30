@@ -10,6 +10,8 @@ flux_param_qua(slopes_df, f_datetime, y_text_position)
 \item{slopes_df}{the slopes_df that is being provided to flux_plot}
 
 \item{f_datetime}{column with datetime of each data point}
+
+\item{y_text_position}{position of the text box}
 }
 \description{
 creates a df with quality flags and quality diagnostics
