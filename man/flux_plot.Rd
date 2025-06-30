@@ -56,7 +56,9 @@ they will be united, and that has to result in a unique facet ID for each
 measurement. Default is \code{f_fluxid}}
 
 \item{facet_wrap_args}{list of arguments for
-\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
+\link[ggplot2:facet_wrap]{facet_wrap}, also used by
+\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
+\verb{output = "pdfpages}}
 
 \item{y_text_position}{position of the text box}
 
@@ -88,6 +90,11 @@ but it is still highly recommended to use it to visually check
 the measurements. Note that 'flux_plot' is specific to the
 \link[fluxible]{fluxible} package and
 will work best with datasets produced following a fluxible workflow.
+}
+\details{
+\code{output = "pdfpages"} uses
+\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}, which tends to be
+slow and heavy.
 }
 \examples{
 data(co2_conc)

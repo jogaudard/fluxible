@@ -1232,3 +1232,13 @@ record_short |>
 
 record_short |>
   tidyr::unite(col = "id", all_of(var))
+
+library(tidyverse)
+library(plotly)
+library(htmlwidgets)
+
+df <- data.frame(x = 1:25, y = c(1:25 * 1:25))
+gg <- ggplot(df,aes(x = x, y = y)) + geom_point()
+
+# Save ggplotly as widget in file test.html
+saveWidget(ggplotly(gg), file = "test.html")

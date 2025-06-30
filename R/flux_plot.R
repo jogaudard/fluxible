@@ -21,7 +21,9 @@
 #' @param f_plotname filename for the extracted pdf file;
 #' if empty, the name of `slopes_df` will be used
 #' @param facet_wrap_args list of arguments for
-#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}
+#' \link[ggplot2:facet_wrap]{facet_wrap}, also used by
+#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
+#' `output = "pdfpages`
 #' @param y_text_position position of the text box
 #' @param print_plot logical, if TRUE it prints the plot as a ggplot object
 #' but will take time depending on the size of the dataset
@@ -41,13 +43,14 @@
 #' The plots are returned as a ggplot object if `print_plot = TRUE`;
 #' if `print_plot = FALSE` it will not return anything but will produce a file
 #' according to the `output` argument.
+#' @details `output = "pdfpages"` uses
+#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}, which tends to be
+#' slow and heavy.
 #' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
 #' scale_linetype_manual guides guide_legend
-#' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
-#' @importFrom progress progress_bar
 #' @importFrom stringr str_detect
 #' @importFrom tidyr unite
 #' @importFrom forcats fct_reorder
@@ -274,9 +277,6 @@ flux_plot <- function(slopes_df,
     )) +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
-    # do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
-    #   args = c(facets = ~f_facetid, facet_wrap_args)
-    # ) +
     labs(
       title = "Fluxes quality assessment",
       subtitle = paste(fit_type, "model"),
@@ -293,34 +293,10 @@ flux_plot <- function(slopes_df,
   }
 
   if (output == "pdfpages") {
-
-    f_plotname <- paste(f_plotname, ".pdf", sep = "")
-    pdf(f_plotname, paper = "a4r", width = 11.7,
-        height = 8.3, title = f_plotname)
-    pb <- progress_bar$new(
-      format =
-        "Printing plots in pdf document [:bar] :current/:total (:percent)",
-      total = plot_pages
-    )
-    pb$tick(0)
-    Sys.sleep(0.5)
-    for (i in 1:plot_pages) {
-      pb$tick()
-      Sys.sleep(0.001)
-      print(f_plot +
-        do.call(facet_wrap_paginate,
-          args = c(
-            facets = ~f_facetid,
-            page = i,
-            facet_wrap_args
-          )
-        ))
-    }
-    quietly(dev.off())
-    message("Plots saved in f_quality_plots folder.")
+    flux_plot_pdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
-    return(f_plot)
+      return(f_plot)
     }
   }
 
