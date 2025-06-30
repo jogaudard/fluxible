@@ -9,7 +9,7 @@
 flux_param_qua <- function(slopes_df) {
   param_df <- slopes_df |>
     select(
-      "f_start", "f_facetid", "f_rsquared", "f_pvalue",
+      "f_facetid", "f_rsquared", "f_pvalue",
       "f_gfactor", "f_quality_flag", "f_cut"
     ) |>
     filter(.data$f_cut != "cut") |>
@@ -26,7 +26,7 @@ flux_param_qua <- function(slopes_df) {
         sep = ""
       )
     ) |>
-    select("f_start", "f_facetid", "print_col", "f_quality_flag")
+    select("f_facetid", "print_col", "f_quality_flag")
 
   param_df
 }

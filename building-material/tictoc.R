@@ -170,6 +170,86 @@ flux_plot(
 )
 toc()
 
+tic("flux_plot plotly 10")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:10)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "plotly",
+  f_plotname = "tictoc10"
+)
+toc()
+
+tic("flux_plot plotly 30")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:30)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "plotly",
+  f_plotname = "tictoc30"
+)
+toc()
+
+tic("flux_plot plotly 50")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:50)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "plotly",
+  f_plotname = "tictoc"
+)
+toc()
+
+tic("flux_plot plotly 100")
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:100)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "plotly",
+  f_plotname = "tictoc"
+)
+toc()
+
+tic("flux_plot plotly 138")
+flags_liahovden |>
+  # filter(
+  #   f_fluxid %in% c(1:100)
+  # ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "plotly",
+  f_plotname = "tictoc"
+)
+toc()
+
 time_flux_plot <- tibble(
   nb_flux = c(10, 30, 50, 100, 138),
   v128 = c(1.172, 6.39, 25.963, 182.251, 494.07),

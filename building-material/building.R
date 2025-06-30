@@ -1241,4 +1241,64 @@ df <- data.frame(x = 1:25, y = c(1:25 * 1:25))
 gg <- ggplot(df,aes(x = x, y = y)) + geom_point()
 
 # Save ggplotly as widget in file test.html
-saveWidget(ggplotly(gg), file = "test.html")
+saveWidget(ggplotly(gg), file = "test_plotly.html")
+
+library(reshape2)
+library(plotly)
+
+p <- tips |>
+  group_by(day) |>
+  ggplot(aes(x=total_bill, y=tip/total_bill, group = day, colour = sex)) + geom_point(shape=1)
+
+# Divide by day, going horizontally and wrapping with 2 columns
+p <- p + facet_wrap( ~ day, ncol=1, scales = "free")
+
+fig <- ggplotly(p, tooltip = c("color"), height = 300)
+
+fig
+saveWidget(ggplotly(fig), file = "test_plotly.html")
+
+test <- tibble(
+  var = c(1:10),
+  group = c(2, 2, 2, 3, 3, 3, 4, 4, 5, 5),
+  rep = c(rep("a", 5), rep("b", 5))
+)
+
+test |>
+  group_by(group) |>
+  distinct(rep, .keep_all = TRUE) |>
+  ungroup()
+
+test |>
+  # group_by(group) |>
+  mutate(
+    .by = group,
+    rep = ifelse(duplicated(rep), NA, rep)
+  )
+
+library(shiny)
+library(bslib)
+library(ggplot2)
+library(palmerpenguins)
+
+ui <- page_fluid(
+  sliderInput(
+    "slider",
+    label = "Number of bins",
+    min = 10,
+    max = 60,
+    value = 20
+  ),
+  plotOutput("plot") 
+)
+
+server <- function(input, output) {
+  output$plot <- renderPlot( 
+    { 
+      ggplot(data = penguins, aes(body_mass_g)) + 
+        geom_histogram(bins = input$slider) 
+    } 
+  ) 
+}
+
+shinyApp(ui = ui, server = server)

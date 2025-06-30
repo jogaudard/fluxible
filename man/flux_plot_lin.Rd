@@ -4,7 +4,7 @@
 \alias{flux_plot_lin}
 \title{plotting fluxes with linear fit}
 \usage{
-flux_plot_lin(slopes_df, f_conc, f_datetime, y_text_position)
+flux_plot_lin(slopes_df, f_conc, f_datetime, x_nudge, y_nudge)
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
@@ -13,7 +13,9 @@ flux_plot_lin(slopes_df, f_conc, f_datetime, y_text_position)
 
 \item{f_datetime}{column with datetime of each data point}
 
-\item{y_text_position}{position of the text box}
+\item{x_nudge}{x nudge for position_nudge in geom_text}
+
+\item{y_nudge}{y nudge for position_nudge in geom_text}
 }
 \description{
 plots the fluxes that were fitted

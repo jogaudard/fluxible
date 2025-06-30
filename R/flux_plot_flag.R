@@ -11,10 +11,12 @@ flux_plot_flag <- function(slopes_df,
     select(!c("f_quality_flag")) |>
     left_join(param_df, by = "f_facetid") |>
     mutate(
+      .by = "f_facetid",
       f_quality_flag = case_when(
         f_cut == "cut" ~ f_cut,
         f_cut != "cut" ~ f_quality_flag
-      )
+      ),
+      print_col = ifelse(duplicated(.data$print_col), NA, .data$print_col)
     )
   # print_col needs to have only 1 row/fluxID
 

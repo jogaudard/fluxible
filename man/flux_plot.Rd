@@ -19,9 +19,12 @@ flux_plot(
   f_plotname = "",
   f_facetid = "f_fluxid",
   facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
-  y_text_position = 500,
+  y_text_position = deprecated(),
+  x_nudge = 60,
+  y_nudge = 50,
   print_plot = "FALSE",
   output = "print_only",
+  plotly_args = list(ncol = 4, width = 1900, ratio = 1),
   ggsave_args = list()
 )
 }
@@ -60,7 +63,8 @@ measurement. Default is \code{f_fluxid}}
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
 \verb{output = "pdfpages}}
 
-\item{y_text_position}{position of the text box}
+\item{y_text_position}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}. Use \code{x_nudge} and
+\code{y_nudge} instead.}
 
 \item{print_plot}{logical, if TRUE it prints the plot as a ggplot object
 but will take time depending on the size of the dataset}
@@ -69,7 +73,7 @@ but will take time depending on the size of the dataset}
 \code{ggsave}, the plots can be saved with the ggsave function;
 \code{print_only} (default) prints the plot without creating a file
 (independently from \code{print_plot} being TRUE or FALSE);
-\code{html} prints the plots in an self contained html file}
+\code{plotly} prints the plots in a plotly html widget}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}

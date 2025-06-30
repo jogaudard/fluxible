@@ -9,7 +9,7 @@
 flux_param_kappamax <- function(slopes_df) {
   param_df <- slopes_df |>
     select(
-      "f_start", "f_facetid", "f_RMSE", "f_cor_coef", "f_b",
+      "f_facetid", "f_RMSE", "f_cor_coef", "f_b",
       "f_gfactor", "f_cut", "f_quality_flag", "f_model",
       "f_rsquared_lm", "f_pvalue_lm"
     ) |>
@@ -43,7 +43,7 @@ flux_param_kappamax <- function(slopes_df) {
         str_detect(.data$f_model, "exp") ~ print_col_exp
       )
     ) |>
-    select("f_start", "f_facetid", "print_col", "f_quality_flag")
+    select("f_facetid", "print_col", "f_quality_flag")
 
   param_df
 }

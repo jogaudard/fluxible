@@ -24,14 +24,15 @@
 #' \link[ggplot2:facet_wrap]{facet_wrap}, also used by
 #' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
 #' `output = "pdfpages`
-#' @param y_text_position position of the text box
+#' @param y_text_position `r lifecycle::badge("deprecated")`. Use `x_nudge` and
+#' `y_nudge` instead.
 #' @param print_plot logical, if TRUE it prints the plot as a ggplot object
 #' but will take time depending on the size of the dataset
 #' @param output `pdfpages`, the plots are saved as A4 landscape pdf pages;
 #' `ggsave`, the plots can be saved with the ggsave function;
 #' `print_only` (default) prints the plot without creating a file
 #' (independently from `print_plot` being TRUE or FALSE);
-#' `html` prints the plots in an self contained html file
+#' `plotly` prints the plots in a plotly html widget
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @param f_facetid character vector of columns to use as facet IDs. Note that
@@ -83,17 +84,34 @@ flux_plot <- function(slopes_df,
                         nrow = 3,
                         scales = "free"
                       ),
-                      y_text_position = 500,
+                      y_text_position = deprecated(),
+                      x_nudge = 60,
+                      y_nudge = 50,
                       print_plot = "FALSE",
                       output = "print_only",
+                      plotly_args = list(
+                        ncol = 4,
+                        width = 1900,
+                        ratio = 1
+                      ),
                       ggsave_args = list()) {
+
+  if (is_present(y_text_position)) {
+    deprecate_warn(
+      when = "1.2.9",
+      what = "flux_plot(y_text_position)"
+      # with = "flux_plot(x_nudge, y_nudge)"
+    )
+  }
+
   args_ok <- flux_fun_check(list(
     f_ylim_upper = f_ylim_upper,
     f_ylim_lower = f_ylim_lower,
-    y_text_position = y_text_position
+    x_nudge = x_nudge,
+    y_nudge = y_nudge
   ),
-  fn = list(is.numeric, is.numeric, is.numeric),
-  msg = rep("has to be numeric", 3))
+  fn = list(is.numeric, is.numeric, is.numeric, is.numeric),
+  msg = rep("has to be numeric", 4))
 
   # making slopes_df as light as possible
   slopes_df <- slopes_df |>
@@ -105,7 +123,7 @@ flux_plot <- function(slopes_df,
         "f_quality_flag",
         "f_fluxid",
         "f_fit",
-        "f_start", "f_pvalue_lm", "f_start_z",
+        "f_pvalue_lm", "f_start_z",
         "f_rsquared", "f_pvalue", "f_fit_slope",
         "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
         "f_cut", "f_rsquared_lm", "f_fit_lm",
@@ -116,7 +134,7 @@ flux_plot <- function(slopes_df,
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
-  output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "html"))
+  output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "plotly"))
 
   if (output == "print_only") {
     print_plot <- "TRUE"
@@ -131,7 +149,7 @@ flux_plot <- function(slopes_df,
     f_plotname <- deparse(substitute(slopes_df))
   }
 
-  if (output %in% c("pdfpages", "ggsave", "html")) {
+  if (output %in% c("pdfpages", "ggsave", "plotly")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
     folder <- "./f_quality_plots"
@@ -214,20 +232,16 @@ flux_plot <- function(slopes_df,
     stop("Please use a f_facetid that is unique for each measurement")
   }
 
-  # n_pages is too slow to get the number of page
-  # instead we can use the nb of facets and nrow and ncol
-  f_ncol <- facet_wrap_args$ncol
-  f_nrow <- facet_wrap_args$nrow
 
-  plot_pages <- ceiling(nb_fluxid / (f_nrow * f_ncol))
 
   if (str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      y_text_position = y_text_position,
-      kappamax = kappamax
+      kappamax = kappamax,
+      x_nudge = x_nudge,
+      y_nudge = y_nudge
     )
   }
 
@@ -237,7 +251,8 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      y_text_position = y_text_position
+      x_nudge = x_nudge,
+      y_nudge = y_nudge
     )
   }
 
@@ -246,19 +261,26 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      y_text_position = y_text_position
+      x_nudge = x_nudge,
+      y_nudge = y_nudge
     )
   }
 
   message("Plotting in progress")
 
   f_plot <- f_plot +
-    geom_line(
-      aes(y = .data$f_fit, linetype = .data$linetype),
-      linewidth = 0.3,
-      na.rm = TRUE,
-      show.legend = TRUE
-    ) +
+    # geom_line(
+    #   data = slopes_df |> filter(.data$linetype == "f_fit"),
+    #   # aes(y = .data$f_fit, linetype = .data$linetype),
+    #   linewidth = 0.3,
+    #   na.rm = TRUE,
+    #   show.legend = TRUE
+    # ) +
+    scale_linetype_manual(values = c(
+      "f_fit" = "longdash",
+      "f_fit_slope" = "solid",
+      "f_fit_lm" = "dotted"
+    )) +
     scale_color_manual(values = c(
       "cut" = color_cut,
       "ok" = color_ok,
@@ -269,12 +291,8 @@ flux_plot <- function(slopes_df,
       "force_lm" = color_ok,
       "force_ok" = color_ok,
       "force_zero" = color_zero,
-      "no_slope" = color_discard
-    )) +
-    scale_linetype_manual(values = c(
-      "f_fit" = "longdash",
-      "f_fit_slope" = "solid",
-      "f_fit_lm" = "dotted"
+      "no_slope" = color_discard,
+      "f_fits" = "black"
     )) +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
@@ -294,15 +312,22 @@ flux_plot <- function(slopes_df,
   }
 
   if (output == "pdfpages") {
-    flux_plot_pdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
+    flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       return(f_plot)
     }
   }
 
-  if (output == "html") {
-    flux_plot_html(f_plot, f_plotname, facet_wrap_args)
+  if (output == "plotly") {
+    flux_plot_plotly(
+      f_plot = f_plot,
+      f_plotname = f_plotname,
+      nb_fluxid = nb_fluxid,
+      plotly_args = plotly_args
+    )
+
+
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       return(f_plot)
