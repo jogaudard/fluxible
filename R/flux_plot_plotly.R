@@ -27,13 +27,17 @@ flux_plot_plotly <- function(f_plot,
   f_height <- (((width) / f_ncol)
                * ceiling((nb_fluxid / f_ncol)) / ratio)
 
+  message("Transforming into plotly...")
+
   f_plotly <- ggplotly(
     f_plot,
     width = width, height = f_height
   ) |>
   style(textposition = c("right", "top"))
 
+  message("Saving widget...")
+
   saveWidget(f_plotly, file = f_plotname)
 
-  message("Plots saved in f_quality_plots folder.")
+  message("Widget saved in f_quality_plots folder.")
 }

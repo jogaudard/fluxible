@@ -105,26 +105,10 @@ flux_plot <- function(slopes_df,
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
-  # making slopes_df as light as possible
-  slopes_df <- slopes_df |>
-    select(
-      {{f_conc}},
-      {{f_datetime}},
-      all_of(f_facetid),
-      any_of(c(
-        "f_quality_flag",
-        "f_fluxid",
-        "f_fit", "f_start",
-        "f_pvalue_lm", "f_start_z",
-        "f_rsquared", "f_pvalue", "f_fit_slope",
-        "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
-        "f_cut", "f_rsquared_lm", "f_fit_lm",
-        "f_model"
-      ))
-    )
-
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
+
+
 
   output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "plotly"))
 
@@ -149,6 +133,24 @@ flux_plot <- function(slopes_df,
       dir.create(folder)
     }
   }
+
+# making slopes_df as light as possible
+  slopes_df <- slopes_df |>
+    select(
+      {{f_conc}},
+      {{f_datetime}},
+      all_of(f_facetid),
+      any_of(c(
+        "f_quality_flag",
+        "f_fluxid",
+        "f_fit", "f_start",
+        "f_pvalue_lm", "f_start_z",
+        "f_rsquared", "f_pvalue", "f_fit_slope",
+        "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
+        "f_cut", "f_rsquared_lm", "f_fit_lm",
+        "f_model"
+      ))
+    )
 
   if (
     max(slopes_df[[deparse(substitute(f_conc))]], na.rm = TRUE) > f_ylim_upper
