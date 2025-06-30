@@ -131,7 +131,7 @@ flux_plot <- function(slopes_df,
     f_plotname <- deparse(substitute(slopes_df))
   }
 
-  if (output %in% c("pdfpages", "ggsave")) {
+  if (output %in% c("pdfpages", "ggsave", "html")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
     folder <- "./f_quality_plots"
