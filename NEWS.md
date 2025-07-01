@@ -1,3 +1,7 @@
+# fluxible 1.2.9
+
+* `flux_plot`: `output = "longpdf"` exports a single page pdf (default width 29.7 cm and as long as needed). This method is considerably faster than `pdfpages`, because it bypasses `facet_wrap_paginate`, but is a bit less aesthetic.
+
 # fluxible 1.2.8
 
 * `flux_plot`: `f_facetid` argument allows to display more information in the facet IDs when plotting
