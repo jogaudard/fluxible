@@ -189,7 +189,10 @@ flags_liahovden |>
   )
 ```
 
-To export the plots as pdf without printing them in one's R session, which we recommend for large datasets, the code looks like this:
+<!-- To export the plots as pdf without printing them in one's R session, which we recommend for large datasets, the code looks like this: -->
+The plots can be directly exported without printing them in the R session, which we recommend for large datasets.
+With `output = "pdfpages"`, the plots are exported in a multipage pdf file (A4 landscape).
+Because it uses `ggforce::facet_wrap_paginate`, it is quite slow.
 
 ```{r plot_pdf, echo=TRUE, eval=FALSE}
 flux_plot(
@@ -198,6 +201,20 @@ flux_plot(
   f_datetime = datetime,
   print_plot = FALSE, # not printing the plots in the R session
   output = "pdfpages", # the type of output
+  f_plotname = "plots_liahovden" # filename for the pdf file
+)
+```
+
+With `output = "longpdf"`, the plots are exported in a single pdf file (defautl width 29.7 cm and as long as needed).
+This does not allow for printing and is aesthetically discutable, but it is much faster.
+
+```{r plot_longpdf, echo=TRUE, eval=FALSE}
+flux_plot(
+  slopes_df = flags_liahovden,
+  f_conc = conc,
+  f_datetime = datetime,
+  print_plot = FALSE, # not printing the plots in the R session
+  output = "longpdf", # the type of output
   f_plotname = "plots_liahovden" # filename for the pdf file
 )
 ```
