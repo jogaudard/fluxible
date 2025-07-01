@@ -212,3 +212,9 @@
     Message
       Plotting in progress
 
+# longpdf works
+
+    Code
+      suppressMessages(flux_plot(slopes0_flag, conc, datetime, f_plotname = "test_exp_plot",
+        print_plot = FALSE, output = "longpdf"))
+

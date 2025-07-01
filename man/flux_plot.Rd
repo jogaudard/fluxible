@@ -19,6 +19,7 @@ flux_plot(
   f_plotname = "",
   f_facetid = "f_fluxid",
   facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
+  longpdf_args = list(ncol = 4, width = 29.7, ratio = 1),
   y_text_position = 500,
   print_plot = "FALSE",
   output = "print_only",
@@ -56,7 +57,12 @@ they will be united, and that has to result in a unique facet ID for each
 measurement. Default is \code{f_fluxid}}
 
 \item{facet_wrap_args}{list of arguments for
-\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
+\link[ggplot2:facet_wrap]{facet_wrap}, also used by
+\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
+\verb{output = "pdfpages}}
+
+\item{longpdf_args}{arguments for plotly in the form
+\verb{list(ncol, width (in cm), ratio)}}
 
 \item{y_text_position}{position of the text box}
 
@@ -88,6 +94,16 @@ but it is still highly recommended to use it to visually check
 the measurements. Note that 'flux_plot' is specific to the
 \link[fluxible]{fluxible} package and
 will work best with datasets produced following a fluxible workflow.
+}
+\details{
+\code{output = "pdfpages"} uses
+\link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}, which tends to be
+slow and heavy. With \verb{output = "longpdf}, a long single page pdf is exported.
+Default width is 29.7 cm (A4 landscape) and is will be as long as it needs
+to be to fit all the facets. The arguments \code{ncol} and \code{ratio} in
+\code{longpdf_args} specify the number of columns and the ratio of the facet
+respectively. This method is considerably faster than \code{pdfpages}, because
+it bypasses \code{facet_wrap_paginate}, but is a bit less aesthetic.
 }
 \examples{
 data(co2_conc)
