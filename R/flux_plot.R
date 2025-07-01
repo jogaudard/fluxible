@@ -52,7 +52,7 @@
 #' to be to fit all the facets. The arguments `ncol` and `ratio` in
 #' `longpdf_args` specify the number of columns and the ratio of the facet
 #' respectively. This method is considerably faster than `pdfpages`, because
-#' it bypasses `facet_wrap_paginat`, but is a bit less aesthetic.
+#' it bypasses `facet_wrap_paginate`, but is a bit less aesthetic.
 #' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
@@ -225,12 +225,7 @@ flux_plot <- function(slopes_df,
     stop("Please use a f_facetid that is unique for each measurement")
   }
 
-  # n_pages is too slow to get the number of page
-  # instead we can use the nb of facets and nrow and ncol
-  f_ncol <- facet_wrap_args$ncol
-  f_nrow <- facet_wrap_args$nrow
 
-  plot_pages <- ceiling(nb_fluxid / (f_nrow * f_ncol))
 
   if (str_detect(fit_type, "exp")) {
     f_plot <- flux_plot_exp(
@@ -305,7 +300,7 @@ flux_plot <- function(slopes_df,
   }
 
   if (output == "pdfpages") {
-    flux_plot_pdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
+    flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       return(f_plot)

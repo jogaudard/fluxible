@@ -61,6 +61,9 @@ measurement. Default is \code{f_fluxid}}
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
 \verb{output = "pdfpages}}
 
+\item{longpdf_args}{arguments for plotly in the form
+\verb{list(ncol, width (in cm), ratio)}}
+
 \item{y_text_position}{position of the text box}
 
 \item{print_plot}{logical, if TRUE it prints the plot as a ggplot object
@@ -95,7 +98,12 @@ will work best with datasets produced following a fluxible workflow.
 \details{
 \code{output = "pdfpages"} uses
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}, which tends to be
-slow and heavy.
+slow and heavy. With \verb{output = "longpdf}, a long single page pdf is exported.
+Default width is 29.7 cm (A4 landscape) and is will be as long as it needs
+to be to fit all the facets. The arguments \code{ncol} and \code{ratio} in
+\code{longpdf_args} specify the number of columns and the ratio of the facet
+respectively. This method is considerably faster than \code{pdfpages}, because
+it bypasses \code{facet_wrap_paginate}, but is a bit less aesthetic.
 }
 \examples{
 data(co2_conc)

@@ -4,17 +4,17 @@
 \alias{flux_plot_pdf}
 \title{print plots in pdf}
 \usage{
-flux_plot_pdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
+flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
 }
 \arguments{
 \item{f_plot}{plot from flux_plot}
 
 \item{f_plotname}{name of plot}
 
-\item{plot_pages}{number of pages}
-
 \item{facet_wrap_args}{list of arguments for
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}}
+
+\item{nb_fluxid}{number of facets}
 }
 \description{
 print plots in pdf

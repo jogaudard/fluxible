@@ -65,41 +65,44 @@ result <- tibble(
 result
 }
 
-rep_1b <- time_test(
+rep_1 <- time_test(
     replicate = 1,
-    version = "v129",
-    output = "longpdf"
+    version = "v128",
+    output = "pdfpages"
 )
 
-rep_2b <- time_test(
+rep_2 <- time_test(
     replicate = 2,
-    version = "v129",
-    output = "longpdf"
+    version = "v128",
+    output = "pdfpages"
 )
 
-rep_3b <- time_test(
+rep_3 <- time_test(
     replicate = 3,
-    version = "v129",
-    output = "longpdf"
+    version = "v128",
+    output = "pdfpages"
 )
 
 allreps <- bind_rows(
-    v129_1,
-    v129_2,
-    v129_3,
-    rep_1b,
-    rep_2b,
-    rep_3b
+    rep_1,
+    rep_2,
+    rep_3
 )
 
 # check fluxible version!
-# saveRDS(allreps, "building-material/v129.rds")
+saveRDS(allreps, "building-material/v128.rds")
 
 v129 <- readRDS("building-material/v129.rds")
 v128 <- readRDS("building-material/v128.rds")
 v126 <- readRDS("building-material/v126.rds")
 
-etime_plot |>
+etime_all <- bind_rows(
+  v129,
+  v128,
+  v126
+)
+
+etime_all |>
     ggplot(aes(nb_fluxes, e_time, color = fluxible)) +
     geom_point() +
     geom_smooth(se = FALSE)
