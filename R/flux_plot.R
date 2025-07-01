@@ -294,25 +294,13 @@ flux_plot <- function(slopes_df,
     ) +
     guides(color = guide_legend(override.aes = list(linetype = 0)))
 
-  if (output == "print_only") {
-    f_plot <- flux_print_plot(f_plot, facet_wrap_args)
-    return(f_plot)
-  }
 
   if (output == "pdfpages") {
     flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
-    if (print_plot == TRUE) {
-      f_plot <- flux_print_plot(f_plot, facet_wrap_args)
-      return(f_plot)
-    }
   }
 
   if (output == "longpdf") {
     flux_plot_longpdf(f_plot, f_plotname, nb_fluxid, longpdf_args)
-    if (print_plot == TRUE) {
-      f_plot <- flux_print_plot(f_plot, facet_wrap_args)
-      return(f_plot)
-    }
   }
 
   if (output == "ggsave") {
@@ -331,4 +319,10 @@ flux_plot <- function(slopes_df,
       return(f_plot)
     }
   }
+
+  if (print_plot == TRUE) {
+    f_plot <- flux_print_plot(f_plot, facet_wrap_args)
+    return(f_plot)
+  }
+
 }
