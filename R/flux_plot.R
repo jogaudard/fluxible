@@ -36,6 +36,8 @@
 #' @param f_facetid character vector of columns to use as facet IDs. Note that
 #' they will be united, and that has to result in a unique facet ID for each
 #' measurement. Default is `f_fluxid`
+#' @param longpdf_args arguments for plotly in the form
+#' `list(ncol, width (in cm), ratio)`
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
 #' and color code indicating quality flags and cuts. The plots are organized
 #' in facets according to flux ID, and a text box display the quality flag and
@@ -45,7 +47,12 @@
 #' according to the `output` argument.
 #' @details `output = "pdfpages"` uses
 #' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}, which tends to be
-#' slow and heavy.
+#' slow and heavy. With `output = "longpdf`, a long single page pdf is exported.
+#' Default width is 29.7 cm (A4 landscape) and is will be as long as it needs
+#' to be to fit all the facets. The arguments `ncol` and `ratio` in
+#' `longpdf_args` specify the number of columns and the ratio of the facet
+#' respectively. This method is considerably faster than `pdfpages`, because
+#' it bypasses `facet_wrap_paginat`, but is a bit less aesthetic.
 #' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
@@ -82,6 +89,11 @@ flux_plot <- function(slopes_df,
                         nrow = 3,
                         scales = "free"
                       ),
+                      longpdf_args = list(
+                        ncol = 4,
+                        width = 29.7,
+                        ratio = 1
+                      ),
                       y_text_position = 500,
                       print_plot = "FALSE",
                       output = "print_only",
@@ -97,7 +109,7 @@ flux_plot <- function(slopes_df,
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
-  output <- match.arg(output, c("pdfpages", "ggsave", "print_only"))
+  output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "longpdf"))
 
   if (output == "print_only") {
     print_plot <- "TRUE"
@@ -301,7 +313,7 @@ flux_plot <- function(slopes_df,
   }
 
   if (output == "longpdf") {
-    flux_plot_longpdf(f_plot, f_plotname, plot_pages, facet_wrap_args)
+    flux_plot_longpdf(f_plot, f_plotname, nb_fluxid, longpdf_args)
     if (print_plot == TRUE) {
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       return(f_plot)

@@ -65,28 +65,31 @@ result <- tibble(
 result
 }
 
-rep_1 <- time_test(
+rep_1b <- time_test(
     replicate = 1,
     version = "v129",
-    output = "pdfpages"
+    output = "longpdf"
 )
 
-rep_2 <- time_test(
+rep_2b <- time_test(
     replicate = 2,
     version = "v129",
-    output = "pdfpages"
+    output = "longpdf"
 )
 
-rep_3 <- time_test(
+rep_3b <- time_test(
     replicate = 3,
     version = "v129",
-    output = "pdfpages"
+    output = "longpdf"
 )
 
 allreps <- bind_rows(
-    rep_1,
-    rep_2,
-    rep_3
+    v129_1,
+    v129_2,
+    v129_3,
+    rep_1b,
+    rep_2b,
+    rep_3b
 )
 
 # check fluxible version!

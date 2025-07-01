@@ -19,6 +19,7 @@ flux_plot(
   f_plotname = "",
   f_facetid = "f_fluxid",
   facet_wrap_args = list(ncol = 4, nrow = 3, scales = "free"),
+  longpdf_args = list(ncol = 4, width = 29.7, ratio = 1),
   y_text_position = 500,
   print_plot = "FALSE",
   output = "print_only",
