@@ -1,7 +1,5 @@
 #' Standardizes CO2 fluxes at fixed PAR values
-#' @description
-#' `r lifecycle::badge("experimental")`
-#' Calculates light response curves (LRC) for CO2 fluxes and
+#' @description Calculates light response curves (LRC) for CO2 fluxes and
 #' standardizes CO2 fluxes according to the LRC
 #' @param fluxes_df a dataframe containing NEE, ER and LRC measurements
 #' @param type_col column containing type of flux (NEE, ER, LRC)
@@ -58,6 +56,26 @@ flux_lrc <- function(fluxes_df,
                      lrc_group = c(),
                      par_nee = 300,
                      par_er = 0) {
+
+  name <- deparse(substitute(fluxes_df))
+
+  args_ok <- flux_fun_check(list(
+    par_nee = par_nee,
+    par_er = par_er
+  ),
+  fn = list(is.numeric, is.numeric),
+  msg = rep("has to be numeric", 2))
+
+  fluxes_df_check <- fluxes_df |>
+    select({{par_ave}}, {{f_flux}})
+
+  fluxes_df_ok <- flux_fun_check(fluxes_df_check,
+                                 fn = list(is.numeric, is.numeric),
+                                 msg = rep("has to be numeric", 2),
+                                 name_df = name)
+
+  if (any(!c(args_ok, fluxes_df_ok)))
+    stop("Please correct the arguments", call. = FALSE)
 
   fluxes_df <- fluxes_df |>
     rowid_to_column("rowid") # to keep the user's row order

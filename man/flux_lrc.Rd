@@ -46,7 +46,6 @@ are in the same \code{f_flux} column. Non corrected fluxes and other fluxes are
 kept, with NA in \code{par_correction}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Calculates light response curves (LRC) for CO2 fluxes and
 standardizes CO2 fluxes according to the LRC
 }
