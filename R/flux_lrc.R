@@ -1,7 +1,7 @@
 #' Standardizes CO2 fluxes at fixed PAR values
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' Calculates light response curves for CO2 fluxes and
+#' Calculates light response curves (LRC) for CO2 fluxes and
 #' standardizes CO2 fluxes according to the LRC
 #' @param fluxes_df a dataframe containing NEE, ER and LRC measurements
 #' @param type_col column containing type of flux (NEE, ER, LRC)
@@ -17,9 +17,16 @@
 #' @details The light response curves are calculated with a quadratic of the
 #' form
 #' \ifelse{html}{\out{flux(PAR) = a * PAR<sup>2</sup> + b * PAR + c}}{\eqn{flux(PAR) = a * PAR^2 + b * PAR + c}{ASCII}}
-#' @return the same dataframe with the additional column `PAR_corrected_flux`
-#' @importFrom dplyr group_by_at filter rename vars select mutate left_join cross_join
-#' case_when
+#' @return the same dataframe with the additional column `par_correction`
+#' indicating at what value of PAR were the flux corrected. Corrected fluxes
+#' are in the same `f_flux` column. Non corrected fluxes and other fluxes are
+#' kept, with NA in `par_correction`.
+#' @details The long format of the output with both uncorrected and corrected
+#' fluxes in the same flux column allows for easier gross primary production
+#' (GPP) fluxes with \link[fluxible:flux_gpp]{flux_gpp} (`par_correction` will
+#' have to be added to the arguemnt `id_cols`).
+#' @importFrom dplyr group_by_at filter rename vars select mutate left_join
+#' cross_join case_when
 #' @importFrom tidyr nest unnest
 #' @importFrom purrr map
 #' @importFrom broom tidy
