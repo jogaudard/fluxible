@@ -47,7 +47,8 @@ Imports:
     purrrlyr,
     tidyselect,
     lifecycle,
-    forcats
+    forcats,
+    tibble
 Depends: 
     R (>= 4.1)
 LazyData: true
