@@ -41,7 +41,7 @@ flux_lrc(
 }
 \value{
 the same dataframe with the additional column \code{par_correction}
-indicating at what value of PAR were the flux corrected. Corrected fluxes
+indicating \code{par_corrected} for correct fluxes. Corrected fluxes
 are in the same \code{f_flux} column. Non corrected fluxes and other fluxes are
 kept, with NA in \code{par_correction}.
 }

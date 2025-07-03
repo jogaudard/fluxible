@@ -18,7 +18,7 @@
 #' form
 #' \ifelse{html}{\out{flux(PAR) = a * PAR<sup>2</sup> + b * PAR + c}}{\eqn{flux(PAR) = a * PAR^2 + b * PAR + c}{ASCII}}
 #' @return the same dataframe with the additional column `par_correction`
-#' indicating at what value of PAR were the flux corrected. Corrected fluxes
+#' indicating `par_corrected` for correct fluxes. Corrected fluxes
 #' are in the same `f_flux` column. Non corrected fluxes and other fluxes are
 #' kept, with NA in `par_correction`.
 #' @details The long format of the output with both uncorrected and corrected
@@ -115,10 +115,7 @@ flux_lrc <- function(fluxes_df,
               a * (par_er^2 - {{par_ave}}^2) +
               b * (par_er - {{par_ave}})
         ),
-      par_correction = case_when(
-        type == "NEE" ~ par_nee,
-        type == "ER" ~ par_er
-      )
+      par_correction = "par_corrected"
     ) |>
     bind_rows(fluxes_df) |>
     arrange(.data$rowid) |>
