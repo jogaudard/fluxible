@@ -23,6 +23,7 @@
 #' @importFrom tidyr nest unnest
 #' @importFrom purrr map
 #' @importFrom broom tidy
+#' @importFrom tibble rowid_to_column
 #' @examples
 #' data(co2_fluxes_lrc)
 #' flux_lrc(
@@ -51,6 +52,8 @@ flux_lrc <- function(fluxes_df,
                      par_nee = 300,
                      par_er = 0) {
 
+  fluxes_df <- fluxes_df |>
+    rowid_to_column("rowid") # to keep the user's row order
 
   coefficients_lrc <- fluxes_df |>
     filter(
@@ -94,19 +97,25 @@ flux_lrc <- function(fluxes_df,
 
   flux_corrected_par <- flux_corrected_par |>
     mutate(
-      PAR_corrected_flux =
-        case_when( #we correct only the NEE
+      {{f_flux}} :=
+        case_when( # NEE correction
           type == "NEE" ~
             {{f_flux}} +
               a * (par_nee^2 - {{par_ave}}^2) +
               b * (par_nee - {{par_ave}}),
-          type == "ER" ~
+          type == "ER" ~ # ER correction
             {{f_flux}} +
               a * (par_er^2 - {{par_ave}}^2) +
               b * (par_er - {{par_ave}})
-        )
+        ),
+      par_correction = case_when(
+        type == "NEE" ~ par_nee,
+        type == "ER" ~ par_er
+      )
     ) |>
-    select(!c("a", "b"))
+    bind_rows(fluxes_df) |>
+    arrange(.data$rowid) |>
+    select(!c("a", "b", "rowid"))
 
   flux_corrected_par
 }
