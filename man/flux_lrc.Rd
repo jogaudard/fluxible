@@ -40,8 +40,8 @@ flux_lrc(
 \item{par_er}{PAR value to correct the ER fluxes to}
 }
 \value{
-the same dataframe with the additional column \code{par_correction}
-indicating \code{par_corrected} for correct fluxes. Corrected fluxes
+the same dataframe with the additional column \code{par_correction = TRUE}
+for correct fluxes. Corrected fluxes
 are in the same \code{f_flux} column. Non corrected fluxes and other fluxes are
 kept, with NA in \code{par_correction}.
 }
