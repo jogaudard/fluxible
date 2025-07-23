@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check/badge.svg)](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check)
+[![R-CMD-check](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Plant-Functional-Trait-Course/fluxible/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.org/package=fluxible)
 [![LifeCycle](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html#stable)
