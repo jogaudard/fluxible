@@ -217,7 +217,7 @@ JP, Trepel J, Vandvik V, Baumane M, Birkeli K, Holle MJM, Hupp JR,
 Santos-Andrade PE, Satriawan TW, Halbritter AH. “Fluxible: an R package
 to process ecosystem gas fluxes from closed-loop chambers in an
 automated and reproducible way.” Authorea Preprints.
-[doi:10.22541/au.175071021.14153294/v1](https://doi:10.22541/au.175071021.14153294/v1),
+[doi:10.22541/au.175071021.14153294/v1](https://doi.org/10.22541/au.175071021.14153294/v1),
 2025.
 
 Gaudard J, Trepel J, Dawson HR, Enquist B, Halbritter AH, Mustri M,
@@ -227,7 +227,7 @@ loop chamber systems in a reproducible and automated workflow”
 ([slides](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/fluxible_jgaudard_EGU25.pdf)),
 EGU General Assembly 2025, Vienna, Austria, 27 Apr–2 May 2025,
 EGU25-12409,
-[doi.org/10.5194/egusphere-egu25-12409](https://doi.org/10.5194/egusphere-egu25-12409),
+[doi:10.5194/egusphere-egu25-12409](https://doi.org/10.5194/egusphere-egu25-12409),
 2025.
 
 Gaudard J, Telford R, Vandvik V, and Halbritter AH: “Fluxible: an R
@@ -235,7 +235,7 @@ package to calculate ecosystem gas fluxes in a reproducible and
 automated workflow”
 ([poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf)),
 EGU General Assembly 2024, Vienna, Austria, 14–19 Apr 2024, EGU24-956,
-[doi.org/10.5194/egusphere-egu24-956](https://doi.org/10.5194/egusphere-egu24-956),
+[doi:10.5194/egusphere-egu24-956](https://doi.org/10.5194/egusphere-egu24-956),
 2024.
 
 <!-- [Direct link to the poster](https://github.com/Plant-Functional-Trait-Course/fluxible/blob/main/dissemination/poster_EGU24_jgaudard.pdf) -->
