@@ -1222,4 +1222,37 @@ test_data <- co2_conc_missing |>
       select(f_fluxid, f_slope) |>
       distinct()
 
+var <- c("type", "turfID")
+var <- stringr::str_flatten_comma("{var}")
+names(var)
+record_short |>
+  mutate(
+    id = stringr::str_c({{var}})
+  )
 
+record_short |>
+  tidyr::unite(col = "id", all_of(var))
+
+library(tidyverse)
+library(plotly)
+library(htmlwidgets)
+
+df <- data.frame(x = 1:25, y = c(1:25 * 1:25))
+gg <- ggplot(df,aes(x = x, y = y)) + geom_point()
+
+# Save ggplotly as widget in file test.html
+saveWidget(ggplotly(gg), file = "test.html")
+
+flags_liahovden |>
+  filter(
+    f_fluxid %in% c(1:100)
+  ) |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = "longpdf",
+  f_plotname = "longpdftest"
+)

@@ -1,3 +1,19 @@
+# fluxible 1.2.10
+
+* `flux_lrc`: output is now in long format (fluxes in same column, additional column indicating PAR correction), which makes it easier to handle with `flux_gpp`.
+
+# fluxible 1.2.9
+
+* `flux_plot`: `output = "longpdf"` exports a single page pdf (default width 29.7 cm and as long as needed). This method is considerably faster than `pdfpages`, because it bypasses `facet_wrap_paginate`, but is a bit less aesthetic.
+
+# fluxible 1.2.8
+
+* `flux_plot`: `f_facetid` argument allows to display more information in the facet IDs when plotting
+
+# fluxible 1.2.7
+
+* `flux_match`: `fixed_length` is deprecated. `flux_match` will detect whether `end_col` or `measurement_length` are provided.
+
 # fluxible 1.2.6
 
 * `flux_calc`: gas concentration unit can be ppm, ppb or ppt. The conversion coefficient is integrated in `flux_units`

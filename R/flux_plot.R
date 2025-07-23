@@ -21,7 +21,9 @@
 #' @param f_plotname filename for the extracted pdf file;
 #' if empty, the name of `slopes_df` will be used
 #' @param facet_wrap_args list of arguments for
-#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}
+#' \link[ggplot2:facet_wrap]{facet_wrap}, also used by
+#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
+#' `output = "pdfpages`
 #' @param y_text_position position of the text box
 #' @param print_plot logical, if TRUE it prints the plot as a ggplot object
 #' but will take time depending on the size of the dataset
@@ -31,6 +33,11 @@
 #' (independently from `print_plot` being TRUE or FALSE)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
+#' @param f_facetid character vector of columns to use as facet IDs. Note that
+#' they will be united, and that has to result in a unique facet ID for each
+#' measurement. Default is `f_fluxid`
+#' @param longpdf_args arguments for plotly in the form
+#' `list(ncol, width (in cm), ratio)`
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
 #' and color code indicating quality flags and cuts. The plots are organized
 #' in facets according to flux ID, and a text box display the quality flag and
@@ -38,14 +45,22 @@
 #' The plots are returned as a ggplot object if `print_plot = TRUE`;
 #' if `print_plot = FALSE` it will not return anything but will produce a file
 #' according to the `output` argument.
+#' @details `output = "pdfpages"` uses
+#' \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate}, which tends to be
+#' slow and heavy. With `output = "longpdf`, a long single page pdf is exported.
+#' Default width is 29.7 cm (A4 landscape) and is will be as long as it needs
+#' to be to fit all the facets. The arguments `ncol` and `ratio` in
+#' `longpdf_args` specify the number of columns and the ratio of the facet
+#' respectively. This method is considerably faster than `pdfpages`, because
+#' it bypasses `facet_wrap_paginate`, but is a bit less aesthetic.
 #' @importFrom dplyr select distinct mutate
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
 #' scale_linetype_manual guides guide_legend
-#' @importFrom ggforce facet_wrap_paginate n_pages
 #' @importFrom purrr quietly
-#' @importFrom progress progress_bar
 #' @importFrom stringr str_detect
+#' @importFrom tidyr unite
+#' @importFrom forcats fct_reorder
 #' @examples
 #' data(co2_conc)
 #' slopes <- flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -68,10 +83,16 @@ flux_plot <- function(slopes_df,
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
                       f_plotname = "",
+                      f_facetid = "f_fluxid",
                       facet_wrap_args = list(
                         ncol = 4,
                         nrow = 3,
                         scales = "free"
+                      ),
+                      longpdf_args = list(
+                        ncol = 4,
+                        width = 29.7,
+                        ratio = 1
                       ),
                       y_text_position = 500,
                       print_plot = "FALSE",
@@ -85,11 +106,10 @@ flux_plot <- function(slopes_df,
   fn = list(is.numeric, is.numeric, is.numeric),
   msg = rep("has to be numeric", 3))
 
-
   if (any(!args_ok))
     stop("Please correct the arguments", call. = FALSE)
 
-  output <- match.arg(output, c("pdfpages", "ggsave", "print_only"))
+  output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "longpdf"))
 
   if (output == "print_only") {
     print_plot <- "TRUE"
@@ -104,7 +124,7 @@ flux_plot <- function(slopes_df,
     f_plotname <- deparse(substitute(slopes_df))
   }
 
-  if (output %in% c("pdfpages", "ggsave")) {
+  if (output %in% c("pdfpages", "ggsave", "longpdf")) {
     f_plotname <- paste("f_quality_plots/", f_plotname, sep = "")
 
     folder <- "./f_quality_plots"
@@ -112,6 +132,24 @@ flux_plot <- function(slopes_df,
       dir.create(folder)
     }
   }
+
+  # making slopes_df as light as possible
+  slopes_df <- slopes_df |>
+    select(
+      {{f_conc}},
+      {{f_datetime}},
+      all_of(f_facetid),
+      any_of(c(
+        "f_quality_flag",
+        "f_fluxid",
+        "f_fit",
+        "f_start", "f_pvalue_lm", "f_start_z",
+        "f_rsquared", "f_pvalue", "f_fit_slope",
+        "f_RMSE", "f_cor_coef", "f_b", "f_gfactor",
+        "f_cut", "f_rsquared_lm", "f_fit_lm",
+        "f_model"
+      ))
+    )
 
   if (
     max(slopes_df[[deparse(substitute(f_conc))]], na.rm = TRUE) > f_ylim_upper
@@ -159,6 +197,33 @@ flux_plot <- function(slopes_df,
       (.data$f_quality_flag != "no data") |> replace_na(TRUE)
     )
 
+  # extracting attributes before they get stripped later on
+  kappamax <- attr(slopes_df, "kappamax")
+
+  nb_fluxid <- slopes_df |>
+    distinct(.data$f_fluxid) |>
+    nrow()
+
+  # costumize facet ID
+  slopes_df <- slopes_df |>
+    unite(
+      col = "f_facetid",
+      all_of(f_facetid),
+      sep = " "
+    ) |>
+    mutate(
+      f_facetid = fct_reorder(f_facetid, {{f_datetime}})
+    )
+
+
+  # testing if f_facetid is unique, otherwise facet will make a mess
+  nb_fluxid_post <- slopes_df |>
+    distinct(.data$f_facetid) |>
+    nrow()
+
+  if (nb_fluxid != nb_fluxid_post) {
+    stop("Please use a f_facetid that is unique for each measurement")
+  }
 
 
 
@@ -167,7 +232,8 @@ flux_plot <- function(slopes_df,
       slopes_df,
       {{f_conc}},
       {{f_datetime}},
-      y_text_position = y_text_position
+      y_text_position = y_text_position,
+      kappamax = kappamax
     )
   }
 
@@ -218,9 +284,6 @@ flux_plot <- function(slopes_df,
     )) +
     do.call(scale_x_datetime, args = scale_x_datetime_args) +
     ylim(f_ylim_lower, f_ylim_upper) +
-    do.call(facet_wrap_paginate, # do.call is here to pass arguments as a list
-      args = c(facets = ~f_fluxid, facet_wrap_args)
-    ) +
     labs(
       title = "Fluxes quality assessment",
       subtitle = paste(fit_type, "model"),
@@ -231,42 +294,21 @@ flux_plot <- function(slopes_df,
     ) +
     guides(color = guide_legend(override.aes = list(linetype = 0)))
 
-  if (output == "print_only") {
-    return(f_plot)
-  }
 
   if (output == "pdfpages") {
-    f_plotname <- paste(f_plotname, ".pdf", sep = "")
-    pdf(f_plotname, paper = "a4r", width = 11.7,
-        height = 8.3, title = f_plotname)
-    pb <- progress_bar$new(
-      format =
-        "Printing plots in pdf document [:bar] :current/:total (:percent)",
-      total = n_pages(f_plot)
-    )
-    pb$tick(0)
-    Sys.sleep(3)
-    for (i in 1:n_pages(f_plot)) {
-      pb$tick()
-      Sys.sleep(0.1)
-      print(f_plot +
-        do.call(facet_wrap_paginate,
-          args = c(
-            facets = ~f_fluxid,
-            page = i,
-            facet_wrap_args
-          )
-        ))
-    }
-    quietly(dev.off())
-    message("Plots saved in f_quality_plots folder.")
-    if (print_plot == TRUE) {
-      return(f_plot)
-    }
+    flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
+  }
+
+  if (output == "longpdf") {
+    flux_plot_longpdf(f_plot, f_plotname, nb_fluxid, longpdf_args)
   }
 
   if (output == "ggsave") {
     message("Saving plots with ggsave.")
+    f_plot <- f_plot +
+      do.call(facet_wrap, # do.call is here to pass arguments as a list
+        args = c(facets = ~f_facetid, facet_wrap_args)
+      )
     do.call(
       ggsave,
       args = c(filename = f_plotname, ggsave_args)
@@ -277,4 +319,10 @@ flux_plot <- function(slopes_df,
       return(f_plot)
     }
   }
+
+  if (print_plot == TRUE) {
+    f_plot <- flux_print_plot(f_plot, facet_wrap_args)
+    return(f_plot)
+  }
+
 }

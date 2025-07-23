@@ -131,6 +131,14 @@ flux_gpp <- function(fluxes_df,
         .data$type == "ER"
     )
 
+  duplicate_check <- fluxes_gpp |>
+    select("id", {{type_col}}) |>
+    duplicated()
+
+  if (any(duplicate_check)) {
+    stop("The id_cols provided do not form unique pairs of ER and NEE.")
+  }
+
   fluxes_gpp <- fluxes_gpp |>
     rename(
       f_flux = {{f_flux}},
