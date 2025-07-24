@@ -48,6 +48,9 @@ usethis::use_lifecycle()
 # rcompendium::add_codecov_badge()
 # this is actually a paid service
 
+# add logo
+usethis::use_logo("logos/fluxible-logo5.png", geometry = "240x278", retina = TRUE)
+
 usethis::use_coverage(type = c("codecov"))
 usethis::use_github_action("test-coverage")
 
