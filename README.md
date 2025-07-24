@@ -11,7 +11,7 @@ status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.o
 [![LifeCycle](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Codecov test
 coverage](https://codecov.io/gh/Plant-Functional-Trait-Course/fluxible/graph/badge.svg)](https://app.codecov.io/gh/Plant-Functional-Trait-Course/fluxible)
-<!-- badges: end -->
+<!-- badges: end --> ![fluxible logo](./man/figures/logo.png "fluxible")
 
 The Fluxible R package is made to transform any dataset of gas
 concentration over time into a gas flux dataset. It was originally made
