@@ -1,7 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- # Fluxible -->
 
-# Fluxible
+# fluxible <a href="https://plant-functional-trait-course.github.io/fluxible/index.html"><img src="man/figures/logo.png" align="right" height="138" alt="fluxible website" /></a>
 
 <!-- badges: start -->
 
