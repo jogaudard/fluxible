@@ -26,7 +26,47 @@ The code used to import the data might be turned into a package later.
 First, we import the data from OSF using the [dataDownloader](https://github.com/Between-the-Fjords/dataDownloader) R package.
 
 ```{r osf-import, include = FALSE}
+library(dataDownloader)
 
+get_file("gs8u6",
+         "rawData/raw_c-flux",
+         "rawC-flux.zip",
+         "vignettes/ex_data/li7500")
+
+unzip("vignettes/ex_data/li7500/rawC-flux.zip",
+      exdir = "vignettes/ex_data/li7500/rawC-flux")
+```
+
+Now we can read the data.
+This is a similar process as described in 
+
+Just to try
+```{r reading, include = FALSE}
+library(tidyverse)
+
+test <- read_tsv("vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux/raw_c-flux_2018_March/ACJ_B_15mar2018/ACJ_B_15mar2018_plot1_a.txt", skip = 10)
+```
+
+```{r reading, include = FALSE}
+library(tidyverse)
+
+raw_conc <- list.files( # list the files
+  "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
+  full.names = TRUE,
+  recursive = TRUE # to read in subfolders
+) |>
+  map_dfr(
+    read_csv, # we map read_csv on all the files
+    na = c("#N/A", "Over"), # "#N/A" and Over should be treated as NA
+    show_col_types = FALSE # just to make it quiet
+  ) |>
+  rename(
+    conc = "CO2 umol/mol"
+  ) |>
+  mutate(
+    datetime = dmy_hms(`Date/Time`)
+  ) |>
+  select(datetime, conc)
 ```
 
 ## Processing with fluxible
