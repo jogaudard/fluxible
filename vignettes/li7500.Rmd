@@ -1,0 +1,37 @@
+---
+title: "Using fluxible with the Li7500"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Preparing the data for fluxible}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: biblio_phd_zot.bib
+csl: emerald-harvard.csl
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(tidyverse.quiet = TRUE)
+```
+
+In this vignette, we will see how to read the data from the setup described in @halbritterPlantTraitVegetation2024 and compare the output calculated with fluxible with the published data.
+
+The code used to import the data might be turned into a package later.
+
+## Importing and reading the files
+
+First, we import the data from OSF using the [dataDownloader](https://github.com/Between-the-Fjords/dataDownloader) R package.
+
+```{r osf-import, include = FALSE}
+
+```
+
+## Processing with fluxible
+
+
+## Comparison
+
+### Importing and reading published data
