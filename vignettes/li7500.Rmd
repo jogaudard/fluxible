@@ -40,37 +40,35 @@ unzip("vignettes/ex_data/li7500/rawC-flux.zip",
 Then we import the data with `licoread::import7500`.
 ```{r reading}
 library(licoread)
-data <- import7500(
+pftc5_data <- import7500(
   "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
-  comment = TRUE,
   plotinfo_names = c("site", "block", "date", "plot", "trial")
 )
 ```
 
-```{r reading-old, include = TRUE}
-library(tidyverse)
-
-raw_conc <- list.files( # list the files
-  "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
-  full.names = TRUE,
-  recursive = TRUE # to read in subfolders
-) |>
-  map_dfr(
-    read_csv, # we map read_csv on all the files
-    na = c("#N/A", "Over"), # "#N/A" and Over should be treated as NA
-    show_col_types = FALSE # just to make it quiet
-  ) |>
-  rename(
-    conc = "CO2 umol/mol"
-  ) |>
-  mutate(
-    datetime = dmy_hms(`Date/Time`)
-  ) |>
-  select(datetime, conc)
-```
 
 ## Processing with fluxible
+Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`.
 
+```{r fitting}
+library(fluxible)
+pftc5_fits <- flux_fitting(pftc5_data,
+                           f_conc = `CO2 umol/mol`,
+                           fit_type = "exp_zhao18")
+```
+
+Using `fluxible::flux_quality` to assess the quality of the dataset.
+```{r flags}
+pftc5_flags <- flux_quality(pftc5_fits,
+                            f_conc = `CO2 umol/mol`)
+```
+
+Then plotting (in an external file) for a visual check.
+```{r plotting}
+flux_plot(pftc5_flags,
+          print_plot = FALSE,
+          output = "longpdf")
+```
 
 ## Comparison
 
