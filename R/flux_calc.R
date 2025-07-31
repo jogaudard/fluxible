@@ -61,7 +61,7 @@
 #' `cols_keep`, any column specified in `cols_ave`, `cols_med` or `cols_sum`
 #' with their values treated accordingly over the measurement after cuts, and a
 #' column `nested_variables` with the variables specified in `cols_nest`.
-#' @importFrom rlang .data :=
+#' @importFrom rlang .data := enquo quo_is_symbolic as_label
 #' @importFrom dplyr select group_by summarise rename_with nest_by
 #' ungroup mutate case_when distinct left_join across everything
 #' @importFrom tidyselect any_of
@@ -141,7 +141,7 @@ flux_calc <- function(slopes_df,
     flux_unit <- "umol/m2/h"
   }
 
-  name_df <- deparse(substitute(slopes_df))
+  name_df <- as_label(enquo(slopes_df))
 
   colnames <- colnames(slopes_df)
   if (length(setdiff(cols_keep, colnames)) > 0) {
@@ -223,9 +223,9 @@ flux_calc <- function(slopes_df,
   }
 
 
-  name_vol <- deparse(substitute(setup_volume))
-  name_atm <- deparse(substitute(atm_pressure))
-  name_plot <- deparse(substitute(plot_area))
+  name_vol <- as_label(enquo(setup_volume))
+  name_atm <- as_label(enquo(atm_pressure))
+  name_plot <- as_label(enquo(plot_area))
 
   message("Averaging air temperature for each flux...")
   slope_temp <- slopes_df |>
@@ -347,7 +347,7 @@ flux_calc <- function(slopes_df,
       .by = {{f_fluxid}}
     )
 
-  if (is.numeric({{atm_pressure}})) {
+  if (!quo_is_symbolic(enquo(atm_pressure))) {
     fluxes <- fluxes |>
       select(!"f_atm_pressure_ave")
   }
