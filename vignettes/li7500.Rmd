@@ -23,9 +23,9 @@ The code used to import the data might be turned into a package later.
 
 ## Importing and reading the files
 
-First, we import the data from OSF using the [dataDownloader](https://github.com/Between-the-Fjords/dataDownloader) R package.
+First, we import the data from OSF with `dataDownloader::get_file`.
 
-```{r osf-import, include = FALSE}
+```{r osf-import, include = TRUE}
 library(dataDownloader)
 
 get_file("gs8u6",
@@ -37,17 +37,17 @@ unzip("vignettes/ex_data/li7500/rawC-flux.zip",
       exdir = "vignettes/ex_data/li7500/rawC-flux")
 ```
 
-Now we can read the data.
-This is a similar process as described in 
-
-Just to try
-```{r reading, include = FALSE}
-library(tidyverse)
-
-test <- read_tsv("vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux/raw_c-flux_2018_March/ACJ_B_15mar2018/ACJ_B_15mar2018_plot1_a.txt", skip = 10)
+Then we import the data with `licoread::import7500`.
+```{r reading}
+library(licoread)
+data <- import7500(
+  "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
+  comment = TRUE,
+  plotinfo_names = c("site", "block", "date", "plot", "trial")
+)
 ```
 
-```{r reading, include = FALSE}
+```{r reading-old, include = TRUE}
 library(tidyverse)
 
 raw_conc <- list.files( # list the files
