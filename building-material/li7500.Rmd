@@ -1,12 +1,13 @@
 ---
 title: "Using fluxible with the Li7500"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Preparing the data for fluxible}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-bibliography: biblio_phd_zot.bib
-csl: emerald-harvard.csl
+output: github_document
+# output: rmarkdown::html_vignette
+# vignette: >
+#   %\VignetteIndexEntry{Preparing the data for fluxible}
+#   %\VignetteEngine{knitr::rmarkdown}
+#   %\VignetteEncoding{UTF-8}
+# bibliography: biblio_phd_zot.bib
+# csl: emerald-harvard.csl
 ---
 
 ```{r, include = FALSE}
@@ -40,10 +41,16 @@ unzip("vignettes/ex_data/li7500/rawC-flux.zip",
 Then we import the data with `licoread::import7500`.
 ```{r reading}
 library(licoread)
+library(tidyverse)
 pftc5_data <- import7500(
   "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
-  plotinfo_names = c("site", "block", "date", "plot", "trial")
+  plotinfo_names = c("site", "treatment", "date", "plot_id", "trial")
 )
+
+pftc5_data <- pftc5_data |>
+  mutate(
+    f_end = f_start + 120
+  )
 ```
 
 
@@ -54,16 +61,19 @@ Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_e
 library(fluxible)
 pftc5_fits <- flux_fitting(pftc5_data,
                            f_conc = `CO2 umol/mol`,
-                           fit_type = "exp_zhao18")
+                           fit_type = "linear",
+                           start_cut = 20,
+                           end_cut = 10)
 ```
 
 Using `fluxible::flux_quality` to assess the quality of the dataset.
 ```{r flags}
 pftc5_flags <- flux_quality(pftc5_fits,
-                            f_conc = `CO2 umol/mol`)
+                            f_conc = `CO2 umol/mol`,
+                            rsquared_threshold = 0.5)
 ```
 
-```{r sites, include = FALSE}
+```{r sites, include = FALSE, echo = FALSE}
 pftc5_flags |>
   dplyr::select(site) |>
   dplyr::distinct()
@@ -106,6 +116,16 @@ pftc5_flags |>
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "WAY_plot")
+
+pftc5_flags |>
+  dplyr::filter(f_quality_flag == "zero") |>
+  flux_plot(f_conc = `CO2 umol/mol`,
+            print_plot = FALSE,
+            output = "longpdf",
+            f_ylim_upper = 500,
+            f_ylim_lower = 350,
+            y_text_position = 450,
+            f_plotname = "zero_plot")
 ```
 
 Now let's calculate the fluxes with `fluxible::flux_calc`.
@@ -117,9 +137,73 @@ pftc5_fluxes <- flux_calc(pftc5_flags,
                           atm_pressure = pressure_atm,
                           plot_area = 1.44,
                           conc_unit = "ppm",
-                          flux_unit = "umol/m2/s")
+                          flux_unit = "umol/m2/s",
+                          cols_keep = c(
+                            "site", "treatment", "date", "plot_id", "trial"
+                          ))
 ```
 
 ## Comparison
 
-### Importing and reading published data
+Let's format the fluxible fluxes in a similar way.
+```{r fluxible-format}
+pftc5_fluxible_fluxes <- pftc5_fluxes |>
+  rename(
+    fluxible_flux = "f_flux"
+  ) |>
+  mutate(
+    plot_id = as.integer(str_extract(plot_id, "\\d+")),
+    flux = case_when(
+      trial == "r" ~ "Reco",
+      trial == "p" ~ "NEE",
+      trial == "p1" ~ "NEE1", # ideally a column "replicate" for that...
+      trial == "p2" ~ "NEE2",
+      trial == "p3" ~ "NEE3",
+    ),
+    date = as_date(f_datetime),
+    fluxible_flux = -fluxible_flux # the opposite convention was used for PFTC5
+  ) |>
+  drop_na(flux) # cleaning
+```
+
+Now download and format PFTC5 fluxes.
+```{r pftc5-fluxes}
+get_file("gs8u6",
+         "c-flux",
+         "PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
+         "vignettes/ex_data/li7500")
+
+pftc5_published_fluxes <- read_csv(
+  "vignettes/ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
+  show_col_types = FALSE # quiet!
+)
+
+pftc5_published_fluxes <- pftc5_published_fluxes |>
+  mutate(
+    date = ymd(paste(year, month, day))
+  ) |>
+  pivot_longer(c(linear_model, nls_model), values_to = "published_fluxes", names_to = "model")
+```
+
+Putting them together:
+```{r gathering}
+pftc5_fluxes_comparison <- left_join(pftc5_published_fluxes, pftc5_fluxible_fluxes, by = join_by(date, flux, site, treatment, plot_id))
+```
+
+```{r figure}
+pftc5_fluxes_comparison |>
+  ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
+  theme_bw() +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0) +
+  geom_smooth(
+    method = "lm"
+  ) +
+  geom_text(aes(label = f_fluxid), vjust = -0.5)
+```
+
+```{r cleaning, include = FALSE, eval = FALSE}
+unlink("building-material/vignettes/ex_data/li7500", recursive = TRUE)
+```
+
+
