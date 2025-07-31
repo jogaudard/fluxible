@@ -1,3 +1,7 @@
+# fluxible 1.2.11
+
+* `flux_calc`: fixed bug when `atm_pressure` is a variable
+
 # fluxible 1.2.10
 
 * `flux_lrc`: output is now in long format (fluxes in same column, additional column indicating PAR correction), which makes it easier to handle with `flux_gpp`.
