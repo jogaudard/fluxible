@@ -47,10 +47,11 @@ pftc5_data <- import7500(
   plotinfo_names = c("site", "treatment", "date", "plot_id", "trial")
 )
 
-pftc5_data <- pftc5_data |>
-  mutate(
-    f_end = f_start + 120
-  )
+# a try to mimic the cuts done in PFTC5
+# pftc5_data <- pftc5_data |>
+#   mutate(
+#     f_end = f_start + 120
+#   )
 ```
 
 
@@ -61,9 +62,9 @@ Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_e
 library(fluxible)
 pftc5_fits <- flux_fitting(pftc5_data,
                            f_conc = `CO2 umol/mol`,
-                           fit_type = "linear",
-                           start_cut = 20,
-                           end_cut = 10)
+                           fit_type = "exp_zhao18",
+                           start_cut = 0,
+                           end_cut = 0)
 ```
 
 Using `fluxible::flux_quality` to assess the quality of the dataset.
@@ -167,6 +168,8 @@ pftc5_fluxible_fluxes <- pftc5_fluxes |>
 ```
 
 Now download and format PFTC5 fluxes.
+In the clean data on OSF, both linear and nls fluxes are available.
+Which one to choose is not explicit (but I am tired, do not quote me on that), so we will just take the one with the lowest aic for now.
 ```{r pftc5-fluxes}
 get_file("gs8u6",
          "c-flux",
@@ -180,19 +183,26 @@ pftc5_published_fluxes <- read_csv(
 
 pftc5_published_fluxes <- pftc5_published_fluxes |>
   mutate(
-    date = ymd(paste(year, month, day))
-  ) |>
-  pivot_longer(c(linear_model, nls_model), values_to = "published_fluxes", names_to = "model")
+    date = ymd(paste(year, month, day)),
+    published_fluxes = case_when(
+      linear_aic <= nls_aic ~ linear_model,
+      linear_aic > nls_aic ~ nls_model
+    )
+  )
 ```
 
 Putting them together:
 ```{r gathering}
-pftc5_fluxes_comparison <- left_join(pftc5_published_fluxes, pftc5_fluxible_fluxes, by = join_by(date, flux, site, treatment, plot_id))
+pftc5_fluxes_comparison <- left_join(pftc5_published_fluxes,
+                                     pftc5_fluxible_fluxes,
+                                     by = join_by(date, flux,
+                                                  site, treatment,
+                                                  plot_id))
 ```
 
 ```{r figure}
 pftc5_fluxes_comparison |>
-  ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
+  ggplot(aes(fluxible_flux, published_fluxes)) +
   theme_bw() +
   geom_point() +
   geom_abline(slope = 1, intercept = 0) +
@@ -203,7 +213,9 @@ pftc5_fluxes_comparison |>
 ```
 
 ```{r cleaning, include = FALSE, eval = TRUE}
-unlink("building-material/vignettes/ex_data/li7500", recursive = TRUE)
+library(here)
+unlink(here("building-material", "vignettes", "ex_data", "li7500"),
+       recursive = TRUE)
 ```
 
 
