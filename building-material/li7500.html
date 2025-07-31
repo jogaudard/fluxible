@@ -618,10 +618,11 @@ files</h2>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>         <span class="st">&quot;rawData/raw_c-flux&quot;</span>,</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>         <span class="st">&quot;rawC-flux.zip&quot;</span>,</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>         <span class="st">&quot;vignettes/ex_data/li7500&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; rawC-flux.zip already up to date.</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">unzip</span>(<span class="st">&quot;vignettes/ex_data/li7500/rawC-flux.zip&quot;</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>      <span class="at">exdir =</span> <span class="st">&quot;vignettes/ex_data/li7500/rawC-flux&quot;</span>)</span></code></pre></div>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; Creating missing path &#39;vignettes/ex_data/li7500&#39;</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt; &#39;rawC-flux.zip&#39; downloaded succesfully</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">unzip</span>(<span class="st">&quot;vignettes/ex_data/li7500/rawC-flux.zip&quot;</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>      <span class="at">exdir =</span> <span class="st">&quot;vignettes/ex_data/li7500/rawC-flux&quot;</span>)</span></code></pre></div>
 <p>Then we import the data with <code>licoread::import7500</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(licoread)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -629,15 +630,16 @@ files</h2>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="st">&quot;vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux&quot;</span>,</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">plotinfo_names =</span> <span class="fu">c</span>(<span class="st">&quot;site&quot;</span>, <span class="st">&quot;treatment&quot;</span>, <span class="st">&quot;date&quot;</span>, <span class="st">&quot;plot_id&quot;</span>, <span class="st">&quot;trial&quot;</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>)</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■                          23% |  ETA:  8s</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■■■■■■■■■■                 52% |  ETA:  5s</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■■■■■■■■■■■■■■■■           75% |  ETA:  3s</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    97% |  ETA:  0s</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>pftc5_data <span class="ot">&lt;-</span> pftc5_data <span class="sc">|&gt;</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    <span class="at">f_end =</span> f_start <span class="sc">+</span> <span class="dv">120</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  )</span></code></pre></div>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;  ■■■■                              12% |  ETA: 11s</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■■■■■■                     39% |  ETA:  7s</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■■■■■■■■■■■■■■             65% |  ETA:  4s</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■■■■■■■■■■■■■■■■■■■        83% |  ETA:  2s</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% |  ETA:  0s</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>pftc5_data <span class="ot">&lt;-</span> pftc5_data <span class="sc">|&gt;</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="at">f_end =</span> f_start <span class="sc">+</span> <span class="dv">120</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  )</span></code></pre></div>
 <h2 id="processing-with-fluxible">Processing with fluxible</h2>
 <p>Since the <code>licoread::import7500</code> already provides
 <code>f_fluxid</code>, <code>f_start</code> and <code>f_end</code>, we
@@ -648,101 +650,7 @@ can skip <code>fluxible::flux_match</code> and directly fit with
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                           <span class="at">f_conc =</span> <span class="st">`</span><span class="at">CO2 umol/mol</span><span class="st">`</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                           <span class="at">fit_type =</span> <span class="st">&quot;linear&quot;</span>,</span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>                           <span class="at">start_cut =</span> <span class="dv">20</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                           <span class="at">end_cut =</span> <span class="dv">10</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Warning in flux_fitting(pftc5_data, f_conc = `CO2 umol/mol`, fit_type = &quot;linear&quot;, : </span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot1_a.txt : slope was estimated on 10 points out of 90 seconds</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot1_p.txt : slope was estimated on 86 points out of 90 seconds</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot1_r.txt : slope was estimated on 83 points out of 90 seconds</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot2_a.txt : slope was estimated on 15 points out of 90 seconds</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot2_p.txt : slope was estimated on 63 points out of 90 seconds</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot3_a.txt : slope was estimated on 19 points out of 90 seconds</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot3_p.txt : slope was estimated on 38 points out of 90 seconds</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot4_a.txt : slope was estimated on 13 points out of 90 seconds</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot5_a.txt : slope was estimated on 16 points out of 90 seconds</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_15mar2018_plot5_p.txt : slope was estimated on 87 points out of 90 seconds</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot1_a.txt : slope was estimated on 12 points out of 90 seconds</span></span>
-<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot2_a.txt : slope was estimated on 9 points out of 90 seconds</span></span>
-<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot2_p.txt : slope was estimated on 88 points out of 90 seconds</span></span>
-<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot3_a.txt : slope was estimated on 17 points out of 90 seconds</span></span>
-<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot3_p.txt : slope was estimated on 54 points out of 90 seconds</span></span>
-<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot4_a.txt : slope was estimated on 20 points out of 90 seconds</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot4_r.txt : slope was estimated on 79 points out of 90 seconds</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot5_a.txt : slope was estimated on 10 points out of 90 seconds</span></span>
-<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_15mar2018_plot5_p.txt : slope was estimated on 65 points out of 90 seconds</span></span>
-<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_B_13mar2018_plot1_a.txt : slope was estimated on 9 points out of 90 seconds</span></span>
-<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_B_13mar2018_plot1_p.txt : slope was estimated on 87 points out of 90 seconds</span></span>
-<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_B_13mar2018_plot2_a.txt : slope was estimated on 16 points out of 90 seconds</span></span>
-<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_B_13mar2018_plot3_a.txt : slope is NA, most likely an issue with the model optimization.</span></span>
-<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt;         Check your data or use a different model.</span></span>
-<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_B_13mar2018_plot4_a.txt : slope was estimated on 13 points out of 90 seconds</span></span>
-<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_B_13mar2018_plot4_r.txt : slope was estimated on 83 points out of 90 seconds</span></span>
-<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_B_13mar2018_plot5_a.txt : slope was estimated on 17 points out of 90 seconds</span></span>
-<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_BB_14mar2018_plot1_a.txt : slope was estimated on 18 points out of 90 seconds</span></span>
-<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_BB_14mar2018_plot2_a.txt : slope was estimated on 13 points out of 90 seconds</span></span>
-<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_BB_14mar2018_plot2_p.txt : slope was estimated on 68 points out of 90 seconds</span></span>
-<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_BB_14mar2018_plot3_a.txt : slope was estimated on 15 points out of 90 seconds</span></span>
-<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_C_14mar2018_plot1_a.txt : slope was estimated on 10 points out of 90 seconds</span></span>
-<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_C_14mar2018_plot2_a.txt : slope was estimated on 14 points out of 90 seconds</span></span>
-<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_C_14mar2018_plot2_r.txt : slope was estimated on 78 points out of 90 seconds</span></span>
-<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_C_14mar2018_plot3_a.txt : slope was estimated on 20 points out of 90 seconds</span></span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_C_14mar2018_plot3_p.txt : slope was estimated on 81 points out of 90 seconds</span></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_C_14mar2018_plot4_a.txt : slope was estimated on 29 points out of 90 seconds</span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt;  fluxID PIL_C_14mar2018_plot5_a.txt : slope was estimated on 23 points out of 90 seconds</span></span>
-<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot1_a.txt : slope was estimated on 36 points out of 90 seconds</span></span>
-<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot1_p.txt : slope was estimated on 56 points out of 90 seconds</span></span>
-<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot2_a.txt : slope was estimated on 19 points out of 90 seconds</span></span>
-<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot2_r.txt : slope was estimated on 87 points out of 90 seconds</span></span>
-<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot3_a.txt : slope was estimated on 18 points out of 90 seconds</span></span>
-<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot3_p.txt : slope was estimated on 85 points out of 90 seconds</span></span>
-<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot4_a.txt : slope was estimated on 30 points out of 90 seconds</span></span>
-<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt;  fluxID QUE_B_17mar2018_plot5_a.txt : slope was estimated on 13 points out of 90 seconds</span></span>
-<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot1_a.txt : slope was estimated on 24 points out of 90 seconds</span></span>
-<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot1_p.txt : slope was estimated on 83 points out of 90 seconds</span></span>
-<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot2_a.txt : slope was estimated on 29 points out of 90 seconds</span></span>
-<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot2_r.txt : slope was estimated on 85 points out of 90 seconds</span></span>
-<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot3_a.txt : slope was estimated on 56 points out of 90 seconds</span></span>
-<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot4_a.txt : slope was estimated on 15 points out of 90 seconds</span></span>
-<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot4_r.txt : slope was estimated on 87 points out of 90 seconds</span></span>
-<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_B_12mar2018_plot5_a.txt : slope was estimated on 19 points out of 90 seconds</span></span>
-<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_C_12mar2018_plot1_a.txt : slope was estimated on 29 points out of 90 seconds</span></span>
-<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_C_12mar2018_plot1_p.txt : slope was estimated on 87 points out of 90 seconds</span></span>
-<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_C_12mar2018_plot2_a.txt : slope is NA, most likely an issue with the model optimization.</span></span>
-<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a><span class="co">#&gt;         Check your data or use a different model.</span></span>
-<span id="cb3-66"><a href="#cb3-66" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_C_12mar2018_plot3_a.txt : slope was estimated on 24 points out of 90 seconds</span></span>
-<span id="cb3-67"><a href="#cb3-67" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_C_12mar2018_plot4_a.txt : slope was estimated on 21 points out of 90 seconds</span></span>
-<span id="cb3-68"><a href="#cb3-68" tabindex="-1"></a><span class="co">#&gt;  fluxID WAY_C_12mar2018_plot5_a.txt : slope was estimated on 12 points out of 90 seconds</span></span>
-<span id="cb3-69"><a href="#cb3-69" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot1_a.txt : slope was estimated on 10 points out of 90 seconds</span></span>
-<span id="cb3-70"><a href="#cb3-70" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot1_p.txt : slope was estimated on 47 points out of 90 seconds</span></span>
-<span id="cb3-71"><a href="#cb3-71" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot1_p1.txt : slope was estimated on 66 points out of 90 seconds</span></span>
-<span id="cb3-72"><a href="#cb3-72" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot1_p2.txt : slope was estimated on 73 points out of 90 seconds</span></span>
-<span id="cb3-73"><a href="#cb3-73" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot1_p3.txt : slope was estimated on 72 points out of 90 seconds</span></span>
-<span id="cb3-74"><a href="#cb3-74" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot1_r.txt : slope was estimated on 71 points out of 90 seconds</span></span>
-<span id="cb3-75"><a href="#cb3-75" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot2_a.txt : slope was estimated on 13 points out of 90 seconds</span></span>
-<span id="cb3-76"><a href="#cb3-76" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot2_p.txt : slope was estimated on 80 points out of 90 seconds</span></span>
-<span id="cb3-77"><a href="#cb3-77" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot2_p1.txt : slope was estimated on 66 points out of 90 seconds</span></span>
-<span id="cb3-78"><a href="#cb3-78" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot2_p2.txt : slope was estimated on 68 points out of 90 seconds</span></span>
-<span id="cb3-79"><a href="#cb3-79" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot2_p3.txt : slope was estimated on 72 points out of 90 seconds</span></span>
-<span id="cb3-80"><a href="#cb3-80" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot2_r.txt : slope was estimated on 71 points out of 90 seconds</span></span>
-<span id="cb3-81"><a href="#cb3-81" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot3_a.txt : slope was estimated on 14 points out of 90 seconds</span></span>
-<span id="cb3-82"><a href="#cb3-82" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot3_p.txt : slope was estimated on 70 points out of 90 seconds</span></span>
-<span id="cb3-83"><a href="#cb3-83" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot3_p1.txt : slope was estimated on 64 points out of 90 seconds</span></span>
-<span id="cb3-84"><a href="#cb3-84" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot3_p2.txt : slope was estimated on 44 points out of 90 seconds</span></span>
-<span id="cb3-85"><a href="#cb3-85" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot3_p3.txt : slope was estimated on 71 points out of 90 seconds</span></span>
-<span id="cb3-86"><a href="#cb3-86" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot3_r.txt : slope was estimated on 58 points out of 90 seconds</span></span>
-<span id="cb3-87"><a href="#cb3-87" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot4_a.txt : slope was estimated on 9 points out of 90 seconds</span></span>
-<span id="cb3-88"><a href="#cb3-88" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot4_p.txt : slope was estimated on 73 points out of 90 seconds</span></span>
-<span id="cb3-89"><a href="#cb3-89" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot4_p1.txt : slope was estimated on 75 points out of 90 seconds</span></span>
-<span id="cb3-90"><a href="#cb3-90" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot4_p2.txt : slope was estimated on 68 points out of 90 seconds</span></span>
-<span id="cb3-91"><a href="#cb3-91" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot4_p3.txt : slope was estimated on 73 points out of 90 seconds</span></span>
-<span id="cb3-92"><a href="#cb3-92" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot4_r.txt : slope was estimated on 65 points out of 90 seconds</span></span>
-<span id="cb3-93"><a href="#cb3-93" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot5_a.txt : slope was estimated on 9 points out of 90 seconds</span></span>
-<span id="cb3-94"><a href="#cb3-94" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot5_p.txt : slope was estimated on 52 points out of 90 seconds</span></span>
-<span id="cb3-95"><a href="#cb3-95" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot5_p1.txt : slope was estimated on 72 points out of 90 seconds</span></span>
-<span id="cb3-96"><a href="#cb3-96" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot5_p2.txt : slope was estimated on 70 points out of 90 seconds</span></span>
-<span id="cb3-97"><a href="#cb3-97" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot5_p3.txt : slope was estimated on 71 points out of 90 seconds</span></span>
-<span id="cb3-98"><a href="#cb3-98" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_B_10apr2019_plot5_r.txt : slope was estimated on 68 points out of 90 seconds</span></span>
-<span id="cb3-99"><a href="#cb3-99" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_10apr2019_plot1_a.txt : slope was estimated on 14 points out of 90 seconds</span></span>
-<span id="cb3-100"><a href="#cb3-100" tabindex="-1"></a><span class="co">#&gt;  fluxID ACJ_C_10apr2019_plot1_p.txt : sl</span></span></code></pre></div>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                           <span class="at">end_cut =</span> <span class="dv">10</span>)</span></code></pre></div>
 <p>Using <code>fluxible::flux_quality</code> to assess the quality of
 the dataset.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>pftc5_flags <span class="ot">&lt;-</span> <span class="fu">flux_quality</span>(pftc5_fits,</span>
@@ -851,7 +759,7 @@ the number of data, we will do it per site to make it lighter.</p>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>         <span class="st">&quot;c-flux&quot;</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>         <span class="st">&quot;PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv&quot;</span>,</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>         <span class="st">&quot;vignettes/ex_data/li7500&quot;</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv already up to date.</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; &#39;PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv&#39; downloaded succesfully</span></span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>pftc5_published_fluxes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
 <span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="st">&quot;vignettes/ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv&quot;</span>,</span>

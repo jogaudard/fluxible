@@ -57,7 +57,7 @@ pftc5_data <- pftc5_data |>
 ## Processing with fluxible
 Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`.
 
-```{r fitting}
+```{r fitting, message = FALSE, warning = FALSE}
 library(fluxible)
 pftc5_fits <- flux_fitting(pftc5_data,
                            f_conc = `CO2 umol/mol`,
@@ -202,7 +202,7 @@ pftc5_fluxes_comparison |>
   geom_text(aes(label = f_fluxid), vjust = -0.5)
 ```
 
-```{r cleaning, include = FALSE, eval = FALSE}
+```{r cleaning, include = FALSE, eval = TRUE}
 unlink("building-material/vignettes/ex_data/li7500", recursive = TRUE)
 ```
 
