@@ -1,0 +1,125 @@
+---
+title: "Using fluxible with the Li7500"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Preparing the data for fluxible}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: biblio_phd_zot.bib
+csl: emerald-harvard.csl
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(tidyverse.quiet = TRUE)
+```
+
+In this vignette, we will see how to read the data from the setup described in @halbritterPlantTraitVegetation2024 and compare the output calculated with fluxible with the published data.
+
+The code used to import the data might be turned into a package later.
+
+## Importing and reading the files
+
+First, we import the data from OSF with `dataDownloader::get_file`.
+
+```{r osf-import, include = TRUE}
+library(dataDownloader)
+
+get_file("gs8u6",
+         "rawData/raw_c-flux",
+         "rawC-flux.zip",
+         "vignettes/ex_data/li7500")
+
+unzip("vignettes/ex_data/li7500/rawC-flux.zip",
+      exdir = "vignettes/ex_data/li7500/rawC-flux")
+```
+
+Then we import the data with `licoread::import7500`.
+```{r reading}
+library(licoread)
+pftc5_data <- import7500(
+  "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
+  plotinfo_names = c("site", "block", "date", "plot", "trial")
+)
+```
+
+
+## Processing with fluxible
+Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`.
+
+```{r fitting}
+library(fluxible)
+pftc5_fits <- flux_fitting(pftc5_data,
+                           f_conc = `CO2 umol/mol`,
+                           fit_type = "exp_zhao18")
+```
+
+Using `fluxible::flux_quality` to assess the quality of the dataset.
+```{r flags}
+pftc5_flags <- flux_quality(pftc5_fits,
+                            f_conc = `CO2 umol/mol`)
+```
+
+```{r sites, include = FALSE}
+pftc5_flags |>
+  dplyr::select(site) |>
+  dplyr::distinct()
+```
+
+Then plotting (in an external file) for a visual check.
+Because of the number of data, we will do it per site to make it lighter.
+```{r plotting, eval = FALSE}
+pftc5_flags |>
+  dplyr::filter(site == "ACJ") |>
+  flux_plot(f_conc = `CO2 umol/mol`,
+            print_plot = FALSE,
+            output = "longpdf",
+            f_plotname = "ACJ_plot")
+
+pftc5_flags |>
+  dplyr::filter(site == "PIL") |>
+  flux_plot(f_conc = `CO2 umol/mol`,
+            print_plot = FALSE,
+            output = "longpdf",
+            f_plotname = "PIL_plot")
+
+pftc5_flags |>
+  dplyr::filter(site == "QUE") |>
+  flux_plot(f_conc = `CO2 umol/mol`,
+            print_plot = FALSE,
+            output = "longpdf",
+            f_plotname = "QUE_plot")
+
+pftc5_flags |>
+  dplyr::filter(site == "TRE") |>
+  flux_plot(f_conc = `CO2 umol/mol`,
+            print_plot = FALSE,
+            output = "longpdf",
+            f_plotname = "TRE_plot")
+
+pftc5_flags |>
+  dplyr::filter(site == "WAY") |>
+  flux_plot(f_conc = `CO2 umol/mol`,
+            print_plot = FALSE,
+            output = "longpdf",
+            f_plotname = "WAY_plot")
+```
+
+Now let's calculate the fluxes with `fluxible::flux_calc`.
+```{r calc}
+pftc5_fluxes <- flux_calc(pftc5_flags,
+                          slope_col = f_slope_corr,
+                          temp_air_col = Temperature,
+                          setup_volume = 2197,
+                          atm_pressure = pressure_atm,
+                          plot_area = 1.44,
+                          conc_unit = "ppm",
+                          flux_unit = "umol/m2/s")
+```
+
+## Comparison
+
+### Importing and reading published data
