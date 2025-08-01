@@ -441,7 +441,7 @@ pftc5_fluxes_exp_h2o <- flux_calc(pftc5_flags_exp_h2o,
                                   setup_volume = 2197,
                                   atm_pressure = pressure_atm,
                                   plot_area = 1.44,
-                                  conc_unit = "ppt",
+                                  conc_unit = "mmol/mol",
                                   flux_unit = "mmol/m2/s",
                                   cols_keep = c(
                                     "site", "treatment", "date", "plot_id",
@@ -532,7 +532,7 @@ pftc5_fluxes_lm_h2o <- flux_calc(pftc5_flags_lm_h2o,
                                  setup_volume = 2197,
                                  atm_pressure = pressure_atm,
                                  plot_area = 1.44,
-                                 conc_unit = "ppt",
+                                 conc_unit = "mmol/mol",
                                  flux_unit = "mmol/m2/s",
                                  cols_keep = c(
                                    "site", "treatment", "date", "plot_id",
@@ -609,8 +609,8 @@ Let's format the fluxible fluxes in a similar way.
 ```{r fluxible-format_h2o}
 pftc5_fluxible_fluxes_h2o <- pftc5_fluxes_exp_h2o |>
   bind_rows(pftc5_fluxes_lm_h2o) |>
-  mutate(
-    fluxible_flux = -f_flux # the opposite convention was used for PFTC5
+  rename(
+    fluxible_flux = "f_flux"
   ) |>
   drop_na(flux) # removing amb measurements
 ```
