@@ -1,5 +1,5 @@
 #' wet air correction
-#' @descripton Corrects for the amount of water vapor inside the air
+#' @description Corrects for the amount of water vapor inside the air
 #' @param conc_df dataframe of gas concentration over time
 #' @param gas_wet the gas to correct
 #' @param h2o_wet water vapor concentration before correction (in ppt)
