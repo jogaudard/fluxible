@@ -374,7 +374,9 @@ Using `fluxible::flux_quality` to assess the quality of the dataset.
 ```{r flags_exp_h2o}
 pftc5_flags_exp_h2o <- flux_quality(pftc5_fits_exp_h2o,
                                     f_conc = `H2O mmol/mol_dry`,
-                                    rsquared_threshold = 0.5)
+                                    rsquared_threshold = 0.5,
+                                    ambient_conc = 40, # the default is for CO2
+                                    error = 20)
 ```
 
 
@@ -440,7 +442,7 @@ pftc5_fluxes_exp_h2o <- flux_calc(pftc5_flags_exp_h2o,
                                   atm_pressure = pressure_atm,
                                   plot_area = 1.44,
                                   conc_unit = "ppt",
-                                  flux_unit = "umol/m2/s",
+                                  flux_unit = "mmol/m2/s",
                                   cols_keep = c(
                                     "site", "treatment", "date", "plot_id",
                                     "flux", "replicate"
@@ -451,7 +453,7 @@ pftc5_fluxes_exp_h2o <- flux_calc(pftc5_flags_exp_h2o,
 
 Fitting a linar model.
 ```{r fitting_lm_h2o, message = FALSE, warning = FALSE}
-pftc5_fits_lm_h2o <- flux_fitting(pftc5_match,
+pftc5_fits_lm_h2o <- flux_fitting(pftc5_match_h2o,
                                   f_conc = `H2O mmol/mol_dry`,
                                   fit_type = "linear",
                                   start_cut = 0,
@@ -462,7 +464,9 @@ Using `fluxible::flux_quality` to assess the quality of the dataset.
 ```{r flags_lm_h2o}
 pftc5_flags_lm_h2o <- flux_quality(pftc5_fits_lm_h2o,
                                    f_conc = `H2O mmol/mol_dry`,
-                                   rsquared_threshold = 0.5)
+                                   rsquared_threshold = 0.5,
+                                   ambient_conc = 40, # the default is for CO2
+                                   error = 20)
 ```
 
 
@@ -529,7 +533,7 @@ pftc5_fluxes_lm_h2o <- flux_calc(pftc5_flags_lm_h2o,
                                  atm_pressure = pressure_atm,
                                  plot_area = 1.44,
                                  conc_unit = "ppt",
-                                 flux_unit = "umol/m2/s",
+                                 flux_unit = "mmol/m2/s",
                                  cols_keep = c(
                                    "site", "treatment", "date", "plot_id",
                                    "flux", "replicate"
@@ -574,7 +578,7 @@ pftc5_fluxes_comparison_co2 <- left_join(pftc5_published_fluxes_co2,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_co2, echo=FALSE, fig.cap="Comparison of fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
+```{r figure_co2, echo=FALSE, fig.cap="Comparison of CO~2~ fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
 
 pftc5_fluxes_comparison_co2 |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
@@ -590,7 +594,7 @@ pftc5_fluxes_comparison_co2 |>
   ) +
   facet_grid(f_model ~ flux, scales = "free") +
   labs(
-    title = "Reprocessing of PFTC5 flux data",
+    title = "Reprocessing of PFTC5 CO~2~ flux data",
     x = "Fluxes calculated with Fluxible (exp_zhao18 and linear model respectively)",
     y = "Fluxes as published in the data paper",
     color = "Model (PFTC5)"
@@ -645,7 +649,7 @@ pftc5_published_fluxes_h2o <- pftc5_published_fluxes_h2o |>
     )
   )
 
-pftc5_published_fluxes <- pftc5_published_fluxes |>
+pftc5_published_fluxes_h2o <- pftc5_published_fluxes_h2o |>
   pivot_longer(
     c(linear_model, nls_model),
     values_to = "published_fluxes",
@@ -663,7 +667,7 @@ pftc5_fluxes_comparison_h2o <- left_join(pftc5_published_fluxes_h2o,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_h2o, echo=FALSE, fig.cap="Comparison of fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
+```{r figure_h2o, echo=FALSE, fig.cap="Comparison of H~2~O fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
 
 pftc5_fluxes_comparison_h2o |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
@@ -679,7 +683,7 @@ pftc5_fluxes_comparison_h2o |>
   ) +
   facet_grid(f_model ~ flux, scales = "free") +
   labs(
-    title = "Reprocessing of PFTC5 flux data",
+    title = "Reprocessing of PFTC5 H~2~O flux data",
     x = "Fluxes calculated with Fluxible (exp_zhao18 and linear model respectively)",
     y = "Fluxes as published in the data paper",
     color = "Model (PFTC5)"
@@ -687,11 +691,6 @@ pftc5_fluxes_comparison_h2o |>
   # geom_text(aes(label = f_fluxid), vjust = -0.5)
 ```
 
-```{r cleaning, include = FALSE, eval = TRUE}
-library(here)
-unlink(here("building-material", "vignettes", "ex_data", "li7500"),
-       recursive = TRUE)
-```
 
 
 ```{r cleaning, include = FALSE, eval = TRUE}
