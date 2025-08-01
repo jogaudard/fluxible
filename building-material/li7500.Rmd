@@ -25,7 +25,7 @@ In this vignette, we will see how to read the data from the setup described in @
 
 First, we import the data from OSF with `dataDownloader::get_file`.
 
-```{r osf-import, include = TRUE}
+```{r osf-import, include = TRUE, message=FALSE}
 library(dataDownloader)
 
 get_file("gs8u6",
@@ -47,19 +47,14 @@ pftc5_data_raw <- import7500(
 )
 ```
 
-The `licoread::import7500` function provides `f_fluxid`, `f_start` and `f_end`, meaning we could skip `fluxible::flux_match`.
-However, those are based on the start and end of the files, which would require a strict data collection routine, which was not done there (because there was no original plans to use fluxible since it did not exist).
+<!-- The `licoread::import7500` function provides `f_fluxid`, `f_start` and `f_end`, meaning we could skip `fluxible::flux_match`. -->
+The `licoread::import7500` function provides `file_start` and `file_end`, and `filename` as a unique measurement identifier, meaning we could skip `fluxible::flux_match`.
+However, `file_start` and `file_end` are based on the start and end of the files, which would require a strict data collection routine, which was not done there (because there was no original plans to use fluxible since it did not exist).
 The strategy will be to recreate the `field_record` input.
 We can use the `t_start` and `t_finish` columns in the clean data for that, since they correspond to the cuts the team decided to apply.
 Note that this is also an example of how fluxible can be used to process data in a non homogenous way, would that be necessary.
 
 ```{r reformat}
-pftc5_data_raw <- pftc5_data_raw |> # will modify import7500 with this naming convention
-  rename( # a bit of renaming to avoid confusions
-    filename = "f_fluxid", # f_fluxid will be created by flux_match
-    file_start = "f_start", # same
-    file_end = "f_end"
-  )
 
 # downloading clean data
 get_file("gs8u6",
