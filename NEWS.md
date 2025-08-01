@@ -2,6 +2,7 @@
 
 * `flux_drygas`: does the wet air correction
 * `flux_units`: added `mmol/mol` as a possible concentration unit
+* `flux_diff`: calculates the difference betwen fluxes (GPP, transpiration, etc)
 
 # fluxible 1.2.11
 
