@@ -21,7 +21,7 @@ options(tidyverse.quiet = TRUE)
 In this vignette, we will see how to read the data from the setup described in @halbritterPlantTraitVegetation2024 and compare the output calculated with fluxible with the published data.
 
 
-## Importing and reading the files
+# Importing and reading the files
 
 First, we import the data from OSF with `dataDownloader::get_file`.
 
@@ -67,11 +67,27 @@ pftc5_published_fluxes <- read_csv(
   show_col_types = FALSE # quiet!
 )
 
-pftc5_cuts <- pftc5_published_fluxes |>
+pftc5_published_fluxes <- pftc5_published_fluxes |>
   mutate(
-    date = ymd(paste(year, month, day))
-  ) |>
-  select(date, flux, site, treatment, plot_id, t_start, t_finish)
+    date = ymd(paste(year, month, day)),
+    replicate = case_when(
+      flux == "Reco" ~ 1,
+      flux == "NEE" ~ 1,
+      flux == "NEE1" ~ 2,
+      flux == "NEE2" ~ 3,
+      flux == "NEE3" ~ 4
+    ),
+    flux = case_when(
+      flux == "Reco" ~ "Reco",
+      flux == "NEE" ~ "NEE",
+      flux == "NEE1" ~ "NEE",
+      flux == "NEE2" ~ "NEE",
+      flux == "NEE3" ~ "NEE"
+    )
+  )
+
+pftc5_cuts <- pftc5_published_fluxes |>
+  select(date, flux, replicate, site, treatment, plot_id, t_start, t_finish)
 
 # t_start and t_finish are relative time
 # we need to fetch datetime from the raw data
@@ -82,16 +98,24 @@ pftc5_record <- pftc5_data_raw |>
     flux = case_when(
       trial == "r" ~ "Reco",
       trial == "p" ~ "NEE",
-      trial == "p1" ~ "NEE1", # ideally a column "replicate" for that...
-      trial == "p2" ~ "NEE2",
-      trial == "p3" ~ "NEE3",
+      trial == "p1" ~ "NEE",
+      trial == "p2" ~ "NEE",
+      trial == "p3" ~ "NEE"
+    ),
+    replicate = case_when(
+      trial == "r" ~ 1,
+      trial == "p" ~ 1,
+      trial == "p1" ~ 2,
+      trial == "p2" ~ 3,
+      trial == "p3" ~ 4
     ),
     date = as_date(f_datetime)
   ) |>
-  select(file_start, date, flux, site, treatment, plot_id) |>
+  select(file_start, date, flux, site, treatment, plot_id, replicate) |>
   distinct() |>
   drop_na(flux) |>
-  left_join(pftc5_cuts, by = join_by(date, flux, site, treatment, plot_id)) |>
+  left_join(pftc5_cuts,
+            by = join_by(date, flux, site, treatment, plot_id, replicate)) |>
   mutate(
     start = file_start + t_start,
     end = file_start + t_finish
@@ -117,7 +141,7 @@ Would that be necessary to process fluxes in a non homogenous way (manual cuttin
 - adapt the record file if necessary and rerun until `flux_plot`
 - once satisfied with cutting and fitting, run `flux_calc` as normally
 
-## Processing with fluxible
+# Processing with fluxible
 <!-- Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`. -->
 
 
@@ -130,23 +154,27 @@ pftc5_match <- flux_match(pftc5_data,
                           end_col = end)
 ```
 
-The wet air correction should happen here (coming soon).
+## CO~2~
+
+```{r wetair}
+pftc5_match <- flux_drygas(pftc5_match, `CO2 umol/mol`, `H2O mmol/mol`)
+```
 
 ### Exponential model
 
 Fitting the model presented in @zhaoCalculationDaytimeCO22018.
 ```{r fitting_exp, message = FALSE, warning = FALSE}
 pftc5_fits_exp <- flux_fitting(pftc5_match,
-                           f_conc = `CO2 umol/mol`,
-                           fit_type = "exp_zhao18",
-                           start_cut = 0,
-                           end_cut = 0)
+                               f_conc = `CO2 umol/mol_dry`,
+                               fit_type = "exp_zhao18",
+                               start_cut = 0,
+                               end_cut = 0)
 ```
 
 Using `fluxible::flux_quality` to assess the quality of the dataset.
 ```{r flags_exp}
 pftc5_flags_exp <- flux_quality(pftc5_fits_exp,
-                                f_conc = `CO2 umol/mol`,
+                                f_conc = `CO2 umol/mol_dry`,
                                 rsquared_threshold = 0.5)
 ```
 
@@ -161,42 +189,42 @@ Because of the number of data, we will do it per site to make it lighter.
 ```{r plotting_exp, eval = FALSE}
 pftc5_flags_exp |>
   dplyr::filter(site == "ACJ") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "ACJ_plot_exp")
 
 pftc5_flags_exp |>
   dplyr::filter(site == "PIL") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "PIL_plot_exp")
 
 pftc5_flags_exp |>
   dplyr::filter(site == "QUE") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "QUE_plot_exp")
 
 pftc5_flags_exp |>
   dplyr::filter(site == "TRE") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "TRE_plot_exp")
 
 pftc5_flags_exp |>
   dplyr::filter(site == "WAY") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "WAY_plot_exp")
 
 pftc5_flags_exp |>
   dplyr::filter(f_quality_flag == "zero") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_ylim_upper = 500,
@@ -220,7 +248,8 @@ pftc5_fluxes_exp <- flux_calc(pftc5_flags_exp,
                               conc_unit = "ppm",
                               flux_unit = "umol/m2/s",
                               cols_keep = c(
-                                "site", "treatment", "date", "plot_id", "flux"
+                                "site", "treatment", "date", "plot_id", "flux",
+                                "replicate"
                               ))
 ```
 
@@ -229,7 +258,7 @@ pftc5_fluxes_exp <- flux_calc(pftc5_flags_exp,
 Fitting a linar model.
 ```{r fitting_lm, message = FALSE, warning = FALSE}
 pftc5_fits_lm <- flux_fitting(pftc5_match,
-                           f_conc = `CO2 umol/mol`,
+                           f_conc = `CO2 umol/mol_dry`,
                            fit_type = "linear",
                            start_cut = 0,
                            end_cut = 0)
@@ -238,7 +267,7 @@ pftc5_fits_lm <- flux_fitting(pftc5_match,
 Using `fluxible::flux_quality` to assess the quality of the dataset.
 ```{r flags_lm}
 pftc5_flags_lm <- flux_quality(pftc5_fits_lm,
-                               f_conc = `CO2 umol/mol`,
+                               f_conc = `CO2 umol/mol_dry`,
                                rsquared_threshold = 0.5)
 ```
 
@@ -249,42 +278,42 @@ Because of the number of data, we will do it per site to make it lighter.
 ```{r plotting_lm, eval = FALSE}
 pftc5_flags_lm |>
   dplyr::filter(site == "ACJ") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "ACJ_plot_lm")
 
 pftc5_flags_lm |>
   dplyr::filter(site == "PIL") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "PIL_plot_lm")
 
 pftc5_flags_lm |>
   dplyr::filter(site == "QUE") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "QUE_plot_lm")
 
 pftc5_flags_lm |>
   dplyr::filter(site == "TRE") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "TRE_plot_lm")
 
 pftc5_flags_lm |>
   dplyr::filter(site == "WAY") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_plotname = "WAY_plot_lm")
 
 pftc5_flags_lm |>
   dplyr::filter(f_quality_flag == "zero") |>
-  flux_plot(f_conc = `CO2 umol/mol`,
+  flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
             f_ylim_upper = 500,
@@ -308,11 +337,14 @@ pftc5_fluxes_lm <- flux_calc(pftc5_flags_lm,
                              conc_unit = "ppm",
                              flux_unit = "umol/m2/s",
                              cols_keep = c(
-                               "site", "treatment", "date", "plot_id", "flux"
+                               "site", "treatment", "date", "plot_id", "flux",
+                               "replicate"
                              ))
 ```
 
-## Comparison
+# Comparison
+
+## CO~2~
 
 Let's format the fluxible fluxes in a similar way.
 ```{r fluxible-format}
@@ -331,9 +363,6 @@ Which one to choose is not explicit (but I am tired, do not quote me on that), s
 
 
 pftc5_published_fluxes <- pftc5_published_fluxes |>
-  mutate(
-    date = ymd(paste(year, month, day))
-  ) |>
   pivot_longer(
     c(linear_model, nls_model),
     values_to = "published_fluxes",
@@ -347,7 +376,7 @@ pftc5_fluxes_comparison <- left_join(pftc5_published_fluxes,
                                      pftc5_fluxible_fluxes,
                                      by = join_by(date, flux,
                                                   site, treatment,
-                                                  plot_id),
+                                                  plot_id, replicate),
                                      relationship = "many-to-many")
 ```
 
@@ -365,13 +394,13 @@ pftc5_fluxes_comparison |>
   geom_smooth(
     method = "lm"
   ) +
-  facet_wrap(. ~ f_model, scales = "free", nrow = 2) +
+  facet_grid(f_model ~ flux, scales = "free") +
   labs(
     title = "Reprocessing of PFTC5 flux data",
     x = "Fluxes calculated with Fluxible (exp_zhao18 and linear model respectively)",
     y = "Fluxes as published in the data paper",
     color = "Model (PFTC5)"
-  )
+  ) 
   # geom_text(aes(label = f_fluxid), vjust = -0.5)
 ```
 
