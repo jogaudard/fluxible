@@ -1,6 +1,7 @@
 # fluxible 1.2.12
 
 * `flux_drygas`: does the wet air correction
+* `flux_units`: added `mmol/mol` as a possible concentration unit
 
 # fluxible 1.2.11
 
