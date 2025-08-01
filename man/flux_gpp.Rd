@@ -44,7 +44,7 @@ NEE measurements.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
-See the more generic \link\href{flux_diff}{fluxible::flux_diff}
+See the more generic \link[fluxible:flux_diff]{flux_diff}
 
 to calculate gross primary production (GPP) from net ecosystem
 (NEE) exchange and ecosystem respiration (ER) as GPP = NEE - ER.
