@@ -11,7 +11,7 @@ flux_drygas(conc_df, gas_wet, h2o_wet)
 
 \item{gas_wet}{the gas to correct}
 
-\item{h2o_wet}{water vapor concentration before correction (in ppt)}
+\item{h2o_wet}{water vapor concentration before correction (in mmol/mol)}
 }
 \value{
 the same dataframe with the additional column \verb{[gas_wet]_dry} in the
