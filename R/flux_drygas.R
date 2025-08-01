@@ -11,8 +11,8 @@
 #' @importFrom dplyr mutate
 #' @export
 #' @examples
-#' data(pftc7_conc)
-#' flux_drygas(pftc7_conc, co2, h2o)
+#' data(wet_conc)
+#' flux_drygas(wet_conc, co2, h2o)
 
 
 flux_drygas <- function(conc_df,
