@@ -2,7 +2,7 @@
 #' @description Corrects for the amount of water vapor inside the air
 #' @param conc_df dataframe of gas concentration over time
 #' @param gas_wet the gas to correct
-#' @param h2o_wet water vapor concentration before correction (in ppt)
+#' @param h2o_wet water vapor concentration before correction (in mmol/mol)
 #' @return the same dataframe with the additional column `[gas_wet]_dry` in the
 #' same unit as `gas_wet`
 #' @details the correction is done as follows
