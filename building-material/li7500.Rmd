@@ -42,25 +42,93 @@ Then we import the data with `licoread::import7500`.
 ```{r reading}
 library(licoread)
 library(tidyverse)
-pftc5_data <- import7500(
+pftc5_data_raw <- import7500(
   "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
   plotinfo_names = c("site", "treatment", "date", "plot_id", "trial")
 )
-
-# a try to mimic the cuts done in PFTC5
-# pftc5_data <- pftc5_data |>
-#   mutate(
-#     f_end = f_start + 120
-#   )
 ```
 
+The `licoread::import7500` function provides `f_fluxid`, `f_start` and `f_end`, meaning we could skip `fluxible::flux_match`.
+However, those are based on the start and end of the files, which would require a strict data collection routine, which was not done there (because there was no original plans to use fluxible since it did not exist).
+The strategy will be to recreate the `field_record` input.
+We can use the `t_start` and `t_finish` columns in the clean data for that, since they correspond to the cuts the team decided to apply.
+Note that this is also an example of how fluxible can be used to process data in a non homogenous way, would that be necessary.
+
+```{r reformat}
+pftc5_data_raw <- pftc5_data_raw |> # will modify import7500 with this naming convention
+  rename( # a bit of renaming to avoid confusions
+    filename = "f_fluxid", # f_fluxid will be created by flux_match
+    file_start = "f_start", # same
+    file_end = "f_end"
+  )
+
+# downloading clean data
+get_file("gs8u6",
+         "c-flux",
+         "PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
+         "vignettes/ex_data/li7500")
+
+pftc5_published_fluxes <- read_csv(
+  "vignettes/ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
+  show_col_types = FALSE # quiet!
+)
+
+pftc5_cuts <- pftc5_published_fluxes |>
+  mutate(
+    date = ymd(paste(year, month, day))
+  ) |>
+  select(date, flux, site, treatment, plot_id, t_start, t_finish)
+
+# t_start and t_finish are relative time
+# we need to fetch datetime from the raw data
+
+pftc5_record <- pftc5_data_raw |>
+  mutate(
+    plot_id = as.integer(str_extract(plot_id, "\\d+")),
+    flux = case_when(
+      trial == "r" ~ "Reco",
+      trial == "p" ~ "NEE",
+      trial == "p1" ~ "NEE1", # ideally a column "replicate" for that...
+      trial == "p2" ~ "NEE2",
+      trial == "p3" ~ "NEE3",
+    ),
+    date = as_date(f_datetime)
+  ) |>
+  select(file_start, date, flux, site, treatment, plot_id) |>
+  distinct() |>
+  drop_na(flux) |>
+  left_join(pftc5_cuts, by = join_by(date, flux, site, treatment, plot_id)) |>
+  mutate(
+    start = file_start + t_start,
+    end = file_start + t_finish
+  ) |>
+  select(!c(file_start, t_start, t_finish)) |> # to avoid confusion
+  arrange(start)
+
+# Now the meta data are in pftc5_record,
+# we remove them from pftc5_data to avoid confusion
+# flux match crashes if columns are both in raw data and record
+# this will be corrected in next version
+
+pftc5_data <- pftc5_data_raw |>
+  select(!c(site, treatment, plot_id, trial, date))
+```
 
 ## Processing with fluxible
 Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`.
 
-```{r fitting, message = FALSE, warning = FALSE}
+```{r match, message = FALSE, warning = FALSE}
 library(fluxible)
-pftc5_fits <- flux_fitting(pftc5_data,
+pftc5_match <- flux_match(pftc5_data,
+                          pftc5_record,
+                          f_datetime = f_datetime,
+                          start_col = start,
+                          end_col = end)
+```
+
+
+```{r fitting, message = FALSE, warning = FALSE}
+pftc5_fits <- flux_fitting(pftc5_match,
                            f_conc = `CO2 umol/mol`,
                            fit_type = "exp_zhao18",
                            start_cut = 0,
@@ -140,7 +208,7 @@ pftc5_fluxes <- flux_calc(pftc5_flags,
                           conc_unit = "ppm",
                           flux_unit = "umol/m2/s",
                           cols_keep = c(
-                            "site", "treatment", "date", "plot_id", "trial"
+                            "site", "treatment", "date", "plot_id", "flux"
                           ))
 ```
 
@@ -149,45 +217,42 @@ pftc5_fluxes <- flux_calc(pftc5_flags,
 Let's format the fluxible fluxes in a similar way.
 ```{r fluxible-format}
 pftc5_fluxible_fluxes <- pftc5_fluxes |>
-  rename(
-    fluxible_flux = "f_flux"
-  ) |>
+  # rename(
+  #   fluxible_flux = "f_flux"
+  # ) |>
   mutate(
-    plot_id = as.integer(str_extract(plot_id, "\\d+")),
-    flux = case_when(
-      trial == "r" ~ "Reco",
-      trial == "p" ~ "NEE",
-      trial == "p1" ~ "NEE1", # ideally a column "replicate" for that...
-      trial == "p2" ~ "NEE2",
-      trial == "p3" ~ "NEE3",
-    ),
-    date = as_date(f_datetime),
-    fluxible_flux = -fluxible_flux # the opposite convention was used for PFTC5
+  #   plot_id = as.integer(str_extract(plot_id, "\\d+")),
+  #   flux = case_when(
+  #     trial == "r" ~ "Reco",
+  #     trial == "p" ~ "NEE",
+  #     trial == "p1" ~ "NEE1", # ideally a column "replicate" for that...
+  #     trial == "p2" ~ "NEE2",
+  #     trial == "p3" ~ "NEE3",
+  #   ),
+  #   date = as_date(f_datetime),
+    fluxible_flux = -f_flux # the opposite convention was used for PFTC5
   ) |>
   drop_na(flux) # cleaning
 ```
 
-Now download and format PFTC5 fluxes.
-In the clean data on OSF, both linear and nls fluxes are available.
-Which one to choose is not explicit (but I am tired, do not quote me on that), so we will just take the one with the lowest aic for now.
+<!-- Now download and format PFTC5 fluxes. -->
+<!-- In the clean data on OSF, both linear and nls fluxes are available.
+Which one to choose is not explicit (but I am tired, do not quote me on that), so we will just take the one with the lowest aic for now. -->
 ```{r pftc5-fluxes}
-get_file("gs8u6",
-         "c-flux",
-         "PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
-         "vignettes/ex_data/li7500")
 
-pftc5_published_fluxes <- read_csv(
-  "vignettes/ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
-  show_col_types = FALSE # quiet!
-)
 
 pftc5_published_fluxes <- pftc5_published_fluxes |>
   mutate(
-    date = ymd(paste(year, month, day)),
-    published_fluxes = case_when(
-      linear_aic <= nls_aic ~ linear_model,
-      linear_aic > nls_aic ~ nls_model
-    )
+    date = ymd(paste(year, month, day))
+    # published_fluxes = case_when(
+    #   linear_aic <= nls_aic ~ linear_model,
+    #   linear_aic > nls_aic ~ nls_model
+    # )
+  ) |>
+  pivot_longer(
+    c(linear_model, nls_model),
+    values_to = "published_fluxes",
+    names_to = "model"
   )
 ```
 
@@ -202,14 +267,14 @@ pftc5_fluxes_comparison <- left_join(pftc5_published_fluxes,
 
 ```{r figure}
 pftc5_fluxes_comparison |>
-  ggplot(aes(fluxible_flux, published_fluxes)) +
+  ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
   theme_bw() +
   geom_point() +
   geom_abline(slope = 1, intercept = 0) +
   geom_smooth(
     method = "lm"
-  ) +
-  geom_text(aes(label = f_fluxid), vjust = -0.5)
+  ) 
+  # geom_text(aes(label = f_fluxid), vjust = -0.5)
 ```
 
 ```{r cleaning, include = FALSE, eval = TRUE}
