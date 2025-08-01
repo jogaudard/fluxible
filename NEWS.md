@@ -1,3 +1,7 @@
+# fluxible 1.2.12
+
+* `flux_drygas`: does the wet air correction
+
 # fluxible 1.2.11
 
 * `flux_calc`: fixed bug when `atm_pressure` is a variable
