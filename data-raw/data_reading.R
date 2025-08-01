@@ -101,3 +101,15 @@ co2_fluxes_lrc <- co2_fluxes_lrc |>
   dplyr::select(!c(campaign, OTC, treatment))
 
 usethis::use_data(co2_fluxes_lrc, overwrite = TRUE)
+
+pftc7_conc <- licoread::import7500(
+  "vignettes/ex_data/field_campaign",
+  version = "post2023", plotinfo = FALSE
+)
+pftc7_conc <- pftc7_conc |>
+  dplyr::select(Time, Date, `CO2 (umol/mol)`, `H2O (mmol/mol)`) |>
+  dplyr::rename(
+    co2 = `CO2 (umol/mol)`,
+    h2o = `H2O (mmol/mol)`
+  )
+usethis::use_data(pftc7_conc, overwrite = TRUE)
