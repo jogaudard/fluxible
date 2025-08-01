@@ -1,23 +1,23 @@
 test_that("flux_diff is equal to flux_gpp", {
 
-  fluxgpp <- flux_gpp(co2_fluxes,
+  fluxgpp <- suppressWarnings(flux_gpp(co2_fluxes,
     type,
     f_start,
     f_flux,
     id_cols = "turfID",
     cols_keep = c("temp_soil")
-  )
+  ))
 
-  fluxdiff <- flux_diff(co2_fluxes,
+  fluxdiff <- suppressWarnings(flux_diff(co2_fluxes,
     type,
     f_start,
     f_flux,
     id_cols = "turfID",
     cols_keep = c("temp_soil"),
-    type1 = "NEE",
-    type2 = "ER",
+    type_a = "NEE",
+    type_b = "ER",
     diff_name = "GPP"
-  )
+  ))
 
   expect_equal(
     fluxdiff,
@@ -34,8 +34,8 @@ test_that("GPP calculation", {
       f_flux,
       id_cols = "turfID",
       cols_keep = c("temp_soil"),
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     )
   )
@@ -49,8 +49,8 @@ test_that("keeping more than one columns", {
       f_flux,
       id_cols = "turfID",
       cols_keep = c("temp_soil", "temp_fahr"),
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     )
   )
@@ -87,8 +87,8 @@ test_that("GPP calculation works with several id cols", {
       datetime,
       flux,
       id_cols = c("turfid", "campaign"),
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     )
   )
@@ -127,8 +127,8 @@ test_that("missing NEE and several id cols", {
       datetime,
       flux,
       id_cols = c("turfid", "campaign"),
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     )
   )
@@ -164,8 +164,8 @@ test_that("GPP error message for non numeric flux", {
       datetime,
       flux,
       id_cols = c("turfid", "campaign"),
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     )
   )
@@ -184,8 +184,8 @@ test_that("option to keep all the cols", {
       f_start,
       id_cols = "turfID",
       cols_keep = "all",
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     ) |>
       select(!c(f_start, PAR, type, f_flux))
@@ -209,8 +209,8 @@ test_that("cols keep takes values from NEE", {
       f_start,
       id_cols = "turfID",
       cols_keep = "all",
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     ) |>
       select(turfID, type, test_keep)
@@ -247,8 +247,8 @@ test_that("GPP calculation works with several id cols, and extra fluxes", {
       datetime,
       flux,
       id_cols = c("turfid", "campaign"),
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     )
   )
@@ -284,10 +284,10 @@ test_that("error with non unique pairs", {
       datetime,
       flux,
       id_cols = "turfid",
-      type1 = "NEE",
-      type2 = "ER",
+      type_a = "NEE",
+      type_b = "ER",
       diff_name = "GPP"
     ),
-    "The id_cols provided do not form unique pairs of ER and NEE."
+    "The id_cols provided do not form unique pairs."
   )
 })
