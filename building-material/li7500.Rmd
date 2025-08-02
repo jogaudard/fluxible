@@ -18,7 +18,8 @@ knitr::opts_chunk$set(
 options(tidyverse.quiet = TRUE)
 ```
 
-In this vignette, we will see how to read the data from the setup described in @halbritterPlantTraitVegetation2024 and compare the output calculated with fluxible with the published data.
+This vignette aims at reproducing the ecosystem fluxes (CO~2~ and H~2~O) processing presented in @halbritterPlantTraitVegetation2024.
+It also acts as an example on how to use fluxible with the LI-7500 open path setup, and how to reprocess data that were collected with a different processing method in mind.
 
 
 # Importing and reading the files
@@ -144,7 +145,7 @@ Would that be necessary to process fluxes in a non homogenous way (manual cuttin
 
 # Processing with fluxible
 <!-- Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`. -->
-
+We will fit both the linear and exponential model for comparison purpose.
 
 ```{r match, message = FALSE, warning = FALSE}
 library(fluxible)
@@ -157,6 +158,7 @@ pftc5_match <- flux_match(pftc5_data,
 
 ## CO~2~
 
+Wet air correction:
 ```{r wetair_co2}
 pftc5_match <- flux_drygas(pftc5_match, `CO2 umol/mol`, `H2O mmol/mol`)
 ```
@@ -251,7 +253,7 @@ pftc5_fluxes_exp_co2 <- flux_calc(pftc5_flags_exp_co2,
 
 ### Linear model
 
-Fitting a linar model.
+Fitting a linar model:
 ```{r fitting_lm_co2, message = FALSE, warning = FALSE}
 pftc5_fits_lm_co2 <- flux_fitting(pftc5_match,
                                   f_conc = `CO2 umol/mol_dry`,
@@ -260,7 +262,7 @@ pftc5_fits_lm_co2 <- flux_fitting(pftc5_match,
                                   end_cut = 0)
 ```
 
-Using `fluxible::flux_quality` to assess the quality of the dataset.
+Using `fluxible::flux_quality` to assess the quality of the dataset:
 ```{r flags_lm_co2}
 pftc5_flags_lm_co2 <- flux_quality(pftc5_fits_lm_co2,
                                    f_conc = `CO2 umol/mol_dry`,
@@ -269,8 +271,7 @@ pftc5_flags_lm_co2 <- flux_quality(pftc5_fits_lm_co2,
 
 
 
-Then plotting (in an external file) for a visual check.
-Because of the number of data, we will do it per site to make it lighter.
+Then plotting (in an external file) for a visual check:
 ```{r plotting_lm_co2, eval = FALSE}
 pftc5_flags_lm_co2 |>
   dplyr::filter(site == "ACJ") |>
@@ -318,11 +319,7 @@ pftc5_flags_lm_co2 |>
             f_plotname = "zero_plot_lm_co2")
 ```
 
-If other data (PAR and co) need cleaning, that would happen here.
-To "compress" environmental variables at a single value per flux, see the arguments `cols_ave`, `cols_sum`, and `cols_med` in `fluxible::flux_calc`.
-To keep the raw data (gas concentration or anything else) in a nested column, see the `cols_nest` argument.
-
-Now let's calculate the fluxes with `fluxible::flux_calc`.
+Flux calculation:
 ```{r calc_lm_co2}
 pftc5_fluxes_lm_co2 <- flux_calc(pftc5_flags_lm_co2,
                                  slope_col = f_slope_corr,
@@ -341,6 +338,7 @@ pftc5_fluxes_lm_co2 <- flux_calc(pftc5_flags_lm_co2,
 ## H~2~O
 
 We need to change the denomination of the fluxes, because now we work with H~2~O.
+Other than that, it is the same procedure and the same functions.
 
 ```{r match_h2o}
 pftc5_match_h2o <- pftc5_match |>
@@ -351,6 +349,7 @@ pftc5_match_h2o <- pftc5_match |>
     ))
   )
 ```
+
 
 Wet air correction:
 ```{r wetair_h2o}
@@ -370,7 +369,7 @@ pftc5_fits_exp_h2o <- flux_fitting(pftc5_match_h2o,
                                    end_cut = 0)
 ```
 
-Using `fluxible::flux_quality` to assess the quality of the dataset.
+Using `fluxible::flux_quality` to assess the quality of the dataset:
 ```{r flags_exp_h2o}
 pftc5_flags_exp_h2o <- flux_quality(pftc5_fits_exp_h2o,
                                     f_conc = `H2O mmol/mol_dry`,
@@ -380,8 +379,7 @@ pftc5_flags_exp_h2o <- flux_quality(pftc5_fits_exp_h2o,
 ```
 
 
-Then plotting (in an external file) for a visual check.
-Because of the number of data, we will do it per site to make it lighter.
+Then plotting (in an external file) for a visual check:
 ```{r plotting_exp_h2o, eval = FALSE}
 pftc5_flags_exp_h2o |>
   dplyr::filter(site == "ACJ") |>
@@ -429,11 +427,7 @@ pftc5_flags_exp_h2o |>
             f_plotname = "zero_plot_exp_h2o")
 ```
 
-If other data (PAR and co) need cleaning, that would happen here.
-To "compress" environmental variables at a single value per flux, see the arguments `cols_ave`, `cols_sum`, and `cols_med` in `fluxible::flux_calc`.
-To keep the raw data (gas concentration or anything else) in a nested column, see the `cols_nest` argument.
-
-Now let's calculate the fluxes with `fluxible::flux_calc`.
+Flux calculations:
 ```{r calc_exp_h2o}
 pftc5_fluxes_exp_h2o <- flux_calc(pftc5_flags_exp_h2o,
                                   slope_col = f_slope_corr,
@@ -451,7 +445,7 @@ pftc5_fluxes_exp_h2o <- flux_calc(pftc5_flags_exp_h2o,
 
 ### Linear model
 
-Fitting a linar model.
+Fitting a linar model:
 ```{r fitting_lm_h2o, message = FALSE, warning = FALSE}
 pftc5_fits_lm_h2o <- flux_fitting(pftc5_match_h2o,
                                   f_conc = `H2O mmol/mol_dry`,
@@ -460,7 +454,7 @@ pftc5_fits_lm_h2o <- flux_fitting(pftc5_match_h2o,
                                   end_cut = 0)
 ```
 
-Using `fluxible::flux_quality` to assess the quality of the dataset.
+Using `fluxible::flux_quality` to assess the quality of the dataset:
 ```{r flags_lm_h2o}
 pftc5_flags_lm_h2o <- flux_quality(pftc5_fits_lm_h2o,
                                    f_conc = `H2O mmol/mol_dry`,
@@ -471,8 +465,7 @@ pftc5_flags_lm_h2o <- flux_quality(pftc5_fits_lm_h2o,
 
 
 
-Then plotting (in an external file) for a visual check.
-Because of the number of data, we will do it per site to make it lighter.
+Then plotting (in an external file) for a visual check:
 ```{r plotting_lm_h2o, eval = FALSE}
 pftc5_flags_lm_h2o |>
   dplyr::filter(site == "ACJ") |>
@@ -520,11 +513,7 @@ pftc5_flags_lm_h2o |>
             f_plotname = "zero_plot_lm_h2o")
 ```
 
-If other data (PAR and co) need cleaning, that would happen here.
-To "compress" environmental variables at a single value per flux, see the arguments `cols_ave`, `cols_sum`, and `cols_med` in `fluxible::flux_calc`.
-To keep the raw data (gas concentration or anything else) in a nested column, see the `cols_nest` argument.
-
-Now let's calculate the fluxes with `fluxible::flux_calc`.
+Flux calculations:
 ```{r calc_lm_h2o}
 pftc5_fluxes_lm_h2o <- flux_calc(pftc5_flags_lm_h2o,
                                  slope_col = f_slope_corr,
@@ -538,6 +527,30 @@ pftc5_fluxes_lm_h2o <- flux_calc(pftc5_flags_lm_h2o,
                                    "site", "treatment", "date", "plot_id",
                                    "flux", "replicate"
                                  ))
+```
+
+
+# Calculating Gross Primary Production and Transpiration
+
+I'm glad you asked!
+The function `fluxible::flux_diff` is precisely made for that.
+
+```{r gpp, warning=FALSE}
+pftc5_fluxes_lm_co2 <- flux_diff(pftc5_fluxes_lm_co2, type_col = flux,
+                                 id_cols = c(
+                                   "site", "treatment", "date",
+                                   "plot_id", "replicate"
+                                 ), type_a = "NEE", type_b = "Reco",
+                                 diff_name = "GPP", cols_keep = "all")
+```
+
+```{r trans, warning=FALSE}
+pftc5_fluxes_lm_h2o <- flux_diff(pftc5_fluxes_lm_h2o, type_col = flux,
+                                 id_cols = c(
+                                   "site", "treatment", "date",
+                                   "plot_id", "replicate"
+                                 ), type_a = "ET", type_b = "E",
+                                 diff_name = "T", cols_keep = "all")
 ```
 
 # Comparison
@@ -578,7 +591,7 @@ pftc5_fluxes_comparison_co2 <- left_join(pftc5_published_fluxes_co2,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_co2, echo=FALSE, fig.cap="Comparison of CO~2~ fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
+```{r figure_co2, echo=FALSE, fig.cap="Comparison of CO2 fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
 
 pftc5_fluxes_comparison_co2 |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
@@ -618,6 +631,7 @@ pftc5_fluxible_fluxes_h2o <- pftc5_fluxes_exp_h2o |>
 <!-- Now download and format PFTC5 fluxes. -->
 <!-- In the clean data on OSF, both linear and nls fluxes are available.
 Which one to choose is not explicit (but I am tired, do not quote me on that), so we will just take the one with the lowest aic for now. -->
+Importing the published dataset:
 ```{r pftc5-fluxes_h2o}
 
 get_file("gs8u6",
@@ -667,7 +681,7 @@ pftc5_fluxes_comparison_h2o <- left_join(pftc5_published_fluxes_h2o,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_h2o, echo=FALSE, fig.cap="Comparison of H~2~O fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
+```{r figure_h2o, echo=FALSE, fig.cap="Comparison of H2O fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
 
 pftc5_fluxes_comparison_h2o |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
@@ -691,22 +705,17 @@ pftc5_fluxes_comparison_h2o |>
   # geom_text(aes(label = f_fluxid), vjust = -0.5)
 ```
 
-# Calculating Gross Primary Production and Transpiration
+## Possible explanation for the differences
 
-I'm glad you asked!
-The function `fluxible::flux_diff` is precisely made for that.
-
-```{r gpp}
-pftc5_fluxes_lm_co2 <- flux_diff(pftc5_fluxes_lm_co2, type_col = flux,
-                                 id_cols = c(
-                                   "site", "treatment", "date",
-                                   "plot_id", "replicate"
-                                 ), type_a = "NEE", type_b = "Reco",
-                                 diff_name = "GPP", cols_keep = "all")
-```
+- Since the nls_model is an exponential model without linear term, it gives unrealistic estimates when fitted to a flux that has no curvature [@huppiRestrictingNonlinearityParameter2018; @pedersenComprehensiveApproachSoilatmosphere2010a]. Fluxible solves this issue by using the model presented in @zhaoCalculationDaytimeCO22018, which is also an exponential but contains a linear term allowing it to fit linear data.
+- The fluxes with hight published values and zero with fluxible are good examples of the behaviour of the nls model with linear data. Looking at the plot, it is evident that those fluxes are close to zero. In fluxible, they get flagged for as "bad fit", but since there is no change of concentration over time they get replaced by zero instead of getting discarded.
+- Possible explanation for the over estimation of the exponential model in fluxible compared to the linear model can be found in @kutzbachCO2FluxDetermination2007 .
+- At this point I don't have a hypothesis for the slight over estimation with fluxible when using a linear model.
 
 ```{r cleaning, include = FALSE, eval = TRUE}
 library(here)
 unlink(here("building-material", "vignettes", "ex_data", "li7500"),
        recursive = TRUE)
 ```
+
+### References
