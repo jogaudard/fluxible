@@ -123,14 +123,14 @@ flux_diff <- function(fluxes_df,
       "id"
     ) |>
     mutate(
-      type = case_when(
-        .data$type == type_a ~ "type_a",
-        .data$type == type_b ~ "type_b"
+      {{type_col}} := case_when(
+        {{type_col}} == type_a ~ "type_a",
+        {{type_col}} == type_b ~ "type_b"
       )
     ) |>
     filter(
-      .data$type == "type_a" |
-        .data$type == "type_b"
+      {{type_col}} == "type_a" |
+        {{type_col}} == "type_b"
     )
 
   duplicate_check <- fluxes_diff |>

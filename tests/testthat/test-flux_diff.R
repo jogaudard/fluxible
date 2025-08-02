@@ -291,3 +291,22 @@ test_that("error with non unique pairs", {
     "The id_cols provided do not form unique pairs."
   )
 })
+
+test_that("type named differently", {
+  test <- co2_fluxes |>
+    dplyr::rename(
+      flux_type = "type"
+    )
+  expect_snapshot(
+    suppressWarnings(flux_diff(test,
+      flux_type,
+      f_start,
+      f_flux,
+      id_cols = "turfID",
+      cols_keep = c("temp_soil"),
+      type_a = "NEE",
+      type_b = "ER",
+      diff_name = "GPP"
+    ))
+  )
+})
