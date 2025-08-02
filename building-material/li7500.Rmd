@@ -691,7 +691,19 @@ pftc5_fluxes_comparison_h2o |>
   # geom_text(aes(label = f_fluxid), vjust = -0.5)
 ```
 
+# Calculating Gross Primary Production and Transpiration
 
+I'm glad you asked!
+The function `fluxible::flux_diff` is precisely made for that.
+
+```{r gpp}
+pftc5_fluxes_lm_co2 <- flux_diff(pftc5_fluxes_lm_co2, type_col = flux,
+                                 id_cols = c(
+                                   "site", "treatment", "date",
+                                   "plot_id", "replicate"
+                                 ), type_a = "NEE", type_b = "Reco",
+                                 diff_name = "GPP", cols_keep = "all")
+```
 
 ```{r cleaning, include = FALSE, eval = TRUE}
 library(here)
