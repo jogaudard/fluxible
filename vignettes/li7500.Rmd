@@ -3,7 +3,7 @@ title: "Using fluxible with the Li7500"
 # output: github_document
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Preparing the data for fluxible}
+  %\VignetteIndexEntry{Using fluxible with the Li7500}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: biblio_phd_zot.bib
@@ -32,10 +32,10 @@ library(dataDownloader)
 get_file("gs8u6",
          "rawData/raw_c-flux",
          "rawC-flux.zip",
-         "vignettes/ex_data/li7500")
+         "ex_data/li7500")
 
-unzip("vignettes/ex_data/li7500/rawC-flux.zip",
-      exdir = "vignettes/ex_data/li7500/rawC-flux")
+unzip("ex_data/li7500/rawC-flux.zip",
+      exdir = "ex_data/li7500/rawC-flux")
 ```
 
 Then we import the data with `licoread::import7500`.
@@ -43,7 +43,7 @@ Then we import the data with `licoread::import7500`.
 library(licoread)
 library(tidyverse)
 pftc5_data_raw <- import7500(
-  "vignettes/ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
+  "ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
   plotinfo_names = c("site", "treatment", "date", "plot_id", "trial")
 )
 ```
@@ -61,10 +61,10 @@ Note that this is also an example of how fluxible can be used to process data in
 get_file("gs8u6",
          "c-flux",
          "PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
-         "vignettes/ex_data/li7500")
+         "ex_data/li7500")
 
 pftc5_published_fluxes_co2 <- read_csv(
-  "vignettes/ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
+  "ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_Cflux.csv",
   show_col_types = FALSE # quiet!
 )
 
@@ -591,7 +591,7 @@ pftc5_fluxes_comparison_co2 <- left_join(pftc5_published_fluxes_co2,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_co2, echo=FALSE, fig.cap="Comparison of CO2 fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=8, fig.height=9}
+```{r figure_co2, echo=FALSE, fig.cap="Comparison of CO2 fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=8, fig.height=8}
 
 pftc5_fluxes_comparison_co2 |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
@@ -637,10 +637,10 @@ Importing the published dataset:
 get_file("gs8u6",
          "c-flux",
          "PFTC3_Puna_PFTC5_Peru_2018_2020_wflux.csv",
-         "vignettes/ex_data/li7500")
+         "ex_data/li7500")
 
 pftc5_published_fluxes_h2o <- read_csv(
-  "vignettes/ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_wflux.csv",
+  "ex_data/li7500/PFTC3_Puna_PFTC5_Peru_2018_2020_wflux.csv",
   show_col_types = FALSE # quiet!
 )
 
@@ -681,7 +681,7 @@ pftc5_fluxes_comparison_h2o <- left_join(pftc5_published_fluxes_h2o,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_h2o, echo=FALSE, fig.cap="Comparison of H2O fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=8, fig.height=9}
+```{r figure_h2o, echo=FALSE, fig.cap="Comparison of H~2~O fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=8, fig.height=8}
 
 pftc5_fluxes_comparison_h2o |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
@@ -697,7 +697,7 @@ pftc5_fluxes_comparison_h2o |>
   ) +
   facet_grid(f_model ~ flux, scales = "free") +
   labs(
-    title = "Reprocessing of PFTC5 H~2~O flux data",
+    title = "Reprocessing of PFTC5 H2O flux data",
     x = "Fluxes calculated with Fluxible (exp_zhao18 and linear model respectively)",
     y = "Fluxes as published in the data paper",
     color = "Model (PFTC5)"
@@ -714,7 +714,7 @@ pftc5_fluxes_comparison_h2o |>
 
 ```{r cleaning, include = FALSE, eval = TRUE}
 library(here)
-unlink(here("building-material", "vignettes", "ex_data", "li7500"),
+unlink(here("vignettes", "ex_data", "li7500"),
        recursive = TRUE)
 ```
 
