@@ -7,7 +7,6 @@
 #' @param id_cols columns used to identify each pair of fluxes
 #' @param f_flux column containing flux values
 #' @param type_col column containing type of flux
-#' @param f_datetime column containing start of measurement as datetime
 #' @param type_a argument designating type_a fluxes in type column
 #' @param type_b argument designating type_b fluxes in type column
 #' @param diff_name name to give to the new calculated flux
@@ -32,7 +31,6 @@
 
 flux_diff <- function(fluxes_df,
                       type_col,
-                      f_datetime,
                       f_flux = f_flux,
                       id_cols,
                       type_a,
@@ -61,8 +59,7 @@ flux_diff <- function(fluxes_df,
       select(!c(
         all_of(id_cols),
         {{type_col}},
-        {{f_flux}},
-        {{f_datetime}}
+        {{f_flux}}
       )) |>
       names()
   }
@@ -83,8 +80,7 @@ flux_diff <- function(fluxes_df,
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      {{f_flux}},
-      {{f_datetime}}
+      {{f_flux}}
     ) |>
     filter(
       {{type_col}} == type_a
@@ -95,8 +91,7 @@ flux_diff <- function(fluxes_df,
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      {{f_flux}},
-      {{f_datetime}}
+      {{f_flux}}
     ) |>
     filter(
       {{type_col}} == type_b
@@ -107,8 +102,7 @@ flux_diff <- function(fluxes_df,
       "id",
       all_of(c(cols_keep, id_cols)),
       {{type_col}},
-      {{f_flux}},
-      {{f_datetime}}
+      {{f_flux}}
     ) |>
     filter(
       {{type_col}} != type_b
@@ -119,7 +113,6 @@ flux_diff <- function(fluxes_df,
     select(
       {{f_flux}},
       {{type_col}},
-      {{f_datetime}},
       "id"
     ) |>
     mutate(
@@ -142,23 +135,15 @@ flux_diff <- function(fluxes_df,
   }
 
   fluxes_diff <- fluxes_diff |>
-    rename(
-      f_flux = {{f_flux}},
-      f_datetime = {{f_datetime}}
-    ) |>
     pivot_wider(id_cols = "id",
       names_from = {{type_col}},
-      values_from = c("f_flux", "f_datetime")
-    ) |>
-    rename(
-      {{f_datetime}} := "f_datetime_type_a"
+      values_from = {{f_flux}}
     ) |>
     mutate(
-      {{f_flux}} := .data$f_flux_type_a - .data$f_flux_type_b,
+      {{f_flux}} := type_a - type_b,
       {{type_col}} := diff_name
     ) |>
     select(
-      {{f_datetime}},
       "id",
       {{type_col}},
       {{f_flux}}
@@ -167,26 +152,26 @@ flux_diff <- function(fluxes_df,
   id_cols_df <- fluxes_df |>
     select(all_of(id_cols), "id")
 
-  nee_missing <- fluxes_diff |>
+  missing <- fluxes_diff |>
     filter(
-      is.na({{f_datetime}})
+      is.na({{f_flux}})
     ) |>
     select("id") |>
     left_join(id_cols_df, by = "id")
 
-  nee_missing[] <- Map(paste, names(nee_missing), nee_missing, sep = ": ")
+  missing[] <- Map(paste, names(missing), missing, sep = ": ")
 
-  nee_missing <- nee_missing |>
+  missing <- missing |>
     mutate(
-      msg = apply(nee_missing[, id_cols], 1, paste, collapse = ", "),
+      msg = apply(missing[, id_cols], 1, paste, collapse = ", "),
       f_warnings = paste(
-        "\n", "type_a missing for measurement", .data$msg
+        "\n", "type_a or type_b missing for measurement", .data$msg
       )
     ) |>
     pull(.data$f_warnings)
 
   fluxes_diff <- fluxes_diff |>
-    drop_na({{f_datetime}})
+    drop_na({{f_flux}})
 
   fluxes_diff <- fluxes_diff |>
     bind_rows(a_df) |>
@@ -195,13 +180,13 @@ flux_diff <- function(fluxes_df,
     ungroup() |>
     bind_rows(b_df) |>
     bind_rows(other_df) |>
-    select(!"id") |>
-    arrange({{f_datetime}})
+    arrange(.data$id, {{type_col}}) |>
+    select(!"id")
 
-  f_warnings <- str_c(nee_missing)
+  f_warnings <- str_c(missing)
 
 
-  if (any(!is.na(nee_missing))) warning(f_warnings)
+  if (any(!is.na(missing))) warning(f_warnings)
 
   fluxes_diff
 
