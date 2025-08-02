@@ -1,36 +1,21 @@
-test_that("flux_diff is equal to flux_gpp", {
-
-  fluxgpp <- suppressWarnings(flux_gpp(co2_fluxes,
-    type,
-    f_start,
-    f_flux,
-    id_cols = "turfID",
-    cols_keep = c("temp_soil")
-  ))
-
-  fluxdiff <- suppressWarnings(flux_diff(co2_fluxes,
-    type,
-    f_start,
-    f_flux,
-    id_cols = "turfID",
-    cols_keep = c("temp_soil"),
-    type_a = "NEE",
-    type_b = "ER",
-    diff_name = "GPP"
-  ))
-
-  expect_equal(
-    fluxdiff,
-    fluxgpp
-  )
-})
-
-
 test_that("GPP calculation", {
   expect_snapshot(
     flux_diff(co2_fluxes,
       type,
-      f_start,
+      f_flux,
+      id_cols = "turfID",
+      cols_keep = c("temp_soil", "f_start"),
+      type_a = "NEE",
+      type_b = "ER",
+      diff_name = "GPP"
+    )
+  )
+})
+
+test_that("without f_datetime", {
+  expect_snapshot(
+    flux_diff(co2_fluxes,
+      type,
       f_flux,
       id_cols = "turfID",
       cols_keep = c("temp_soil"),
@@ -45,10 +30,9 @@ test_that("keeping more than one columns", {
   expect_snapshot(
     flux_diff(co2_fluxes,
       type,
-      f_start,
       f_flux,
       id_cols = "turfID",
-      cols_keep = c("temp_soil", "temp_fahr"),
+      cols_keep = c("temp_soil", "temp_fahr", "f_start"),
       type_a = "NEE",
       type_b = "ER",
       diff_name = "GPP"
@@ -84,9 +68,9 @@ test_that("GPP calculation works with several id cols", {
   expect_snapshot(
     flux_diff(fluxes,
       type,
-      datetime,
       flux,
       id_cols = c("turfid", "campaign"),
+      cols_keep = c("datetime"),
       type_a = "NEE",
       type_b = "ER",
       diff_name = "GPP"
@@ -124,12 +108,12 @@ test_that("missing NEE and several id cols", {
   expect_snapshot(
     flux_diff(fluxes,
       type,
-      datetime,
       flux,
       id_cols = c("turfid", "campaign"),
       type_a = "NEE",
       type_b = "ER",
-      diff_name = "GPP"
+      diff_name = "GPP",
+      cols_keep = c("datetime")
     )
   )
 })
@@ -161,9 +145,9 @@ test_that("GPP error message for non numeric flux", {
   expect_error(
     flux_diff(fluxes,
       type,
-      datetime,
       flux,
       id_cols = c("turfid", "campaign"),
+      cols_keep = c("datetime"),
       type_a = "NEE",
       type_b = "ER",
       diff_name = "GPP"
@@ -181,7 +165,6 @@ test_that("option to keep all the cols", {
     flux_diff(
       test_df,
       type,
-      f_start,
       id_cols = "turfID",
       cols_keep = "all",
       type_a = "NEE",
@@ -206,7 +189,6 @@ test_that("cols keep takes values from NEE", {
     flux_diff(
       test_df,
       type,
-      f_start,
       id_cols = "turfID",
       cols_keep = "all",
       type_a = "NEE",
@@ -244,12 +226,12 @@ test_that("GPP calculation works with several id cols, and extra fluxes", {
   expect_snapshot(
     flux_diff(fluxes,
       type,
-      datetime,
       flux,
       id_cols = c("turfid", "campaign"),
       type_a = "NEE",
       type_b = "ER",
-      diff_name = "GPP"
+      diff_name = "GPP",
+      cols_keep = c("datetime")
     )
   )
 })
@@ -281,7 +263,6 @@ test_that("error with non unique pairs", {
   expect_error(
     flux_diff(fluxes,
       type,
-      datetime,
       flux,
       id_cols = "turfid",
       type_a = "NEE",
@@ -289,5 +270,23 @@ test_that("error with non unique pairs", {
       diff_name = "GPP"
     ),
     "The id_cols provided do not form unique pairs."
+  )
+})
+
+test_that("type named differently", {
+  test <- co2_fluxes |>
+    dplyr::rename(
+      flux_type = "type"
+    )
+  expect_snapshot(
+    suppressWarnings(flux_diff(test,
+      flux_type,
+      f_flux,
+      id_cols = "turfID",
+      cols_keep = c("temp_soil", "f_start"),
+      type_a = "NEE",
+      type_b = "ER",
+      diff_name = "GPP"
+    ))
   )
 })

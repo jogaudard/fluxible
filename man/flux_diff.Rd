@@ -7,7 +7,6 @@
 flux_diff(
   fluxes_df,
   type_col,
-  f_datetime,
   f_flux = f_flux,
   id_cols,
   type_a,
@@ -20,8 +19,6 @@ flux_diff(
 \item{fluxes_df}{a dataframe containing fluxes}
 
 \item{type_col}{column containing type of flux}
-
-\item{f_datetime}{column containing start of measurement as datetime}
 
 \item{f_flux}{column containing flux values}
 
@@ -52,6 +49,6 @@ GPP = NEE - ER). Datetime and other variables to keep will be taken from the
 }
 \examples{
 data(co2_fluxes)
-flux_diff(co2_fluxes, type, f_start, id_cols = "turfID",
-cols_keep = c("temp_soil"), type_a = "NEE", type_b = "ER", diff_name = "GPP")
+flux_diff(co2_fluxes, type, id_cols = "turfID", cols_keep = c("temp_soil"),
+type_a = "NEE", type_b = "ER", diff_name = "GPP")
 }
