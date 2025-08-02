@@ -1,13 +1,13 @@
 ---
 title: "Using fluxible with the Li7500"
-# output: github_document
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Using fluxible with the Li7500}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-bibliography: biblio_phd_zot.bib
-csl: emerald-harvard.csl
+output: github_document
+# output: rmarkdown::html_vignette
+# vignette: >
+#   %\VignetteIndexEntry{Using fluxible with the Li7500}
+#   %\VignetteEngine{knitr::rmarkdown}
+#   %\VignetteEncoding{UTF-8}
+# bibliography: biblio_phd_zot.bib
+# csl: emerald-harvard.csl
 ---
 
 ```{r, include = FALSE}
@@ -714,7 +714,7 @@ pftc5_fluxes_comparison_h2o |>
 
 ```{r cleaning, include = FALSE, eval = TRUE}
 library(here)
-unlink(here("vignettes", "ex_data", "li7500"),
+unlink(here("building-material", "ex_data", "li7500"),
        recursive = TRUE)
 ```
 
