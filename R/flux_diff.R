@@ -25,8 +25,8 @@
 #' @importFrom rlang := as_label enquo
 #' @examples
 #' data(co2_fluxes)
-#' flux_diff(co2_fluxes, type, f_start, id_cols = "turfID",
-#' cols_keep = c("temp_soil"), type_a = "NEE", type_b = "ER", diff_name = "GPP")
+#' flux_diff(co2_fluxes, type, id_cols = "turfID", cols_keep = c("temp_soil"),
+#' type_a = "NEE", type_b = "ER", diff_name = "GPP")
 #' @export
 
 flux_diff <- function(fluxes_df,
