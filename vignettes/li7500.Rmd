@@ -1,13 +1,13 @@
 ---
 title: "Using fluxible with the Li7500"
-output: github_document
-# output: rmarkdown::html_vignette
-# vignette: >
-#   %\VignetteIndexEntry{Preparing the data for fluxible}
-#   %\VignetteEngine{knitr::rmarkdown}
-#   %\VignetteEncoding{UTF-8}
-# bibliography: biblio_phd_zot.bib
-# csl: emerald-harvard.csl
+# output: github_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Preparing the data for fluxible}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: biblio_phd_zot.bib
+csl: emerald-harvard.csl
 ---
 
 ```{r, include = FALSE}
@@ -591,7 +591,7 @@ pftc5_fluxes_comparison_co2 <- left_join(pftc5_published_fluxes_co2,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_co2, echo=FALSE, fig.cap="Comparison of CO2 fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
+```{r figure_co2, echo=FALSE, fig.cap="Comparison of CO2 fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=8, fig.height=9}
 
 pftc5_fluxes_comparison_co2 |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
@@ -681,7 +681,7 @@ pftc5_fluxes_comparison_h2o <- left_join(pftc5_published_fluxes_h2o,
                                          relationship = "many-to-many")
 ```
 
-```{r figure_h2o, echo=FALSE, fig.cap="Comparison of H2O fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=15, fig.height=18}
+```{r figure_h2o, echo=FALSE, fig.cap="Comparison of H2O fluxes calculated with fluxible and published in Halbritter et al (2024).", message=FALSE, warning=FALSE, fig.width=8, fig.height=9}
 
 pftc5_fluxes_comparison_h2o |>
   ggplot(aes(fluxible_flux, published_fluxes, color = model)) +
