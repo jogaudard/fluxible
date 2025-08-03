@@ -1,3 +1,8 @@
+# fluxible 1.2.13
+
+* `flux_fitting`: `cut_direction` allows to cut from both sides, or start, or end
+
+
 # fluxible 1.2.12
 
 * `flux_drygas`: does the wet air correction

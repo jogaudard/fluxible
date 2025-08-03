@@ -26,6 +26,10 @@
 #' (`exp_zhao18` and `exp_tz` fits)
 #' @param start_cut time to discard at the start of the measurements
 #' (in seconds)
+#' @param cut_direction `"none"` (default) means that the focuse window is
+#' `f_start + start_cut` to `f_end - end_cut`; `"from_start"` makes it
+#' `f_start + start_cut` to `f_start + end_cut`; `"from_end"` makes it
+#' `f_end - start_cut` to `f_end - end_cut`.
 #' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @param f_start column with datetime when the measurement started (`ymd_hms`)
 #' @param f_end column with datetime when the measurement ended (`ymd_hms`)
@@ -56,6 +60,8 @@
 #' transparent chambers. Agricultural and Forest Meteorology 263, 267–275.
 #' https://doi.org/10.1016/j.agrformet.2018.08.022
 #' @importFrom lubridate int_length interval
+#' @importFrom rlang as_label enquo
+#' @importFrom dplyr case_when mutate select
 #' @examples
 #' data(co2_conc)
 #' flux_fitting(co2_conc, conc, datetime, fit_type = "exp_zhao18")
@@ -73,12 +79,13 @@ flux_fitting <- function(conc_df,
                          start_cut = 0,
                          end_cut = 0,
                          t_zero = 0,
+                         cut_direction = "none",
                          cz_window = 15,
                          b_window = 10,
                          a_window = 10,
                          roll_width = 15) {
 
-  name_df <- deparse(substitute(conc_df))
+  name_df <- as_label(enquo(conc_df))
 
   args_ok <- flux_fun_check(list(
     start_cut = start_cut,
@@ -114,6 +121,8 @@ flux_fitting <- function(conc_df,
   if (any(!c(args_ok, conc_df_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
+  cut_direction <- match.arg(cut_direction, c("none", "from_start", "from_end"))
+
   length_flux_max <- conc_df |>
     mutate(
       length_flux = int_length(interval({{f_start}}, {{f_end}}))
@@ -121,10 +130,41 @@ flux_fitting <- function(conc_df,
     select("length_flux") |>
     max()
 
-  if ((start_cut + end_cut) >= length_flux_max) {
+
+
+  if (
+    cut_direction == "none" &&
+      (start_cut + end_cut) >= length_flux_max
+  ) {
     stop(
       "You cannot cut more than the length of the measurements!"
     )
+  }
+
+  if (cut_direction == "from_start") {
+    if (end_cut >= length_flux_max) {
+      stop(
+        "You cannot cut more than the length of the measurements!"
+      )
+    }
+    if (end_cut < start_cut) {
+      stop(
+        "end_cut cannot be smaller than start_cut"
+      )
+    }
+  }
+
+  if (cut_direction == "from_end") {
+    if (start_cut >= length_flux_max) {
+      stop(
+        "You cannot cut more than the length of the measurements!"
+      )
+    }
+    if (start_cut < end_cut) {
+      stop(
+        "start_cut cannot be smaller than end_cut"
+      )
+    }
   }
 
   conc_df <- conc_df |>
@@ -147,8 +187,14 @@ flux_fitting <- function(conc_df,
         units = "secs"
       ),
       f_time = as.double(.data$f_time),
-      {{f_start}} := {{f_start}} + start_cut,
-      {{f_end}} := {{f_end}} - end_cut,
+      {{f_start}} := case_when(
+        cut_direction %in% c("none", "from_start") ~ {{f_start}} + start_cut,
+        cut_direction == "from_end" ~ {{f_end}} - start_cut
+      ),
+      {{f_end}} := case_when(
+        cut_direction %in% c("none", "from_end") ~ {{f_end}} - end_cut,
+        cut_direction == "from_start" ~ {{f_start}} + end_cut
+      ),
       f_cut = case_when(
         {{f_datetime}} < {{f_start}} | {{f_datetime}} >= {{f_end}}
         ~ "cut",

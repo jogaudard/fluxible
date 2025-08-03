@@ -1,8 +1,8 @@
 ---
-title: "Practical example: from raw gas concentration data to clean ecosystem gas fluxes."
+title: "From raw gas concentration data to clean ecosystem gas fluxes."
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Practical example: from raw gas concentration data to clean ecosystem gas fluxes.}
+  %\VignetteIndexEntry{From raw gas concentration data to clean ecosystem gas fluxes.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: biblio_phd_zot.bib
@@ -322,7 +322,7 @@ fluxes_liahovden_60 <- flux_calc(
   setup_volume = 24.575, # in liters, can also be a variable
   atm_pressure = 1, # in atm, can also be a variable
   plot_area = 0.0625, # in m2, can also be a variable
-  cols_keep = c("turfID", "type"),
+  cols_keep = c("turfID", "type", "round"),
   cols_ave = c("temp_soil", "PAR")
 )
 ```
@@ -383,28 +383,15 @@ Other type of flux than ER and NEE, if present in the dataset (e.g. light respon
 <!-- The timestamps and PAR value from the NEE measurement are also attributed to the GEP one and any variable specified by the user. -->
 Each NEE and ER measurements need to be paired together for this calculation.
 The `id_cols` argument specifies which columns should be used for pairing (e.g., date, campaign).
-Since those measurements were done continuously for 24 hours, we added a pairID column, which is pairing each NEE measurement with its following ER measurement.
-This pairs the NEE and ER measurements of the same plot and same round of measurement because we systematically measured ER after NEE for each plot.
+Note that the more generic `flux_diff` can also be used.
 
 ```{r gpp-lia}
-library(tidyverse)
-
-fluxes_liahovden_60 <- fluxes_liahovden_60 |>
-  mutate(
-    f_fluxid = as.integer(f_fluxid),
-    pairID = case_when(
-      type == "NEE" ~ f_fluxid,
-      type == "ER" ~ f_fluxid - 1
-    ),
-    f_fluxid = as_factor(f_fluxid),
-    pairID = as_factor(pairID)
-  )
 
 gpp_liahovden_60 <- flux_gpp(
   fluxes_df = fluxes_liahovden_60,
   type_col = type, # the column specifying the type of measurement
   f_datetime = datetime,
-  id_cols = c("pairID", "turfID"),
+  id_cols = c("round", "turfID"),
   cols_keep = c("temp_soil_ave", "PAR_ave"), # or "none" (default) or "all"
   nee_arg = "NEE", # default value
   er_arg = "ER" # default value
@@ -422,7 +409,6 @@ str(gpp_liahovden_60, width = 70, strict.width = "cut")
 
 
 ```{r 24h_fluxes, fig.width=8, fig.height=9, warning=FALSE, message=FALSE, echo=FALSE, eval=FALSE}
-
 
 library(ggplot2)
 fluxes_exp_liahovden_60_gep |>
