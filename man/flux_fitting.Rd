@@ -56,6 +56,11 @@ from Zhao et al (2018).
 \item{t_zero}{time at which the slope should be calculated
 (for \code{quadratic}, \code{exp_tz} and \code{exp_hm} fits)}
 
+\item{cut_direction}{\code{"none"} (default) means that the focuse window is
+\code{f_start + start_cut} to \code{f_end - end_cut}; \code{"from_start"} makes it
+\code{f_start + start_cut} to \code{f_start + end_cut}; \code{"from_end"} makes it
+\code{f_end - start_cut} to \code{f_end - end_cut}.}
+
 \item{cz_window}{window used to calculate Cz, at the beginning of cut window
 (\code{exp_zhao18} and \code{exp_tz} fits)}
 
