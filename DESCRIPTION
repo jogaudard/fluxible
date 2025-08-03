@@ -29,8 +29,6 @@ Suggests:
     vdiffr,
     tidyverse,
     fs,
-    dataDownloader,
-    here,
     licoread
 Config/testthat/edition: 3
 Imports: 
