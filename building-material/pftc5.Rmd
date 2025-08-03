@@ -1,13 +1,10 @@
 ---
 title: "Reprocessing PFTC5 fluxes"
 output: github_document
-# output: rmarkdown::html_vignette
-# vignette: >
-#   %\VignetteIndexEntry{Using fluxible with the Li7500}
-#   %\VignetteEngine{knitr::rmarkdown}
-#   %\VignetteEncoding{UTF-8}
-bibliography: biblio_phd_zot.bib
-csl: emerald-harvard.csl
+author: Joseph Gaudard
+date: today
+bibliography: /home/jga051/Dropbox/PhD/biblio_phd_zot.bib
+csl: /home/jga051/Documents/01_PhD/apa-old-doi-prefix.csl
 ---
 
 ```{r, include = FALSE}
@@ -18,8 +15,7 @@ knitr::opts_chunk$set(
 options(tidyverse.quiet = TRUE)
 ```
 
-This vignette aims at reproducing the ecosystem fluxes (CO~2~ and H~2~O) processing presented in @halbritterPlantTraitVegetation2024.
-It also acts as an example on how to use fluxible with the LI-7500 open path setup, and how to reprocess data that were collected with a different processing method in mind.
+This report aims at reproducing the ecosystem fluxes (CO~2~ and H~2~O) processing presented in @halbritterPlantTraitVegetation2024.
 
 
 # Importing and reading the files
@@ -49,9 +45,7 @@ pftc5_data_raw <- import7500(
 ```
 
 <!-- The `licoread::import7500` function provides `f_fluxid`, `f_start` and `f_end`, meaning we could skip `fluxible::flux_match`. -->
-The `licoread::import7500` function provides `file_start` and `file_end`, and `filename` as a unique measurement identifier, meaning we could skip `fluxible::flux_match`.
-However, `file_start` and `file_end` are based on the start and end of the files, which would require a strict data collection routine, which was not done there (because there was no original plans to use fluxible since it did not exist).
-The strategy will be to recreate the `field_record` input.
+To reproduce the similar flux by flux cutting done during the PFTC5, we will  recreate the `field_record` input.
 We can use the `t_start` and `t_finish` columns in the clean data for that, since they correspond to the cuts the team decided to apply.
 Note that this is also an example of how fluxible can be used to process data in a non homogenous way, would that be necessary.
 
@@ -134,15 +128,6 @@ pftc5_data <- pftc5_data_raw |>
   select(!c(site, treatment, plot_id, trial, date))
 ```
 
-Would that be necessary to process fluxes in a non homogenous way (manual cutting after visualization), the procedure would go as follow:
-
-- use start and end from `licoread::import7500`
-- process fluxes until visualization (`flux_fitting`, `flux_quality` and `flux_plot`)
-- based on the plots, create a `record` file with metadata identifying the fluxes (`filename`), start and end (note that `flux_match` requires datetime format)
-- include `flux_match` before `flux_fitting` in your workflow, and match the fluxes with the record file created
-- adapt the record file if necessary and rerun until `flux_plot`
-- once satisfied with cutting and fitting, run `flux_calc` as normally
-
 # Processing with fluxible
 <!-- Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`. -->
 We will fit both the linear and exponential model for comparison purpose.
@@ -190,6 +175,9 @@ pftc5_flags_exp_co2 |>
   flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 500,
+            f_ylim_lower = 350,
+            y_text_position = 450,
             f_plotname = "ACJ_plot_exp_co2")
 
 pftc5_flags_exp_co2 |>
@@ -197,6 +185,9 @@ pftc5_flags_exp_co2 |>
   flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 500,
+            f_ylim_lower = 350,
+            y_text_position = 450,
             f_plotname = "PIL_plot_exp_co2")
 
 pftc5_flags_exp_co2 |>
@@ -204,6 +195,9 @@ pftc5_flags_exp_co2 |>
   flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 500,
+            f_ylim_lower = 350,
+            y_text_position = 450,
             f_plotname = "QUE_plot_exp_co2")
 
 pftc5_flags_exp_co2 |>
@@ -211,6 +205,9 @@ pftc5_flags_exp_co2 |>
   flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 500,
+            f_ylim_lower = 350,
+            y_text_position = 450,
             f_plotname = "TRE_plot_exp_co2")
 
 pftc5_flags_exp_co2 |>
@@ -218,6 +215,9 @@ pftc5_flags_exp_co2 |>
   flux_plot(f_conc = `CO2 umol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 500,
+            f_ylim_lower = 350,
+            y_text_position = 450,
             f_plotname = "WAY_plot_exp_co2")
 
 pftc5_flags_exp_co2 |>
@@ -230,10 +230,6 @@ pftc5_flags_exp_co2 |>
             y_text_position = 450,
             f_plotname = "zero_plot_exp_co2")
 ```
-
-If other data (PAR and co) need cleaning, that would happen here.
-To "compress" environmental variables at a single value per flux, see the arguments `cols_ave`, `cols_sum`, and `cols_med` in `fluxible::flux_calc`.
-To keep the raw data (gas concentration or anything else) in a nested column, see the `cols_nest` argument.
 
 Now let's calculate the fluxes with `fluxible::flux_calc`.
 ```{r calc_exp_co2}
@@ -270,9 +266,8 @@ pftc5_flags_lm_co2 <- flux_quality(pftc5_fits_lm_co2,
 ```
 
 
-
-Then plotting (in an external file) for a visual check:
-```{r plotting_lm_co2, eval = FALSE}
+<!-- Then plotting (in an external file) for a visual check: -->
+```{r plotting_lm_co2, eval = FALSE, include=FALSE}
 pftc5_flags_lm_co2 |>
   dplyr::filter(site == "ACJ") |>
   flux_plot(f_conc = `CO2 umol/mol_dry`,
