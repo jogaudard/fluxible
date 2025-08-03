@@ -4,6 +4,7 @@ usethis::use_test("flux_fitting_quadratic")
 
 #to add used packages in the description
 usethis::use_package("tibble")
+usethis::use_dev_package("licoread")
 
 # to make the webpage
 usethis::use_pkgdown()
