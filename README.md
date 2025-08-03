@@ -15,9 +15,16 @@ coverage](https://codecov.io/gh/Plant-Functional-Trait-Course/fluxible/graph/bad
 <!-- badges: end -->
 
 The Fluxible R package is made to transform any dataset of gas
-concentration over time into a gas flux dataset. It was originally made
-to be used with a closed loop chamber system connected to a gas
-analyzer.
+concentration over time into a gas flux dataset.
+<!-- It was originally made to be used with a closed loop chamber system connected to a gas analyzer. -->
+Thanks to its flexibility, it works for all kinds of setups (separated
+files for each measurement vs continuous logging, variable vs constant
+chamber volume, variable vs constant measurement length, …). It is
+organized as a toolbox with one function per steps, which offers a lot
+of freedom. If environmental data were recorded simultaneously
+(photosynthetically active radiation, soil temperature, …), they can
+also be processed (mean, sum or median), with the same focus window as
+the flux estimate.
 
 The goal of fluxible is to provide a workflow that removes individual
 evaluation of each flux, reduces risk of bias, and makes it
@@ -174,15 +181,17 @@ fluxes_gpp
 #> 9 2022-07-29 00:06:25 NEE    32.7           12.2 29 WN3C 106
 ```
 
-## Further developments
+## Supporting infrastructure
 
-### The licoread R package
+### licoread R package
 
 The [licoread R
 package](https://jogaudard.github.io/licoread/index.html), developped in
 collaboration with [LI-COR](https://www.licor.com/), provides an easy
 way to import raw files from Li-COR gas analyzers as R objects that can
 be used directly with the Fluxible R package.
+
+## Further developments
 
 ### Segmentation tool
 
