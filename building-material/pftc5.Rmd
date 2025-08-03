@@ -40,7 +40,7 @@ library(licoread)
 library(tidyverse)
 pftc5_data_raw <- import7500(
   "ex_data/li7500/rawC-flux/rawData/raw_tent-flux",
-  plotinfo_names = c("site", "treatment", "date", "plot_id", "trial")
+  plotinfo = c("site", "treatment", "date", "plot_id", "trial")
 )
 ```
 
@@ -220,15 +220,7 @@ pftc5_flags_exp_co2 |>
             y_text_position = 450,
             f_plotname = "WAY_plot_exp_co2")
 
-pftc5_flags_exp_co2 |>
-  dplyr::filter(f_quality_flag == "zero") |>
-  flux_plot(f_conc = `CO2 umol/mol_dry`,
-            print_plot = FALSE,
-            output = "longpdf",
-            f_ylim_upper = 500,
-            f_ylim_lower = 350,
-            y_text_position = 450,
-            f_plotname = "zero_plot_exp_co2")
+
 ```
 
 Now let's calculate the fluxes with `fluxible::flux_calc`.
@@ -381,6 +373,9 @@ pftc5_flags_exp_h2o |>
   flux_plot(f_conc = `H2O mmol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 15,
+            f_ylim_lower = 5,
+            y_text_position = 12,
             f_plotname = "ACJ_plot_exp_h2o")
 
 pftc5_flags_exp_h2o |>
@@ -388,6 +383,9 @@ pftc5_flags_exp_h2o |>
   flux_plot(f_conc = `H2O mmol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 15,
+            f_ylim_lower = 5,
+            y_text_position = 12,
             f_plotname = "PIL_plot_exp_h2o")
 
 pftc5_flags_exp_h2o |>
@@ -395,6 +393,9 @@ pftc5_flags_exp_h2o |>
   flux_plot(f_conc = `H2O mmol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 15,
+            f_ylim_lower = 5,
+            y_text_position = 12,
             f_plotname = "QUE_plot_exp_h2o")
 
 pftc5_flags_exp_h2o |>
@@ -402,6 +403,9 @@ pftc5_flags_exp_h2o |>
   flux_plot(f_conc = `H2O mmol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 15,
+            f_ylim_lower = 5,
+            y_text_position = 12,
             f_plotname = "TRE_plot_exp_h2o")
 
 pftc5_flags_exp_h2o |>
@@ -409,17 +413,12 @@ pftc5_flags_exp_h2o |>
   flux_plot(f_conc = `H2O mmol/mol_dry`,
             print_plot = FALSE,
             output = "longpdf",
+            f_ylim_upper = 15,
+            f_ylim_lower = 5,
+            y_text_position = 12,
             f_plotname = "WAY_plot_exp_h2o")
 
-pftc5_flags_exp_h2o |>
-  dplyr::filter(f_quality_flag == "zero") |>
-  flux_plot(f_conc = `H2O mmol/mol_dry`,
-            print_plot = FALSE,
-            output = "longpdf",
-            f_ylim_upper = 500,
-            f_ylim_lower = 350,
-            y_text_position = 450,
-            f_plotname = "zero_plot_exp_h2o")
+
 ```
 
 Flux calculations:
@@ -460,8 +459,8 @@ pftc5_flags_lm_h2o <- flux_quality(pftc5_fits_lm_h2o,
 
 
 
-Then plotting (in an external file) for a visual check:
-```{r plotting_lm_h2o, eval = FALSE}
+<!-- Then plotting (in an external file) for a visual check: -->
+```{r plotting_lm_h2o, eval = FALSE, include=FALSE}
 pftc5_flags_lm_h2o |>
   dplyr::filter(site == "ACJ") |>
   flux_plot(f_conc = `H2O mmol/mol_dry`,
@@ -525,28 +524,6 @@ pftc5_fluxes_lm_h2o <- flux_calc(pftc5_flags_lm_h2o,
 ```
 
 
-# Calculating Gross Primary Production and Transpiration
-
-I'm glad you asked!
-The function `fluxible::flux_diff` is precisely made for that.
-
-```{r gpp, warning=FALSE}
-pftc5_fluxes_lm_co2 <- flux_diff(pftc5_fluxes_lm_co2, type_col = flux,
-                                 id_cols = c(
-                                   "site", "treatment", "date",
-                                   "plot_id", "replicate"
-                                 ), type_a = "NEE", type_b = "Reco",
-                                 diff_name = "GPP", cols_keep = "all")
-```
-
-```{r trans, warning=FALSE}
-pftc5_fluxes_lm_h2o <- flux_diff(pftc5_fluxes_lm_h2o, type_col = flux,
-                                 id_cols = c(
-                                   "site", "treatment", "date",
-                                   "plot_id", "replicate"
-                                 ), type_a = "ET", type_b = "E",
-                                 diff_name = "T", cols_keep = "all")
-```
 
 # Comparison
 
@@ -706,6 +683,8 @@ pftc5_fluxes_comparison_h2o |>
 - The fluxes with hight published values and zero with fluxible are good examples of the behaviour of the nls model with linear data. Looking at the plot, it is evident that those fluxes are close to zero. In fluxible, they get flagged for as "bad fit", but since there is no change of concentration over time they get replaced by zero instead of getting discarded.
 - Possible explanation for the over estimation of the exponential model in fluxible compared to the linear model can be found in @kutzbachCO2FluxDetermination2007 .
 - At this point I don't have a hypothesis for the slight over estimation with fluxible when using a linear model.
+
+## Investigation of differences
 
 ```{r cleaning, include = FALSE, eval = TRUE}
 library(here)
