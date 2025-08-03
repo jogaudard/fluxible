@@ -15,6 +15,7 @@ flux_fitting(
   start_cut = 0,
   end_cut = 0,
   t_zero = 0,
+  cut_direction = "none",
   cz_window = 15,
   b_window = 10,
   a_window = 10,
