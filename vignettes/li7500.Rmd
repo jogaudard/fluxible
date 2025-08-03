@@ -97,7 +97,7 @@ li7500_flags_co2 <- flux_quality(li7500_fits_co2,
 
 
 Plotting:
-```{r plotting_co2, message=FALSE, warning=FALSE}
+```{r plotting_co2, message=FALSE, warning=FALSE, fig.cap="Output of `flux_plot` for co2 fluxes"}
 flux_plot(li7500_flags_co2,
           f_conc = `CO2 umol/mol_dry`,
           f_ylim_upper = 500,
@@ -164,7 +164,7 @@ li7500_flags_h2o <- flux_quality(li7500_fits_h2o,
 
 
 Plotting:
-```{r plotting_h2o, eval = FALSE}
+```{r plotting_h2o, message=FALSE, warning=FALSE, fig.cap="Output of `flux_plot` for h2o fluxes"}
 
 flux_plot(li7500_flags_h2o,
           f_conc = `H2O mmol/mol_dry`,

@@ -1,8 +1,8 @@
 ---
-title: "Practical example: from raw gas concentration data to clean ecosystem gas fluxes."
+title: "From raw gas concentration data to clean ecosystem gas fluxes."
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Practical example: from raw gas concentration data to clean ecosystem gas fluxes.}
+  %\VignetteIndexEntry{From raw gas concentration data to clean ecosystem gas fluxes.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: biblio_phd_zot.bib
