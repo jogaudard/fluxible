@@ -227,14 +227,27 @@ li7500_fluxes_h2o <- flux_diff(li7500_fluxes_h2o, type_col = trial,
 # Further calculations
 
 In order to calculate carbon and water use efficiencies, we need both H~2~O and CO~2~ fluxes in the same dataset.
-Because they have the same fluxid, we can join them like this.
 
+```{r joining}
+library(tidyverse)
+# to avoid confusion, we add a gas column
+# this might be implemented in flux_calc in the future
 
+li7500_fluxes_co2 <- li7500_fluxes_co2 |>
+  mutate(gas = "co2")
 
-Note that in this example the fluxid is the filename.
-If we had used `flux_match`, fluxid would be a number.
-But because `flux_match` attributes the fluxid in chronological order, and H~2~O and CO~2~ concentrations were measured simultaneously, fluxid would still be a valid strategy to join the two flux datsets.
-This is explained in `vignette("two-gases", package = "fluxible")`.
+li7500_fluxes_h2o <- li7500_fluxes_h2o |>
+  mutate(gas = "h2o")
+
+li7500_fluxes <- bind_rows(li7500_fluxes_co2, li7500_fluxes_h2o)
+
+# Now the data are in a single long df
+```
+```{r, str, message=FALSE, echo=FALSE}
+
+str(li7500_fluxes, width = 70, strict.width = "cut")
+```
+
 
 
 ### References
