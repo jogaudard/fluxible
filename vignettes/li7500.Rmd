@@ -59,14 +59,13 @@ That makes the processing non homogeneous but still reproducible.
 
 ## One side is reliable
 
-(Coming soon!!)
 
-<!-- If the start or the end are consistant but not the other, you can change the direction of the cutting in `flux_fitting`.
+If the start or the end are consistant but not the other, you can change the direction of the cutting in `flux_fitting`.
 By default, `flux_fitting` cuts the focus window as `start + start_cut` to `end - end_cut`.
 The argument `cut_direction` allows to change that:
 
-- `cut_direction = "from_start"` means the focus window will be `start + start_cut` to `start + end_cut`
-- `cut_direction = "from_end"` means the focus window will be `end - start_cut` to `end - end_cut` -->
+- `cut_direction = "from_start"` means the focus window will be from `start + start_cut` to `start + end_cut`
+- `cut_direction = "from_end"` means the focus window will be from `end - start_cut` to `end - end_cut`
 
 
 # Processing with fluxible
@@ -82,7 +81,7 @@ li7500_data_co2 <- flux_drygas(li7500_data, `CO2 umol/mol`, `H2O mmol/mol`)
 ```
 
 
-Fitting the model presented in @zhaoCalculationDaytimeCO22018.
+Fitting a linear model:
 ```{r fitting_co2, message = FALSE, warning = FALSE}
 li7500_fits_co2 <- flux_fitting(li7500_data_co2,
                                 f_conc = `CO2 umol/mol_dry`,
@@ -145,22 +144,22 @@ li7500_data_h2o <- flux_drygas(li7500_data, `H2O mmol/mol`, `H2O mmol/mol`)
 ```
 
 
-Fitting the model presented in @zhaoCalculationDaytimeCO22018.
+Fitting a linear model:
 ```{r fitting_h2o, message = FALSE, warning = FALSE}
 li7500_fits_h2o <- flux_fitting(li7500_data_h2o,
-                                   f_conc = `H2O mmol/mol_dry`,
-                                   fit_type = "linear",
-                                   start_cut = 0,
-                                   end_cut = 0)
+                                f_conc = `H2O mmol/mol_dry`,
+                                fit_type = "linear",
+                                start_cut = 0,
+                                end_cut = 0)
 ```
 
 Using `fluxible::flux_quality` to assess the quality of the dataset:
 ```{r flags_h2o}
 li7500_flags_h2o <- flux_quality(li7500_fits_h2o,
-                                    f_conc = `H2O mmol/mol_dry`,
-                                    rsquared_threshold = 0.5,
-                                    ambient_conc = 10, # the default is for CO2
-                                    error = 2)
+                                 f_conc = `H2O mmol/mol_dry`,
+                                 rsquared_threshold = 0.5,
+                                 ambient_conc = 10, # the default is for CO2
+                                 error = 2)
 ```
 
 
