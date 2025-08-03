@@ -28,8 +28,7 @@ Suggests:
     testthat (>= 3.0.0),
     vdiffr,
     tidyverse,
-    fs,
-    licoread
+    fs
 Config/testthat/edition: 3
 Imports: 
     broom,
@@ -49,10 +48,13 @@ Imports:
     tidyselect,
     lifecycle,
     forcats,
-    tibble
+    tibble,
+    licoread (>= 0.3.0)
 Depends: 
     R (>= 4.1)
 LazyData: true
 URL: https://plant-functional-trait-course.github.io/fluxible/, https://github.com/Plant-Functional-Trait-Course/fluxible
 VignetteBuilder: knitr
 BugReports: https://github.com/Plant-Functional-Trait-Course/fluxible/issues
+Remotes:  
+    jogaudard/licoread
