@@ -1256,3 +1256,5 @@ flux_plot(
   output = "longpdf",
   f_plotname = "longpdftest"
 )
+
+message(bquote(`blop` * m^2 * `h`))

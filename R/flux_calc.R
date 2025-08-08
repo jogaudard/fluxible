@@ -321,7 +321,7 @@ flux_calc <- function(slopes_df,
   message("Calculating fluxes...")
 
   r_const <- 0.082057
-  message("R constant set to 0.082057")
+  message("R constant set to 0.082057 L * atm * K^-1 * mol^-1")
 
   message(paste("Concentration was measured in", conc_unit))
 
