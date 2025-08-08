@@ -9,17 +9,17 @@ co2_liahovden <- read_csv(
 )
 
 # some renaming because logger is giving them annoying names
-co2_liahovden <- co2_liahovden %>%
+co2_liahovden <- co2_liahovden |>
   rename(
     datetime = "Date/Time",
     temp_air = "Temp_air ('C)",
     temp_soil = "Temp_soil ('C)",
     conc = "CO2 (ppm)",
     PAR = "PAR (umolsm2)"
-  ) %>%
+  ) |>
   mutate(
     datetime = dmy_hms(datetime)
-  ) %>%
+  ) |>
   select(
     datetime, temp_air, temp_soil, conc, PAR
   ) # we keep just the variables we need
@@ -31,8 +31,8 @@ usethis::use_data(co2_liahovden, overwrite = TRUE)
 # making the dataset we want
 record_liahovden <- read_csv("data-raw/PFTC6_cflux_field-record_liahovden.csv")
 
-record_liahovden <- record_liahovden %>%
-  select(turfID, type, starting_time, date, round) %>%
+record_liahovden <- record_liahovden |>
+  select(turfID, type, starting_time, date, round) |>
   dplyr::rename(measurement_round = "round") |>
   mutate(
     starting_time = formatC(
@@ -47,7 +47,7 @@ record_liahovden <- record_liahovden %>%
     start = ymd_hms(
       paste(date, starting_time)
     ), # pasting date and time together to make datetime
-  ) %>%
+  ) |>
   select(!c(starting_time, date))
 
 usethis::use_data(record_liahovden, overwrite = TRUE)

@@ -12,7 +12,7 @@ test_that("matching works", {
 })
 
 test_that("time_diff works", {
-  co2_df_short_180 <- co2_df_short %>%
+  co2_df_short_180 <- co2_df_short |>
     dplyr::mutate(
       datetime = datetime - 180 # logger is lagging 3 minutes behind
     )
@@ -30,13 +30,13 @@ test_that("time_diff works", {
 })
 
 test_that("renaming variables works", {
-  co2_df_short <- co2_df_short %>%
+  co2_df_short <- co2_df_short |>
     dplyr::rename(
       CO2_conc = conc,
       date_time = datetime
     )
 
-  record_short <- record_short %>%
+  record_short <- record_short |>
     dplyr::rename(
       starting = start
     )
@@ -76,7 +76,7 @@ test_that("flags on nb of data", {
 # test that the data type checking works (all the error messages)
 
 test_that("error on datetime", {
-  co2_df_short <- co2_df_short %>%
+  co2_df_short <- co2_df_short |>
     dplyr::mutate(
       datetime = lubridate::date(datetime)
     )
@@ -95,7 +95,7 @@ test_that("error on datetime", {
 
 
 test_that("error on start", {
-  record_short <- record_short %>%
+  record_short <- record_short |>
     dplyr::mutate(
       start = lubridate::hour(start)
     )
