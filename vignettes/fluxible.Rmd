@@ -322,7 +322,7 @@ fluxes_liahovden_60 <- flux_calc(
   setup_volume = 24.575, # in liters, can also be a variable
   atm_pressure = 1, # in atm, can also be a variable
   plot_area = 0.0625, # in m2, can also be a variable
-  cols_keep = c("turfID", "type", "round"),
+  cols_keep = c("turfID", "type", "measurement_round"),
   cols_ave = c("temp_soil", "PAR")
 )
 ```
@@ -391,7 +391,7 @@ gpp_liahovden_60 <- flux_gpp(
   fluxes_df = fluxes_liahovden_60,
   type_col = type, # the column specifying the type of measurement
   f_datetime = datetime,
-  id_cols = c("round", "turfID"),
+  id_cols = c("measurement_round", "turfID"),
   cols_keep = c("temp_soil_ave", "PAR_ave"), # or "none" (default) or "all"
   nee_arg = "NEE", # default value
   er_arg = "ER" # default value

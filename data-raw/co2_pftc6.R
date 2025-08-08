@@ -33,6 +33,7 @@ record_liahovden <- read_csv("data-raw/PFTC6_cflux_field-record_liahovden.csv")
 
 record_liahovden <- record_liahovden %>%
   select(turfID, type, starting_time, date, round) %>%
+  dplyr::rename(measurement_round = "round") |>
   mutate(
     starting_time = formatC(
       starting_time,
