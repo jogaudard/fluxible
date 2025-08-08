@@ -358,7 +358,7 @@ test_that("cutting too much", {
 })
 
 test_that("renaming works", {
-  co2_conc_names <- co2_conc %>%
+  co2_conc_names <- co2_conc |>
     dplyr::rename(
       date_time = datetime,
       finish = f_end,
@@ -508,7 +508,7 @@ test_that("cutting too much", {
 })
 
 test_that("renaming works", {
-  co2_conc_names <- co2_conc %>%
+  co2_conc_names <- co2_conc |>
     dplyr::rename(
       date_time = datetime,
       finish = f_end,

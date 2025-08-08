@@ -134,7 +134,7 @@ flux_quality <- function(slopes_df,
                          instr_error = 5,
                          kappamax = FALSE) {
 
-  name_df <- deparse(substitute(slopes_df))
+  name_df <- as_label(enquo(slopes_df))
 
   args_ok <- flux_fun_check(list(
     ambient_conc = ambient_conc,

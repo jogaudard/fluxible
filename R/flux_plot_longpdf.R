@@ -2,7 +2,7 @@
 #' @param f_plot plot from flux_plots
 #' @param nb_fluxid number of facets
 #' @param f_plotname name of plot
-#' @param longpdf_args arguments for plotly in the form
+#' @param longpdf_args arguments for longpdf in the form
 #' `list(ncol, width (in cm), ratio)`
 #' @importFrom ggplot2 ggsave
 

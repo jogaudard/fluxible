@@ -50,7 +50,7 @@ flux_plot_exp <- function(slopes_df,
                color = "grey", linewidth = 0.5) +
     geom_point(
       aes(y = {{f_conc}}, color = .data$f_quality_flag),
-      size = 0.2,
+      size = 0.4,
       na.rm = TRUE
     ) +
     geom_text(

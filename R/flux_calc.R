@@ -7,7 +7,7 @@
 #' measurements in `slopes_df`. The first one after cutting will be kept as
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
-#' `ppm`, `ppb`, or `ppt`
+#' `mmol/mol`, `ppm`, `ppb`, or `ppt`
 #' @param flux_unit desired units for the calculated fluxes. Has to be of the
 #' form amount/surface/time. Amount can be `mol`, `mmol`, `umol`, `nmol` or
 #' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
@@ -51,12 +51,8 @@
 #' \link[fluxible:flux_fitting]{flux_fitting}. Will be automatically filled if
 #' `slopes_df` was produced using \link[fluxible:flux_fitting]{flux_fitting}.
 #' @return a dataframe containing flux IDs, datetime of measurements' starts,
-#' fluxes in
-#' \ifelse{html}{\out{mmol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{mmol*m^{-2}*h^{-1}}{ASCII}}
-#' or
-#' \ifelse{html}{\out{micromol * m<sup>-2</sup> * h<sup>-1</sup>}}{\eqn{micromol*m^{-2}*h^{-1}}{ASCII}}
-#' (`f_flux`) according to `flux_unit`, temperature average for each flux in
-#' Kelvin (`f_temp_ave`), the model used in
+#' fluxes (`f_flux`) in the units defined with `flux_unit`, temperature average
+#' for each flux in the same unit as the input (`f_temp_ave`), the model used in
 #' \link[fluxible:flux_fitting]{flux_fitting}, any column specified in
 #' `cols_keep`, any column specified in `cols_ave`, `cols_med` or `cols_sum`
 #' with their values treated accordingly over the measurement after cuts, and a
@@ -325,7 +321,7 @@ flux_calc <- function(slopes_df,
   message("Calculating fluxes...")
 
   r_const <- 0.082057
-  message("R constant set to 0.082057")
+  message("R constant set to 0.082057 L * atm * K^-1 * mol^-1")
 
   message(paste("Concentration was measured in", conc_unit))
 

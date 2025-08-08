@@ -17,11 +17,11 @@ knitr::opts_chunk$set(
 options(tidyverse.quiet = TRUE)
 ```
 
-Loggers and field equipement provide many different datasets format.
+Loggers and field equipment provide many different datasets format.
 The `readr::read_delim` [@readr2024] function works perfectly in most cases, given that the data are in a delimited file.
 
 We provide here examples on how to use `read_delim` to prepare your raw data files for the Fluxible R package.
-For users of Li-COR instruments, the [licoread R package](https://jogaudard.github.io/licoread/index.html), developped in collaboration with Li-COR, is designed to read 82z and 81x files and import them as fluxible-friendly objets.
+For users of Li-COR instruments, the [licoread R package](https://jogaudard.github.io/licoread/index.html), developed in collaboration with Li-COR, is designed to read 82z and 81x files and import them as fluxible-friendly objets.
 <!-- For users of LI-COR instruments, we present at the end of this section the Licoread R package [@gaudardLicoreadReadsRaw2025], to read specific LI-COR formats (82z and 81x). -->
 
 ## Checklists for inputs
@@ -156,13 +156,27 @@ raw_conc <- list.files( # list the files
 
 
 ## The one file per flux approach
-Fluxible is designed to process data that were measured continuously (in a single or several files) and a `field_record` that records what was measured when.
-Another strategy while measuring gas fluxes on the field is to create a new file for each measurement, with the file name as the flux ID.
-The approach is similar to reading multiple files, except we add a column with the file name, and can then by-pass `flux_match`.
+Fluxible can also be used with data that were recorded with one file per flux and the file names as flux ID.
+In that case, `flux_match` can be skipped as we will directly import the data with the flux IDs, and start and end of each flux measurements.
+In this example we use the fluxible default column names to make it easier for the rest of the data processing.
+The measurement lengths are based on the start and end of the files, which might not be accurate depending on the field routine.
+This can be adjusted with the arguments `start_cut`, `end_cut` and `cut_direction` in `flux_fitting`:
+<!-- By default, `flux_fitting` cuts the focus window as `start + start_cut` to `end - end_cut`. -->
+<!-- The argument `cut_direction` allows to change that: -->
+
+- `cut_direction = "none"` (default) means the focus window is defined as `start + start_cut` to `end - end_cut`
+- `cut_direction = "from_start"` means the focus window is defined as `start + start_cut` to `start + end_cut`
+- `cut_direction = "from_end"` means the focus window is defined as `end - start_cut` to `end - end_cut`
+
+
+<!-- Fluxible is designed to process data that were measured continuously (in a single or several files) and a `field_record` that records what was measured when. -->
+<!-- Another strategy while measuring gas fluxes on the field is to create a new file for each measurement, with the file name as the flux ID. -->
+<!-- The approach is similar to reading multiple files, except we add a column with the file name, and can then by-pass `flux_match`. -->
 
 ```{r one-file-one-flux, message=FALSE}
 
 library(tidyverse)
+
 
 raw_conc <- list.files( #listing all the files
   "ex_data/field_campaign", # at location "ex_data/field_campaign"
@@ -173,7 +187,7 @@ raw_conc <- list.files( #listing all the files
     read_tsv,
     skip = 3,
     # creates a column with the filename, that we can use as flux ID
-    id = "filename"
+    id = "f_fluxid"
   ) |>
   rename( # a bit of renaming to make the columns more practical
     co2_conc = "CO2 (umol/mol)",
@@ -182,13 +196,18 @@ raw_conc <- list.files( #listing all the files
     pressure = "Pressure (kPa)"
   ) |>
   mutate(
-    datetime = paste(Date, Time),
+    .by = f_fluxid,
+    f_datetime = paste(Date, Time),
     # we get rid of the milliseconds
-    datetime = as.POSIXct(datetime, format="%Y-%m-%d %H:%M:%OS"),
+    f_datetime = as.POSIXct(f_datetime, format = "%Y-%m-%d %H:%M:%OS"),
     pressure = pressure / 101.325, # conversion from kPa to atm
-    filename = basename(filename) # removing folder names
+    f_fluxid = basename(f_fluxid), # removing folder names
+    f_start = min(f_datetime), # start is the smallest datetime of each flux
+    f_end = max(f_datetime) # end is the greatest datetime of each flux
   ) |>
-  select(datetime, co2_conc, h2o_conc, air_temp, pressure, filename)
+  select(
+    f_datetime, co2_conc, h2o_conc, air_temp, pressure, f_fluxid, f_start, f_end
+  )
 ```
 
 `raw_conc` structure:

@@ -12,7 +12,7 @@ test_that("matching works", {
 })
 
 test_that("time_diff works", {
-  co2_df_short_180 <- co2_df_short %>%
+  co2_df_short_180 <- co2_df_short |>
     dplyr::mutate(
       datetime = datetime - 180 # logger is lagging 3 minutes behind
     )
@@ -30,13 +30,13 @@ test_that("time_diff works", {
 })
 
 test_that("renaming variables works", {
-  co2_df_short <- co2_df_short %>%
+  co2_df_short <- co2_df_short |>
     dplyr::rename(
       CO2_conc = conc,
       date_time = datetime
     )
 
-  record_short <- record_short %>%
+  record_short <- record_short |>
     dplyr::rename(
       starting = start
     )
@@ -76,7 +76,7 @@ test_that("flags on nb of data", {
 # test that the data type checking works (all the error messages)
 
 test_that("error on datetime", {
-  co2_df_short <- co2_df_short %>%
+  co2_df_short <- co2_df_short |>
     dplyr::mutate(
       datetime = lubridate::date(datetime)
     )
@@ -95,7 +95,7 @@ test_that("error on datetime", {
 
 
 test_that("error on start", {
-  record_short <- record_short %>%
+  record_short <- record_short |>
     dplyr::mutate(
       start = lubridate::hour(start)
     )
@@ -235,5 +235,21 @@ test_that("fixe length deprecated", {
   ),
   "The `fixed_length` argument of `flux_match()` is deprecated as of fluxible 1.2.7.",
   fixed = TRUE
+  )
+})
+
+test_that("error when cols have same name", {
+  record_test <- record_short |>
+    dplyr::rename(datetime = start)
+
+  expect_error(
+    flux_match(
+      raw_conc = co2_df_short,
+      field_record = record_test,
+      f_datetime = datetime,
+      start_col = datetime,
+      measurement_length = 180
+    ),
+    "raw_conc and field_record must have different column names"
   )
 })

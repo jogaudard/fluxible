@@ -53,7 +53,7 @@ Then `f_datetime` is the column containing date and time in the gas concentratio
 <!-- The column containing the gas concentration in the gas concentrationd dataframe `f_conc`. -->
 The length of the measurements is provided with `measurement_length` (in seconds).
 Alternatively, a column indicating the end time and date of each measurement can be provided to `end_col`, with `fixed_length = FALSE`.
-The `time_diff` argument allow to account for a consistant time difference (in seconds) between the two inputs.
+The `time_diff` argument allow to account for a consistent time difference (in seconds) between the two inputs.
 This value is added to the datetime column of the gas concentration dataset.
 
 ```{r match, message=FALSE, echo=TRUE}
@@ -75,7 +75,7 @@ We fit a model and obtain the slope at $t_0$, which is needed for the flux calcu
 <!-- Before calculating fluxes we need to fit a model to each measurement and estimate a slope of the concentration changing rate. -->
 <!-- We use the `flux_fitting` function with the model provided by @zhaoCalculationDaytimeCO22018. -->
 In this example we use the `exp_zhao18` model [@zhaoCalculationDaytimeCO22018].
-The `exp_zhao18` is a mix of an exponential and linear model - thus fitting all fluxes independantly from curvature - and includes $t_0$ as a fitting parameter (its implementation is described in `vignette("zhao18", package = "fluxible")`).
+The `exp_zhao18` is a mix of an exponential and linear model - thus fitting all fluxes independently from curvature - and includes $t_0$ as a fitting parameter (its implementation is described in `vignette("zhao18", package = "fluxible")`).
 A similar model but with the option to manually set $t_0$ is `exp_tz`.
 Other available models are: `linear` for a linear fit, `quadratic` for a quadratic fit, and `exp_hm` for the original HM model [@hutchinsonImprovedSoilCover1981].
 
@@ -113,7 +113,7 @@ The function `flux_quality` is used to provide diagnostics about the quality of 
 The main principle is that the user sets thresholds on diagnostics (depending on the model used) to flag the measurements according to the quality of the data and the model fit.
 Those quality flags are then used to provide `f_slope_corr`, a column containing the advised slope to use for calculation.
 The `force_` arguments allow the user to override this automatic flagging by providing a vector of fluxIDs.
-The `ambient_conc` and `error` arguments are used to detect measurements starting outside of a reasonable range (the mean of the three first gas concentration data points is used, independantly from the focus window).
+The `ambient_conc` and `error` arguments are used to detect measurements starting outside of a reasonable range (the mean of the three first gas concentration data points is used, independently from the focus window).
 The minimal detectable slope is calculated as $\frac{2 \times \text{instr error}}{\text{length of measurement}}$ and is used to detect slopes that should be replaced by zero.
 Other arguments are described in the function documentation (displayed with `?flux_quality`).
 The function `flux_flag_count` provides a table with the counts of quality flags, which is convenient for reporting on the dataset quality, and can also be done on the final flux dataset.
@@ -205,8 +205,8 @@ flux_plot(
 )
 ```
 
-With `output = "longpdf"`, the plots are exported in a single pdf file (defautl width 29.7 cm and as long as needed).
-This does not allow for printing and is aesthetically discutable, but it is much faster.
+With `output = "longpdf"`, the plots are exported in a single pdf file (default width 29.7 cm and as long as needed).
+This does not allow for printing and is aesthetically debatable, but it is much faster.
 
 ```{r plot_longpdf, echo=TRUE, eval=FALSE}
 flux_plot(
@@ -322,7 +322,7 @@ fluxes_liahovden_60 <- flux_calc(
   setup_volume = 24.575, # in liters, can also be a variable
   atm_pressure = 1, # in atm, can also be a variable
   plot_area = 0.0625, # in m2, can also be a variable
-  cols_keep = c("turfID", "type", "round"),
+  cols_keep = c("turfID", "type", "measurement_round"),
   cols_ave = c("temp_soil", "PAR")
 )
 ```
@@ -391,7 +391,7 @@ gpp_liahovden_60 <- flux_gpp(
   fluxes_df = fluxes_liahovden_60,
   type_col = type, # the column specifying the type of measurement
   f_datetime = datetime,
-  id_cols = c("round", "turfID"),
+  id_cols = c("measurement_round", "turfID"),
   cols_keep = c("temp_soil_ave", "PAR_ave"), # or "none" (default) or "all"
   nee_arg = "NEE", # default value
   er_arg = "ER" # default value

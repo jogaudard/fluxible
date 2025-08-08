@@ -1105,7 +1105,7 @@ test_vol <- function(
   #       volume = volume
   #     )
   # }
-name_vol <- deparse(substitute(volume))
+name_vol <- as_label(enquo(volume))
 
   # name <- c(as.character(volume))
   # name
@@ -1256,3 +1256,21 @@ flux_plot(
   output = "longpdf",
   f_plotname = "longpdftest"
 )
+
+message(bquote(`blop` * m^2 * `h`))
+
+# create a vector named names
+# of college 1
+names1 = c("mohan","sravya","navya")
+
+# create a vector named names 
+# of college 2
+names2 = c("sravan", "mohasn", "deepika")
+ 
+# check names1 is present in 
+# names 2
+test <- names1 %in% names2
+
+if (any(test)) {
+  print("blsda")
+}

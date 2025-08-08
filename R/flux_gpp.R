@@ -43,7 +43,7 @@ flux_gpp <- function(fluxes_df,
                      er_arg = "ER",
                      cols_keep = "none") {
 
-  name <- deparse(substitute(fluxes_df))
+  name <- as_label(enquo(fluxes_df))
 
   fluxes_df_check <- fluxes_df |>
     select({{f_flux}})

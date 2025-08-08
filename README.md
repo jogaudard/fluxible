@@ -152,7 +152,7 @@ fluxes_df <- flux_calc(
 #> Creating a df with the columns from 'cols_keep' argument...
 #> Creating a df with the columns from 'cols_ave' argument...
 #> Calculating fluxes...
-#> R constant set to 0.082057
+#> R constant set to 0.082057 L * atm * K^-1 * mol^-1
 #> Concentration was measured in ppm
 #> Fluxes are in mmol/m2/h
 
@@ -186,7 +186,7 @@ fluxes_gpp
 ### licoread R package
 
 The [licoread R
-package](https://jogaudard.github.io/licoread/index.html), developped in
+package](https://jogaudard.github.io/licoread/index.html), developed in
 collaboration with [LI-COR](https://www.licor.com/), provides an easy
 way to import raw files from Li-COR gas analyzers as R objects that can
 be used directly with the Fluxible R package.

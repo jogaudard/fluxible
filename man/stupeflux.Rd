@@ -60,7 +60,7 @@ and any other column identifying the measurements.}
 
 \item{start_col}{start column in field_record (dmy_hms format)}
 
-\item{end_col}{end columne in field_record (\code{ymd_hms} format)}
+\item{end_col}{end column in field_record (\code{ymd_hms} format)}
 
 \item{f_conc}{concentration column in raw_conc}
 
@@ -183,7 +183,7 @@ since the slope is provided from \link[fluxible:flux_fitting]{flux_fitting},
 but it will influence the values of the columns in \code{cols_ave}.}
 
 \item{slope_correction}{logical. If \code{TRUE}, the flux will be calculated with
-the slope corrected according to the recommandations of the quality flags.}
+the slope corrected according to the recommendations of the quality flags.}
 }
 \value{
 a dataframe containing flux IDs, datetime of measurements' starts,
@@ -199,7 +199,7 @@ Kelvin (\code{f_temp_ave}), the total volume of the setup for each measurement
 their value averaged over the measurement after cuts and discarding NA.
 }
 \description{
-Wrapper function for the Fluxible workflow. We recommand using
+Wrapper function for the Fluxible workflow. We recommend using
 the step-by-step workflow for more control over the process.
 }
 \examples{
