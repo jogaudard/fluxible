@@ -55,7 +55,7 @@ can also be a column in case it is a variable}
 \item{f_fluxid}{column containing the flux IDs}
 
 \item{conc_unit}{unit in which the concentration of gas was measured
-\code{ppm}, \code{ppb}, or \code{ppt}}
+\code{mmol/mol}, \code{ppm}, \code{ppb}, or \code{ppt}}
 
 \item{flux_unit}{desired units for the calculated fluxes. Has to be of the
 form amount/surface/time. Amount can be \code{mol}, \code{mmol}, \code{umol}, \code{nmol} or

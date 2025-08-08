@@ -7,7 +7,7 @@
 #' measurements in `slopes_df`. The first one after cutting will be kept as
 #' datetime of each flux in the output.
 #' @param conc_unit unit in which the concentration of gas was measured
-#' `ppm`, `ppb`, or `ppt`
+#' `mmol/mol`, `ppm`, `ppb`, or `ppt`
 #' @param flux_unit desired units for the calculated fluxes. Has to be of the
 #' form amount/surface/time. Amount can be `mol`, `mmol`, `umol`, `nmol` or
 #' `pmol`. Time can be `d` (day), `h` (hour), `mn` (minute) or `s` (seconds).
