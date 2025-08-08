@@ -1105,7 +1105,7 @@ test_vol <- function(
   #       volume = volume
   #     )
   # }
-name_vol <- deparse(substitute(volume))
+name_vol <- as_label(enquo(volume))
 
   # name <- c(as.character(volume))
   # name

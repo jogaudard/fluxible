@@ -121,7 +121,7 @@ flux_plot <- function(slopes_df,
 
 
   if (f_plotname == "") {
-    f_plotname <- deparse(substitute(slopes_df))
+    f_plotname <- as_label(enquo(slopes_df))
   }
 
   if (output %in% c("pdfpages", "ggsave", "longpdf")) {
@@ -152,7 +152,7 @@ flux_plot <- function(slopes_df,
     )
 
   if (
-    max(slopes_df[[deparse(substitute(f_conc))]], na.rm = TRUE) > f_ylim_upper
+    max(slopes_df[[as_label(enquo(f_conc))]], na.rm = TRUE) > f_ylim_upper
   ) {
     message("Some concentration data points will not be displayed
     because f_ylim_upper is too low.")
@@ -164,7 +164,7 @@ flux_plot <- function(slopes_df,
   }
 
   if (
-    min(slopes_df[[deparse(substitute(f_conc))]], na.rm = TRUE) < f_ylim_lower
+    min(slopes_df[[as_label(enquo(f_conc))]], na.rm = TRUE) < f_ylim_lower
   ) {
     message("Some concentration data points will not be displayed
     because f_ylim_lower is too high.")

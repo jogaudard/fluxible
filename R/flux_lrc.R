@@ -57,7 +57,7 @@ flux_lrc <- function(fluxes_df,
                      par_nee = 300,
                      par_er = 0) {
 
-  name <- deparse(substitute(fluxes_df))
+  name <- as_label(enquo(fluxes_df))
 
   args_ok <- flux_fun_check(list(
     par_nee = par_nee,

@@ -39,6 +39,7 @@
 #' @importFrom tidyr fill drop_na
 #' @importFrom lubridate is.POSIXct
 #' @importFrom lifecycle deprecate_stop deprecated deprecate_warn is_present
+#' @importFrom rlang as_label enquo
 #' @examples
 #' data(co2_df_short, record_short)
 #' flux_match(co2_df_short, record_short, datetime, start,
@@ -90,8 +91,8 @@ flux_match <- function(raw_conc,
     )
   }
 
-  name_raw_conc <- deparse(substitute(raw_conc))
-  name_field_record <- deparse(substitute(field_record))
+  name_raw_conc <- as_label(enquo(raw_conc))
+  name_field_record <- as_label(enquo(field_record))
 
   args_ok <- flux_fun_check(
     list(time_diff = time_diff),
