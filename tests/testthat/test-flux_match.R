@@ -237,3 +237,19 @@ test_that("fixe length deprecated", {
   fixed = TRUE
   )
 })
+
+test_that("error when cols have same name", {
+  record_test <- record_short |>
+    dplyr::rename(datetime = start)
+
+  expect_error(
+    flux_match(
+      raw_conc = co2_df_short,
+      field_record = record_test,
+      f_datetime = datetime,
+      start_col = datetime,
+      measurement_length = 180
+    ),
+    "raw_conc and field_record must have different column names"
+  )
+})

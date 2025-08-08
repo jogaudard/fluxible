@@ -119,10 +119,15 @@ flux_match <- function(raw_conc,
   if (any(!c(args_ok, raw_conc_ok, field_record_ok)))
     stop("Please correct the arguments", call. = FALSE)
 
+  # test if cols in field_record and raw_conc are different
+  colnames_raw_conc <- names(raw_conc)
+  colnames_field_record <- names(field_record)
 
+  colnames_test <- colnames_raw_conc %in% colnames_field_record
 
-
-
+  if (any(colnames_test)) {
+    stop("raw_conc and field_record must have different column names")
+  }
 
 
   field_record <- field_record |>
