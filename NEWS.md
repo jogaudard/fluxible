@@ -1,3 +1,10 @@
+# fluxible 1.3.0
+
+* `flux_match`: checks that the two inputs have different column names
+* `flux_plot`: dots in legend and lines bigger
+* `flux_fitting`: `exp_zhao18` now default model
+* various fixes and code improvements
+
 # fluxible 1.2.13
 
 * `flux_fitting`: `cut_direction` allows to cut from both sides, or start, or end
