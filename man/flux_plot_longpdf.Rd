@@ -13,7 +13,7 @@ flux_plot_longpdf(f_plot, f_plotname, nb_fluxid, longpdf_args)
 
 \item{nb_fluxid}{number of facets}
 
-\item{longpdf_args}{arguments for plotly in the form
+\item{longpdf_args}{arguments for longpdf in the form
 \verb{list(ncol, width (in cm), ratio)}}
 }
 \description{

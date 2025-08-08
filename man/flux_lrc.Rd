@@ -57,7 +57,7 @@ form
 The long format of the output with both uncorrected and corrected
 fluxes in the same flux column allows for easier gross primary production
 (GPP) fluxes with \link[fluxible:flux_gpp]{flux_gpp} (\code{par_correction} will
-have to be added to the arguemnt \code{id_cols}).
+have to be added to the argument \code{id_cols}).
 }
 \examples{
 data(co2_fluxes_lrc)

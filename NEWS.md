@@ -14,7 +14,7 @@
 
 * `flux_drygas`: does the wet air correction
 * `flux_units`: added `mmol/mol` as a possible concentration unit
-* `flux_diff`: calculates the difference betwen fluxes (GPP, transpiration, etc)
+* `flux_diff`: calculates the difference between fluxes (GPP, transpiration, etc)
 
 # fluxible 1.2.11
 
@@ -165,6 +165,6 @@
 # fluxible 0.0.2
 
 * `flux_calc` allows to choose units.
-* `flux_calc` alows plot area as a variable.
+* `flux_calc` allows plot area as a variable.
 * `flux_fitting` with exponential model works when concentration data are
   missing in the middle of the measurement.

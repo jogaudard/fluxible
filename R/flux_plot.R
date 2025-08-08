@@ -27,16 +27,18 @@
 #' @param y_text_position position of the text box
 #' @param print_plot logical, if TRUE it prints the plot as a ggplot object
 #' but will take time depending on the size of the dataset
-#' @param output `pdfpages`, the plots are saved as A4 landscape pdf pages;
-#' `ggsave`, the plots can be saved with the ggsave function;
-#' `print_only` (default) prints the plot without creating a file
-#' (independently from `print_plot` being TRUE or FALSE)
+#' @param output `"pdfpages"`, the plots are saved as A4 landscape pdf pages;
+#' `"ggsave"`, the plots can be saved with the ggsave function;
+#' `"print_only"` (default) prints the plot without creating a file
+#' (independently from `print_plot` being TRUE or FALSE);
+#' `"longpdf"`, the plots are saved as a pdf file as long as needed (faster than
+#' `"pdfpages"`)
 #' @param ggsave_args list of arguments for \link[ggplot2:ggsave]{ggsave}
 #' (in case `output = "ggsave"`)
 #' @param f_facetid character vector of columns to use as facet IDs. Note that
 #' they will be united, and that has to result in a unique facet ID for each
 #' measurement. Default is `f_fluxid`
-#' @param longpdf_args arguments for plotly in the form
+#' @param longpdf_args arguments for longpdf in the form
 #' `list(ncol, width (in cm), ratio)`
 #' @return plots of fluxes, with raw concentration data points, fit, slope,
 #' and color code indicating quality flags and cuts. The plots are organized

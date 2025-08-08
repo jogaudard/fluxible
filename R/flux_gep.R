@@ -2,7 +2,7 @@
 #' @description
 #' `r lifecycle::badge("deprecated")`
 #'
-#' `flux_gep` was renamed `flux_gpp` out of consistancy with the litterature.
+#' `flux_gep` was renamed `flux_gpp` out of consistency with the literature.
 #'
 #' Calculate gross ecosystem production (GEP) from net ecosystem
 #' (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.

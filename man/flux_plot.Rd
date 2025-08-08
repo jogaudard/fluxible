@@ -61,7 +61,7 @@ measurement. Default is \code{f_fluxid}}
 \link[ggforce:facet_wrap_paginate]{facet_wrap_paginate} in case
 \verb{output = "pdfpages}}
 
-\item{longpdf_args}{arguments for plotly in the form
+\item{longpdf_args}{arguments for longpdf in the form
 \verb{list(ncol, width (in cm), ratio)}}
 
 \item{y_text_position}{position of the text box}
@@ -69,10 +69,12 @@ measurement. Default is \code{f_fluxid}}
 \item{print_plot}{logical, if TRUE it prints the plot as a ggplot object
 but will take time depending on the size of the dataset}
 
-\item{output}{\code{pdfpages}, the plots are saved as A4 landscape pdf pages;
-\code{ggsave}, the plots can be saved with the ggsave function;
-\code{print_only} (default) prints the plot without creating a file
-(independently from \code{print_plot} being TRUE or FALSE)}
+\item{output}{\code{"pdfpages"}, the plots are saved as A4 landscape pdf pages;
+\code{"ggsave"}, the plots can be saved with the ggsave function;
+\code{"print_only"} (default) prints the plot without creating a file
+(independently from \code{print_plot} being TRUE or FALSE);
+\code{"longpdf"}, the plots are saved as a pdf file as long as needed (faster than
+\code{"pdfpages"})}
 
 \item{ggsave_args}{list of arguments for \link[ggplot2:ggsave]{ggsave}
 (in case \code{output = "ggsave"})}
