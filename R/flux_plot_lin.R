@@ -31,7 +31,7 @@ flux_plot_lin <- function(slopes_df,
     ggplot(aes({{f_datetime}})) +
     theme_bw() +
     geom_point(aes(y = {{f_conc}}, color = .data$f_quality_flag),
-      size = 0.2,
+      size = 0.4,
       na.rm = TRUE
     ) +
     geom_text(

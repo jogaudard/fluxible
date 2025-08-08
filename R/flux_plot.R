@@ -261,7 +261,7 @@ flux_plot <- function(slopes_df,
   f_plot <- f_plot +
     geom_line(
       aes(y = .data$f_fit, linetype = .data$linetype),
-      linewidth = 0.3,
+      linewidth = 0.5,
       na.rm = TRUE,
       show.legend = TRUE
     ) +
@@ -292,7 +292,7 @@ flux_plot <- function(slopes_df,
       colour = "Quality flags",
       linetype = "Fits"
     ) +
-    guides(color = guide_legend(override.aes = list(linetype = 0)))
+    guides(color = guide_legend(override.aes = list(linetype = 0, size = 3)))
 
 
   if (output == "pdfpages") {
