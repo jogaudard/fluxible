@@ -11,7 +11,7 @@ flux_fitting(
   f_start = f_start,
   f_end = f_end,
   f_fluxid = f_fluxid,
-  fit_type,
+  fit_type = "exp_zhao18",
   start_cut = 0,
   end_cut = 0,
   t_zero = 0,
