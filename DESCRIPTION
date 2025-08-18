@@ -56,5 +56,3 @@ LazyData: true
 URL: https://plant-functional-trait-course.github.io/fluxible/, https://github.com/Plant-Functional-Trait-Course/fluxible
 VignetteBuilder: knitr
 BugReports: https://github.com/Plant-Functional-Trait-Course/fluxible/issues
-Remotes:  
-    jogaudard/licoread
