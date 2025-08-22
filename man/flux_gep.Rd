@@ -52,8 +52,4 @@ Datetime and other variables to keep will be taken from the NEE measurement.
 Fluxes presents in the dataset that are neither NEE nor ER
 (soilR, LRC or other) are not lost.
 }
-\examples{
-data(co2_fluxes)
-flux_gep(co2_fluxes, type, f_start, id_cols = "turfID",
-cols_keep = c("temp_soil"))
-}
+\keyword{internal}
