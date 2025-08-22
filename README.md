@@ -1,8 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- # Fluxible -->
+<!-- # `fluxible` -->
 
-# `fluxible` <a href="https://plant-functional-trait-course.github.io/fluxible/index.html"><img src="man/figures/logo.png" align="right" height="138" alt="fluxible website" /></a>
+# fluxible <a href="https://plant-functional-trait-course.github.io/fluxible/index.html"><img src="man/figures/logo.png" align="right" height="138" alt="fluxible website" /></a>
 
 <!-- badges: start -->
 
@@ -14,7 +14,7 @@ status](https://www.r-pkg.org/badges/version/fluxible)](https://CRAN.R-project.o
 coverage](https://codecov.io/gh/Plant-Functional-Trait-Course/fluxible/graph/badge.svg)](https://app.codecov.io/gh/Plant-Functional-Trait-Course/fluxible)
 <!-- badges: end -->
 
-The Fluxible R package is made to transform any dataset of gas
+The `fluxible` R package is made to transform any dataset of gas
 concentration over time measured with closed loop chamber systems into a
 gas flux dataset.
 <!-- It was originally made to be used with a closed loop chamber system connected to a gas analyzer. -->
@@ -33,26 +33,27 @@ The goal of `fluxible` is to provide a workflow that removes individual
 evaluation of each flux, reduces risk of bias, and makes it
 reproducible. Users set specific data quality standards and selection
 parameters as function arguments that are applied to the entire dataset.
-Fluxible offers different methods to estimate fluxes: linear, quadratic,
-exponential (Zhao *et al.*, 2018), and the original HM model (Hutchinson
-and Mosier, 1981; Pedersen *et al.*, 2010). The kappamax method (Hüppi
-*et al.*, 2018) is also included, at the quality control step. The
-package runs the calculations automatically, without prompting the user
-to take decisions mid-way, and provides quality flags and plots at the
-end of the process for a visual check.
+`fluxible` offers different methods to estimate fluxes: linear,
+quadratic, exponential (Zhao *et al.*, 2018), and the original HM model
+(Hutchinson and Mosier, 1981; Pedersen *et al.*, 2010). The kappamax
+method (Hüppi *et al.*, 2018) is also included, at the quality control
+step. The package runs the calculations automatically, without prompting
+the user to take decisions mid-way, and provides quality flags and plots
+at the end of the process for a visual check.
 
 This makes it easy to use with large flux datasets and to integrate into
 a reproducible and automated data processing pipeline such as the
-[targets R package (Landau, 2021)](https://books.ropensci.org/targets/).
-Using the Fluxible R package makes the workflow reproducible, increases
-compatibility across studies, and is more time efficient.
+[`targets` R package (Landau,
+2021)](https://books.ropensci.org/targets/). Using the `fluxible` R
+package makes the workflow reproducible, increases compatibility across
+studies, and is more time efficient.
 
 For a visual overview of the package, see [the
 poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf).
 
 ## Installation
 
-Fluxible can be installed from CRAN.
+`fluxible` can be installed from CRAN.
 
 ``` r
 install.packages("fluxible")
@@ -186,12 +187,12 @@ fluxes_gpp
 
 ## Supporting infrastructure
 
-### licoread R package
+### `licoread` R package
 
-The [licoread R
+The [`licoread` R
 package](https://jogaudard.github.io/licoread/index.html), developed in
 collaboration with [LI-COR](https://www.licor.com/), provides an easy
-way to import raw files from Li-COR gas analyzers as R objects that can
+way to import raw files from LI-COR gas analyzers as R objects that can
 be used directly with the `fluxible` R package.
 
 ## Further developments
@@ -267,9 +268,8 @@ EGU General Assembly 2024, Vienna, Austria, 14–19 Apr 2024, EGU24-956,
 ## Acknowledgements
 
 `fluxible` builds on the earlier effort from the Plant Functional Traits
-Course Community
-[co2fluxtent](https://github.com/PaulESantos/co2fluxtent) (Brummer *et
-al.*, 2023).
+Course Community [`co2fluxtent` (Brummer *et al.*,
+2023)](https://github.com/PaulESantos/co2fluxtent).
 
 #### References
 

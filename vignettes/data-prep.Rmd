@@ -1,8 +1,8 @@
 ---
-title: "Preparing the data for `fluxible`"
+title: "Preparing the data for fluxible"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Preparing the data for `fluxible`}
+  %\VignetteIndexEntry{Preparing the data for fluxible}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: biblio_phd_zot.bib
@@ -21,7 +21,7 @@ Loggers and field equipment provide many different datasets format.
 The `readr::read_delim` [@readr2024] function works perfectly in most cases, given that the data are in a delimited file.
 
 We provide here examples on how to use `read_delim` to prepare your raw data files for the `fluxible` R package.
-For users of Li-COR instruments, the [licoread R package](https://jogaudard.github.io/licoread/index.html), developed in collaboration with Li-COR, is designed to read 82z and 81x files and import them as `fluxible`-friendly objets.
+For users of Li-COR instruments, the [`licoread` R package](https://jogaudard.github.io/licoread/index.html), developed in collaboration with Li-COR, is designed to read 82z and 81x files and import them as `fluxible`-friendly objets.
 <!-- For users of LI-COR instruments, we present at the end of this section the Licoread R package [@gaudardLicoreadReadsRaw2025], to read specific LI-COR formats (82z and 81x). -->
 
 ## Checklists for inputs
@@ -67,8 +67,8 @@ By treating the data homogeneously, the bias are consistent and therefore will a
 <!-- Homogeneous treatement of the dataset also means that the dataset should be carefully defined, as to avoid introducing bias (fitting all treatment A with a linear model and all treatment B with an exponential model might show that B has higher fluxes than than A, because of the way those models tend to under and over estimate fluxes). -->
 Measurements done under similar conditions and with the same equipment should ideally be processed together.
 
-Note that the "flux after flux" approach, treating each measurement individually in terms of fit, cut and quality control, is also possible (but this is not what `fluxible` is optimised for!).
-It would require looping the `flux_fitting` and `flux_quality` (optionally `flux_plot` too for visualization) functions on each flux ID with a prompt asking for the arguments.
+<!-- Note that the "flux after flux" approach, treating each measurement individually in terms of fit, cut and quality control, is also possible (but this is not what `fluxible` is optimised for!). -->
+<!-- It would require looping the `flux_fitting` and `flux_quality` (optionally `flux_plot` too for visualization) functions on each flux ID with a prompt asking for the arguments. -->
 
 ## Importing a single file
 In this example we will import the file `26124054001.#00`, which is a text file extracted from a Squirrel Data Logger 2010 Series (Grant Instruments) through SquirrelView software.
