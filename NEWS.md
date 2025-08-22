@@ -138,13 +138,13 @@
 
 * Added a vignette describing how to prepare the data for `fluxible`.
 * `flux_plot` now adds a vertical line showing where t_zero is.
-* 'flux_plot': scale_x_datetime arguments are now past as a list.
-* Functions now recycle user's column names instead of renaming them.
-  Columns created by fluxible functions have the suffix 'f_'.
+* `flux_plot`: scale_x_datetime arguments are now past as a list.
+* Functions now recycle user`s column names instead of renaming them.
+  Columns created by fluxible functions have the suffix `f_`.
 
 # fluxible 0.0.6
 
-* Correction in `flux_quality`: 'zero' and 'discard' flags were inverted when
+* Correction in `flux_quality`: `zero` and `discard` flags were inverted when
   using the linear fit.
 
 # fluxible 0.0.5
