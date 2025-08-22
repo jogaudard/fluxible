@@ -33,7 +33,7 @@
 #' data(co2_fluxes)
 #' flux_gep(co2_fluxes, type, f_start, id_cols = "turfID",
 #' cols_keep = c("temp_soil"))
-#' @export
+#' @keywords internal
 
 flux_gep <- function(fluxes_df,
                      type_col,
