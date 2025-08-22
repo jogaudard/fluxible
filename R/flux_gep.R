@@ -29,10 +29,6 @@
 #' @importFrom tidyr pivot_wider fill
 #' @importFrom purrrlyr slice_rows unslice
 #' @importFrom lifecycle deprecate_warn
-#' @examples
-#' data(co2_fluxes)
-#' flux_gep(co2_fluxes, type, f_start, id_cols = "turfID",
-#' cols_keep = c("temp_soil"))
 #' @keywords internal
 
 flux_gep <- function(fluxes_df,
