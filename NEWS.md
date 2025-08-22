@@ -1,3 +1,10 @@
+# fluxible 1.3.0
+
+* `flux_match`: checks that the two inputs have different column names
+* `flux_plot`: dots in legend and lines bigger
+* `flux_fitting`: `exp_zhao18` now default model
+* various fixes and code improvements
+
 # fluxible 1.2.13
 
 * `flux_fitting`: `cut_direction` allows to cut from both sides, or start, or end
@@ -7,7 +14,7 @@
 
 * `flux_drygas`: does the wet air correction
 * `flux_units`: added `mmol/mol` as a possible concentration unit
-* `flux_diff`: calculates the difference betwen fluxes (GPP, transpiration, etc)
+* `flux_diff`: calculates the difference between fluxes (GPP, transpiration, etc)
 
 # fluxible 1.2.11
 
@@ -131,13 +138,13 @@
 
 * Added a vignette describing how to prepare the data for `fluxible`.
 * `flux_plot` now adds a vertical line showing where t_zero is.
-* 'flux_plot': scale_x_datetime arguments are now past as a list.
-* Functions now recycle user's column names instead of renaming them.
-  Columns created by fluxible functions have the suffix 'f_'.
+* `flux_plot`: scale_x_datetime arguments are now past as a list.
+* Functions now recycle user`s column names instead of renaming them.
+  Columns created by fluxible functions have the suffix `f_`.
 
 # fluxible 0.0.6
 
-* Correction in `flux_quality`: 'zero' and 'discard' flags were inverted when
+* Correction in `flux_quality`: `zero` and `discard` flags were inverted when
   using the linear fit.
 
 # fluxible 0.0.5
@@ -158,6 +165,6 @@
 # fluxible 0.0.2
 
 * `flux_calc` allows to choose units.
-* `flux_calc` alows plot area as a variable.
+* `flux_calc` allows plot area as a variable.
 * `flux_fitting` with exponential model works when concentration data are
   missing in the middle of the measurement.

@@ -21,3 +21,4 @@ flux_plot_exp(slopes_df, f_conc, f_datetime, y_text_position, kappamax)
 plots the fluxes that were fitted with
 an exponential model
 }
+\keyword{internal}

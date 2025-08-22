@@ -60,7 +60,7 @@ That makes the processing non homogeneous but still reproducible.
 ## One side is reliable
 
 
-If the start or the end are consistant but not the other, you can change the direction of the cutting in `flux_fitting`.
+If the start or the end are consistent but not the other, you can change the direction of the cutting in `flux_fitting`.
 By default, `flux_fitting` cuts the focus window as `start + start_cut` to `end - end_cut`.
 The argument `cut_direction` allows to change that:
 
@@ -68,7 +68,7 @@ The argument `cut_direction` allows to change that:
 - `cut_direction = "from_end"` means the focus window will be from `end - start_cut` to `end - end_cut`
 
 
-# Processing with fluxible
+# Processing with `fluxible`
 <!-- Since the `licoread::import7500` already provides `f_fluxid`, `f_start` and `f_end`, we can skip `fluxible::flux_match` and directly fit with `fluxible::flux_fitting`. -->
 
 
@@ -97,7 +97,7 @@ li7500_flags_co2 <- flux_quality(li7500_fits_co2,
 
 
 Plotting:
-```{r plotting_co2, message=FALSE, warning=FALSE, fig.cap="Output of `flux_plot` for co2 fluxes"}
+```{r plotting_co2, message=FALSE, warning=FALSE, fig.cap="Output of `flux_plot` for CO~2~ fluxes"}
 flux_plot(li7500_flags_co2,
           f_conc = `CO2 umol/mol_dry`,
           f_ylim_upper = 500,
@@ -164,7 +164,7 @@ li7500_flags_h2o <- flux_quality(li7500_fits_h2o,
 
 
 Plotting:
-```{r plotting_h2o, message=FALSE, warning=FALSE, fig.cap="Output of `flux_plot` for h2o fluxes"}
+```{r plotting_h2o, message=FALSE, warning=FALSE, fig.cap="Output of `flux_plot` for H~2~O fluxes"}
 
 flux_plot(li7500_flags_h2o,
           f_conc = `H2O mmol/mol_dry`,

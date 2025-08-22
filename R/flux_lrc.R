@@ -22,7 +22,7 @@
 #' @details The long format of the output with both uncorrected and corrected
 #' fluxes in the same flux column allows for easier gross primary production
 #' (GPP) fluxes with \link[fluxible:flux_gpp]{flux_gpp} (`par_correction` will
-#' have to be added to the arguemnt `id_cols`).
+#' have to be added to the argument `id_cols`).
 #' @importFrom dplyr group_by_at filter rename vars select mutate left_join
 #' cross_join case_when
 #' @importFrom tidyr nest unnest
@@ -57,7 +57,7 @@ flux_lrc <- function(fluxes_df,
                      par_nee = 300,
                      par_er = 0) {
 
-  name <- deparse(substitute(fluxes_df))
+  name <- as_label(enquo(fluxes_df))
 
   args_ok <- flux_fun_check(list(
     par_nee = par_nee,

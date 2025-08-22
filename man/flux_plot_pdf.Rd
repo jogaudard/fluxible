@@ -19,3 +19,4 @@ flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
 \description{
 print plots in pdf
 }
+\keyword{internal}

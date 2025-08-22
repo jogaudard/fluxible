@@ -15,3 +15,4 @@ to print on the plots produced by flux_plot.
 flux_param_lm is for fit in the lm family (linear and quadratic)
 flux_param_exp is for the exponential fit
 }
+\keyword{internal}

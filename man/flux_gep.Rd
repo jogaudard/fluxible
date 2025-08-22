@@ -44,7 +44,7 @@ NEE measurements.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-\code{flux_gep} was renamed \code{flux_gpp} out of consistancy with the litterature.
+\code{flux_gep} was renamed \code{flux_gpp} out of consistency with the literature.
 
 Calculate gross ecosystem production (GEP) from net ecosystem
 (NEE) exchange and ecosystem respiration (ER) as GEP = NEE - ER.

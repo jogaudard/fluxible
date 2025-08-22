@@ -5,8 +5,8 @@ library(timetk)
 # making the dataset we want
 record <- read_csv("data-raw/PFTC6_cflux_field-record_joasete.csv")
 
-record_short <- record %>%
-  select(turfID, type, starting_time, date) %>%
+record_short <- record |>
+  select(turfID, type, starting_time, date) |>
   mutate(
     starting_time = formatC(
       starting_time,
@@ -20,8 +20,8 @@ record_short <- record %>%
     start = ymd_hms(
       paste(date, starting_time)
     ), # pasting date and time together to make datetime
-  ) %>%
-  select(!c(starting_time, date)) %>%
+  ) |>
+  select(!c(starting_time, date)) |>
   filter(
     # we will just make it shorter and keep a couple of fluxes around midnight
     timetk::between_time(start, "2022-07-28 23:40:00", "2022-07-29 00:10:00")

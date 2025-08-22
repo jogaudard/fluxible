@@ -12,6 +12,7 @@
 #' @importFrom purrr quietly
 #' @importFrom grDevices pdf dev.off
 #' @importFrom tidyr pivot_longer
+#' @keywords internal
 
 
 
@@ -36,7 +37,7 @@ flux_plot_quadratic <- function(slopes_df,
     geom_vline(xintercept = slopes_df$f_start_z,
                color = "grey", linewidth = 0.5) +
     geom_point(aes(y = {{f_conc}}, color = .data$f_quality_flag),
-      size = 0.2,
+      size = 0.4,
       na.rm = TRUE
     ) +
     geom_text(

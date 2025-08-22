@@ -4,6 +4,7 @@
 #' @param slopes_df as provided in flux_plot
 #' @param param_df as provided by flux_param
 #' @importFrom dplyr select left_join mutate case_when
+#' @keywords internal
 
 flux_plot_flag <- function(slopes_df,
                            param_df) {
