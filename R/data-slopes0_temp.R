@@ -47,4 +47,5 @@
 #' }
 #' @examples
 #' slopes0_temp
+#' @keywords internal
 "slopes0_temp"

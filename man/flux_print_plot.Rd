@@ -15,3 +15,4 @@ flux_print_plot(f_plot, facet_wrap_args)
 \description{
 printing plot from flux_plot
 }
+\keyword{internal}

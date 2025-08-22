@@ -4,6 +4,7 @@
 #' @param facet_wrap_args list of arguments for
 #' \link[ggplot2:facet_wrap]{facet_wrap}
 #' @importFrom ggplot2 facet_wrap
+#' @keywords internal
 
 
 

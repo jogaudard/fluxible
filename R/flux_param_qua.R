@@ -5,6 +5,7 @@
 #' flux_param_exp is for the exponential fit
 #' @param slopes_df the slopes_df that is being provided to flux_plot
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
+#' @keywords internal
 
 flux_param_qua <- function(slopes_df) {
   param_df <- slopes_df |>

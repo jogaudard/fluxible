@@ -19,3 +19,4 @@ flux_plot_longpdf(f_plot, f_plotname, nb_fluxid, longpdf_args)
 \description{
 print plots in a single long pdf
 }
+\keyword{internal}

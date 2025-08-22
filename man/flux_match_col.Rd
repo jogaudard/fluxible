@@ -20,3 +20,4 @@ and any other column identifying the measurements.}
 \description{
 Provides the \code{f_end} column for \code{flux_match}
 }
+\keyword{internal}
