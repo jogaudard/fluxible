@@ -2,7 +2,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- # Fluxible -->
 
-# fluxible <a href="https://plant-functional-trait-course.github.io/fluxible/index.html"><img src="man/figures/logo.png" align="right" height="138" alt="fluxible website" /></a>
+# `fluxible` <a href="https://plant-functional-trait-course.github.io/fluxible/index.html"><img src="man/figures/logo.png" align="right" height="138" alt="fluxible website" /></a>
 
 <!-- badges: start -->
 
@@ -15,18 +15,21 @@ coverage](https://codecov.io/gh/Plant-Functional-Trait-Course/fluxible/graph/bad
 <!-- badges: end -->
 
 The Fluxible R package is made to transform any dataset of gas
-concentration over time into a gas flux dataset.
+concentration over time measured with closed loop chamber systems into a
+gas flux dataset.
 <!-- It was originally made to be used with a closed loop chamber system connected to a gas analyzer. -->
-Thanks to its flexibility, it works for all kinds of setups (separated
-files for each measurement vs continuous logging, variable vs constant
-chamber volume, variable vs constant measurement length, …). It is
-organized as a toolbox with one function per steps, which offers a lot
-of freedom. If environmental data were recorded simultaneously
-(photosynthetically active radiation, soil temperature, …), they can
-also be processed (mean, sum or median), with the same focus window as
-the flux estimate.
+Thanks to its flexibility, it works for all kinds of field setup (manual
+or automated chambers, tents, soil respiration chambers, …) and data
+collection strategies (separated files for each measurement vs
+continuous logging, variable vs constant chamber volume, variable vs
+constant measurement length, …). It is organized as a toolbox with one
+function per steps, which offers a lot of freedom and backwards
+compatibility for ongoing projects. If environmental data were recorded
+simultaneously (photosynthetically active radiation, soil temperature,
+…), they can also be processed (mean, sum or median), with the same
+focus window as the flux estimate.
 
-The goal of fluxible is to provide a workflow that removes individual
+The goal of `fluxible` is to provide a workflow that removes individual
 evaluation of each flux, reduces risk of bias, and makes it
 reproducible. Users set specific data quality standards and selection
 parameters as function arguments that are applied to the entire dataset.
@@ -55,7 +58,7 @@ Fluxible can be installed from CRAN.
 install.packages("fluxible")
 ```
 
-You can install the development version of fluxible from the [GitHub
+You can install the development version of `fluxible` from the [GitHub
 repo](https://github.com/Plant-Functional-Trait-Course/fluxible) with:
 
 ``` r
@@ -189,7 +192,7 @@ The [licoread R
 package](https://jogaudard.github.io/licoread/index.html), developed in
 collaboration with [LI-COR](https://www.licor.com/), provides an easy
 way to import raw files from Li-COR gas analyzers as R objects that can
-be used directly with the Fluxible R package.
+be used directly with the `fluxible` R package.
 
 ## Further developments
 
@@ -198,13 +201,23 @@ be used directly with the Fluxible R package.
 We are working on a tool to automatically select the window of the
 measurement on which to fit a model. This selection will be based on
 environmental variable, such as photosynthetically active radiation
-(PAR), measured simultaneously.
+(PAR), or residuals.
 
-### More fits
+### Working in mol/volume
 
-As we want fluxible to fit the use of as many projects as possible, more
-fitting expressions will be included in the flux_fitting function. Feel
-welcome to get in touch if you wish to include yours in fluxible.
+So far `fluxible` works in fractional concentration (e. g. ppm) and
+transforms it in mol when calculating the fluxes, using the average
+temperature of the measurement. This has the advantage to work even if
+the setup does not provide temperature for each gas concentration data
+point. Recent setups provide temperature at the same frequency as gas
+concentration, and this allows to transform the concentration in
+mol/volume earlier in the process, accounting better for temperature
+changes during the measurement. This will be implemented in a future
+version of `fluxible`.
+
+<!-- ### More fits
+As we want fluxible to fit the use of as many projects as possible, more fitting expressions will be included in the flux_fitting function.
+Feel welcome to get in touch if you wish to include yours in fluxible. -->
 
 ## Contact
 
@@ -217,22 +230,22 @@ of Bergen, Norway
 
 ## Dissemination
 
-If you are running a course and want to talk about Fluxible, feel free
+If you are running a course and want to talk about `fluxible`, feel free
 to use this [two-slides
 presentation](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/fluxible_jgaudard_short.pdf).
 Of course, you can always reach out if you wish to have more material.
 
 Gaudard J, Chacon-Labella J, Dawson HR, Enquist B, Telford RJ, Töpper
 JP, Trepel J, Vandvik V, Baumane M, Birkeli K, Holle MJM, Hupp JR,
-Santos-Andrade PE, Satriawan TW, Halbritter AH. “Fluxible: an R package
-to process ecosystem gas fluxes from closed-loop chambers in an
+Santos-Andrade PE, Satriawan TW, Halbritter AH. “`fluxible`: an R
+package to process ecosystem gas fluxes from closed-loop chambers in an
 automated and reproducible way.” Authorea Preprints.
 [doi:10.22541/au.175071021.14153294/v1](https://doi.org/10.22541/au.175071021.14153294/v1),
 2025.
 
 Gaudard J, Trepel J, Dawson HR, Enquist B, Halbritter AH, Mustri M,
 Niittynen P, Santos-Andrade PE, Topper JP, Vandvik V, and Telford RJ.
-“Fluxible: an R package to calculate ecosystem gas fluxes from closed
+“`fluxible`: an R package to calculate ecosystem gas fluxes from closed
 loop chamber systems in a reproducible and automated workflow”
 ([slides](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/fluxible_jgaudard_EGU25.pdf)),
 EGU General Assembly 2025, Vienna, Austria, 27 Apr–2 May 2025,
@@ -240,7 +253,7 @@ EGU25-12409,
 [doi:10.5194/egusphere-egu25-12409](https://doi.org/10.5194/egusphere-egu25-12409),
 2025.
 
-Gaudard J, Telford R, Vandvik V, and Halbritter AH: “Fluxible: an R
+Gaudard J, Telford R, Vandvik V, and Halbritter AH: “`fluxible`: an R
 package to calculate ecosystem gas fluxes in a reproducible and
 automated workflow”
 ([poster](https://raw.githubusercontent.com/Plant-Functional-Trait-Course/fluxible/refs/heads/main/dissemination/poster_fluxible.pdf)),
@@ -253,7 +266,7 @@ EGU General Assembly 2024, Vienna, Austria, 14–19 Apr 2024, EGU24-956,
 
 ## Acknowledgements
 
-Fluxible builds on the earlier effort from the Plant Functional Traits
+`fluxible` builds on the earlier effort from the Plant Functional Traits
 Course Community
 [co2fluxtent](https://github.com/PaulESantos/co2fluxtent) (Brummer *et
 al.*, 2023).
