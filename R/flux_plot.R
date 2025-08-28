@@ -55,7 +55,7 @@
 #' `longpdf_args` specify the number of columns and the ratio of the facet
 #' respectively. This method is considerably faster than `pdfpages`, because
 #' it bypasses `facet_wrap_paginate`, but is a bit less aesthetic.
-#' @importFrom dplyr select distinct mutate
+#' @importFrom dplyr select distinct mutate n_distinct
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
 #' scale_linetype_manual guides guide_legend
@@ -202,9 +202,7 @@ flux_plot <- function(slopes_df,
   # extracting attributes before they get stripped later on
   kappamax <- attr(slopes_df, "kappamax")
 
-  nb_fluxid <- slopes_df |>
-    distinct(.data$f_fluxid) |>
-    nrow()
+  nb_fluxid <- n_distinct(slopes_df$f_fluxid)
 
   # costumize facet ID
   slopes_df <- slopes_df |>
@@ -219,9 +217,7 @@ flux_plot <- function(slopes_df,
 
 
   # testing if f_facetid is unique, otherwise facet will make a mess
-  nb_fluxid_post <- slopes_df |>
-    distinct(.data$f_facetid) |>
-    nrow()
+  nb_fluxid_post <- n_distinct(slopes_df$f_facetid) 
 
   if (nb_fluxid != nb_fluxid_post) {
     stop("Please use a f_facetid that is unique for each measurement")
