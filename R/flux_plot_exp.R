@@ -23,13 +23,9 @@ flux_plot_exp <- function(slopes_df,
                           y_text_position,
                           kappamax) {
 
-
-
-  if (!is.null(kappamax) && kappamax == TRUE) {
-    param_df <- flux_param_kappamax(slopes_df)
-  }
-
-  if (is.null(kappamax)) {
+  if (isTRUE(kappamax)) {
+    param_df <- flux_param_kappamax(slopes_df)  
+  } else {
     param_df <- flux_param_exp(slopes_df)
   }
 
