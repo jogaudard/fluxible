@@ -100,6 +100,7 @@ flux_plot <- function(slopes_df,
                       print_plot = "FALSE",
                       output = "print_only",
                       ggsave_args = list()) {
+  
   args_ok <- flux_fun_check(list(
     f_ylim_upper = f_ylim_upper,
     f_ylim_lower = f_ylim_lower,
@@ -204,7 +205,7 @@ flux_plot <- function(slopes_df,
 
   nb_fluxid <- n_distinct(slopes_df$f_fluxid)
 
-  # costumize facet ID
+  # customize facet ID
   slopes_df <- slopes_df |>
     unite(
       col = "f_facetid",
@@ -292,33 +293,31 @@ flux_plot <- function(slopes_df,
     ) +
     guides(color = guide_legend(override.aes = list(linetype = 0, size = 3)))
 
-
-  if (output == "pdfpages") {
-    flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid)
-  }
-
-  if (output == "longpdf") {
-    flux_plot_longpdf(f_plot, f_plotname, nb_fluxid, longpdf_args)
-  }
-
-  if (output == "ggsave") {
-    message("Saving plots with ggsave.")
-    f_plot <- f_plot +
-      do.call(facet_wrap, # do.call is here to pass arguments as a list
-        args = c(facets = ~f_facetid, facet_wrap_args)
+  
+  # select plotting engine
+  switch(
+    output, 
+    pdfpages = flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, nb_fluxid),
+    longpdf = flux_plot_longpdf(f_plot, f_plotname, nb_fluxid, longpdf_args),
+    ggsave = {
+      message("Saving plots with ggsave.")
+      f_plot <- f_plot +
+        do.call(facet_wrap, # do.call is here to pass arguments as a list
+          args = c(facets = ~f_facetid, facet_wrap_args)
+        )
+      do.call(
+        ggsave,
+        args = c(filename = f_plotname, ggsave_args)
       )
-    do.call(
-      ggsave,
-      args = c(filename = f_plotname, ggsave_args)
-    )
-
-    message("Plots saved in f_quality_plots folder.")
-    if (print_plot == TRUE) {
-      return(f_plot)
+  
+      message("Plots saved in f_quality_plots folder.")
+      if (print_plot) {
+        return(f_plot)
+      }
     }
-  }
+  )
 
-  if (print_plot == TRUE) {
+  if (print_plot) {
     f_plot <- flux_print_plot(f_plot, facet_wrap_args)
     return(f_plot)
   }
