@@ -9,7 +9,9 @@
 library(adjustedcranlogs)
 library(tidyverse)
 
-adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
+adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2024-08-27", to = "2025-09-01") |>
+# adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
+
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
   ggplot(aes(date, value, color = package)) +
   geom_line(aes(linewidth = package)) +
