@@ -1,0 +1,33 @@
+---
+title: "Frequently asked questions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Frequently asked questions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: biblio_phd_zot.bib
+csl: emerald-harvard.csl
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(tidyverse.quiet = TRUE)
+```
+
+This vignette aims at gathering questions we had during various outreach and throught he peer-review process of our paper.
+
+
+## Can fluxible handle negative fluxes?
+
+## What about missing data or irregular measuring frequency
+
+## How are units handled?
+
+## Changes in air temperature inside the chamber
+
+## What about packages?
+
+## What about the goflux package?
