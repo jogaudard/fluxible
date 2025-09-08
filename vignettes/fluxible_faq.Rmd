@@ -22,12 +22,73 @@ This vignette aims at gathering questions we had during various outreach and thr
 
 ## Can fluxible handle negative fluxes?
 
+Yes.
+Measurements with an overall decreasing gas concentration inside the chamber (ecosystem uptake) will produce a negative flux; measurement with an overall increasing gas concentration inside the chamber (ecosystem emission) will produce a positive flux.
+
 ## What about missing data or irregular measuring frequency
+
+All the functions internally use relative time since start of the measurement in seconds (and not row id!).
+That means missing data and irregular measuring frequency are accounted for.
 
 ## How are units handled?
 
+All the steps until `flux_calc` are unitless.
+`flux_calc` can handle several units (see `?flux_calc` for details).
+Concentration has to be fractional, and fluxes are calculated in Mol per surface per time as no molar mass in provided.
+
 ## Changes in air temperature inside the chamber
 
-## What about packages?
+The air temperature used for the flux calculation is the average air temperature during the focus window of the measurement.
+The transformation of fractional concentration in Mol per volume before fitting a model (using instant air temperature) is planned in further developments.
+This requires a paired temperature measurement for each gas concentration measurement, which is not always available, and both options will be kept.
 
-## What about the goflux package?
+## What about other packages?
+
+A full comparison with other R packages available on CRAN also processing ecosystem gas fluxes data from closed loop chambers is available in the paper (REF coming).
+
+In short, fluxible's advantages:
+- one function per step, maximizing flexibility
+- processes additional variables at the flux calculation step with the same focus window as the fluxes
+- covers the entire process from raw gas concentration data to clean analysis ready fluxes
+
+## What about the goFlux [@rheaultGoFluxUserfriendlyWay2024] R package?
+
+goFlux is not on CRAN and was therefore not included in the comparison in the paper, but since it has been presented alongside fluxible at several occasions, this question came up several times.
+goFlux seems to offer an easier approach than fluxible because it does everything at once and does not require the user to decide which model to use or what quality thresholds to apply.
+This comes at the cost of a lack of transparency and flexibility.
+
+Furthermore, goflux is hosted on GitHub only and does not seem to have any continuously integrated testing.
+This means that there is no proof that it does what it says it does, or what it used to do in a previous version, or that it works at all [@wickham2023r].
+Packages hosted on CRAN (like fluxible), are tested every 24 hours on Windows, MacOS, and Linux, using the current R version and the development one.
+In case of failure, the maintainer has 30 days to fix the package or it gets archived.
+
+## Could fluxible be used with flow-through chambers?
+
+We would not recommend it as the calcutions are quite different.
+However, we have in mind that a similar package, following the same structure and same default names, could be developed.
+Some functions, `flux_diff` or `flux_lrc`, could be shared.
+
+## What to do if we have so much data that it is not possible to visually inspect all the fluxes?
+
+Automatic chambers produce a lot of data and it is nearly impossible to visually inspect all of them.
+We would recommend to visually inspect all fits, but here is what you can do in case that is not a viable option:
+
+- target specific campaigns or dates
+- random sampling of flux IDs, campaigns, or dates
+- target measurements based on other variables (wind speed for example)
+- apply over conservative thresholds in `flux_quality` (therefore assuming only false negative) and inspect flagged measurements only
+- do quality control statistics, targeting unrealistic changes in fluxes over time or outliers
+
+Filtering the data directly before plotting is made convenient as `fluxible` follows the `tidyverse` grammar [@tidyverse2019], as shown in the example below.
+```{r ex-plot-filter, eval=FALSE}
+flags_lia |> # the output of flux_quality
+  # apply here dplyr::filter on f_quality_flags, f_fluxid,
+  # sample(f_fluxid) for random sampling of fluxid, campaigns,
+  # dates, windspeed...
+  # flux_plot will plot only the measurements passing the filter
+  # and not the entire flags_lia df
+  flux_plot(
+    f_conc = conc,
+    f_datetime = datetime
+  )
+```
