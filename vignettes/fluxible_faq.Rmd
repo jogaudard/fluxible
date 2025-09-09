@@ -5,7 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Frequently asked questions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: biblio_phd_zot.bib
+bibliography: biblio_fluxible.bib
 csl: emerald-harvard.csl
 ---
 
@@ -17,13 +17,22 @@ knitr::opts_chunk$set(
 options(tidyverse.quiet = TRUE)
 ```
 
-This vignette aims at gathering questions we had during various outreach and throught he peer-review process of our paper.
+Questions gathered through various outreach events, peer-review, and communication with users.
 
+## What quality garantees come with `fluxible`?
+
+The methods used is `fluxible` come from the litterature and are described in a publication recently accepted in *Methods in Ecology and Evolution*.
+The largest manufacturer of infrared gas analyzers, LI-COR, has been involved in the development and provided testing data (in the paper).
+
+On the technical side, `fluxible` is developed following @wickham2023r, including fully automated formal tests with the `testthat` R package.
+The CRAN version is being tested by CRAN every 24 hours on Windows, Linux, and MACOS, with the current and development version of R.
+The development version hosted on GitHub is tested in the same way at every pull request or push on the main branch, using GitHub actions.
+The code coverage is maintained above 98% (meaning 98% of the code is subject to at least one test) through test driven development.
 
 ## Can fluxible handle negative fluxes?
 
 Yes.
-Measurements with an overall decreasing gas concentration inside the chamber (ecosystem uptake) will produce a negative flux; measurement with an overall increasing gas concentration inside the chamber (ecosystem emission) will produce a positive flux.
+Measurements with an overall decreasing gas concentration over time inside the chamber (ecosystem uptake) will produce a negative flux; measurement with an overall increasing gas concentration over time inside the chamber (ecosystem emission) will produce a positive flux.
 
 ## What about missing data or irregular measuring frequency
 
@@ -34,7 +43,7 @@ That means missing data and irregular measuring frequency are accounted for.
 
 All the steps until `flux_calc` are unitless.
 `flux_calc` can handle several units (see `?flux_calc` for details).
-Concentration has to be fractional, and fluxes are calculated in Mol per surface per time as no molar mass in provided.
+Concentration has to be fractional, and fluxes are calculated in Mol per surface per time as no molar mass is provided.
 
 ## Changes in air temperature inside the chamber
 
@@ -44,23 +53,29 @@ This requires a paired temperature measurement for each gas concentration measur
 
 ## What about other packages?
 
-A full comparison with other R packages available on CRAN also processing ecosystem gas fluxes data from closed loop chambers is available in the paper (REF coming).
+A full comparison with other R packages available on CRAN also processing ecosystem gas fluxes data from closed loop chambers is available in the paper [@gaudardFluxiblePackageProcess2025].
 
-In short, fluxible's advantages:
+In short, `fluxible`'s advantages:
+
 - one function per step, maximizing flexibility
-- processes additional variables at the flux calculation step with the same focus window as the fluxes
-- covers the entire process from raw gas concentration data to clean analysis ready fluxes
+- processing additional variables at the flux calculation step with the same focus window as the fluxes
+- covering the entire process from raw gas concentration data to clean analysis ready fluxes
+- fully reproducible and transparent data quality control
 
-## What about the goFlux [@rheaultGoFluxUserfriendlyWay2024] R package?
+## What about the goFlux R package?
 
-goFlux is not on CRAN and was therefore not included in the comparison in the paper, but since it has been presented alongside fluxible at several occasions, this question came up several times.
-goFlux seems to offer an easier approach than fluxible because it does everything at once and does not require the user to decide which model to use or what quality thresholds to apply.
-This comes at the cost of a lack of transparency and flexibility.
+`goFlux` [@rheaultGoFluxUserfriendlyWay2024] is not on CRAN and was therefore not included in the packages comparison found in the paper, but since it has been presented alongside fluxible at several occasions, this question came up several times.
 
-Furthermore, goflux is hosted on GitHub only and does not seem to have any continuously integrated testing.
+`goFlux` seems to offer an easier approach than fluxible because it does everything at once.
+This comes at the cost of a lack of transparency, flexibility, and reproducibility.
+It also sticks to the idea of choosing between a linear and an exponential model instead of using the new model presented in @zhaoCalculationDaytimeCO22018, and does not provide tools to process environmental data at the flux calculation step.
+
+Furthermore, `goFlux` is hosted on GitHub only and does not seem to have any continuously integrated testing.
 This means that there is no proof that it does what it says it does, or what it used to do in a previous version, or that it works at all [@wickham2023r].
-Packages hosted on CRAN (like fluxible), are tested every 24 hours on Windows, MacOS, and Linux, using the current R version and the development one.
+It has been broken by updates in the past, which is a major issue for users.
+Packages hosted on CRAN (like `fluxible`), are tested every 24 hours on Windows, MacOS, and Linux, using the current R version and the development one.
 In case of failure, the maintainer has 30 days to fix the package or it gets archived.
+GitHub packages could also do that using continuously integrated testing through Github actions (done for the development version of `fluxible` hosted on GitHub), but no `testthat.R` script can be found in `goFlux` repository.
 
 ## Could fluxible be used with flow-through chambers?
 
@@ -71,7 +86,7 @@ Some functions, `flux_diff` or `flux_lrc`, could be shared.
 ## What to do if we have so much data that it is not possible to visually inspect all the fluxes?
 
 Automatic chambers produce a lot of data and it is nearly impossible to visually inspect all of them.
-We would recommend to visually inspect all fits, but here is what you can do in case that is not a viable option:
+While we would recommend to visually inspect all fits, here is what you can do in case that is not a viable option:
 
 - target specific campaigns or dates
 - random sampling of flux IDs, campaigns, or dates
@@ -92,3 +107,6 @@ flags_lia |> # the output of flux_quality
     f_datetime = datetime
   )
 ```
+
+
+### References
