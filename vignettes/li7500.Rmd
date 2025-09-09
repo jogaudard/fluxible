@@ -5,7 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Using fluxible with the Li7500}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: biblio_phd_zot.bib
+bibliography: biblio_fluxible.bib
 csl: emerald-harvard.csl
 ---
 

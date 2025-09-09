@@ -5,7 +5,7 @@ vignette: >
   %\VignetteIndexEntry{From raw gas concentration data to clean ecosystem gas fluxes.}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: biblio_phd_zot.bib
+bibliography: biblio_fluxible.bib
 csl: emerald-harvard.csl
 ---
 
