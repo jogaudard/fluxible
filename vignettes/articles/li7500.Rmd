@@ -1,12 +1,7 @@
 ---
 title: "Using fluxible with the Li7500"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Using fluxible with the Li7500}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-bibliography: articles/biblio_fluxible.bib
-csl: articles/emerald-harvard.csl
+bibliography: biblio_fluxible.bib
+csl: emerald-harvard.csl
 ---
 
 ```{r, include = FALSE}
@@ -33,7 +28,7 @@ We import the data with `licoread::import7500`.
 ```{r reading, message=FALSE}
 library(licoread)
 li7500_data <- import7500(
-  "ex_data/li7500",
+  "li7500",
   plotinfo = c("site", "treatment", "date", "plot_id", "trial")
 )
 ```
