@@ -17,6 +17,7 @@ devtools::build_vignettes()
 usethis::use_readme_rmd()
 devtools::build_readme()
 usethis::use_package_doc()
+usethis::use_article("fluxible_faq")
 
 #to detect unused arguments
 args()

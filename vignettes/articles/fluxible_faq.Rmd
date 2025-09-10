@@ -1,13 +1,9 @@
 ---
 title: "Frequently asked questions"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Frequently asked questions}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 bibliography: biblio_fluxible.bib
 csl: emerald-harvard.csl
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -21,15 +17,16 @@ Questions gathered through various outreach events, peer-review, and communicati
 
 ## What quality garantees come with `fluxible`?
 
-The methods used is `fluxible` come from the litterature and are described in a publication recently accepted in *Methods in Ecology and Evolution*.
-The largest manufacturer of infrared gas analyzers, LI-COR, has been involved in the development and provided testing data (in the paper).
+The methods used is `fluxible` come from the litterature and are described in a publication recently accepted in *Methods in Ecology and Evolution* [@gaudardFluxiblePackageProcess2025].
+[LI-COR](https://www.licor.com/), one of the largest manufacturers of infrared gas analyzers and soil respiration chamber systems, has been involved in the development and provided testing data (in the paper).
 
-On the technical side, `fluxible` is developed following @wickham2023r, including fully automated formal tests with the `testthat` R package.
+On the technical side, `fluxible` is developed following @wickham2023r, including fully automated formal tests with the `testthat` R package [@testthat2011].
 The CRAN version is being tested by CRAN every 24 hours on Windows, Linux, and MACOS, with the current and development version of R.
 The development version hosted on GitHub is tested in the same way at every pull request or push on the main branch, using GitHub actions.
-The code coverage is maintained above 98% (meaning 98% of the code is subject to at least one test) through test driven development.
+The code coverage is maintained above 90% (meaning at least 90% of the code is subject to at least one test) through test driven development.
+`fluxible` follows the `tidyverse` [@tidyverse2019] grammar, and all inputs and outputs are tibble S3 objects that can be used without restrictions with other packages and column names provided by the users are kept (at the exception of the `flux_plot` function, which is producing, well, a plot, and requires `fluxible` default column names).
 
-## Can fluxible handle negative fluxes?
+## Can `fluxible` handle negative fluxes?
 
 Yes.
 Measurements with an overall decreasing gas concentration over time inside the chamber (ecosystem uptake) will produce a negative flux; measurement with an overall increasing gas concentration over time inside the chamber (ecosystem emission) will produce a positive flux.
@@ -51,33 +48,7 @@ The air temperature used for the flux calculation is the average air temperature
 The transformation of fractional concentration in Mol per volume before fitting a model (using instant air temperature) is planned in further developments.
 This requires a paired temperature measurement for each gas concentration measurement, which is not always available, and both options will be kept.
 
-## What about other packages?
-
-A full comparison with other R packages available on CRAN also processing ecosystem gas fluxes data from closed loop chambers is available in the paper [@gaudardFluxiblePackageProcess2025].
-
-In short, `fluxible`'s advantages:
-
-- one function per step, maximizing flexibility
-- processing additional variables at the flux calculation step with the same focus window as the fluxes
-- covering the entire process from raw gas concentration data to clean analysis ready fluxes
-- fully reproducible and transparent data quality control
-
-## What about the goFlux R package?
-
-`goFlux` [@rheaultGoFluxUserfriendlyWay2024] is not on CRAN and was therefore not included in the packages comparison found in the paper, but since it has been presented alongside fluxible at several occasions, this question came up several times.
-
-`goFlux` seems to offer an easier approach than fluxible because it does everything at once.
-This comes at the cost of a lack of transparency, flexibility, and reproducibility.
-It also sticks to the idea of choosing between a linear and an exponential model instead of using the new model presented in @zhaoCalculationDaytimeCO22018, and does not provide tools to process environmental data at the flux calculation step.
-
-Furthermore, `goFlux` is hosted on GitHub only and does not seem to have any continuously integrated testing.
-This means that there is no proof that it does what it says it does, or what it used to do in a previous version, or that it works at all [@wickham2023r].
-It has been broken by updates in the past, which is a major issue for users.
-Packages hosted on CRAN (like `fluxible`), are tested every 24 hours on Windows, MacOS, and Linux, using the current R version and the development one.
-In case of failure, the maintainer has 30 days to fix the package or it gets archived.
-GitHub packages could also do that using continuously integrated testing through Github actions (done for the development version of `fluxible` hosted on GitHub), but no `testthat.R` script can be found in `goFlux` repository.
-
-## Could fluxible be used with flow-through chambers?
+## Could `fluxible` be used with flow-through chambers?
 
 We would not recommend it as the calcutions are quite different.
 However, we have in mind that a similar package, following the same structure and same default names, could be developed.
@@ -107,6 +78,33 @@ flags_lia |> # the output of flux_quality
     f_datetime = datetime
   )
 ```
+
+## How does `fluxible` compare to other R packages?
+
+A full comparison with other R packages available on CRAN also processing ecosystem gas fluxes data from closed loop chambers is available in the paper [@gaudardFluxiblePackageProcess2025].
+
+In short, `fluxible`'s advantages:
+
+- one function per step, maximizing flexibility
+- processing additional variables at the flux calculation step with the same focus window as the fluxes
+- covering the entire process from raw gas concentration data to clean analysis ready fluxes
+- fully reproducible and transparent data quality control
+- maximizing automation, making it time and resource efficient
+
+### What about the `goFlux` R package?
+
+`goFlux` [@rheaultGoFluxUserfriendlyWay2024] is not on CRAN and was therefore not included in the package comparison found in the paper, but since it has been presented alongside `fluxible` at several occasions, this question came up several times.
+
+`goFlux` seems to offer an easier approach than fluxible because it does everything at once.
+This comes at the cost of a lack of transparency, flexibility, and reproducibility.
+It also sticks to the idea of choosing between a linear and an exponential model instead of using the new model presented in @zhaoCalculationDaytimeCO22018, and does not provide tools to process environmental data at the flux calculation step.
+
+On the technical side, `goFlux` is hosted on GitHub only and does not seem to have any continuously integrated testing or a test driven development routine.
+This means that there is no proof that it does what it says it does, or what it used to do in a previous version, or that it works at all [@wickham2023r].
+It has been broken by updates in the past.
+<!-- Packages hosted on CRAN (like `fluxible`), are tested every 24 hours on Windows, MacOS, and Linux, using the current R version and the development one. -->
+<!-- In case of failure, the maintainer has 30 days to fix the package or it gets archived. -->
+<!-- GitHub packages could also do that using continuously integrated testing through Github actions (done for the development version of `fluxible` hosted on GitHub), but no `testthat.R` script can be found in `goFlux` repository. -->
 
 
 ### References

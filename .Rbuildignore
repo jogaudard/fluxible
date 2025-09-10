@@ -25,3 +25,4 @@
 ^revdep$
 ^codecov\.yml$
 ^logos$
+^vignettes/articles$

@@ -5,8 +5,8 @@ vignette: >
   %\VignetteIndexEntry{Preparing the data for fluxible}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: biblio_fluxible.bib
-csl: emerald-harvard.csl
+bibliography: articles/biblio_fluxible.bib
+csl: articles/emerald-harvard.csl
 ---
 
 ```{r, include = FALSE}
