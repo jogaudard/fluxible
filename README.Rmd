@@ -1,7 +1,7 @@
 ---
 output: github_document
-bibliography: vignettes/articles/biblio_fluxible.bib
-csl: vignettes/articles/emerald-harvard.csl
+bibliography: vignettes/biblio_vignettes.bib
+csl: vignettes/emerald-harvard.csl
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
