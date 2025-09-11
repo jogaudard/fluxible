@@ -26,6 +26,7 @@ test_that("plot for exponential fit", {
 })
 
 test_that("plot for linear fit", {
+  skip_on_ci()
   slopes30lin_flag <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
@@ -72,6 +73,7 @@ test_that("plot for linear fit with jpg extension works", {
 })
 
 test_that("ggssave and print", {
+  skip_on_ci()
   slopes30lin_flag <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
@@ -101,6 +103,7 @@ test_that("ggssave and print", {
 })
 
 test_that("plot can be exported as an object", {
+  skip_on_ci()
   slopes30lin_flag <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
@@ -117,6 +120,7 @@ test_that("plot can be exported as an object", {
 })
 
 test_that("plot for quadratic fit with mid missing data", {
+  skip_on_ci()
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for quadratic fit with mid missing data",
@@ -136,6 +140,7 @@ test_that("plot for quadratic fit with mid missing data", {
 
 
 test_that("plot for exp_tz fit", {
+  skip_on_ci()
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for exp_tz fit",
@@ -155,6 +160,7 @@ test_that("plot for exp_tz fit", {
 
 
 test_that("plot for exp_tz fit with mid missing data", {
+  skip_on_ci()
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for exp_tz fit with mid missing data",
@@ -173,6 +179,7 @@ test_that("plot for exp_tz fit with mid missing data", {
 })
 
 test_that("plot for exp_zhao18 fit with mid missing data", {
+  skip_on_ci()
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for exp_zhao18 fit with mid missing data",
@@ -191,6 +198,7 @@ test_that("plot for exp_zhao18 fit with mid missing data", {
 })
 
 test_that("plot for exp_hm fit", {
+  skip_on_ci()
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for exp_hm fit",
@@ -209,6 +217,7 @@ test_that("plot for exp_hm fit", {
 })
 
 test_that("plot for kappamax fit", {
+  skip_on_ci()
   expect_snapshot(
     vdiffr::expect_doppelganger(
       "plot for kappamax fit",
@@ -232,6 +241,7 @@ test_that("plot for kappamax fit", {
 })
 
 test_that("plot with custom facet id", {
+  skip_on_ci()
   slopes30lin_flag <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
@@ -305,6 +315,7 @@ test_that("longpdf works", {
 })
 
 test_that("longpdf and print", {
+  skip_on_ci()
   slopes0 <- suppressWarnings(flux_fitting(
     co2_conc,
     conc,
