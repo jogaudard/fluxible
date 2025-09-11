@@ -1,5 +1,6 @@
 library(tidyverse)
 library(fluxible)
+packageVersion("fluxible")
 
 conc_liahovden <- flux_match(
   raw_conc = co2_liahovden, # dataframe with raw gas concentration
@@ -67,19 +68,19 @@ result
 
 rep_1 <- time_test(
     replicate = 1,
-    version = "v128",
+    version = "v132",
     output = "pdfpages"
 )
 
 rep_2 <- time_test(
     replicate = 2,
-    version = "v128",
+    version = "v132",
     output = "pdfpages"
 )
 
 rep_3 <- time_test(
     replicate = 3,
-    version = "v128",
+    version = "v132",
     output = "pdfpages"
 )
 
@@ -90,13 +91,15 @@ allreps <- bind_rows(
 )
 
 # check fluxible version!
-saveRDS(allreps, "building-material/v128.rds")
+saveRDS(allreps, "building-material/v132.rds")
 
+v132 <- readRDS("building-material/v132.rds")
 v129 <- readRDS("building-material/v129.rds")
 v128 <- readRDS("building-material/v128.rds")
 v126 <- readRDS("building-material/v126.rds")
 
 etime_all <- bind_rows(
+  v132,
   v129,
   v128,
   v126
@@ -105,4 +108,5 @@ etime_all <- bind_rows(
 etime_all |>
     ggplot(aes(nb_fluxes, e_time, color = fluxible)) +
     geom_point() +
-    geom_smooth(se = FALSE)
+    geom_smooth(se = FALSE) +
+    theme_bw()
