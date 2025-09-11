@@ -1,3 +1,7 @@
+# fluxible 1.3.2
+
+* `flux_plot`: fixed a bug that became an issue with `ggplot2 v4.0.0`
+
 # fluxible 1.3.1
 
 * Vignettes and readme: reference and small fixes
