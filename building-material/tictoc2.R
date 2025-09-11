@@ -84,10 +84,31 @@ rep_3 <- time_test(
     output = "pdfpages"
 )
 
+rep_1l <- time_test(
+    replicate = 1,
+    version = "v132",
+    output = "longpdf"
+)
+
+rep_2l <- time_test(
+    replicate = 2,
+    version = "v132",
+    output = "longpdf"
+)
+
+rep_3l <- time_test(
+    replicate = 3,
+    version = "v132",
+    output = "longpdf"
+)
+
 allreps <- bind_rows(
     rep_1,
     rep_2,
-    rep_3
+    rep_3,
+    rep_1l,
+    rep_2l,
+    rep_3l
 )
 
 # check fluxible version!
@@ -110,3 +131,4 @@ etime_all |>
     geom_point() +
     geom_smooth(se = FALSE) +
     theme_bw()
+ggsave("building-material/flux_plot_etime.png")

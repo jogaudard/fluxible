@@ -1,6 +1,6 @@
 # fluxible 1.3.2
 
-* `flux_plot`: fixed a bug that became an issue with `ggplot2 v4.0.0`
+* `flux_plot`: fixed a bug, which makes it now much faster
 
 # fluxible 1.3.1
 
