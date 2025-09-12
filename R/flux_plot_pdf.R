@@ -6,6 +6,7 @@
 #' @param f_plotname name of plot
 #' @importFrom ggforce facet_wrap_paginate
 #' @importFrom progress progress_bar
+#' @importFrom grDevices pdf dev.off
 #' @keywords internal
 
 
