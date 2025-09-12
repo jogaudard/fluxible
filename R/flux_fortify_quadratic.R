@@ -20,5 +20,5 @@ flux_fortify_quadratic <- function(slopes_df) {
       values_to = "f_fit"
     )
 
-  slopes_df
+  list(slopes_df = slopes_df, param_df = param_df)
 }

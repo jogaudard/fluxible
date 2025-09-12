@@ -17,5 +17,5 @@ flux_fortify_lin <- function(slopes_df) {
       linetype = "f_fit_slope"
     )
 
-  slopes_df
+  list(slopes_df = slopes_df, param_df = param_df)
 }
