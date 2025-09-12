@@ -58,7 +58,7 @@
 #' @importFrom dplyr select distinct mutate n_distinct
 #' @importFrom ggplot2 ggplot aes geom_point geom_line scale_color_manual
 #' scale_x_datetime ylim facet_wrap labs geom_text theme_bw ggsave
-#' scale_linetype_manual guides guide_legend
+#' scale_linetype_manual guides guide_legend geom_vline
 #' @importFrom purrr quietly
 #' @importFrom stringr str_detect
 #' @importFrom tidyr unite
@@ -161,11 +161,7 @@ flux_plot <- function(slopes_df,
       ),
       vjust = 0, hjust = "inward",
       na.rm = TRUE
-    )
-
-  message("Plotting in progress")
-
-  f_plot <- f_plot +
+    ) +
     geom_line(
       aes(y = .data$f_fit, linetype = .data$linetype),
       linewidth = 0.5,
@@ -202,6 +198,7 @@ flux_plot <- function(slopes_df,
     guides(color = guide_legend(override.aes = list(linetype = 0, size = 3))) +
     theme_bw()
 
+  message("Plotting in progress")
   
   # select plotting engine
   switch(
@@ -210,10 +207,7 @@ flux_plot <- function(slopes_df,
     longpdf = flux_plot_longpdf(f_plot, f_plotname, slopes_params$nb_fluxid, longpdf_args),
     ggsave = {
       message("Saving plots with ggsave.")
-      f_plot <- f_plot +
-        do.call(facet_wrap, # do.call is here to pass arguments as a list
-          args = c(facets = ~f_facetid, facet_wrap_args)
-        )
+      f_plot <- flux_print_plot(f_plot, facet_wrap_args)
       do.call(
         ggsave,
         args = c(filename = f_plotname, ggsave_args)
