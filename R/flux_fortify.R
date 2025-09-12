@@ -22,7 +22,6 @@ flux_fortify <- function(slopes_df,
                       f_datetime = f_datetime,
                       f_ylim_upper = 800,
                       f_ylim_lower = 400,
-                      f_plotname = "",
                       f_facetid = "f_fluxid",
                       y_text_position = 500) {
 
@@ -43,9 +42,7 @@ flux_fortify <- function(slopes_df,
   )
   
   
-  if (f_plotname == "") {
-    f_plotname <- as_label(enquo(slopes_df))
-  }
+
   
 
   
@@ -118,7 +115,7 @@ flux_fortify <- function(slopes_df,
   
   nb_fluxid <- n_distinct(slopes_df$f_fluxid)
   
-  # costumize facet ID
+  # customize facet ID
   slopes_df <- slopes_df |>
     unite(
       col = "f_facetid",
@@ -139,17 +136,20 @@ flux_fortify <- function(slopes_df,
   
   
   if (str_detect(fit_type, "exp")) {
-    f_plot <- flux_plot_exp(
+    slopes_params <- flux_fortify_exp(
       slopes_df,
       kappamax = kappamax
     )
   } else if (fit_type == "linear") {
-    f_plot <- flux_plot_lin(slopes_df)
+    slopes_params <- flux_fortify_lin(slopes_df)
   } else if (fit_type == "quadratic") {
-    f_plot <- flux_plot_quadratic(slopes_df)
+    slopes_params <- flux_fortify_quadratic(slopes_df)
   } else {
     stop("Unrecognised plot type:", fit_type)
   }
   
-slopes_df  
+  c(
+    slopes_params, 
+    fit_type = fit_type,
+    nb_fluxid = nb_fluxid)  
 }
