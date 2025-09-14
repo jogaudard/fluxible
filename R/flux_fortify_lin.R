@@ -5,8 +5,6 @@
 #' @importFrom dplyr select distinct mutate
 #' @keywords internal
 
-
-
 flux_fortify_lin <- function(slopes_df) {
   param_df <- flux_param_lm(slopes_df)
 
