@@ -137,11 +137,11 @@ flux_plot <- function(slopes_df,
   # build plot
   f_plot <- slopes_df |>
     ggplot(aes({{f_datetime}})) 
-#browser()  
+ 
   if(any(names(slopes_df) == "f_start_z")) {
     f_plot <- f_plot + 
       geom_vline(
-        mapping = aes(xintercept = f_start_z),
+        mapping = aes(xintercept = .data$f_start_z),
         data = distinct(slopes_df, .data$f_facetid, .keep_all = TRUE),
         color = "grey",
         linewidth = 0.5
