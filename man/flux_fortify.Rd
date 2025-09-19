@@ -6,12 +6,12 @@
 \usage{
 flux_fortify(
   slopes_df,
-  f_conc = f_conc,
-  f_datetime = f_datetime,
-  f_ylim_upper = 800,
-  f_ylim_lower = 400,
-  f_facetid = "f_fluxid",
-  y_text_position = 500
+  f_conc,
+  f_datetime,
+  f_ylim_upper,
+  f_ylim_lower,
+  f_facetid,
+  y_text_position
 )
 }
 \arguments{

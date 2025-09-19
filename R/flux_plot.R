@@ -112,8 +112,6 @@ flux_plot <- function(slopes_df,
     y_text_position = 500
   )
   slopes_df <- slopes_params$slopes_df
-  param_df <- slopes_params$param_df
-
   
   # prepare for plotting
   output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "longpdf"))
@@ -154,7 +152,7 @@ flux_plot <- function(slopes_df,
                na.rm = TRUE
     ) +
     geom_text(
-      data = param_df,
+      data = slopes_params$param_df,
       aes(
         x = .data$f_start, y = y_text_position,
         label = .data$print_col
@@ -164,6 +162,7 @@ flux_plot <- function(slopes_df,
     ) +
     geom_line(
       aes(y = .data$f_fit, linetype = .data$linetype),
+      data = slopes_params$fits_df,
       linewidth = 0.5,
       na.rm = TRUE,
       show.legend = TRUE

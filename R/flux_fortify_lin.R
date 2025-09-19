@@ -12,10 +12,10 @@ flux_fortify_lin <- function(slopes_df) {
 
   slopes_df <- flux_plot_flag(slopes_df, param_df)
 
-  slopes_df <- slopes_df |>
+  fits_df <- slopes_df |>
     mutate(
       linetype = "f_fit_slope"
     )
 
-  list(slopes_df = slopes_df, param_df = param_df)
+  list(slopes_df = slopes_df, fits_df = fits_df, param_df = param_df)
 }
