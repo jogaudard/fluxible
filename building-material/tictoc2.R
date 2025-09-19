@@ -126,11 +126,24 @@ etime_all <- bind_rows(
   v129,
   v128,
   v126
-)
+) |>
+separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove = FALSE)
 
 etime_all |>
-    ggplot(aes(nb_fluxes, e_time, color = fluxible)) +
+    ggplot(aes(nb_fluxes, e_time, color = version)) +
     geom_point() +
     geom_smooth(se = FALSE) +
-    theme_bw()
-ggsave("building-material/flux_plot_etime.png")
+    theme_bw() +
+    facet_wrap(output ~ ., nrow = 2, scales = "free")
+
+ggsave("building-material/flux_plot_etime_all.png")
+
+etime_all |>
+    filter(version %in% c("v132", "graphics")) |>
+    ggplot(aes(nb_fluxes, e_time, color = version)) +
+    geom_point() +
+    geom_smooth(se = FALSE) +
+    theme_bw() +
+    facet_wrap(output ~ ., nrow = 2, scales = "free")
+
+ggsave("building-material/flux_plot_etime_recent.png")
