@@ -7,16 +7,14 @@
 #' @importFrom tidyr pivot_longer
 #' @keywords internal
 
-
-
 flux_fortify_exp <- function(slopes_df,
-                          f_conc,
-                          f_datetime,
-                          y_text_position,
-                          kappamax) {
+                             f_conc,
+                             f_datetime,
+                             y_text_position,
+                             kappamax) {
 
   if (isTRUE(kappamax)) {
-    param_df <- flux_param_kappamax(slopes_df)  
+    param_df <- flux_param_kappamax(slopes_df)
   } else {
     param_df <- flux_param_exp(slopes_df)
   }

@@ -9,11 +9,10 @@
 #' @importFrom grDevices pdf dev.off
 #' @keywords internal
 
-
 flux_plot_pdf <- function(f_plot,
-    f_plotname,
-    facet_wrap_args,
-    nb_fluxid
+  f_plotname,
+  facet_wrap_args,
+  nb_fluxid
 ) {
 
   # n_pages is too slow to get the number of page

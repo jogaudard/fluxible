@@ -6,8 +6,6 @@
 #' @importFrom tidyr pivot_longer
 #' @keywords internal
 
-
-
 flux_fortify_quadratic <- function(slopes_df) {
   param_df <- flux_param_qua(slopes_df)
 
