@@ -100,19 +100,19 @@ flux_plot <- function(slopes_df,
                       print_plot = "FALSE",
                       output = "print_only",
                       ggsave_args = list()) {
-  
+
   # fortify data
   slopes_params <- flux_fortify(
     slopes_df = slopes_df,
     f_conc = {{f_conc}},
     f_datetime = {{f_datetime}},
-    f_ylim_upper = 800,
-    f_ylim_lower = 400,
-    f_facetid = "f_fluxid",
-    y_text_position = 500
+    f_ylim_upper = f_ylim_upper,
+    f_ylim_lower = f_ylim_lower,
+    f_facetid = f_facetid,
+    y_text_position = y_text_position
   )
   slopes_df <- slopes_params$slopes_df
-  
+
   # prepare for plotting
   output <- match.arg(output, c("pdfpages", "ggsave", "print_only", "longpdf"))
 
@@ -137,6 +137,7 @@ flux_plot <- function(slopes_df,
     ggplot(aes({{f_datetime}})) 
  
   if(any(names(slopes_df) == "f_start_z")) {
+
     f_plot <- f_plot + 
       geom_vline(
         mapping = aes(xintercept = .data$f_start_z),
@@ -145,11 +146,11 @@ flux_plot <- function(slopes_df,
         linewidth = 0.5
       )
   }
-    
+
   f_plot <- f_plot + 
     geom_point(aes(y = {{f_conc}}, color = .data$f_quality_flag),
-               size = 0.4,
-               na.rm = TRUE
+      size = 0.4,
+      na.rm = TRUE
     ) +
     geom_text(
       data = slopes_params$param_df,
@@ -198,12 +199,16 @@ flux_plot <- function(slopes_df,
     theme_bw()
 
   message("Plotting in progress")
-  
+
   # select plotting engine
   switch(
-    output, 
-    pdfpages = flux_plot_pdf(f_plot, f_plotname, facet_wrap_args, slopes_params$nb_fluxid),
-    longpdf = flux_plot_longpdf(f_plot, f_plotname, slopes_params$nb_fluxid, longpdf_args),
+    output,
+    pdfpages = flux_plot_pdf(
+      f_plot, f_plotname, facet_wrap_args, slopes_params$nb_fluxid
+    ),
+    longpdf = flux_plot_longpdf(
+      f_plot, f_plotname, slopes_params$nb_fluxid, longpdf_args
+    ),
     ggsave = {
       message("Saving plots with ggsave.")
       f_plot <- flux_print_plot(f_plot, facet_wrap_args)
@@ -211,7 +216,7 @@ flux_plot <- function(slopes_df,
         ggsave,
         args = c(filename = f_plotname, ggsave_args)
       )
-  
+
       message("Plots saved in f_quality_plots folder.")
       if (print_plot) {
         return(f_plot)
