@@ -134,6 +134,9 @@ etime_all |>
     geom_point() +
     geom_smooth(se = FALSE) +
     theme_bw() +
+    labs(
+      title = "flux_plot"
+    ) +
     facet_wrap(output ~ ., nrow = 2, scales = "free")
 
 ggsave("building-material/flux_plot_etime_all.png")
@@ -144,6 +147,61 @@ etime_all |>
     geom_point() +
     geom_smooth(se = FALSE) +
     theme_bw() +
+    labs(
+      title = "flux_plot"
+    ) +
     facet_wrap(output ~ ., nrow = 2, scales = "free")
 
 ggsave("building-material/flux_plot_etime_recent.png")
+
+
+#### testing flux_fitting ####
+
+fitting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
+ replicates = 3, fit_type = c("exp_zhao18", "linear", "quadratic", "exp_tz")) {
+
+
+result <- replicate(n = replicates, expr = {
+  map(nb_fluxes, \(x) {
+test_df <- conc_liahovden |>
+  filter(
+    f_fluxid %in% sample(c(1:138), x)
+  )
+
+map(fit_type, \(f) {
+  time <- system.time(
+    {
+        test_df |>
+flux_fitting(
+  f_conc = conc, # gas concentration column
+  f_datetime = datetime, # date and time column
+  fit_type = f, # the model to fit to the gas concentration
+)
+})
+
+tibble(e_time = time["elapsed"], fit_type = f)
+
+
+
+}) |>
+list_rbind() |>
+  mutate(
+    nb_fluxes = x
+  )
+}) |>
+list_rbind()
+}, simplify = FALSE) |>
+list_rbind() |>
+mutate(
+  fluxible = version
+)
+
+
+result
+}
+
+# debug(flux_fitting)
+test <- fitting_etime(version = "123", nb_fluxes = c(2, 6))
+
+test_rep <- replicate(2, fitting_etime(version = "123", fit_type = "exp_zhao18", nb_fluxes = c(1, 10, 30)), simplify = FALSE) |>
+  list_rbind()
