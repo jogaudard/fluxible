@@ -201,7 +201,18 @@ result
 }
 
 # debug(flux_fitting)
-test <- fitting_etime(version = "123", nb_fluxes = c(2, 6))
+# test <- fitting_etime(version = "123", nb_fluxes = c(2, 6))
 
-test_rep <- replicate(2, fitting_etime(version = "123", fit_type = "exp_zhao18", nb_fluxes = c(1, 10, 30)), simplify = FALSE) |>
-  list_rbind()
+# test_rep <- replicate(2, fitting_etime(version = "123", fit_type = "exp_zhao18", nb_fluxes = c(1, 10, 30)), simplify = FALSE) |>
+#   list_rbind()
+
+flux_fitting_v123 <- fitting_etime("v123")
+
+flux_fitting_v123 |>
+  ggplot(aes(nb_fluxes, e_time, color = fit_type, shape = fluxible)) +
+  geom_point() +
+    geom_smooth(se = FALSE) +
+    theme_bw() +
+    labs(
+      title = "flux_fitting etime"
+    )
