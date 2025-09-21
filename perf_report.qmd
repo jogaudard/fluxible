@@ -133,7 +133,7 @@ bind_rows(flux_plot_v133)
 #| label: fig-flux_plot
 #| echo: false
 #| fig-cap: "Performance of flux_plot per version and output."
-#| fig-height: 8
+#| fig-height: 6
 #| fig-width: 10
 #| message: false
 
@@ -213,7 +213,7 @@ flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
 #| label: fig-flux_fitting
 #| echo: false
 #| fig-cap: "Performance of flux_fitting per version and model."
-#| fig-height: 8
+#| fig-height: 6
 #| fig-width: 10
 #| message: false
 
