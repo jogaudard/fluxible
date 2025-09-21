@@ -107,10 +107,11 @@ result
 ```{r}
 #| include: false
 
-flux_plot_v133 <- plotting_etime("v133")
+# flux_plot_v133 <- plotting_etime("v133")
 
-saveRDS(flux_plot_v133, "perf_data/plotting_v133.rds")
+# saveRDS(flux_plot_v133, "perf_data/plotting_v133.rds")
 
+flux_plot_v133 <- readRDS("perf_data/plotting_v133.rds")
 v132 <- readRDS("perf_data/v132.rds")
 v129 <- readRDS("perf_data/v129.rds")
 v128 <- readRDS("perf_data/v128.rds")
@@ -132,7 +133,7 @@ bind_rows(flux_plot_v133)
 #| label: fig-flux_plot
 #| echo: false
 #| fig-cap: "Performance of flux_plot per version and output."
-#| fig-height: 10
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
 
@@ -142,7 +143,7 @@ etime_all_plotting |>
     geom_smooth(se = FALSE) +
     theme_bw() +
     labs(
-      title = "flux_plot"
+      title = "flux_plot etime"
     )
 ```
 
@@ -212,7 +213,7 @@ flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
 #| label: fig-flux_fitting
 #| echo: false
 #| fig-cap: "Performance of flux_fitting per version and model."
-#| fig-height: 10
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
 
