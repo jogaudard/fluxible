@@ -67,4 +67,5 @@ usethis::use_revdep()
 # checking if the new release is breaking other packages
 revdepcheck::revdep_check(num_workers = 4)
 
-
+# to render perf report, preview does not work
+quarto::quarto_render("perf_report.qmd")

@@ -1,10 +1,10 @@
+# fluxible performance report
+Joseph Gaudard
+2025-09-21
 
-
-Current `fluxible` package version: 1.3.2
+Current `fluxible` package version: 1.3.3
 
 # `flux_plot`
-
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
 <div id="fig-flux_plot">
 
@@ -15,8 +15,6 @@ Figure 1: Performance of flux_plot per version and output.
 </div>
 
 # `flux_fitting`
-
-    `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 
 <div id="fig-flux_fitting">
 

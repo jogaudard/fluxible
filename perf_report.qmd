@@ -1,18 +1,19 @@
 ---
-# title: fluxible performance report
-# author: Joseph Gaudard
-# date: today
+title: fluxible performance report
+author: Joseph Gaudard
+date: today
 format: gfm
 ---
 
 ```{r}
 #| label: packages
 #| include: false
+#| message: false
 
 library(tidyverse)
-library(fluxible)
+# library(fluxible)
 
-# devtools::load_all()
+devtools::load_all()
 
 ```
 
@@ -106,9 +107,9 @@ result
 ```{r}
 #| include: false
 
-# flux_plot_v133 <- plotting_etime("v133")
+flux_plot_v133 <- plotting_etime("v133")
 
-# saveRDS(flux_plot_v132, "perf_data/plotting_v132.rds")
+saveRDS(flux_plot_v133, "perf_data/plotting_v133.rds")
 
 v132 <- readRDS("perf_data/v132.rds")
 v129 <- readRDS("perf_data/v129.rds")
@@ -122,8 +123,8 @@ etime_all_plotting <- bind_rows(
   v126
 ) |>
 select(!replicate) |>
-separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove = TRUE) #|>
-# bind_rows(flux_plot_v133)
+separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove = TRUE) |>
+bind_rows(flux_plot_v133)
 
 ```
 
@@ -133,6 +134,7 @@ separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove 
 #| fig-cap: "Performance of flux_plot per version and output."
 #| fig-height: 10
 #| fig-width: 10
+#| message: false
 
 etime_all_plotting |>
     ggplot(aes(nb_fluxes, e_time, color = version, shape = output)) +
@@ -212,6 +214,7 @@ flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
 #| fig-cap: "Performance of flux_fitting per version and model."
 #| fig-height: 10
 #| fig-width: 10
+#| message: false
 
 flux_fitting_v132 |>
   ggplot(aes(nb_fluxes, e_time, color = fit_type, shape = version)) +
