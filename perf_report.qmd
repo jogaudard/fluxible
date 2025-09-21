@@ -1,0 +1,224 @@
+---
+# title: fluxible performance report
+# author: Joseph Gaudard
+# date: today
+format: gfm
+---
+
+```{r}
+#| label: packages
+#| include: false
+
+library(tidyverse)
+library(fluxible)
+
+# devtools::load_all()
+
+```
+
+Current `fluxible` package version: `r packageVersion("fluxible")`
+
+```{r}
+#| label: data-prep
+#| include: false
+
+
+
+conc_liahovden <- flux_match(
+  raw_conc = co2_liahovden, # dataframe with raw gas concentration
+  field_record = record_liahovden, # dataframe with meta data
+  f_datetime = datetime, # column containing date and time
+  start_col = start, # start date and time of each measurement
+  measurement_length = 220, # length of measurements (in seconds)
+  time_diff = 0 # time difference between f_datetime and start_col
+)
+
+slopes_liahovden <- flux_fitting(
+  conc_df = conc_liahovden, # the output of flux_match
+  f_conc = conc, # gas concentration column
+  f_datetime = datetime, # date and time column
+  f_start = f_start, # start of each measurement, provided by flux_match
+  f_end = f_end, # end of each measurement, provided by flux_match
+  f_fluxid = f_fluxid, # unique ID for each measurement, provided by flux_match
+  fit_type = "exp_zhao18", # the model to fit to the gas concentration
+  start_cut = 0, # seconds to prune at the start before fitting
+  end_cut = 0 # seconds to prune at the end of all measurements before fitting
+)
+
+flags_liahovden <- flux_quality(
+  slopes_df = slopes_liahovden,
+  f_conc = conc,
+  ambient_conc = 421,
+  error = 100,
+  instr_error = 5
+)
+```
+
+# `flux_plot`
+
+```{r}
+#| include: false
+#| label: flux_plot-fct
+
+plotting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
+ replicates = 3, output = c("pdfpages", "longpdf")) {
+
+result <- replicate(n = replicates, expr = {
+  map(nb_fluxes, \(x) {
+test_df <- flags_liahovden |>
+  filter(
+    f_fluxid %in% sample(c(1:138), x)
+  )
+map(output, \(f) {
+time <- system.time(
+    {
+        test_df |>
+flux_plot(
+  f_conc = conc,
+  f_datetime = datetime,
+  f_ylim_upper = 600, # upper limit of y-axis
+  f_ylim_lower = 350, # lower limit of x-axis
+  y_text_position = 450, # position of text with flags and diagnostics
+  output = f,
+  f_plotname = "test"
+)
+})
+
+tibble(e_time = time["elapsed"], output = f)
+}) |>
+list_rbind() |>
+  mutate(
+    nb_fluxes = x
+  )
+}) |>
+list_rbind()
+}, simplify = FALSE) |>
+list_rbind() |>
+mutate(
+  version = version
+)
+
+result
+}
+
+```
+
+```{r}
+#| include: false
+
+# flux_plot_v133 <- plotting_etime("v133")
+
+# saveRDS(flux_plot_v132, "perf_data/plotting_v132.rds")
+
+v132 <- readRDS("perf_data/v132.rds")
+v129 <- readRDS("perf_data/v129.rds")
+v128 <- readRDS("perf_data/v128.rds")
+v126 <- readRDS("perf_data/v126.rds")
+
+etime_all_plotting <- bind_rows(
+  v132,
+  v129,
+  v128,
+  v126
+) |>
+select(!replicate) |>
+separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove = TRUE) #|>
+# bind_rows(flux_plot_v133)
+
+```
+
+```{r}
+#| label: fig-flux_plot
+#| echo: false
+#| fig-cap: "Performance of flux_plot per version and output."
+#| fig-height: 10
+#| fig-width: 10
+
+etime_all_plotting |>
+    ggplot(aes(nb_fluxes, e_time, color = version, shape = output)) +
+    geom_point() +
+    geom_smooth(se = FALSE) +
+    theme_bw() +
+    labs(
+      title = "flux_plot"
+    )
+```
+
+# `flux_fitting`
+
+```{r}
+#| label: fct-fitting
+#| include: false
+
+fitting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
+ replicates = 3, fit_type = c("exp_zhao18", "linear", "quadratic", "exp_tz")) {
+
+
+result <- replicate(n = replicates, expr = {
+  map(nb_fluxes, \(x) {
+test_df <- conc_liahovden |>
+  filter(
+    f_fluxid %in% sample(c(1:138), x)
+  )
+
+map(fit_type, \(f) {
+  time <- system.time(
+    {
+        test_df |>
+flux_fitting(
+  f_conc = conc, # gas concentration column
+  f_datetime = datetime, # date and time column
+  fit_type = f, # the model to fit to the gas concentration
+)
+})
+
+tibble(e_time = time["elapsed"], fit_type = f)
+
+
+
+}) |>
+list_rbind() |>
+  mutate(
+    nb_fluxes = x
+  )
+}) |>
+list_rbind()
+}, simplify = FALSE) |>
+list_rbind() |>
+mutate(
+  version = version
+)
+
+
+result
+}
+
+```
+
+```{r}
+#| include: false
+
+# flux_fitting_v132 <- fitting_etime("v132")
+
+flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
+
+# saveRDS(flux_fitting_v132, "perf_data/fitting_v132.rds")
+
+```
+
+```{r}
+#| label: fig-flux_fitting
+#| echo: false
+#| fig-cap: "Performance of flux_fitting per version and model."
+#| fig-height: 10
+#| fig-width: 10
+
+flux_fitting_v132 |>
+  ggplot(aes(nb_fluxes, e_time, color = fit_type, shape = version)) +
+  geom_point() +
+    geom_smooth(se = FALSE) +
+    theme_bw() +
+    labs(
+      title = "flux_fitting etime"
+    )
+```
