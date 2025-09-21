@@ -25,3 +25,7 @@
 ^revdep$
 ^codecov\.yml$
 ^logos$
+^perf_report_files$
+^perf_data$
+^perf_report\.qmd$
+^perf_report\.md$
