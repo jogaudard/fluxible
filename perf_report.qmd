@@ -58,8 +58,9 @@ flags_liahovden <- flux_quality(
 # `flux_plot`
 
 ```{r}
-#| include: false
+#| warning: false
 #| label: flux_plot-fct
+#| message: false
 
 plotting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
  replicates = 3, output = c("pdfpages", "longpdf")) {
@@ -151,7 +152,8 @@ etime_all_plotting |>
 
 ```{r}
 #| label: fct-fitting
-#| include: false
+#| message: false
+#| warning: false
 
 fitting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
  replicates = 3, fit_type = c("exp_zhao18", "linear", "quadratic", "exp_tz")) {
