@@ -69,3 +69,4 @@ revdepcheck::revdep_check(num_workers = 4)
 
 # to render perf report, preview does not work
 quarto::quarto_render("perf_report.qmd")
+quarto::quarto_render("download_logs.qmd")
