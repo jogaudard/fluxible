@@ -1,6 +1,29 @@
+---
+title: fluxible performance report
+author: Joseph Gaudard
+date: today
+format: gfm
+---
+
+```{r}
+#| label: packages
+#| include: false
+#| message: false
+
 library(tidyverse)
-library(fluxible)
-packageVersion("fluxible")
+# library(fluxible)
+
+devtools::load_all()
+
+```
+
+Current `fluxible` package version: `r packageVersion("fluxible")`
+
+```{r}
+#| label: data-prep
+#| include: false
+
+
 
 conc_liahovden <- flux_match(
   raw_conc = co2_liahovden, # dataframe with raw gas concentration
@@ -30,17 +53,25 @@ flags_liahovden <- flux_quality(
   error = 100,
   instr_error = 5
 )
+```
 
-time_test <- function(nb_fluxes = c(1, 10, 30, 60, 100, 138),
- replicate, version, output) {
-e_time <- c()
-    
-for (i in seq_along(nb_fluxes)) {
+# `flux_plot`
 
+```{r}
+#| warning: false
+#| label: flux_plot-fct
+#| message: false
+
+plotting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
+ replicates = 3, output = c("pdfpages", "longpdf")) {
+
+result <- replicate(n = replicates, expr = {
+  map(nb_fluxes, \(x) {
 test_df <- flags_liahovden |>
   filter(
-    f_fluxid %in% sample(c(1:138), nb_fluxes[i])
+    f_fluxid %in% sample(c(1:138), x)
   )
+map(output, \(f) {
 time <- system.time(
     {
         test_df |>
@@ -50,112 +81,79 @@ flux_plot(
   f_ylim_upper = 600, # upper limit of y-axis
   f_ylim_lower = 350, # lower limit of x-axis
   y_text_position = 450, # position of text with flags and diagnostics
-  output = output,
+  output = f,
   f_plotname = "test"
 )
 })
-e_time[i] <- time["elapsed"]
-}
-result <- tibble(
-    nb_fluxes,
-    e_time,
-    replicate = rep(replicate, length(nb_fluxes)),
-    fluxible = rep(paste(version, output, sep = "_"), length(nb_fluxes))
+
+tibble(e_time = time["elapsed"], output = f)
+}) |>
+list_rbind() |>
+  mutate(
+    nb_fluxes = x
+  )
+}) |>
+list_rbind()
+}, simplify = FALSE) |>
+list_rbind() |>
+mutate(
+  version = version
 )
 
 result
 }
 
-rep_1 <- time_test(
-    replicate = 1,
-    version = "graphics",
-    output = "pdfpages"
-)
+```
 
-rep_2 <- time_test(
-    replicate = 2,
-    version = "graphics",
-    output = "pdfpages"
-)
+```{r}
+#| include: false
 
-rep_3 <- time_test(
-    replicate = 3,
-    version = "graphics",
-    output = "pdfpages"
-)
+# flux_plot_v133 <- plotting_etime("v133")
 
-rep_1l <- time_test(
-    replicate = 1,
-    version = "graphics",
-    output = "longpdf"
-)
+# saveRDS(flux_plot_v133, "perf_data/plotting_v133.rds")
 
-rep_2l <- time_test(
-    replicate = 2,
-    version = "graphics",
-    output = "longpdf"
-)
+flux_plot_v133 <- readRDS("perf_data/plotting_v133.rds")
+v132 <- readRDS("perf_data/v132.rds")
+v129 <- readRDS("perf_data/v129.rds")
+v128 <- readRDS("perf_data/v128.rds")
+v126 <- readRDS("perf_data/v126.rds")
 
-rep_3l <- time_test(
-    replicate = 3,
-    version = "graphics",
-    output = "longpdf"
-)
-
-allreps <- bind_rows(
-    rep_1,
-    rep_2,
-    rep_3,
-    rep_1l,
-    rep_2l,
-    rep_3l
-)
-
-# check fluxible version!
-saveRDS(allreps, "building-material/graphics.rds")
-
-graphics <- readRDS("building-material/graphics.rds")
-v132 <- readRDS("building-material/v132.rds")
-v129 <- readRDS("building-material/v129.rds")
-v128 <- readRDS("building-material/v128.rds")
-v126 <- readRDS("building-material/v126.rds")
-
-etime_all <- bind_rows(
-  graphics,
+etime_all_plotting <- bind_rows(
   v132,
   v129,
   v128,
   v126
 ) |>
-separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove = FALSE)
+select(!replicate) |>
+separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove = TRUE) |>
+bind_rows(flux_plot_v133)
 
-etime_all |>
-    ggplot(aes(nb_fluxes, e_time, color = version)) +
+```
+
+```{r}
+#| label: fig-flux_plot
+#| echo: false
+#| fig-cap: "Performance of flux_plot per version and output."
+#| fig-height: 6
+#| fig-width: 10
+#| message: false
+
+etime_all_plotting |>
+    ggplot(aes(nb_fluxes, e_time, color = version, shape = output)) +
     geom_point() +
     geom_smooth(se = FALSE) +
     theme_bw() +
     labs(
-      title = "flux_plot"
-    ) +
-    facet_wrap(output ~ ., nrow = 2, scales = "free")
+      title = "flux_plot etime"
+    )
+```
 
-ggsave("building-material/flux_plot_etime_all.png")
+# `flux_fitting`
 
-etime_all |>
-    filter(version %in% c("v132", "graphics")) |>
-    ggplot(aes(nb_fluxes, e_time, color = version)) +
-    geom_point() +
-    geom_smooth(se = FALSE) +
-    theme_bw() +
-    labs(
-      title = "flux_plot"
-    ) +
-    facet_wrap(output ~ ., nrow = 2, scales = "free")
-
-ggsave("building-material/flux_plot_etime_recent.png")
-
-
-#### testing flux_fitting ####
+```{r}
+#| label: fct-fitting
+#| message: false
+#| warning: false
 
 fitting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
  replicates = 3, fit_type = c("exp_zhao18", "linear", "quadratic", "exp_tz")) {
@@ -193,26 +191,40 @@ list_rbind()
 }, simplify = FALSE) |>
 list_rbind() |>
 mutate(
-  fluxible = version
+  version = version
 )
 
 
 result
 }
 
-# debug(flux_fitting)
-# test <- fitting_etime(version = "123", nb_fluxes = c(2, 6))
+```
 
-# test_rep <- replicate(2, fitting_etime(version = "123", fit_type = "exp_zhao18", nb_fluxes = c(1, 10, 30)), simplify = FALSE) |>
-#   list_rbind()
+```{r}
+#| include: false
 
-flux_fitting_v123 <- fitting_etime("v123")
+# flux_fitting_v132 <- fitting_etime("v132")
 
-flux_fitting_v123 |>
-  ggplot(aes(nb_fluxes, e_time, color = fit_type, shape = fluxible)) +
+flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
+
+# saveRDS(flux_fitting_v132, "perf_data/fitting_v132.rds")
+
+```
+
+```{r}
+#| label: fig-flux_fitting
+#| echo: false
+#| fig-cap: "Performance of flux_fitting per version and model."
+#| fig-height: 6
+#| fig-width: 10
+#| message: false
+
+flux_fitting_v132 |>
+  ggplot(aes(nb_fluxes, e_time, color = fit_type, shape = version)) +
   geom_point() +
     geom_smooth(se = FALSE) +
     theme_bw() +
     labs(
       title = "flux_fitting etime"
     )
+```
