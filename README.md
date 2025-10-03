@@ -240,8 +240,8 @@ Gaudard J, Telford RJ, Chacon-Labella J, Dawson HR, Enquist BJ, Töpper
 JP, Trepel J, Vandvik V, Baumane M, Birkeli K, Holle MJM, Hupp JR,
 Santos-Andrade PE, Satriawan TW, Halbritter AH. “`fluxible`: An R
 package to process ecosystem gas fluxes from closed-loop chambers in an
-automated and reproducible way” (2025). Methods in Ecology and
-Evolution,
+automated and reproducible way” (2025). *Methods in Ecology and
+Evolution*,
 [doi:10.1111/2041-210X.70161](https://doi.org/10.1111/2041-210X.70161).
 
 <br>
