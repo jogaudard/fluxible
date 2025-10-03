@@ -31,7 +31,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   geom_line(aes(linewidth = package)) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
+  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 3))) +
   labs(
     title = "Last month"
   )
@@ -52,7 +52,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   geom_line(aes(linewidth = package)) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
+  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 3))) +
   labs(
     title = "Since paper publication"
   )
@@ -74,7 +74,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   geom_line(aes(linewidth = package)) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
+  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 3))) +
   labs(
     title = "Since first CRAN acceptance"
   )
