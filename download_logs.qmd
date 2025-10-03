@@ -46,7 +46,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| fig-width: 10
 #| message: false
 
-adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-27", to = date_end) |>
+adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-25", to = date_end) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
   ggplot(aes(date, value, color = package)) +
   geom_line(aes(linewidth = package)) +
@@ -54,7 +54,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   facet_grid(name ~ ., scales = "free") +
   scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
   labs(
-    title = "Since paper publication (following CRAN update)"
+    title = "Since paper publication"
   )
 
 ```
@@ -62,7 +62,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 ```{r}
 #| label: fig-overall
 #| echo: false
-#| fig-cap: "Overall number of downloads since CRAN acceptance."
+#| fig-cap: "Overall number of downloads since first CRAN acceptance."
 #| fig-height: 6
 #| fig-width: 10
 #| message: false
@@ -76,7 +76,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   facet_grid(name ~ ., scales = "free") +
   scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
   labs(
-    title = "Since CRAN acceptance"
+    title = "Since first CRAN acceptance"
   )
 
 ```

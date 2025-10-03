@@ -22,6 +22,6 @@ Figure 2: Number of downloads since paper was published.
 
 ![](download_logs_files/figure-commonmark/fig-overall-1.png)
 
-Figure 3: Overall number of downloads since CRAN acceptance.
+Figure 3: Overall number of downloads since first CRAN acceptance.
 
 </div>
