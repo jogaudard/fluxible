@@ -12,7 +12,7 @@ format: gfm
 
 library(tidyverse)
 library(adjustedcranlogs)
-library(tidyverse)
+library(zoo)
 
 date_end <- today() - 2
 ```
@@ -47,7 +47,10 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| message: false
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-25", to = date_end) |>
-  pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
+  mutate(
+    rollmean_5days = rollmean(adjusted_downloads, 5, fill = NA)
+  ) |>
+  pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_5days)) |>
   ggplot(aes(date, value, color = package)) +
   geom_line(aes(alpha = package)) +
   theme_bw() +
@@ -69,7 +72,10 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2024-08-27", to = date_end) |>
-  pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
+  mutate(
+    rollmean_10days = rollmean(adjusted_downloads, 10, fill = NA)
+  ) |>
+  pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_10days)) |>
   ggplot(aes(date, value, color = package)) +
   geom_line(aes(alpha = package)) +
   theme_bw() +
