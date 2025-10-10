@@ -50,7 +50,8 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-25", to = date_end) |>
   mutate(
-    rollmean_5days = rollmean(adjusted_downloads, 5, fill = NA)
+    rollmean_5days = rollmean(adjusted_downloads, 5, fill = NA, align = "right"),
+    .by = package
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_5days)) |>
   ggplot(aes(date, value, color = package)) +
@@ -76,7 +77,8 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2024-08-27", to = date_end) |>
   mutate(
-    rollmean_10days = rollmean(adjusted_downloads, 10, fill = NA)
+    rollmean_10days = rollmean(adjusted_downloads, 10, fill = NA, align = "right"),
+    .by = package
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_10days)) |>
   ggplot(aes(date, value, color = package)) +
