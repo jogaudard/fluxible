@@ -10,9 +10,6 @@ Figure 1: Number of downloads for the last month.
 
 </div>
 
-    Warning: Removed 2 rows containing missing values or values outside the scale range
-    (`geom_line()`).
-
 <div id="fig-paper">
 
 ![](download_logs_files/figure-commonmark/fig-paper-1.png)
@@ -20,9 +17,6 @@ Figure 1: Number of downloads for the last month.
 Figure 2: Number of downloads since paper was published.
 
 </div>
-
-    Warning: Removed 5 rows containing missing values or values outside the scale range
-    (`geom_line()`).
 
 <div id="fig-overall">
 

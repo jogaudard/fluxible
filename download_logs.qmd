@@ -24,6 +24,7 @@ date_end <- today() - 2
 #| fig-height: 6
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
@@ -42,9 +43,10 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| label: fig-paper
 #| echo: false
 #| fig-cap: "Number of downloads since paper was published."
-#| fig-height: 6
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-25", to = date_end) |>
   mutate(
@@ -66,9 +68,10 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| label: fig-overall
 #| echo: false
 #| fig-cap: "Overall number of downloads since first CRAN acceptance."
-#| fig-height: 6
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2024-08-27", to = date_end) |>
