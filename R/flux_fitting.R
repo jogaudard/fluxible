@@ -147,7 +147,7 @@ flux_fitting <- function(conc_df,
         "You cannot cut more than the length of the measurements!"
       )
     }
-    if (end_cut < start_cut) {
+    if (end_cut <= start_cut) {
       stop(
         "end_cut cannot be smaller than start_cut"
       )
@@ -160,7 +160,7 @@ flux_fitting <- function(conc_df,
         "You cannot cut more than the length of the measurements!"
       )
     }
-    if (start_cut < end_cut) {
+    if (start_cut <= end_cut) {
       stop(
         "start_cut cannot be smaller than end_cut"
       )

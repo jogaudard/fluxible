@@ -626,3 +626,18 @@ test_that("from end start cut too small", {
     "start_cut cannot be smaller than end_cut"
   )
 })
+
+test_that("equal cuts", {
+  expect_error(
+    flux_fitting(
+      co2_conc,
+      conc,
+      datetime,
+      cut_direction = "from_end",
+      start_cut = 20,
+      end_cut = 20,
+      fit_type = "linear"
+    ),
+    "start_cut cannot be smaller than end_cut"
+  )
+})
