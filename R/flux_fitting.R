@@ -181,29 +181,36 @@ flux_fitting <- function(conc_df,
 
 
   conc_df <- conc_df |>
+    # rename(
+    #   f_start_og = {{f_start}}
+    # ) |>
     mutate(
       f_time = difftime({{f_datetime}}[seq_along({{f_datetime}})],
         {{f_datetime}}[1],
         units = "secs"
       ),
       f_time = as.double(.data$f_time),
+      f_start_og = {{f_start}},
       {{f_start}} := case_when(
-        cut_direction %in% c("none", "from_start") ~ {{f_start}} + start_cut,
+        cut_direction %in% c("none", "from_start") ~ .data$f_start_og + start_cut,
         cut_direction == "from_end" ~ {{f_end}} - start_cut
       ),
       {{f_end}} := case_when(
         cut_direction %in% c("none", "from_end") ~ {{f_end}} - end_cut,
-        cut_direction == "from_start" ~ {{f_start}} + end_cut
+        cut_direction == "from_start" ~ .data$f_start_og + end_cut
       ),
       f_cut = case_when(
         {{f_datetime}} < {{f_start}} | {{f_datetime}} >= {{f_end}}
         ~ "cut",
         TRUE ~ "keep"
       ),
+      f_time_diff = difftime({{f_start}}, .data$f_start_og, units = "secs"),
+      f_time_diff = as.double(.data$f_time_diff),
       f_cut = as_factor(.data$f_cut),
       f_n_conc = sum(!is.na(.data[[name_conc]])),
       .by = {{f_fluxid}}
-    )
+    ) |>
+    select(!"f_start_og")
 
   conc_df_cut <- conc_df |>
     filter(
@@ -219,7 +226,7 @@ flux_fitting <- function(conc_df,
       f_length_window = max(.data$f_time_cut),
       f_length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
       f_start_window = min({{f_datetime}}),
-      f_time_diff = .data$f_time - .data$f_time_cut,
+      # f_time_diff = .data$f_time - .data$f_time_cut,
       f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
       .by = {{f_fluxid}}
     )
@@ -228,11 +235,11 @@ flux_fitting <- function(conc_df,
   # because of cut direction, f_time - start_cut has to be replaced by f_time_diff
   # need to produce t_time_diff in a more efficient way
 
-  time_diff_df <- conc_df_cut |>
-    distinct({{f_fluxid}}, .data$f_time_diff)
+  # time_diff_df <- conc_df_cut |>
+  #   distinct({{f_fluxid}}, .data$f_time_diff)
 
-  conc_df <- conc_df |>
-    left_join(time_diff_df, by = join_by({{f_fluxid}}))
+  # conc_df <- conc_df |>
+  #   left_join(time_diff_df, by = join_by({{f_fluxid}}))
 
   conc_fitting <- flux_fitting_lm(
     conc_df_cut,
