@@ -224,8 +224,15 @@ flux_fitting <- function(conc_df,
       .by = {{f_fluxid}}
     )
 
-  # putting f_time_cut back in conc_df for when calculating slope_fit
-  # because of cut direction, f_time - start_cut has to be replaced by f_time_cut
+  # putting f_time_diff back in conc_df for when calculating slope_fit
+  # because of cut direction, f_time - start_cut has to be replaced by f_time_diff
+  # need to produce t_time_diff in a more efficient way
+
+  time_diff_df <- conc_df_cut |>
+    distinct({{f_fluxid}}, .data$f_time_diff)
+
+  conc_df <- conc_df |>
+    left_join(time_diff_df, by = join_by({{f_fluxid}}))
 
   conc_fitting <- flux_fitting_lm(
     conc_df_cut,
