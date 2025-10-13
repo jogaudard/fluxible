@@ -416,7 +416,7 @@ test_that("slope crosses fit at tz with exp_tz", {
     flux_fitting(
       fit_type = "exp_tz",
       start_cut = 50,
-      t_zero = 10
+      t_zero = 80
     )
 
   flux_flag_tz <- flux_quality(flux_fit)
@@ -427,7 +427,7 @@ test_that("slope crosses fit at tz with exp_tz", {
       flux_plot(
         flux_flag_tz,
         f_ylim_upper = 600,
-        f_ylim_lower = 350
+        f_ylim_lower = 20
       )
     )
   )
@@ -453,7 +453,8 @@ test_that("slope crosses fit at tz with exp_hm", {
   flux_fit <- flux |>
     flux_fitting(
       fit_type = "exp_hm",
-      start_cut = 50
+      start_cut = 50,
+      t_zero = 30
     )
 
   flux_flag_hm <- flux_quality(flux_fit)

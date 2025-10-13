@@ -138,10 +138,10 @@ flux_fitting_hm <- function(conc_df_cut,
     left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_slope_z *
-        (exp(-.data$f_b * (.data$f_time - start_cut)) / (-.data$f_b)),
+        (exp(-.data$f_b * (.data$f_time  - .data$f_time_diff)) / (-.data$f_b)),
       f_fit_slope = .data$f_Cm
       + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b * t_zero)
-      - .data$f_slope * (t_zero - .data$f_time),
+      - .data$f_slope * (t_zero - .data$f_time + .data$f_time_diff),
       f_start_z = {{f_start}} + t_zero
     ) |>
     select(!"f_slope_z")
