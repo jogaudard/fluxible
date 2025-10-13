@@ -14,9 +14,9 @@ flux_fortify_exp <- function(slopes_df,
                              kappamax) {
 
   if (isTRUE(kappamax)) {
-    param_df <- flux_param_kappamax(slopes_df)
+    param_df <- flux_param_kappamax(slopes_df, f_datetime = {{f_datetime}})
   } else {
-    param_df <- flux_param_exp(slopes_df)
+    param_df <- flux_param_exp(slopes_df, f_datetime = {{f_datetime}})
   }
 
   slopes_df <- flux_plot_flag(slopes_df, param_df)

@@ -253,7 +253,7 @@
 
     Code
       vdiffr::expect_doppelganger("flux diff and lm", flux_plot(flux_flag_lm,
-        f_ylim_upper = 600, f_ylim_lower = 350))
+        f_ylim_upper = 500, f_ylim_lower = 350, y_text_position = 450))
     Message
       Plotting in progress
 
@@ -261,7 +261,7 @@
 
     Code
       vdiffr::expect_doppelganger("slope crosses fit at tz with exp_tz", flux_plot(
-        flux_flag_tz, f_ylim_upper = 600, f_ylim_lower = 350))
+        flux_flag_tz, f_ylim_upper = 500, f_ylim_lower = 350, y_text_position = 450))
     Message
       Plotting in progress
 
@@ -269,7 +269,7 @@
 
     Code
       vdiffr::expect_doppelganger("slope crosses fit at tz with exp_hm", flux_plot(
-        flux_flag_hm, f_ylim_upper = 600, f_ylim_lower = 350))
+        flux_flag_hm, f_ylim_upper = 500, f_ylim_lower = 350, y_text_position = 450))
     Message
       Plotting in progress
 
@@ -277,7 +277,7 @@
 
     Code
       vdiffr::expect_doppelganger("slope crosses fit at tz with quadratic", flux_plot(
-        flux_flag_zhao18, f_ylim_upper = 600, f_ylim_lower = 350))
+        flux_flag_zhao18, f_ylim_upper = 500, f_ylim_lower = 350, y_text_position = 450))
     Message
       Plotting in progress
 
