@@ -16,8 +16,6 @@
 #' @param f_conc column with gas concentration
 #' @param f_start column with datetime when the measurement started
 #' @param f_fluxid column with ID of each flux
-#' @param start_cut time to discard at the start of the measurements
-#' (in seconds)
 #' @param cz_window window used to calculate Cz, at the beginning of cut window
 #' @param b_window window to estimate b. It is an interval after tz
 #' where it is assumed that C fits the data perfectly
@@ -47,7 +45,6 @@ flux_fitting_hm <- function(conc_df_cut,
                             f_conc,
                             f_start,
                             f_fluxid,
-                            start_cut,
                             cz_window,
                             b_window,
                             roll_width,

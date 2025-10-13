@@ -416,7 +416,8 @@ test_that("slope crosses fit at tz with exp_tz", {
   flux_fit <- flux |>
     flux_fitting(
       fit_type = "exp_tz",
-      start_cut = 50,
+      start_cut = 250,
+      cut_direction = "from_end",
       t_zero = 20
     )
 
@@ -454,7 +455,8 @@ test_that("slope crosses fit at tz with exp_hm", {
   flux_fit <- flux |>
     flux_fitting(
       fit_type = "exp_hm",
-      start_cut = 50,
+      start_cut = 250,
+      cut_direction = "from_end",
       t_zero = 30
     )
 
@@ -472,39 +474,40 @@ test_that("slope crosses fit at tz with exp_hm", {
   )
 })
 
-# test_that("slope crosses fit at tz with quadratic", {
+test_that("slope crosses fit at tz with quadratic", {
 
-#   flux <- co2_liahovden |>
-#     filter(
-#       datetime >= lubridate::as_datetime("2022-07-27 13:52:00") &
-#         datetime <= lubridate::as_datetime("2022-07-27 13:57:00")
-#     ) |>
-#     mutate(
-#       f_fluxid = 1,
-#       f_start = lubridate::as_datetime("2022-07-27 13:52:00"),
-#       f_end = lubridate::as_datetime("2022-07-27 13:57:00")
-#     ) |>
-#     rename(
-#       f_conc = "conc",
-#       f_datetime = "datetime"
-#     )
+  flux <- co2_liahovden |>
+    filter(
+      datetime >= lubridate::as_datetime("2022-07-27 13:52:00") &
+        datetime <= lubridate::as_datetime("2022-07-27 13:57:00")
+    ) |>
+    mutate(
+      f_fluxid = 1,
+      f_start = lubridate::as_datetime("2022-07-27 13:52:00"),
+      f_end = lubridate::as_datetime("2022-07-27 13:57:00")
+    ) |>
+    rename(
+      f_conc = "conc",
+      f_datetime = "datetime"
+    )
 
-#   flux_fit <- flux |>
-#     flux_fitting(
-#       fit_type = "quadratic",
-#       start_cut = 50
-#     )
+  flux_fit <- flux |>
+    flux_fitting(
+      fit_type = "quadratic",
+      start_cut = 240,
+      cut_direction = "from_end"
+    )
 
-#   flux_flag_zhao18 <- flux_quality(flux_fit)
+  flux_flag_zhao18 <- flux_quality(flux_fit)
 
-#   expect_snapshot(
-#     vdiffr::expect_doppelganger(
-#       "slope crosses fit at tz with quadratic",
-#       flux_plot(
-#         flux_flag_zhao18,
-#         f_ylim_upper = 600,
-#         f_ylim_lower = 350
-#       )
-#     )
-#   )
-# })
+  expect_snapshot(
+    vdiffr::expect_doppelganger(
+      "slope crosses fit at tz with quadratic",
+      flux_plot(
+        flux_flag_zhao18,
+        f_ylim_upper = 600,
+        f_ylim_lower = 350
+      )
+    )
+  )
+})

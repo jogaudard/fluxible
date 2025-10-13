@@ -234,8 +234,7 @@ flux_fitting <- function(conc_df,
     conc_df_cut,
     conc_df,
     {{f_conc}},
-    {{f_fluxid}},
-    start_cut = start_cut
+    {{f_fluxid}}
   )
 
   if (fit_type != "linear") {
@@ -257,7 +256,6 @@ flux_fitting <- function(conc_df,
       {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
-      start_cut = start_cut,
       cz_window = cz_window,
       b_window = b_window,
       a_window = a_window,
@@ -272,7 +270,6 @@ flux_fitting <- function(conc_df,
       {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
-      start_cut = start_cut,
       t_zero = t_zero,
       cz_window = cz_window,
       b_window = b_window,
@@ -288,7 +285,6 @@ flux_fitting <- function(conc_df,
       {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
-      start_cut = start_cut,
       t_zero = t_zero,
       cz_window = cz_window,
       b_window = b_window,
@@ -304,7 +300,6 @@ flux_fitting <- function(conc_df,
       {{f_conc}},
       {{f_start}},
       {{f_fluxid}},
-      start_cut = start_cut,
       t_zero = t_zero
     )
   }

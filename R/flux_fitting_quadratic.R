@@ -5,8 +5,6 @@
 #' @param f_conc column with gas concentration
 #' @param f_start column with datetime when the measurement started
 #' @param f_fluxid column with ID of each flux
-#' @param start_cut time to discard at the start of the measurements
-#' (in seconds)
 #' @param t_zero time at which the slope should be calculated
 #' @return a df with the modeled gas concentration, slope, intercept,
 #' std error, r square and p value of the quadratic model
@@ -25,7 +23,6 @@ flux_fitting_quadratic <- function(conc_df_cut,
                                    f_conc,
                                    f_start,
                                    f_fluxid,
-                                   start_cut,
                                    t_zero) {
   args_ok <- flux_fun_check(list(
     t_zero = t_zero
