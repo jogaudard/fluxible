@@ -4,7 +4,7 @@
 \alias{flux_fortify_quadratic}
 \title{Fortify fluxes with a quadratic fit}
 \usage{
-flux_fortify_quadratic(slopes_df)
+flux_fortify_quadratic(slopes_df, f_datetime)
 }
 \arguments{
 \item{slopes_df}{dataset containing slopes}
