@@ -249,3 +249,19 @@
       Starting ggsave...
       Plots saved in f_quality_plots folder.
 
+# slope crosses fit at tz with exp_tz
+
+    Code
+      vdiffr::expect_doppelganger("slope crosses fit at tz with exp_tz", flux_plot(
+        flux_flag_tz, f_ylim_upper = 600, f_ylim_lower = 350))
+    Message
+      Plotting in progress
+
+# slope crosses fit at tz with exp_hm
+
+    Code
+      vdiffr::expect_doppelganger("slope crosses fit at tz with exp_hm", flux_plot(
+        flux_flag_hm, f_ylim_upper = 600, f_ylim_lower = 350))
+    Message
+      Plotting in progress
+

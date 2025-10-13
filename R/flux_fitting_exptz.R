@@ -257,12 +257,12 @@ flux_fitting_exptz <- function(conc_df_cut,
     left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_a *
-        (.data$f_time - start_cut)
+        (.data$f_time_cut)
       + (.data$f_Cz - .data$f_Cm)
-      * exp(-.data$f_b * (.data$f_time - start_cut)),
+      * exp(-.data$f_b * (.data$f_time_cut)),
       f_fit_slope = .data$f_Cm + .data$f_a * t_zero
       + (.data$f_Cz - .data$f_Cm) * exp(-.data$f_b * t_zero)
-      - .data$f_slope * (t_zero - .data$f_time),
+      - .data$f_slope * (t_zero - .data$f_time_cut),
       f_start_z = {{f_start}} + t_zero,
       .by = {{f_fluxid}}
     )
