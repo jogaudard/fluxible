@@ -30,6 +30,8 @@
 #' `f_start + start_cut` to `f_end - end_cut`; `"from_start"` makes it
 #' `f_start + start_cut` to `f_start + end_cut`; `"from_end"` makes it
 #' `f_end - start_cut` to `f_end - end_cut`.
+#' Bug fix since v1.3.4: `"from_start"` was doing `f_start` + `start_cut` to
+#' `f_start` + `start_cut` + `end_cut`
 #' @param end_cut time to discard at the end of the measurements (in seconds)
 #' @param f_start column with datetime when the measurement started (`ymd_hms`)
 #' @param f_end column with datetime when the measurement ended (`ymd_hms`)
