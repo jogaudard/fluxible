@@ -12,7 +12,7 @@ format: gfm
 
 library(tidyverse)
 library(adjustedcranlogs)
-library(tidyverse)
+library(zoo)
 
 date_end <- today() - 2
 ```
@@ -24,14 +24,15 @@ date_end <- today() - 2
 #| fig-height: 6
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(linewidth = package)) +
+  geom_line(aes(alpha = package)) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
+  scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
   labs(
     title = "Last month"
   )
@@ -42,19 +43,24 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| label: fig-paper
 #| echo: false
 #| fig-cap: "Number of downloads since paper was published."
-#| fig-height: 6
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
+#| warning: false
 
-adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-27", to = date_end) |>
-  pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
+adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-25", to = date_end) |>
+  mutate(
+    rollmean_5days = rollmean(adjusted_downloads, 5, fill = NA, align = "right"),
+    .by = package
+  ) |>
+  pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_5days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(linewidth = package)) +
+  geom_line(aes(alpha = package)) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
+  scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
   labs(
-    title = "Since paper publication (following CRAN update)"
+    title = "Since paper publication"
   )
 
 ```
@@ -62,21 +68,27 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 ```{r}
 #| label: fig-overall
 #| echo: false
-#| fig-cap: "Overall number of downloads since CRAN acceptance."
-#| fig-height: 6
+#| fig-cap: "Overall number of downloads since first CRAN acceptance."
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2024-08-27", to = date_end) |>
-  pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
+  mutate(
+    rollmean_10days = rollmean(adjusted_downloads, 10, fill = NA, align = "right"),
+    .by = package
+  ) |>
+  pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_10days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(linewidth = package)) +
+  geom_line(aes(alpha = package)) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 2), 1)) +
+  scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
+  # scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 3))) +
   labs(
-    title = "Since CRAN acceptance"
+    title = "Since first CRAN acceptance"
   )
 
 ```
