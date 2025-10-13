@@ -12,7 +12,7 @@ format: gfm
 
 library(tidyverse)
 library(adjustedcranlogs)
-library(tidyverse)
+library(zoo)
 
 date_end <- today() - 2
 ```
@@ -24,6 +24,7 @@ date_end <- today() - 2
 #| fig-height: 6
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
@@ -42,12 +43,17 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| label: fig-paper
 #| echo: false
 #| fig-cap: "Number of downloads since paper was published."
-#| fig-height: 6
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-25", to = date_end) |>
-  pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
+  mutate(
+    rollmean_5days = rollmean(adjusted_downloads, 5, fill = NA, align = "right"),
+    .by = package
+  ) |>
+  pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_5days)) |>
   ggplot(aes(date, value, color = package)) +
   geom_line(aes(alpha = package)) +
   theme_bw() +
@@ -63,13 +69,18 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| label: fig-overall
 #| echo: false
 #| fig-cap: "Overall number of downloads since first CRAN acceptance."
-#| fig-height: 6
+#| fig-height: 8
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2024-08-27", to = date_end) |>
-  pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
+  mutate(
+    rollmean_10days = rollmean(adjusted_downloads, 10, fill = NA, align = "right"),
+    .by = package
+  ) |>
+  pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_10days)) |>
   ggplot(aes(date, value, color = package)) +
   geom_line(aes(alpha = package)) +
   theme_bw() +
