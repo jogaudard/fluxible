@@ -56,7 +56,7 @@ flux_fitting_lm <- function(conc_df_cut,
   conc_fitting <- conc_df |>
     left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
-      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - start_cut)
+      f_fit = .data$f_intercept + .data$f_slope * (.data$f_time - .data$f_time_diff)
     )
 
 

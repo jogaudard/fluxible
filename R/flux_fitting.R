@@ -360,7 +360,7 @@ flux_fitting <- function(conc_df,
   if (any(!is.na(warnings))) warning(warnings)
 
   conc_fitting <- conc_fitting |>
-    select(!"f_n_conc")
+    select(!c("f_n_conc", "f_time_diff"))
 
   attr(conc_fitting, "fit_type") <- fit_type
 
