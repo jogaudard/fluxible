@@ -8,6 +8,8 @@ flux_param_qua(slopes_df, f_datetime)
 }
 \arguments{
 \item{slopes_df}{the slopes_df that is being provided to flux_plot}
+
+\item{f_datetime}{column with datetime of each data point}
 }
 \description{
 creates a df with quality flags and quality diagnostics

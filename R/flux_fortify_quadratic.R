@@ -2,6 +2,7 @@
 #' @description specific part of flux_plot for
 #' quadratic fit
 #' @param slopes_df dataset containing slopes
+#' @param f_datetime column with datetime of each data point
 #' @importFrom dplyr select distinct
 #' @importFrom tidyr pivot_longer
 #' @keywords internal

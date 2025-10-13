@@ -2,6 +2,7 @@
 #' @description Extracts fluxes that were fitted
 #' with a linear model
 #' @param slopes_df dataset containing slopes
+#' @param f_datetime column with datetime of each data point
 #' @importFrom dplyr select distinct mutate
 #' @keywords internal
 

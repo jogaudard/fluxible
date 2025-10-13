@@ -3,14 +3,13 @@
 #' an exponential model
 #' @param slopes_df dataset containing slopes
 #' @param kappamax indicating if kappamax was applied
+#' @param f_datetime column with datetime of each data point
 #' @importFrom dplyr select distinct mutate
 #' @importFrom tidyr pivot_longer
 #' @keywords internal
 
 flux_fortify_exp <- function(slopes_df,
-                             f_conc,
                              f_datetime,
-                             y_text_position,
                              kappamax) {
 
   if (isTRUE(kappamax)) {

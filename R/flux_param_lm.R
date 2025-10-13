@@ -4,6 +4,7 @@
 #' flux_param_lm is for fit in the lm family (linear and quadratic)
 #' flux_param_exp is for the exponential fit
 #' @param slopes_df the slopes_df that is being provided to flux_plot
+#' @param f_datetime column with datetime of each data point
 #' @importFrom dplyr select group_by mutate ungroup distinct filter
 #' @keywords internal
 
