@@ -389,8 +389,9 @@ test_that("flux diff and lm", {
       "flux diff and lm",
       flux_plot(
         flux_flag_lm,
-        f_ylim_upper = 600,
-        f_ylim_lower = 350
+        f_ylim_upper = 500,
+        f_ylim_lower = 350,
+        y_text_position = 450
       )
     )
   )

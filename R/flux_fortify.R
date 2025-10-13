@@ -131,7 +131,7 @@ flux_fortify <- function(slopes_df,
       kappamax = kappamax
     )
   } else if (fit_type == "linear") {
-    slopes_params <- flux_fortify_lin(slopes_df)
+    slopes_params <- flux_fortify_lin(slopes_df, f_datetime = {{f_datetime}})
   } else if (fit_type == "quadratic") {
     slopes_params <- flux_fortify_quadratic(slopes_df)
   } else {
