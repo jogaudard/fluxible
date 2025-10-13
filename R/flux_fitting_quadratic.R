@@ -82,14 +82,14 @@ flux_fitting_quadratic <- function(conc_df_cut,
       f_fit =
         .data$f_intercept
         + .data$f_param1
-        * (.data$f_time - start_cut) + .data$f_param2
-        * (.data$f_time - start_cut)^2,
+        * (.data$f_time - .data$f_time_diff) + .data$f_param2
+        * (.data$f_time - .data$f_time_diff)^2,
       f_fit_slope =
         .data$f_intercept
         - .data$f_param2
         * t_zero^2
         + (.data$f_param1 + 2 * .data$f_param2 * t_zero)
-        * (.data$f_time - start_cut),
+        * (.data$f_time - .data$f_time_diff),
       f_start_z = {{f_start}} + t_zero
     )
 

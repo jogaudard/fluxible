@@ -281,11 +281,11 @@ flux_fitting_zhao18 <- function(conc_df_cut,
     left_join(fitting_par, by = join_by({{f_fluxid}})) |>
     mutate(
       f_fit = .data$f_Cm + .data$f_a *
-        (.data$f_time - .data$f_tz - start_cut)
+        (.data$f_time - .data$f_tz - .data$f_time_diff)
       + (.data$f_Cz - .data$f_Cm)
-      * exp(-.data$f_b * (.data$f_time - .data$f_tz - start_cut)),
+      * exp(-.data$f_b * (.data$f_time - .data$f_tz - .data$f_time_diff)),
       f_fit_slope = .data$f_slope * (.data$f_time) + .data$f_Cz - .data$f_slope
-      * (.data$f_tz + start_cut),
+      * (.data$f_tz + .data$f_time_diff),
       f_start_z = {{f_start}} + .data$f_tz,
       .by = {{f_fluxid}}
     )
