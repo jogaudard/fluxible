@@ -181,9 +181,6 @@ flux_fitting <- function(conc_df,
 
 
   conc_df <- conc_df |>
-    # rename(
-    #   f_start_og = {{f_start}}
-    # ) |>
     mutate(
       f_time = difftime({{f_datetime}}[seq_along({{f_datetime}})],
         {{f_datetime}}[1],
@@ -226,20 +223,9 @@ flux_fitting <- function(conc_df,
       f_length_window = max(.data$f_time_cut),
       f_length_flux = difftime({{f_end}}, {{f_start}}, units = "sec"),
       f_start_window = min({{f_datetime}}),
-      # f_time_diff = .data$f_time - .data$f_time_cut,
       f_n_conc_cut = sum(!is.na(.data[[name_conc]])),
       .by = {{f_fluxid}}
     )
-
-  # putting f_time_diff back in conc_df for when calculating slope_fit
-  # because of cut direction, f_time - start_cut has to be replaced by f_time_diff
-  # need to produce t_time_diff in a more efficient way
-
-  # time_diff_df <- conc_df_cut |>
-  #   distinct({{f_fluxid}}, .data$f_time_diff)
-
-  # conc_df <- conc_df |>
-  #   left_join(time_diff_df, by = join_by({{f_fluxid}}))
 
   conc_fitting <- flux_fitting_lm(
     conc_df_cut,
