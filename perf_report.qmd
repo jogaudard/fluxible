@@ -114,10 +114,11 @@ result
 #| warning: false
 #| message: false
 
-flux_plot_v134 <- plotting_etime("v134")
+# flux_plot_v134 <- plotting_etime("v134")
 
-saveRDS(flux_plot_v134, "perf_data/plotting_v134.rds")
+# saveRDS(flux_plot_v134, "perf_data/plotting_v134.rds")
 
+flux_plot_v134 <- readRDS("perf_data/plotting_v134.rds")
 flux_plot_v133 <- readRDS("perf_data/plotting_v133.rds")
 v132 <- readRDS("perf_data/v132.rds")
 v129 <- readRDS("perf_data/v129.rds")
@@ -216,9 +217,10 @@ result
 #| warning: false
 
 
-flux_fitting_v134 <- fitting_etime("v134")
-saveRDS(flux_fitting_v134, "perf_data/fitting_v134.rds")
+# flux_fitting_v134 <- fitting_etime("v134")
+# saveRDS(flux_fitting_v134, "perf_data/fitting_v134.rds")
 
+flux_fitting_v134 <- readRDS("perf_data/fitting_v134.rds")
 flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
 
 flux_fitting_etime <- bind_rows(
