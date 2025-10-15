@@ -155,7 +155,9 @@ etime_all_plotting |>
     geom_smooth(se = FALSE) +
     theme_bw() +
     labs(
-      title = "flux_plot etime"
+      title = "flux_plot etime",
+      x = "nb of measurements to plot",
+      y = "running time [s]"
     )
 ```
 
@@ -245,6 +247,8 @@ flux_fitting_etime |>
     geom_smooth(aes(linetype = fit_type), se = FALSE) +
     theme_bw() +
     labs(
-      title = "flux_fitting etime"
+      title = "flux_fitting etime",
+      x = "nb of measurements to process",
+      y = "running time [s]"
     )
 ```
