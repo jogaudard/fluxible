@@ -29,7 +29,7 @@ date_end <- today() - 2
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package)) +
+  geom_line(aes(alpha = package), linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
   scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
@@ -56,7 +56,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_5days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package)) +
+  geom_line(aes(alpha = package), linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
   scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
@@ -84,7 +84,7 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_10days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package)) +
+  geom_line(aes(alpha = package), linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
   scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
