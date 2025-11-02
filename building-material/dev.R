@@ -51,7 +51,7 @@ usethis::use_lifecycle()
 # this is actually a paid service
 
 # add logo
-usethis::use_logo("logos/fluxible-logo6.png", geometry = "240x278", retina = TRUE)
+usethis::use_logo("logos/fluxible-logo7.png", geometry = "240x278", retina = TRUE)
 
 usethis::use_coverage(type = c("codecov"))
 usethis::use_github_action("test-coverage")

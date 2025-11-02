@@ -9,11 +9,12 @@ format: gfm
 #| label: packages
 #| include: false
 #| message: false
+#| warning: false
 
 library(tidyverse)
-# library(fluxible)
+library(fluxible)
 
-devtools::load_all()
+# devtools::load_all()
 
 ```
 
@@ -22,6 +23,9 @@ Current `fluxible` package version: `r packageVersion("fluxible")`
 ```{r}
 #| label: data-prep
 #| include: false
+#| message: false
+#| warning: false
+
 
 
 
@@ -62,7 +66,7 @@ flags_liahovden <- flux_quality(
 #| label: flux_plot-fct
 #| message: false
 
-plotting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
+plotting_etime <- function(version, nb_fluxes = c(1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 138),
  replicates = 3, output = c("pdfpages", "longpdf")) {
 
 result <- replicate(n = replicates, expr = {
@@ -107,11 +111,14 @@ result
 
 ```{r}
 #| include: false
+#| warning: false
+#| message: false
 
-# flux_plot_v133 <- plotting_etime("v133")
+# flux_plot_v134 <- plotting_etime("v134")
 
-# saveRDS(flux_plot_v133, "perf_data/plotting_v133.rds")
+# saveRDS(flux_plot_v134, "perf_data/plotting_v134.rds")
 
+flux_plot_v134 <- readRDS("perf_data/plotting_v134.rds")
 flux_plot_v133 <- readRDS("perf_data/plotting_v133.rds")
 v132 <- readRDS("perf_data/v132.rds")
 v129 <- readRDS("perf_data/v129.rds")
@@ -126,7 +133,10 @@ etime_all_plotting <- bind_rows(
 ) |>
 select(!replicate) |>
 separate_wider_delim(fluxible, "_", names = c("version", "output"), cols_remove = TRUE) |>
-bind_rows(flux_plot_v133)
+bind_rows(
+  flux_plot_v133,
+  flux_plot_v134
+  )
 
 ```
 
@@ -137,6 +147,7 @@ bind_rows(flux_plot_v133)
 #| fig-height: 6
 #| fig-width: 10
 #| message: false
+#| warning: false
 
 etime_all_plotting |>
     ggplot(aes(nb_fluxes, e_time, color = version, shape = output)) +
@@ -144,7 +155,9 @@ etime_all_plotting |>
     geom_smooth(se = FALSE) +
     theme_bw() +
     labs(
-      title = "flux_plot etime"
+      title = "flux_plot etime",
+      x = "nb of measurements to plot",
+      y = "running time [s]"
     )
 ```
 
@@ -155,7 +168,7 @@ etime_all_plotting |>
 #| message: false
 #| warning: false
 
-fitting_etime <- function(version, nb_fluxes = c(1, 10, 30, 60, 100, 138),
+fitting_etime <- function(version, nb_fluxes = c(1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 138),
  replicates = 3, fit_type = c("exp_zhao18", "linear", "quadratic", "exp_tz")) {
 
 
@@ -202,12 +215,20 @@ result
 
 ```{r}
 #| include: false
+#| message: false
+#| warning: false
 
-# flux_fitting_v132 <- fitting_etime("v132")
 
+# flux_fitting_v134 <- fitting_etime("v134")
+# saveRDS(flux_fitting_v134, "perf_data/fitting_v134.rds")
+
+flux_fitting_v134 <- readRDS("perf_data/fitting_v134.rds")
 flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
 
-# saveRDS(flux_fitting_v132, "perf_data/fitting_v132.rds")
+flux_fitting_etime <- bind_rows(
+  flux_fitting_v134,
+  flux_fitting_v132
+)
 
 ```
 
@@ -218,13 +239,16 @@ flux_fitting_v132 <- readRDS("perf_data/fitting_v132.rds")
 #| fig-height: 6
 #| fig-width: 10
 #| message: false
+#| warning: false
 
-flux_fitting_v132 |>
-  ggplot(aes(nb_fluxes, e_time, color = fit_type, shape = version)) +
+flux_fitting_etime |>
+  ggplot(aes(nb_fluxes, e_time, color = version, shape = fit_type)) +
   geom_point() +
-    geom_smooth(se = FALSE) +
+    geom_smooth(aes(linetype = fit_type), se = FALSE) +
     theme_bw() +
     labs(
-      title = "flux_fitting etime"
+      title = "flux_fitting etime",
+      x = "nb of measurements to process",
+      y = "running time [s]"
     )
 ```

@@ -29,13 +29,14 @@ date_end <- today() - 2
 adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package)) +
+  geom_line(aes(alpha = package), linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
   scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
   labs(
     title = "Last month"
-  )
+  ) +
+  scale_x_date(date_minor_breaks = "1 day")
 
 ```
 
@@ -48,20 +49,21 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| message: false
 #| warning: false
 
-adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-25", to = date_end) |>
+adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-24", to = date_end) |>
   mutate(
     rollmean_5days = rollmean(adjusted_downloads, 5, fill = NA, align = "right"),
     .by = package
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_5days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package)) +
+  geom_line(aes(alpha = package), linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
   scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
   labs(
     title = "Since paper publication"
-  )
+  ) +
+  scale_x_date(date_breaks = "5 days", limits = c(ymd("2025-09-24"), NA), date_minor_breaks = "1 day")
 
 ```
 
@@ -82,13 +84,14 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_10days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package)) +
+  geom_line(aes(alpha = package), linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
   scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
   # scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 3))) +
   labs(
     title = "Since first CRAN acceptance"
-  )
+  ) +
+  scale_x_date(date_breaks = "1 month", date_minor_breaks = "5 days")
 
 ```
