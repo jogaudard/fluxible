@@ -246,6 +246,13 @@ Evolution*,
 
 <br>
 
+Gaudard J, Telford RJ, Chacon-Labella J, Dawson HR, **Enquist BJ**,
+Töpper JP, Trepel J, Vandvik V, Baumane M, Birkeli K, Holle MJM, Hupp
+JR, Santos-Andrade PE, Satriawan TW, Halbritter AH. “`fluxible`: An R
+package to process ecosystem gas fluxes from closed-loop chambers in an
+automated and reproducible way”, Poster, 2025 AmeriFlux Annual Meeting,
+Tucson AZ, USA.
+
 Gaudard J, Telford RJ, Chacon-Labella J, Dawson HR, Enquist BJ, Töpper
 JP, Trepel J, **Vandvik V**, Baumane M, Birkeli K, Holle MJM, Hupp JR,
 Santos-Andrade PE, Satriawan TW, Halbritter AH. “`fluxible`: An R
