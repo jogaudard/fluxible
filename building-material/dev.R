@@ -10,6 +10,7 @@ usethis::use_dev_package("licoread")
 usethis::use_pkgdown()
 pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
+pkgdown::build_llm_docs(pkg = ".")
 
 usethis::use_vignette("two-gases")
 devtools::build_vignettes()
