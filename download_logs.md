@@ -1,6 +1,6 @@
 # fluxible download logs
 Joseph Gaudard
-2025-10-17
+2025-11-09
 
 <div id="fig-lastmonth">
 
