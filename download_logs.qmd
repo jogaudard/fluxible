@@ -26,13 +26,12 @@ date_end <- today() - 2
 #| message: false
 #| warning: false
 
-adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), "last-month") |>
+adj_cran_downloads(c("fluxible", "licoread"), "last-month") |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package), linewidth = 0.6) +
+  geom_line(linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
   labs(
     title = "Last month"
   ) +
@@ -49,17 +48,16 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| message: false
 #| warning: false
 
-adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2025-09-24", to = date_end) |>
+adj_cran_downloads(c("fluxible", "licoread"), from = "2025-09-24", to = date_end) |>
   mutate(
     rollmean_5days = rollmean(adjusted_downloads, 5, fill = NA, align = "right"),
     .by = package
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_5days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package), linewidth = 0.6) +
+  geom_line(linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
   labs(
     title = "Since paper publication"
   ) +
@@ -77,18 +75,16 @@ adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "lico
 #| warning: false
 
 
-adj_cran_downloads(c("fluxible", "fluxfinder", "gasfluxes", "flux", "HMR", "licoread"), from = "2024-08-27", to = date_end) |>
+adj_cran_downloads(c("fluxible", "licoread"), from = "2024-08-27", to = date_end) |>
   mutate(
     rollmean_10days = rollmean(adjusted_downloads, 10, fill = NA, align = "right"),
     .by = package
   ) |>
   pivot_longer(c(adjusted_downloads, adjusted_total_downloads, rollmean_10days)) |>
   ggplot(aes(date, value, color = package)) +
-  geom_line(aes(alpha = package), linewidth = 0.6) +
+  geom_line(linewidth = 0.6) +
   theme_bw() +
   facet_grid(name ~ ., scales = "free") +
-  scale_alpha_manual(values = c(rep(0.5, 2), 1, rep(0.5, 3))) +
-  # scale_linewidth_manual(values = c(rep(0.4, 2), 1, rep(0.4, 3))) +
   labs(
     title = "Since first CRAN acceptance"
   ) +
