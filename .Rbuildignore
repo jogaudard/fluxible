@@ -32,5 +32,4 @@
 ^download_logs_files$
 ^download_logs\.qmd$
 ^download_logs\.md$
-^download_logs_internal\.qmd$
-^download_logs_internal\.md$
+^dev$
